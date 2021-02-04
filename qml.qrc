@@ -1,0 +1,21 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>assets/backgrounds/default.jpg</file>
+        <file>MainMenu.qml</file>
+        <file>assets/ui/menu-button.png</file>
+        <file>assets/ui/MenuButton.qml</file>
+        <file>NewGame.qml</file>
+        <file>ui/CharacterSheet.qml</file>
+        <file>assets/ui/hud.png</file>
+        <file>assets/ui/Label.qml</file>
+        <file>assets/ui/Pane.qml</file>
+        <file>assets/ui/pane.png</file>
+        <file>assets/ui/paper.png</file>
+        <file>assets/ui/PaperPane.qml</file>
+        <file>assets/ui/TerminalPane.qml</file>
+        <file>assets/ui/terminal.png</file>
+        <file>ui/MenuButton.qml</file>
+        <file>assets/ui/TerminalScrollbar.qml</file>
+    </qresource>
+</RCC>
