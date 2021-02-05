@@ -7,17 +7,18 @@ Window {
   width: 800
   height: 600
   visible: true
-  visibility: Window.Maximized
+  //visibility: Window.Maximized
   title: qsTr("Fallout Equestria")
 
   property bool hasSavedGame: false // TODO
 
   function createGame() {
-    pushView("NewGame.qml");
+    //pushView("NewGame.qml");
+    pushView("Game.qml", { gameController: gameController });
   }
 
-  function pushView(path) {
-    mainView.push(path);
+  function pushView(path, properties = {}) {
+    mainView.push(path, properties);
   }
 
   function popView() {

@@ -31,6 +31,18 @@ set(TS_FILES falloutequestria_en_US.ts)
 
 set(PROJECT_SOURCES
         main.cpp
+        tilemap/tileset.h
+        tilemap/tileset.cpp
+        tilemap/tile.h
+        tilemap/tile.cpp
+        tilemap/tilelayer.h
+        tilemap/tilelayer.cpp
+        tilemap/tilemap.h
+        tilemap/tilemap.cpp
+        game/leveltask.h
+        game/leveltask.cpp
+        game.h
+        game.cpp
         qml.qrc
         ${TS_FILES}
 )
