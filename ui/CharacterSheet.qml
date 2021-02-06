@@ -15,6 +15,9 @@ Pane {
 
   background: UiStyle.Pane {}
 
+  signal accepted()
+  signal canceled()
+
   CMAP.PersonalInfo {
     id: characterNameRow
     characterSheet: root.characterSheet
@@ -170,11 +173,11 @@ Pane {
     MenuButton {
       text: qsTr("Confirm")
       enabled: characterSheet.acceptable
-      onClicked: console.log("accepted")
+      onClicked: root.accepted()
     }
     MenuButton {
       text: qsTr("Cancel")
-      onClicked: application.popView()
+      onClicked: root.canceled()
     }
   }
 }

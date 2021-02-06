@@ -3,6 +3,7 @@ export class Controller {
     this.canvas   = canvas;
     this.context  = canvas.getContext("2d");
     this.tilemap  = params.tilemap;
+    this.level    = params.level;
     this.mapSize  = this.tilemap.mapSize
     this.tileSize = this.tilemap.tileSize
     this.wallSize = { width: this.tileSize.width, height: this.tileSize.height * 3 };
@@ -30,19 +31,38 @@ export class Controller {
   renderCoordinates(x, y) {
     const tile = this.layers.ground.getTile(x, y);
     const wall = this.layers.walls.getTile(x, y);
+    const dynamicObject = this.level.getOccupantAt(x, y);
 
     if (tile)
       this.renderTile(tile, x, y);
     if (wall)
       this.renderWall(wall, x, y);
+    else if (dynamicObject)
+      this.renderSprite(dynamicObject);
   }
 
   renderTile(tile, x, y) {
-    this.renderImage(tile.image, x, y, this.tileSize.width, this.tileSize.height, tile.clippedRect);
+    this.renderImage("../" + tile.image, x, y, this.tileSize.width, this.tileSize.height, tile.clippedRect);
   }
 
   renderWall(tile, x, y) {
-    this.renderImage(tile.image, x, y, this.wallSize.width, this.wallSize .height, tile.clippedRect);
+    this.renderImage("../" + tile.image, x, y, this.wallSize.width, this.wallSize.height, tile.clippedRect);
+  }
+
+  renderSprite(sprite) {
+    const offset      = sprite.getSpritePosition();
+    const clippedRect = sprite.getClippedRect();
+    const extraHeight = clippedRect.height - this.tileSize.height;
+
+    offset.y -= extraHeight;
+    if (this.shouldRender(offset.x, offset.y, clippedRect.width, clippedRect.height)) {
+      this.context.drawImage(
+        "../" + sprite.getSpriteSource(),
+        clippedRect.x, clippedRect.y, clippedRect.width, clippedRect.height,
+        offset.x, offset.y, clippedRect.width, clippedRect.height
+      );
+      return true;
+    }
   }
 
   renderImage(source, x, y, width, height, clippedRect) {
@@ -54,7 +74,7 @@ export class Controller {
       clippedRect = Qt.rect(0, 0, width, height);
     if (this.shouldRender(offset.x, offset.y, width, height)) {
       this.context.drawImage(
-        "../" + source,
+        source,
         clippedRect.x, clippedRect.y, clippedRect.width, clippedRect.height,
         offset.x, offset.y, width, height
       );

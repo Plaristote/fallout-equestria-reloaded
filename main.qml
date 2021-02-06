@@ -14,6 +14,7 @@ Window {
 
   function createGame() {
     //pushView("NewGame.qml");
+    gameController.goToLevel("eltest5");
     pushView("Game.qml", { gameController: gameController });
   }
 

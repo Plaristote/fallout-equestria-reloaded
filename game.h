@@ -12,7 +12,7 @@ class Game : public QObject
 public:
   explicit Game(QObject *parent = nullptr);
 
-  void goToLevel(const QString& name);
+  Q_INVOKABLE void goToLevel(const QString& name);
   void exitLevel();
 
 signals:

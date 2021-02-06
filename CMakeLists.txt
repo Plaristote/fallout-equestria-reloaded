@@ -43,6 +43,14 @@ set(PROJECT_SOURCES
         cmap/statmodel.cpp
         game/leveltask.h
         game/leveltask.cpp
+        game/levelgrid.h
+        game/levelgrid.cpp
+        game/dynamicobject.h
+        game/dynamicobject.cpp
+        game/sprite.h
+        game/sprite.cpp
+        game/animationlibrary.h
+        game/animationlibrary.cpp
         game.h
         game.cpp
         qml.qrc

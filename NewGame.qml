@@ -12,5 +12,7 @@ Rectangle {
       specialPoints: 5
       Component.onCompleted: specialChanged()
     }
+    onAccepted: console.log("Start a new game")
+    onCanceled: application.popView()
   }
 }

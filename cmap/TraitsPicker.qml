@@ -38,6 +38,7 @@ Pane {
         delegate: Column {
           property int offsetIndex: index == 0 ? 0 : availableTraits.length / 2
           Layout.alignment: Qt.AlignLeft
+          spacing: 10
 
           Repeater {
             model: availableTraits.length / 2

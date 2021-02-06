@@ -3,6 +3,7 @@
 LevelTask::LevelTask(QObject *parent) : QObject(parent)
 {
   tilemap = new TileMap(this);
+  grid    = new LevelGrid(this);
   taskTick.setInterval(17);
   clockTick.setInterval(1000);
   connect(&taskTick,  &QTimer::timeout, this, &LevelTask::onTaskTick);
@@ -12,6 +13,12 @@ LevelTask::LevelTask(QObject *parent) : QObject(parent)
 void LevelTask::load(const QString& levelName)
 {
   tilemap->load(levelName);
+  grid->initializeGrid(tilemap);
+
+  player = new DynamicObject(this);
+  player->setSpriteName("pony");
+  player->setAnimation("walking-down");
+  forceCharacterPosition(player, 0, 0);
 }
 
 void LevelTask::onTaskTick()
@@ -24,9 +31,35 @@ void LevelTask::onClockTick()
 
 }
 
+DynamicObject* LevelTask::getOccupantAt(int x, int y)
+{
+  return grid->getOccupant(x, y);
+}
+
 void LevelTask::moveTo(int x, int y)
 {
+  moveCharacterTo(player, x, y);
+}
 
+void LevelTask::moveCharacterTo(DynamicObject *, int x, int y)
+{
+  // TODO Pathfinding and all that shit
+}
+
+void LevelTask::triggerCharacterMoveTo(DynamicObject* character, int x, int y)
+{
+  QPoint renderPosition = tilemap->getLayer("ground")->getTile(x, y)->getPosition();
+
+  if (grid->moveObject(character, x, y))
+    character->moveToCoordinates(renderPosition);
+}
+
+void LevelTask::forceCharacterPosition(DynamicObject* character, int x, int y)
+{
+  QPoint renderPosition = tilemap->getLayer("ground")->getTile(x, y)->getPosition();
+
+  grid->moveObject(character, x, y);
+  character->forceMoveToCoordinates(renderPosition);
 }
 
 void LevelTask::onPauseChanged()

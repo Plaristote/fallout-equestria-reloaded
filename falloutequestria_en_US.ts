@@ -4,17 +4,17 @@
 <context>
     <name>CharacterSheet</name>
     <message>
-        <location filename="ui/CharacterSheet.qml" line="95"/>
+        <location filename="ui/CharacterSheet.qml" line="99"/>
         <source>Available skill points</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="ui/CharacterSheet.qml" line="170"/>
+        <location filename="ui/CharacterSheet.qml" line="174"/>
         <source>Confirm</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="ui/CharacterSheet.qml" line="175"/>
+        <location filename="ui/CharacterSheet.qml" line="179"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
@@ -71,37 +71,37 @@
 <context>
     <name>PersonalInfo</name>
     <message>
-        <location filename="cmap/PersonalInfo.qml" line="20"/>
+        <location filename="cmap/PersonalInfo.qml" line="21"/>
         <source>Your name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="cmap/PersonalInfo.qml" line="34"/>
+        <location filename="cmap/PersonalInfo.qml" line="36"/>
         <source>age</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="cmap/PersonalInfo.qml" line="59"/>
+        <location filename="cmap/PersonalInfo.qml" line="62"/>
         <source>Stallion</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="cmap/PersonalInfo.qml" line="60"/>
+        <location filename="cmap/PersonalInfo.qml" line="63"/>
         <source>Mare</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="cmap/PersonalInfo.qml" line="81"/>
+        <location filename="cmap/PersonalInfo.qml" line="87"/>
         <source>Earth pony</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="cmap/PersonalInfo.qml" line="82"/>
+        <location filename="cmap/PersonalInfo.qml" line="88"/>
         <source>Unicorn</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="cmap/PersonalInfo.qml" line="83"/>
+        <location filename="cmap/PersonalInfo.qml" line="89"/>
         <source>Pegasus</source>
         <translation type="unfinished"></translation>
     </message>

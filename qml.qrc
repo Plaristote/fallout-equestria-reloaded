@@ -40,5 +40,7 @@
         <file>cmap/DescriptionPane.qml</file>
         <file>ui/TabRow.qml</file>
         <file>cmap/TraitsPicker.qml</file>
+        <file>assets/sprites.json</file>
+        <file>assets/sprites/ZEkA10000.png</file>
     </qresource>
 </RCC>

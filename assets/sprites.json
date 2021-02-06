@@ -1,0 +1,14 @@
+{
+  "pony": {
+    "defaultSource": "ZEkA10000.png",
+    "idle-down": {
+      "height": 46, "width": 46,
+      "offsetX": 46, "offsetY": 0
+    },
+    "walking-down": {
+      "height": 46, "width": 46,
+      "frameCount": 3, "frameInterval": 250,
+      "repeat": true
+    }
+  }
+}
