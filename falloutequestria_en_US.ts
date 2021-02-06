@@ -4,57 +4,22 @@
 <context>
     <name>CharacterSheet</name>
     <message>
-        <location filename="ui/CharacterSheet.qml" line="32"/>
-        <source>Your name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="ui/CharacterSheet.qml" line="46"/>
-        <source>age</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="ui/CharacterSheet.qml" line="71"/>
-        <source>Stallion</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="ui/CharacterSheet.qml" line="72"/>
-        <source>Mare</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="ui/CharacterSheet.qml" line="93"/>
-        <source>Earth pony</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="ui/CharacterSheet.qml" line="94"/>
-        <source>Unicorn</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="ui/CharacterSheet.qml" line="95"/>
-        <source>Pegasus</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="ui/CharacterSheet.qml" line="122"/>
+        <location filename="ui/CharacterSheet.qml" line="49"/>
         <source>Available points</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="ui/CharacterSheet.qml" line="198"/>
+        <location filename="ui/CharacterSheet.qml" line="126"/>
         <source>Cutie Mark Acquisition Program</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="ui/CharacterSheet.qml" line="275"/>
+        <location filename="ui/CharacterSheet.qml" line="203"/>
         <source>Confirm</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="ui/CharacterSheet.qml" line="280"/>
+        <location filename="ui/CharacterSheet.qml" line="208"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
@@ -97,6 +62,44 @@
     <message>
         <location filename="MainMenu.qml" line="31"/>
         <source>Exit</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>PersonalInfo</name>
+    <message>
+        <location filename="cmap/PersonalInfo.qml" line="19"/>
+        <source>Your name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="cmap/PersonalInfo.qml" line="33"/>
+        <source>age</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="cmap/PersonalInfo.qml" line="58"/>
+        <source>Stallion</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="cmap/PersonalInfo.qml" line="59"/>
+        <source>Mare</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="cmap/PersonalInfo.qml" line="80"/>
+        <source>Earth pony</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="cmap/PersonalInfo.qml" line="81"/>
+        <source>Unicorn</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="cmap/PersonalInfo.qml" line="82"/>
+        <source>Pegasus</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

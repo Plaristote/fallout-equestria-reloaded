@@ -43,15 +43,18 @@ class StatModel : public QObject
   Q_OBJECT
 
   Q_PROPERTY(QString name MEMBER name NOTIFY nameChanged)
-  Q_PROPERTY(int   age  MEMBER age  NOTIFY ageChanged)
+  Q_PROPERTY(int     age  MEMBER age  NOTIFY ageChanged)
 
   Q_PROPERTY(int hitPoints      MEMBER hitPoints    NOTIFY hitPointsChanged)
-  Q_PROPERTY(int   experience     READ getExperience  NOTIFY experienceChanged)
+  Q_PROPERTY(int experience     READ getExperience  NOTIFY experienceChanged)
   Q_PROPERTY(int level          MEMBER level        NOTIFY levelChanged)
-  Q_PROPERTY(int   xpNextLevel    READ getXpNextLevel NOTIFY levelChanged)
+  Q_PROPERTY(int xpNextLevel    READ getXpNextLevel NOTIFY levelChanged)
   Q_PROPERTY(int skillPoints    MEMBER skillPoints  NOTIFY skillPointsChanged)
   Q_PROPERTY(int availablePerks MEMBER availablePerks NOTIFY availablePerksChanged)
   Q_PROPERTY(int specialPoints  MEMBER specialPoints NOTIFY specialChanged)
+
+  Q_PROPERTY(QStringList perks  MEMBER perks  NOTIFY perksChanged)
+  Q_PROPERTY(QStringList traits MEMBER traits NOTIFY traitsChanged)
 
   // SPECIAL
   Q_PROPERTY(int strength     MEMBER strength     NOTIFY specialChanged)
@@ -152,6 +155,8 @@ signals:
   void skillPointsChanged();
   void specialChanged();
   void statisticsChanged();
+  void perksChanged();
+  void traitsChanged();
 
 private slots:
   void updateBaseValues();
@@ -170,6 +175,8 @@ private:
 
   StatData data;
   StatData modifiers;
+
+  QStringList traits, perks;
 };
 
 #endif // STATMODEL_H

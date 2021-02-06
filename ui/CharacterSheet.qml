@@ -1,8 +1,8 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
-import "qrc:/assets/ui" as UiStyle
-import "qrc:/cmap" as CMAP
+import "../assets/ui" as UiStyle
+import "../cmap" as CMAP
 
 Pane {
   id: root
@@ -13,88 +13,13 @@ Pane {
 
   background: UiStyle.Pane {}
 
-  RowLayout {
+  CMAP.PersonalInfo {
     id: characterNameRow
-    spacing: 10
-    height: 50
+    editable: createMode
     anchors {
       margins: 10
       top: parent.top
       left: parent.left
-    }
-
-    TextField {
-      id: characterName
-      text: characterSheet.name
-      Layout.minimumWidth: 200
-      Layout.fillHeight: true
-      readOnly: !createMode
-      color: "white"
-      placeholderText: qsTr("Your name")
-      placeholderTextColor: "lightgray"
-      background: UiStyle.Label {
-        style: parent.focus ? "dark" : "base"
-      }
-    }
-
-    TextField {
-      id: characterAge
-      text: characterSheet.age
-      Layout.minimumWidth: 50
-      Layout.fillHeight: true
-      color: "white"
-      readOnly: !createMode
-      placeholderText: qsTr("age")
-      placeholderTextColor: "lightgray"
-      validator: IntValidator { bottom: 15; top: 100 }
-      background: UiStyle.Label {
-        style: parent.focus ? "dark" : "base"
-      }
-    }
-
-    ComboBox {
-      id: characterGender
-      Layout.minimumWidth: 200
-      Layout.fillHeight: true
-      enabled: createMode
-      textRole: "text"
-      valueRole: "value"
-      contentItem: Text {
-        verticalAlignment: Text.AlignVCenter
-        horizontalAlignment: Text.AlignHCenter
-        text: characterGender.currentText
-        color: "white"
-      }
-      background: UiStyle.Label {
-        style: parent.focus ? "dark" : "base"
-      }
-      model: [
-        { value: 0, text: qsTr("Stallion") },
-        { value: 1, text: qsTr("Mare") }
-      ]
-    }
-
-    ComboBox {
-      id: characterRace
-      Layout.minimumWidth: 200
-      Layout.fillHeight: true
-      enabled: createMode
-      textRole: "text"
-      valueRole: "value"
-      contentItem: Text {
-        verticalAlignment: Text.AlignVCenter
-        horizontalAlignment: Text.AlignHCenter
-        text: characterRace.currentText
-        color: "white"
-      }
-      background: UiStyle.Label {
-        style: parent.focus ? "dark" : "base"
-      }
-      model: [
-        { value: 0, text: qsTr("Earth pony") },
-        { value: 1, text: qsTr("Unicorn") },
-        { value: 1, text: qsTr("Pegasus") }
-      ]
     }
   }
 

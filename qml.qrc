@@ -35,5 +35,6 @@
         <file>game/LevelCanvas.qml</file>
         <file>game/LevelRender.mjs</file>
         <file>game/LevelView.qml</file>
+        <file>cmap/PersonalInfo.qml</file>
     </qresource>
 </RCC>
