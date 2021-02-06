@@ -39,6 +39,8 @@ set(PROJECT_SOURCES
         tilemap/tilelayer.cpp
         tilemap/tilemap.h
         tilemap/tilemap.cpp
+        cmap/statmodel.h
+        cmap/statmodel.cpp
         game/leveltask.h
         game/leveltask.cpp
         game.h

@@ -7,6 +7,9 @@ Repeater {
   readonly property var list: [
     "STR", "PER", "END", "CHA", "INT", "AGI", "LUC"
   ]
+  readonly property var propertyName: [
+    "strength", "perception", "endurance", "charisma", "intelligence", "agility", "luck"
+  ]
   property QtObject characterSheet
   property bool editable: false
 
@@ -22,7 +25,7 @@ Repeater {
     }
     Label {
       Layout.minimumWidth: 50
-      text: "5"
+      text: characterSheet[propertyName[index]]
       color: "white"
       horizontalAlignment: Qt.AlignHCenter
       verticalAlignment: Qt.AlignVCenter
@@ -41,10 +44,25 @@ Repeater {
     UiStyle.TinyButton {
       visible: editable
       text: "+"
+      enabled: characterSheet.specialPoints > 0
+      onClicked: {
+        const value = characterSheet[propertyName[index]];
+        if (value < 10) {
+          characterSheet[propertyName[index]] += 1
+          characterSheet.specialPoints -= 1;
+        }
+      }
     }
     UiStyle.TinyButton {
       visible: editable
       text: "-"
+      onClicked: {
+        const value = characterSheet[propertyName[index]];
+        if (value > 1) {
+          characterSheet[propertyName[index]] -= 1
+          characterSheet.specialPoints += 1;
+        }
+      }
     }
   }
 }

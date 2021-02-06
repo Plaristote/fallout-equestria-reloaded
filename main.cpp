@@ -8,6 +8,8 @@
 
 #include "game.h"
 
+#include "cmap/statmodel.h"
+
 void registerQmlTilemap() {
   qmlRegisterType<TileMap>  ("Tiles", 1,0, "TileMap");
   qmlRegisterType<TileLayer>("Tiles", 1,0, "TileLayer");
@@ -27,6 +29,7 @@ int main(int argc, char *argv[])
   QQmlApplicationEngine engine;
 
   qmlRegisterType<Game>("Game", 1,0, "Controller");
+  qmlRegisterType<StatModel>("Game", 1,0, "StatModel");
   registerQmlTilemap();
 
   engine.rootContext()->setContextProperty("gameController", game);

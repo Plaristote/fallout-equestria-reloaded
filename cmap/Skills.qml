@@ -7,11 +7,11 @@ Pane {
   id: root
   property QtObject characterSheet
   property var list: [
-    "small-guns", "big-guns", "energy-guns",
-    "explosives", "unarmed", "melee-weapons",
-    "lockpick", "sneak", "medecine", "repair",
-    "science", "speak", "trade", "spellcasting",
-    "steal", "barter", "outdoorspony"
+    "smallGuns", "bigGuns", "energyGuns",
+    "explosives", "unarmed", "meleeWeapons",
+    "lockpick", "sneak", "medicine", "repair",
+    "science", "speech", "barter", "spellcasting",
+    "steal", "gambling", "outdoorsman"
   ]
 
   background: UiStyle.TerminalPane {}
@@ -30,8 +30,6 @@ Pane {
     clip: true
 
     Column {
-      x: width < root.width ? root.width / 2 - width / 2 - 10 : 0
-
       id: content
       Repeater {
         model: root.list
@@ -39,20 +37,29 @@ Pane {
           Text {
             text: qsTr(root.list[index])
             color: "white"
-            width: 250
+            width: Math.max(150, root.width - (root.canEdit() ? 150 : 50))
           }
           Text {
-            text: "0%"
+            text: characterSheet[root.list[index]] + "%"
             color: "white"
             width: 50
           }
           UiStyle.TerminalButton {
             visible: root.canEdit()
+            enabled: characterSheet.skillPoints > 0
             text: "+"
+            onClicked: {
+              characterSheet[root.list[index]] += 1
+              characterSheet.skillPoints -= 1
+            }
           }
           UiStyle.TerminalButton {
             visible: root.canEdit()
             text: "-"
+            onClicked: {
+              characterSheet[root.list[index]] -= 1
+              characterSheet.skillPoints += 1
+            }
           }
         }
       }

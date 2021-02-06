@@ -4,37 +4,57 @@
 <context>
     <name>CharacterSheet</name>
     <message>
-        <location filename="ui/CharacterSheet.qml" line="31"/>
+        <location filename="ui/CharacterSheet.qml" line="32"/>
         <source>Your name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="ui/CharacterSheet.qml" line="44"/>
+        <location filename="ui/CharacterSheet.qml" line="46"/>
         <source>age</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="ui/CharacterSheet.qml" line="69"/>
-        <source>Male</source>
+        <location filename="ui/CharacterSheet.qml" line="71"/>
+        <source>Stallion</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="ui/CharacterSheet.qml" line="70"/>
-        <source>Female</source>
+        <location filename="ui/CharacterSheet.qml" line="72"/>
+        <source>Mare</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="ui/CharacterSheet.qml" line="153"/>
+        <location filename="ui/CharacterSheet.qml" line="93"/>
+        <source>Earth pony</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="ui/CharacterSheet.qml" line="94"/>
+        <source>Unicorn</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="ui/CharacterSheet.qml" line="95"/>
+        <source>Pegasus</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="ui/CharacterSheet.qml" line="122"/>
+        <source>Available points</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="ui/CharacterSheet.qml" line="198"/>
         <source>Cutie Mark Acquisition Program</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="ui/CharacterSheet.qml" line="230"/>
+        <location filename="ui/CharacterSheet.qml" line="275"/>
         <source>Confirm</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="ui/CharacterSheet.qml" line="235"/>
+        <location filename="ui/CharacterSheet.qml" line="280"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>

@@ -6,16 +6,16 @@ import "qrc:/assets/ui" as UiStyle
 Pane {
   property QtObject characterSheet
   property var list: [
-    "armor-class",
-    "action-points",
-    "carry-weight",
-    "melee-damage",
-    "damage-resistance",
-    "poison-resistance",
-    "radiation-resistance",
+    "armorClass",
+    "actionPoints",
+    "carryWeight",
+    "meleeDamage",
+    "damageResistance",
+    "poisonResistance",
+    "radiationResistance",
     "sequence",
-    "healing-rate",
-    "critical-chance"
+    "healingRate",
+    "criticalChance"
   ]
 
   id: root
@@ -32,7 +32,7 @@ Pane {
           width: 150
         }
         Text {
-          text: "0"
+          text: characterSheet[list[index]]
           color: "white"
           Layout.alignment: Qt.AlignRight
         }

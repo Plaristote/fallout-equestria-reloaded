@@ -9,6 +9,7 @@ Pane {
   property QtObject characterSheet
   property var mode: "create"
   readonly property bool createMode: mode === "create"
+  readonly property bool editMode: mode === "edit"
 
   background: UiStyle.Pane {}
 
@@ -24,6 +25,7 @@ Pane {
 
     TextField {
       id: characterName
+      text: characterSheet.name
       Layout.minimumWidth: 200
       Layout.fillHeight: true
       readOnly: !createMode
@@ -37,6 +39,7 @@ Pane {
 
     TextField {
       id: characterAge
+      text: characterSheet.age
       Layout.minimumWidth: 50
       Layout.fillHeight: true
       color: "white"
@@ -66,8 +69,31 @@ Pane {
         style: parent.focus ? "dark" : "base"
       }
       model: [
-        { value: 0, text: qsTr("Male") },
-        { value: 1, text: qsTr("Female") }
+        { value: 0, text: qsTr("Stallion") },
+        { value: 1, text: qsTr("Mare") }
+      ]
+    }
+
+    ComboBox {
+      id: characterRace
+      Layout.minimumWidth: 200
+      Layout.fillHeight: true
+      enabled: createMode
+      textRole: "text"
+      valueRole: "value"
+      contentItem: Text {
+        verticalAlignment: Text.AlignVCenter
+        horizontalAlignment: Text.AlignHCenter
+        text: characterRace.currentText
+        color: "white"
+      }
+      background: UiStyle.Label {
+        style: parent.focus ? "dark" : "base"
+      }
+      model: [
+        { value: 0, text: qsTr("Earth pony") },
+        { value: 1, text: qsTr("Unicorn") },
+        { value: 1, text: qsTr("Pegasus") }
       ]
     }
   }
@@ -88,6 +114,28 @@ Pane {
       CMAP.Special {
         editable: createMode
         characterSheet: root.characterSheet
+      }
+
+      RowLayout {
+        visible: createMode
+        Layout.topMargin: 15
+        Label {
+          Layout.fillWidth: true
+          text: qsTr("Available points")
+          color: "yellow"
+          horizontalAlignment: Qt.AlignHCenter
+          verticalAlignment: Qt.AlignVCenter
+          background: UiStyle.Pane {}
+        }
+        Label {
+          Layout.minimumWidth: 50
+          text: characterSheet.specialPoints
+          color: "white"
+          padding: 5
+          horizontalAlignment: Qt.AlignHCenter
+          verticalAlignment: Qt.AlignVCenter
+          background: UiStyle.TerminalPane {}
+        }
       }
 
       CMAP.Experience {
@@ -125,7 +173,7 @@ Pane {
     }
 
     RowLayout {
-      visible: true // TODO only when skill pointz are available
+      visible: editMode || createMode
       Label {
         text: "Available skill points"
         color: "white"
@@ -135,7 +183,7 @@ Pane {
         Layout.fillWidth: true
       }
       Label {
-        text: "0"
+        text: characterSheet.skillPoints
         color: "white"
         padding: 10
         background: UiStyle.TerminalPane {}
