@@ -6,6 +6,7 @@ import "qrc:/assets/ui" as UiStyle
 Pane {
   id: root
   property QtObject characterSheet
+  property string selectedProperty
   property var list: [
     "smallGuns", "bigGuns", "energyGuns",
     "explosives", "unarmed", "meleeWeapons",
@@ -15,6 +16,8 @@ Pane {
   ]
 
   background: UiStyle.TerminalPane {}
+
+  signal selectProperty(string selectedName)
 
   function canEdit() {
     return true;
@@ -31,34 +34,43 @@ Pane {
 
     Column {
       id: content
+      spacing: 10
       Repeater {
         model: root.list
         delegate: Row {
+          property string propertyName: root.list[index]
+          property color textColor: propertyName == root.selectedProperty ? "green" : "white"
+
+
           Text {
-            text: qsTr(root.list[index])
-            color: "white"
+            text: qsTr(propertyName)
+            color: textColor
             width: Math.max(150, root.width - (root.canEdit() ? 150 : 50))
+            MouseArea { anchors.fill: parent; onClicked: root.selectProperty(propertyName) }
           }
           Text {
             text: characterSheet[root.list[index]] + "%"
-            color: "white"
+            color: textColor
             width: 50
+            MouseArea { anchors.fill: parent; onClicked: root.selectProperty(propertyName) }
           }
           UiStyle.TerminalButton {
             visible: root.canEdit()
             enabled: characterSheet.skillPoints > 0
             text: "+"
             onClicked: {
-              characterSheet[root.list[index]] += 1
-              characterSheet.skillPoints -= 1
+              characterSheet[root.list[index]] += 1;
+              characterSheet.skillPoints -= 1;
+              root.selectProperty(propertyName);
             }
           }
           UiStyle.TerminalButton {
             visible: root.canEdit()
             text: "-"
             onClicked: {
-              characterSheet[root.list[index]] -= 1
-              characterSheet.skillPoints += 1
+              characterSheet[root.list[index]] -= 1;
+              characterSheet.skillPoints += 1;
+              root.selectProperty(propertyName);
             }
           }
         }

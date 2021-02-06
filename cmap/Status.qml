@@ -5,31 +5,43 @@ import "qrc:/assets/ui" as UiStyle
 
 Pane {
   property QtObject characterSheet
+  property string selectedProperty
   property var injuries: [
     "poisoned", "radiated", "eye-damage", "crippled-front-left-leg", "crippled-front-right-leg", "crippled-rear-left-leg", "crippled-rear-right-leg"
   ]
+
+  signal selectProperty(string selectedName);
 
   background: UiStyle.TerminalPane {}
 
   ColumnLayout {
     RowLayout {
+      property string propertyName: "hitPoints"
+      property color textColor: selectedProperty == propertyName ? "green" : "white"
+
       Label {
-        text: qsTr("Hit Points")
+        text: qsTr(parent.propertyName)
         Layout.alignment: Qt.AlignLeft
-        color: "white"
+        color: parent.textColor
+        MouseArea { anchors.fill: parent; onClicked: selectProperty(parent.parent.propertyName) }
       }
       Label {
-        text: "50/50"
+        text: characterSheet.hitPoints + '/' + characterSheet.maxHitPoints
         Layout.alignment: Qt.AlignRight
-        color: "white"
+        color: parent.textColor
+        MouseArea { anchors.fill: parent; onClicked: selectProperty(parent.parent.propertyName) }
       }
     }
 
     Repeater {
       model: injuries
       delegate: Label {
+        property string propertyName: injuries[index]
+        property color textColor: selectedProperty == propertyName ? "green" : "white"
+
         text: qsTr(injuries[index])
-        color: false ? "white" : "gray"
+        color: false ? textColor : "gray"
+        MouseArea { anchors.fill: parent; onClicked: selectProperty(parent.propertyName) }
       }
     }
   }

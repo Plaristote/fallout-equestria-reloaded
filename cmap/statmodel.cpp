@@ -7,6 +7,9 @@ StatModel::StatModel(QObject *parent) : QObject(parent)
   skillPoints = 0;
   experience = 0;
   connect(this, &StatModel::specialChanged, this, &StatModel::updateBaseValues);
+  connect(this, &StatModel::specialChanged, this, &StatModel::acceptableChanged);
+  connect(this, &StatModel::traitsChanged,  this, &StatModel::acceptableChanged);
+  connect(this, &StatModel::nameChanged,    this, &StatModel::acceptableChanged);
 }
 
 int StatModel::getXpNextLevel() const
@@ -74,4 +77,9 @@ void StatModel::updateBaseValues()
   data.gambling     = charisma + 4 * luck;
 
   emit statisticsChanged();
+}
+
+bool StatModel::isAcceptable() const
+{
+  return traits.length() == getMaxTraits() && specialPoints == 0 && name.length() > 0;
 }

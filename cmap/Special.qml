@@ -13,26 +13,32 @@ Repeater {
   property QtObject characterSheet
   property bool editable: false
 
+  signal selectProperty(string selectedName);
+
   model: list
   delegate: RowLayout {
     Label {
+      id: specialName
       Layout.minimumWidth: 100
       text: list[index]
       color: "white"
       horizontalAlignment: Qt.AlignHCenter
       verticalAlignment: Qt.AlignVCenter
       background: UiStyle.Pane {}
+      MouseArea { anchors.fill: parent; onClicked: selectProperty(propertyName[index]) }
     }
     Label {
       Layout.minimumWidth: 50
-      text: characterSheet[propertyName[index]]
+      text: characterSheet[propertyName [index]]
       color: "white"
       horizontalAlignment: Qt.AlignHCenter
       verticalAlignment: Qt.AlignVCenter
       padding: 5
       background: UiStyle.TerminalPane {}
+      MouseArea { anchors.fill: parent; onClicked: selectProperty(propertyName[index]) }
     }
     Label {
+      id: specialQualifier
       Layout.minimumWidth: 100
       text: "Average"
       color: "white"
@@ -40,6 +46,7 @@ Repeater {
       verticalAlignment: Qt.AlignVCenter
       padding: 5
       background: UiStyle.TerminalPane {}
+      MouseArea { anchors.fill: parent; onClicked: selectProperty(propertyName[index]) }
     }
     UiStyle.TinyButton {
       visible: editable
@@ -51,6 +58,7 @@ Repeater {
           characterSheet[propertyName[index]] += 1
           characterSheet.specialPoints -= 1;
         }
+        selectProperty(propertyName[index])
       }
     }
     UiStyle.TinyButton {
@@ -62,6 +70,7 @@ Repeater {
           characterSheet[propertyName[index]] -= 1
           characterSheet.specialPoints += 1;
         }
+        selectProperty(propertyName[index])
       }
     }
   }

@@ -4,6 +4,7 @@ import QtQuick.Layouts 1.15
 import "../assets/ui" as UiStyle
 
 RowLayout {
+  property QtObject characterSheet
   id: root
   property bool editable: true
 
@@ -22,6 +23,7 @@ RowLayout {
     background: UiStyle.Label {
       style: parent.focus ? "dark" : "base"
     }
+    onTextChanged: characterSheet.name = text
   }
 
   TextField {
@@ -37,6 +39,7 @@ RowLayout {
     background: UiStyle.Label {
       style: parent.focus ? "dark" : "base"
     }
+    onTextChanged: characterSheet.age = parseInt(text)
   }
 
   ComboBox {
@@ -59,6 +62,9 @@ RowLayout {
       { value: 0, text: qsTr("Stallion") },
       { value: 1, text: qsTr("Mare") }
     ]
+    onCurrentIndexChanged: {
+
+    }
   }
 
   ComboBox {
@@ -82,5 +88,8 @@ RowLayout {
       { value: 1, text: qsTr("Unicorn") },
       { value: 1, text: qsTr("Pegasus") }
     ]
+    onCurrentIndexChanged: {
+
+    }
   }
 }

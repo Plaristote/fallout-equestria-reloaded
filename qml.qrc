@@ -36,5 +36,9 @@
         <file>game/LevelRender.mjs</file>
         <file>game/LevelView.qml</file>
         <file>cmap/PersonalInfo.qml</file>
+        <file>cmap/SpecialCounter.qml</file>
+        <file>cmap/DescriptionPane.qml</file>
+        <file>ui/TabRow.qml</file>
+        <file>cmap/TraitsPicker.qml</file>
     </qresource>
 </RCC>

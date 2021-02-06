@@ -4,8 +4,8 @@ import QtQuick.Controls 2.15
 
 Window {
   id: application
-  width: 800
-  height: 600
+  width: 1024
+  height: 800
   visible: true
   //visibility: Window.Maximized
   title: qsTr("Fallout Equestria")
