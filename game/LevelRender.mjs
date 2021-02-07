@@ -60,6 +60,7 @@ export class Controller {
     const extraHeight = clippedRect.height - this.tileSize.height;
 
     offset.y -= extraHeight;
+    offset.x += this.tileSize.width / 2 - clippedRect.width / 2
     if (this.shouldRender(offset.x, offset.y, clippedRect.width, clippedRect.height)) {
       if (sprite.getShadowSource() !== "")
       {
