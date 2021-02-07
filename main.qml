@@ -10,6 +10,7 @@ Window {
   //visibility: Window.Maximized
   title: qsTr("Fallout Equestria")
 
+  property bool isMaximizeed: visibility === Window.Maximized
   property bool hasSavedGame: false // TODO
 
   function createGame() {

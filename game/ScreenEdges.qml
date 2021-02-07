@@ -1,9 +1,9 @@
-import QtQuick 2.0
+import QtQuick 2.15
 
 Item {
   anchors.fill: parent
 
-  property int scrollBorderSize: 40
+  property int scrollBorderSize: application.isMaximized ? 5 : 40
   property int scrollSpeed: 20
   property bool enabled: true
 

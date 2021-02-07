@@ -30,7 +30,7 @@ Item {
       anchors.left: parent.left
       anchors.top: parent.top
       anchors.bottom: parent.bottom
-      width: 250
+      width: 240
       background: UiStyle.TerminalPane {}
 
       Flickable {
