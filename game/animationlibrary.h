@@ -7,6 +7,7 @@
 
 struct SpriteAnimation
 {
+  QString name;
   QString source;
   QPoint  firstFramePosition;
   QRect   clippedRect;

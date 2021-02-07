@@ -50,6 +50,7 @@ SpriteAnimation AnimationLibrary::getAnimation(const QString &group, const QStri
   auto groupData = data[group];
   auto animationData = groupData[animation];
 
+  object.name          = animation;
   object.source        = "assets/sprites/";
   object.source       += animationData["source"].toString(groupData["defaultSource"].toString());
   object.repeat        = animationData["repeat"].toBool(false);

@@ -22,6 +22,7 @@ public:
   Q_INVOKABLE QString getSpriteSource() const { return animation.source; }
   Q_INVOKABLE QRect   getClippedRect() const  { return animation.clippedRect; }
   Q_INVOKABLE QPoint  getSpritePosition() const { return spritePosition; }
+  Q_INVOKABLE QString getCurrentAnimation() const { return animation.name; }
 
 signals:
   void animationFinished();

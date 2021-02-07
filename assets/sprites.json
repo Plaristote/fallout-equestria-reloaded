@@ -9,6 +9,24 @@
       "height": 46, "width": 46,
       "frameCount": 3, "frameInterval": 250,
       "repeat": true
+    },
+    "walking-left": {
+      "offsetX": 0, "offsetY": 48,
+      "height": 46, "width": 46,
+      "frameCount": 3, "frameInterval": 250,
+      "repeat": true
+    },
+    "walking-up": {
+      "offsetX": 0, "offsetY": 144,
+      "height": 46, "width": 46,
+      "frameCount": 3, "frameInterval": 250,
+      "repeat": true
+    },
+    "walking-right": {
+      "offsetX": 0, "offsetY": 96,
+      "height": 46, "width": 46,
+      "frameCount": 3, "frameInterval": 250,
+      "repeat": true
     }
   }
 }
