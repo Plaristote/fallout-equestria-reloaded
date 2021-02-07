@@ -19,6 +19,7 @@ void LevelTask::load(const QString& levelName)
   player->setSpriteName("pony");
   player->setAnimation("walking-down");
   forceCharacterPosition(player, 0, 0);
+  triggerCharacterMoveTo(player, 8, 2);
 }
 
 void LevelTask::onTaskTick()
@@ -48,15 +49,17 @@ void LevelTask::moveCharacterTo(DynamicObject *, int x, int y)
 
 void LevelTask::triggerCharacterMoveTo(DynamicObject* character, int x, int y)
 {
-  QPoint renderPosition = tilemap->getLayer("ground")->getTile(x, y)->getPosition();
+  QPoint renderPosition = tilemap->getLayer("ground")->getTile(x, y)->getRenderPosition();
 
   if (grid->moveObject(character, x, y))
     character->moveToCoordinates(renderPosition);
+  else
+    qDebug() << "Cannot move to coordinate" << x << y;
 }
 
 void LevelTask::forceCharacterPosition(DynamicObject* character, int x, int y)
 {
-  QPoint renderPosition = tilemap->getLayer("ground")->getTile(x, y)->getPosition();
+  QPoint renderPosition = tilemap->getLayer("ground")->getTile(x, y)->getRenderPosition();
 
   grid->moveObject(character, x, y);
   character->forceMoveToCoordinates(renderPosition);

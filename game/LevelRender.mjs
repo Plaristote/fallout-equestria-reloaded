@@ -42,11 +42,11 @@ export class Controller {
   }
 
   renderTile(tile, x, y) {
-    this.renderImage("../" + tile.image, x, y, this.tileSize.width, this.tileSize.height, tile.clippedRect);
+    this.renderImage("../" + tile.image, tile.renderPosition, this.tileSize.width, this.tileSize.height, tile.clippedRect);
   }
 
   renderWall(tile, x, y) {
-    this.renderImage("../" + tile.image, x, y, this.wallSize.width, this.wallSize.height, tile.clippedRect);
+    this.renderImage("../" + tile.image, this.getPointFor(x, y), this.wallSize.width, this.wallSize.height, tile.clippedRect);
   }
 
   renderSprite(sprite) {
@@ -65,11 +65,10 @@ export class Controller {
     }
   }
 
-  renderImage(source, x, y, width, height, clippedRect) {
+  renderImage(source, tileOffset, width, height, clippedRect) {
     const extraHeight = height - this.tileSize.height;
-    const offset  = this.getPointFor(x, y);
+    const offset  = { x: tileOffset.x, y: tileOffset.y - extraHeight };
 
-    offset.y -= extraHeight;
     if (clippedRect === undefined)
       clippedRect = Qt.rect(0, 0, width, height);
     if (this.shouldRender(offset.x, offset.y, width, height)) {

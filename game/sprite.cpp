@@ -4,8 +4,10 @@
 
 Sprite::Sprite(QObject *parent) : QObject(parent)
 {
+  movementSpeed = 2;
   animationTimer.setSingleShot(true);
   movementTimer.setSingleShot(true);
+  movementTimer.setInterval(100);
   connect(&animationTimer, &QTimer::timeout, this, &Sprite::runAnimation);
   connect(&movementTimer,  &QTimer::timeout, this, &Sprite::runMovement);
 }
@@ -56,17 +58,26 @@ void Sprite::moveToCoordinates(QPoint coordinates)
     movementTimer.start();
 }
 
+static int axisMovement(int current, int final, int speed)
+{
+  int result = final;
+
+  if      (current < final && final - current > speed) { result = current + speed; }
+  else if (current > final && current - final > speed) { result = current - speed; }
+  return std::abs(result - final) < speed ? final : result;
+}
+
 void Sprite::runMovement()
 {
-  QPoint delta = spriteMovementTarget - spritePosition;
-  float angle = std::atan2<float>(static_cast<float>(delta.x()), static_cast<float>(delta.y()));
+  float movementSpeedX = movementSpeed;
+  float movementSpeedY = movementSpeed;
+  int   distX = std::max(spritePosition.x(), spriteMovementTarget.x()) - std::min(spritePosition.x(), spriteMovementTarget.x());
+  int   distY = std::max(spritePosition.y(), spriteMovementTarget.y()) - std::min(spritePosition.y(), spriteMovementTarget.y());
 
-  spritePosition.rx() += static_cast<int>(movementSpeed * std::cos(angle));
-  spritePosition.ry() += static_cast<int>(movementSpeed * std::sin(angle));
-  if (std::abs(spritePosition.x() - spriteMovementTarget.x()) < static_cast<int>(movementSpeed))
-    spritePosition.setX(spriteMovementTarget.x());
-  if (std::abs(spritePosition.y() - spriteMovementTarget.y()) < static_cast<int>(movementSpeed))
-    spritePosition.setY(spriteMovementTarget.y());
+  if      (distX > distY) { movementSpeedY = movementSpeed * (static_cast<float>(distY) / static_cast<float>(distX)); }
+  else if (distY > distX) { movementSpeedX = movementSpeed * (static_cast<float>(distX) / static_cast<float>(distY)); }
+  spritePosition.setX(axisMovement(spritePosition.x(), spriteMovementTarget.x(), static_cast<int>(movementSpeedX)));
+  spritePosition.setY(axisMovement(spritePosition.y(), spriteMovementTarget.y(), static_cast<int>(movementSpeedY)));
   if (spritePosition != spriteMovementTarget)
     movementTimer.start();
   else

@@ -14,6 +14,7 @@ public:
 
   inline const QString& getSource() const { return source; }
   QRect getClipRectFor(int tileId) const;
+  QSize getTileSize() const { return tileSize; }
   bool isInRange(int tileId) { return tileId >= firstGid && tileId < firstGid + tileCount; }
 
 private:

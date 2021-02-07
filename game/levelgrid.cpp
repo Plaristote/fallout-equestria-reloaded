@@ -11,25 +11,26 @@ void LevelGrid::initializeGrid(TileMap* tilemap)
   auto* wallLayer = tilemap->getLayer("walls");
 
   size = tilemap->getSize();
+  grid.resize(size.width() * size.height());
   for (int x = 0 ; x < size.width() ; ++x)
   {
     for (int y = 0 ; y < size.height() ; ++y)
     {
-      CaseContent gridCase;
+      int position = y * size.width() + x;
+      CaseContent& gridCase = grid[position];
 
       gridCase.occupied = wallLayer->getTile(x, y) != nullptr;
-      grid.push_back(gridCase);
     }
   }
 }
 
 LevelGrid::CaseContent* LevelGrid::getGridCase(int x, int y)
 {
-  int index = y * size.width() + x;
+  int position = y * size.width() + x;
 
-  if (index >= grid.count())
+  if (position >= grid.count())
     return nullptr;
-  return &(grid[index]);
+  return &(grid[position]);
 }
 
 bool LevelGrid::isOccupied(int x, int y) const
@@ -68,6 +69,13 @@ bool LevelGrid::moveObject(DynamicObject* object, int x, int y)
     if (oldCase && oldCase->occupant == object)
       setCaseOccupant(*oldCase, nullptr);
     setCaseOccupant(*gridCase, object);
+    return true;
   }
+  else if (!gridCase)
+    qDebug() << "LevelRange: Out of range" << x << y;
+  else if (gridCase->occupant == nullptr)
+    qDebug() << "LevelGrid:" << x << y << "haz a wall";
+  else
+    qDebug() << "LevelGrid:" << x << y << "already occupied";
   return false;
 }

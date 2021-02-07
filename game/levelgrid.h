@@ -23,9 +23,10 @@ public:
 
   void initializeGrid(TileMap*);
 
-  bool           isOccupied(int x, int y) const;
-  DynamicObject* getOccupant(int x, int y);
-  bool           moveObject(DynamicObject*, int x, int y);
+  Q_INVOKABLE bool           isOccupied(int x, int y) const;
+  Q_INVOKABLE DynamicObject* getOccupant(int x, int y);
+
+  bool moveObject(DynamicObject*, int x, int y);
 
 private:
   CaseContent* getGridCase(int x, int y);
