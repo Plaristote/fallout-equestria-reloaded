@@ -1,6 +1,8 @@
 #include "levelgrid.h"
 #include "tilemap/tilemap.h"
 #include "dynamicobject.h"
+#include "astar.hpp"
+#include <cmath>
 
 LevelGrid::LevelGrid(QObject *parent) : QObject(parent)
 {
@@ -20,8 +22,86 @@ void LevelGrid::initializeGrid(TileMap* tilemap)
       CaseContent& gridCase = grid[position];
 
       gridCase.occupied = wallLayer->getTile(x, y) != nullptr;
+      gridCase.position = QPoint(x, y);
     }
   }
+  initializePathfinding();
+}
+
+void LevelGrid::initializePathfinding()
+{
+  for (auto& gridCase : grid)
+  {
+    bool hasLeft  = gridCase.position.x() - 1 >= 0;
+    bool hasRight = gridCase.position.x() + 1 < size.width();
+    bool hasUp    = gridCase.position.y() - 1 >= 0;
+    bool hasDown  = gridCase.position.y() + 1 < size.height();
+
+    gridCase.successors.clear();
+    gridCase.successors.push_back(hasLeft && hasUp    ? getGridCase(gridCase.position.x() - 1, gridCase.position.y() - 1) : nullptr);
+    gridCase.successors.push_back(hasUp               ? getGridCase(gridCase.position.x(),     gridCase.position.y() - 1) : nullptr);
+    gridCase.successors.push_back(hasRight && hasUp   ? getGridCase(gridCase.position.x() + 1, gridCase.position.y() - 1) : nullptr);
+    gridCase.successors.push_back(hasLeft             ? getGridCase(gridCase.position.x() - 1, gridCase.position.y())     : nullptr);
+    gridCase.successors.push_back(hasRight            ? getGridCase(gridCase.position.x() + 1, gridCase.position.y())     : nullptr);
+    gridCase.successors.push_back(hasDown && hasLeft  ? getGridCase(gridCase.position.x() - 1, gridCase.position.y() + 1) : nullptr);
+    gridCase.successors.push_back(hasDown             ? getGridCase(gridCase.position.x(),     gridCase.position.y() + 1) : nullptr);
+    gridCase.successors.push_back(hasDown && hasRight ? getGridCase(gridCase.position.x() + 1, gridCase.position.y() + 1) : nullptr);
+    for (auto it = gridCase.successors.begin() ; it != gridCase.successors.end() ;)
+    {
+      if ((*it) == nullptr || (*it)->occupied)
+        it = gridCase.successors.erase(it);
+      else
+        it++;
+    }
+  }
+}
+
+bool LevelGrid::findPath(QPoint from, QPoint to, QList<QPoint>& path)
+{
+  typedef AstarPathfinding<LevelGrid::CaseContent> Pathfinder;
+  Pathfinder        astar;
+  unsigned short    iterationCount = 0;
+  Pathfinder::State state;
+  CaseContent*      fromCase = getGridCase(from.x(), from.y());
+  CaseContent*      toCase   = getGridCase(to.x(), to.y());
+
+  fromCase->occupied = false;
+  path.clear();
+  astar.SetStartAndGoalStates(*fromCase, *toCase);
+  while ((state = astar.SearchStep()) == Pathfinder::Searching && ++iterationCount < 250)
+  {
+    qDebug() << "Looking zor path..." << iterationCount;
+  }
+  if (state == Pathfinder::Succeeded)
+  {
+    for (auto& gridCase : astar.GetSolution())
+      path << gridCase.position;
+    path.pop_front(); // first case is the starting point
+    fromCase->occupied = true;
+    return true;
+  }
+  fromCase->occupied = true;
+  return false;
+}
+
+std::list<LevelGrid::CaseContent*> LevelGrid::CaseContent::GetSuccessors(const CaseContent* parent) const
+{
+  std::list<LevelGrid::CaseContent*> results;
+
+  for (auto* node : successors)
+  {
+    if (node != parent && !node->occupied)
+      results.push_back(node);
+  }
+  return results;
+}
+
+float LevelGrid::CaseContent::GoalDistanceEstimate(const CaseContent& other) const
+{
+  int distX = position.x() - other.position.x();
+  int distY = position.y() - other.position.y();
+
+  return std::sqrt(static_cast<float>(distX * distX + distY * distY));
 }
 
 LevelGrid::CaseContent* LevelGrid::getGridCase(int x, int y)

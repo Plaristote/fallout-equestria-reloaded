@@ -14,18 +14,28 @@ class LevelGrid : public QObject
 
   struct CaseContent
   {
-    bool           occupied = false;
-    DynamicObject* occupant = nullptr;
-  };
-public:
+    bool                      occupied = false;
+    DynamicObject*            occupant = nullptr;
+    QPoint                    position;
+    std::vector<CaseContent*> successors;
 
+    bool  operator==(const CaseContent& other) { return position == other.position; }
+    bool  operator==(const CaseContent* other) { return position == other->position; }
+    float GetCost(const CaseContent&) const { return 1.f; }
+    float GoalDistanceEstimate(const CaseContent&) const;
+    std::list<CaseContent*> GetSuccessors(const CaseContent* parent) const;
+  };
+
+public:
   explicit LevelGrid(QObject *parent = nullptr);
 
   void initializeGrid(TileMap*);
+  void initializePathfinding();
 
   Q_INVOKABLE bool           isOccupied(int x, int y) const;
   Q_INVOKABLE DynamicObject* getOccupant(int x, int y);
 
+  bool findPath(QPoint from, QPoint to, QList<QPoint>& path);
   bool moveObject(DynamicObject*, int x, int y);
 
 private:

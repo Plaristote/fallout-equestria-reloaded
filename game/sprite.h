@@ -25,7 +25,7 @@ public:
 
 signals:
   void animationFinished();
-  void movementFinished();
+  void movementFinished(Sprite*);
 
 private slots:
   void runAnimation();

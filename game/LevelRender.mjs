@@ -21,28 +21,33 @@ export class Controller {
     var totalRendered = 0;
 
     this.clear();
+    this.eachCase(this.renderTile.bind(this));
+    this.eachCase(this.renderCoordinates.bind(this));
+  }
+
+  eachCase(callback) {
     for (var x = 0 ; x < this.mapSize.width; ++x) {
       for (var y = 0 ; y < this.mapSize.height; ++y) {
-        this.renderCoordinates(x, y, 0);
+        callback(x, y);
       }
     }
   }
 
-  renderCoordinates(x, y) {
+  renderTile(x, y) {
     const tile = this.layers.ground.getTile(x, y);
+
+    if (tile)
+      this.renderImage("../" + tile.image, tile.renderPosition, this.tileSize.width, this.tileSize.height, tile.clippedRect);
+  }
+
+  renderCoordinates(x, y) {
     const wall = this.layers.walls.getTile(x, y);
     const dynamicObject = this.level.getOccupantAt(x, y);
 
-    if (tile)
-      this.renderTile(tile, x, y);
     if (wall)
       this.renderWall(wall, x, y);
     else if (dynamicObject)
       this.renderSprite(dynamicObject);
-  }
-
-  renderTile(tile, x, y) {
-    this.renderImage("../" + tile.image, tile.renderPosition, this.tileSize.width, this.tileSize.height, tile.clippedRect);
   }
 
   renderWall(tile, x, y) {
@@ -105,5 +110,22 @@ export class Controller {
 
   clear() {
     this.context.clearRect(-this.origin.x, -this.origin.y, this.canvas.width * 100, this.canvas.height * 100);
+  }
+
+  onMouseClick(mouse, mouseX, mouseY) {
+    const posX = mouseX - this.canvas.origin.x;
+    const posY = mouseY - this.canvas.origin.y;
+
+    for (var x = 0 ; x < this.mapSize.width; ++x) {
+      for (var y = 0 ; y < this.mapSize.height; ++y) {
+        const pos = this.getPointFor(x, y);
+        if (posX >= pos.x && posX <= pos.x + this.tileSize.width &&
+            posY >= pos.y && posY <= pos.y + this.tileSize.height)
+        {
+          this.level.tileClicked(x, y);
+          return ;
+        }
+      }
+    }
   }
 };

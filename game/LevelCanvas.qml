@@ -29,6 +29,13 @@ Canvas {
     requestPaint();
   }
 
+  MouseArea {
+    anchors.fill: parent
+    onClicked: {
+      controller.onMouseClick(mouse, mouseX, mouseY);
+    }
+  }
+
   function preloadImages() {
     const images = [];
 

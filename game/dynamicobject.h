@@ -15,12 +15,22 @@ public:
 
   Q_INVOKABLE QPoint getPosition() const { return position; }
   void setPosition(QPoint value) { position = value; }
+  void moveTo(int x, int y, QPoint renderPosition);
+
+  const QList<QPoint>& getCurrentPath() const { return currentPath; }
+  QList<QPoint>& rcurrentPath() { return currentPath; }
 
 signals:
+  void reachedDestination();
+  void pathBlocked();
+
+private slots:
+  void onMovementEnded();
 
 private:
-  QPoint position;
+  QPoint position, nextPosition;
   Sprite* sprite;
+  QList<QPoint> currentPath;
 };
 
 #endif // DYNAMICOBJECT_H

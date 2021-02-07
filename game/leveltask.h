@@ -25,8 +25,12 @@ public:
   Q_INVOKABLE void moveTo(int x, int y);
   Q_INVOKABLE void moveCharacterTo(DynamicObject*, int x, int y);
   Q_INVOKABLE DynamicObject* getOccupantAt(int x, int y);
+  Q_INVOKABLE void tileClicked(int x, int y);
 
-  void triggerCharacterMoveTo(DynamicObject* character, int x, int y);
+  void registerDynamicObject(DynamicObject*);
+  void unregisterDynamicObject(DynamicObject*);
+
+  bool triggerCharacterMoveTo(DynamicObject* character, int x, int y);
   void forceCharacterPosition(DynamicObject* chracter, int x, int y);
 
 signals:
@@ -37,6 +41,8 @@ private slots:
   void onPauseChanged();
   void onClockTick();
   void onTaskTick();
+
+  void onObjectMovementFinished(Sprite*);
 
 private:
   DynamicObject* player;

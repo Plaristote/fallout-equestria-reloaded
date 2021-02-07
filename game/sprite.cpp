@@ -4,7 +4,7 @@
 
 Sprite::Sprite(QObject *parent) : QObject(parent)
 {
-  movementSpeed = 2;
+  movementSpeed = 10;
   animationTimer.setSingleShot(true);
   movementTimer.setSingleShot(true);
   movementTimer.setInterval(100);
@@ -81,5 +81,7 @@ void Sprite::runMovement()
   if (spritePosition != spriteMovementTarget)
     movementTimer.start();
   else
-    emit movementFinished();
+  {
+    emit movementFinished(this);
+  }
 }
