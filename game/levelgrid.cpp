@@ -68,10 +68,7 @@ bool LevelGrid::findPath(QPoint from, QPoint to, QList<QPoint>& path)
   fromCase->occupied = false;
   path.clear();
   astar.SetStartAndGoalStates(*fromCase, *toCase);
-  while ((state = astar.SearchStep()) == Pathfinder::Searching && ++iterationCount < 250)
-  {
-    qDebug() << "Looking zor path..." << iterationCount;
-  }
+  while ((state = astar.SearchStep()) == Pathfinder::Searching && ++iterationCount < 250);
   if (state == Pathfinder::Succeeded)
   {
     for (auto& gridCase : astar.GetSolution())

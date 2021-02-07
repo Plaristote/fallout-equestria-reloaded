@@ -36,6 +36,7 @@ public:
 signals:
   void pausedChanged();
   void tilemapReady();
+  void displayConsoleMessage(const QString&);
 
 private slots:
   void onPauseChanged();

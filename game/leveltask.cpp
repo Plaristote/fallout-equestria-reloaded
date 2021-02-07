@@ -18,32 +18,26 @@ void LevelTask::load(const QString& levelName)
   player = new DynamicObject(this);
   registerDynamicObject(player);
   player->setSpriteName("pony");
-  player->setAnimation("walking-down");
+  player->setAnimation("idle-down");
   forceCharacterPosition(player, 0, 0);
-  //triggerCharacterMoveTo(player, 8, 2);
-  if (grid->findPath(QPoint(0, 0), QPoint(10, 8), player->rcurrentPath()))
-  {
-    QPoint nextCase = player->getCurrentPath().first();
-    qDebug() << "Ztarting our great journey";
-    triggerCharacterMoveTo(player, nextCase.x(), nextCase.y());
-  }
-  else
-    qDebug() << "NO PATH TOWARD (10,8)";
 }
 
 void LevelTask::tileClicked(int x, int y)
 {
   QPoint position = player->getPosition();
 
-  qDebug() << "Going to" << x << y;
   if (grid->findPath(position, QPoint(x, y), player->rcurrentPath()))
   {
-    QPoint nextCase = player->getCurrentPath().first();
-    qDebug() << "Ztarting our great journey" << x << y;
-    triggerCharacterMoveTo(player, nextCase.x(), nextCase.y());
+    if (player->getCurrentPath().size() > 0)
+    {
+      QPoint nextCase = player->getCurrentPath().first();
+      triggerCharacterMoveTo(player, nextCase.x(), nextCase.y());
+    }
+    else
+      emit player->reachedDestination();
   }
   else
-    qDebug() << "NO PATH TOWARD" << x << y;
+    emit displayConsoleMessage("No path towards [" + QString::number(x) + ',' + QString::number(y) + ']');
 }
 
 void LevelTask::registerDynamicObject(DynamicObject* object)
@@ -129,6 +123,7 @@ void LevelTask::forceCharacterPosition(DynamicObject* character, int x, int y)
   QPoint renderPosition = tilemap->getLayer("ground")->getTile(x, y)->getRenderPosition();
 
   grid->moveObject(character, x, y);
+  character->setPosition(QPoint(x, y));
   character->forceMoveToCoordinates(renderPosition);
 }
 

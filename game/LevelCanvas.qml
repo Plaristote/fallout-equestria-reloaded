@@ -25,7 +25,6 @@ Canvas {
 
   onAvailableChanged: {
     controller = new LevelRender.Controller(canvas, { level: levelController, tilemap: levelController.tilemap });
-    //moveToCoordinates(62, 45);
     requestPaint();
   }
 

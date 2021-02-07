@@ -25,5 +25,38 @@ Item {
     height: 135
     width: Math.min(parent.width, 1025)
     background: UiStyle.PlayPanel {}
+
+    Pane {
+      anchors.left: parent.left
+      anchors.top: parent.top
+      anchors.bottom: parent.bottom
+      width: 250
+      background: UiStyle.TerminalPane {}
+
+      Flickable {
+        id: terminalFlickable
+        anchors.fill: parent
+        contentHeight: terminalContent.height
+        clip: true
+
+        ScrollBar.vertical: UiStyle.TerminalScrollbar { orientation: Qt.Vertical }
+
+        Column {
+          id: terminalContent
+          width: parent.width - 10
+          onHeightChanged: terminalFlickable.contentY = Math.max(0, terminalContent.height - terminalFlickable.height);
+
+          Repeater {
+            model: gameController.consoleMessages
+            delegate: Text {
+              wrapMode: Text.WordWrap
+              width: terminalContent.width
+              text: "> " + gameController.consoleMessages[index]
+              color: "green"
+            }
+          }
+        }
+      }
+    }
   }
 }

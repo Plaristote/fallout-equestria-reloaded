@@ -60,7 +60,7 @@ export class Controller {
     const extraHeight = clippedRect.height - this.tileSize.height;
 
     offset.y -= extraHeight;
-    offset.x += this.tileSize.width / 2 - clippedRect.width / 2
+    offset.x += this.tileSize.width / 2 - clippedRect.width / 2;
     if (this.shouldRender(offset.x, offset.y, clippedRect.width, clippedRect.height)) {
       if (sprite.getShadowSource() !== "")
       {
@@ -131,6 +131,7 @@ export class Controller {
         if (posX >= pos.x && posX <= pos.x + this.tileSize.width &&
             posY >= pos.y && posY <= pos.y + this.tileSize.height)
         {
+          this.level.displayConsoleMessage(`Going to [${x}, ${y}]`);
           this.level.tileClicked(x, y);
           return ;
         }
