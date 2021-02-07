@@ -23,6 +23,7 @@ public:
   Q_INVOKABLE QRect   getClippedRect() const  { return animation.clippedRect; }
   Q_INVOKABLE QPoint  getSpritePosition() const { return spritePosition; }
   Q_INVOKABLE QString getCurrentAnimation() const { return animation.name; }
+  Q_INVOKABLE QString getShadowSource() const { return shadow.source; }
 
 signals:
   void animationFinished();
@@ -35,6 +36,7 @@ private slots:
 private:
   QPoint          spritePosition, spriteMovementTarget;
   QString         name;
+  SpriteAnimation shadow;
   SpriteAnimation animation;
   QTimer          animationTimer;
   QTimer          movementTimer;

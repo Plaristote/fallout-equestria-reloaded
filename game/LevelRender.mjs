@@ -61,6 +61,14 @@ export class Controller {
 
     offset.y -= extraHeight;
     if (this.shouldRender(offset.x, offset.y, clippedRect.width, clippedRect.height)) {
+      if (sprite.getShadowSource() !== "")
+      {
+        this.context.drawImage(
+          "../" + sprite.getShadowSource(),
+          //clippedRect.x, clippedRect.y, clippedRect.width, clippedRect.height,
+          offset.x, offset.y + 3, clippedRect.width, clippedRect.height
+        );
+      }
       this.context.drawImage(
         "../" + sprite.getSpriteSource(),
         clippedRect.x, clippedRect.y, clippedRect.width, clippedRect.height,

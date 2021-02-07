@@ -27,6 +27,10 @@
       "height": 46, "width": 46,
       "frameCount": 3, "frameInterval": 250,
       "repeat": true
+    },
+    "shadow": {
+      "source": "pony-shadow.png",
+      "height": 46, "width": 46
     }
   }
 }

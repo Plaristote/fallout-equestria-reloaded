@@ -20,6 +20,7 @@ void Sprite::setAnimation(const QString &animationName)
   animation = library->getAnimation(name, animationName);
   if (animation.frameCount > 1)
     animationTimer.start(animation.frameInterval);
+  shadow = library->getAnimation(name, "shadow");
 }
 
 void Sprite::runAnimation()
