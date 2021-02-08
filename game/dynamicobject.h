@@ -20,6 +20,9 @@ public:
   const QList<QPoint>& getCurrentPath() const { return currentPath; }
   QList<QPoint>& rcurrentPath() { return currentPath; }
 
+  const QString& getCurrentZone() const { return currentZone; }
+  void setCurrentZone(const QString& value) { currentZone = value; }
+
 signals:
   void reachedDestination();
   void pathBlocked();
@@ -31,6 +34,7 @@ private:
   QPoint position, nextPosition;
   Sprite* sprite;
   QList<QPoint> currentPath;
+  QString currentZone;
 };
 
 #endif // DYNAMICOBJECT_H

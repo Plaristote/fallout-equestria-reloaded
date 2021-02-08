@@ -6,6 +6,7 @@
 #include <QPoint>
 
 class TileMap;
+class TileZone;
 class DynamicObject;
 
 class LevelGrid : public QObject
@@ -16,6 +17,7 @@ class LevelGrid : public QObject
   {
     bool                      occupied = false;
     DynamicObject*            occupant = nullptr;
+    TileZone*                 zone     = nullptr;
     QPoint                    position;
     std::vector<CaseContent*> successors;
 
@@ -37,6 +39,7 @@ public:
 
   bool findPath(QPoint from, QPoint to, QList<QPoint>& path);
   bool moveObject(DynamicObject*, int x, int y);
+  void triggerZone(DynamicObject*, int x, int y);
 
 private:
   CaseContent* getGridCase(int x, int y);

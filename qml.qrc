@@ -43,5 +43,6 @@
         <file>assets/sprites.json</file>
         <file>assets/sprites/ZEkA10000.png</file>
         <file>assets/sprites/pony-shadow.png</file>
+        <file>assets/tilesets/zones.png</file>
     </qresource>
 </RCC>

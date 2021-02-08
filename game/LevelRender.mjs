@@ -37,7 +37,16 @@ export class Controller {
     const tile = this.layers.ground.getTile(x, y);
 
     if (tile)
+    {
       this.renderImage("../" + tile.image, tile.renderPosition, this.tileSize.width, this.tileSize.height, tile.clippedRect);
+      for (var i = 0 ; i < this.tilemap.zones.length ; ++i) {
+        const zone = this.tilemap.zones[i];
+        if (zone.type === "exit" && zone.isInside(x, y)) {
+          this.renderImage("../assets/tilesets/zones.png", tile.renderPosition, this.tileSize.width, this.tileSize.height, zone.clippedRect);
+          break ;
+        }
+      }
+    }
   }
 
   renderCoordinates(x, y) {

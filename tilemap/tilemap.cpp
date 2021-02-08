@@ -9,7 +9,6 @@ static const QString tilemapsPath = "./assets/tilemaps/";
 
 TileMap::TileMap(QObject *parent) : QObject(parent)
 {
-
 }
 
 bool TileMap::load(const QString& name)
@@ -42,12 +41,26 @@ bool TileMap::load(const QString& name)
     for (QJsonValue value : document["layers"].toArray())
     {
       QJsonObject layerData = value.toObject();
-      auto* layer = new TileLayer(this);
 
-      layer->load(layerData, tilesets);
-      layers.push_back(layer);
+      if (layerData["type"].toString() == "tilelayer")
+      {
+        auto* layer = new TileLayer(this);
+
+        layer->load(layerData, tilesets);
+        layers.push_back(layer);
+      }
+      else
+      {
+        for (QJsonValue value : layerData["layers"].toArray())
+        {
+          QJsonObject zoneData = value.toObject();
+          auto* zone = new TileZone(this);
+
+          zone->load(zoneData, mapSize);
+          zones.push_back(zone);
+        }
+      }
     }
-
     return true;
   }
   else
@@ -61,6 +74,16 @@ TileLayer* TileMap::getLayer(const QString &name)
   {
     if (layer->getName() == name)
       return layer;
+  }
+  return nullptr;
+}
+
+TileZone* TileMap::getZone(const QString& name)
+{
+  for (TileZone* zone : zones)
+  {
+    if (zone->getName() == name)
+      return zone;
   }
   return nullptr;
 }

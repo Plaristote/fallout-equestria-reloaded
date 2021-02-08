@@ -14,12 +14,40 @@ void LevelTask::load(const QString& levelName)
 {
   tilemap->load(levelName);
   grid->initializeGrid(tilemap);
+  for (auto* zone : tilemap->getZones())
+  {
+    connect(zone, &TileZone::enteredZone, this, &LevelTask::onZoneEntered, Qt::QueuedConnection);
+    connect(zone, &TileZone::exitedZone,  this, &LevelTask::onZoneExited,  Qt::QueuedConnection);
+  }
 
   player = new DynamicObject(this);
   registerDynamicObject(player);
   player->setSpriteName("pony");
   player->setAnimation("idle-down");
   forceCharacterPosition(player, 0, 0);
+}
+
+void LevelTask::onZoneEntered(DynamicObject* object, TileZone* zone)
+{
+  if (object == player)
+  {
+    displayConsoleMessage("Zone entered: " + zone->getName());
+    if (zone->getType() == "exit")
+    {
+      if (zone->getTarget() == "")
+        displayConsoleMessage("TODO: go to worldmap");
+      else
+        displayConsoleMessage("TODO: go to " + zone->getTarget());
+    }
+  }
+}
+
+void LevelTask::onZoneExited(DynamicObject* object, TileZone* zone)
+{
+  if (object == player)
+  {
+    displayConsoleMessage("Zone exited: " + zone->getName());
+  }
 }
 
 void LevelTask::tileClicked(int x, int y)
@@ -53,7 +81,9 @@ void LevelTask::unregisterDynamicObject(DynamicObject* object)
 void LevelTask::onObjectMovementFinished(Sprite* sprite)
 {
   auto* object = reinterpret_cast<DynamicObject*>(sprite);
+  auto position = object->getPosition();
 
+  grid->triggerZone(object, position.x(), position.y());
   if (object->rcurrentPath().size() > 0)
   {
     object->rcurrentPath().pop_front();

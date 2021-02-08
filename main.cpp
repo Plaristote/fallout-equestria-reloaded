@@ -6,6 +6,7 @@
 
 #include "tilemap/tilemap.h"
 #include "tilemap/tilelayer.h"
+#include "tilemap/tilezone.h"
 #include "tilemap/tile.h"
 
 #include "game.h"
@@ -18,6 +19,7 @@ void registerQmlTilemap() {
   qmlRegisterType<TileMap>  ("Tiles", 1,0, "TileMap");
   qmlRegisterType<TileLayer>("Tiles", 1,0, "TileLayer");
   qmlRegisterType<Tile>     ("Tiles", 1,0, "Tile");
+  qmlRegisterType<TileZone> ("Tiles", 1,0, "TileZone");
 }
 
 int main(int argc, char *argv[])
@@ -30,7 +32,6 @@ int main(int argc, char *argv[])
   animationLibrary.initialize();
 
   Game* game = new Game();
-  game->goToLevel("eltest5");
 
   QGuiApplication app(argc, argv);
   QQmlApplicationEngine engine;

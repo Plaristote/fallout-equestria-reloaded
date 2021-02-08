@@ -46,6 +46,14 @@
     </message>
 </context>
 <context>
+    <name>Game</name>
+    <message>
+        <location filename="Game.qml" line="57"/>
+        <source>Loading</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>MainMenu</name>
     <message>
         <location filename="MainMenu.qml" line="12"/>

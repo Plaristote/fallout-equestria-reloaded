@@ -3,8 +3,10 @@
 
 # include <QObject>
 # include <QSize>
+# include <QQmlListProperty>
 # include "tileset.h"
 # include "tilelayer.h"
+# include "tilezone.h"
 
 class TileMap : public QObject
 {
@@ -12,6 +14,7 @@ class TileMap : public QObject
 
   Q_PROPERTY(QSize tileSize MEMBER tileSize)
   Q_PROPERTY(QSize mapSize MEMBER mapSize)
+  Q_PROPERTY(QQmlListProperty<TileZone> zones READ getZonesQml)
 public:
   explicit TileMap(QObject *parent = nullptr);
 
@@ -19,14 +22,19 @@ public:
 
   inline const QSize& getSize() const { return mapSize; }
   inline const QSize& getTileSize() const { return tileSize; }
+  QList<TileZone*>& getZones() { return zones; }
 
   Q_INVOKABLE TileLayer* getLayer(const QString& name);
+  Q_INVOKABLE TileZone*  getZone(const QString& name);
+
+  QQmlListProperty<TileZone> getZonesQml() { return   QQmlListProperty<TileZone>(this, &zones); }
 
 private:
   QSize               tileSize;
   QSize               mapSize;
   QVector<Tileset*>   tilesets;
   QVector<TileLayer*> layers;
+  QList<TileZone*>    zones;
 };
 
 #endif // LEVELMAP_H

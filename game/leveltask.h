@@ -44,6 +44,8 @@ private slots:
   void onTaskTick();
 
   void onObjectMovementFinished(Sprite*);
+  void onZoneEntered(DynamicObject*, TileZone*);
+  void onZoneExited(DynamicObject*, TileZone*);
 
 private:
   DynamicObject* player;

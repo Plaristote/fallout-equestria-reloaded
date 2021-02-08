@@ -11,6 +11,7 @@ LevelGrid::LevelGrid(QObject *parent) : QObject(parent)
 void LevelGrid::initializeGrid(TileMap* tilemap)
 {
   auto* wallLayer = tilemap->getLayer("walls");
+  auto zones      = tilemap->getZones();
 
   size = tilemap->getSize();
   grid.resize(size.width() * size.height());
@@ -23,6 +24,14 @@ void LevelGrid::initializeGrid(TileMap* tilemap)
 
       gridCase.occupied = wallLayer->getTile(x, y) != nullptr;
       gridCase.position = QPoint(x, y);
+      for (auto* zone : zones)
+      {
+        if (zone->isInside(x, y))
+        {
+          gridCase.zone = zone;
+          break ;
+        }
+      }
     }
   }
   initializePathfinding();
@@ -144,7 +153,11 @@ bool LevelGrid::moveObject(DynamicObject* object, int x, int y)
     auto*  oldCase = getGridCase(currentPosition.x(), currentPosition.y());
 
     if (oldCase && oldCase->occupant == object)
+    {
       setCaseOccupant(*oldCase, nullptr);
+      if (oldCase->zone && oldCase->zone != gridCase->zone)
+        emit oldCase->zone->exitedZone(object, oldCase->zone);
+    }
     setCaseOccupant(*gridCase, object);
     return true;
   }
@@ -155,4 +168,17 @@ bool LevelGrid::moveObject(DynamicObject* object, int x, int y)
   else
     qDebug() << "LevelGrid:" << x << y << "already occupied";
   return false;
+}
+
+void LevelGrid::triggerZone(DynamicObject* object, int x, int y)
+{
+  auto* gridCase = getGridCase(x, y);
+
+  if (gridCase && gridCase->zone && gridCase->zone->getName() != object->getCurrentZone())
+  {
+    object->setCurrentZone(gridCase->zone->getName());
+    emit gridCase->zone->enteredZone(object, gridCase->zone);
+  }
+  else if (object->getCurrentZone() != "" && (!gridCase || !gridCase->zone))
+    object->setCurrentZone("");
 }

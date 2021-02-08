@@ -1,0 +1,15 @@
+{ "columns":3,
+ "image":"zones.png",
+ "imageheight":36,
+ "imagewidth":218,
+ "margin":0,
+ "name":"zones",
+ "spacing":1,
+ "tilecount":3,
+ "tiledversion":"1.4.3",
+ "tileheight":36,
+ "tilewidth":72,
+ "transparentcolor":"#ffffff",
+ "type":"tileset",
+ "version":1.4
+}
