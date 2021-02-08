@@ -12,6 +12,7 @@
 #include "game.h"
 #include "game/dynamicobject.h"
 #include "game/leveltask.h"
+#include "gamemanager.h"
 
 #include "cmap/statmodel.h"
 
@@ -31,17 +32,43 @@ int main(int argc, char *argv[])
   AnimationLibrary animationLibrary;
   animationLibrary.initialize();
 
-  Game* game = new Game();
-
   QGuiApplication app(argc, argv);
   QQmlApplicationEngine engine;
+
+/*
+  QJSEngine jengine;
+  QJSValue value = jengine.importModule("test.mjs");
+
+  jengine.globalObject().setProperty("window", value);
+
+  auto zz = value.toVariant();
+  qDebug() << "koko:" << zz << value.isObject();
+  auto ll = zz.toMap();
+
+  if (zz.typeName())
+    qDebug() << zz.typeName();
+  for (auto& ii : ll)
+  {
+    qDebug() << ii.typeName();
+  }
+
+  jengine.setProperty("tintin", "Taratata");
+
+  auto retval = jengine.evaluate("window.onTraitToggled(true)");
+
+  qDebug() << "coucou" << retval.toString();
+  return 0;
+*/
 
   qmlRegisterType<Game>("Game", 1,0, "Controller");
   qmlRegisterType<StatModel>("Game", 1,0, "StatModel");
   qmlRegisterType<DynamicObject>("Game", 1,0, "DynamicObject");
+  qmlRegisterType<GameManager>("Game", 1,0, "GameManager");
   registerQmlTilemap();
 
-  engine.rootContext()->setContextProperty("gameController", game);
+  GameManager* gameManager = new GameManager();
+
+  engine.rootContext()->setContextProperty("gameManager", gameManager);
   engine.rootContext()->setContextProperty("animationLibrary", &animationLibrary);
 
   const QUrl url(QStringLiteral("qrc:/main.qml"));

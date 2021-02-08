@@ -43,6 +43,8 @@ set(PROJECT_SOURCES
         tilemap/tilemap.cpp
         cmap/statmodel.h
         cmap/statmodel.cpp
+        cmap/trait.h
+        cmap/trait.cpp
         game/leveltask.h
         game/leveltask.cpp
         game/levelgrid.h
@@ -53,6 +55,8 @@ set(PROJECT_SOURCES
         game/sprite.cpp
         game/animationlibrary.h
         game/animationlibrary.cpp
+        gamemanager.h
+        gamemanager.cpp
         game.h
         game.cpp
         qml.qrc

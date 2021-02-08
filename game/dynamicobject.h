@@ -9,7 +9,6 @@ class DynamicObject : public Sprite
 {
   Q_OBJECT
 
-  Q_PROPERTY(Sprite* sprite MEMBER sprite)
 public:
   explicit DynamicObject(QObject *parent = nullptr);
 
@@ -32,7 +31,6 @@ private slots:
 
 private:
   QPoint position, nextPosition;
-  Sprite* sprite;
   QList<QPoint> currentPath;
   QString currentZone;
 };

@@ -44,5 +44,13 @@
         <file>assets/sprites/ZEkA10000.png</file>
         <file>assets/sprites/pony-shadow.png</file>
         <file>assets/tilesets/zones.png</file>
+        <file>scripts/traits/bloody-mess.mjs</file>
+        <file>scripts/traits/gifted.mjs</file>
+        <file>scripts/traits/heavy-handed.mjs</file>
+        <file>scripts/traits/bruiser.mjs</file>
+        <file>scripts/traits/finesse.mjs</file>
+        <file>scripts/traits/kamikaze.mjs</file>
+        <file>scripts/traits/skilled.mjs</file>
+        <file>scripts/traits/small-frame.mjs</file>
     </qresource>
 </RCC>

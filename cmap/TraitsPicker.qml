@@ -6,9 +6,7 @@ import "../assets/ui" as UiStyle
 Pane {
   property QtObject characterSheet
   property int maxTraits: characterSheet.getMaxTraits()
-  property var availableTraits: [
-    "bloody-mess","bruiser","finesse","gifted","heavy-handed","kamikaze","skilled","small-frame"
-  ]
+  property var availableTraits: characterSheet.getAvailableTraits()
   property string selectedProperty
 
   background: UiStyle.TerminalPane {}
@@ -54,9 +52,9 @@ Pane {
                 onClicked: {
                   selectProperty(traitName);
                   if (!isPicked && characterSheet.traits.length < maxTraits)
-                    characterSheet.traits.push(traitName);
+                    characterSheet.toggleTrait(traitName, true);
                   else if (isPicked)
-                    characterSheet.traits.splice(characterSheet.traits.indexOf(traitName), 1);
+                    characterSheet.toggleTrait(traitName, false);
                 }
               }
 

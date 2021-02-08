@@ -5,7 +5,10 @@ import "game/"
 
 Item {
   id: root
-  property QtObject gameController;
+  property string initialState;
+  property string mystate;
+  property var gameController;
+  property string currentLevelName;
   anchors.fill: parent
 
   function openLevelView() {
@@ -15,9 +18,29 @@ Item {
     });
   }
 
+
   Component.onCompleted: {
+    mystate = initialState;
+  }
+
+  onGameControllerChanged: {
     if (gameController.level)
       deferredLevelLoading.running = true;
+  }
+
+  onMystateChanged: {
+    console.log("(!) My state changed", mystate);
+    if (mystate == "new-game") {
+      gameManager.startNewGame();
+    }
+    else if (mystate == "create-character") {
+      deferredCharacterCreate.running = true;
+    }
+    else if (mystate == "level") {
+      if (gameManager.currentGame.level)
+        gameManager.currentGame.endLevel();
+      gameManager.currentGame.goToLevel(currentLevelName);
+    }
   }
 
   // Level control
@@ -27,12 +50,29 @@ Item {
     onTriggered: openLevelView();
   }
 
+  Timer {
+    id: deferredCharacterCreate
+    interval: 500
+    onTriggered: application.pushView("NewGame.qml")
+  }
+
   Connections {
-    target: gameController
+    target: gameManager
+
+    function onCurrentGameChanged() {
+      console.log("(!) Current game changed");
+      root.gameController = gameManager.currentGame;
+      if (mystate == "new-game")
+        mystate = "create-character";
+    }
+  }
+
+  Connections {
+    target: gameManager.currentGame
 
     function onLevelChanged() {
       if (gameController.level)
-        openLevelView();
+        deferredLevelLoading.running = true
       else
         application.popView();
     }

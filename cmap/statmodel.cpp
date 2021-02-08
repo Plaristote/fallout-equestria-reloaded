@@ -1,5 +1,7 @@
 #include "statmodel.h"
 
+#include "game.h"
+
 StatModel::StatModel(QObject *parent) : QObject(parent)
 {
   strength = perception = endurance = charisma = intelligence = agility = luck = 5;
@@ -82,4 +84,30 @@ void StatModel::updateBaseValues()
 bool StatModel::isAcceptable() const
 {
   return traits.length() == getMaxTraits() && specialPoints == 0 && name.length() > 0;
+}
+
+QStringList StatModel::getAvailableTraits()
+{
+  QStringList results;
+  auto traits = Game::get()->getCmapTraits();
+
+  for (auto trait : traits)
+    results << trait.name;
+  qDebug() << "GET TRAITZ" << results;
+  return results;
+}
+
+void StatModel::toggleTrait(const QString& name, bool value)
+{
+  auto traits = Game::get()->getCmapTraits();
+
+  qDebug() << "Euh... à l'huile ?";
+  for (auto trait : traits)
+  {
+    if  (trait.name == name)
+    {
+      trait.toogle(this, value);
+      break ;
+    }
+  }
 }

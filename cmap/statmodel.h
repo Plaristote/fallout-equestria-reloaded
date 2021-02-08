@@ -1,7 +1,8 @@
 #ifndef STATMODEL_H
-#define STATMODEL_H
+# define STATMODEL_H
 
-#include <QObject>
+# include <QObject>
+# include <QJsonDocument>
 
 struct StatData
 {
@@ -54,8 +55,7 @@ class StatModel : public QObject
   Q_PROPERTY(int  specialPoints  MEMBER specialPoints NOTIFY specialChanged)
   Q_PROPERTY(bool acceptable     READ isAcceptable NOTIFY acceptableChanged)
 
-  Q_PROPERTY(QStringList perks  MEMBER perks  NOTIFY perksChanged)
-  Q_PROPERTY(QStringList traits MEMBER traits NOTIFY traitsChanged)
+  Q_PROPERTY(QJsonDocument variables MEMBER variables)
 
   // SPECIAL
   Q_PROPERTY(int strength     MEMBER strength     NOTIFY specialChanged)
@@ -65,6 +65,9 @@ class StatModel : public QObject
   Q_PROPERTY(int intelligence MEMBER intelligence NOTIFY specialChanged)
   Q_PROPERTY(int agility      MEMBER agility      NOTIFY specialChanged)
   Q_PROPERTY(int luck         MEMBER luck         NOTIFY specialChanged)
+
+  Q_PROPERTY(QStringList perks  MEMBER perks  NOTIFY perksChanged)
+  Q_PROPERTY(QStringList traits MEMBER traits NOTIFY traitsChanged)
 
   // Statistics
   Q_PROPERTY(int maxHitPoints        READ get_maxHitPoints WRITE set_maxHitPoints NOTIFY statisticsChanged)
@@ -110,6 +113,8 @@ public:
   Q_INVOKABLE void addExperience(int xp);
   Q_INVOKABLE bool isAcceptable() const;
   Q_INVOKABLE int getMaxTraits() const { return 2; }
+  Q_INVOKABLE QStringList getAvailableTraits();
+  Q_INVOKABLE void toggleTrait(const QString& name, bool);
 
 #define STAT_GETTER(statName) \
   int get_##statName() const { return data.statName + modifiers.statName; } \
@@ -174,13 +179,14 @@ private:
   int availablePerks = 0;
   int lastPerk = 0;
   int level = 1;
-  int   experience = 0;
+  int experience = 0;
   int specialPoints = 0;
 
   StatData data;
   StatData modifiers;
 
   QStringList traits, perks;
+  QJsonDocument variables;
 };
 
 #endif // STATMODEL_H

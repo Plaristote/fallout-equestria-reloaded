@@ -15,6 +15,7 @@ class LevelTask : public QObject
   Q_PROPERTY(bool       paused  MEMBER paused NOTIFY pausedChanged)
   Q_PROPERTY(TileMap*   tilemap READ getTileMap NOTIFY tilemapReady)
   Q_PROPERTY(LevelGrid* grid    MEMBER grid)
+  Q_PROPERTY(DynamicObject* player MEMBER player);
 public:
   explicit LevelTask(QObject *parent = nullptr);
 

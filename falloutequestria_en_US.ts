@@ -48,7 +48,7 @@
 <context>
     <name>Game</name>
     <message>
-        <location filename="Game.qml" line="57"/>
+        <location filename="Game.qml" line="97"/>
         <source>Loading</source>
         <translation type="unfinished"></translation>
     </message>
@@ -125,7 +125,7 @@
 <context>
     <name>TraitsPicker</name>
     <message>
-        <location filename="cmap/TraitsPicker.qml" line="20"/>
+        <location filename="cmap/TraitsPicker.qml" line="18"/>
         <source>Traits</source>
         <translation type="unfinished"></translation>
     </message>

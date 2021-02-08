@@ -12,7 +12,15 @@ Rectangle {
       specialPoints: 5
       Component.onCompleted: specialChanged()
     }
-    onAccepted: console.log("Start a new game")
-    onCanceled: application.popView()
+    onAccepted: {
+      console.log("Start a new game");
+
+      gameManager.currentGame.goToLevel("eltest5");
+      application.popView();
+    }
+    onCanceled: {
+      application.popView()
+      gameManager.endGame();
+    }
   }
 }
