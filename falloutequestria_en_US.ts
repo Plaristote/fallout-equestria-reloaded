@@ -48,7 +48,7 @@
 <context>
     <name>Game</name>
     <message>
-        <location filename="Game.qml" line="97"/>
+        <location filename="Game.qml" line="107"/>
         <source>Loading</source>
         <translation type="unfinished"></translation>
     </message>

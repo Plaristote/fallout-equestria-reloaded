@@ -13,6 +13,7 @@ public:
   explicit GameManager(QObject *parent = nullptr);
 
   Q_INVOKABLE void startNewGame();
+  Q_INVOKABLE void endGame();
 
 signals:
   void currentGameChanged();

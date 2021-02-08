@@ -24,8 +24,12 @@ Item {
   }
 
   onGameControllerChanged: {
-    if (gameController.level)
-      deferredLevelLoading.running = true;
+    if (gameController) {
+      if (gameController.level)
+        deferredLevelLoading.running = true;
+    }
+    else
+      deferredGameEnding.running = true;
   }
 
   onMystateChanged: {
@@ -54,6 +58,12 @@ Item {
     id: deferredCharacterCreate
     interval: 500
     onTriggered: application.pushView("NewGame.qml")
+  }
+
+  Timer {
+    id: deferredGameEnding
+    interval: 500
+    onTriggered: application.popView();
   }
 
   Connections {
