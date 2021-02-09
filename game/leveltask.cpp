@@ -1,5 +1,6 @@
 #include "leveltask.h"
 #include "game.h"
+#include <QJsonArray>
 
 LevelTask::LevelTask(QObject *parent) : QObject(parent)
 {
@@ -39,6 +40,74 @@ void LevelTask::load(const QString& levelName)
       otherParty->insertIntoZone(this, zone);
     }
   }
+
+  for (QJsonObject objectData : tilemap->getObjects())
+  {
+    DynamicObject*  object;
+    QJsonArray      objectTiles = objectData["objects"].toArray();
+    QJsonObject     objectTile;
+    int             gid;
+    QString         type;
+    QPoint          drawAt, interactionPosition;
+    QString         scriptName, dialogName;
+    QPoint          renderPosition;
+    SpriteAnimation customDisplay;
+
+    qDebug() << ">>>>>>>>>>>>>>>>>>>>> Loading object" << objectData["name"].toString();
+    if (objectTiles.size() == 0)
+      continue ;
+    objectTile  = objectTiles.first().toObject();
+    gid         = objectTile["gid"].toInt();
+    customDisplay.name   = "tiled-object";
+    customDisplay.source = tilemap->getObjectSource(gid);
+    customDisplay.clippedRect.setSize(tilemap->getObjectSize(gid));
+    customDisplay.frameCount = 1;
+    renderPosition.setX(static_cast<int>(objectTile["x"].toDouble())); // unreliable, use properties x/y
+    renderPosition.setY(static_cast<int>(objectTile["y"].toDouble()));
+    for (QJsonValue property : objectData["properties"].toArray())
+    {
+        QString propertyName = property["name"].toString();
+        QJsonValue propertyValue = property["value"];
+
+        if (propertyName == "type")
+          type = propertyValue.toString();
+        else if (propertyName == "drawAtX")
+          drawAt.setX(propertyValue.toInt());
+        else if (propertyName == "drawAtY")
+          drawAt.setY(propertyValue.toInt());
+        else if (propertyName == "interactionPositionX")
+          interactionPosition.setX(propertyValue.toInt());
+        else if (propertyName == "interactionPositionY")
+          interactionPosition.setY(propertyValue.toInt());
+        else if (propertyName == "script")
+          scriptName = propertyValue.toString();
+        else if (propertyName == "dialog")
+          dialogName = propertyValue.toString();
+
+        else if (propertyName == "x")
+          renderPosition.setX(propertyValue.toInt() - this->tilemap->getPixelWidth() / 2 + customDisplay.clippedRect.width() / 2 + 5);
+        else if (propertyName == "y")
+          renderPosition.setY(propertyValue.toInt());
+    }
+    if (type == "character")
+    {
+      Character* character = new Character(this);
+
+      object = character;
+    }
+    else
+    {
+      object = new DynamicObject(this);
+    }
+    grid->moveObject(object, drawAt.x(), drawAt.y());
+    object->forceMoveToCoordinates(renderPosition);
+    object->setInteractionPosition(interactionPosition);
+    object->setSpriteAnimation(customDisplay);
+    if (!scriptName.isEmpty())
+      object->setScript(scriptName);
+    registerDynamicObject(object);
+  }
+
   if (player == nullptr)
     qDebug()<< "Could not input player !";
 
@@ -79,11 +148,13 @@ void LevelTask::tileClicked(int x, int y)
 
 void LevelTask::registerDynamicObject(DynamicObject* object)
 {
+  objects.push_back(object);
   connect(object, &Sprite::movementFinished, this, &LevelTask::onObjectMovementFinished);
 }
 
 void LevelTask::unregisterDynamicObject(DynamicObject* object)
 {
+  objects.removeAll(object);
   object->setAnimation("idle-down");
   disconnect(object, &Sprite::movementFinished, this, &LevelTask::onObjectMovementFinished);
 }

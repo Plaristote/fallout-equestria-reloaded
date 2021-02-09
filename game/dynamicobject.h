@@ -17,8 +17,12 @@ class DynamicObject : public Sprite
 public:
   explicit DynamicObject(QObject *parent = nullptr);
 
+  void setScript(const QString& name);
+
   Q_INVOKABLE QPoint getPosition() const { return position; }
+  Q_INVOKABLE QPoint getInteractionPosition() const { return interactionPosition; }
   void setPosition(QPoint value) { position = value; }
+  void setInteractionPosition(QPoint value) { interactionPosition = value; }
   void moveTo(int x, int y, QPoint renderPosition);
 
   Q_INVOKABLE void setTickBehavior(int interval, bool repeat = false);
@@ -39,12 +43,14 @@ private slots:
   void onTicked();
 
 protected:
+  virtual QString getScriptPath() const { return ":/scripts/behaviour"; }
   QJSValue script;
 private:
   QPoint position, nextPosition;
   QTimer tick;
   QList<QPoint> currentPath;
   QString currentZone;
+  QPoint interactionPosition;
 };
 
 #endif // DYNAMICOBJECT_H

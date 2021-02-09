@@ -18,7 +18,7 @@ bool Tileset::load(const QString& filepath, int firstGid)
   {
     QJsonDocument document = QJsonDocument::fromJson(sourceFile.readAll());
 
-    this->name = name;
+    this->name = document["name"].toString();
     source = tilesetsPath + document["image"].toString();
     spacing = document["spacing"].toInt();
     columns = document["columns"].toInt();

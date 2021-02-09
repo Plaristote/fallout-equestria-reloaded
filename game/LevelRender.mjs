@@ -102,10 +102,13 @@ export class Controller {
   renderSprite(sprite) {
     const offset      = sprite.getSpritePosition();
     const clippedRect = sprite.getClippedRect();
-    const extraHeight = clippedRect.height - this.tileSize.height;
 
-    offset.y -= extraHeight;
-    offset.x += this.tileSize.width / 2 - clippedRect.width / 2;
+    if (sprite.renderOnTile()) {
+      const extraHeight = clippedRect.height - this.tileSize.height;
+
+      offset.y -= extraHeight;
+      offset.x += this.tileSize.width / 2 - clippedRect.width / 2;
+    }
     if (this.shouldRender(offset.x, offset.y, clippedRect.width, clippedRect.height)) {
       if (sprite.getShadowSource() !== "")
       {

@@ -38,20 +38,15 @@ Canvas {
   function preloadImages() {
     const images = [];
 
-    for (var x = 0 ; x < levelController.tilemap.mapSize.width; ++x) {
-      for (var y = 0 ; y < levelController.tilemap.mapSize.height; ++y) {
-        ["ground", "walls"].forEach(function(layerName) {
-          const layer = levelController.tilemap.getLayer(layerName);
-          const tile  = layer.getTile(x, y);
-
-          if (tile && images.indexOf(tile.image) === -1) {
-            console.log("LevelCanvas: Preloading image", tile.image, "from layer", layerName);
-            loadImage("../" + tile.image);
-            images.push(tile.image);
-          }
-        });
+    for (var i = 0 ; i < levelController.tilemap.textureList.length ; ++i) {
+      const texturePath = levelController.tilemap.textureList[i];
+      if (images.indexOf(texturePath) === -1) {
+        console.log("LevelCanvas: Preloading image", texturePath, "from Tiled resources");
+        loadImage("../" + texturePath);
+        images.push(texturePath);
       }
     }
+
     animationLibrary.getSources().forEach(function(texture) {
       console.log("LevelCanvas: Preloading texture", texture, "from animation library");
       loadImage("../assets/sprites/" + texture);

@@ -12,12 +12,14 @@ class Character : public DynamicObject
 public:
   explicit Character(QObject *parent = nullptr);
 
-  void setScript(const QString& name);
-
   StatModel* getStatistics() { return statistics; }
+
+  Q_INVOKABLE bool renderOnTile() const { return true; }
 
 signals:
 
+protected:
+  virtual QString getScriptPath() const { return ":/scripts/pnjs"; }
 private:
   StatModel* statistics;
 };

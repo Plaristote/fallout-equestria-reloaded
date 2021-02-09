@@ -26,17 +26,40 @@ bool TileMap::load(const QString& name)
 
     qDebug() << "Loading tilemap" << name << '(' << mapSize.width() << ',' << mapSize.height() << ')';
 
+    // BEGIN TILEsETs LOADING
     for (QJsonValue value : document["tilesets"].toArray())
     {
       QJsonObject tilesetData = value.toObject();
-      auto* tileset  = new Tileset(this);
-      auto  firstGid = tilesetData["firstgid"].toInt(1);
-      auto  source   = tilemapsPath + tilesetData["source"].toString();
+      auto sourcePath = tilesetData["source"].toString();
+      auto firstGid = tilesetData["firstgid"].toInt(1);
+      auto source   = tilemapsPath + sourcePath;
 
-      tilesets.push_back(tileset);
-      if (!tileset->load(source, firstGid))
-        return false;
+      // OBJECT TILEsET
+      if (sourcePath.indexOf("/objects-") >= 0)
+      {
+        auto* tileset = new ObjectTileset(this);
+
+        qDebug() << "Le object tileset ma gueule" << sourcePath;
+        objectTilesets.push_back(tileset);
+        if (tileset->load(source, firstGid))
+          textureList.append(tileset->getAllSources());
+        else
+          return false;
+      }
+      // REGULAR TILEsET
+      else
+      {
+        auto* tileset  = new Tileset(this);
+
+        qDebug() << "Registering new tileset" << sourcePath;
+        tilesets.push_back(tileset);
+        if (tileset->load(source, firstGid))
+          textureList << tileset->getSource();
+        else
+          return false;
+      }
     }
+    qDebug() << "HONTO NI HONTO TEXTURE LIST" << textureList;
 
     for (QJsonValue value : document["layers"].toArray())
     {
@@ -76,6 +99,15 @@ bool TileMap::load(const QString& name)
             roofs.push_back(roofLayer);
           }
         }
+        else if (layerName == "objects")
+        {
+          for (QJsonValue value : layerData["layers"].toArray())
+          {
+            QJsonObject objectData = value.toObject();
+
+            objects.push_back(objectData);
+          }
+        }
       }
     }
     return true;
@@ -103,4 +135,24 @@ TileZone* TileMap::getZone(const QString& name)
       return zone;
   }
   return nullptr;
+}
+
+QString TileMap::getObjectSource(int gid) const
+{
+  for (auto* tileset : objectTilesets)
+  {
+    if (tileset->getFirstGid() <= gid && tileset->getLastGid() > gid)
+      return tileset->getSource(gid);
+  }
+  return QString();
+}
+
+QSize TileMap::getObjectSize(int gid) const
+{
+  for (auto* tileset : objectTilesets)
+  {
+      if (tileset->getFirstGid() <= gid && tileset->getLastGid() > gid)
+        return tileset->getTileSize(gid);
+  }
+  return QSize();
 }

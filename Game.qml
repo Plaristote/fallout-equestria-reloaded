@@ -90,7 +90,7 @@ Item {
 
   // Loading screen
   Image {
-    source: "assets/backgrounds/default.jpg"
+    source: "assets/backgrounds/ministry-of-peace.jpg"
     anchors.fill: parent
     fillMode: Image.PreserveAspectCrop
 

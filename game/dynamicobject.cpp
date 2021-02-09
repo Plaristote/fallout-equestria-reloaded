@@ -8,6 +8,19 @@ DynamicObject::DynamicObject(QObject *parent) : Sprite(parent)
   connect(this, &DynamicObject::reachedDestination, this, &DynamicObject::onDestinationReached);
 }
 
+void DynamicObject::setScript(const QString& name)
+{
+  script = Game::get()->loadScript(getScriptPath() + '/' + name);
+  QJSValue callback = script.property("initialize");
+
+  if (callback.isCallable())
+  {
+    QJSValueList args;
+
+    args << Game::get()->getScriptEngine().newQObject(this);
+    Game::get()->scriptCall(callback, args, "initialize");
+  }
+}
 
 void DynamicObject::setTickBehavior(int interval, bool repeat)
 {

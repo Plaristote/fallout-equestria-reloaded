@@ -54,6 +54,7 @@ private slots:
 
 private:
   DynamicObject* player;
+  QList<DynamicObject*> objects;
 
   QTimer     taskTick, clockTick;
   QString    name;

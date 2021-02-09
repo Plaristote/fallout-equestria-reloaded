@@ -18,12 +18,14 @@ public:
   void setAnimation(const QString& animationName);
   void moveToCoordinates(QPoint coordinates);
   void forceMoveToCoordinates(QPoint coordinates);
+  void setSpriteAnimation(const SpriteAnimation& value) { animation = value; }
 
   Q_INVOKABLE QString getSpriteSource() const { return animation.source; }
   Q_INVOKABLE QRect   getClippedRect() const  { return animation.clippedRect; }
   Q_INVOKABLE QPoint  getSpritePosition() const { return spritePosition; }
   Q_INVOKABLE QString getCurrentAnimation() const { return animation.name; }
   Q_INVOKABLE QString getShadowSource() const { return shadow.source; }
+  Q_INVOKABLE bool    renderOnTile() const { return false; }
 
 signals:
   void animationFinished();
