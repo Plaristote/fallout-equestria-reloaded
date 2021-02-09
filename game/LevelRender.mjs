@@ -24,14 +24,20 @@ export class Controller {
     this.eachCase(this.renderTile.bind(this));
     this.renderZones();
     this.eachCase(this.renderCoordinates.bind(this));
+    this.startClipAroundPlayer();
     this.eachCase(this.renderRoofs.bind(this));
-    this.context.restore();
+    this.stopClipAroundPlayer();
   }
 
   eachCase(callback) {
+    const playerPosition = this.level.player.position;
+
+    this.renderAfterPlayer = false;
     for (var x = 0 ; x < this.mapSize.width; ++x) {
       for (var y = 0 ; y < this.mapSize.height; ++y) {
         callback(x, y);
+        if (playerPosition.x == x && playerPosition.y == y)
+          this.renderAfterPlayer = true;
       }
     }
   }
@@ -96,7 +102,30 @@ export class Controller {
   }
 
   renderWall(tile, x, y) {
+    if (this.renderAfterPlayer)
+      this.startClipAroundPlayer();
     this.renderImage("../" + tile.image, this.getPointFor(x, y), this.wallSize.width, this.wallSize.height, tile.clippedRect);
+    if (this.renderAfterPlayer)
+      this.stopClipAroundPlayer();
+  }
+
+  startClipAroundPlayer() {
+    const sprite      = this.level.player;
+    const offset      = sprite.getSpritePosition();
+    const clippedRect = sprite.getClippedRect();
+    const extraHeight = clippedRect.height - this.tileSize.height;
+
+    offset.y -= extraHeight;
+    offset.x += this.tileSize.width / 2 - clippedRect.width / 2;
+    this.context.save();
+    this.context.beginPath();
+    this.context.arc(offset.x + this.tileSize.width / 2 - clippedRect.width / 4, offset.y + this.tileSize.height / 2, clippedRect.width, 0, Math.PI * 2, false);
+    this.context.rect(-this.canvas.origin.x + this.canvas.width, -this.canvas.origin.y, - this.canvas.width, this.canvas.height);
+    this.context.clip();
+  }
+
+  stopClipAroundPlayer() {
+    this.context.restore();
   }
 
   renderSprite(sprite) {
@@ -109,7 +138,6 @@ export class Controller {
       offset.y -= extraHeight;
       offset.x += this.tileSize.width / 2 - clippedRect.width / 2;
     }
-
     if (this.shouldRender(offset.x, offset.y, clippedRect.width, clippedRect.height)) {
       if (sprite.getShadowSource() !== "")
       {
@@ -124,16 +152,6 @@ export class Controller {
         clippedRect.x, clippedRect.y, clippedRect.width, clippedRect.height,
         offset.x, offset.y, clippedRect.width, clippedRect.height
       );
-      if (sprite === this.level.player) {
-        //console.log("PLAYER RENDERING");
-        this.context.save();
-        this.context.beginPath();
-        this.context.arc(offset.x + this.tileSize.width / 2 - clippedRect.width / 4, offset.y + this.tileSize.height / 2, clippedRect.width, 0, Math.PI * 2, false);
-        this.context.rect(-this.canvas.origin.x + this.canvas.width, -this.canvas.origin.y, - this.canvas.width, this.canvas.height);
-        //this.context.closePath();
-        //this.context.globalCompositeOperation = "xor";
-        this.context.clip();
-      }
       return true;
     }
   }
