@@ -26,19 +26,22 @@ public:
   bool getIsDefault() const { return isDefault; }
 
   Q_INVOKABLE bool isInside(int x, int y) const;
-  const QVector<QPoint>& getPositions() const { return tiles; }
+  const QList<QPoint>& getPositions() const { return tiles; }
+
+  Q_INVOKABLE int getPositionCount() const { return tiles.size(); }
+  Q_INVOKABLE QPoint getPositionAt(int i) const { return tiles.at(i); }
 
 signals:
   void enteredZone(DynamicObject*, TileZone*);
   void exitedZone(DynamicObject*, TileZone*);
 
 private:
-  QString         name;
-  QString         type;
-  QString         target;
-  bool            isDefault = false;
-  QRect           clippedRect;
-  QVector<QPoint> tiles;
+  QString       name;
+  QString       type;
+  QString       target;
+  bool          isDefault = false;
+  QRect         clippedRect;
+  QList<QPoint> tiles;
 };
 
 #endif // TILEZONE_H

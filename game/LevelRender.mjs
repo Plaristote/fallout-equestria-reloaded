@@ -22,7 +22,9 @@ export class Controller {
 
     this.clear();
     this.eachCase(this.renderTile.bind(this));
+    this.renderZones();
     this.eachCase(this.renderCoordinates.bind(this));
+
   }
 
   eachCase(callback) {
@@ -33,19 +35,28 @@ export class Controller {
     }
   }
 
+  renderZones() {
+    for (var i = 0 ; i < this.tilemap.zones.length ; ++i) {
+      const zone = this.tilemap.zones[i];
+      if (zone.type == "exit")
+      {
+        for (var ii = 0 ; ii < this.tilemap.zones[i].getPositionCount() ; ++ii)
+        {
+          const position = this.tilemap.zones[i].getPositionAt(ii);
+          const tile = this.layers.ground.getTile(position.x, position.y);
+
+          this.renderImage("../assets/tilesets/zones.png", tile.renderPosition, this.tileSize.width, this.tileSize.height, zone.clippedRect);
+        }
+      }
+    }
+  }
+
   renderTile(x, y) {
     const tile = this.layers.ground.getTile(x, y);
 
     if (tile)
     {
       this.renderImage("../" + tile.image, tile.renderPosition, this.tileSize.width, this.tileSize.height, tile.clippedRect);
-      for (var i = 0 ; i < this.tilemap.zones.length ; ++i) {
-        const zone = this.tilemap.zones[i];
-        if (zone.type === "exit" && zone.isInside(x, y)) {
-          this.renderImage("../assets/tilesets/zones.png", tile.renderPosition, this.tileSize.width, this.tileSize.height, zone.clippedRect);
-          break ;
-        }
-      }
     }
   }
 
