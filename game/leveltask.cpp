@@ -2,6 +2,7 @@
 
 LevelTask::LevelTask(QObject *parent) : QObject(parent)
 {
+  player  = nullptr;
   tilemap = new TileMap(this);
   grid    = new LevelGrid(this);
   taskTick.setInterval(17);
@@ -12,19 +13,34 @@ LevelTask::LevelTask(QObject *parent) : QObject(parent)
 
 void LevelTask::load(const QString& levelName)
 {
+  name = levelName;
   tilemap->load(levelName);
   grid->initializeGrid(tilemap);
   for (auto* zone : tilemap->getZones())
   {
     connect(zone, &TileZone::enteredZone, this, &LevelTask::onZoneEntered, Qt::QueuedConnection);
     connect(zone, &TileZone::exitedZone,  this, &LevelTask::onZoneExited,  Qt::QueuedConnection);
-  }
 
-  player = new DynamicObject(this);
-  registerDynamicObject(player);
-  player->setSpriteName("pony");
-  player->setAnimation("idle-down");
-  forceCharacterPosition(player, 0, 0);
+    qDebug() << "Detected" << zone->getType() << "zone" << zone->getName() << zone->getIsDefault();
+    if (zone->getType() == "entry")
+    {
+      for (auto position : zone->getPositions())
+      {
+        if (!grid->isOccupied(position.x(), position.y()))
+        {
+          qDebug() << "inserted player !";
+          player = new DynamicObject(this);
+          registerDynamicObject(player);
+          player->setSpriteName("pony");
+          player->setAnimation("idle-down");
+          forceCharacterPosition(player, position.x(), position.y());
+          break ;
+        }
+      }
+    }
+  }
+  if (player == nullptr)
+    qDebug()<< "Could not input player !";
 }
 
 void LevelTask::onZoneEntered(DynamicObject* object, TileZone* zone)
@@ -37,7 +53,10 @@ void LevelTask::onZoneEntered(DynamicObject* object, TileZone* zone)
       if (zone->getTarget() == "")
         displayConsoleMessage("TODO: go to worldmap");
       else
+      {
         displayConsoleMessage("TODO: go to " + zone->getTarget());
+        emit exitZoneEntered(zone);
+      }
     }
   }
 }

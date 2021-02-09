@@ -10,6 +10,7 @@ Game::Game(QObject *parent) : QObject(parent)
     throw std::runtime_error("can't have two Game instances at once");
   instance = this;
   scriptEngine.installExtensions(QJSEngine::ConsoleExtension);
+  scriptEngine.globalObject().setProperty("game", scriptEngine.newQObject(this));
   loadCmapTraits();
   scriptEngine.evaluate("level.displayConsoleMessage(\"Coucou Script Engine\")");
 }
@@ -61,6 +62,21 @@ void Game::goToLevel(const QString& name)
   appendToConsole("You reached " + name);
   currentLevel = new LevelTask(this);
   connect(currentLevel, &LevelTask::displayConsoleMessage, this, &Game::appendToConsole);
+  connect(currentLevel, &LevelTask::exitZoneEntered, this, &Game::changeZone);
+  currentLevel->load(name);
+  scriptObject.setProperty("level", scriptEngine.newQObject(currentLevel));
+  emit levelChanged();
+}
+
+void Game::switchToLevel(const QString& name, const QString& targetZone)
+{
+  auto scriptObject = scriptEngine.globalObject();
+
+  if (currentLevel)
+    exitLevel();
+  currentLevel = new LevelTask(this);
+  connect(currentLevel, &LevelTask::displayConsoleMessage, this, &Game::appendToConsole);
+  connect(currentLevel, &LevelTask::exitZoneEntered, this, &Game::changeZone);
   currentLevel->load(name);
   scriptObject.setProperty("level", scriptEngine.newQObject(currentLevel));
   emit levelChanged();
@@ -71,6 +87,15 @@ void Game::exitLevel()
   currentLevel->deleteLater();
   currentLevel = nullptr;
   emit levelChanged();
+}
+
+void Game::changeZone(TileZone* tileZone)
+{
+  QString targetZone;
+
+  if (currentLevel)
+    targetZone = currentLevel->getName();
+  switchToLevel(tileZone->getTarget(), targetZone);
 }
 
 void Game::appendToConsole(const QString& message)

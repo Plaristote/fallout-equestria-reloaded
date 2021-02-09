@@ -12,15 +12,17 @@ class LevelTask : public QObject
 {
   Q_OBJECT
 
+  Q_PROPERTY(QString    name MEMBER name)
   Q_PROPERTY(bool       paused  MEMBER paused NOTIFY pausedChanged)
   Q_PROPERTY(TileMap*   tilemap READ getTileMap NOTIFY tilemapReady)
   Q_PROPERTY(LevelGrid* grid    MEMBER grid)
-  Q_PROPERTY(DynamicObject* player MEMBER player);
+  Q_PROPERTY(DynamicObject* player MEMBER player)
 public:
   explicit LevelTask(QObject *parent = nullptr);
 
   void load(const QString& levelName);
 
+  const QString& getName() const { return name; }
   TileMap* getTileMap() const { return tilemap; }
 
   Q_INVOKABLE void moveTo(int x, int y);
@@ -38,6 +40,7 @@ signals:
   void pausedChanged();
   void tilemapReady();
   void displayConsoleMessage(const QString&);
+  void exitZoneEntered(TileZone*);
 
 private slots:
   void onPauseChanged();
@@ -52,6 +55,7 @@ private:
   DynamicObject* player;
 
   QTimer     taskTick, clockTick;
+  QString    name;
   TileMap*   tilemap = nullptr;
   LevelGrid* grid = nullptr;
   bool       paused = true;

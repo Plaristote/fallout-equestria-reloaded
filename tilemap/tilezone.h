@@ -26,6 +26,7 @@ public:
   bool getIsDefault() const { return isDefault; }
 
   Q_INVOKABLE bool isInside(int x, int y) const;
+  const QVector<QPoint>& getPositions() const { return tiles; }
 
 signals:
   void enteredZone(DynamicObject*, TileZone*);
