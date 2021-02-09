@@ -32,7 +32,7 @@ public:
 
   QJSEngine& getScriptEngine() { return scriptEngine; }
   QJSValue loadScript(const QString& path);
-
+  QJSValue scriptCall(QJSValue callable, const QJSValueList& args, const QString& scriptName);
   void loadCmapTraits();
 
   QMap<QString, Trait>& getCmapTraits() { return cmapTraits; }

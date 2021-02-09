@@ -12,6 +12,8 @@ class Character : public DynamicObject
 public:
   explicit Character(QObject *parent = nullptr);
 
+  void setScript(const QString& name);
+
   StatModel* getStatistics() { return statistics; }
 
 signals:

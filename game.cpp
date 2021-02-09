@@ -109,6 +109,20 @@ void Game::changeZone(TileZone* tileZone)
   switchToLevel(tileZone->getTarget(), targetZone);
 }
 
+QJSValue Game::scriptCall(QJSValue callable, const QJSValueList& args, const QString& scriptName)
+{
+  QJSValue retval = callable.call(args);
+
+  if (retval.isError())
+  {
+    qDebug() << "Script crashed:" << scriptName << ": uncaught exception at line "
+             << retval.property("lineNumber").toInt() << ":" << retval.toString();
+    return false;
+  }
+
+  return retval;
+}
+
 void Game::appendToConsole(const QString& message)
 {
   if (consoleMessages.size() > 100)

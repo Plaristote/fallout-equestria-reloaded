@@ -17,6 +17,14 @@ void LevelTask::load(const QString& levelName)
   name = levelName;
   tilemap->load(levelName);
   grid->initializeGrid(tilemap);
+
+  CharacterParty* otherParty = new CharacterParty(this);
+  Character* otherChar = new Character;
+  otherChar->setSpriteName("pony-green");
+  otherChar->setAnimation("idle-down");
+  otherChar->setScript("dummy.mjs");
+  otherParty->addCharacter(otherChar);
+
   for (auto* zone : tilemap->getZones())
   {
     connect(zone, &TileZone::enteredZone, this, &LevelTask::onZoneEntered, Qt::QueuedConnection);
@@ -27,10 +35,14 @@ void LevelTask::load(const QString& levelName)
 
       player = playerParty->getCharacters().first();
       playerParty->insertIntoZone(this, zone);
+      //
+      otherParty->insertIntoZone(this, zone);
     }
   }
   if (player == nullptr)
     qDebug()<< "Could not input player !";
+
+  moveCharacterTo(otherChar, 0, 0);
 }
 
 void LevelTask::onZoneEntered(DynamicObject* object, TileZone* zone)
@@ -61,19 +73,7 @@ void LevelTask::onZoneExited(DynamicObject* object, TileZone* zone)
 
 void LevelTask::tileClicked(int x, int y)
 {
-  QPoint position = player->getPosition();
-
-  if (grid->findPath(position, QPoint(x, y), player->rcurrentPath()))
-  {
-    if (player->getCurrentPath().size() > 0)
-    {
-      QPoint nextCase = player->getCurrentPath().first();
-      triggerCharacterMoveTo(player, nextCase.x(), nextCase.y());
-    }
-    else
-      emit player->reachedDestination();
-  }
-  else
+  if (!moveCharacterTo(player, x, y))
     emit displayConsoleMessage("No path towards [" + QString::number(x) + ',' + QString::number(y) + ']');
 }
 
@@ -84,6 +84,7 @@ void LevelTask::registerDynamicObject(DynamicObject* object)
 
 void LevelTask::unregisterDynamicObject(DynamicObject* object)
 {
+  object->setAnimation("idle-down");
   disconnect(object, &Sprite::movementFinished, this, &LevelTask::onObjectMovementFinished);
 }
 
@@ -138,9 +139,24 @@ void LevelTask::moveTo(int x, int y)
   moveCharacterTo(player, x, y);
 }
 
-void LevelTask::moveCharacterTo(DynamicObject *, int x, int y)
+bool LevelTask::moveCharacterTo(DynamicObject* character, int x, int y)
 {
   // TODO Pathfinding and all that shit
+  QPoint position = player->getPosition();
+
+  if (grid->findPath(position, QPoint(x, y), character->rcurrentPath()))
+  {
+    if (character->getCurrentPath().size() > 0)
+    {
+      QPoint nextCase = character->getCurrentPath().first();
+      triggerCharacterMoveTo(character, nextCase.x(), nextCase.y());
+    }
+    else
+      emit character->reachedDestination();
+    return true;
+  }
+  return false;
+
 }
 
 bool LevelTask::triggerCharacterMoveTo(DynamicObject* character, int x, int y)

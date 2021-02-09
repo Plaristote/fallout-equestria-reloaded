@@ -27,7 +27,7 @@ public:
   LevelGrid* getGrid() const { return grid; }
 
   Q_INVOKABLE void moveTo(int x, int y);
-  Q_INVOKABLE void moveCharacterTo(DynamicObject*, int x, int y);
+  Q_INVOKABLE bool moveCharacterTo(DynamicObject*, int x, int y);
   Q_INVOKABLE DynamicObject* getOccupantAt(int x, int y);
   Q_INVOKABLE void tileClicked(int x, int y);
 

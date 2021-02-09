@@ -52,5 +52,7 @@
         <file>scripts/traits/kamikaze.mjs</file>
         <file>scripts/traits/skilled.mjs</file>
         <file>scripts/traits/small-frame.mjs</file>
+        <file>assets/sprites/ZEkA10000-green.png</file>
+        <file>scripts/pnjs/dummy.mjs</file>
     </qresource>
 </RCC>
