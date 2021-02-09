@@ -24,6 +24,7 @@ public:
 
   const QString& getName() const { return name; }
   TileMap* getTileMap() const { return tilemap; }
+  LevelGrid* getGrid() const { return grid; }
 
   Q_INVOKABLE void moveTo(int x, int y);
   Q_INVOKABLE void moveCharacterTo(DynamicObject*, int x, int y);

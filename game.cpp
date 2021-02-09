@@ -21,6 +21,16 @@ Game::~Game()
   instance = nullptr;
 }
 
+void Game::newPlayerParty()
+{
+  Character* player = new Character;
+
+  playerParty = new CharacterParty(this);
+  player->setSpriteName("pony");
+  player->setAnimation("idle-down");
+  playerParty->addCharacter(player);
+}
+
 QJSValue Game::loadScript(const QString& path)
 {
   auto module = scriptEngine.importModule(path);
@@ -84,6 +94,7 @@ void Game::switchToLevel(const QString& name, const QString& targetZone)
 
 void Game::exitLevel()
 {
+  playerParty->extractFromLevel(currentLevel);
   currentLevel->deleteLater();
   currentLevel = nullptr;
   emit levelChanged();

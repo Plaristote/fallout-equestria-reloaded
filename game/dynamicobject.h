@@ -3,12 +3,15 @@
 
 # include <QObject>
 # include <QPoint>
+# include <QJSValue>
 # include "sprite.h"
 
 class DynamicObject : public Sprite
 {
   Q_OBJECT
 
+  Q_PROPERTY(QPoint position     READ getPosition)
+  Q_PROPERTY(QString currentZone READ getCurrentZone)
 public:
   explicit DynamicObject(QObject *parent = nullptr);
 
@@ -29,6 +32,8 @@ signals:
 private slots:
   void onMovementEnded();
 
+protected:
+  QJSValue script;
 private:
   QPoint position, nextPosition;
   QList<QPoint> currentPath;

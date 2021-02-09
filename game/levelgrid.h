@@ -39,6 +39,7 @@ public:
 
   bool findPath(QPoint from, QPoint to, QList<QPoint>& path);
   bool moveObject(DynamicObject*, int x, int y);
+  void removeObject(DynamicObject*);
   void triggerZone(DynamicObject*, int x, int y);
 
 private:

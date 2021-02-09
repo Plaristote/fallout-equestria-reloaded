@@ -1,4 +1,5 @@
 #include "leveltask.h"
+#include "game.h"
 
 LevelTask::LevelTask(QObject *parent) : QObject(parent)
 {
@@ -20,23 +21,12 @@ void LevelTask::load(const QString& levelName)
   {
     connect(zone, &TileZone::enteredZone, this, &LevelTask::onZoneEntered, Qt::QueuedConnection);
     connect(zone, &TileZone::exitedZone,  this, &LevelTask::onZoneExited,  Qt::QueuedConnection);
-
-    qDebug() << "Detected" << zone->getType() << "zone" << zone->getName() << zone->getIsDefault();
-    if (zone->getType() == "entry")
+    if (zone->getType() == "entry" && zone->getIsDefault())
     {
-      for (auto position : zone->getPositions())
-      {
-        if (!grid->isOccupied(position.x(), position.y()))
-        {
-          qDebug() << "inserted player !";
-          player = new DynamicObject(this);
-          registerDynamicObject(player);
-          player->setSpriteName("pony");
-          player->setAnimation("idle-down");
-          forceCharacterPosition(player, position.x(), position.y());
-          break ;
-        }
-      }
+      auto* playerParty = Game::get()->getPlayerParty();
+
+      player = playerParty->getCharacters().first();
+      playerParty->insertIntoZone(this, zone);
     }
   }
   if (player == nullptr)

@@ -51,6 +51,10 @@ set(PROJECT_SOURCES
         game/levelgrid.cpp
         game/dynamicobject.h
         game/dynamicobject.cpp
+        game/character.h
+        game/character.cpp
+        game/characterparty.h
+        game/characterparty.cpp
         game/sprite.h
         game/sprite.cpp
         game/animationlibrary.h

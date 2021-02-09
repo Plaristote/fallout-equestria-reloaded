@@ -143,6 +143,18 @@ DynamicObject* LevelGrid::getOccupant(int x, int y)
   return nullptr;
 }
 
+void LevelGrid::removeObject(DynamicObject* object)
+{
+  auto  position = object->getPosition();
+  auto* gridCase = getGridCase(position.x(), position.y());
+
+  if (gridCase && gridCase->occupant == object)
+  {
+    setCaseOccupant(*gridCase, nullptr);
+    emit gridCase->zone->exitedZone(object, gridCase->zone);
+  }
+}
+
 bool LevelGrid::moveObject(DynamicObject* object, int x, int y)
 {
   auto* gridCase = getGridCase(x, y);

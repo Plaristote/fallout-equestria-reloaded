@@ -109,6 +109,7 @@ public:
   int getXpNextLevel() const;
   void levelUp();
 
+  const QString& getName() const { return name; }
   int getExperience() const { return experience; }
   Q_INVOKABLE void addExperience(int xp);
   Q_INVOKABLE bool isAcceptable() const;

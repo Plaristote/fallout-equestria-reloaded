@@ -10,6 +10,7 @@ void GameManager::startNewGame()
   if (!currentGame)
   {
     currentGame = new Game(this);
+    currentGame->newPlayerParty();
     emit currentGameChanged();
   }
   else
