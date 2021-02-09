@@ -11,7 +11,7 @@ LevelGrid::LevelGrid(QObject *parent) : QObject(parent)
 void LevelGrid::initializeGrid(TileMap* tilemap)
 {
   auto* wallLayer = tilemap->getLayer("walls");
-  auto zones      = tilemap->getZones();
+  auto  zones     = tilemap->getZones();
 
   size = tilemap->getSize();
   grid.resize(size.width() * size.height());

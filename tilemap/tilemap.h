@@ -15,6 +15,7 @@ class TileMap : public QObject
   Q_PROPERTY(QSize tileSize MEMBER tileSize)
   Q_PROPERTY(QSize mapSize MEMBER mapSize)
   Q_PROPERTY(QQmlListProperty<TileZone> zones READ getZonesQml)
+  Q_PROPERTY(QQmlListProperty<TileLayer> roofs READ getRoofsQml)
 public:
   explicit TileMap(QObject *parent = nullptr);
 
@@ -28,6 +29,7 @@ public:
   Q_INVOKABLE TileZone*  getZone(const QString& name);
 
   QQmlListProperty<TileZone> getZonesQml() { return   QQmlListProperty<TileZone>(this, &zones); }
+  QQmlListProperty<TileLayer> getRoofsQml() { return   QQmlListProperty<TileLayer>(this, &roofs); }
 
 private:
   QSize               tileSize;
@@ -35,6 +37,7 @@ private:
   QVector<Tileset*>   tilesets;
   QVector<TileLayer*> layers;
   QList<TileZone*>    zones;
+  QList<TileLayer*>   roofs;
 };
 
 #endif // LEVELMAP_H

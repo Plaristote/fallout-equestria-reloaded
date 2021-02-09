@@ -13,16 +13,16 @@ void TileLayer::load(const QJsonObject& object, const QVector<Tileset*>& tileset
   name = object["name"].toString();
   size.setWidth(object["width"].toInt());
   size.setHeight(object["height"].toInt());
-  offset.setX(object["x"].toInt());
-  offset.setY(object["y"].toInt());
+  offset.setX(object["offsetx"].toInt());
+  offset.setY(object["offsety"].toInt());
   loadTiles(object["data"].toArray(), tilesets);
 }
 
-static QPoint getRenderPosition(QPoint currentPosition, QSize tileSize)
+static QPoint getRenderPosition(QPoint offset, QPoint currentPosition, QSize tileSize)
 {
   return QPoint(
-    currentPosition.x() * tileSize.width()  / 2 - currentPosition.y() * tileSize.width()  / 2,
-    currentPosition.y() * tileSize.height() / 2 + currentPosition.x() * tileSize.height() / 2
+    offset.x() + currentPosition.x() * tileSize.width()  / 2 - currentPosition.y() * tileSize.width()  / 2,
+    offset.y() + currentPosition.y() * tileSize.height() / 2 + currentPosition.x() * tileSize.height() / 2
   );
 }
 
@@ -45,7 +45,7 @@ void TileLayer::loadTiles(const QJsonArray& tileArray, const QVector<Tileset*>& 
           tile->setImage(&tileset->getSource());
           tile->setPosition(currentPosition);
           tile->setRect(tileset->getClipRectFor(tid));
-          tile->setRenderPosition(getRenderPosition(currentPosition, tileset->getTileSize()));
+          tile->setRenderPosition(getRenderPosition(offset, currentPosition, tileset->getTileSize()));
           tiles.push_back(tile);
           break ;
         }

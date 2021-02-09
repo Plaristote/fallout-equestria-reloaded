@@ -24,6 +24,7 @@ export class Controller {
     this.eachCase(this.renderTile.bind(this));
     this.renderZones();
     this.eachCase(this.renderCoordinates.bind(this));
+    this.eachCase(this.renderRoofs.bind(this));
 
   }
 
@@ -68,6 +69,30 @@ export class Controller {
       this.renderWall(wall, x, y);
     else if (dynamicObject)
       this.renderSprite(dynamicObject);
+  }
+
+  renderRoofs(x, y) {
+    const player = this.level.player;
+
+    for (var i = 0 ; i < this.tilemap.roofs.length ; ++i) {
+      const layer = this.tilemap.roofs[i];
+
+      if (player) {
+        const tile = layer.getTile(player.position.x, player.position.y);
+
+        if (tile)
+          layer.visible = false;
+        else
+          layer.visible = true;
+      }
+      if (layer.visible) {
+        this.eachCase((x, y) => {
+          const tile = this.tilemap.roofs[i].getTile(x, y);
+          if (tile)
+            this.renderImage("../" + tile.image, tile.renderPosition, this.tileSize.width, this.tileSize.height, tile.clippedRect);
+        });
+      }
+    }
   }
 
   renderWall(tile, x, y) {

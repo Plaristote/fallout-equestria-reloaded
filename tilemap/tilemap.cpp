@@ -41,8 +41,10 @@ bool TileMap::load(const QString& name)
     for (QJsonValue value : document["layers"].toArray())
     {
       QJsonObject layerData = value.toObject();
+      auto layerType = layerData["type"].toString();
+      auto layerName = layerData["name"].toString();
 
-      if (layerData["type"].toString() == "tilelayer")
+      if (layerType == "tilelayer")
       {
         auto* layer = new TileLayer(this);
 
@@ -51,13 +53,28 @@ bool TileMap::load(const QString& name)
       }
       else
       {
-        for (QJsonValue value : layerData["layers"].toArray())
+        if (layerName == "zones")
         {
-          QJsonObject zoneData = value.toObject();
-          auto* zone = new TileZone(this);
+          for (QJsonValue value : layerData["layers"].toArray())
+          {
+            QJsonObject zoneData = value.toObject();
+            auto* zone = new TileZone(this);
 
-          zone->load(zoneData, mapSize);
-          zones.push_back(zone);
+
+            zone->load(zoneData, mapSize);
+            zones.push_back(zone);
+          }
+        }
+        else if (layerName == "roofs")
+        {
+          for (QJsonValue value : layerData["layers"].toArray())
+          {
+            QJsonObject roofLayerData = value.toObject();
+            auto* roofLayer = new TileLayer(this);
+
+            roofLayer->load(roofLayerData, tilesets);
+            roofs.push_back(roofLayer);
+          }
         }
       }
     }
