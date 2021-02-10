@@ -30,18 +30,22 @@ public:
   Q_INVOKABLE bool moveCharacterTo(DynamicObject*, int x, int y);
   Q_INVOKABLE DynamicObject* getOccupantAt(int x, int y);
   Q_INVOKABLE void tileClicked(int x, int y);
+  Q_INVOKABLE void interactOrderReceived(DynamicObject*, const QString& type);
 
   void registerDynamicObject(DynamicObject*);
   void unregisterDynamicObject(DynamicObject*);
 
   bool triggerCharacterMoveTo(DynamicObject* character, int x, int y);
   void forceCharacterPosition(DynamicObject* chracter, int x, int y);
+  bool openInteractionMenu(DynamicObject*);
+  void startPendingInteraction();
 
 signals:
   void pausedChanged();
   void tilemapReady();
   void displayConsoleMessage(const QString&);
   void exitZoneEntered(TileZone*);
+  void interactionRequired(DynamicObject* interactionTarget, QStringList interactionList);
 
 private slots:
   void onPauseChanged();
@@ -61,6 +65,8 @@ private:
   TileMap*   tilemap = nullptr;
   LevelGrid* grid = nullptr;
   bool       paused = true;
+
+  QPair<DynamicObject*, QString> pendingInteraction;
 };
 
 #endif // LEVELTASK_H

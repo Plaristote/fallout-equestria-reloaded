@@ -15,6 +15,7 @@ public:
   StatModel* getStatistics() { return statistics; }
 
   Q_INVOKABLE bool renderOnTile() const { return true; }
+  Q_INVOKABLE QPoint getInteractionPosition() const;
 
 signals:
 

@@ -35,6 +35,39 @@ Item {
     onMoveBottom: { canvas.translate(0, -scrollSpeed); }
   }
 
+  // INTERACTION MENU
+  Pane {
+    property QtObject interactionTarget
+    property var interactionTypes: []
+    id: interactionMenu
+    visible: interactionTarget && interactionTypes.length > 0
+
+    Column {
+      Repeater {
+        model: interactionMenu.interactionTypes
+        delegate: Button {
+          text: interactionMenu.interactionTypes[index]
+          onClicked:{
+            levelController.interactOrderReceived(interactionMenu.interactionTarget, interactionMenu.interactionTypes[index]);
+            interactionMenu.interactionTarget = null;
+          }
+        }
+      }
+    }
+  }
+
+  Connections {
+    target: levelController
+    function onInteractionRequired(interactionTarget, interactionList) {
+      console.log("LevelView received interact menu request");
+      interactionMenu.x = interactionTarget.getSpritePosition() - canvas.origin.x;
+      interactionMenu.y = interactionTarget.getSpritePosition() - canvas.origin.y;
+      interactionMenu.interactionTarget = interactionTarget;
+      interactionMenu.interactionTypes  = interactionList;
+    }
+  }
+
+  // BOTTOM PANE
   Pane {
     anchors.horizontalCenter: parent.horizontalCenter
     anchors.bottom: parent.bottom

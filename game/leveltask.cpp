@@ -142,8 +142,52 @@ void LevelTask::onZoneExited(DynamicObject* object, TileZone* zone)
 
 void LevelTask::tileClicked(int x, int y)
 {
-  if (!moveCharacterTo(player, x, y))
+  DynamicObject* occupant = grid->getOccupant(x, y);
+
+  if (occupant && openInteractionMenu(occupant))
+    return ;
+  else if (!moveCharacterTo(player, x, y))
     emit displayConsoleMessage("No path towards [" + QString::number(x) + ',' + QString::number(y) + ']');
+}
+
+bool LevelTask::openInteractionMenu(DynamicObject* object)
+{
+  auto entries = object->getAvailableInteractions();
+
+  if (entries.length() > 0)
+  {
+    qDebug() << "interaction rekired called";
+    emit interactionRequired(object, entries);
+    return true;
+  }
+  else
+    qDebug() << "no interction available for object";
+  return false;
+}
+
+void LevelTask::interactOrderReceived(DynamicObject* object, const QString &type)
+{
+  auto position = object->getInteractionPosition();
+
+  pendingInteraction.first  = object;
+  pendingInteraction.second = type;
+  if (player->getPosition() != position)
+  {
+    if (position.x() != -1 && !moveCharacterTo(player, position.x(), position.y()))
+    {
+      pendingInteraction.first = nullptr;
+      displayConsoleMessage("Cannot reach target.");
+    }
+    else
+      qDebug() << "Going to target at " << position;
+  }
+  else
+    startPendingInteraction();
+}
+
+void LevelTask::startPendingInteraction()
+{
+  displayConsoleMessage("Should try to start interaction " + pendingInteraction.second);
 }
 
 void LevelTask::registerDynamicObject(DynamicObject* object)
@@ -176,6 +220,7 @@ void LevelTask::onObjectMovementFinished(Sprite* sprite)
       if (!triggerCharacterMoveTo(object, nextCase.x(), nextCase.y()))
       {
         qDebug() << "Path blocked" << nextCase;
+        if (sprite == player) { pendingInteraction.first = nullptr; }
         emit object->pathBlocked();
       }
     }
@@ -183,6 +228,7 @@ void LevelTask::onObjectMovementFinished(Sprite* sprite)
     {
       qDebug() << "-> Reached deztination";
       object->setAnimation("idle-down");
+      if (sprite == player && pendingInteraction.first != nullptr) { startPendingInteraction(); }
       emit object->reachedDestination();
     }
   }
@@ -212,7 +258,6 @@ void LevelTask::moveTo(int x, int y)
 
 bool LevelTask::moveCharacterTo(DynamicObject* character, int x, int y)
 {
-  // TODO Pathfinding and all that shit
   QPoint position = player->getPosition();
 
   if (grid->findPath(position, QPoint(x, y), character->rcurrentPath()))

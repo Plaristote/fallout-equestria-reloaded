@@ -92,3 +92,19 @@ void DynamicObject::onTicked()
     Game::get()->scriptCall(callback, args, "onTicked");
   }
 }
+
+QStringList DynamicObject::getAvailableInteractions()
+{
+  QJSValue callback = script.property("getAvailableInteractions");
+
+  if (callback.isCallable())
+  {
+    QJSValueList args;
+    QJSValue retval;
+
+    args << Game::get()->getScriptEngine().newQObject(this);
+    retval = Game::get()->scriptCall(callback, args, "getAvailableInteractions");
+    return retval.toVariant().toStringList();
+  }
+  return QStringList();
+}

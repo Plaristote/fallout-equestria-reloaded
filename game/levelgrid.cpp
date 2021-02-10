@@ -114,7 +114,7 @@ LevelGrid::CaseContent* LevelGrid::getGridCase(int x, int y)
 {
   int position = y * size.width() + x;
 
-  if (position >= grid.count())
+  if (position >= grid.count() || position < 0)
     return nullptr;
   return &(grid[position]);
 }
@@ -123,7 +123,7 @@ bool LevelGrid::isOccupied(int x, int y) const
 {
   int index = y * size.width() + x;
 
-  if (index >= grid.count())
+  if (index >= grid.count() || index < 0)
     return true;
   return grid.at(index).occupied;
 }

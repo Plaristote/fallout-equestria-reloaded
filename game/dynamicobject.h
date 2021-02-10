@@ -20,7 +20,8 @@ public:
   void setScript(const QString& name);
 
   Q_INVOKABLE QPoint getPosition() const { return position; }
-  Q_INVOKABLE QPoint getInteractionPosition() const { return interactionPosition; }
+  Q_INVOKABLE virtual QPoint getInteractionPosition() const { return interactionPosition; }
+  QStringList getAvailableInteractions();
   void setPosition(QPoint value) { position = value; }
   void setInteractionPosition(QPoint value) { interactionPosition = value; }
   void moveTo(int x, int y, QPoint renderPosition);

@@ -1,6 +1,10 @@
 export function initialize(character) {
   console.log("----> dummy initialize <-----");
-  character.setTickBehavior(1000, true);
+  //character.setTickBehavior(1000, true);
+}
+
+export function getAvailableInteractions() {
+  return ["talk", "look", "use-skill"];
 }
 
 export function onMovementEnded(character) {
