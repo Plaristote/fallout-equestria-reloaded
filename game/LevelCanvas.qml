@@ -56,16 +56,18 @@ Canvas {
   function translate(x, y) {
     const context = getContext("2d");
     const limits = controller.getLimits();
-    /*
-    if ((origin.x + x < limits.minX && x < 0) || (origin.x + x > limits.maxX && x > 0))
-      x = 0;
-    if ((origin.y + y < limits.minY && y < 0) || (origin.y + y > limits.maxY && y > 0))
-      y = 0;
-    */
+    var   newOriginX = origin.x + x;
+    var   newOriginY = origin.y + y;
+
+    newOriginX = Math.min(newOriginX, limits.maxX);
+    newOriginX = Math.max(newOriginX, limits.minX);
+    newOriginY = Math.min(newOriginY, limits.maxY);
+    newOriginY = Math.max(newOriginY, limits.minY);
+    x = newOriginX - origin.x;
+    y = newOriginY - origin.y;
     context.translate(x, y);
     origin.x += x;
     origin.y += y;
-    //console.log("View offset:", origin.x, origin.y, JSON.stringify(limits));
     requestPaint();
   }
 
@@ -74,7 +76,24 @@ Canvas {
   }
 
   function moveToCoordinates(x, y) {
-    const offset = controller.getPointFor(x, y);
-    moveToOffset(offset.x - canvas.width / 2, offset.y - canvas.height / 2);
+    const position = controller.getPointFor(x, y);
+
+    position.x -= canvas.width / 2
+    position.y -= canvas.height / 2
+    translate(-origin.x - position.x, -origin.y - position.y);
+
+  }
+
+  function moveToObject(object) {
+    const position = object.getSpritePosition();
+
+    position.x -= canvas.width / 2
+    position.y -= canvas.height / 2
+    translate(-origin.x - position.x, -origin.y - position.y);
+  }
+
+  Shortcut {
+    sequence: "c"
+    onActivated: moveToObject(levelController.player)
   }
 }

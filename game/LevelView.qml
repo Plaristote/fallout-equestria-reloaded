@@ -14,6 +14,7 @@ Item {
     mainMenu.visible = !mainMenu.visible;
   }
 
+
   Action {
     id: openMenuAction
     shortcut: Shortcut {
@@ -38,6 +39,17 @@ Item {
     onMoveLeft:   { canvas.translate(scrollSpeed, 0); }
     onMoveRight:  { canvas.translate(-scrollSpeed, 0); }
     onMoveBottom: { canvas.translate(0, -scrollSpeed); }
+  }
+
+  Text {
+    anchors.top: parent.top
+    anchors.right: parent.right
+    text: "OriginX: " + canvas.origin.x
+    Text {
+      anchors.top: parent.bottom
+      anchors.right: parent.right
+      text: "OriginY: " + canvas.origin.y
+    }
   }
 
   // INTERACTION MENU
