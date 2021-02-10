@@ -190,7 +190,19 @@ void LevelTask::interactOrderReceived(DynamicObject* object, const QString &type
 
 void LevelTask::startPendingInteraction()
 {
-  displayConsoleMessage("Should try to start interaction " + pendingInteraction.second);
+  if (pendingInteraction.first)
+  {
+    if (pendingInteraction.second == "talk-to")
+    {
+      displayConsoleMessage("Should try to start interaction " + pendingInteraction.second);
+      emit startDialog(reinterpret_cast<Character*>(pendingInteraction.first));
+    }
+    else
+      qDebug() << "Error 422: unknown interaciton type";
+  }
+  else
+    qDebug() << "Error 500: No more interaction target";
+  pendingInteraction.first = nullptr;
 }
 
 void LevelTask::registerDynamicObject(DynamicObject* object)

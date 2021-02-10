@@ -6,6 +6,7 @@
 # include "tilemap/tilemap.h"
 # include "levelgrid.h"
 
+# include "character.h"
 # include "dynamicobject.h"
 
 class LevelTask : public QObject
@@ -46,6 +47,7 @@ signals:
   void displayConsoleMessage(const QString&);
   void exitZoneEntered(TileZone*);
   void interactionRequired(DynamicObject* interactionTarget, QStringList interactionList);
+  void startDialog(Character*);
 
 private slots:
   void onPauseChanged();

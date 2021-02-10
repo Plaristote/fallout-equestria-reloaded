@@ -86,6 +86,14 @@ Item {
     }
   }
 
+  // DIALOG STARTER
+  Connections {
+    target: levelController
+    function onStartDialog(character) {
+      application.pushView("game/Dialog.qml", {character: character});
+    }
+  }
+
   // BOTTOM PANE
   Pane {
     anchors.horizontalCenter: parent.horizontalCenter
