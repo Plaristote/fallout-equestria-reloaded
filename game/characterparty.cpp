@@ -79,5 +79,8 @@ void CharacterParty::extractFromLevel(LevelTask* level)
   auto* grid = level->getGrid();
 
   for (Character* character : list)
+  {
     grid->removeObject(character);
+    level->unregisterDynamicObject(character);
+  }
 }

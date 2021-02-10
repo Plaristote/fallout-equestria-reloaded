@@ -2,6 +2,7 @@
 # define GAME_H
 
 # include <QObject>
+# include "game/dataengine.h"
 # include "game/leveltask.h"
 # include "game/characterparty.h"
 # include <QJSEngine>
@@ -14,6 +15,7 @@ class Game : public QObject
   Q_PROPERTY(LevelTask* level MEMBER currentLevel NOTIFY levelChanged)
   Q_PROPERTY(QStringList consoleMessages MEMBER consoleMessages NOTIFY consoleUpdated)
   Q_PROPERTY(CharacterParty* playerParty MEMBER playerParty NOTIFY playerPartyChanged)
+  Q_PROPERTY(DataEngine* dataEngine MEMBER dataEngine NOTIFY dataEngineChanged)
 
   static Game* instance;
 
@@ -30,6 +32,7 @@ public:
 
   static Game* get() { return instance; }
 
+  DataEngine* getDataEngine() const { return dataEngine; }
   LevelTask* getLevel() const { return currentLevel; }
   QJSEngine& getScriptEngine() { return scriptEngine; }
   QJSValue loadScript(const QString& path);
@@ -43,11 +46,13 @@ signals:
   void levelChanged();
   void consoleUpdated();
   void playerPartyChanged();
+  void dataEngineChanged();
 
 public slots:
   void changeZone(TileZone*);
 
 private:
+  DataEngine* dataEngine = nullptr;
   LevelTask*  currentLevel = nullptr;
   CharacterParty* playerParty = nullptr;
   QStringList consoleMessages;

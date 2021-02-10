@@ -5,12 +5,29 @@ GameManager::GameManager(QObject *parent) : QObject(parent), currentGame(nullptr
 
 }
 
+bool GameManager::hasContinueGame() const
+{
+  return false;
+}
+
 void GameManager::startNewGame()
 {
   if (!currentGame)
   {
     currentGame = new Game(this);
     currentGame->newPlayerParty();
+    emit currentGameChanged();
+  }
+  else
+    qDebug() << "ERROR cannot start new game while another is still running";
+}
+
+void GameManager::loadGame(const QString& path)
+{
+  if (!currentGame)
+  {
+    currentGame = new Game(this);
+    //currentGame->load(path);
     emit currentGameChanged();
   }
   else

@@ -9,6 +9,7 @@ Game::Game(QObject *parent) : QObject(parent)
   if (instance != nullptr)
     throw std::runtime_error("can't have two Game instances at once");
   instance = this;
+  dataEngine = new DataEngine(this);
   scriptEngine.installExtensions(QJSEngine::ConsoleExtension);
   scriptEngine.globalObject().setProperty("game", scriptEngine.newQObject(this));
   loadCmapTraits();
@@ -70,10 +71,12 @@ void Game::goToLevel(const QString& name)
   auto scriptObject = scriptEngine.globalObject();
 
   appendToConsole("You reached " + name);
+  dataEngine->setCurrentLevel(name);
   currentLevel = new LevelTask(this);
   connect(currentLevel, &LevelTask::displayConsoleMessage, this, &Game::appendToConsole);
   connect(currentLevel, &LevelTask::exitZoneEntered, this, &Game::changeZone);
-  currentLevel->load(name);
+  currentLevel->load(name, dataEngine);
+  currentLevel->setPaused(false);
   scriptObject.setProperty("level", scriptEngine.newQObject(currentLevel));
   emit levelChanged();
 }
@@ -84,10 +87,13 @@ void Game::switchToLevel(const QString& name, const QString& targetZone)
 
   if (currentLevel)
     exitLevel();
+  dataEngine->setCurrentLevel(name);
   currentLevel = new LevelTask(this);
   connect(currentLevel, &LevelTask::displayConsoleMessage, this, &Game::appendToConsole);
   connect(currentLevel, &LevelTask::exitZoneEntered, this, &Game::changeZone);
-  currentLevel->load(name);
+  currentLevel->load(name, dataEngine);
+  currentLevel->insertPartyIntoZone(playerParty);
+  currentLevel->setPaused(false);
   scriptObject.setProperty("level", scriptEngine.newQObject(currentLevel));
   emit levelChanged();
 }
@@ -95,8 +101,10 @@ void Game::switchToLevel(const QString& name, const QString& targetZone)
 void Game::exitLevel()
 {
   playerParty->extractFromLevel(currentLevel);
+  currentLevel->save(dataEngine);
   currentLevel->deleteLater();
   currentLevel = nullptr;
+  dataEngine->exitLevel();
   emit levelChanged();
 }
 

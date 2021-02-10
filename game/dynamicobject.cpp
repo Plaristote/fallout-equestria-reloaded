@@ -1,5 +1,6 @@
 #include "dynamicobject.h"
 #include "game.h"
+#include <QJsonArray>
 
 DynamicObject::DynamicObject(QObject *parent) : Sprite(parent)
 {
@@ -13,6 +14,7 @@ void DynamicObject::setScript(const QString& name)
   script = Game::get()->loadScript(getScriptPath() + '/' + name);
   QJSValue callback = script.property("initialize");
 
+  scriptName = name;
   if (callback.isCallable())
   {
     QJSValueList args;
@@ -107,4 +109,46 @@ QStringList DynamicObject::getAvailableInteractions()
     return retval.toVariant().toStringList();
   }
   return QStringList();
+}
+
+void DynamicObject::load(const QJsonObject& data)
+{
+  objectName = data["objectName"].toString();
+  position.setX(data["x"].toInt()); position.setY(data["y"].toInt());
+  nextPosition.setX(data["nextX"].toInt()); nextPosition.setY(data["nextY"].toInt());
+  interactionPosition.setX(data["intX"].toInt()); interactionPosition.setY(data["intY"].toInt());
+  for (QJsonValue pathPointData : data["currentPath"].toArray())
+  {
+    QPoint pathPoint;
+
+    pathPoint.setX(pathPointData["x"].toInt());
+    pathPoint.setY(pathPointData["y"].toInt());
+    currentPath << pathPoint;
+  }
+  currentZone = data["currentZone"].toString();
+  scriptName  = data["script"].toString();
+  Sprite::load(data);
+  setScript(scriptName);
+}
+
+void DynamicObject::save(QJsonObject& data) const
+{
+  QJsonArray currentPathData;
+
+  data["objectName"] = objectName;
+  data["x"] = position.x(); data["y"] = position.y();
+  data["nextX"] = nextPosition.x(); data["nextY"] = nextPosition.y();
+  data["intX"] = interactionPosition.x(); data["intY"] = interactionPosition.y();
+  for (QPoint pathPoint : currentPath)
+  {
+    QJsonObject pathPointData;
+
+    pathPointData["x"] = pathPoint.x();
+    pathPointData["y"] = pathPoint.y();
+    currentPathData << pathPointData;
+  }
+  data["currentPath"] = currentPathData;
+  data["currentZone"] = currentZone;
+  data["script"]      = scriptName;
+  Sprite::save(data);
 }

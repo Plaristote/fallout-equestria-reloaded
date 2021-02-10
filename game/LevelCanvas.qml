@@ -16,11 +16,9 @@ Canvas {
     preloadImages();
   }
 
-  Timer {
-    running: canvas.imageReady
-    repeat: true
-    interval: 17
-    onTriggered: canvas.requestPaint()
+  Connections {
+    target: levelController
+    function onUpdated() { canvas.requestPaint(); }
   }
 
   onAvailableChanged: {

@@ -5,6 +5,7 @@
 # include <QTimer>
 # include <QSize>
 # include <QRect>
+# include <QJsonObject>
 # include "animationlibrary.h"
 
 class Sprite : public QObject
@@ -13,6 +14,8 @@ class Sprite : public QObject
 
 public:
   explicit Sprite(QObject *parent = nullptr);
+
+  void update(qint64);
 
   void setSpriteName(const QString& value) { name = value; }
   void setAnimation(const QString& animationName);
@@ -27,21 +30,23 @@ public:
   Q_INVOKABLE QString getShadowSource() const { return shadow.source; }
   Q_INVOKABLE bool    renderOnTile() const { return false; }
 
+  void load(const QJsonObject&);
+  void save(QJsonObject&) const;
+
 signals:
   void animationFinished();
   void movementFinished(Sprite*);
 
-private slots:
+private:
   void runAnimation();
-  void runMovement();
+  void runMovement(qint64);
 
 private:
   QPoint          spritePosition, spriteMovementTarget;
   QString         name;
   SpriteAnimation shadow;
   SpriteAnimation animation;
-  QTimer          animationTimer;
-  QTimer          movementTimer;
+  qint64          animationElapsedTime;
   float           movementSpeed;
 };
 

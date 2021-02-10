@@ -12,7 +12,9 @@ class GameManager : public QObject
 public:
   explicit GameManager(QObject *parent = nullptr);
 
+  Q_INVOKABLE bool hasContinueGame() const;
   Q_INVOKABLE void startNewGame();
+  Q_INVOKABLE void loadGame(const QString&);
   Q_INVOKABLE void endGame();
 
 signals:

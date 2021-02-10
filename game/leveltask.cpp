@@ -8,39 +8,54 @@ LevelTask::LevelTask(QObject *parent) : QObject(parent)
   player  = nullptr;
   tilemap = new TileMap(this);
   grid    = new LevelGrid(this);
-  taskTick.setInterval(17);
-  clockTick.setInterval(1000);
-  connect(&taskTick,  &QTimer::timeout, this, &LevelTask::onTaskTick);
-  connect(&clockTick, &QTimer::timeout, this, &LevelTask::onClockTick);
+  updateTimer.setInterval(30);
+  updateTimer.setSingleShot(false);
+  connect(&updateTimer, &QTimer::timeout, this, &LevelTask::update);
+  connect(this, &LevelTask::pausedChanged, this, &LevelTask::onPauseChanged);
 }
 
-void LevelTask::load(const QString& levelName)
+bool LevelTask::insertPartyIntoZone(CharacterParty* party, const QString& zoneName)
+{
+  for (auto* zone : tilemap->getZones())
+  {
+    if (zone->getType() == "entry" && (zone->getName() == zoneName || zone->getIsDefault() && zoneName == ""))
+      return party->insertIntoZone(this, zone);
+  }
+  return false;
+}
+
+void LevelTask::load(const QString& levelName, DataEngine* dataEngine)
 {
   name = levelName;
+  player = Game::get()->getPlayerParty()->getCharacters().first();
   tilemap->load(levelName);
   grid->initializeGrid(tilemap);
 
+  if (dataEngine->isLevelActive(name))
+    loadObjectsFromDataEngine(dataEngine);
+  else
+    loadObjectsFromTilemap();
+  for (auto* zone : tilemap->getZones())
+  {
+    connect(zone, &TileZone::enteredZone, this, &LevelTask::onZoneEntered, Qt::QueuedConnection);
+    connect(zone, &TileZone::exitedZone,  this, &LevelTask::onZoneExited,  Qt::QueuedConnection);
+  }
+}
+
+void LevelTask::loadObjectsFromTilemap()
+{
+  displayConsoleMessage("Level loaded from TileMap");
+
   CharacterParty* otherParty = new CharacterParty(this);
   Character* otherChar = new Character;
+  otherChar->setStatistics(Game::get()->getDataEngine()->makeStatModel("tintin", "toto"));
   otherChar->setSpriteName("pony-green");
   otherChar->setAnimation("idle-down");
   otherChar->setScript("dummy.mjs");
   otherParty->addCharacter(otherChar);
 
-  for (auto* zone : tilemap->getZones())
-  {
-    connect(zone, &TileZone::enteredZone, this, &LevelTask::onZoneEntered, Qt::QueuedConnection);
-    connect(zone, &TileZone::exitedZone,  this, &LevelTask::onZoneExited,  Qt::QueuedConnection);
-    if (zone->getType() == "entry" && zone->getIsDefault())
-    {
-      auto* playerParty = Game::get()->getPlayerParty();
-
-      player = playerParty->getCharacters().first();
-      playerParty->insertIntoZone(this, zone);
-      //
-      otherParty->insertIntoZone(this, zone);
-    }
-  }
+  insertPartyIntoZone(Game::get()->getPlayerParty());
+  insertPartyIntoZone(otherParty);
 
   for (QJsonObject objectData : tilemap->getObjects())
   {
@@ -50,9 +65,10 @@ void LevelTask::load(const QString& levelName)
     int             gid;
     QString         type;
     QPoint          drawAt, interactionPosition;
-    QString         scriptName, dialogName;
+    QString         scriptName, dialogName, characterSheetName;
     QPoint          renderPosition;
     SpriteAnimation customDisplay;
+    bool            unique = false;
 
     qDebug() << ">>>>>>>>>>>>>>>>>>>>> Loading object" << objectData["name"].toString();
     if (objectTiles.size() == 0)
@@ -84,6 +100,10 @@ void LevelTask::load(const QString& levelName)
           scriptName = propertyValue.toString();
         else if (propertyName == "dialog")
           dialogName = propertyValue.toString();
+        else if (propertyName == "characterSheet")
+          characterSheetName = propertyValue.toString();
+        else if (propertyName == "unique")
+          characterSheetName = propertyValue.toBool();
 
         else if (propertyName == "x")
           renderPosition.setX(propertyValue.toInt() - this->tilemap->getPixelWidth() / 2 + customDisplay.clippedRect.width() / 2 + 5);
@@ -94,13 +114,19 @@ void LevelTask::load(const QString& levelName)
     {
       Character* character = new Character(this);
 
+      character->setUnique(unique);
+      character->setStatistics(
+        Game::get()->getDataEngine()->makeStatModel(character->getObjectName(), characterSheetName)
+      );
       object = character;
     }
     else
     {
       object = new DynamicObject(this);
     }
+    object->setObjectName(objectData["name"].toString());
     grid->moveObject(object, drawAt.x(), drawAt.y());
+    object->setPosition(drawAt);
     object->forceMoveToCoordinates(renderPosition);
     object->setInteractionPosition(interactionPosition);
     object->setSpriteAnimation(customDisplay);
@@ -108,11 +134,50 @@ void LevelTask::load(const QString& levelName)
       object->setScript(scriptName);
     registerDynamicObject(object);
   }
-
-  if (player == nullptr)
-    qDebug()<< "Could not input player !";
-
   moveCharacterTo(otherChar, 0, 0);
+}
+
+void LevelTask::loadObjectsFromDataEngine(DataEngine* dataEngine)
+{
+  QJsonObject levelData = dataEngine->getLevelData(name);
+
+  displayConsoleMessage("Level loaded from DataEngine");
+
+  for (QJsonValue objectData : levelData["objects"].toArray())
+  {
+    QString type = objectData["type"].toString();
+    DynamicObject* object;
+
+    if (type == "Character")
+      object = new Character(this);
+    else
+      object = new DynamicObject(this);
+    object->load(objectData.toObject());
+    grid->moveObject(object, object->getPosition().x(), object->getPosition().y());
+    //object->forceMoveToCoordinates(object->getSpritePosition());
+    registerDynamicObject(object);
+
+    if (type == "Character") {
+      // TODO Execute pending saved actions
+    }
+  }
+}
+
+void LevelTask::save(DataEngine* dataEngine)
+{
+  QJsonObject levelData = dataEngine->getLevelData(name);
+  QJsonArray  objectArray;
+
+  for (DynamicObject* object : objects)
+  {
+    QJsonObject objectData;
+
+    objectData["type"] = object->metaObject()->className();
+    object->save(objectData);
+    objectArray << objectData;
+  }
+  levelData["objects"] = objectArray;
+  dataEngine->setLevelData(name, levelData);
 }
 
 void LevelTask::onZoneEntered(DynamicObject* object, TileZone* zone)
@@ -256,16 +321,6 @@ void LevelTask::onObjectMovementFinished(Sprite* sprite)
     qDebug() << "!!";
 }
 
-void LevelTask::onTaskTick()
-{
-
-}
-
-void LevelTask::onClockTick()
-{
-
-}
-
 DynamicObject* LevelTask::getOccupantAt(int x, int y)
 {
   return grid->getOccupant(x, y);
@@ -321,13 +376,19 @@ void LevelTask::forceCharacterPosition(DynamicObject* character, int x, int y)
 void LevelTask::onPauseChanged()
 {
   if (paused)
-  {
-    taskTick.stop();
-    clockTick.stop();
-  }
+    updateTimer.stop();
   else
   {
-    taskTick.start();
-    clockTick.start();
+    updateTimer.start();
+    clock.start();
   }
+}
+
+void LevelTask::update()
+{
+  qint64 delta = clock.restart();
+
+  for (DynamicObject* object : objects)
+    object->update(delta);
+  emit updated();
 }

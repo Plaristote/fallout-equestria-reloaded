@@ -5,18 +5,25 @@
 # include <QPoint>
 # include <QJSValue>
 # include <QTimer>
+# include <QJsonObject>
 # include "sprite.h"
 
 class DynamicObject : public Sprite
 {
   Q_OBJECT
 
+  Q_PROPERTY(QString objectName MEMBER objectName)
   Q_PROPERTY(QPoint  position    READ getPosition)
   Q_PROPERTY(QString currentZone READ getCurrentZone)
 
 public:
   explicit DynamicObject(QObject *parent = nullptr);
 
+  virtual void load(const QJsonObject&);
+  virtual void save(QJsonObject&) const;
+
+  void setObjectName(const QString& value) { objectName = value; }
+  const QString& getObjectName() const { return objectName; }
   void setScript(const QString& name);
 
   Q_INVOKABLE QPoint getPosition() const { return position; }
@@ -47,6 +54,7 @@ protected:
   virtual QString getScriptPath() const { return ":/scripts/behaviour"; }
   QJSValue script;
 private:
+  QString objectName, scriptName;
   QPoint position, nextPosition;
   QTimer tick;
   QList<QPoint> currentPath;

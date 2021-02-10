@@ -14,7 +14,6 @@ Window {
   property bool hasSavedGame: false // TODO
 
   function createGame() {
-    //pushView("NewGame.qml");
     pushView("Game.qml", { initialState: "new-game" });
   }
 

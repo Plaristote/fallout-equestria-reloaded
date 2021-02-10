@@ -3,6 +3,7 @@
 
 # include <QObject>
 # include <QJsonDocument>
+# include <QJsonObject>
 
 struct StatData
 {
@@ -105,6 +106,9 @@ class StatModel : public QObject
 
 public:
   explicit StatModel(QObject *parent = nullptr);
+
+  void fromJson(const QJsonObject&);
+  void toJson(QJsonObject&);
 
   int getXpNextLevel() const;
   void levelUp();

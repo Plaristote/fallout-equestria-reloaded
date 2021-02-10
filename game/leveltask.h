@@ -2,14 +2,16 @@
 # define LEVELTASK_H
 
 # include <QObject>
-# include <QTimer>
+# include <QElapsedTimer>
 # include "tilemap/tilemap.h"
 # include "levelgrid.h"
 
 # include "character.h"
 # include "dynamicobject.h"
 
+class CharacterParty;
 class CharacterDialog;
+class DataEngine;
 
 class LevelTask : public QObject
 {
@@ -23,12 +25,17 @@ class LevelTask : public QObject
 public:
   explicit LevelTask(QObject *parent = nullptr);
 
-  void load(const QString& levelName);
+  void load(const QString& levelName, DataEngine*);
+  void loadObjectsFromTilemap();
+  void loadObjectsFromDataEngine(DataEngine*);
+  void save(DataEngine*);
+  void setPaused(bool value) { paused = value; emit pausedChanged(); }
 
   const QString& getName() const { return name; }
   TileMap* getTileMap() const { return tilemap; }
   LevelGrid* getGrid() const { return grid; }
 
+  Q_INVOKABLE bool insertPartyIntoZone(CharacterParty*, const QString& zoneName = "");
   Q_INVOKABLE void moveTo(int x, int y);
   Q_INVOKABLE bool moveCharacterTo(DynamicObject*, int x, int y);
   Q_INVOKABLE DynamicObject* getOccupantAt(int x, int y);
@@ -44,6 +51,7 @@ public:
   void startPendingInteraction();
 
 signals:
+  void updated();
   void pausedChanged();
   void tilemapReady();
   void displayConsoleMessage(const QString&);
@@ -52,9 +60,8 @@ signals:
   void startDialog(CharacterDialog* dialogController);
 
 private slots:
+  void update();
   void onPauseChanged();
-  void onClockTick();
-  void onTaskTick();
 
   void onObjectMovementFinished(Sprite*);
   void onZoneEntered(DynamicObject*, TileZone*);
@@ -64,11 +71,12 @@ private:
   DynamicObject* player;
   QList<DynamicObject*> objects;
 
-  QTimer     taskTick, clockTick;
-  QString    name;
-  TileMap*   tilemap = nullptr;
-  LevelGrid* grid = nullptr;
-  bool       paused = true;
+  QTimer        updateTimer;
+  QElapsedTimer clock;
+  QString       name;
+  TileMap*      tilemap = nullptr;
+  LevelGrid*    grid = nullptr;
+  bool          paused = true;
 
   QPair<DynamicObject*, QString> pendingInteraction;
 };

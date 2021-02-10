@@ -47,6 +47,8 @@ set(PROJECT_SOURCES
         cmap/statmodel.cpp
         cmap/trait.h
         cmap/trait.cpp
+        game/dataengine.h
+        game/dataengine.cpp
         game/leveltask.h
         game/leveltask.cpp
         game/levelgrid.h

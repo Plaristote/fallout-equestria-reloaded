@@ -37,3 +37,33 @@ QString Character::getDialogName()
 {
   return script.property("dialog").toString();
 }
+
+void Character::load(const QJsonObject& data)
+{
+  QString objectName = data["objectName"].toString();
+
+  isUnique = data["uniq"].toBool();
+  if (isUnique)
+    statistics = Game::get()->getDataEngine()->makeStatModel(objectName);
+  else
+  {
+    statistics = new StatModel(this);
+    statistics->fromJson(data["stats"].toObject());
+  }
+  DynamicObject::load(data);
+}
+
+void Character::save(QJsonObject& data) const
+{
+  data["uniq"] = isUnique;
+  if (isUnique)
+    Game::get()->getDataEngine()->saveStatModel(getObjectName(), statistics);
+  else
+  {
+    QJsonObject statData;
+
+    statistics->toJson(statData);
+    data.insert("stats", statData);
+  }
+  DynamicObject::save(data);
+}
