@@ -56,5 +56,42 @@
         <file>scripts/pnjs/dummy.mjs</file>
         <file>assets/sprites/library.png</file>
         <file>assets/backgrounds/ministry-of-peace.jpg</file>
+        <file>ui/FaceDisplay.qml</file>
+        <file>assets/faces/backgrounds/wasteland.jpg</file>
+        <file>assets/faces/mare-basic/eyes/angry.png</file>
+        <file>assets/faces/mare-basic/eyes/neutral.png</file>
+        <file>assets/faces/mare-basic/eyes/sad.png</file>
+        <file>assets/faces/mare-basic/eyes/smile.png</file>
+        <file>assets/faces/mare-basic/mouthes/angry.png</file>
+        <file>assets/faces/mare-basic/mouthes/neutral.png</file>
+        <file>assets/faces/mare-basic/mouthes/sad.png</file>
+        <file>assets/faces/mare-basic/mouthes/smile.png</file>
+        <file>assets/faces/mare-basic/base-white.png</file>
+        <file>assets/faces/mare-basic/base.png</file>
+        <file>assets/faces/mare-basic/accessories/eye-patch.png</file>
+        <file>assets/faces/mare-basic/accessories/eye-scar.png</file>
+        <file>assets/faces/mare-basic/accessories/fancypants.png</file>
+        <file>assets/faces/mare-basic/accessories/square-glasses.png</file>
+        <file>assets/ui/interactions/look-active.png</file>
+        <file>assets/ui/interactions/look-normal.png</file>
+        <file>assets/ui/interactions/look-pressed.png</file>
+        <file>assets/ui/interactions/push-active.png</file>
+        <file>assets/ui/interactions/push-normal.png</file>
+        <file>assets/ui/interactions/push-pressed.png</file>
+        <file>assets/ui/interactions/talk-to-active.png</file>
+        <file>assets/ui/interactions/talk-to-normal.png</file>
+        <file>assets/ui/interactions/talk-to-pressed.png</file>
+        <file>assets/ui/interactions/use-active.png</file>
+        <file>assets/ui/interactions/use-magic-active.png</file>
+        <file>assets/ui/interactions/use-magic-normal.png</file>
+        <file>assets/ui/interactions/use-magic-pressed.png</file>
+        <file>assets/ui/interactions/use-normal.png</file>
+        <file>assets/ui/interactions/use-object-active.png</file>
+        <file>assets/ui/interactions/use-object-normal.png</file>
+        <file>assets/ui/interactions/use-object-pressed.png</file>
+        <file>assets/ui/interactions/use-pressed.png</file>
+        <file>assets/ui/interactions/use-skill-active.png</file>
+        <file>assets/ui/interactions/use-skill-normal.png</file>
+        <file>assets/ui/interactions/use-skill-pressed.png</file>
     </qresource>
 </RCC>

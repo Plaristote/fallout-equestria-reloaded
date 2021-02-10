@@ -4,7 +4,7 @@ export function initialize(character) {
 }
 
 export function getAvailableInteractions() {
-  return ["talk", "look", "use-skill"];
+  return ["talk-to", "look", "use-skill"];
 }
 
 export function onMovementEnded(character) {

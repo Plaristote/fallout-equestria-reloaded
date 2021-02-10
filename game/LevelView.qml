@@ -18,7 +18,12 @@ Item {
     id: openMenuAction
     shortcut: Shortcut {
       sequence: "Esc"
-      onActivated: openMenuAction.trigger()
+      onActivated: {
+        if (interactionMenu.visible)
+          interactionMenu.interactionTarget = null;
+        else
+          openMenuAction.trigger()
+      }
     }
     onTriggered: openMenu()
   }
@@ -36,17 +41,28 @@ Item {
   }
 
   // INTERACTION MENU
-  Pane {
+  Item {
     property QtObject interactionTarget
     property var interactionTypes: []
+    property point interactionPosition
     id: interactionMenu
     visible: interactionTarget && interactionTypes.length > 0
+
+    x: interactionPosition.x + canvas.origin.x
+    y: interactionPosition.y + canvas.origin.y
 
     Column {
       Repeater {
         model: interactionMenu.interactionTypes
         delegate: Button {
-          text: interactionMenu.interactionTypes[index]
+          id: button
+          hoverEnabled: true
+
+          background: Image {
+            property string bgType: parent.down ? 'pressed' : (parent.hovered ? 'active' : 'normal')
+            source: "qrc:/assets/ui/interactions/" + interactionMenu.interactionTypes[index] + '-' + bgType + '.png'
+          }
+
           onClicked:{
             levelController.interactOrderReceived(interactionMenu.interactionTarget, interactionMenu.interactionTypes[index]);
             interactionMenu.interactionTarget = null;
@@ -59,11 +75,14 @@ Item {
   Connections {
     target: levelController
     function onInteractionRequired(interactionTarget, interactionList) {
-      console.log("LevelView received interact menu request");
-      interactionMenu.x = interactionTarget.getSpritePosition() - canvas.origin.x;
-      interactionMenu.y = interactionTarget.getSpritePosition() - canvas.origin.y;
-      interactionMenu.interactionTarget = interactionTarget;
-      interactionMenu.interactionTypes  = interactionList;
+      if (interactionTarget)
+      {
+        interactionMenu.interactionTarget = interactionTarget;
+        interactionMenu.interactionTypes  = interactionList;
+        interactionMenu.interactionPosition = interactionTarget.getSpritePosition();
+      }
+      else
+        interactionMenu.interactionTarget = null;
     }
   }
 

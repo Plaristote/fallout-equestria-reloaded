@@ -144,6 +144,9 @@ void LevelTask::tileClicked(int x, int y)
 {
   DynamicObject* occupant = grid->getOccupant(x, y);
 
+  // Cancel interaction if any is running
+  emit interactionRequired(nullptr, QStringList());
+  // Infer interaction type and proceed
   if (occupant && openInteractionMenu(occupant))
     return ;
   else if (!moveCharacterTo(player, x, y))
