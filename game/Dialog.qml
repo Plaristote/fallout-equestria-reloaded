@@ -9,7 +9,10 @@ Item {
 
   Connections {
     target: controller
-    function onDialogEnded() { application.popView(); }
+    function onDialogEnded() {
+      application.popView();
+      levelController.paused = false;
+    }
   }
 
   FaceDisplay {

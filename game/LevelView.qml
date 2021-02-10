@@ -93,6 +93,7 @@ Item {
       console.log("ztarting dialog controller", dialogController);
       console.log("text iz ", dialogController.text);
       application.pushView("game/Dialog.qml", {controller: dialogController});
+      levelController.paused  = true;
     }
   }
 

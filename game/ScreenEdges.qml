@@ -12,6 +12,30 @@ Item {
   signal moveRight();
   signal moveBottom();
 
+  Shortcut {
+    sequence: "Up"
+    autoRepeat: true
+    onActivated: moveTop()
+  }
+
+  Shortcut {
+    sequence: "Left"
+    autoRepeat: true
+    onActivated: moveLeft()
+  }
+
+  Shortcut {
+    sequence: "Right"
+    autoRepeat: true
+    onActivated: moveRight()
+  }
+
+  Shortcut {
+    sequence: "Down"
+    autoRepeat: true
+    onActivated: moveBottom()
+  }
+
   MouseArea {
     id: topLeftCorner
     anchors { top: parent.top; left: parent.left }
