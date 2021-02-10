@@ -1,5 +1,6 @@
 #include "leveltask.h"
 #include "game.h"
+#include "characterdialog.h"
 #include <QJsonArray>
 
 LevelTask::LevelTask(QObject *parent) : QObject(parent)
@@ -194,8 +195,12 @@ void LevelTask::startPendingInteraction()
   {
     if (pendingInteraction.second == "talk-to")
     {
+      Character*       npc    = reinterpret_cast<Character*>(pendingInteraction.first);
+      CharacterDialog* dialog = new CharacterDialog(this);
+
+      dialog->load(npc->getDialogName(), reinterpret_cast<Character*>(player), npc);
       displayConsoleMessage("Should try to start interaction " + pendingInteraction.second);
-      emit startDialog(reinterpret_cast<Character*>(pendingInteraction.first));
+      emit startDialog(dialog);
     }
     else
       qDebug() << "Error 422: unknown interaciton type";

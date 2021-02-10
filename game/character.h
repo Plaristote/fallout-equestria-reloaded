@@ -13,6 +13,7 @@ public:
   explicit Character(QObject *parent = nullptr);
 
   StatModel* getStatistics() { return statistics; }
+  QString    getDialogName();
 
   Q_INVOKABLE bool renderOnTile() const { return true; }
   Q_INVOKABLE QPoint getInteractionPosition() const;

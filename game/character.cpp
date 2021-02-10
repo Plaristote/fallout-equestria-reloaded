@@ -32,3 +32,8 @@ QPoint Character::getInteractionPosition() const
   qDebug() << "No path to reach character";
   return QPoint(-1, -1);
 }
+
+QString Character::getDialogName()
+{
+  return script.property("dialog").toString();
+}

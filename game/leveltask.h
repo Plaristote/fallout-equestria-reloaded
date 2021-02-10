@@ -9,6 +9,8 @@
 # include "character.h"
 # include "dynamicobject.h"
 
+class CharacterDialog;
+
 class LevelTask : public QObject
 {
   Q_OBJECT
@@ -47,7 +49,7 @@ signals:
   void displayConsoleMessage(const QString&);
   void exitZoneEntered(TileZone*);
   void interactionRequired(DynamicObject* interactionTarget, QStringList interactionList);
-  void startDialog(Character*);
+  void startDialog(CharacterDialog* dialogController);
 
 private slots:
   void onPauseChanged();

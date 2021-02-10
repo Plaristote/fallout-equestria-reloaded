@@ -5,13 +5,16 @@ import "qrc:/assets/ui" as UiStyle
 
 Item {
   id: root
-  property QtObject character
+  property QtObject controller
 
-  function exitDialog() {
-    application.popView();
+  Connections {
+    target: controller
+    function onDialogEnded() { application.popView(); }
   }
 
   FaceDisplay {
+    mood:     controller.mood
+    ambiance: controller.ambiance
     anchors.fill: faceForeground
     anchors.topMargin: 12
     anchors.leftMargin: 287
@@ -52,7 +55,7 @@ Item {
       Text {
         id: dialogContent
         color: "white"
-        text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. In risus tellus, commodo vitae pretium at, viverra elementum velit. Phasellus et finibus magna. Praesent fermentum, tortor eu vehicula hendrerit, magna sem iaculis metus, vitae placerat quam ligula vitae nibh. In accumsan sodales tortor, nec efficitur tortor bibendum in. In hac habitasse platea dictumst. Vivamus pellentesque ex sit amet mauris fringilla porta. Phasellus mollis enim nec lacus tempus, sit amet pretium nulla vestibulum. Suspendisse non tortor quis tortor auctor posuere nec a ligula. Suspendisse a lectus sollicitudin, feugiat dolor consectetur, tempus ligula. Etiam at diam at quam rutrum fringilla. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam facilisis sodales eros eget viverra."
+        text: controller.text
         wrapMode: Text.WordWrap
         horizontalAlignment: Qt.AlignJustify
         width: parent.width - 15
@@ -99,13 +102,13 @@ Item {
       Column {
         id: answersList
         Repeater {
-          model: 100
+          model: controller.options
           delegate: Button {
-            text: `> Words ^ ${index}`
+            text: "> " + controller.getOptionText(controller.options[index])
             hoverEnabled: true
             contentItem: Text { color: parent.hovered ? "white" : "green"; text: parent.text }
             background: Rectangle { color: "transparent" }
-            onClicked: root.exitDialog()
+            onClicked: controller.selectOption(controller.options[index])
             width: answersFlickable.width - 10
           }
         }

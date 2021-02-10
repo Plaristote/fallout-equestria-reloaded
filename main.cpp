@@ -12,6 +12,7 @@
 #include "game.h"
 #include "game/dynamicobject.h"
 #include "game/leveltask.h"
+#include "game/characterdialog.h"
 #include "gamemanager.h"
 
 #include "cmap/statmodel.h"
@@ -63,6 +64,7 @@ int main(int argc, char *argv[])
   qmlRegisterType<Game>("Game", 1,0, "Controller");
   qmlRegisterType<StatModel>("Game", 1,0, "StatModel");
   qmlRegisterType<DynamicObject>("Game", 1,0, "DynamicObject");
+  qmlRegisterType<CharacterDialog>("Game", 1,0, "CharacterDialog");
   qmlRegisterType<GameManager>("Game", 1,0, "GameManager");
   registerQmlTilemap();
 

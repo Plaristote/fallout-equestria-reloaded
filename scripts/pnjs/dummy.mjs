@@ -1,3 +1,5 @@
+export var dialog = "parley";
+
 export function initialize(character) {
   console.log("----> dummy initialize <-----");
   //character.setTickBehavior(1000, true);

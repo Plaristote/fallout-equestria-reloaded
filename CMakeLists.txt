@@ -57,6 +57,8 @@ set(PROJECT_SOURCES
         game/character.cpp
         game/characterparty.h
         game/characterparty.cpp
+        game/characterdialog.h
+        game/characterdialog.cpp
         game/sprite.h
         game/sprite.cpp
         game/animationlibrary.h

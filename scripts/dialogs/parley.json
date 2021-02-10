@@ -1,0 +1,40 @@
+{
+  "entryPoint": "my-entry-point",
+  "my-entry-point": {
+    "text": "Salutations !",
+    "options": {
+      "rep1": {
+        "text": "Le diable vous emporte !",
+	"executeHook": "unhappy"
+      },
+      "rep2": {
+        "text": "Dieu vous benisse !",
+        "executeHook": "happy"
+      }
+    }
+  },
+  "insults": {
+    "text": "Marin d'eau douce ! Bois sans soif ! Hors de ma vue !",
+    "options": {
+      "quit": {
+        "text": "{Partir}"
+      }
+    }
+  },
+  "thanks": {
+    "text": "Comme c'est aimable ! De quoi voulez-vous parler ?",
+    "options": {
+      "repinvis": {
+        "text": "Du mystère en chocolat",
+	"availableHook": "unavailable"
+      },
+      "repvisis": {
+        "text": "Du complot judéo-maçonnique",
+	"availableHook": "available"
+      },
+      "quit": {
+        "text": "De rien, ça ira, tchuss."
+      }
+    }
+  }
+}

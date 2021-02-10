@@ -89,8 +89,10 @@ Item {
   // DIALOG STARTER
   Connections {
     target: levelController
-    function onStartDialog(character) {
-      application.pushView("game/Dialog.qml", {character: character});
+    function onStartDialog(dialogController) {
+      console.log("ztarting dialog controller", dialogController);
+      console.log("text iz ", dialogController.text);
+      application.pushView("game/Dialog.qml", {controller: dialogController});
     }
   }
 
