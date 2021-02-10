@@ -23,7 +23,9 @@ public:
   explicit Game(QObject *parent = nullptr);
   ~Game();
 
-  void newPlayerParty();
+  void loadFromDataEngine();
+  void save();
+  void newPlayerParty(StatModel*);
 
   Q_INVOKABLE void appendToConsole(const QString&);
   Q_INVOKABLE void goToLevel(const QString& name);
@@ -40,7 +42,10 @@ public:
   void loadCmapTraits();
 
   QMap<QString, Trait>& getCmapTraits() { return cmapTraits; }
-  CharacterParty* getPlayerParty() { return playerParty; }
+
+  Q_INVOKABLE CharacterParty* getPlayerParty() { return playerParty; }
+  Q_INVOKABLE Character* getPlayer() { return getPlayerParty()->getCharacters().first(); }
+  Q_INVOKABLE StatModel* getPlayerStatistics() { return getPlayer()->getStatistics(); }
 
 signals:
   void levelChanged();

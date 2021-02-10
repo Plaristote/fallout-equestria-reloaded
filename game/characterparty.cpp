@@ -1,5 +1,6 @@
 #include "characterparty.h"
 #include "leveltask.h"
+#include <QJsonArray>
 
 CharacterParty::CharacterParty(QObject *parent) : QObject(parent)
 {
@@ -82,5 +83,39 @@ void CharacterParty::extractFromLevel(LevelTask* level)
   {
     grid->removeObject(character);
     level->unregisterDynamicObject(character);
+  }
+}
+
+void CharacterParty::save(QJsonObject& data)
+{
+  QJsonArray charactersData;
+
+  data["name"] = name;
+  for (Character* character : list)
+  {
+    QJsonObject characterData;
+
+    character->save(characterData);
+    charactersData << characterData;
+  }
+  data.insert("list", charactersData);
+}
+
+void CharacterParty::load(const QJsonObject& data, LevelTask* level)
+{
+  auto* grid = level ? level->getGrid() : nullptr;
+
+  name = data["name"].toString();
+  for (QJsonValue characterDataV : data["list"].toArray())
+  {
+    QJsonObject characterData = characterDataV.toObject();
+    Character*  character = new Character(this);
+
+    character->load(characterData);
+    if (level)
+    {
+      grid->moveObject(character, character->getPosition().x(), character->getPosition().y());
+      level->registerDynamicObject(character);
+    }
   }
 }

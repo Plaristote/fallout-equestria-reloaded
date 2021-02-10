@@ -10,6 +10,7 @@ Game::Game(QObject *parent) : QObject(parent)
     throw std::runtime_error("can't have two Game instances at once");
   instance = this;
   dataEngine = new DataEngine(this);
+  playerParty = new CharacterParty(this);
   scriptEngine.installExtensions(QJSEngine::ConsoleExtension);
   scriptEngine.globalObject().setProperty("game", scriptEngine.newQObject(this));
   loadCmapTraits();
@@ -22,14 +23,23 @@ Game::~Game()
   instance = nullptr;
 }
 
-void Game::newPlayerParty()
+void Game::newPlayerParty(StatModel* statistics)
 {
   Character* player = new Character;
 
-  playerParty = new CharacterParty(this);
   player->setSpriteName("pony");
   player->setAnimation("idle-down");
+  player->setStatistics(statistics);
   playerParty->addCharacter(player);
+}
+
+void Game::loadFromDataEngine()
+{
+  QString currentLevelName = dataEngine->getCurrentLevel();
+
+  if (currentLevelName != "")
+    goToLevel(currentLevelName);
+  playerParty->load(dataEngine->getPlayerParty(), currentLevel);
 }
 
 QJSValue Game::loadScript(const QString& path)
@@ -115,6 +125,16 @@ void Game::changeZone(TileZone* tileZone)
   if (currentLevel)
     targetZone = currentLevel->getName();
   switchToLevel(tileZone->getTarget(), targetZone);
+}
+
+void Game::save()
+{
+  QJsonObject partyData;
+
+  playerParty->save(partyData);
+  if (currentLevel)
+    currentLevel->save(dataEngine);
+  dataEngine->setPlayerParty(partyData);
 }
 
 QJSValue Game::scriptCall(QJSValue callable, const QJSValueList& args, const QString& scriptName)

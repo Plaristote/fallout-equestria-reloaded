@@ -10,7 +10,7 @@ Image {
   Action {
     id: continueAction
     text: qsTr("Continue")
-    enabled: application.hasSavedGame
+    enabled: gameManager.hasContinueGame()
     onTriggered: application.continueGame()
   }
 
@@ -23,6 +23,7 @@ Image {
   Action {
     id: loadGameAction
     text: qsTr("Load game")
+    enabled: gameManager.getSavedGames().length > 0
     onTriggered: application.loadGame()
   }
 
@@ -36,6 +37,7 @@ Image {
     anchors.top: parent.top
     anchors.left: parent.left
     anchors.margins: 50
+    spacing: 10
 
     Repeater {
       model: [continueAction, newGameAction, loadGameAction, exitAction]

@@ -101,5 +101,7 @@
         <file>assets/ui/dialog/text.png</file>
         <file>scripts/dialogs/parley.json</file>
         <file>scripts/dialogs/parley.mjs</file>
+        <file>SaveGame.qml</file>
+        <file>ui/SavedGameListItem.qml</file>
     </qresource>
 </RCC>

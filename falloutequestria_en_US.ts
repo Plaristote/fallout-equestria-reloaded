@@ -71,7 +71,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="MainMenu.qml" line="31"/>
+        <location filename="MainMenu.qml" line="32"/>
         <source>Exit</source>
         <translation type="unfinished"></translation>
     </message>

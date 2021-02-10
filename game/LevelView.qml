@@ -35,6 +35,7 @@ Item {
   }
 
   ScreenEdges {
+    enabled: !parent.levelController.paused
     onMoveTop:    { canvas.translate(0, scrollSpeed); }
     onMoveLeft:   { canvas.translate(scrollSpeed, 0); }
     onMoveRight:  { canvas.translate(-scrollSpeed, 0); }
@@ -105,7 +106,7 @@ Item {
       console.log("ztarting dialog controller", dialogController);
       console.log("text iz ", dialogController.text);
       application.pushView("game/Dialog.qml", {controller: dialogController});
-      levelController.paused  = true;
+      levelController.paused = true;
     }
   }
 
@@ -155,21 +156,31 @@ Item {
       anchors.left: terminalPane.right
       anchors.top: parent.top;
       anchors.bottom: parent.bottom
-      anchors.topMargin: 1
+      anchors.topMargin: 20
       anchors.bottomMargin: 1
       anchors.leftMargin: 5
-      width: 100
+      width: 80
       background: UiStyle.Pane {}
 
       Column {
         anchors.fill: parent
+        anchors.topMargin: 10
+        spacing: 5
+
+        Button {
+          text: "INV"
+          height: 20
+          width: parent.width
+          onClicked: {
+            gameController.consoleMessages.push("Inventory not implemented yet")
+          }
+        }
 
         Button {
           text: "Q"
           height: 20
           width: parent.width
           onClicked: {
-            console.log("Wtz");
             terminalPane.parent.parent.open
             root.openMenu();
           }
@@ -188,6 +199,16 @@ Item {
 
     Column {
       anchors.fill: parent
+
+      MenuButton {
+        text: "Save Game"
+        onClicked: application.pushView("SaveGame.qml");
+      }
+
+      MenuButton {
+        text: "Load Game"
+        onClicked: application.pushView("LoadGame.qml")
+      }
 
       MenuButton {
         text: "Exit"

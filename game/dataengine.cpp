@@ -6,9 +6,46 @@
 
 DataEngine::DataEngine(QObject *parent) : QObject(parent)
 {
-  //data = QJsonDocument::fromJson("{\"characters\":{},\"levels\":{}}");
   data.insert("characters", characters);
   data.insert("levels", levels);
+  data.insert("playerParty", QJsonObject());
+}
+
+void DataEngine::loadFromFile(const QString &path)
+{
+  QFile in("./saves/" + path);
+
+  if (in.open(QIODevice::ReadOnly))
+  {
+    auto document = QJsonDocument::fromJson(in.readAll());
+
+    data       = document.object();
+    levels     = data["levels"].toObject();
+    characters = data["characters"].toObject();
+  }
+  else
+    qDebug() << "Could not load save file" << path;
+}
+
+void DataEngine::saveToFile(const QString &path)
+{
+  QFile out("./saves/" + path);
+
+  if (out.open(QIODevice::WriteOnly))
+    out.write(QJsonDocument(data).toJson());
+  else
+    qDebug() << "Could not open save file" << path;
+}
+
+QJsonObject DataEngine::getPlayerParty() const
+{
+  return data["playerParty"].toObject();
+}
+
+void DataEngine::setPlayerParty(const QJsonObject& partyData)
+{
+  data.remove("playerParty");
+  data.insert("playerParty", partyData);
 }
 
 void DataEngine::setCurrentLevel(const QString& name)
@@ -41,9 +78,6 @@ void DataEngine::setLevelData(const QString& name, const QJsonObject& levelData)
   levels.remove(name);
   levels.insert(name, levelData);
   data.insert("levels", levels);
-  qDebug() << "dataengine state#1:" << QJsonDocument(data).toJson();
-  qDebug() << "dataengine state#2:" << QJsonDocument(levelData).toJson();
-  qDebug() << "dataengine state#3:" << QJsonDocument(levels).toJson();
 }
 
 StatModel* DataEngine::makeStatModel(const QString& characterId, const QString& source)

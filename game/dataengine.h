@@ -15,12 +15,15 @@ public:
   void loadFromFile(const QString& path);
   void saveToFile(const QString &path);
 
-  void    setCurrentLevel(const QString&);
-  QString getCurrentLevel() const;
-  void    exitLevel();
+  void        setCurrentLevel(const QString&);
+  QString     getCurrentLevel() const;
+  void        exitLevel();
   bool        isLevelActive(const QString&) const;
   QJsonObject getLevelData(const QString&);
   void        setLevelData(const QString&, const QJsonObject&);
+
+  QJsonObject getPlayerParty() const;
+  void        setPlayerParty(const QJsonObject&);
 
   StatModel* makeStatModel(const QString& characterId, const QString& source = "");
   void       saveStatModel(const QString& characterId, StatModel*);

@@ -28,6 +28,7 @@ Canvas {
 
   MouseArea {
     anchors.fill: parent
+    enabled: !levelController.paused
     onClicked: {
       controller.onMouseClick(mouse, mouseX, mouseY);
     }

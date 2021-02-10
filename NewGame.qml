@@ -8,13 +8,14 @@ Rectangle {
 
   CharacterSheet {
     anchors.fill: parent
-    characterSheet: StatModel {
-      specialPoints: 5
-      Component.onCompleted: specialChanged()
+    characterSheet: gameManager.currentGame.getPlayerStatistics()
+
+    Component.onCompleted: {
+      characterSheet.specialPoints = 5;
     }
+
     onAccepted: {
       console.log("Start a new game");
-
       gameManager.currentGame.goToLevel("eltest5");
       application.popView();
     }
