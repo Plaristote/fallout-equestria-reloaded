@@ -5,6 +5,8 @@
 # include "game/dataengine.h"
 # include "game/leveltask.h"
 # include "game/characterparty.h"
+# include "game/timermanager.h"
+# include "game/worldmap.h"
 # include <QJSEngine>
 # include "cmap/trait.h"
 
@@ -12,10 +14,12 @@ class Game : public QObject
 {
   Q_OBJECT
 
-  Q_PROPERTY(LevelTask* level MEMBER currentLevel NOTIFY levelChanged)
-  Q_PROPERTY(QStringList consoleMessages MEMBER consoleMessages NOTIFY consoleUpdated)
-  Q_PROPERTY(CharacterParty* playerParty MEMBER playerParty NOTIFY playerPartyChanged)
-  Q_PROPERTY(DataEngine* dataEngine MEMBER dataEngine NOTIFY dataEngineChanged)
+  Q_PROPERTY(QStringList     consoleMessages MEMBER consoleMessages NOTIFY consoleUpdated)
+  Q_PROPERTY(LevelTask*      level       MEMBER currentLevel NOTIFY levelChanged)
+  Q_PROPERTY(WorldMap*       worldmap    MEMBER worldmap)
+  Q_PROPERTY(CharacterParty* playerParty MEMBER playerParty)
+  Q_PROPERTY(DataEngine*     dataEngine  MEMBER dataEngine)
+  Q_PROPERTY(TimeManager*    timeManager MEMBER timeManager)
 
   static Game* instance;
 
@@ -30,11 +34,12 @@ public:
   Q_INVOKABLE void appendToConsole(const QString&);
   Q_INVOKABLE void goToLevel(const QString& name);
   Q_INVOKABLE void switchToLevel(const QString& name, const QString& targetZone);
-  void exitLevel();
+  void exitLevel(bool silence = false);
 
   static Game* get() { return instance; }
 
   DataEngine* getDataEngine() const { return dataEngine; }
+  TimeManager* getTimeManager() const { return timeManager; }
   LevelTask* getLevel() const { return currentLevel; }
   QJSEngine& getScriptEngine() { return scriptEngine; }
   QJSValue loadScript(const QString& path);
@@ -49,16 +54,18 @@ public:
 
 signals:
   void levelChanged();
+  void levelSwapped();
   void consoleUpdated();
-  void playerPartyChanged();
-  void dataEngineChanged();
 
 public slots:
+  void onCityEntered(QString name);
   void changeZone(TileZone*);
   void deleteLater();
 
 private:
   DataEngine* dataEngine = nullptr;
+  TimeManager* timeManager;
+  WorldMap* worldmap;
   LevelTask*  currentLevel = nullptr;
   CharacterParty* playerParty = nullptr;
   Character* player = nullptr;

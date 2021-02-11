@@ -31,6 +31,7 @@ bool LevelTask::insertPartyIntoZone(CharacterParty* party, const QString& zoneNa
 void LevelTask::load(const QString& levelName, DataEngine* dataEngine)
 {
   name = levelName;
+  timeManager = Game::get()->getTimeManager();
   tilemap->load(levelName);
   grid->initializeGrid(tilemap);
 
@@ -49,16 +50,19 @@ void LevelTask::loadObjectsFromTilemap()
 {
   displayConsoleMessage("Level loaded from TileMap");
 
+  // TODO thatz tezt data
   CharacterParty* otherParty = new CharacterParty(this);
   Character* otherChar = new Character;
   otherChar->setStatistics(Game::get()->getDataEngine()->makeStatModel("tintin", "toto"));
   otherChar->setSpriteName("pony-green");
   otherChar->setAnimation("idle-down");
   otherChar->setScript("dummy.mjs");
+  forceCharacterPosition(otherChar, 8, 0);
   otherParty->addCharacter(otherChar);
 
   insertPartyIntoZone(Game::get()->getPlayerParty());
   insertPartyIntoZone(otherParty);
+  // END tezt data
 
   for (QJsonObject objectData : tilemap->getObjects())
   {
@@ -194,15 +198,7 @@ void LevelTask::onZoneEntered(DynamicObject* object, TileZone* zone)
   {
     displayConsoleMessage("Zone entered: " + zone->getName());
     if (zone->getType() == "exit")
-    {
-      if (zone->getTarget() == "")
-        displayConsoleMessage("TODO: go to worldmap");
-      else
-      {
-        displayConsoleMessage("TODO: go to " + zone->getTarget());
-        emit exitZoneEntered(zone);
-      }
-    }
+      emit exitZoneEntered(zone);
   }
 }
 
@@ -384,6 +380,7 @@ void LevelTask::forceCharacterPosition(DynamicObject* character, int x, int y)
 
 void LevelTask::onPauseChanged()
 {
+  qDebug() << "PAUZE CHANGED";
   if (paused)
     updateTimer.stop();
   else
@@ -397,6 +394,7 @@ void LevelTask::update()
 {
   qint64 delta = clock.restart();
 
+  timeManager->addElapsedMilliseconds(delta);
   for (DynamicObject* object : objects)
     object->update(delta);
   emit updated();

@@ -48,7 +48,7 @@
 <context>
     <name>Game</name>
     <message>
-        <location filename="Game.qml" line="110"/>
+        <location filename="Game.qml" line="131"/>
         <source>Loading</source>
         <translation type="unfinished"></translation>
     </message>
@@ -133,7 +133,7 @@
 <context>
     <name>main</name>
     <message>
-        <location filename="main.qml" line="11"/>
+        <location filename="main.qml" line="12"/>
         <source>Fallout Equestria</source>
         <translation type="unfinished"></translation>
     </message>

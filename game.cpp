@@ -10,11 +10,15 @@ Game::Game(QObject *parent) : QObject(parent)
     throw std::runtime_error("can't have two Game instances at once");
   instance = this;
   dataEngine = new DataEngine(this);
+  timeManager = new TimeManager(this);
   playerParty = new CharacterParty(this);
+  worldmap = new WorldMap(this);
   scriptEngine.installExtensions(QJSEngine::ConsoleExtension);
   scriptEngine.globalObject().setProperty("game", scriptEngine.newQObject(this));
   loadCmapTraits();
   scriptEngine.evaluate("level.displayConsoleMessage(\"Coucou Script Engine\")");
+
+  connect(worldmap, &WorldMap::cityEntered, this, &Game::onCityEntered);
 }
 
 Game::~Game()
@@ -43,6 +47,7 @@ void Game::loadFromDataEngine()
 {
   QString currentLevelName = dataEngine->getCurrentLevel();
 
+  timeManager->load(dataEngine->getTimeData());
   if (currentLevelName != "")
     goToLevel(currentLevelName);
   playerParty->load(dataEngine->getPlayerParty(), currentLevel);
@@ -83,6 +88,12 @@ void Game::loadCmapTraits()
   }
 }
 
+void Game::onCityEntered(QString name)
+{
+  goToLevel(name);
+  currentLevel->insertPartyIntoZone(playerParty);
+}
+
 void Game::goToLevel(const QString& name)
 {
   auto scriptObject = scriptEngine.globalObject();
@@ -103,7 +114,7 @@ void Game::switchToLevel(const QString& name, const QString& targetZone)
   auto scriptObject = scriptEngine.globalObject();
 
   if (currentLevel)
-    exitLevel();
+    exitLevel(true);
   dataEngine->setCurrentLevel(name);
   currentLevel = new LevelTask(this);
   connect(currentLevel, &LevelTask::displayConsoleMessage, this, &Game::appendToConsole);
@@ -112,35 +123,43 @@ void Game::switchToLevel(const QString& name, const QString& targetZone)
   currentLevel->insertPartyIntoZone(playerParty);
   currentLevel->setPaused(false);
   scriptObject.setProperty("level", scriptEngine.newQObject(currentLevel));
-  emit levelChanged();
+  emit levelSwapped();
 }
 
-void Game::exitLevel()
+void Game::exitLevel(bool silent)
 {
   playerParty->extractFromLevel(currentLevel);
   currentLevel->save(dataEngine);
   currentLevel->deleteLater();
   currentLevel = nullptr;
   dataEngine->exitLevel();
-  emit levelChanged();
+  if (!silent)
+    emit levelChanged();
 }
 
 void Game::changeZone(TileZone* tileZone)
 {
   QString targetZone;
 
-  if (currentLevel)
-    targetZone = currentLevel->getName();
-  switchToLevel(tileZone->getTarget(), targetZone);
+  if (tileZone->getTarget() != "")
+  {
+    if (currentLevel)
+      targetZone = currentLevel->getName();
+    switchToLevel(tileZone->getTarget(), targetZone);
+  }
+  else
+    exitLevel();
 }
 
 void Game::save()
 {
-  QJsonObject partyData;
+  QJsonObject partyData, timeData;
 
+  timeManager->save(timeData);
   playerParty->save(partyData);
   if (currentLevel)
     currentLevel->save(dataEngine);
+  dataEngine->setTimeData(timeData);
   dataEngine->setPlayerParty(partyData);
 }
 

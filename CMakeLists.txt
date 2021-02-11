@@ -65,6 +65,14 @@ set(PROJECT_SOURCES
         game/sprite.cpp
         game/animationlibrary.h
         game/animationlibrary.cpp
+        game/datetime.hpp
+        game/datetime.cpp
+        game/timermanager.h
+        game/timermanager.cpp
+        game/worldmap.h
+        game/worldmap.cpp
+        game/worldmapcity.h
+        game/worldmapcity.cpp
         gamemanager.h
         gamemanager.cpp
         game.h

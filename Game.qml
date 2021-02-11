@@ -39,11 +39,16 @@ Item {
     else if (mystate == "create-character") {
       deferredCharacterCreate.running = true;
     }
-    else if (mystate == "level") {
-      if (gameManager.currentGame.level)
-        gameManager.currentGame.endLevel();
+    else if (mystate == "level" && currentLevelName != "") {
+      console.log("Game.kml going to open level", currentLevelName);
       gameManager.currentGame.goToLevel(currentLevelName);
     }
+    else if (mystate == "worldmap") {
+      console.log("Game.kml going to open worldmap");
+      deferredWorldmapDisplay = true;
+    }
+    else
+      console.log("/!\\ Game state changed to", mystate, "and I don't know what to do.");
   }
 
   // Level control
@@ -51,6 +56,12 @@ Item {
     id: deferredLevelLoading
     interval: 500
     onTriggered: openLevelView();
+  }
+
+  Timer {
+    id: deferredWorldmapDisplay
+    interval: 500
+    onTriggered: application.pushView("game/Worldmap.qml", { controller: root.gameController.worldmap })
   }
 
   Timer {
@@ -76,7 +87,7 @@ Item {
       else if (mystate == "load-game" && root.gameController.level)
         mystate = "level";
       else if (mystate == "load-game")
-        console.log("(!) Oops, I can't finish loading the game.");
+        mystate = "worldmap";
     }
   }
 
@@ -84,10 +95,20 @@ Item {
     target: gameManager.currentGame
 
     function onLevelChanged() {
+      console.log("Game.kml onLevelChanged haz been called");
       if (gameController.level)
-        deferredLevelLoading.running = true
+        deferredLevelLoading.running = true;
       else
+      {
+        console.log("Zuce mon zboub");
+        deferredWorldmapDisplay.running = true;
         application.popView();
+      }
+    }
+
+    function onLevelSwapped() {
+      deferredLevelLoading.running = true;
+      application.popView();
     }
   }
 

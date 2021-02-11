@@ -5,6 +5,7 @@
 # include <QElapsedTimer>
 # include "tilemap/tilemap.h"
 # include "levelgrid.h"
+# include "timermanager.h"
 
 # include "character.h"
 # include "dynamicobject.h"
@@ -76,6 +77,7 @@ private:
   QString       name;
   TileMap*      tilemap = nullptr;
   LevelGrid*    grid = nullptr;
+  TimeManager*  timeManager = nullptr;
   bool          paused = true;
 
   QPair<DynamicObject*, QString> pendingInteraction;

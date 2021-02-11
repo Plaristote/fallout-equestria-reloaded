@@ -105,5 +105,12 @@
         <file>ui/SavedGameListItem.qml</file>
         <file>LoadGame.qml</file>
         <file>ui/SaveGameUi.qml</file>
+        <file>game/Worldmap.qml</file>
+        <file>assets/worldmap.png</file>
+        <file>assets/ui/HudScrollbar.qml</file>
+        <file>assets/ui/scrollbars/background.png</file>
+        <file>assets/ui/scrollbars/content.png</file>
+        <file>assets/ui/clock.png</file>
+        <file>assets/ui/clock-overlay.png</file>
     </qresource>
 </RCC>

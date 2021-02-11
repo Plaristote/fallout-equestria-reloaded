@@ -8,6 +8,7 @@ Window {
   height: 800
   visible: true
   //visibility: Window.Maximized
+  color: "black"
   title: qsTr("Fallout Equestria")
 
   property bool isMaximizeed: visibility === Window.Maximized

@@ -66,6 +66,8 @@ int main(int argc, char *argv[])
   qmlRegisterType<DynamicObject>("Game", 1,0, "DynamicObject");
   qmlRegisterType<CharacterDialog>("Game", 1,0, "CharacterDialog");
   qmlRegisterType<GameManager>("Game", 1,0, "GameManager");
+  qmlRegisterType<WorldMap>("Game", 1,0, "WorldMap");
+  qmlRegisterType<WorldMapCity>("Game", 1,0, "WorldMapCity");
   registerQmlTilemap();
 
   GameManager* gameManager = new GameManager();

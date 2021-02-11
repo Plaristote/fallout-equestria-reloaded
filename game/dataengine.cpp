@@ -9,6 +9,19 @@ DataEngine::DataEngine(QObject *parent) : QObject(parent)
   data.insert("characters", characters);
   data.insert("levels", levels);
   data.insert("playerParty", QJsonObject());
+  data.insert("time", time);
+}
+
+QJsonObject DataEngine::getTimeData() const
+{
+  return time;
+}
+
+void DataEngine::setTimeData(const QJsonObject& timeData)
+{
+  time = timeData;
+  data.remove("time");
+  data.insert("time", timeData);
 }
 
 void DataEngine::loadFromFile(const QString &path)
@@ -22,6 +35,7 @@ void DataEngine::loadFromFile(const QString &path)
     data       = document.object();
     levels     = data["levels"].toObject();
     characters = data["characters"].toObject();
+    time       = data["time"].toObject();
   }
   else
     qDebug() << "Could not load save file" << path;
