@@ -11,7 +11,7 @@ Item {
     target: controller
     function onDialogEnded() {
       application.popView();
-      levelController.paused = false;
+      gameManager.currentGame.level.paused = false;
     }
   }
 

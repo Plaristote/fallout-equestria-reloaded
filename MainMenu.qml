@@ -11,7 +11,7 @@ Image {
     id: continueAction
     text: qsTr("Continue")
     enabled: gameManager.hasContinueGame()
-    onTriggered: application.continueGame()
+    onTriggered: application.gameLoading = gameManager.getSavedGames()[0]
   }
 
   Action {

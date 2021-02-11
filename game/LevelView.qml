@@ -192,13 +192,14 @@ Item {
   Pane {
     id: mainMenu
     width: 280
-    height: 400
+    height: 250
     anchors.centerIn: parent
     visible: false
     background: UiStyle.Pane {}
 
     Column {
       anchors.fill: parent
+      anchors.topMargin: 10
 
       MenuButton {
         text: "Save Game"

@@ -12,7 +12,6 @@ SaveGameUi {
     id: loadGame
     onTriggered: {
       application.popAllViews();
-      console.log("Toto", root.savedGameList[root.selectedIndex], application.gameLoading);
       application.gameLoading = root.savedGameList[root.selectedIndex];
     }
   }
