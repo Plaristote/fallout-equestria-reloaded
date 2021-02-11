@@ -2,6 +2,7 @@
 # define STATMODEL_H
 
 # include <QObject>
+# include <QColor>
 # include <QJsonDocument>
 # include <QJsonObject>
 
@@ -104,6 +105,12 @@ class StatModel : public QObject
   Q_PROPERTY(int speech       READ get_speech       WRITE set_speech       NOTIFY statisticsChanged)
   Q_PROPERTY(int gambling     READ get_gambling     WRITE set_gambling     NOTIFY statisticsChanged)
 
+  // VISUAL
+  Q_PROPERTY(QStringList faceAccessories MEMBER faceAccessories NOTIFY faceAccessoriesChanged)
+  Q_PROPERTY(QString     spriteTheme     MEMBER spriteTheme     NOTIFY spriteThemeChanged)
+  Q_PROPERTY(QString     faceTheme       MEMBER faceTheme       NOTIFY faceThemeChanged)
+  Q_PROPERTY(QColor      faceColor       MEMBER faceColor       NOTIFY faceColorChanged)
+
 public:
   explicit StatModel(QObject *parent = nullptr);
 
@@ -120,6 +127,7 @@ public:
   Q_INVOKABLE int getMaxTraits() const { return 2; }
   Q_INVOKABLE QStringList getAvailableTraits();
   Q_INVOKABLE void toggleTrait(const QString& name, bool);
+  Q_INVOKABLE void setFaceColor(int r, int g, int b, int a) { faceColor = QColor(r, g, b, a); emit faceColorChanged(); }
 
 #define STAT_GETTER(statName) \
   int get_##statName() const { return data.statName + modifiers.statName; } \
@@ -171,6 +179,10 @@ signals:
   void perksChanged();
   void traitsChanged();
   void acceptableChanged();
+  void spriteThemeChanged();
+  void faceAccessoriesChanged();
+  void faceThemeChanged();
+  void faceColorChanged();
 
 private slots:
   void updateBaseValues();
@@ -192,6 +204,10 @@ private:
 
   QStringList traits, perks;
   QJsonDocument variables;
+
+  QString     spriteTheme, faceTheme;
+  QColor      faceColor;
+  QStringList faceAccessories;
 };
 
 #endif // STATMODEL_H

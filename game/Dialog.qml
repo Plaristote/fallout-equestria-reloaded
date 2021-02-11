@@ -16,8 +16,11 @@ Item {
   }
 
   FaceDisplay {
-    mood:     controller.mood
-    ambiance: controller.ambiance
+    mood:        controller.mood
+    ambiance:    controller.ambiance
+    theme:       controller.npc.statistics.faceTheme
+    accessories: controller.npc.statistics.faceAccessories
+    color:       controller.npc.statistics.faceColor
     anchors.fill: faceForeground
     anchors.topMargin: 12
     anchors.leftMargin: 287

@@ -170,6 +170,17 @@ void StatModel::fromJson(const QJsonObject& json)
 
   loadStatData("base", data);
   loadStatData("mod", modifiers);
+
+  auto faceColorArray = json["face-color"].toArray();
+  spriteTheme = json["sprite-theme"].toString();
+  faceTheme   = json["face-theme"].toString();
+  faceColor.setRed  (faceColorArray.at(0).toInt());
+  faceColor.setGreen(faceColorArray.at(1).toInt());
+  faceColor.setBlue (faceColorArray.at(2).toInt());
+  faceColor.setAlpha(faceColorArray.at(3).toInt());
+
+  for (QJsonValue value : json["face-accessories"].toArray())
+    faceAccessories.push_back(value.toString());
 }
 
 void StatModel::toJson(QJsonObject& json)
@@ -227,4 +238,9 @@ void StatModel::toJson(QJsonObject& json)
 
   storeStatData("base", data);
   storeStatData("mod", modifiers);
+
+  json["sprite-theme"]     = spriteTheme;
+  json["face-theme"]       = faceTheme;
+  json["face-color"]       = QJsonArray::fromVariantList(QVariantList() << faceColor.red() << faceColor.green() << faceColor.blue() << faceColor.alpha());
+  json["face-accessories"] =  QJsonArray::fromStringList(faceAccessories);
 }

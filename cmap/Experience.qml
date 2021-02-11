@@ -14,17 +14,17 @@ Pane {
 
     Text {
       Layout.alignment: Qt.AlignCenter
-      text: qsTr("Level") + ": 2"
+      text: qsTr("Level") + ": " + characterSheet.level
       color: "white"
     }
     Text {
       Layout.alignment: Qt.AlignCenter
-      text: qsTr("Experience") + ": 1301"
+      text: qsTr("Experience") + ": " + characterSheet.experience
       color: "white"
     }
     Text {
       Layout.alignment: Qt.AlignCenter
-      text: qsTr("Next level") + ": 3000"
+      text: qsTr("Next level") + ": " + characterSheet.xpNextLevel
       color: "white"
     }
   }
