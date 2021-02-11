@@ -29,7 +29,6 @@ Pane {
     contentHeight: content.height
     contentWidth: content.width
     ScrollBar.vertical:   UiStyle.TerminalScrollbar { orientation: Qt.Vertical }
-    ScrollBar.horizontal: UiStyle.TerminalScrollbar { orientation: Qt.Horizontal }
     clip: true
 
     Column {

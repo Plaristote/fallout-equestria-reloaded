@@ -94,6 +94,7 @@ void Game::onCityEntered(QString name)
   currentLevel->insertPartyIntoZone(playerParty);
 }
 
+// Keep in mind that Player is not available during Level loading
 void Game::goToLevel(const QString& name)
 {
   auto scriptObject = scriptEngine.globalObject();

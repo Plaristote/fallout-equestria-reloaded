@@ -3,12 +3,13 @@ import Game 1.0
 import "./ui"
 
 Rectangle {
+  property QtObject gameController
   anchors.fill: parent
   color: "black"
 
   CharacterSheet {
     anchors.fill: parent
-    characterSheet: gameManager.currentGame.getPlayerStatistics()
+    characterSheet: gameController.getPlayerStatistics()
 
     Component.onCompleted: {
       characterSheet.specialPoints = 5;

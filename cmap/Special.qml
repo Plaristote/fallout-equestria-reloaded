@@ -15,6 +15,20 @@ Repeater {
 
   signal selectProperty(string selectedName);
 
+  function getQualifierLabel(value) {
+    if (value < 0 || value > 10)
+      return "Invalid";
+    if (value > 8)
+      return "Heroic";
+    if (value > 6)
+      return "Very good";
+    if (value > 4)
+      return "Average";
+    if (value > 2)
+      return "Poor";
+    return "Abysmal";
+  }
+
   model: list
   delegate: RowLayout {
     Label {
@@ -40,7 +54,7 @@ Repeater {
     Label {
       id: specialQualifier
       Layout.minimumWidth: 100
-      text: "Average"
+      text: getQualifierLabel(characterSheet[propertyName [index]])
       color: "white"
       horizontalAlignment: Qt.AlignHCenter
       verticalAlignment: Qt.AlignVCenter

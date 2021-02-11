@@ -18,10 +18,17 @@ Pane {
   }
 
   Image {
+    visible: selectedProperty.length > 0
     id: descriptionPicture
+    source: "qrc:/assets/cmap/no-icon.png"
+    anchors.top: descriptionTitle.bottom
+    anchors.left: parent.left
+    anchors.bottom: parent.bottom
+    fillMode: Image.PreserveAspectFit
   }
 
   Flickable {
+    visible: selectedProperty.length > 0
     clip: true
     contentHeight: descriptionContent.height
 

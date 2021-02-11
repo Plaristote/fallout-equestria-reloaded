@@ -112,5 +112,8 @@
         <file>assets/ui/scrollbars/content.png</file>
         <file>assets/ui/clock.png</file>
         <file>assets/ui/clock-overlay.png</file>
+        <file>assets/cmap/no-icon.png</file>
+        <file>game/CharacterView.qml</file>
+        <file>cmap/PerksPane.qml</file>
     </qresource>
 </RCC>

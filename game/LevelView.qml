@@ -168,7 +168,7 @@ Item {
 
       Column {
         anchors.fill: parent
-        anchors.topMargin: 10
+        //anchors.topMargin: 10
         spacing: 5
 
         Button {
@@ -177,6 +177,15 @@ Item {
           width: parent.width
           onClicked: {
             gameController.consoleMessages.push("Inventory not implemented yet")
+          }
+        }
+
+        Button {
+          text: "CHA"
+          height: 20
+          width: parent.width
+          onClicked: {
+            application.pushView("game/CharacterView.qml", {gameController: root.gameController})
           }
         }
 

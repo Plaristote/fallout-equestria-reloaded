@@ -67,7 +67,7 @@ Item {
   Timer {
     id: deferredCharacterCreate
     interval: 500
-    onTriggered: application.pushView("NewGame.qml")
+    onTriggered: application.pushView("NewGame.qml", {gameController: root.gameController})
   }
 
   Timer {

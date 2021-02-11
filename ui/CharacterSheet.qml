@@ -137,11 +137,12 @@ Pane {
       currentTab: "perks"
     }
 
-    Pane {
+    CMAP.PerksPane {
       id: perksPane
+      characterSheet: root.characterSheet
+      onSelectProperty: root.selectedProperty = selectedName
       anchors { top: tabList.bottom; left: parent.left; bottom: parent.bottom; right: parent.right }
       visible: tabList.currentTab === "perks"
-      background: UiStyle.TerminalPane {}
     }
 
     Pane {
