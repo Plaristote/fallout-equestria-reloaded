@@ -5,7 +5,6 @@
 
 LevelTask::LevelTask(QObject *parent) : QObject(parent)
 {
-  player  = nullptr;
   tilemap = new TileMap(this);
   grid    = new LevelGrid(this);
   updateTimer.setInterval(30);
@@ -14,11 +13,16 @@ LevelTask::LevelTask(QObject *parent) : QObject(parent)
   connect(this, &LevelTask::pausedChanged, this, &LevelTask::onPauseChanged);
 }
 
+Character* LevelTask::getPlayer()
+{
+  return Game::get()->getPlayer();
+}
+
 bool LevelTask::insertPartyIntoZone(CharacterParty* party, const QString& zoneName)
 {
   for (auto* zone : tilemap->getZones())
   {
-    if (zone->getType() == "entry" && (zone->getName() == zoneName || zone->getIsDefault() && zoneName == ""))
+    if (zone->getType() == "entry" && (zone->getName() == zoneName || (zone->getIsDefault() && zoneName == "")))
       return party->insertIntoZone(this, zone);
   }
   return false;
@@ -27,7 +31,6 @@ bool LevelTask::insertPartyIntoZone(CharacterParty* party, const QString& zoneNa
 void LevelTask::load(const QString& levelName, DataEngine* dataEngine)
 {
   name = levelName;
-  player = Game::get()->getPlayerParty()->getCharacters().first();
   tilemap->load(levelName);
   grid->initializeGrid(tilemap);
 
@@ -167,14 +170,19 @@ void LevelTask::save(DataEngine* dataEngine)
 {
   QJsonObject levelData = dataEngine->getLevelData(name);
   QJsonArray  objectArray;
+  auto*       playerParty = Game::get()->getPlayerParty();
 
   for (DynamicObject* object : objects)
   {
     QJsonObject objectData;
+    QString     type(object->metaObject()->className());
 
-    objectData["type"] = object->metaObject()->className();
-    object->save(objectData);
-    objectArray << objectData;
+    if (type != "Character" || !playerParty->containsCharacter(reinterpret_cast<Character*>(object)))
+    {
+      objectData["type"] = type;
+      object->save(objectData);
+      objectArray << objectData;
+    }
   }
   levelData["objects"] = objectArray;
   dataEngine->setLevelData(name, levelData);
@@ -182,7 +190,7 @@ void LevelTask::save(DataEngine* dataEngine)
 
 void LevelTask::onZoneEntered(DynamicObject* object, TileZone* zone)
 {
-  if (object == player)
+  if (object == getPlayer())
   {
     displayConsoleMessage("Zone entered: " + zone->getName());
     if (zone->getType() == "exit")
@@ -200,7 +208,7 @@ void LevelTask::onZoneEntered(DynamicObject* object, TileZone* zone)
 
 void LevelTask::onZoneExited(DynamicObject* object, TileZone* zone)
 {
-  if (object == player)
+  if (object == getPlayer())
   {
     displayConsoleMessage("Zone exited: " + zone->getName());
   }
@@ -215,7 +223,7 @@ void LevelTask::tileClicked(int x, int y)
   // Infer interaction type and proceed
   if (occupant && openInteractionMenu(occupant))
     return ;
-  else if (!moveCharacterTo(player, x, y))
+  else if (!moveCharacterTo(getPlayer(), x, y))
     emit displayConsoleMessage("No path towards [" + QString::number(x) + ',' + QString::number(y) + ']');
 }
 
@@ -236,7 +244,8 @@ bool LevelTask::openInteractionMenu(DynamicObject* object)
 
 void LevelTask::interactOrderReceived(DynamicObject* object, const QString &type)
 {
-  auto position = object->getInteractionPosition();
+  auto  position = object->getInteractionPosition();
+  auto* player = getPlayer();
 
   pendingInteraction.first  = object;
   pendingInteraction.second = type;
@@ -263,7 +272,7 @@ void LevelTask::startPendingInteraction()
       Character*       npc    = reinterpret_cast<Character*>(pendingInteraction.first);
       CharacterDialog* dialog = new CharacterDialog(this);
 
-      dialog->load(npc->getDialogName(), reinterpret_cast<Character*>(player), npc);
+      dialog->load(npc->getDialogName(), getPlayer(), npc);
       displayConsoleMessage("Should try to start interaction " + pendingInteraction.second);
       emit startDialog(dialog);
     }
@@ -305,7 +314,7 @@ void LevelTask::onObjectMovementFinished(Sprite* sprite)
       if (!triggerCharacterMoveTo(object, nextCase.x(), nextCase.y()))
       {
         qDebug() << "Path blocked" << nextCase;
-        if (sprite == player) { pendingInteraction.first = nullptr; }
+        if (sprite == getPlayer()) { pendingInteraction.first = nullptr; }
         emit object->pathBlocked();
       }
     }
@@ -313,7 +322,7 @@ void LevelTask::onObjectMovementFinished(Sprite* sprite)
     {
       qDebug() << "-> Reached deztination";
       object->setAnimation("idle-down");
-      if (sprite == player && pendingInteraction.first != nullptr) { startPendingInteraction(); }
+      if (sprite == getPlayer() && pendingInteraction.first != nullptr) { startPendingInteraction(); }
       emit object->reachedDestination();
     }
   }
@@ -328,12 +337,12 @@ DynamicObject* LevelTask::getOccupantAt(int x, int y)
 
 void LevelTask::moveTo(int x, int y)
 {
-  moveCharacterTo(player, x, y);
+  moveCharacterTo(getPlayer(), x, y);
 }
 
 bool LevelTask::moveCharacterTo(DynamicObject* character, int x, int y)
 {
-  QPoint position = player->getPosition();
+  QPoint position = getPlayer()->getPosition();
 
   if (grid->findPath(position, QPoint(x, y), character->rcurrentPath()))
   {

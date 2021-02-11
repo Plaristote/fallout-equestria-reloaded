@@ -24,7 +24,7 @@ Image {
     id: loadGameAction
     text: qsTr("Load game")
     enabled: gameManager.getSavedGames().length > 0
-    onTriggered: application.loadGame()
+    onTriggered: application.pushView("LoadGame.qml")
   }
 
   Action {

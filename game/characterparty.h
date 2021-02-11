@@ -23,6 +23,7 @@ public:
   Q_INVOKABLE void addCharacter(Character*);
   Q_INVOKABLE void removeCharacter(Character*);
   Q_INVOKABLE void removeCharacter(const QString& name);
+  Q_INVOKABLE bool containsCharacter(Character*);
   Q_INVOKABLE Character* get(const QString& name);
   const QList<Character*>& getCharacters() const { return list; }
   QQmlListProperty<Character> getQmlCharacters() { return QQmlListProperty<Character>(this, &list); }

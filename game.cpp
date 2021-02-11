@@ -20,13 +20,19 @@ Game::Game(QObject *parent) : QObject(parent)
 Game::~Game()
 {
   scriptEngine.collectGarbage();
+  if (instance == this)
+    instance = nullptr;
+}
+
+void Game::deleteLater()
+{
   instance = nullptr;
+  QObject::deleteLater();
 }
 
 void Game::newPlayerParty(StatModel* statistics)
 {
-  Character* player = new Character;
-
+  player = new Character;
   player->setSpriteName("pony");
   player->setAnimation("idle-down");
   player->setStatistics(statistics);
@@ -40,6 +46,7 @@ void Game::loadFromDataEngine()
   if (currentLevelName != "")
     goToLevel(currentLevelName);
   playerParty->load(dataEngine->getPlayerParty(), currentLevel);
+  player = playerParty->getCharacters().first();
 }
 
 QJSValue Game::loadScript(const QString& path)

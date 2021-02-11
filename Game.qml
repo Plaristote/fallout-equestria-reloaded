@@ -18,7 +18,6 @@ Item {
     });
   }
 
-
   Component.onCompleted: {
     mystate = initialState;
   }
@@ -74,6 +73,10 @@ Item {
       root.gameController = gameManager.currentGame;
       if (mystate == "new-game")
         mystate = "create-character";
+      else if (mystate == "load-game" && root.gameController.level)
+        mystate = "level";
+      else if (mystate == "load-game")
+        console.log("(!) Oops, I can't finish loading the game.");
     }
   }
 

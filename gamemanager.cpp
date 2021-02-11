@@ -18,7 +18,7 @@ QStringList GameManager::getSavedGames() const
 
   if (directory.exists())
   {
-    list = directory.entryList(QStringList() << "*.json", QDir::NoFilter, QDir::Time | QDir::Reversed);
+    list = directory.entryList(QStringList() << "*.json", QDir::NoFilter, QDir::Time);
     for (auto it = list.begin() ; it != list.end() ; ++it)
       it->replace(".json", "");
   }
@@ -42,14 +42,12 @@ void GameManager::startNewGame()
 
 void GameManager::loadGame(const QString& path)
 {
-  if (!currentGame)
-  {
-    currentGame = new Game(this);
-    currentGame->getDataEngine()->loadFromFile(path + ".json");
-    emit currentGameChanged();
-  }
-  else
-    qDebug() << "ERROR cannot start new game while another is still running";
+  if (currentGame)
+    endGame();
+  currentGame = new Game(this);
+  currentGame->getDataEngine()->loadFromFile(path + ".json");
+  currentGame->loadFromDataEngine();
+  emit currentGameChanged();
 }
 
 void GameManager::saveGame(const QString& path)

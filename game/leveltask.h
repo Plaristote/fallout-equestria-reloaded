@@ -21,7 +21,7 @@ class LevelTask : public QObject
   Q_PROPERTY(bool       paused  MEMBER paused NOTIFY pausedChanged)
   Q_PROPERTY(TileMap*   tilemap READ getTileMap NOTIFY tilemapReady)
   Q_PROPERTY(LevelGrid* grid    MEMBER grid)
-  Q_PROPERTY(DynamicObject* player MEMBER player)
+  Q_PROPERTY(Character* player READ getPlayer)
 public:
   explicit LevelTask(QObject *parent = nullptr);
 
@@ -34,6 +34,7 @@ public:
   const QString& getName() const { return name; }
   TileMap* getTileMap() const { return tilemap; }
   LevelGrid* getGrid() const { return grid; }
+  Character* getPlayer();
 
   Q_INVOKABLE bool insertPartyIntoZone(CharacterParty*, const QString& zoneName = "");
   Q_INVOKABLE void moveTo(int x, int y);
@@ -68,7 +69,6 @@ private slots:
   void onZoneExited(DynamicObject*, TileZone*);
 
 private:
-  DynamicObject* player;
   QList<DynamicObject*> objects;
 
   QTimer        updateTimer;

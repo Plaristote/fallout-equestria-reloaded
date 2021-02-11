@@ -20,6 +20,11 @@ void CharacterParty::removeCharacter(Character* character)
   emit partyChanged();
 }
 
+bool CharacterParty::containsCharacter(Character* character)
+{
+  return list.count(character) > 0;
+}
+
 void CharacterParty::removeCharacter(const QString& name)
 {
   for (auto it = list.begin() ; it != list.end() ;)
@@ -117,5 +122,8 @@ void CharacterParty::load(const QJsonObject& data, LevelTask* level)
       grid->moveObject(character, character->getPosition().x(), character->getPosition().y());
       level->registerDynamicObject(character);
     }
+    list << character;
   }
+  if (list.length() == 0)
+    qDebug() << "Fatal error: saved data did not contain any player character";
 }

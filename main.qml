@@ -12,6 +12,7 @@ Window {
 
   property bool isMaximizeed: visibility === Window.Maximized
   property bool hasSavedGame: false // TODO
+  property string gameLoading
 
   function createGame() {
     pushView("Game.qml", { initialState: "new-game" });
@@ -25,9 +26,23 @@ Window {
     mainView.pop();
   }
 
+  function popAllViews() {
+    mainView.pop(null);
+  }
+
   StackView {
     id: mainView
     initialItem: "MainMenu.qml"
     anchors.fill: parent
+  }
+
+  Timer {
+    interval: 500
+    running: gameLoading.length > 0
+    onTriggered: {
+      pushView("Game.qml", { initialState: "load-game" });
+      gameManager.loadGame(gameLoading);
+      gameLoading = "";
+    }
   }
 }

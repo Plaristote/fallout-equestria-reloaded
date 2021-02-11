@@ -44,7 +44,7 @@ public:
   QMap<QString, Trait>& getCmapTraits() { return cmapTraits; }
 
   Q_INVOKABLE CharacterParty* getPlayerParty() { return playerParty; }
-  Q_INVOKABLE Character* getPlayer() { return getPlayerParty()->getCharacters().first(); }
+  Q_INVOKABLE Character* getPlayer() { return player; }
   Q_INVOKABLE StatModel* getPlayerStatistics() { return getPlayer()->getStatistics(); }
 
 signals:
@@ -55,11 +55,13 @@ signals:
 
 public slots:
   void changeZone(TileZone*);
+  void deleteLater();
 
 private:
   DataEngine* dataEngine = nullptr;
   LevelTask*  currentLevel = nullptr;
   CharacterParty* playerParty = nullptr;
+  Character* player = nullptr;
   QStringList consoleMessages;
   QJSEngine   scriptEngine;
 

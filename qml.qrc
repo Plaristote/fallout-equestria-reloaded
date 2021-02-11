@@ -103,5 +103,7 @@
         <file>scripts/dialogs/parley.mjs</file>
         <file>SaveGame.qml</file>
         <file>ui/SavedGameListItem.qml</file>
+        <file>LoadGame.qml</file>
+        <file>ui/SaveGameUi.qml</file>
     </qresource>
 </RCC>
