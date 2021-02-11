@@ -43,13 +43,17 @@ Item {
   }
 
   Text {
-    anchors.top: parent.top
-    anchors.right: parent.right
-    text: "OriginX: " + canvas.origin.x
-    Text {
-      anchors.top: parent.bottom
-      anchors.right: parent.right
-      text: "OriginY: " + canvas.origin.y
+    anchors { top: parent.top; right: parent.right }
+    text: "Frame Rate: " + myframeRate
+    font.pointSize: 20
+    styleColor: "white"; style: Text.Outline
+    property int myframeRate: 0
+    Timer {
+      interval: 1000; repeat: true; running: true
+      onTriggered: {
+        parent.myframeRate = canvas.controller.frameCount;
+        canvas.controller.frameCount = 0;
+      }
     }
   }
 

@@ -11,6 +11,7 @@ export class Controller {
       ground: this.tilemap.getLayer("ground"),
       walls:  this.tilemap.getLayer("walls")
     };
+    this.frameCount = 0;
   }
 
   get origin() {
@@ -20,6 +21,7 @@ export class Controller {
   render() {
     var totalRendered = 0;
 
+    this.frameCount++;
     this.clear();
     this.eachCase(this.renderTile.bind(this));
     this.renderZones();

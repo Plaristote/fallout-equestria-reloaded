@@ -68,8 +68,9 @@ static int axisMovement(int current, int final, int speed)
 
 void Sprite::runMovement(qint64 delta)
 {
-  float movementSpeedX = movementSpeed * static_cast<float>(delta) / 1000.f;
-  float movementSpeedY = movementSpeed * static_cast<float>(delta) / 1000.f;
+  float movementSpeed  = this->movementSpeed * static_cast<float>(delta) / 1000.f;
+  float movementSpeedX = movementSpeed;
+  float movementSpeedY = movementSpeed;
   int   distX = std::max(spritePosition.x(), spriteMovementTarget.x()) - std::min(spritePosition.x(), spriteMovementTarget.x());
   int   distY = std::max(spritePosition.y(), spriteMovementTarget.y()) - std::min(spritePosition.y(), spriteMovementTarget.y());
 

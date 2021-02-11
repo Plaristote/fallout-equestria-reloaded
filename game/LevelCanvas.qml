@@ -4,6 +4,8 @@ import "LevelRender.mjs" as LevelRender
 Canvas {
   id: canvas
   anchors.fill: parent
+  renderStrategy: Canvas.Cooperative
+  renderTarget:   Canvas.Image
   onImageLoaded: imageReady = true
   onPaint: { if (controller) { controller.render(); } }
 
