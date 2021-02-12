@@ -59,11 +59,13 @@ bool CharacterParty::insertIntoZone(LevelTask* level, TileZone* zone)
       Character* character = list.at(characterIt);
 
       level->registerDynamicObject(character);
-      level->forceCharacterPosition(character, position.x(), position.y());
+      level->setCharacterPosition(character, position.x(), position.y());
       if (++characterIt >= list.length())
         break ;
     }
   }
+  if (characterIt > 0)
+    emit level->cameraFocusRequired(list.at(0));
   return characterIt == list.length();
 }
 
@@ -106,10 +108,8 @@ void CharacterParty::save(QJsonObject& data)
   data.insert("list", charactersData);
 }
 
-void CharacterParty::load(const QJsonObject& data, LevelTask* level)
+void CharacterParty::load(const QJsonObject& data)
 {
-  auto* grid = level ? level->getGrid() : nullptr;
-
   name = data["name"].toString();
   for (QJsonValue characterDataV : data["list"].toArray())
   {
@@ -117,13 +117,19 @@ void CharacterParty::load(const QJsonObject& data, LevelTask* level)
     Character*  character = new Character(this);
 
     character->load(characterData);
-    if (level)
-    {
-      grid->moveObject(character, character->getPosition().x(), character->getPosition().y());
-      level->registerDynamicObject(character);
-    }
     list << character;
   }
   if (list.length() == 0)
     qDebug() << "Fatal error: saved data did not contain any player character";
+}
+
+void CharacterParty::loadIntoLevel(LevelTask* level)
+{
+  auto* grid = level->getGrid();
+
+  for (Character* character : list)
+  {
+    grid->moveObject(character, character->getPosition().x(), character->getPosition().y());
+    level->registerDynamicObject(character);
+  }
 }

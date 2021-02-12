@@ -73,6 +73,12 @@ set(PROJECT_SOURCES
         game/worldmap.cpp
         game/worldmapcity.h
         game/worldmapcity.cpp
+        game/level/grid.h
+        game/level/grid.cpp
+        game/level/interaction.h
+        game/level/interaction.cpp
+        game/level/combat.h
+        game/level/combat.cpp
         gamemanager.h
         gamemanager.cpp
         game.h

@@ -3,10 +3,9 @@
 #include "characterdialog.h"
 #include <QJsonArray>
 
-LevelTask::LevelTask(QObject *parent) : QObject(parent)
+LevelTask::LevelTask(QObject *parent) : CombatComponent(parent)
 {
   tilemap = new TileMap(this);
-  grid    = new LevelGrid(this);
   updateTimer.setInterval(30);
   updateTimer.setSingleShot(false);
   connect(&updateTimer, &QTimer::timeout, this, &LevelTask::update);
@@ -57,7 +56,7 @@ void LevelTask::loadObjectsFromTilemap()
   otherChar->setSpriteName("pony-green");
   otherChar->setAnimation("idle-down");
   otherChar->setScript("dummy.mjs");
-  forceCharacterPosition(otherChar, 8, 0);
+  setCharacterPosition(otherChar, 8, 0);
   otherParty->addCharacter(otherChar);
 
   insertPartyIntoZone(Game::get()->getPlayerParty());
@@ -134,14 +133,14 @@ void LevelTask::loadObjectsFromTilemap()
     object->setObjectName(objectData["name"].toString());
     grid->moveObject(object, drawAt.x(), drawAt.y());
     object->setPosition(drawAt);
-    object->forceMoveToCoordinates(renderPosition);
+    object->setRenderPosition(renderPosition);
     object->setInteractionPosition(interactionPosition);
     object->setSpriteAnimation(customDisplay);
     if (!scriptName.isEmpty())
       object->setScript(scriptName);
     registerDynamicObject(object);
   }
-  moveCharacterTo(otherChar, 0, 0);
+  moveTo(otherChar, 0, 0);
 }
 
 void LevelTask::loadObjectsFromDataEngine(DataEngine* dataEngine)
@@ -161,7 +160,7 @@ void LevelTask::loadObjectsFromDataEngine(DataEngine* dataEngine)
       object = new DynamicObject(this);
     object->load(objectData.toObject());
     grid->moveObject(object, object->getPosition().x(), object->getPosition().y());
-    //object->forceMoveToCoordinates(object->getSpritePosition());
+    object->setRenderPosition(object->getSpritePosition()); // isn't this basically self-assign ?
     registerDynamicObject(object);
 
     if (type == "Character") {
@@ -216,171 +215,36 @@ void LevelTask::tileClicked(int x, int y)
 
   // Cancel interaction if any is running
   emit interactionRequired(nullptr, QStringList());
-  // Infer interaction type and proceed
+  // Infer action type and proceed
   if (occupant && openInteractionMenu(occupant))
     return ;
-  else if (!moveCharacterTo(getPlayer(), x, y))
+  else if (!moveTo(getPlayer(), x, y))
     emit displayConsoleMessage("No path towards [" + QString::number(x) + ',' + QString::number(y) + ']');
-}
-
-bool LevelTask::openInteractionMenu(DynamicObject* object)
-{
-  auto entries = object->getAvailableInteractions();
-
-  if (entries.length() > 0)
-  {
-    qDebug() << "interaction rekired called";
-    emit interactionRequired(object, entries);
-    return true;
-  }
-  else
-    qDebug() << "no interction available for object";
-  return false;
-}
-
-void LevelTask::interactOrderReceived(DynamicObject* object, const QString &type)
-{
-  auto  position = object->getInteractionPosition();
-  auto* player = getPlayer();
-
-  pendingInteraction.first  = object;
-  pendingInteraction.second = type;
-  if (player->getPosition() != position)
-  {
-    if (position.x() != -1 && !moveCharacterTo(player, position.x(), position.y()))
-    {
-      pendingInteraction.first = nullptr;
-      displayConsoleMessage("Cannot reach target.");
-    }
-    else
-      qDebug() << "Going to target at " << position;
-  }
-  else
-    startPendingInteraction();
-}
-
-void LevelTask::startPendingInteraction()
-{
-  if (pendingInteraction.first)
-  {
-    if (pendingInteraction.second == "talk-to")
-    {
-      Character*       npc    = reinterpret_cast<Character*>(pendingInteraction.first);
-      CharacterDialog* dialog = new CharacterDialog(this);
-
-      dialog->load(npc->getDialogName(), getPlayer(), npc);
-      displayConsoleMessage("Should try to start interaction " + pendingInteraction.second);
-      emit startDialog(dialog);
-    }
-    else
-      qDebug() << "Error 422: unknown interaciton type";
-  }
-  else
-    qDebug() << "Error 500: No more interaction target";
-  pendingInteraction.first = nullptr;
 }
 
 void LevelTask::registerDynamicObject(DynamicObject* object)
 {
   objects.push_back(object);
-  connect(object, &Sprite::movementFinished, this, &LevelTask::onObjectMovementFinished);
+  CombatComponent::registerDynamicObject(object);
 }
 
 void LevelTask::unregisterDynamicObject(DynamicObject* object)
 {
   objects.removeAll(object);
-  object->setAnimation("idle-down");
-  disconnect(object, &Sprite::movementFinished, this, &LevelTask::onObjectMovementFinished);
+  CombatComponent::unregisterDynamicObject(object);
 }
 
-void LevelTask::onObjectMovementFinished(Sprite* sprite)
+QPoint LevelTask::getRenderPositionForTile(int x, int y)
 {
-  auto* object = reinterpret_cast<DynamicObject*>(sprite);
-  auto position = object->getPosition();
+  auto* layer = tilemap->getLayer("ground");
+  auto* tile  = layer ? layer->getTile(x, y) : nullptr;
 
-  grid->triggerZone(object, position.x(), position.y());
-  if (object->rcurrentPath().size() > 0)
-  {
-    object->rcurrentPath().pop_front();
-    qDebug() << "Object movement zinizhed: left = " << object->getCurrentPath().size();
-    if (object->getCurrentPath().size() > 0)
-    {
-      QPoint nextCase = object->getCurrentPath().first();
-
-      if (!triggerCharacterMoveTo(object, nextCase.x(), nextCase.y()))
-      {
-        qDebug() << "Path blocked" << nextCase;
-        if (sprite == getPlayer()) { pendingInteraction.first = nullptr; }
-        emit object->pathBlocked();
-      }
-    }
-    else
-    {
-      qDebug() << "-> Reached deztination";
-      object->setAnimation("idle-down");
-      if (sprite == getPlayer() && pendingInteraction.first != nullptr) { startPendingInteraction(); }
-      emit object->reachedDestination();
-    }
-  }
-  else
-    qDebug() << "!!";
-}
-
-DynamicObject* LevelTask::getOccupantAt(int x, int y)
-{
-  return grid->getOccupant(x, y);
-}
-
-void LevelTask::moveTo(int x, int y)
-{
-  moveCharacterTo(getPlayer(), x, y);
-}
-
-bool LevelTask::moveCharacterTo(DynamicObject* character, int x, int y)
-{
-  QPoint position = getPlayer()->getPosition();
-
-  if (grid->findPath(position, QPoint(x, y), character->rcurrentPath()))
-  {
-    if (character->getCurrentPath().size() > 0)
-    {
-      QPoint nextCase = character->getCurrentPath().first();
-      triggerCharacterMoveTo(character, nextCase.x(), nextCase.y());
-    }
-    else
-      emit character->reachedDestination();
-    return true;
-  }
-  return false;
-
-}
-
-bool LevelTask::triggerCharacterMoveTo(DynamicObject* character, int x, int y)
-{
-  QPoint renderPosition = tilemap->getLayer("ground")->getTile(x, y)->getRenderPosition();
-
-  if (grid->moveObject(character, x, y))
-  {
-    character->moveTo(x, y, renderPosition);
-    return true;
-  }
-  else
-    qDebug() << "Cannot move to coordinate" << x << y;
-  return false;
-}
-
-void LevelTask::forceCharacterPosition(DynamicObject* character, int x, int y)
-{
-  QPoint renderPosition = tilemap->getLayer("ground")->getTile(x, y)->getRenderPosition();
-
-  grid->moveObject(character, x, y);
-  character->setPosition(QPoint(x, y));
-  character->forceMoveToCoordinates(renderPosition);
+  return tile ? tile->getRenderPosition() : QPoint();
 }
 
 void LevelTask::onPauseChanged()
 {
-  qDebug() << "PAUZE CHANGED";
+  qDebug() << "LevelTask::onPauseChanged:" << paused;
   if (paused)
     updateTimer.stop();
   else

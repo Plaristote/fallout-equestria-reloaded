@@ -112,7 +112,7 @@ Item {
           delegate: Button {
             text: "> " + controller.getOptionText(controller.options[index])
             hoverEnabled: true
-            contentItem: Text { color: parent.hovered ? "white" : "green"; text: parent.text }
+            contentItem: Text { color: parent.hovered ? "white" : "green"; text: parent.text; wrapMode: Text.WordWrap }
             background: Rectangle { color: "transparent" }
             onClicked: controller.selectOption(controller.options[index])
             width: answersFlickable.width - 10

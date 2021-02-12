@@ -48,10 +48,13 @@ void Game::loadFromDataEngine()
   QString currentLevelName = dataEngine->getCurrentLevel();
 
   timeManager->load(dataEngine->getTimeData());
-  if (currentLevelName != "")
-    goToLevel(currentLevelName);
-  playerParty->load(dataEngine->getPlayerParty(), currentLevel);
+  playerParty->load(dataEngine->getPlayerParty());
   player = playerParty->getCharacters().first();
+  if (currentLevelName != "")
+  {
+    goToLevel(currentLevelName);
+    playerParty->loadIntoLevel(currentLevel);
+  }
 }
 
 QJSValue Game::loadScript(const QString& path)
@@ -121,7 +124,7 @@ void Game::switchToLevel(const QString& name, const QString& targetZone)
   connect(currentLevel, &LevelTask::displayConsoleMessage, this, &Game::appendToConsole);
   connect(currentLevel, &LevelTask::exitZoneEntered, this, &Game::changeZone);
   currentLevel->load(name, dataEngine);
-  currentLevel->insertPartyIntoZone(playerParty);
+  currentLevel->insertPartyIntoZone(playerParty, targetZone);
   currentLevel->setPaused(false);
   scriptObject.setProperty("level", scriptEngine.newQObject(currentLevel));
   emit levelSwapped();
@@ -140,10 +143,10 @@ void Game::exitLevel(bool silent)
 
 void Game::changeZone(TileZone* tileZone)
 {
-  QString targetZone;
-
   if (tileZone->getTarget() != "")
   {
+    QString targetZone;
+
     if (currentLevel)
       targetZone = currentLevel->getName();
     switchToLevel(tileZone->getTarget(), targetZone);

@@ -46,7 +46,7 @@ void Sprite::runAnimation()
     animation.clippedRect.adjust(width, 0, width, 0);
 }
 
-void Sprite::forceMoveToCoordinates(QPoint coordinates)
+void Sprite::setRenderPosition(QPoint coordinates)
 {
   spritePosition = coordinates;
   spriteMovementTarget = coordinates;

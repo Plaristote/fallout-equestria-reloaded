@@ -17,7 +17,8 @@ class CharacterParty : public QObject
 public:
   explicit CharacterParty(QObject *parent = nullptr);
 
-  void load(const QJsonObject&, LevelTask* = nullptr);
+  void loadIntoLevel(LevelTask*);
+  void load(const QJsonObject&);
   void save(QJsonObject&);
 
   Q_INVOKABLE void addCharacter(Character*);

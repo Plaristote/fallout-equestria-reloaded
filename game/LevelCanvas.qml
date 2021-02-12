@@ -6,26 +6,29 @@ Canvas {
   anchors.fill: parent
   renderStrategy: Canvas.Cooperative
   renderTarget:   Canvas.Image
-  onImageLoaded: imageReady = true
   onPaint: { if (controller) { controller.render(); } }
 
   property QtObject levelController;
   property point origin;
   property var controller;
-  property bool imageReady;
 
   Component.onCompleted: {
     preloadImages();
   }
 
+  Timer {
+    id: afterLoadCameraCenter; interval: 100; onTriggered: moveToObject(levelController.player);
+  }
+
   Connections {
     target: levelController
     function onUpdated() { canvas.requestPaint(); }
+    function onCameraFocusRequired(object) { moveToObject(object); }
   }
 
   onAvailableChanged: {
     controller = new LevelRender.Controller(canvas, { level: levelController, tilemap: levelController.tilemap });
-    requestPaint();
+    afterLoadCameraCenter.running = true;
   }
 
   MouseArea {

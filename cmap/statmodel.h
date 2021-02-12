@@ -122,6 +122,7 @@ public:
 
   const QString& getName() const { return name; }
   int getExperience() const { return experience; }
+  int getHitPoints() const { return hitPoints; }
   Q_INVOKABLE void addExperience(int xp);
   Q_INVOKABLE bool isAcceptable() const;
   Q_INVOKABLE int getMaxTraits() const { return 2; }
@@ -167,6 +168,7 @@ public:
   STAT_GETTER(gambling)
 
 signals:
+  void damageReceived(int damage, QString type);
   void nameChanged();
   void ageChanged();
   void hitPointsChanged();

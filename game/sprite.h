@@ -20,7 +20,7 @@ public:
   void setSpriteName(const QString& value) { name = value; }
   void setAnimation(const QString& animationName);
   void moveToCoordinates(QPoint coordinates);
-  void forceMoveToCoordinates(QPoint coordinates);
+  void setRenderPosition(QPoint coordinates);
   void setSpriteAnimation(const SpriteAnimation& value) { animation = value; }
 
   Q_INVOKABLE QString getSpriteSource() const { return animation.source; }

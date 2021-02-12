@@ -8,12 +8,11 @@ CharacterSheet {
   mode: "view"
 
   Component.onCompleted: {
-    gameController.currentLevel.paused = true;
+    gameController.level.paused = true;
   }
 
-
   onCanceled: {
-    gameController.currentLevel.paused = false;
+    gameController.level.paused = false;
     application.popView();
   }
 }

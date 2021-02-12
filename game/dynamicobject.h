@@ -22,6 +22,8 @@ public:
   virtual void load(const QJsonObject&);
   virtual void save(QJsonObject&) const;
 
+  bool isCharacter() const { return QString(metaObject()->className()) == "Character"; }
+
   void setObjectName(const QString& value) { objectName = value; }
   const QString& getObjectName() const { return objectName; }
   void setScript(const QString& name);
