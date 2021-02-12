@@ -1,3 +1,4 @@
+#include "globals.h"
 #include "animationlibrary.h"
 #include <QFile>
 #include <QJsonObject>
@@ -17,7 +18,7 @@ AnimationLibrary::~AnimationLibrary()
 
 void AnimationLibrary::initialize()
 {
-  QFile sourceFile(":/assets/sprites.json");
+  QFile sourceFile(ASSETS_PATH + "/sprites.json");
 
   if (sourceFile.open(QIODevice::ReadOnly))
   {

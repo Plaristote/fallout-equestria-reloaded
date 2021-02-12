@@ -1,3 +1,4 @@
+#include "globals.h"
 #include "characterdialog.h"
 #include "game.h"
 #include <QFile>
@@ -10,7 +11,7 @@ CharacterDialog::CharacterDialog(QObject *parent) : QObject(parent)
 
 void CharacterDialog::load(const QString& name, Character* player, Character* npc)
 {
-  QFile file(":/scripts/dialogs/" + name + ".json");
+  QFile file(SCRIPTS_PATH + "/dialogs/" + name + ".json");
 
   if (file.open(QIODevice::ReadOnly))
   {
@@ -20,7 +21,7 @@ void CharacterDialog::load(const QString& name, Character* player, Character* np
     this->npc     = npc;
     self          = Game::get()->getScriptEngine().newQObject(this);
     data          = QJsonDocument::fromJson(file.readAll());
-    script        = Game::get()->loadScript(":/scripts/dialogs/" + name + ".mjs");
+    script        = Game::get()->loadScript(SCRIPTS_PATH + "dialogs/" + name + ".mjs");
     initializer   = script.property("initialize");
     if (initializer.isCallable())
     {

@@ -1,6 +1,7 @@
 #ifndef  CHARACTER_H
 # define CHARACTER_H
 
+# include "globals.h"
 # include "dynamicobject.h"
 # include "cmap/statmodel.h"
 
@@ -27,7 +28,7 @@ public:
 signals:
 
 protected:
-  virtual QString getScriptPath() const { return ":/scripts/pnjs"; }
+  virtual QString getScriptPath() const { return SCRIPTS_PATH + "pnjs"; }
 private:
   StatModel* statistics = nullptr;
   bool isUnique = false;

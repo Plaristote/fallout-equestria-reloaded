@@ -1,3 +1,4 @@
+#include "globals.h"
 #include "game.h"
 #include <QFile>
 #include <QDir>
@@ -72,13 +73,13 @@ QJSValue Game::loadScript(const QString& path)
 
 void Game::loadCmapTraits()
 {
-  QDir traitsDir(":/scripts/traits");
+  QDir traitsDir(SCRIPTS_PATH + "traits");
   auto files = traitsDir.entryList(QStringList() << "*.mjs" << "*.js", QDir::Files);
   qDebug() << traitsDir.entryList();
   for (auto scriptPath : files)
   {
     qDebug() << "Loading trait:" << scriptPath;
-    auto script = loadScript(":/scripts/traits/" + scriptPath);
+    auto script = loadScript(SCRIPTS_PATH + "traits/" + scriptPath);
 
     if (!script.isBool())
     {

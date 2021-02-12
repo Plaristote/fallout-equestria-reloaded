@@ -1,3 +1,4 @@
+#include "globals.h"
 #include "dataengine.h"
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -101,7 +102,7 @@ StatModel* DataEngine::makeStatModel(const QString& characterId, const QString& 
 
   if (characterData.isUndefined() || characterData.isNull())
   {
-    QFile file(":/assets/characterSheets/" + source + ".json");
+    QFile file(ASSETS_PATH + "characterSheets/" + source + ".json");
 
     if (file.open(QIODevice::ReadOnly))
     {
