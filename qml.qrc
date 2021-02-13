@@ -115,5 +115,8 @@
         <file>assets/cmap/no-icon.png</file>
         <file>game/CharacterView.qml</file>
         <file>cmap/PerksPane.qml</file>
+        <file>game/Looting.qml</file>
+        <file>game/InventoryItemsView.qml</file>
+        <file>assets/sprites/medikit.png</file>
     </qresource>
 </RCC>

@@ -89,8 +89,10 @@ Item {
     }
   }
 
+  // INTERACTION
   Connections {
     target: levelController
+
     function onInteractionRequired(interactionTarget, interactionList) {
       if (interactionTarget)
       {
@@ -101,15 +103,17 @@ Item {
       else
         interactionMenu.interactionTarget = null;
     }
-  }
 
-  // DIALOG STARTER
-  Connections {
-    target: levelController
     function onStartDialog(dialogController) {
       console.log("ztarting dialog controller", dialogController);
       console.log("text iz ", dialogController.text);
       application.pushView("game/Dialog.qml", {controller: dialogController});
+      levelController.paused = true;
+    }
+
+    function onStartLooting(lootingController) {
+      console.log("ztarting looting controller", lootingController);
+      application.pushView("game/Looting.qml", {controller: lootingController});
       levelController.paused = true;
     }
   }

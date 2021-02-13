@@ -2,6 +2,7 @@
 #include "game.h"
 #include "characterdialog.h"
 #include <QJsonArray>
+#include "inventoryitem.h"
 
 LevelTask::LevelTask(QObject *parent) : CombatComponent(parent)
 {
@@ -116,6 +117,7 @@ void LevelTask::loadObjectsFromTilemap()
         else if (propertyName == "y")
           renderPosition.setY(propertyValue.toInt());
     }
+
     if (type == "character")
     {
       Character* character = new Character(this);
@@ -125,6 +127,16 @@ void LevelTask::loadObjectsFromTilemap()
         Game::get()->getDataEngine()->makeStatModel(character->getObjectName(), characterSheetName)
       );
       object = character;
+    }
+    else if (type == "storage")
+    {
+      StorageObject* storageObject = new StorageObject(this);
+
+      object = storageObject;
+      // LOOTING TEsT
+      InventoryItem* toto = new InventoryItem(this);
+      toto->setObjectName("testItem");
+      storageObject->getInventory()->addItem(toto);
     }
     else
     {
@@ -156,6 +168,8 @@ void LevelTask::loadObjectsFromDataEngine(DataEngine* dataEngine)
 
     if (type == "Character")
       object = new Character(this);
+    else if (type == "StorageObject")
+      object = new StorageObject(this);
     else
       object = new DynamicObject(this);
     object->load(objectData.toObject());

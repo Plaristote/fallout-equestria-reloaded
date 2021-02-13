@@ -4,6 +4,7 @@
 
 #include "globals.h"
 #include "game/animationlibrary.h"
+#include "game/inventoryitemlibrary.h"
 
 #include "tilemap/tilemap.h"
 #include "tilemap/tilelayer.h"
@@ -12,8 +13,10 @@
 
 #include "game.h"
 #include "game/dynamicobject.h"
+#include "game/inventoryitem.h"
 #include "game/leveltask.h"
 #include "game/characterdialog.h"
+#include "game/lootingcontroller.h"
 #include "gamemanager.h"
 
 #include "cmap/statmodel.h"
@@ -37,13 +40,19 @@ int main(int argc, char *argv[])
   AnimationLibrary animationLibrary;
   animationLibrary.initialize();
 
+  InventoryItemLibrary itemLibrary;
+  itemLibrary.initialize();
+
   QGuiApplication app(argc, argv);
   QQmlApplicationEngine engine;
 
   qmlRegisterType<Game>("Game", 1,0, "Controller");
   qmlRegisterType<StatModel>("Game", 1,0, "StatModel");
   qmlRegisterType<DynamicObject>("Game", 1,0, "DynamicObject");
+  qmlRegisterType<InventoryItem>("Game", 1,0, "InventoryItem");
+  qmlRegisterType<Inventory>("Game", 1,0, "Inventory");
   qmlRegisterType<CharacterDialog>("Game", 1,0, "CharacterDialog");
+  qmlRegisterType<LootingController>("Game", 1,0, "LootingController");
   qmlRegisterType<GameManager>("Game", 1,0, "GameManager");
   qmlRegisterType<WorldMap>("Game", 1,0, "WorldMap");
   qmlRegisterType<WorldMapCity>("Game", 1,0, "WorldMapCity");

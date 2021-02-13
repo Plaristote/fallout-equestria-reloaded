@@ -127,6 +127,7 @@ void DynamicObject::load(const QJsonObject& data)
   }
   currentZone = data["currentZone"].toString();
   scriptName  = data["script"].toString();
+  dataStore   = data["dataStore"].toObject();
   Sprite::load(data);
   setScript(scriptName);
 }
@@ -150,5 +151,6 @@ void DynamicObject::save(QJsonObject& data) const
   data["currentPath"] = currentPathData;
   data["currentZone"] = currentZone;
   data["script"]      = scriptName;
+  data["dataStore"]   = dataStore;
   Sprite::save(data);
 }

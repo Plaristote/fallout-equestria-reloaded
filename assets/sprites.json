@@ -66,5 +66,12 @@
       "source": "pony-shadow.png",
       "height": 46, "width": 46
     }
+  },
+  "items": {
+    "medikit": {
+      "source": "medikit.png",
+      "height": 36,
+      "width": 72
+    }
   }
 }

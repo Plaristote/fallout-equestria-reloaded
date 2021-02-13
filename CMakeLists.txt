@@ -55,12 +55,16 @@ set(PROJECT_SOURCES
         game/levelgrid.cpp
         game/dynamicobject.h
         game/dynamicobject.cpp
+        game/storageobject.h
+        game/storageobject.cpp
         game/character.h
         game/character.cpp
         game/characterparty.h
         game/characterparty.cpp
         game/characterdialog.h
         game/characterdialog.cpp
+        game/lootingcontroller.h
+        game/lootingcontroller.cpp
         game/sprite.h
         game/sprite.cpp
         game/animationlibrary.h
@@ -73,6 +77,12 @@ set(PROJECT_SOURCES
         game/worldmap.cpp
         game/worldmapcity.h
         game/worldmapcity.cpp
+        game/inventory.h
+        game/inventory.cpp
+        game/inventoryitem.h
+        game/inventoryitem.cpp
+        game/inventoryitemlibrary.h
+        game/inventoryitemlibrary.cpp
         game/level/grid.h
         game/level/grid.cpp
         game/level/interaction.h

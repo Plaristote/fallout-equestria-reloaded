@@ -6,6 +6,7 @@
 # include "../dynamicobject.h"
 
 class CharacterDialog;
+class LootingController;
 
 class InteractionComponent : public GridComponent
 {
@@ -22,12 +23,14 @@ public:
 signals:
   void interactionRequired(DynamicObject* target, QStringList options);
   void startDialog(CharacterDialog*);
+  void startLooting(LootingController*);
 
 protected slots:
   void startPendingInteraction();
 
 private:
   void initializeDialog(Character* npc);
+  void initializeLooting(StorageObject*);
 
 protected:
   QMetaObject::Connection        playerReachedDestinationObserver;

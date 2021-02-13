@@ -1,7 +1,7 @@
 #include "character.h"
 #include "game.h"
 
-Character::Character(QObject *parent) : DynamicObject(parent)
+Character::Character(QObject *parent) : StorageObject(parent)
 {
 
 }
@@ -50,7 +50,7 @@ void Character::load(const QJsonObject& data)
     statistics = new StatModel(this);
     statistics->fromJson(data["stats"].toObject());
   }
-  DynamicObject::load(data);
+  StorageObject::load(data);
 }
 
 void Character::save(QJsonObject& data) const
@@ -65,5 +65,5 @@ void Character::save(QJsonObject& data) const
     statistics->toJson(statData);
     data.insert("stats", statData);
   }
-  DynamicObject::save(data);
+  StorageObject::save(data);
 }

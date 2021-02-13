@@ -2,10 +2,10 @@
 # define CHARACTER_H
 
 # include "globals.h"
-# include "dynamicobject.h"
+# include "storageobject.h"
 # include "cmap/statmodel.h"
 
-class Character : public DynamicObject
+class Character : public StorageObject
 {
   Q_OBJECT
 

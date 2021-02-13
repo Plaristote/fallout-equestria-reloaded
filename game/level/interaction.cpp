@@ -1,6 +1,7 @@
 #include "interaction.h"
 #include "game.h"
 #include "../characterdialog.h"
+#include "../lootingcontroller.h"
 
 InteractionComponent::InteractionComponent(QObject *parent) : GridComponent(parent)
 {
@@ -62,10 +63,14 @@ void InteractionComponent::startPendingInteraction()
 {
   if (pendingInteraction.first)
   {
+    QString typeName(pendingInteraction.first->metaObject()->className());
+
     if (pendingInteraction.second == "talk-to")
       initializeDialog(reinterpret_cast<Character*>(pendingInteraction.first));
+    else if (pendingInteraction.second == "use" && typeName == "StorageObject")
+      initializeLooting(reinterpret_cast<StorageObject*>(pendingInteraction.first));
     else
-      qDebug() << "InteractionComponent::startPendingInteraction: unknown interaciton type";
+      qDebug() << "InteractionComponent::startPendingInteraction: unknown interaciton type" << pendingInteraction.second;
   }
   else
     qDebug() << "InteractionComponent::startPendingInteraction: No more interaction target";
@@ -79,4 +84,13 @@ void InteractionComponent::initializeDialog(Character* npc)
 
   dialog->load(npc->getDialogName(), player, npc);
   emit startDialog(dialog);
+}
+
+void InteractionComponent::initializeLooting(StorageObject* target)
+{
+  Character* player = Game::get()->getPlayer();
+  LootingController* controller = new LootingController(this);
+
+  controller->initialize(player, target);
+  emit startLooting(controller);
 }
