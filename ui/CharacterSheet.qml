@@ -9,7 +9,8 @@ Pane {
   id: root
   property QtObject characterSheet
   property var mode: "create"
-  readonly property bool createMode: mode === "create"
+  readonly property bool gameEditorMode: mode === "gameEditor"
+  readonly property bool createMode: mode === "create" || mode === "gameEditor"
   readonly property bool editMode: mode === "edit"
   property string selectedProperty: ""
 
@@ -54,6 +55,7 @@ Pane {
       }
 
       CMAP.Experience {
+        editable: gameEditorMode
         characterSheet: root.characterSheet
         Layout.fillWidth: true
         Layout.topMargin: 15

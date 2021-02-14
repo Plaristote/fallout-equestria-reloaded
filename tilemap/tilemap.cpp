@@ -113,7 +113,7 @@ bool TileMap::load(const QString& name)
     return true;
   }
   else
-    qDebug() << "TileMap: failed to open tilemap" << name;
+    qDebug() << "TileMap: failed to open tilemap" << (tilemapsPath + name + ".json");
   return false;
 }
 

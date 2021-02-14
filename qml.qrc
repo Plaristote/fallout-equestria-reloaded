@@ -118,5 +118,14 @@
         <file>game/Looting.qml</file>
         <file>game/InventoryItemsView.qml</file>
         <file>assets/sprites/medikit.png</file>
+        <file>editor/Index.qml</file>
+        <file>ui/TerminalField.qml</file>
+        <file>ui/TerminalButton.qml</file>
+        <file>editor/SpriteEditor.qml</file>
+        <file>editor/ObjectEditor.qml</file>
+        <file>ui/TerminalComboBox.qml</file>
+        <file>editor/NpcEditor.qml</file>
+        <file>editor/EditorSelectPanel.qml</file>
+        <file>editor/LevelEditor.qml</file>
     </qresource>
 </RCC>

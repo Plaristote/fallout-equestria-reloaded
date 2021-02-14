@@ -1,77 +1,140 @@
 {
-  "pony": {
-    "defaultSource": "ZEkA10000.png",
-    "idle-down": {
-      "height": 46, "width": 46,
-      "offsetX": 46, "offsetY": 0
+    "LeGroupe": {
+        "Lanim": {
+            "frameCount": 1,
+            "frameInterval": 100,
+            "height": 36,
+            "offsetX": 0,
+            "offsetY": 0,
+            "repeat": true,
+            "source": "medikit.png",
+            "width": 72
+        },
+        "Lotranim": {
+            "frameCount": 1,
+            "frameInterval": 100,
+            "height": 35,
+            "offsetX": 0,
+            "offsetY": 0,
+            "repeat": false,
+            "source": "medikit.png",
+            "width": 25
+        }
     },
-    "walking-down": {
-      "height": 46, "width": 46,
-      "frameCount": 3, "frameInterval": 250,
-      "repeat": true
+    "items": {
+        "gun": {
+            "frameCount": 1,
+            "frameInterval": 100,
+            "height": 75,
+            "offsetX": 0,
+            "offsetY": 0,
+            "repeat": false,
+            "source": "gun.png",
+            "width": 112
+        },
+        "medikit": {
+            "height": 36,
+            "source": "medikit.png",
+            "width": 72
+        }
     },
-    "walking-left": {
-      "offsetX": 0, "offsetY": 48,
-      "height": 46, "width": 46,
-      "frameCount": 3, "frameInterval": 250,
-      "repeat": true
+    "pony": {
+        "defaultSource": "ZEkA10000.png",
+        "idle-down": {
+            "height": 46,
+            "offsetX": 46,
+            "offsetY": 0,
+            "width": 46
+        },
+        "shadow": {
+            "height": 46,
+            "source": "pony-shadow.png",
+            "width": 46
+        },
+        "walking-down": {
+            "frameCount": 3,
+            "frameInterval": 250,
+            "height": 46,
+            "offsetX": 0,
+            "offsetY": 0,
+            "repeat": true,
+            "source": "ZEkA10000.png",
+            "width": 48
+        },
+        "walking-left": {
+            "frameCount": 3,
+            "frameInterval": 250,
+            "height": 46,
+            "offsetX": 0,
+            "offsetY": 48,
+            "repeat": true,
+            "width": 46
+        },
+        "walking-right": {
+            "frameCount": 3,
+            "frameInterval": 250,
+            "height": 46,
+            "offsetX": 0,
+            "offsetY": 96,
+            "repeat": true,
+            "width": 46
+        },
+        "walking-up": {
+            "frameCount": 3,
+            "frameInterval": 250,
+            "height": 46,
+            "offsetX": 0,
+            "offsetY": 144,
+            "repeat": true,
+            "width": 46
+        }
     },
-    "walking-up": {
-      "offsetX": 0, "offsetY": 144,
-      "height": 46, "width": 46,
-      "frameCount": 3, "frameInterval": 250,
-      "repeat": true
-    },
-    "walking-right": {
-      "offsetX": 0, "offsetY": 96,
-      "height": 46, "width": 46,
-      "frameCount": 3, "frameInterval": 250,
-      "repeat": true
-    },
-    "shadow": {
-      "source": "pony-shadow.png",
-      "height": 46, "width": 46
+    "pony-green": {
+        "defaultSource": "ZEkA10000-green.png",
+        "idle-down": {
+            "height": 46,
+            "offsetX": 46,
+            "offsetY": 0,
+            "width": 46
+        },
+        "shadow": {
+            "height": 46,
+            "source": "pony-shadow.png",
+            "width": 46
+        },
+        "walking-down": {
+            "frameCount": 3,
+            "frameInterval": 250,
+            "height": 46,
+            "repeat": true,
+            "width": 46
+        },
+        "walking-left": {
+            "frameCount": 3,
+            "frameInterval": 250,
+            "height": 46,
+            "offsetX": 0,
+            "offsetY": 48,
+            "repeat": true,
+            "width": 46
+        },
+        "walking-right": {
+            "frameCount": 3,
+            "frameInterval": 250,
+            "height": 46,
+            "offsetX": 0,
+            "offsetY": 96,
+            "repeat": true,
+            "width": 46
+        },
+        "walking-up": {
+            "frameCount": 3,
+            "frameInterval": 250,
+            "height": 46,
+            "offsetX": 0,
+            "offsetY": 144,
+            "repeat": true,
+            "width": 46
+        }
     }
-  },
-  "pony-green": {
-    "defaultSource": "ZEkA10000-green.png",
-    "idle-down": {
-      "height": 46, "width": 46,
-      "offsetX": 46, "offsetY": 0
-    },
-    "walking-down": {
-      "height": 46, "width": 46,
-      "frameCount": 3, "frameInterval": 250,
-      "repeat": true
-    },
-    "walking-left": {
-      "offsetX": 0, "offsetY": 48,
-      "height": 46, "width": 46,
-      "frameCount": 3, "frameInterval": 250,
-      "repeat": true
-    },
-    "walking-up": {
-      "offsetX": 0, "offsetY": 144,
-      "height": 46, "width": 46,
-      "frameCount": 3, "frameInterval": 250,
-      "repeat": true
-    },
-    "walking-right": {
-      "offsetX": 0, "offsetY": 96,
-      "height": 46, "width": 46,
-      "frameCount": 3, "frameInterval": 250,
-      "repeat": true
-    },
-    "shadow": {
-      "source": "pony-shadow.png",
-      "height": 46, "width": 46
-    }
-  },
-  "items": {
-    "medikit": {
-      "source": "medikit.png",
-      "height": 36,
-      "width": 72
-    }
-  }
 }

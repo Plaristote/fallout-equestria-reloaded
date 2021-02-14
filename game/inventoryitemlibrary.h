@@ -17,7 +17,10 @@ public:
 
   static InventoryItemLibrary* get() { return instance; }
 
-  const QJsonValue getObject(const QString&)const;
+  Q_INVOKABLE const QJsonValue getObject(const QString&) const;
+  Q_INVOKABLE void setObject(const QString&, const QJsonObject&);
+  Q_INVOKABLE QStringList getObjectList() const { return library.keys(); }
+  Q_INVOKABLE void save();
 
 signals:
 

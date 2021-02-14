@@ -16,6 +16,11 @@ Canvas {
     preloadImages();
   }
 
+  onLevelControllerChanged: {
+    preloadImages();
+    initializeRenderer();
+  }
+
   Timer {
     id: afterLoadCameraCenter; interval: 100; onTriggered: moveToObject(levelController.player);
   }
@@ -27,7 +32,7 @@ Canvas {
   }
 
   onAvailableChanged: {
-    controller = new LevelRender.Controller(canvas, { level: levelController, tilemap: levelController.tilemap });
+    initializeRenderer();
     afterLoadCameraCenter.running = true;
   }
 
@@ -37,6 +42,10 @@ Canvas {
     onClicked: {
       controller.onMouseClick(mouse, mouseX, mouseY);
     }
+  }
+
+  function initializeRenderer() {
+    controller = new LevelRender.Controller(canvas, { level: levelController, tilemap: levelController.tilemap });
   }
 
   function preloadImages() {

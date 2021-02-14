@@ -44,6 +44,7 @@ void StatModel::levelUp()
   }
   emit levelChanged();
   emit skillPointsChanged();
+  emit statisticsChanged();
 }
 
 void StatModel::updateBaseValues()
@@ -129,6 +130,8 @@ void StatModel::fromJson(const QJsonObject& json)
   charisma     = json["cha"].toInt();
   intelligence = json["int"].toInt();
   luck         = json["luc"].toInt();
+  traits.clear();
+  perks.clear();
   for (QJsonValue value : json["traits"].toArray())
     traits.push_back(value.toString());
   for (QJsonValue value : json["perks"].toArray())
@@ -179,8 +182,23 @@ void StatModel::fromJson(const QJsonObject& json)
   faceColor.setBlue (faceColorArray.at(2).toInt());
   faceColor.setAlpha(faceColorArray.at(3).toInt());
 
+  faceAccessories.clear();
   for (QJsonValue value : json["face-accessories"].toArray())
     faceAccessories.push_back(value.toString());
+
+  emit statisticsChanged();
+  emit specialChanged();
+  emit perksChanged();
+  emit traitsChanged();
+  emit levelChanged();
+  emit hitPointsChanged();
+  emit nameChanged();
+  emit ageChanged();
+  emit experienceChanged();
+  emit spriteThemeChanged();
+  emit faceAccessoriesChanged();
+  emit faceThemeChanged();
+  emit faceColorChanged();
 }
 
 void StatModel::toJson(QJsonObject& json)

@@ -25,6 +25,7 @@ void InventoryItemLibrary::initialize()
   {
     QJsonDocument document = QJsonDocument::fromJson(file.readAll());
 
+    file.close();
     library = document.object();
   }
 }
@@ -32,4 +33,23 @@ void InventoryItemLibrary::initialize()
 const QJsonValue InventoryItemLibrary::getObject(const QString& name) const
 {
   return library[name];
+}
+
+void InventoryItemLibrary::setObject(const QString& name, const QJsonObject& data)
+{
+  qDebug() << "InventoryItemLibrary::setObject" << name << QJsonDocument(data).toJson();
+  library.remove(name);
+  library.insert(name, data);
+}
+
+void InventoryItemLibrary::save()
+{
+  QFile file(ASSETS_PATH + "objects.json");
+
+  if (file.open(QIODevice::WriteOnly))
+  {
+    qDebug() << "save: " << QJsonDocument(library).toJson();
+    file.write(QJsonDocument(library).toJson());
+    file.close();
+  }
 }

@@ -7,6 +7,7 @@
 # include <QTimer>
 # include <QJsonObject>
 # include "sprite.h"
+# include "taskrunner.h"
 
 class DynamicObject : public Sprite
 {
@@ -16,9 +17,12 @@ class DynamicObject : public Sprite
   Q_PROPERTY(QPoint  position    READ getPosition)
   Q_PROPERTY(QString currentZone READ getCurrentZone)
   Q_PROPERTY(QJsonObject dataStore MEMBER dataStore)
+  Q_PROPERTY(TaskRunner* tasks MEMBER taskManager)
 
 public:
   explicit DynamicObject(QObject *parent = nullptr);
+
+  void update(qint64);
 
   virtual void load(const QJsonObject&);
   virtual void save(QJsonObject&) const;
@@ -28,6 +32,7 @@ public:
   void setObjectName(const QString& value) { objectName = value; emit objectNameChanged(); }
   const QString& getObjectName() const { return objectName; }
   void setScript(const QString& name);
+  TaskRunner* getTaskManager() { return taskManager; }
 
   Q_INVOKABLE QPoint getPosition() const { return position; }
   Q_INVOKABLE virtual QPoint getInteractionPosition() const { return interactionPosition; }
@@ -57,6 +62,7 @@ private slots:
 protected:
   virtual QString getScriptPath() const { return ":/scripts/behaviour"; }
   QJSValue script;
+  TaskRunner* taskManager;
 private:
   QString objectName, scriptName;
   QPoint position, nextPosition;

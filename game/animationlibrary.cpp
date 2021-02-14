@@ -1,8 +1,20 @@
 #include "globals.h"
 #include "animationlibrary.h"
 #include <QFile>
-#include <QJsonObject>
+#include <QJsonDocument>
 #include <QDebug>
+
+void QmlSpriteAnimation::initialize(const QString &group, const QString &name)
+{
+  SpriteAnimation::operator=(AnimationLibrary::get()->getAnimation(group, name));
+  emit frameIntervalChanged();
+  emit frameCountChanged();
+  emit firstFramePositionChanged();
+  emit sourceChanged();
+  emit nameChanged();
+  emit repeatChanged();
+  emit clippedRectChanged();
+}
 
 AnimationLibrary* AnimationLibrary::self = nullptr;
 
@@ -22,9 +34,10 @@ void AnimationLibrary::initialize()
 
   if (sourceFile.open(QIODevice::ReadOnly))
   {
-    data = QJsonDocument::fromJson(sourceFile.readAll());
+    data = QJsonDocument::fromJson(sourceFile.readAll()).object();
 
-    for (const QString& groupName : data.object().keys())
+    sourceFile.close();
+    for (const QString& groupName : data.keys())
     {
       QJsonObject groupObject = data[groupName].toObject();
       QString defaultTexture = groupObject["defaultSource"].toString();
@@ -64,4 +77,47 @@ SpriteAnimation AnimationLibrary::getAnimation(const QString &group, const QStri
   object.clippedRect.setWidth(animationData["width"].toInt());
   object.clippedRect.setHeight(animationData["height"].toInt());
   return object;
+}
+
+void AnimationLibrary::setAnimation(const QString& group, const QString& name, QmlSpriteAnimation* animation)
+{
+  auto groupData = data[group].toObject();
+  QJsonObject animationData;
+
+  animationData["source"] = animation->source.replace("assets/sprites/", "");
+  animationData["repeat"] = animation->repeat;
+  animationData["frameCount"] = animation->frameCount;
+  animationData["frameInterval"] = animation->frameInterval;
+  animationData["offsetX"] = animation->firstFramePosition.x();
+  animationData["offsetY"] = animation->firstFramePosition.y();
+  animationData["width"] = animation->clippedRect.width();
+  animationData["height"] = animation->clippedRect.height();
+  groupData.remove(name);
+  groupData.insert(animation->name, animationData);
+  data[group] = groupData;
+}
+
+void AnimationLibrary::save()
+{
+  QFile sourceFile(ASSETS_PATH + "sprites.json");
+
+  if (sourceFile.open(QIODevice::WriteOnly))
+  {
+    QJsonDocument document(data);
+    sourceFile.write(document.toJson());
+    sourceFile.close();
+  }
+}
+
+QStringList AnimationLibrary::getGroups() const
+{
+  return data.keys();
+}
+
+QStringList AnimationLibrary::getAnimationList(const QString& group) const
+{
+  auto list = data[group].toObject().keys();
+
+  list.removeAll("defaultSource");
+  return list;
 }

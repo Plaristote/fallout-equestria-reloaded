@@ -33,6 +33,12 @@ Image {
     onTriggered: application.close();
   }
 
+  Action {
+    id: gameEditorAction
+    text: "Game Editor"
+    onTriggered: application.pushView("editor/Index.qml")
+  }
+
   Column {
     anchors.top: parent.top
     anchors.left: parent.left
@@ -40,7 +46,7 @@ Image {
     spacing: 10
 
     Repeater {
-      model: [continueAction, newGameAction, loadGameAction, exitAction]
+      model: [continueAction, newGameAction, loadGameAction, gameEditorAction, exitAction]
       delegate: MenuButton { action: modelData }
     }
   }

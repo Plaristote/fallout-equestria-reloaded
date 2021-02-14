@@ -77,6 +77,8 @@ set(PROJECT_SOURCES
         game/worldmap.cpp
         game/worldmapcity.h
         game/worldmapcity.cpp
+        game/taskrunner.h
+        game/taskrunner.cpp
         game/inventory.h
         game/inventory.cpp
         game/inventoryitem.h
@@ -89,6 +91,8 @@ set(PROJECT_SOURCES
         game/level/interaction.cpp
         game/level/combat.h
         game/level/combat.cpp
+        editor/scripteditorcontroller.h
+        editor/scripteditorcontroller.cpp
         gamemanager.h
         gamemanager.cpp
         game.h

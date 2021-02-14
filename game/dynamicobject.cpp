@@ -4,6 +4,7 @@
 
 DynamicObject::DynamicObject(QObject *parent) : Sprite(parent)
 {
+  taskManager = new TaskRunner(this);
   connect(&tick, &QTimer::timeout, this, &DynamicObject::onTicked);
   connect(this, &Sprite::movementFinished, this, &DynamicObject::onMovementEnded);
   connect(this, &DynamicObject::reachedDestination, this, &DynamicObject::onDestinationReached);
@@ -15,6 +16,7 @@ void DynamicObject::setScript(const QString& name)
   QJSValue callback = script.property("initialize");
 
   scriptName = name;
+  taskManager->setLocalModule(script);
   if (callback.isCallable())
   {
     QJSValueList args;
@@ -111,6 +113,12 @@ QStringList DynamicObject::getAvailableInteractions()
   return QStringList();
 }
 
+void DynamicObject::update(qint64 delta)
+{
+  Sprite::update(delta);
+  taskManager->update(delta);
+}
+
 void DynamicObject::load(const QJsonObject& data)
 {
   objectName = data["objectName"].toString();
@@ -130,6 +138,8 @@ void DynamicObject::load(const QJsonObject& data)
   dataStore   = data["dataStore"].toObject();
   Sprite::load(data);
   setScript(scriptName);
+  taskManager->setLocalModule(script);
+  taskManager->load(data);
 }
 
 void DynamicObject::save(QJsonObject& data) const
@@ -153,4 +163,5 @@ void DynamicObject::save(QJsonObject& data) const
   data["script"]      = scriptName;
   data["dataStore"]   = dataStore;
   Sprite::save(data);
+  taskManager->save(data);
 }

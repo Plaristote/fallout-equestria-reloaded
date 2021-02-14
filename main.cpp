@@ -21,6 +21,8 @@
 
 #include "cmap/statmodel.h"
 
+#include "editor/scripteditorcontroller.h"
+
 void registerQmlTilemap() {
   qmlRegisterType<TileMap>  ("Tiles", 1,0, "TileMap");
   qmlRegisterType<TileLayer>("Tiles", 1,0, "TileLayer");
@@ -43,6 +45,8 @@ int main(int argc, char *argv[])
   InventoryItemLibrary itemLibrary;
   itemLibrary.initialize();
 
+  ScriptEditorController scriptEditorController;
+
   QGuiApplication app(argc, argv);
   QQmlApplicationEngine engine;
 
@@ -56,14 +60,20 @@ int main(int argc, char *argv[])
   qmlRegisterType<GameManager>("Game", 1,0, "GameManager");
   qmlRegisterType<WorldMap>("Game", 1,0, "WorldMap");
   qmlRegisterType<WorldMapCity>("Game", 1,0, "WorldMapCity");
+
   registerQmlTilemap();
+  // GAME EDITOR
+  qmlRegisterType<QmlSpriteAnimation>("Game", 1,0, "SpriteAnimation");
+  // END GAME EDITOR
 
   GameManager* gameManager = new GameManager();
 
   engine.rootContext()->setContextProperty("gameManager", gameManager);
   engine.rootContext()->setContextProperty("animationLibrary", &animationLibrary);
+  engine.rootContext()->setContextProperty("itemLibrary", &itemLibrary);
   engine.rootContext()->setContextProperty("scriptPath", scriptPath);
   engine.rootContext()->setContextProperty("assetPath", assetPath);
+  engine.rootContext()->setContextProperty("scriptController", &scriptEditorController);
 
   const QUrl url(QStringLiteral("qrc:/main.qml"));
   QObject::connect(&engine, &QQmlApplicationEngine::objectCreated, &app, [url](QObject *obj, const QUrl &objUrl)

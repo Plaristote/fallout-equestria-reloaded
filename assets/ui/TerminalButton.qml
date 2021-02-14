@@ -2,7 +2,7 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 
 Button {
-  property color backgroundColor: down ? "lightgreen" : "transparent"
+  property color backgroundColor: down ? "green" : "transparent"
 
   id: button
   height: 15
@@ -14,7 +14,7 @@ Button {
     color: "white"
   }
   background: Rectangle {
-    border.color: "lightgreen"
+    border.color: "green"
     color: backgroundColor
     radius: 5
   }

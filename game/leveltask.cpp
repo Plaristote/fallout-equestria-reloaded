@@ -51,6 +51,7 @@ void LevelTask::loadObjectsFromTilemap()
   displayConsoleMessage("Level loaded from TileMap");
 
   // TODO thatz tezt data
+  /*
   CharacterParty* otherParty = new CharacterParty(this);
   Character* otherChar = new Character;
   otherChar->setStatistics(Game::get()->getDataEngine()->makeStatModel("tintin", "toto"));
@@ -62,6 +63,7 @@ void LevelTask::loadObjectsFromTilemap()
 
   insertPartyIntoZone(Game::get()->getPlayerParty());
   insertPartyIntoZone(otherParty);
+  */
   // END tezt data
 
   for (QJsonObject objectData : tilemap->getObjects())
@@ -152,7 +154,7 @@ void LevelTask::loadObjectsFromTilemap()
       object->setScript(scriptName);
     registerDynamicObject(object);
   }
-  moveTo(otherChar, 0, 0);
+  //moveTo(otherChar, 0, 0);
 }
 
 void LevelTask::loadObjectsFromDataEngine(DataEngine* dataEngine)

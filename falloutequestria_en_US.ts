@@ -4,17 +4,17 @@
 <context>
     <name>CharacterSheet</name>
     <message>
-        <location filename="ui/CharacterSheet.qml" line="99"/>
+        <location filename="ui/CharacterSheet.qml" line="101"/>
         <source>Available skill points</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="ui/CharacterSheet.qml" line="175"/>
+        <location filename="ui/CharacterSheet.qml" line="177"/>
         <source>Confirm</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="ui/CharacterSheet.qml" line="180"/>
+        <location filename="ui/CharacterSheet.qml" line="182"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
@@ -30,17 +30,17 @@
 <context>
     <name>Experience</name>
     <message>
-        <location filename="cmap/Experience.qml" line="17"/>
+        <location filename="cmap/Experience.qml" line="19"/>
         <source>Level</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="cmap/Experience.qml" line="22"/>
+        <location filename="cmap/Experience.qml" line="40"/>
         <source>Experience</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="cmap/Experience.qml" line="27"/>
+        <location filename="cmap/Experience.qml" line="45"/>
         <source>Next level</source>
         <translation type="unfinished"></translation>
     </message>
