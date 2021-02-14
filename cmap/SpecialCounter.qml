@@ -7,6 +7,8 @@ RowLayout {
   Label {
     Layout.fillWidth: true
     text: qsTr("Available points")
+    font.family: application.titleFontName
+    font.pointSize: 14
     color: "yellow"
     horizontalAlignment: Qt.AlignHCenter
     verticalAlignment: Qt.AlignVCenter
@@ -15,6 +17,8 @@ RowLayout {
   Label {
     Layout.minimumWidth: 50
     text: characterSheet.specialPoints
+    font.family: application.consoleFontName
+    font.pointSize: 12
     color: "white"
     padding: 5
     horizontalAlignment: Qt.AlignHCenter

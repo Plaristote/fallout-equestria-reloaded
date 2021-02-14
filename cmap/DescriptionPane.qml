@@ -11,8 +11,9 @@ Pane {
   Text {
     id: descriptionTitle
     text: selectedProperty || qsTr("Cutie Mark Acquisition Program")
-    font.bold: true
+    font.family: application.titleFontName
     font.pointSize: 15
+    font.letterSpacing: 2
     wrapMode: Text.WordWrap
     width: parent.width
   }
@@ -44,6 +45,8 @@ Pane {
       text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. In risus tellus, commodo vitae pretium at, viverra elementum velit. Phasellus et finibus magna. Praesent fermentum, tortor eu vehicula hendrerit, magna sem iaculis metus, vitae placerat quam ligula vitae nibh. In accumsan sodales tortor, nec efficitur tortor bibendum in. In hac habitasse platea dictumst. Vivamus pellentesque ex sit amet mauris fringilla porta. Phasellus mollis enim nec lacus tempus, sit amet pretium nulla vestibulum. Suspendisse non tortor quis tortor auctor posuere nec a ligula. Suspendisse a lectus sollicitudin, feugiat dolor consectetur, tempus ligula. Etiam at diam at quam rutrum fringilla. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam facilisis sodales eros eget viverra."
       wrapMode: Text.WordWrap
       width: parent.width
+      font.family: application.consoleFontName
+      font.pointSize: 8
     }
   }
 }

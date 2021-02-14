@@ -46,4 +46,25 @@ Window {
       gameLoading = "";
     }
   }
+
+  property alias consoleFontName: consoleFont.name
+  property alias titleFontName: titleFont.name
+
+  FontLoader {
+    id: consoleFont
+    source: "./assets/fonts/JH_FALLOUT.TTF"
+    onStatusChanged: console.log("Loaded font", parent.name, parent.status);
+    Component.onCompleted: {
+      console.log("trololo", status);
+    }
+  }
+
+  FontLoader {
+    id: titleFont
+    source: "./assets/fonts/fallout.ttf"
+    onStatusChanged: console.log("loaded font", parent.name, parent.status)
+    Component.onCompleted: {
+      console.log("tralala", status);
+    }
+  }
 }

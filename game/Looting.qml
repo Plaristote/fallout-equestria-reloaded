@@ -116,11 +116,66 @@ Pane {
         anchors.margins: 10
 
         Pane {
+          id: selectedObjectPreview
           background: UiStyle.TerminalPane {}
-          height: 50;
+          height: selectedObjectPreviewColumn.height + 50
           anchors.left: parent.left
           anchors.right: parent.right
           anchors.margins: 10
+
+          Column {
+            id: selectedObjectPreviewColumn
+            spacing: 5
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.leftMargin: 10
+            anchors.rightMargin: 10
+
+            Image {
+              anchors.horizontalCenter: parent.horizontalCenter
+              id: selectedObjectPreviewPicture
+              source:         "../" + selectedObject.getSpriteSource()
+              sourceClipRect: selectedObject.getClippedRect()
+              height:         selectedObject.getClippedRect().height
+              width:          selectedObject.getClippedRect().width
+            }
+
+            Text {
+              font.family: application.consoleFontName
+              font.pointSize: 12
+              text: selectedObject.objectName
+              color: "white"
+            }
+
+            Rectangle {
+              height: 1
+              color: "green"
+              anchors { left: parent.left; right: parent.right }
+            }
+
+            Text {
+              font.family: application.consoleFontName
+              font.pointSize: 8
+              text: "Lorem ipsum dolor sit amet, consetitur subis pacem para bellum alea jacta est perseverare in vine diabolicum."
+              width: parent.width
+              wrapMode: Text.WordWrap
+              horizontalAlignment: Text.AlignJustify
+              color: "white"
+            }
+
+            Rectangle {
+              height: 1
+              color: "green"
+              anchors { left: parent.left; right: parent.right }
+            }
+
+            Text {
+              font.family: application.consoleFontName
+              font.pointSize: 8
+              text: "Weight: " + selectedObject.weight
+              color: "white"
+            }
+          }
         }
 
         MenuButton {

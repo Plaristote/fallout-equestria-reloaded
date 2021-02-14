@@ -128,5 +128,7 @@
         <file>editor/EditorSelectPanel.qml</file>
         <file>editor/LevelEditor.qml</file>
         <file>editor/CharacterObjectEditor.qml</file>
+        <file>assets/fonts/fallout.ttf</file>
+        <file>assets/fonts/JH_FALLOUT.TTF</file>
     </qresource>
 </RCC>

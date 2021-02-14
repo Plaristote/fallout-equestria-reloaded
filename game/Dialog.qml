@@ -65,6 +65,7 @@ Item {
         wrapMode: Text.WordWrap
         horizontalAlignment: Qt.AlignJustify
         width: parent.width - 15
+        font.family: application.consoleFontName
       }
     }
   }
@@ -111,8 +112,9 @@ Item {
           model: controller.options
           delegate: Button {
             text: "> " + controller.getOptionText(controller.options[index])
+            font.family: application.consoleFontName
             hoverEnabled: true
-            contentItem: Text { color: parent.hovered ? "white" : "green"; text: parent.text; wrapMode: Text.WordWrap }
+            contentItem: Text { color: parent.hovered ? "white" : "green"; text: parent.text; font: parent.font; wrapMode: Text.WordWrap }
             background: Rectangle { color: "transparent" }
             onClicked: controller.selectOption(controller.options[index])
             width: answersFlickable.width - 10

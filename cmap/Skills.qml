@@ -45,12 +45,16 @@ Pane {
             text: qsTr(propertyName)
             color: textColor
             width: Math.max(150, root.width - (root.canEdit() ? 150 : 50))
+            font.family: application.consoleFontName
+            font.pointSize: 8
             MouseArea { anchors.fill: parent; onClicked: root.selectProperty(propertyName) }
           }
           Text {
             text: characterSheet[root.list[index]] + "%"
             color: textColor
             width: 50
+            font.family: application.consoleFontName
+            font.pointSize: 8
             MouseArea { anchors.fill: parent; onClicked: root.selectProperty(propertyName) }
           }
           UiStyle.TerminalButton {

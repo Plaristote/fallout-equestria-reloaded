@@ -35,6 +35,9 @@ Repeater {
       id: specialName
       Layout.minimumWidth: 100
       text: list[index]
+      font.family: application.titleFontName
+      font.pointSize: 16
+      font.letterSpacing: 3
       color: "white"
       horizontalAlignment: Qt.AlignHCenter
       verticalAlignment: Qt.AlignVCenter
@@ -44,10 +47,12 @@ Repeater {
     Label {
       Layout.minimumWidth: 50
       text: characterSheet[propertyName [index]]
+      font.family: application.consoleFontName
+      font.pointSize: 8
       color: "white"
       horizontalAlignment: Qt.AlignHCenter
       verticalAlignment: Qt.AlignVCenter
-      padding: 5
+      padding: 10
       background: UiStyle.TerminalPane {}
       MouseArea { anchors.fill: parent; onClicked: selectProperty(propertyName[index]) }
     }
@@ -55,10 +60,12 @@ Repeater {
       id: specialQualifier
       Layout.minimumWidth: 100
       text: getQualifierLabel(characterSheet[propertyName [index]])
+      font.family: application.consoleFontName
+      font.pointSize: 8
       color: "white"
       horizontalAlignment: Qt.AlignHCenter
       verticalAlignment: Qt.AlignVCenter
-      padding: 5
+      padding: 10
       background: UiStyle.TerminalPane {}
       MouseArea { anchors.fill: parent; onClicked: selectProperty(propertyName[index]) }
     }

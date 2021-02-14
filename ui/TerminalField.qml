@@ -4,6 +4,7 @@ import QtQuick.Controls 2.15
 TextField {
   id: field
   color: "green"
+  font.family: application.consoleFontName
   background: Rectangle {
     color: "transparent";
     border.color: field.focus ? "white" : "green";

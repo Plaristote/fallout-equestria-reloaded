@@ -39,6 +39,10 @@ Pane {
             anchors.bottom: parent.bottom
             anchors.bottomMargin: 10
             text: inventoryItem.objectName + (itemCount > 1 ? `x${itemCount}` : "")
+            font.family: application.consoleFontName
+            font.pointSize: 8
+            style: Text.Raised
+            styleColor: "black"
             color: "white"
           }
           MouseArea {

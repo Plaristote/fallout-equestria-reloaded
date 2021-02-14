@@ -32,13 +32,17 @@ Pane {
         property color textColor: selectedProperty == propertyName ? "green" : "white"
         Text {
           text: qsTr(propertyName)
+          font.family: application.consoleFontName
+          font.pointSize: 8
           color: textColor
           Layout.alignment: Qt.AlignLeft
-          width: 150
+          width: 200
           MouseArea { anchors.fill: parent; onClicked: selectProperty(propertyName) }
         }
         Text {
           text: characterSheet[propertyName]
+          font.family: application.consoleFontName
+          font.pointSize: 8
           color: textColor
           Layout.alignment: Qt.AlignRight
           MouseArea { anchors.fill: parent; onClicked: selectProperty(propertyName) }

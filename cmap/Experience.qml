@@ -18,6 +18,8 @@ Pane {
       Layout.alignment: Qt.AlignCenter
       text: qsTr("Level") + ": " + characterSheet.level
       color: "white"
+      font.family: application.consoleFontName
+      font.pointSize: 8
 
       TerminalButton {
         visible: editable
@@ -39,11 +41,15 @@ Pane {
       Layout.alignment: Qt.AlignCenter
       text: qsTr("Experience") + ": " + characterSheet.experience
       color: "white"
+      font.family: application.consoleFontName
+      font.pointSize: 8
     }
     Text {
       Layout.alignment: Qt.AlignCenter
       text: qsTr("Next level") + ": " + characterSheet.xpNextLevel
       color: "white"
+      font.family: application.consoleFontName
+      font.pointSize: 8
     }
   }
 }

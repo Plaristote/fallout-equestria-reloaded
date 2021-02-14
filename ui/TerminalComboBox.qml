@@ -9,6 +9,7 @@ ComboBox {
     text: root.currentText
     color: "green"
     padding: 10
+    font.family: application.consoleFontName
   }
   background: Rectangle {
     border.color: "green"

@@ -23,12 +23,16 @@ Pane {
         text: qsTr(parent.propertyName)
         Layout.alignment: Qt.AlignLeft
         color: parent.textColor
+        font.family: application.consoleFontName
+        font.pointSize: 8
         MouseArea { anchors.fill: parent; onClicked: selectProperty(parent.parent.propertyName) }
       }
       Label {
         text: characterSheet.hitPoints + '/' + characterSheet.maxHitPoints
         Layout.alignment: Qt.AlignRight
         color: parent.textColor
+        font.family: application.consoleFontName
+        font.pointSize: 8
         MouseArea { anchors.fill: parent; onClicked: selectProperty(parent.parent.propertyName) }
       }
     }
@@ -41,6 +45,8 @@ Pane {
 
         text: qsTr(injuries[index])
         color: false ? textColor : "gray"
+        font.family: application.consoleFontName
+        font.pointSize: 8
         MouseArea { anchors.fill: parent; onClicked: selectProperty(parent.propertyName) }
       }
     }

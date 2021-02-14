@@ -6,6 +6,7 @@ Button {
 
   id: button
   height: 15
+  font.family: application.consoleFontName
   contentItem: Text {
     horizontalAlignment: Text.AlignHCenter
     verticalAlignment: Text.AlignVCenter

@@ -99,6 +99,8 @@ Pane {
       visible: editMode || createMode
       Label {
         text: qsTr("Available skill points")
+        font.family: application.titleFontName
+        font.pointSize: 14
         color: "white"
         padding: 10
         leftPadding: 30
@@ -107,6 +109,8 @@ Pane {
       }
       Label {
         text: characterSheet.skillPoints
+        font.family: application.consoleFontName
+        font.pointSize: 12
         color: "white"
         padding: 10
         background: UiStyle.TerminalPane {}

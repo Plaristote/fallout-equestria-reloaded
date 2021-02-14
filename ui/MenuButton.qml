@@ -4,6 +4,9 @@ import "qrc:/assets/ui" as UiStyle
 
 Button {
   font.bold: true
+  font.family: application.titleFontName
+  font.pointSize: 19
+  font.letterSpacing: 3
   contentItem: Text {
     horizontalAlignment: Text.AlignHCenter
     verticalAlignment: Text.AlignVCenter

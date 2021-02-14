@@ -17,6 +17,8 @@ Pane {
       model: characterSheet.traits
       delegate: Text {
         text: root.characterSheet.traits[index]; color: "lightgreen"
+        font.family: application.consoleFontName
+        font.pointSize: 8
         MouseArea { anchors.fill: parent; onClicked: selectProperty(characterSheet.traits[index]) }
       }
     }
@@ -29,6 +31,8 @@ Pane {
       model: characterSheet.perks
       delegate: Text {
         text: root.characterSheet.traits[index]; color: "lightgreen"
+        font.family: application.consoleFontName
+        font.pointSize: 8
         MouseArea { anchors.fill: parent; onClicked: selectProperty(root.characterSheet.perks[index]) }
       }
     }

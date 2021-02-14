@@ -15,17 +15,27 @@ Pane {
 
   Text {
     id: title
-    text: qsTr("Traits") + " - " + (maxTraits - characterSheet.traits.length)
+    text: qsTr("Available traits") + ": " + (maxTraits - characterSheet.traits.length)
     color: "white"
     font.bold: true
-    font.pointSize: 15
+    font.pointSize: 12
+    font.family: application.consoleFontName
     width: parent.width
+  }
+
+  Rectangle {
+    id: titleSeparator
+    color: "green"
+    height: 1
+    anchors { left: parent.left; top: title.bottom; right: parent.right }
+    anchors.margins: 10
   }
 
   Flickable {
     clip: true
     contentHeight: row.height
-    anchors { top: title.bottom; left: parent.left; bottom: parent.bottom; right: parent.right }
+    anchors { top: titleSeparator.bottom; left: parent.left; bottom: parent.bottom; right: parent.right }
+    anchors.topMargin: 10
 
     RowLayout {
       id: row
@@ -61,6 +71,8 @@ Pane {
               Text {
                 text: traitName
                 color: textColor
+                font.family: application.consoleFontName
+                font.pointSize: 8
                 MouseArea { anchors.fill: parent; onClicked: selectProperty(traitName); }
               }
             }
