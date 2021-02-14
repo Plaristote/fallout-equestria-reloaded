@@ -11,6 +11,7 @@ Canvas {
   property QtObject levelController;
   property point origin;
   property var controller;
+  property bool renderRoofs: true
 
   Component.onCompleted: {
     preloadImages();

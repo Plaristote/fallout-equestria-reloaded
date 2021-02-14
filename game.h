@@ -28,7 +28,7 @@ public:
   ~Game();
 
   void loadFromDataEngine();
-  void save();
+  Q_INVOKABLE void save();
   void newPlayerParty(StatModel*);
 
   Q_INVOKABLE void appendToConsole(const QString&);
@@ -38,7 +38,7 @@ public:
 
   static Game* get() { return instance; }
 
-  DataEngine* getDataEngine() const { return dataEngine; }
+  Q_INVOKABLE DataEngine* getDataEngine() const { return dataEngine; }
   TimeManager* getTimeManager() const { return timeManager; }
   LevelTask* getLevel() const { return currentLevel; }
   QJSEngine& getScriptEngine() { return scriptEngine; }

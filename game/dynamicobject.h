@@ -34,6 +34,7 @@ public:
   void setScript(const QString& name);
   TaskRunner* getTaskManager() { return taskManager; }
 
+  Q_INVOKABLE QString getObjectType() const { return metaObject()->className(); }
   Q_INVOKABLE QPoint getPosition() const { return position; }
   Q_INVOKABLE virtual QPoint getInteractionPosition() const { return interactionPosition; }
   virtual QStringList getAvailableInteractions();

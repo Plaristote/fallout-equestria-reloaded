@@ -127,5 +127,6 @@
         <file>editor/NpcEditor.qml</file>
         <file>editor/EditorSelectPanel.qml</file>
         <file>editor/LevelEditor.qml</file>
+        <file>editor/CharacterObjectEditor.qml</file>
     </qresource>
 </RCC>

@@ -26,6 +26,7 @@ public:
 
   bool startCharacterMoveToTile(Character*, int x, int y);
   void setCharacterPosition(Character*, int x, int y);
+  Q_INVOKABLE void setObjectPosition(DynamicObject*, int x, int y);
 
 protected slots:
   void onMovementFinished(Character*);

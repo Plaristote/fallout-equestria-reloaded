@@ -12,8 +12,8 @@ class DataEngine : public QObject
 public:
   explicit DataEngine(QObject *parent = nullptr);
 
-  void loadFromFile(const QString& path);
-  void saveToFile(const QString &path);
+  Q_INVOKABLE void loadFromFile(const QString& path);
+  Q_INVOKABLE void saveToFile(const QString &path);
 
   void         setCurrentLevel(const QString&);
   QString      getCurrentLevel() const;

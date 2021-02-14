@@ -3,6 +3,7 @@
 
 # include <QObject>
 # include <QElapsedTimer>
+# include <QQmlListProperty>
 # include "tilemap/tilemap.h"
 # include "levelgrid.h"
 # include "timermanager.h"
@@ -24,6 +25,7 @@ class LevelTask : public CombatComponent
   Q_PROPERTY(bool       paused  MEMBER paused NOTIFY pausedChanged)
   Q_PROPERTY(TileMap*   tilemap READ getTileMap NOTIFY tilemapReady)
   Q_PROPERTY(Character* player READ getPlayer)
+  Q_PROPERTY(QQmlListProperty<DynamicObject> dynamicObjects READ getQmlObjects NOTIFY objectsChanged)
 public:
   explicit LevelTask(QObject *parent = nullptr);
 
@@ -44,14 +46,23 @@ public:
   void unregisterDynamicObject(DynamicObject*);
 
   Q_INVOKABLE QPoint getRenderPositionForTile(int x, int y);
+  Q_INVOKABLE DynamicObject* getObjectByName(const QString&);
+
+  Q_INVOKABLE Character* generateCharacter(const QString& name, const QString& characterSheet);
+  Q_INVOKABLE StorageObject* generateStorageObject(const QString& name);
+
+  QQmlListProperty<DynamicObject> getQmlObjects() { return QQmlListProperty<DynamicObject>(this, &objects); }
 
 signals:
   void updated();
   void pausedChanged();
+  void objectsChanged();
   void tilemapReady();
   void displayConsoleMessage(const QString&);
   void exitZoneEntered(TileZone*);
   void cameraFocusRequired(DynamicObject*);
+  void clickedOnCase(int x, int y);
+  void clickedOnObject(DynamicObject*);
 
 private slots:
   void update();

@@ -17,8 +17,8 @@ public:
 
   void update(qint64);
 
-  void setSpriteName(const QString& value) { name = value; }
-  void setAnimation(const QString& animationName);
+  Q_INVOKABLE void setSpriteName(const QString& value) { name = value; }
+  Q_INVOKABLE void setAnimation(const QString& animationName);
   void moveToCoordinates(QPoint coordinates);
   void setRenderPosition(QPoint coordinates);
   void setSpriteAnimation(const SpriteAnimation& value) { animation = value; }

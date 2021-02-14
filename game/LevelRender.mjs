@@ -26,9 +26,11 @@ export class Controller {
     this.eachCase(this.renderTile.bind(this));
     this.renderZones();
     this.eachCase(this.renderCoordinates.bind(this));
-    this.startClipAroundPlayer();
-    this.eachCase(this.renderRoofs.bind(this));
-    this.stopClipAroundPlayer();
+    if (this.canvas.renderRoofs) {
+      this.startClipAroundPlayer();
+      this.eachCase(this.renderRoofs.bind(this));
+      this.stopClipAroundPlayer();
+    }
   }
 
   eachCase(callback) {

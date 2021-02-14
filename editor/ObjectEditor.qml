@@ -203,7 +203,7 @@ Item {
         id: saveButton
         anchors.bottom: parent.bottom
         anchors.right: parent.right
-        text: "save"
+        text: "Save"
         onClicked: root.save()
       }
     }

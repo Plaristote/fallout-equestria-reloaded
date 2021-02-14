@@ -11,6 +11,9 @@ Pane {
 
   Controller {
     id: game
+    Component.onCompleted: {
+      getDataEngine().loadFromFile("./assets/game.json");
+    }
   }
 
   TabRow {

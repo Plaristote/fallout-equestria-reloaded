@@ -229,25 +229,45 @@ void LevelTask::tileClicked(int x, int y)
 {
   DynamicObject* occupant = grid->getOccupant(x, y);
 
-  // Cancel interaction if any is running
-  emit interactionRequired(nullptr, QStringList());
-  // Infer action type and proceed
-  if (occupant && openInteractionMenu(occupant))
-    return ;
-  else if (!moveTo(getPlayer(), x, y))
-    emit displayConsoleMessage("No path towards [" + QString::number(x) + ',' + QString::number(y) + ']');
+  if (getPlayer())
+  {
+    // Cancel interaction if any is running
+    emit interactionRequired(nullptr, QStringList());
+    // Infer action type and proceed
+    if (occupant && openInteractionMenu(occupant))
+      return ;
+    else if (!moveTo(getPlayer(), x, y))
+      emit displayConsoleMessage("No path towards [" + QString::number(x) + ',' + QString::number(y) + ']');
+  }
+  else
+  {
+    emit clickedOnCase(x, y);
+    emit clickedOnObject(occupant);
+  }
 }
 
 void LevelTask::registerDynamicObject(DynamicObject* object)
 {
   objects.push_back(object);
   CombatComponent::registerDynamicObject(object);
+  emit objectsChanged();
 }
 
 void LevelTask::unregisterDynamicObject(DynamicObject* object)
 {
   objects.removeAll(object);
   CombatComponent::unregisterDynamicObject(object);
+  emit objectsChanged();
+}
+
+DynamicObject* LevelTask::getObjectByName(const QString& name)
+{
+  for (DynamicObject* object : objects)
+  {
+    if (object->getObjectName() == name)
+      return object;
+  }
+  return nullptr;
 }
 
 QPoint LevelTask::getRenderPositionForTile(int x, int y)
@@ -278,4 +298,22 @@ void LevelTask::update()
   for (DynamicObject* object : objects)
     object->update(delta);
   emit updated();
+}
+
+Character* LevelTask::generateCharacter(const QString &name, const QString &characterSheet)
+{
+  Character* object = new Character(this);
+  object->setObjectName(name);
+  object->setStatistics(Game::get()->getDataEngine()->makeStatModel(characterSheet));
+  registerDynamicObject(object);
+  return object;
+}
+
+StorageObject* LevelTask::generateStorageObject(const QString &name)
+{
+  StorageObject* object = new StorageObject(this);
+
+  object->setObjectName(name);
+  registerDynamicObject(object);
+  return object;
 }

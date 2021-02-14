@@ -27,7 +27,7 @@ void DataEngine::setTimeData(const QJsonObject& timeData)
 
 void DataEngine::loadFromFile(const QString &path)
 {
-  QFile in("./saves/" + path);
+  QFile in(path.startsWith("./assets") ? path : "./saves/" + path);
 
   if (in.open(QIODevice::ReadOnly))
   {
@@ -44,7 +44,7 @@ void DataEngine::loadFromFile(const QString &path)
 
 void DataEngine::saveToFile(const QString &path)
 {
-  QFile out("./saves/" + path);
+  QFile out(path.startsWith("./assets") ? path : "./saves/" + path);
 
   if (out.open(QIODevice::WriteOnly))
     out.write(QJsonDocument(data).toJson());

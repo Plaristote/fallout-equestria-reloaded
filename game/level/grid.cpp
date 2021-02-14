@@ -73,11 +73,16 @@ bool GridComponent::startCharacterMoveToTile(Character* character, int x, int y)
 
 void GridComponent::setCharacterPosition(Character* character, int x, int y)
 {
+  setObjectPosition(character, x, y);
+}
+
+void GridComponent::setObjectPosition(DynamicObject* object, int x, int y)
+{
   QPoint renderPosition = getRenderPositionForTile(x, y);
 
-  grid->moveObject(character, x, y);
-  character->setPosition(QPoint(x, y));
-  character->setRenderPosition(renderPosition);
+  grid->moveObject(object, x, y);
+  object->setPosition(QPoint(x, y));
+  object->setRenderPosition(renderPosition);
 }
 
 bool GridComponent::moveTo(Character* character, QPoint targetPosition)
