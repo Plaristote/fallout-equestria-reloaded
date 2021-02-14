@@ -75,7 +75,7 @@ export class Controller {
     const wall = this.layers.walls.getTile(x, y);
     const dynamicObject = this.level.getOccupantAt(x, y);
 
-    if (wall)
+    if (wall && this.canvas.renderWalls)
       this.renderWall(wall, x, y);
     else if (dynamicObject)
       this.renderSprite(dynamicObject);
@@ -206,7 +206,7 @@ export class Controller {
     this.context.clearRect(-this.origin.x, -this.origin.y, this.canvas.width * 100, this.canvas.height * 100);
   }
 
-  onMouseClick(mouse, mouseX, mouseY) {
+  getHoveredCase(mouseX, mouseY) {
     const posX = mouseX - this.canvas.origin.x;
     const posY = mouseY - this.canvas.origin.y;
 
@@ -216,11 +216,17 @@ export class Controller {
         if (posX >= pos.x && posX <= pos.x + this.tileSize.width &&
             posY >= pos.y && posY <= pos.y + this.tileSize.height)
         {
-          this.level.displayConsoleMessage(`Going to [${x}, ${y}]`);
-          this.level.tileClicked(x, y);
-          return ;
+          return [x, y];
         }
       }
     }
+    return null;
+  }
+
+  onMouseClick(mouse, mouseX, mouseY) {
+    const coords = this.getHoveredCase(mouseX, mouseY);
+
+    if (coords !== null)
+      this.level.tileClicked(coords[0], coords[1])
   }
 };

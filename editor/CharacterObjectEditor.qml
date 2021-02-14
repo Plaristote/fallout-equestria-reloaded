@@ -30,7 +30,7 @@ Pane {
     Label { text: "Script"; color: "green"; }
     TerminalComboBox {
       id: characterScriptInput
-      model: scriptController.getScripts("npcs")
+      model: scriptController.getScripts("pnjs")
       onCurrentTextChanged: {
         selectedCharacter.setScript(currentText);
       }
@@ -38,13 +38,15 @@ Pane {
 
     Label { text: "Dialog"; color: "green"; }
     TerminalComboBox {
-      model: []
+      model: scriptController.getScripts("dialogs")
+      //currentIndex: scriptController.getScript("dialogs").indexOf(character.getDialog())
     }
 
     Label { text: "Sprite"; color: "green"; }
     TerminalComboBox {
       id: characterSpriteInput
       model: animationLibrary.getGroups();
+      currentIndex: model.indexOf(character.getSpriteName())
       onCurrentTextChanged: {
         character.setSpriteName(currentText);
       }
@@ -54,6 +56,7 @@ Pane {
     TerminalComboBox {
       id: characterAnimationInput
       model: animationLibrary.getAnimationList(characterSpriteInput.currentText);
+      currentIndex: model.indexOf(character.getAnimation())
       onCurrentTextChanged: {
         character.setAnimation(currentText);
       }

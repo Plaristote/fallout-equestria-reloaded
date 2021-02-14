@@ -12,6 +12,9 @@ Canvas {
   property point origin;
   property var controller;
   property bool renderRoofs: true
+  property bool renderWalls: true
+  property bool showHoverCoordinates: false
+  property var hoverTile: []
 
   Component.onCompleted: {
     preloadImages();
@@ -40,9 +43,20 @@ Canvas {
   MouseArea {
     anchors.fill: parent
     enabled: !levelController.paused
+    hoverEnabled: showHoverCoordinates
     onClicked: {
       controller.onMouseClick(mouse, mouseX, mouseY);
     }
+    onMouseXChanged: hoverTile = controller.getHoveredCase(mouseX, mouseY);
+    onMouseYChanged: hoverTile = controller.getHoveredCase(mouseX, mouseY);
+
+  }
+
+  Text {
+    anchors.top: parent.top; anchors.right: parent.right
+    color: "white"
+    text: hoverTile !== null ? hoverTile[0] + '/' + hoverTile[1] : ''
+    visible: showHoverCoordinates
   }
 
   function initializeRenderer() {

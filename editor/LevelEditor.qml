@@ -19,7 +19,8 @@ Item {
     selectedObject = selectedCharacter = null;
     gameController.goToLevel(currentLevelName.replace(".json", ""));
     updateObjectList();
-    //gameController.level.paused = false;
+    canvas.translate(-canvas.origin.x, -canvas.origin.y);
+    //gameController.level.paused = true;
   }
 
   onSelectedObjectNameChanged: {
@@ -78,7 +79,8 @@ Item {
         id: canvas
         levelController: gameController.level
         renderRoofs: displayRoofCheckbox.checked
-        //anchors { top: parent.top; left: parent.left; bottom: parent.bottom; right: parent.right }
+        renderWalls: displayWallsCheckbox.checked
+        showHoverCoordinates: true
       }
 
       GameComponents.ScreenEdges {
@@ -100,6 +102,15 @@ Item {
           Text {
             anchors.left: parent.right; anchors.verticalCenter: parent.verticalCenter
             text: "Display roofs"
+            color: "white"
+          }
+        }
+
+        CheckBox {
+          id: displayWallsCheckbox
+          Text {
+            anchors.left: parent.right; anchors.verticalCenter: parent.verticalCenter
+            text: "Display walls"
             color: "white"
           }
         }
