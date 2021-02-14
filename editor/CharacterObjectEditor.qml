@@ -6,7 +6,6 @@ import "../ui"
 import "../game" as GameComponents
 import Game 1.0
 
-
 Pane {
   property QtObject gameController
   property QtObject character
@@ -16,6 +15,9 @@ Pane {
   function positionChanged() {
     gameController.level.setObjectPosition(character, parseInt(characterXInput.text), parseInt(characterYInput.text))
   }
+
+  signal openInventoryClicked()
+  signal removeClicked()
 
   Grid {
     columns: 2
@@ -39,6 +41,7 @@ Pane {
     Label { text: "Dialog"; color: "green"; }
     TerminalComboBox {
       model: scriptController.getScripts("dialogs")
+      enabled: false
       //currentIndex: scriptController.getScript("dialogs").indexOf(character.getDialog())
     }
 
@@ -60,6 +63,24 @@ Pane {
       onCurrentTextChanged: {
         character.setAnimation(currentText);
       }
+    }
+
+    TerminalButton {
+      Layout.columnSpan: 2
+      Layout.alignment: Qt.AlignCenter
+      text: "Inventory"
+      onClicked: openInventoryClicked()
+      padding: 20
+      height: 40
+    }
+
+    TerminalButton {
+      Layout.columnSpan: 2
+      Layout.alignment: Qt.AlignCenter
+      text: "Remove"
+      onClicked: removeClicked()
+      padding: 20
+      height: 40
     }
   }
 }

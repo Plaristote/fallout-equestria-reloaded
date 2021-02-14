@@ -24,6 +24,8 @@ Item {
 
   SpriteAnimation {
     id: spriteAnimation
+    frameCount: 0
+    frameInterval: 10
   }
 
   Dialog {

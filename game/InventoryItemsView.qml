@@ -16,8 +16,9 @@ Pane {
 
   Flickable {
     clip: true
-    contentHeight: characterInventoryView.height
+    contentHeight: characterInventoryItemsView.height
     anchors.fill: parent
+    anchors.bottomMargin: 15
 
     GridLayout {
       id: characterInventoryItemsView
@@ -48,15 +49,19 @@ Pane {
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.bottom: parent.bottom
             anchors.bottomMargin: 5
-            text: inventoryItem.objectName + (itemCount > 1 ? `x${itemCount}` : "")
+            text: itemCount > 1 ? `x${itemCount}` : ""
             font.family: application.consoleFontName
             font.pointSize: 8
             style: Text.Raised
             styleColor: "black"
             color: "white"
+            width: root.itemIconWidth
+            wrapMode: Text.WrapAnywhere
           }
           MouseArea {
+            id: itemMouseArea
             anchors.fill: parent
+            hoverEnabled: true
             onClicked: root.itemSelected(inventoryItem);
           }
         }

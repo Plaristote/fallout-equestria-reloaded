@@ -44,7 +44,7 @@ void Inventory::addItemOfType(const QString &name, int quantity)
   {
     if (inventoryItem->getObjectName() == name && inventoryItem->isGroupable())
     {
-      inventoryItem->add();
+      inventoryItem->add(quantity);
       return ;
     }
   }
@@ -52,7 +52,7 @@ void Inventory::addItemOfType(const QString &name, int quantity)
   item->setObjectName(name);
   if (quantity > 1)
     item->add(quantity - 1);
-  emit itemsChanged();
+  addItem(item);
 }
 
 bool Inventory::removeItemOfType(const QString &name, int quantity)

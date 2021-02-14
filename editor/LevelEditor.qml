@@ -26,11 +26,11 @@ Item {
   onSelectedObjectNameChanged: {
     if (selectedObjectName !== "") {
       selectedObject = gameController.level.getObjectByName(selectedObjectName);
-      if (selectedObject.getObjectType() == "Character") {
+      if (selectedObject.getObjectType() === "Character") {
         console.log("selected character");
         selectedCharacter = selectedObject
       }
-      else if (selectedObject.getObjectType() == "StorageObject") {
+      else if (selectedObject.getObjectType() === "StorageObject") {
         console.log("selected storage object")
         selectedCharacter = null;
       }
@@ -84,6 +84,7 @@ Item {
       }
 
       GameComponents.ScreenEdges {
+        enabled: characterInventory.visible == false
         onMoveTop:    { canvas.translate(0, scrollSpeed); }
         onMoveLeft:   { canvas.translate(scrollSpeed, 0); }
         onMoveRight:  { canvas.translate(-scrollSpeed, 0); }
@@ -108,6 +109,7 @@ Item {
 
         CheckBox {
           id: displayWallsCheckbox
+          checked: true
           Text {
             anchors.left: parent.right; anchors.verticalCenter: parent.verticalCenter
             text: "Display walls"
@@ -133,9 +135,21 @@ Item {
           gameController: root.gameController
           Layout.fillHeight: true
           Layout.fillWidth: true
+          onOpenInventoryClicked: {
+            characterInventory.character = root.selectedCharacter;
+            characterInventory.open();
+          }
         }
       }
     }
+  }
+
+  CharacterInventoryEditor {
+    id: characterInventory
+    anchors.fill: parent
+    anchors.margins: 50
+    character: selectedCharacter
+    visible: false
   }
 
   Dialog {

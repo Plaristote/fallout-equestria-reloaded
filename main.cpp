@@ -60,6 +60,7 @@ int main(int argc, char *argv[])
   qmlRegisterType<GameManager>("Game", 1,0, "GameManager");
   qmlRegisterType<WorldMap>("Game", 1,0, "WorldMap");
   qmlRegisterType<WorldMapCity>("Game", 1,0, "WorldMapCity");
+  qmlRegisterType<Inventory>("Game", 1,0, "Inventory");
 
   registerQmlTilemap();
   // GAME EDITOR

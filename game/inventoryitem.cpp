@@ -35,8 +35,8 @@ int InventoryItem::getWeight() const
   auto itemData = InventoryItemLibrary::get()->getObject(getObjectName());
 
   if (itemData.isObject())
-    return itemData["weight"].toInt(1);
-  return 1;
+    return itemData["weight"].toInt(1) * getQuantity();
+  return getQuantity();
 }
 
 int InventoryItem::getValue() const
@@ -55,7 +55,7 @@ bool InventoryItem::isGroupable(InventoryItem* other)
   bool result   = true;
 
   if (itemData.isObject())
-    result = itemData["groupable"].toBool(result);
+    result = itemData["isGroupable"].toBool(result);
   if (callback.isCallable())
   {
     QJSValueList args;
