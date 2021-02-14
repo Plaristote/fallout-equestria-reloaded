@@ -32,8 +32,10 @@ void registerQmlTilemap() {
 
 int main(int argc, char *argv[])
 {
-  auto scriptPath = SCRIPTS_PATH;
-  auto assetPath  = ASSETS_PATH;
+  auto fileProtocol = FILE_PROTOCOL;
+  auto rootPath     = FILE_PROTOCOL + ROOT_PATH;
+  auto scriptPath   = FILE_PROTOCOL + SCRIPTS_PATH;
+  auto assetPath    = FILE_PROTOCOL + ASSETS_PATH;
 
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
   QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
@@ -72,6 +74,8 @@ int main(int argc, char *argv[])
   engine.rootContext()->setContextProperty("gameManager", gameManager);
   engine.rootContext()->setContextProperty("animationLibrary", &animationLibrary);
   engine.rootContext()->setContextProperty("itemLibrary", &itemLibrary);
+  engine.rootContext()->setContextProperty("fileProtocol", fileProtocol);
+  engine.rootContext()->setContextProperty("rootPath", rootPath);
   engine.rootContext()->setContextProperty("scriptPath", scriptPath);
   engine.rootContext()->setContextProperty("assetPath", assetPath);
   engine.rootContext()->setContextProperty("scriptController", &scriptEditorController);

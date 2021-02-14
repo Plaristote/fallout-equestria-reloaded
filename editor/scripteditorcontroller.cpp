@@ -6,7 +6,6 @@
 
 ScriptEditorController::ScriptEditorController(QObject *parent) : QObject(parent)
 {
-
 }
 
 QStringList ScriptEditorController::getScripts(const QString& type)

@@ -60,7 +60,11 @@ Canvas {
   }
 
   function initializeRenderer() {
-    controller = new LevelRender.Controller(canvas, { level: levelController, tilemap: levelController.tilemap });
+    controller = new LevelRender.Controller(canvas, {
+      level: levelController,
+      tilemap: levelController.tilemap,
+      pathPrefix: fileProtocol
+    });
   }
 
   function preloadImages() {

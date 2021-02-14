@@ -1,5 +1,6 @@
 export class Controller {
   constructor(canvas, params) {
+    this.pathPrefix = params.pathPrefix
     this.canvas   = canvas;
     this.context  = canvas.getContext("2d");
     this.tilemap  = params.tilemap;
@@ -40,7 +41,7 @@ export class Controller {
     for (var x = 0 ; x < this.mapSize.width; ++x) {
       for (var y = 0 ; y < this.mapSize.height; ++y) {
         callback(x, y);
-        if (playerPosition.x == x && playerPosition.y == y)
+        if (playerPosition.x === x && playerPosition.y === y)
           this.renderAfterPlayer = true;
       }
     }
@@ -67,7 +68,7 @@ export class Controller {
 
     if (tile)
     {
-      this.renderImage("../" + tile.image, tile.renderPosition, this.tileSize.width, this.tileSize.height, tile.clippedRect);
+      this.renderImage(this.pathPrefix + tile.image, tile.renderPosition, this.tileSize.width, this.tileSize.height, tile.clippedRect);
     }
   }
 
@@ -99,7 +100,7 @@ export class Controller {
         this.eachCase((x, y) => {
           const tile = this.tilemap.roofs[i].getTile(x, y);
           if (tile)
-            this.renderImage("../" + tile.image, tile.renderPosition, this.tileSize.width, this.tileSize.height, tile.clippedRect);
+            this.renderImage(this.pathPrefix + tile.image, tile.renderPosition, this.tileSize.width, this.tileSize.height, tile.clippedRect);
         });
       }
     }
@@ -108,7 +109,7 @@ export class Controller {
   renderWall(tile, x, y) {
     if (this.renderAfterPlayer)
       this.startClipAroundPlayer();
-    this.renderImage("../" + tile.image, this.getPointFor(x, y), this.wallSize.width, this.wallSize.height, tile.clippedRect);
+    this.renderImage(this.pathPrefix + tile.image, this.getPointFor(x, y), this.wallSize.width, this.wallSize.height, tile.clippedRect);
     if (this.renderAfterPlayer)
       this.stopClipAroundPlayer();
   }
@@ -150,13 +151,13 @@ export class Controller {
       if (sprite.getShadowSource() !== "")
       {
         this.context.drawImage(
-          "../" + sprite.getShadowSource(),
+          this.pathPrefix + sprite.getShadowSource(),
           //clippedRect.x, clippedRect.y, clippedRect.width, clippedRect.height,
           offset.x, offset.y + 3, clippedRect.width, clippedRect.height
         );
       }
       this.context.drawImage(
-        "../" + sprite.getSpriteSource(),
+        this.pathPrefix + sprite.getSpriteSource(),
         clippedRect.x, clippedRect.y, clippedRect.width, clippedRect.height,
         offset.x, offset.y, clippedRect.width, clippedRect.height
       );

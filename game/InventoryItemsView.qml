@@ -42,7 +42,7 @@ Pane {
             anchors.centerIn: parent
             width: root.itemIconWidth
             height: root.itemIconHeight
-            source: "../" + inventoryItem.getSpriteSource()
+            source: fileProtocol + inventoryItem.getSpriteSource()
             sourceClipRect: inventoryItem.getClippedRect()
           }
           Text {

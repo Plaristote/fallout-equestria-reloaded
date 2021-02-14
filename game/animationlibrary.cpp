@@ -16,6 +16,11 @@ void QmlSpriteAnimation::initialize(const QString &group, const QString &name)
   emit clippedRectChanged();
 }
 
+QString QmlSpriteAnimation::getRelativeSource() const
+{
+  return QString(source).replace(ASSETS_PATH + "sprites/", "");
+}
+
 AnimationLibrary* AnimationLibrary::self = nullptr;
 
 AnimationLibrary::AnimationLibrary(QObject *parent) : QObject(parent)
@@ -65,7 +70,7 @@ SpriteAnimation AnimationLibrary::getAnimation(const QString &group, const QStri
   auto animationData = groupData[animation];
 
   object.name          = animation;
-  object.source        = "assets/sprites/";
+  object.source        = ASSETS_PATH + "sprites/";
   object.source       += animationData["source"].toString(groupData["defaultSource"].toString());
   object.repeat        = animationData["repeat"].toBool(false);
   object.frameCount    = animationData["frameCount"].toInt(1);
@@ -84,7 +89,7 @@ void AnimationLibrary::setAnimation(const QString& group, const QString& name, Q
   auto groupData = data[group].toObject();
   QJsonObject animationData;
 
-  animationData["source"] = animation->source.replace("assets/sprites/", "");
+  animationData["source"] = animation->getRelativeSource();
   animationData["repeat"] = animation->repeat;
   animationData["frameCount"] = animation->frameCount;
   animationData["frameInterval"] = animation->frameInterval;

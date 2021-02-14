@@ -138,7 +138,7 @@ Item {
 
             TerminalField {
               id: sourceInput
-              text: spriteAnimation.source
+              text: spriteAnimation.relativeSource
             }
 
             Label {
@@ -218,7 +218,7 @@ Item {
               Repeater {
                 model: parseInt(frameCountInput.text)
                 delegate: Image {
-                  source: "../" + sourceInput.text
+                  source: assetPath + "sprites/" + sourceInput.text
                   height: parseInt(heightInput.text)
                   width: parseInt(widthInput.text)
                   sourceClipRect: Qt.rect(parseInt(xInput.text) + parseInt(widthInput.text) * index, parseInt(yInput.text), parseInt(widthInput.text), parseInt(heightInput.text))

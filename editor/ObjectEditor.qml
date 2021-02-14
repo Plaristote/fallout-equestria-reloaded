@@ -143,7 +143,7 @@ Item {
               SpriteAnimation {
                 id: itemSprite
               }
-              source: "../" + itemSprite.source
+              source: fileProtocol + itemSprite.source
               width: itemSprite.clippedRect.width
               height: itemSprite.clippedRect.height
               sourceClipRect: itemSprite.clippedRect

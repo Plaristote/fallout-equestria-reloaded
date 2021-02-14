@@ -98,7 +98,7 @@ Pane {
 
             Image {
               anchors.horizontalCenter: parent.horizontalCenter
-              source: "../" + character.getSpriteSource()
+              source: fileProtocol + character.getSpriteSource()
               sourceClipRect: character.getClippedRect()
               height: character.getClippedRect().height
               width: character.getClippedRect().height

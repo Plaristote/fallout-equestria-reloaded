@@ -21,7 +21,7 @@ Pane {
     Image {
       anchors.horizontalCenter: parent.horizontalCenter
       id: selectedObjectPreviewPicture
-      source:         "../" + objectPreview.model.getSpriteSource()
+      source:         fileProtocol + objectPreview.model.getSpriteSource()
       sourceClipRect: objectPreview.model.getClippedRect()
       height:         objectPreview.model.getClippedRect().height
       width:          objectPreview.model.getClippedRect().width

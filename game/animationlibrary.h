@@ -23,6 +23,7 @@ class QmlSpriteAnimation : public QObject, public SpriteAnimation
 
   Q_PROPERTY(QString name   MEMBER name NOTIFY nameChanged)
   Q_PROPERTY(QString source MEMBER source NOTIFY sourceChanged)
+  Q_PROPERTY(QString relativeSource READ getRelativeSource NOTIFY sourceChanged)
   Q_PROPERTY(QPoint offset MEMBER firstFramePosition NOTIFY firstFramePositionChanged)
   Q_PROPERTY(QRect clippedRect MEMBER clippedRect NOTIFY clippedRectChanged)
   Q_PROPERTY(int frameCount MEMBER frameCount NOTIFY frameCountChanged)
@@ -34,6 +35,7 @@ public:
   }
 
   Q_INVOKABLE void initialize(const QString& group, const QString& name);
+  QString getRelativeSource() const;
 
 signals:
   void frameIntervalChanged();
