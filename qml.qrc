@@ -130,5 +130,7 @@
         <file>editor/CharacterObjectEditor.qml</file>
         <file>assets/fonts/fallout.ttf</file>
         <file>assets/fonts/JH_FALLOUT.TTF</file>
+        <file>ui/CharacterInventory.qml</file>
+        <file>ui/InventoryItemPreview.qml</file>
     </qresource>
 </RCC>

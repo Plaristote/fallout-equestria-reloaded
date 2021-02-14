@@ -26,18 +26,28 @@ Pane {
 
       Repeater {
         model: inventory.items.length
-        delegate: Image {
+        delegate: Rectangle {
           property QtObject inventoryItem: inventory.items[index]
           property int itemCount: inventoryItem.quantity
           property bool selected: selectedObject == inventoryItem
 
-          width: root.itemIconWidth; height: root.itemIconHeight
-          source: "../" + inventoryItem.getSpriteSource()
-          sourceClipRect: inventoryItem.getClippedRect()
+          width: Math.max(root.itemIconWidth, root.itemIconHeight)
+          height: width
+          border.width: root.selectedObject === inventoryItem ? 1 : 0
+          border.color: "green"
+          radius: 5
+          color: "transparent"
+          Image {
+            anchors.centerIn: parent
+            width: root.itemIconWidth
+            height: root.itemIconHeight
+            source: "../" + inventoryItem.getSpriteSource()
+            sourceClipRect: inventoryItem.getClippedRect()
+          }
           Text {
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.bottom: parent.bottom
-            anchors.bottomMargin: 10
+            anchors.bottomMargin: 5
             text: inventoryItem.objectName + (itemCount > 1 ? `x${itemCount}` : "")
             font.family: application.consoleFontName
             font.pointSize: 8

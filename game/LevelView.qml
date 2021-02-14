@@ -11,22 +11,37 @@ Item {
 
   function openMenu() {
     levelController.paused = !mainMenu.visible;
+    if (interactionMenu.visible)
+      interactionMenu.interactionTarget = null;
     mainMenu.visible = !mainMenu.visible;
   }
 
+  Shortcut {
+    sequence: "Esc"
+    onActivated: {
+      if (interactionMenu.visible)
+        interactionMenu.interactionTarget = null;
+      else if (inventoryView.visible)
+        inventoryView.visible = false;
+      else
+        openMenuAction.trigger()
+    }
+  }
 
   Action {
     id: openMenuAction
-    shortcut: Shortcut {
-      sequence: "Esc"
-      onActivated: {
-        if (interactionMenu.visible)
-          interactionMenu.interactionTarget = null;
-        else
-          openMenuAction.trigger()
-      }
-    }
     onTriggered: openMenu()
+  }
+
+  Action {
+    id: openInventoryAction
+    shortcut: Shortcut {
+      sequence: "i"
+      onActivated: openInventoryAction.trigger()
+    }
+    onTriggered: {
+      inventoryView.visible = true;
+    }
   }
 
   LevelCanvas {
@@ -120,6 +135,7 @@ Item {
 
   // BOTTOM PANE
   Pane {
+    id: levelHud
     anchors.horizontalCenter: parent.horizontalCenter
     anchors.bottom: parent.bottom
     height: 135
@@ -154,6 +170,8 @@ Item {
               width: terminalContent.width
               text: "> " + gameController.consoleMessages[index]
               color: "green"
+              font.family: application.consoleFontName
+              font.pointSize: 6
             }
           }
         }
@@ -179,9 +197,7 @@ Item {
           text: "INV"
           height: 20
           width: parent.width
-          onClicked: {
-            gameController.consoleMessages.push("Inventory not implemented yet")
-          }
+          action: openInventoryAction
         }
 
         Button {
@@ -205,7 +221,22 @@ Item {
       }
     }
   }
+  // END Bottom Pane
 
+  CharacterInventory {
+    id: inventoryView
+    character: levelController.player
+    anchors { top: parent.top; left: parent.left; bottom: levelHud.top; right: parent.right }
+    anchors.leftMargin:  parent.width > 1200 ? parent.width / 4 : parent.width / 8
+    anchors.rightMargin: parent.width > 1200 ? parent.width / 4 : parent.width / 8
+    anchors.bottomMargin: 50
+    anchors.topMargin: 50
+    visible: false
+    onVisibleChanged: levelController.paused = visible
+    onClosed: visible = false
+  }
+
+  // MainMenu
   Pane {
     id: mainMenu
     width: 280

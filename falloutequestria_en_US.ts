@@ -9,12 +9,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="ui/CharacterSheet.qml" line="177"/>
+        <location filename="ui/CharacterSheet.qml" line="181"/>
         <source>Confirm</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="ui/CharacterSheet.qml" line="182"/>
+        <location filename="ui/CharacterSheet.qml" line="186"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
@@ -35,12 +35,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="cmap/Experience.qml" line="40"/>
+        <location filename="cmap/Experience.qml" line="42"/>
         <source>Experience</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="cmap/Experience.qml" line="45"/>
+        <location filename="cmap/Experience.qml" line="49"/>
         <source>Next level</source>
         <translation type="unfinished"></translation>
     </message>
@@ -126,7 +126,8 @@
     <name>TraitsPicker</name>
     <message>
         <location filename="cmap/TraitsPicker.qml" line="18"/>
-        <source>Traits</source>
+        <source>Available traits</source>
+        <oldsource>Traits</oldsource>
         <translation type="unfinished"></translation>
     </message>
 </context>
