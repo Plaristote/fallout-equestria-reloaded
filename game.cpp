@@ -133,10 +133,13 @@ void Game::switchToLevel(const QString& name, const QString& targetZone)
 
 void Game::exitLevel(bool silent)
 {
+  auto scriptObject = scriptEngine.globalObject();
+
   playerParty->extractFromLevel(currentLevel);
   currentLevel->save(dataEngine);
   currentLevel->deleteLater();
   currentLevel = nullptr;
+  scriptObject.deleteProperty("level");
   dataEngine->exitLevel();
   if (!silent)
     emit levelChanged();

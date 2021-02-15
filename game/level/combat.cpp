@@ -1,6 +1,6 @@
 #include "combat.h"
 
-CombatComponent::CombatComponent(QObject *parent) : InteractionComponent(parent)
+CombatComponent::CombatComponent(QObject *parent) : TextBubblesComponent(parent)
 {
 
 }

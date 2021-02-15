@@ -49,10 +49,11 @@ public:
   void setInteractionPosition(QPoint value) { interactionPosition = value; }
   void moveTo(int x, int y, QPoint renderPosition);
 
-  Q_INVOKABLE void setTickBehavior(int interval, bool repeat = false);
   Q_INVOKABLE TileZone* addControlZone();
   Q_INVOKABLE void      removeControlZone();
   TileZone*             getControlZone() { return controlZone; }
+
+  Q_INVOKABLE void      scriptCall(const QString& method, const QString& message = "");
 
   const QList<QPoint>& getCurrentPath() const { return currentPath; }
   QList<QPoint>& rcurrentPath() { return currentPath; }
@@ -72,7 +73,6 @@ signals:
 private slots:
   void onMovementEnded();
   void onDestinationReached();
-  void onTicked();
 
 protected:
   virtual QString getScriptPath() const { return SCRIPTS_PATH + "behaviours"; }
@@ -83,7 +83,6 @@ private:
   QString objectName, scriptName;
   QPoint position, nextPosition;
   bool floating;
-  QTimer tick;
   QList<QPoint> currentPath;
   QString currentZone;
   QPoint interactionPosition;

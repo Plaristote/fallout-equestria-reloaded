@@ -315,6 +315,7 @@ void LevelTask::update()
   timeManager->addElapsedMilliseconds(delta);
   for (DynamicObject* object : objects)
     object->update(delta);
+  CombatComponent::update(delta);
   emit updated();
 }
 

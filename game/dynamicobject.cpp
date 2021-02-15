@@ -6,7 +6,6 @@
 DynamicObject::DynamicObject(QObject *parent) : Sprite(parent)
 {
   taskManager = new TaskRunner(this);
-  connect(&tick, &QTimer::timeout, this, &DynamicObject::onTicked);
   connect(this, &Sprite::movementFinished, this, &DynamicObject::onMovementEnded);
   connect(this, &DynamicObject::reachedDestination, this, &DynamicObject::onDestinationReached);
   connect(this, &DynamicObject::controlZoneAdded,   this, &DynamicObject::controlZoneChanged);
@@ -27,13 +26,6 @@ void DynamicObject::setScript(const QString& name)
     args << Game::get()->getScriptEngine().newQObject(this);
     Game::get()->scriptCall(callback, args, "initialize");
   }
-}
-
-void DynamicObject::setTickBehavior(int interval, bool repeat)
-{
-  tick.setSingleShot(!repeat);
-  tick.setInterval(interval);
-  tick.start();
 }
 
 void DynamicObject::moveTo(int x, int y, QPoint renderPosition)
@@ -87,19 +79,6 @@ void DynamicObject::onDestinationReached()
   }
 }
 
-void DynamicObject::onTicked()
-{
-  QJSValue callback = script.property("onTicked");
-
-  if (callback.isCallable())
-  {
-    QJSValueList args;
-
-    args << Game::get()->getScriptEngine().newQObject(this);
-    Game::get()->scriptCall(callback, args, "onTicked");
-  }
-}
-
 QStringList DynamicObject::getAvailableInteractions()
 {
   QJSValue callback = script.property("getAvailableInteractions");
@@ -114,6 +93,21 @@ QStringList DynamicObject::getAvailableInteractions()
     return retval.toVariant().toStringList();
   }
   return QStringList();
+}
+
+void DynamicObject::scriptCall(const QString& method, const QString& message)
+{
+  QJSValue callback = script.property(method);
+
+  if (callback.isCallable())
+  {
+    QJSValueList args;
+
+    args << message;
+    Game::get()->scriptCall(callback, args, "scriptCall");
+  }
+  else
+    qDebug() << "/!\\ Tried to call undefined" << method << "on object" << getObjectType() << ':' << objectName;
 }
 
 void DynamicObject::update(qint64 delta)

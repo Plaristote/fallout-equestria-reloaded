@@ -91,6 +91,8 @@ set(PROJECT_SOURCES
         game/level/interaction.cpp
         game/level/combat.h
         game/level/combat.cpp
+        game/level/textbubbles.h
+        game/level/textbubbles.cpp
         editor/scripteditorcontroller.h
         editor/scripteditorcontroller.cpp
         gamemanager.h

@@ -4,9 +4,9 @@
 # include <QObject>
 # include <QQmlListProperty>
 # include "../character.h"
-# include "interaction.h"
+# include "textbubbles.h"
 
-class CombatComponent : public InteractionComponent
+class CombatComponent : public TextBubblesComponent
 {
   Q_OBJECT
 
