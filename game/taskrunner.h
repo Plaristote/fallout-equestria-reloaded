@@ -21,7 +21,6 @@ class TaskRunner : public QObject
     QString     name;
     int         iterationCount = 1;
     bool        infinite = false;
-    QJsonObject data;
     QJSValue    callback, module;
     qint64      interval;
     qint64      timeLeft;
@@ -36,8 +35,8 @@ public:
   void load(const QJsonObject&);
   void save(QJsonObject&) const;
 
-  void addTask(const QString& name, QJsonObject& data, qint64 interval, int iterationCount = 1);
-  void addLocalTask(const QString& name, QJsonObject& data, qint64 interval, int iterationCount = 1);
+  Q_INVOKABLE void addTask(const QString& name, qint64 interval, int iterationCount = 1);
+  Q_INVOKABLE void addLocalTask(const QString& name, qint64 interval, int iterationCount = 1);
 
 signals:
 

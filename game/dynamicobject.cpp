@@ -14,10 +14,11 @@ DynamicObject::DynamicObject(QObject *parent) : Sprite(parent)
 
 void DynamicObject::setScript(const QString& name)
 {
-  script = Game::get()->loadScript(getScriptPath() + '/' + name);
-  QJSValue callback = script.property("initialize");
+  QJSValue callback;
 
   scriptName = name;
+  script     = Game::get()->loadScript(getScriptPath() + '/' + name);
+  callback   = script.property("initialize");
   taskManager->setLocalModule(script);
   if (callback.isCallable())
   {

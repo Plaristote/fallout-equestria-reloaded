@@ -181,7 +181,6 @@ QJSValue Game::scriptCall(QJSValue callable, const QJSValueList& args, const QSt
              << retval.property("lineNumber").toInt() << ":" << retval.toString();
     return false;
   }
-
   return retval;
 }
 

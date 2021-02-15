@@ -10,12 +10,11 @@ TaskRunner::TaskRunner(QObject *parent) : QObject(parent)
 
 void TaskRunner::update(qint64 delta)
 {
-  for (auto it = tasks.begin() ; it != tasks.end() ; )
+  for (auto it = tasks.begin() ; it != tasks.end() ;)
   {
     auto elapsedTime = delta;
 
-    while (it->iterationCount > 0 && elapsedTime >= it->timeLeft)
-    {
+    do {
       if (it->timeLeft <= elapsedTime)
       {
         it->timeLeft = it->interval;
@@ -32,11 +31,11 @@ void TaskRunner::update(qint64 delta)
         it->timeLeft -= elapsedTime;
         break ;
       }
-      if (it->iterationCount == 0)
-        it = tasks.erase(it);
-      else
-        it++;
-    }
+    } while ((it->iterationCount > 0 || it->infinite) && elapsedTime >= it->timeLeft);
+    if (it->iterationCount == 0)
+      it = tasks.erase(it);
+    else
+      it++;
   }
 }
 
@@ -46,10 +45,10 @@ bool TaskRunner::runTask(Task& task)
   auto& scriptEngine = Game::get()->getScriptEngine();
 
   args << scriptEngine.newQObject(parent());
-  return task.callback.call(args).toBool();
+  return Game::get()->scriptCall(task.callback, args, "TaskRunner").toBool();
 }
 
-void TaskRunner::addTask(const QString &name, QJsonObject &data, qint64 interval, int iterationCount)
+void TaskRunner::addTask(const QString &name, qint64 interval, int iterationCount)
 {
   Task task;
   QString scriptName = name + ".mjs";
@@ -57,6 +56,7 @@ void TaskRunner::addTask(const QString &name, QJsonObject &data, qint64 interval
   task.type = ModularTask;
   task.name = name;
   task.interval = interval;
+  task.timeLeft = interval;
   if (iterationCount < 1)
   {
     task.infinite = true;
@@ -64,18 +64,19 @@ void TaskRunner::addTask(const QString &name, QJsonObject &data, qint64 interval
   }
   else
     task.iterationCount = iterationCount;
-  task.module = Game::get()->loadScript(SCRIPTS_PATH + "tasks/" + data["script"].toString(scriptName));
+  task.module = Game::get()->loadScript(SCRIPTS_PATH + "tasks/" + scriptName);
   task.callback = task.module.property("onTriggered");
   tasks << task;
 }
 
-void TaskRunner::addLocalTask(const QString &name, QJsonObject &data, qint64 interval, int iterationCount)
+void TaskRunner::addLocalTask(const QString &name, qint64 interval, int iterationCount)
 {
   Task task;
 
   task.type = LocalTask;
   task.name = name;
   task.interval = interval;
+  task.timeLeft = interval;
   if (iterationCount < 1)
   {
     task.infinite = true;
@@ -84,6 +85,7 @@ void TaskRunner::addLocalTask(const QString &name, QJsonObject &data, qint64 int
   else
     task.iterationCount = iterationCount;
   task.module = module;
+  task.callback = task.module.property(name);
   tasks << task;
 }
 
@@ -99,7 +101,6 @@ void TaskRunner::load(const QJsonObject& data)
     task.name = taskData["name"].toString();
     task.interval = taskData["interval"].toInt();
     task.infinite = taskData["infinite"].toBool();
-    task.data = taskData["data"].toObject();
     task.timeLeft = taskData["timeLeft"].toInt();
     scriptName = task.name + ".mjs";
     if (task.type == LocalTask)
@@ -129,7 +130,6 @@ void TaskRunner::save(QJsonObject& data) const
     taskData["iteractionCount"] = task.iterationCount;
     taskData["infinite"] = task.infinite;
     taskData["interval"] = task.interval;
-    taskData["data"] = task.data;
     taskData["timeLeft"] = task.timeLeft;
     array << taskData;
   }
