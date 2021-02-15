@@ -57,19 +57,9 @@ Item {
     onMoveBottom: { canvas.translate(0, -scrollSpeed); }
   }
 
-  Text {
+  LevelFrameRate {
+    target: canvas
     anchors { top: parent.top; right: parent.right }
-    text: "Frame Rate: " + myframeRate
-    font.pointSize: 20
-    styleColor: "white"; style: Text.Outline
-    property int myframeRate: 0
-    Timer {
-      interval: 1000; repeat: true; running: true
-      onTriggered: {
-        parent.myframeRate = canvas.controller.frameCount;
-        canvas.controller.frameCount = 0;
-      }
-    }
   }
 
   // INTERACTION MENU
@@ -133,95 +123,16 @@ Item {
     }
   }
 
-  // BOTTOM PANE
-  Pane {
+  LevelHud {
     id: levelHud
-    anchors.horizontalCenter: parent.horizontalCenter
     anchors.bottom: parent.bottom
-    height: 135
-    width: Math.min(parent.width, 1025)
-    background: UiStyle.PlayPanel {}
+    anchors.horizontalCenter: parent.horizontalCenter
+    gameController:  root.gameController
+    levelController: root.levelController
 
-    Pane {
-      id: terminalPane
-      anchors.left: parent.left
-      anchors.top: parent.top
-      anchors.bottom: parent.bottom
-      width: 240
-      background: UiStyle.TerminalPane {}
-
-      Flickable {
-        id: terminalFlickable
-        anchors.fill: parent
-        contentHeight: terminalContent.height
-        clip: true
-
-        ScrollBar.vertical: UiStyle.TerminalScrollbar { orientation: Qt.Vertical }
-
-        Column {
-          id: terminalContent
-          width: parent.width - 10
-          onHeightChanged: terminalFlickable.contentY = Math.max(0, terminalContent.height - terminalFlickable.height);
-
-          Repeater {
-            model: gameController.consoleMessages
-            delegate: Text {
-              wrapMode: Text.WordWrap
-              width: terminalContent.width
-              text: "> " + gameController.consoleMessages[index]
-              color: "green"
-              font.family: application.consoleFontName
-              font.pointSize: 6
-            }
-          }
-        }
-      }
-    }
-
-    Pane {
-      anchors.left: terminalPane.right
-      anchors.top: parent.top;
-      anchors.bottom: parent.bottom
-      anchors.topMargin: 20
-      anchors.bottomMargin: 1
-      anchors.leftMargin: 5
-      width: 80
-      background: UiStyle.Pane {}
-
-      Column {
-        anchors.fill: parent
-        //anchors.topMargin: 10
-        spacing: 5
-
-        Button {
-          text: "INV"
-          height: 20
-          width: parent.width
-          action: openInventoryAction
-        }
-
-        Button {
-          text: "CHA"
-          height: 20
-          width: parent.width
-          onClicked: {
-            application.pushView("game/CharacterView.qml", {gameController: root.gameController})
-          }
-        }
-
-        Button {
-          text: "Q"
-          height: 20
-          width: parent.width
-          onClicked: {
-            terminalPane.parent.parent.open
-            root.openMenu();
-          }
-        }
-      }
-    }
+    onOpenMenu: openMenuAction.trigger()
+    onOpenInventory: openInventoryAction.trigger()
   }
-  // END Bottom Pane
 
   CharacterInventory {
     id: inventoryView
@@ -236,42 +147,10 @@ Item {
     onClosed: visible = false
   }
 
-  // MainMenu
-  Pane {
+  LevelMenu {
     id: mainMenu
-    width: 280
-    height: 250
     anchors.centerIn: parent
     visible: false
-    background: UiStyle.Pane {}
-
-    Column {
-      anchors.fill: parent
-      anchors.topMargin: 10
-
-      MenuButton {
-        text: "Save Game"
-        onClicked: application.pushView("SaveGame.qml");
-      }
-
-      MenuButton {
-        text: "Load Game"
-        onClicked: application.pushView("LoadGame.qml")
-      }
-
-      MenuButton {
-        text: "Exit"
-        onClicked: {
-          console.log("exit");
-          application.popView();
-          gameManager.endGame();
-        }
-      }
-
-      MenuButton {
-        text: "Cancel"
-        action: openMenuAction
-      }
-    }
+    onVisibleChanged: levelController.paused = visible
   }
 }
