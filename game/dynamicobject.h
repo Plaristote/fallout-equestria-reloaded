@@ -19,7 +19,6 @@ class DynamicObject : public Sprite
   Q_PROPERTY(QString objectName MEMBER objectName NOTIFY objectNameChanged)
   Q_PROPERTY(QPoint  position    READ getPosition)
   Q_PROPERTY(QString currentZone READ getCurrentZone)
-  Q_PROPERTY(QJsonObject dataStore MEMBER dataStore)
   Q_PROPERTY(TaskRunner* tasks MEMBER taskManager)
   Q_PROPERTY(bool floating MEMBER floating NOTIFY floatingChanged)
   Q_PROPERTY(TileZone* controlZone MEMBER controlZone NOTIFY controlZoneChanged)
@@ -40,6 +39,11 @@ public:
   const QString& getObjectName() const { return objectName; }
   void setScript(const QString& name);
   TaskRunner* getTaskManager() { return taskManager; }
+
+  Q_INVOKABLE bool     hasVariable(const QString& name) const { return dataStore.contains(name); }
+  Q_INVOKABLE QVariant getVariable(const QString& name) const { return dataStore[name].toVariant(); }
+  Q_INVOKABLE void     setVariable(const QString& name, const QVariant& value) { dataStore.insert(name, QJsonValue::fromVariant(value)); }
+  Q_INVOKABLE void     unsetVariable(const QString& name) { dataStore.remove(name); }
 
   Q_INVOKABLE QString getObjectType() const { return metaObject()->className(); }
   Q_INVOKABLE QPoint getPosition() const { return position; }
