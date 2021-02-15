@@ -1,6 +1,7 @@
 #ifndef  DYNAMICOBJECT_H
 # define DYNAMICOBJECT_H
 
+# include "globals.h"
 # include <QObject>
 # include <QPoint>
 # include <QJSValue>
@@ -8,6 +9,8 @@
 # include <QJsonObject>
 # include "sprite.h"
 # include "taskrunner.h"
+
+class TileZone;
 
 class DynamicObject : public Sprite
 {
@@ -18,6 +21,8 @@ class DynamicObject : public Sprite
   Q_PROPERTY(QString currentZone READ getCurrentZone)
   Q_PROPERTY(QJsonObject dataStore MEMBER dataStore)
   Q_PROPERTY(TaskRunner* tasks MEMBER taskManager)
+  Q_PROPERTY(bool floating MEMBER floating NOTIFY floatingChanged)
+  Q_PROPERTY(TileZone* controlZone MEMBER controlZone NOTIFY controlZoneChanged)
 
 public:
   explicit DynamicObject(QObject *parent = nullptr);
@@ -27,7 +32,9 @@ public:
   virtual void load(const QJsonObject&);
   virtual void save(QJsonObject&) const;
 
-  bool isCharacter() const { return QString(metaObject()->className()) == "Character"; }
+  inline bool isCharacter() const { return getObjectType() == "Character"; }
+  inline bool isFloating() const { return floating; }
+  virtual bool isBlockingPath() const { return true; }
 
   void setObjectName(const QString& value) { objectName = value; emit objectNameChanged(); }
   const QString& getObjectName() const { return objectName; }
@@ -43,6 +50,9 @@ public:
   void moveTo(int x, int y, QPoint renderPosition);
 
   Q_INVOKABLE void setTickBehavior(int interval, bool repeat = false);
+  Q_INVOKABLE TileZone* addControlZone();
+  Q_INVOKABLE void      removeControlZone();
+  TileZone*             getControlZone() { return controlZone; }
 
   const QList<QPoint>& getCurrentPath() const { return currentPath; }
   QList<QPoint>& rcurrentPath() { return currentPath; }
@@ -54,6 +64,10 @@ signals:
   void objectNameChanged();
   void reachedDestination();
   void pathBlocked();
+  void floatingChanged();
+  void controlZoneChanged();
+  void controlZoneAdded(TileZone*);
+  void controlZoneRemoved(TileZone*);
 
 private slots:
   void onMovementEnded();
@@ -61,12 +75,14 @@ private slots:
   void onTicked();
 
 protected:
-  virtual QString getScriptPath() const { return ":/scripts/behaviour"; }
+  virtual QString getScriptPath() const { return SCRIPTS_PATH + "behaviours"; }
   QJSValue script;
   TaskRunner* taskManager;
+  TileZone* controlZone = nullptr;
 private:
   QString objectName, scriptName;
   QPoint position, nextPosition;
+  bool floating;
   QTimer tick;
   QList<QPoint> currentPath;
   QString currentZone;

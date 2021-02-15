@@ -22,7 +22,7 @@ public:
   Q_INVOKABLE void setAnimation(const QString& animationName);
   Q_INVOKABLE QString getAnimation() const { return animation.name; }
   void moveToCoordinates(QPoint coordinates);
-  void setRenderPosition(QPoint coordinates);
+  Q_INVOKABLE void setRenderPosition(QPoint coordinates);
   void setSpriteAnimation(const SpriteAnimation& value) { animation = value; }
 
   Q_INVOKABLE QString getSpriteSource() const { return animation.source; }

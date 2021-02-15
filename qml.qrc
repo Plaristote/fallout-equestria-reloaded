@@ -133,5 +133,9 @@
         <file>ui/CharacterInventory.qml</file>
         <file>ui/InventoryItemPreview.qml</file>
         <file>editor/CharacterInventoryEditor.qml</file>
+        <file>editor/StorageObjectEditor.qml</file>
+        <file>ui/TerminalLabel.qml</file>
+        <file>editor/DynamicObjectEditor.qml</file>
+        <file>editor/ControlZoneEditor.qml</file>
     </qresource>
 </RCC>

@@ -1,5 +1,6 @@
 #include "dynamicobject.h"
 #include "game.h"
+#include "tilemap/tilezone.h"
 #include <QJsonArray>
 
 DynamicObject::DynamicObject(QObject *parent) : Sprite(parent)
@@ -8,6 +9,8 @@ DynamicObject::DynamicObject(QObject *parent) : Sprite(parent)
   connect(&tick, &QTimer::timeout, this, &DynamicObject::onTicked);
   connect(this, &Sprite::movementFinished, this, &DynamicObject::onMovementEnded);
   connect(this, &DynamicObject::reachedDestination, this, &DynamicObject::onDestinationReached);
+  connect(this, &DynamicObject::controlZoneAdded,   this, &DynamicObject::controlZoneChanged);
+  connect(this, &DynamicObject::controlZoneRemoved, this, &DynamicObject::controlZoneChanged);
 }
 
 void DynamicObject::setScript(const QString& name)
@@ -119,12 +122,33 @@ void DynamicObject::update(qint64 delta)
   taskManager->update(delta);
 }
 
+TileZone* DynamicObject::addControlZone()
+{
+  if (controlZone == nullptr)
+  {
+    controlZone = new TileZone(this);
+    emit controlZoneAdded(controlZone);
+  }
+  return controlZone;
+}
+
+void DynamicObject::removeControlZone()
+{
+  if (controlZone != nullptr)
+  {
+    delete controlZone;
+    emit controlZoneRemoved(controlZone);
+  }
+  controlZone = nullptr;
+}
+
 void DynamicObject::load(const QJsonObject& data)
 {
   objectName = data["objectName"].toString();
   position.setX(data["x"].toInt()); position.setY(data["y"].toInt());
   nextPosition.setX(data["nextX"].toInt()); nextPosition.setY(data["nextY"].toInt());
   interactionPosition.setX(data["intX"].toInt()); interactionPosition.setY(data["intY"].toInt());
+  floating = data["float"].toBool(false);
   for (QJsonValue pathPointData : data["currentPath"].toArray())
   {
     QPoint pathPoint;
@@ -132,6 +156,17 @@ void DynamicObject::load(const QJsonObject& data)
     pathPoint.setX(pathPointData["x"].toInt());
     pathPoint.setY(pathPointData["y"].toInt());
     currentPath << pathPoint;
+  }
+  if (data["zone"].isArray())
+  {
+    controlZone = controlZone ? controlZone : new TileZone(this);
+    for (QJsonValue posValue : data["zone"].toArray())
+    {
+      QJsonArray posArray(posValue.toArray());
+
+      controlZone->addPosition(QPoint(posArray[0].toInt(), posArray[1].toInt()));
+    }
+    emit controlZoneChanged();
   }
   currentZone = data["currentZone"].toString();
   scriptName  = data["script"].toString();
@@ -150,6 +185,7 @@ void DynamicObject::save(QJsonObject& data) const
   data["x"] = position.x(); data["y"] = position.y();
   data["nextX"] = nextPosition.x(); data["nextY"] = nextPosition.y();
   data["intX"] = interactionPosition.x(); data["intY"] = interactionPosition.y();
+  data["float"] = floating;
   for (QPoint pathPoint : currentPath)
   {
     QJsonObject pathPointData;
@@ -157,6 +193,19 @@ void DynamicObject::save(QJsonObject& data) const
     pathPointData["x"] = pathPoint.x();
     pathPointData["y"] = pathPoint.y();
     currentPathData << pathPointData;
+  }
+  if (controlZone)
+  {
+    QJsonArray zoneArray;
+
+    for (QPoint position : controlZone->getPositions())
+    {
+      QJsonArray posArray;
+
+      posArray << position.x() << position.y();
+      zoneArray << posArray;
+    }
+    data["zone"] = zoneArray;
   }
   data["currentPath"] = currentPathData;
   data["currentZone"] = currentZone;

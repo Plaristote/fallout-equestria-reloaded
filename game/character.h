@@ -24,6 +24,7 @@ public:
 
   Q_INVOKABLE bool renderOnTile() const { return true; }
   Q_INVOKABLE QPoint getInteractionPosition() const;
+  bool isBlockingPath() { return getStatistics()->getHitPoints() > 0; }
 
 signals:
 

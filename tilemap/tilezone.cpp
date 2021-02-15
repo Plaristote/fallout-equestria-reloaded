@@ -4,6 +4,9 @@
 
 TileZone::TileZone(QObject *parent) : QObject(parent)
 {
+  clippedRect.setX(72 * 2); clippedRect.setY(0);
+  clippedRect.setWidth(72);
+  clippedRect.setHeight(36);
 }
 
 void TileZone::load(const QJsonObject& object, const QSize mapSize)
@@ -46,9 +49,23 @@ void TileZone::load(const QJsonObject& object, const QSize mapSize)
     clippedRect.setWidth(72);
     clippedRect.setHeight(36);
   }
+  emit tilesChanged();
 }
 
 bool TileZone::isInside(int x, int y) const
 {
   return tiles.indexOf(QPoint(x, y)) >= 0;
 }
+
+void TileZone::addPosition(QPoint position)
+{
+  tiles << position;
+  emit tilesChanged();
+}
+
+void TileZone::removePosition(QPoint position)
+{
+  tiles.removeAll(position);
+  emit tilesChanged();
+}
+

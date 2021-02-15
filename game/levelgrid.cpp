@@ -4,6 +4,13 @@
 #include "astar.hpp"
 #include <cmath>
 
+bool LevelGrid::CaseContent::isBlocked() const
+{
+  if (zone && zone->getAccessBlocked())
+    return true;
+  return occupied;
+}
+
 LevelGrid::LevelGrid(QObject *parent) : QObject(parent)
 {
 }
@@ -96,7 +103,7 @@ std::list<LevelGrid::CaseContent*> LevelGrid::CaseContent::GetSuccessors(const C
 
   for (auto* node : successors)
   {
-    if (node != parent && !node->occupied)
+    if (node != parent && !node->isBlocked())
       results.push_back(node);
   }
   return results;
@@ -125,7 +132,7 @@ bool LevelGrid::isOccupied(int x, int y) const
 
   if (index >= grid.count() || index < 0)
     return true;
-  return grid.at(index).occupied;
+  return grid.at(index).isBlocked();
 }
 
 void LevelGrid::setCaseOccupant(CaseContent& _case, DynamicObject* occupant)

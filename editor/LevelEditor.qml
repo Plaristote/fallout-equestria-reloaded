@@ -44,6 +44,10 @@ Item {
       selectedObject = selectedCharacter = null;
   }
 
+  onSelectedObjectChanged: {
+    canvas.editorObject = selectedObject;
+  }
+
   function updateObjectList() {
     var array = [];
     for (var i = 0 ; i < gameController.level.dynamicObjects.length ; ++i)
@@ -81,6 +85,10 @@ Item {
         renderRoofs: displayRoofCheckbox.checked
         renderWalls: displayWallsCheckbox.checked
         showHoverCoordinates: true
+
+        // Zone edition
+        editingZone: controlZoneEditor.editingZone
+        onToggleZoneTile: controlZoneEditor.toggleTile(tileX, tileY)
       }
 
       GameComponents.ScreenEdges {
@@ -130,15 +138,29 @@ Item {
 
         CharacterObjectEditor {
           id: characterEditor
-          visible: selectedCharacter !== null
-          character: selectedCharacter
+          visible: model !== null
+          model: selectedObject && selectedObject.getObjectType() === "Character" ? selectedObject : null
           gameController: root.gameController
-          Layout.fillHeight: true
           Layout.fillWidth: true
           onOpenInventoryClicked: {
-            characterInventory.character = root.selectedCharacter;
+            characterInventory.character = characterEditor.model;
             characterInventory.open();
           }
+        }
+
+        StorageObjectEditor {
+          id: storageEditor
+          visible: model !== null
+          model: selectedObject && selectedObject.getObjectType() === "StorageObject" ? selectedObject : null
+          Layout.fillWidth: true
+        }
+
+        ControlZoneEditor {
+          id: controlZoneEditor
+          selectedObject: root.selectedObject
+          displayRoofs: displayRoofCheckbox
+          displayWalls: displayWallsCheckbox
+          Layout.fillWidth: true
         }
       }
     }
@@ -158,23 +180,22 @@ Item {
     modal: true
     anchors.centerIn: parent
     standardButtons: Dialog.Ok | Dialog.Cancel
-    Column {
-      Row {
-        Text { text: "type" }
-        ComboBox { id: objectTypeInput; model: ["character", "storage"] }
-      }
-      Row {
-        Text { text: "name" }
-        TextField { id: objectNameInput }
-      }
-      Row {
-        Text { text: "character sheet" }
-        ComboBox { id: sheetInput; model: scriptController.getCharacterSheets() }
-      }
+    GridLayout {
+      columns: 2
+      Text { text: "type" }
+      ComboBox { id: objectTypeInput; model: ["character", "storage", "other"] }
+      Text { text: "name" }
+      TextField { id: objectNameInput }
+      Text { text: "character sheet"; visible: objectTypeInput.currentText === "character" }
+      ComboBox { id: sheetInput; model: scriptController.getCharacterSheets(); visible: objectTypeInput.currentText === "character" }
     }
     onAccepted: {
       if (objectTypeInput.currentText === "character") {
         gameController.level.generateCharacter(objectNameInput.text, sheetInput.currentText.replace(".json", ""))
+        objectSelectBox.currentIndex = gameController.level.objects.length - 1
+      }
+      else if (objectTypeInput.currentText == "storage") {
+        gameController.level.generateStorageObject(objectNameInput.text);
         objectSelectBox.currentIndex = gameController.level.objects.length - 1
       }
       else

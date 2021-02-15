@@ -19,10 +19,15 @@ export class Controller {
     return this.canvas.origin;
   }
 
-  render() {
-    var totalRendered = 0;
+  initializeRenderObjects() {
+    this.renderObjects = [];
+    for (var i = 0 ; i < this.level.dynamicObjects.length ; ++i)
+      this.renderObjects.push(this.level.dynamicObjects[i]);
+  }
 
-    this.frameCount++;
+  render() {
+    this.initializeRenderObjects();
+    this.playerPosition = this.level.player ? this.level.player.position : Qt.point(-1, -1);
     this.clear();
     this.eachCase(this.renderTile.bind(this));
     this.renderZones();
@@ -32,32 +37,39 @@ export class Controller {
       this.eachCase(this.renderRoofs.bind(this));
       this.stopClipAroundPlayer();
     }
+    this.frameCount++;
   }
 
   eachCase(callback) {
-    const playerPosition = this.level.player ? this.level.player.position : Qt.point(-1, -1);
-
     this.renderAfterPlayer = false;
     for (var x = 0 ; x < this.mapSize.width; ++x) {
       for (var y = 0 ; y < this.mapSize.height; ++y) {
         callback(x, y);
-        if (playerPosition.x === x && playerPosition.y === y)
+        if (this.playerPosition.x === x && this.playerPosition.y === y)
           this.renderAfterPlayer = true;
       }
     }
   }
 
+  getTextureForZone(zone) {
+    if (zone.type === "exit" || (this.canvas.editorObject && this.canvas.editorObject.controlZone === zone))
+      return "../assets/tilesets/zones.png";
+    return null;
+  }
+
   renderZones() {
     for (var i = 0 ; i < this.tilemap.zones.length ; ++i) {
       const zone = this.tilemap.zones[i];
-      if (zone.type == "exit")
+      const zoneTexture = this.getTextureForZone(zone);
+
+      if (zoneTexture !== null)
       {
         for (var ii = 0 ; ii < this.tilemap.zones[i].getPositionCount() ; ++ii)
         {
           const position = this.tilemap.zones[i].getPositionAt(ii);
           const tile = this.layers.ground.getTile(position.x, position.y);
 
-          this.renderImage("../assets/tilesets/zones.png", tile.renderPosition, this.tileSize.width, this.tileSize.height, zone.clippedRect);
+          this.renderImage(zoneTexture, tile.renderPosition, this.tileSize.width, this.tileSize.height, zone.clippedRect);
         }
       }
     }
@@ -67,19 +79,23 @@ export class Controller {
     const tile = this.layers.ground.getTile(x, y);
 
     if (tile)
-    {
       this.renderImage(this.pathPrefix + tile.image, tile.renderPosition, this.tileSize.width, this.tileSize.height, tile.clippedRect);
-    }
   }
 
   renderCoordinates(x, y) {
     const wall = this.layers.walls.getTile(x, y);
-    const dynamicObject = this.level.getOccupantAt(x, y);
 
     if (wall && this.canvas.renderWalls)
-      this.renderWall(wall, x, y);
-    else if (dynamicObject)
-      this.renderSprite(dynamicObject);
+      return this.renderWall(wall, x, y);
+    for (var i = 0 ; i < this.renderObjects.length ; ++i) {
+      const objectPosition = this.renderObjects[i].getPosition();
+
+      if (objectPosition.x === x && objectPosition.y === y) {
+        this.renderSprite(this.renderObjects[i]);
+        this.renderObjects.splice(i, 1);
+        break ;
+      }
+    }
   }
 
   renderRoofs(x, y) {
@@ -228,6 +244,11 @@ export class Controller {
     const coords = this.getHoveredCase(mouseX, mouseY);
 
     if (coords !== null)
-      this.level.tileClicked(coords[0], coords[1])
+    {
+      if (!this.canvas.editingZone)
+        this.level.tileClicked(coords[0], coords[1])
+      else
+        this.canvas.toggleZoneTile(coords[0], coords[1]);
+    }
   }
 };

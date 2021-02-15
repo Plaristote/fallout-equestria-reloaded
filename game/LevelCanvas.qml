@@ -14,7 +14,13 @@ Canvas {
   property bool renderRoofs: true
   property bool renderWalls: true
   property bool showHoverCoordinates: false
+
+  // EDITOR
+  property QtObject editorObject
   property var hoverTile: []
+  property bool editingZone: false
+  signal toggleZoneTile(int tileX, int tileY)
+  // END EDITOR
 
   Component.onCompleted: {
     preloadImages();
@@ -44,9 +50,7 @@ Canvas {
     anchors.fill: parent
     enabled: !levelController.paused
     hoverEnabled: showHoverCoordinates
-    onClicked: {
-      controller.onMouseClick(mouse, mouseX, mouseY);
-    }
+    onClicked: controller.onMouseClick(mouse, mouseX, mouseY)
     onMouseXChanged: hoverTile = controller.getHoveredCase(mouseX, mouseY);
     onMouseYChanged: hoverTile = controller.getHoveredCase(mouseX, mouseY);
 

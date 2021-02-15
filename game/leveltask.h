@@ -70,6 +70,8 @@ private slots:
 
   void onZoneEntered(DynamicObject*, TileZone*);
   void onZoneExited(DynamicObject*, TileZone*);
+  void registerControlZone(TileZone*);
+  void unregisterControlZone(TileZone*);
 
 private:
   QList<DynamicObject*> objects;

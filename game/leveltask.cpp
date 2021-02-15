@@ -250,6 +250,10 @@ void LevelTask::registerDynamicObject(DynamicObject* object)
 {
   objects.push_back(object);
   CombatComponent::registerDynamicObject(object);
+  connect(object, &DynamicObject::controlZoneAdded,   this, &LevelTask::registerControlZone);
+  connect(object, &DynamicObject::controlZoneRemoved, this, &LevelTask::unregisterControlZone);
+  if (object->getControlZone())
+    registerControlZone(object->getControlZone());
   emit objectsChanged();
 }
 
@@ -257,7 +261,21 @@ void LevelTask::unregisterDynamicObject(DynamicObject* object)
 {
   objects.removeAll(object);
   CombatComponent::unregisterDynamicObject(object);
+  disconnect(object, &DynamicObject::controlZoneAdded,   this, &LevelTask::registerControlZone);
+  disconnect(object, &DynamicObject::controlZoneRemoved, this, &LevelTask::unregisterControlZone);
+  if (object->getControlZone())
+    unregisterControlZone(object->getControlZone());
   emit objectsChanged();
+}
+
+void LevelTask::registerControlZone(TileZone* zone)
+{
+  tilemap->addTileZone(zone);
+}
+
+void LevelTask::unregisterControlZone(TileZone* zone)
+{
+  tilemap->removeTileZone(zone);
 }
 
 DynamicObject* LevelTask::getObjectByName(const QString& name)

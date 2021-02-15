@@ -21,6 +21,7 @@ class LevelGrid : public QObject
     QPoint                    position;
     std::vector<CaseContent*> successors;
 
+    bool  isBlocked() const;
     bool  operator==(const CaseContent& other) { return position == other.position; }
     bool  operator==(const CaseContent* other) { return position == other->position; }
     float GetCost(const CaseContent&) const { return 1.f; }

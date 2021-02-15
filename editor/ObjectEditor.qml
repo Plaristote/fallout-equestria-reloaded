@@ -71,142 +71,128 @@ Item {
       background: UiStyle.TerminalPane {}
       Layout.fillWidth: true
       Layout.fillHeight: true
+      Layout.bottomMargin: saveButton.height
 
-      Flickable {
-        clip: true
-        anchors.fill: parent
-        contentHeight: formGrid.height
+      GridLayout {
+        id: formGrid
+        anchors.top: parent.top
+        anchors.left: parent.left
+        anchors.right: parent.right
+        columns: 2
 
-        GridLayout {
-          id: formGrid
-          width: parent.width
-          columns: 2
+        TerminalLabel {
+          text: "type"
+        }
 
-          Label {
-            text: "type"
-            color: "green"
+        TerminalComboBox {
+          id: typeInput
+          model: ["weapon","armor","ammo","consommables","misc"]
+          currentIndex: model.indexOf(currentObject.type)
+        }
+
+        TerminalLabel {
+          text: "weight"
+        }
+
+        TerminalField {
+          id: weightInput
+          text: currentObject.weight
+        }
+
+        TerminalLabel {
+          text: "value"
+        }
+
+        TerminalField {
+          id: valueInput
+          text: currentObject.value
+        }
+
+        TerminalLabel {
+          text: "groupable"
+        }
+
+        CheckBox {
+          id: groupableInput
+          checked: currentObject.isGroupable
+        }
+
+        TerminalLabel {
+          text: "sprite"
+        }
+
+        Row {
+          TerminalComboBox {
+            id: spriteInput
+            model: animationLibrary.getAnimationList("items")
+            currentIndex: animationLibrary.getAnimationList("items").indexOf(currentObject.sprite)
+            onCurrentTextChanged: {
+              itemSprite.initialize("items", currentText);
+              console.log("source", itemSprite.source);
+            }
           }
+
+          Image {
+            SpriteAnimation {
+              id: itemSprite
+            }
+            source: fileProtocol + itemSprite.source
+            width: itemSprite.clippedRect.width
+            height: itemSprite.clippedRect.height
+            sourceClipRect: itemSprite.clippedRect
+          }
+        }
+
+        TerminalLabel {
+          id: labelScript
+          text: "script"
+        }
+
+        Row {
+          id: scriptHeader
+          spacing: 5
 
           TerminalComboBox {
-            id: typeInput
-            model: ["weapon","armor","ammo","consommables","misc"]
-            currentIndex: model.indexOf(currentObject.type)
-          }
-
-          Label {
-            text: "weight"
-            color: "green"
-          }
-
-          TerminalField {
-            id: weightInput
-            text: currentObject.weight
-          }
-
-          Label {
-            text: "value"
-            color: "green"
-          }
-
-          TerminalField {
-            id: valueInput
-            text: currentObject.value
-          }
-
-          Label {
-            text: "groupable"
-            color: "green"
-          }
-
-          CheckBox {
-            id: groupableInput
-            checked: currentObject.isGroupable
-          }
-
-          Label {
-            text: "sprite"
-            color: "green"
-          }
-
-          Row {
-            TerminalComboBox {
-              id: spriteInput
-              model: animationLibrary.getAnimationList("items")
-              currentIndex: animationLibrary.getAnimationList("items").indexOf(currentObject.sprite)
-              onCurrentTextChanged: {
-                itemSprite.initialize("items", currentText);
-                console.log("source", itemSprite.source);
-              }
-            }
-
-            Image {
-              SpriteAnimation {
-                id: itemSprite
-              }
-              source: fileProtocol + itemSprite.source
-              width: itemSprite.clippedRect.width
-              height: itemSprite.clippedRect.height
-              sourceClipRect: itemSprite.clippedRect
+            id: scriptInput
+            model: scriptList
+            currentIndex: scriptList.indexOf(currentObject.script)
+            onCurrentTextChanged: {
+              scriptEditor.text = scriptController.getScript("items", scriptInput.currentText)
             }
           }
 
-          Label {
-            id: labelScript
-            text: "script"
-            color: "green"
-          }
-
-          Item {
-            Layout.preferredWidth: parent.width - labelScript.width - 100
-            Layout.preferredHeight: 700
-
-            Row {
-              id: scriptHeader
-              anchors.top: parent.top
-              anchors.left: parent.left
-
-              TerminalComboBox {
-                id: scriptInput
-                model: scriptList
-                currentIndex: scriptList.indexOf(currentObject.script)
-                onCurrentTextChanged: {
-                  scriptEditor.text = scriptController.getScript("items", scriptInput.currentText)
-                }
-              }
-
-              TerminalButton {
-                text: "Add script"
-                height: scriptInput.height
-                onClicked: {
-                  newScriptDialog.open();
-                }
-              }
-            }
-
-            Rectangle {
-              anchors.top: scriptHeader.bottom
-              anchors { bottom: parent.bottom; right: parent.right; left: parent.left }
-              border.width: 1
-              border.color: "green"
-              color: "transparent"
-              TextEdit {
-                id: scriptEditor
-                anchors.fill: parent
-                color: "white"
-              }
+          TerminalButton {
+            text: "Add script"
+            height: scriptInput.height
+            onClicked: {
+              newScriptDialog.open();
             }
           }
         }
-      }
+      } // END Grid Layout
 
-      MenuButton {
-        id: saveButton
-        anchors.bottom: parent.bottom
-        anchors.right: parent.right
-        text: "Save"
-        onClicked: root.save()
+      Rectangle {
+        anchors.top: formGrid.bottom
+        anchors { left: parent.left; bottom: parent.bottom; right: parent.right }
+        border.width: 1
+        border.color: "green"
+        color: "transparent"
+        TextEdit {
+          id: scriptEditor
+          anchors.fill: parent
+          anchors.margins: 5
+          color: "white"
+        }
       }
     }
+  }
+
+  MenuButton {
+    id: saveButton
+    anchors.bottom: parent.bottom
+    anchors.right: parent.right
+    text: "Save"
+    onClicked: root.save()
   }
 
   Dialog {
