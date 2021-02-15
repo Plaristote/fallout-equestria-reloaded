@@ -137,5 +137,8 @@
         <file>ui/TerminalLabel.qml</file>
         <file>editor/DynamicObjectEditor.qml</file>
         <file>editor/ControlZoneEditor.qml</file>
+        <file>ui/TerminalCheckBox.qml</file>
+        <file>editor/LevelEditorCanvas.qml</file>
+        <file>editor/LevelEditorRender.mjs</file>
     </qresource>
 </RCC>

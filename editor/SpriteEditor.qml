@@ -179,10 +179,9 @@ Item {
             text: "repeat"
           }
 
-          CheckBox {
+          TerminalCheckBox {
             id: repeatInput
             checked: spriteAnimation.repeat
-            background: Rectangle { color: "transparent"; border.color: "green"; border.width: 1 }
           }
         }
       } // END form flickable

@@ -42,7 +42,7 @@ Pane {
       TerminalComboBox {
         id: positioningInput
         model: ["Tile-based", "Floating"]
-        currentIndex: objectEditor.model.flloating ? 1 : 0
+        currentIndex: objectEditor.model.floating ? 1 : 0
         onCurrentTextChanged: {
           objectEditor.model.floating = currentText == "Floating"
         }

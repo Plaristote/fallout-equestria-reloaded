@@ -79,7 +79,7 @@ Item {
       Layout.fillHeight: true
       Layout.fillWidth: true
 
-      GameComponents.LevelCanvas {
+      LevelEditorCanvas {
         id: canvas
         levelController: gameController.level
         renderRoofs: displayRoofCheckbox.checked
@@ -106,22 +106,28 @@ Item {
       Layout.fillHeight: true
 
       ColumnLayout {
-        CheckBox {
-          id: displayRoofCheckbox
-          Text {
-            anchors.left: parent.right; anchors.verticalCenter: parent.verticalCenter
-            text: "Display roofs"
-            color: "white"
-          }
-        }
+        width: parent.width
 
-        CheckBox {
-          id: displayWallsCheckbox
-          checked: true
-          Text {
-            anchors.left: parent.right; anchors.verticalCenter: parent.verticalCenter
+        Row {
+          CheckBox {
+            id: displayRoofCheckbox
+            text: "Display roofs"
+            contentItem: Text {
+              leftPadding: 45
+              text: parent.text
+              color: "white"
+            }
+          }
+
+          CheckBox {
+            id: displayWallsCheckbox
+            checked: true
             text: "Display walls"
-            color: "white"
+            contentItem: Text {
+              leftPadding: 45
+              text: parent.text
+              color: "white"
+            }
           }
         }
 

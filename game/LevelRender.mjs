@@ -32,12 +32,14 @@ export class Controller {
     this.eachCase(this.renderTile.bind(this));
     this.renderZones();
     this.eachCase(this.renderCoordinates.bind(this));
-    if (this.canvas.renderRoofs) {
-      this.startClipAroundPlayer();
-      this.eachCase(this.renderRoofs.bind(this));
-      this.stopClipAroundPlayer();
-    }
+    this.renderRoofs();
     this.frameCount++;
+  }
+
+  renderRoofs() {
+    this.startClipAroundPlayer();
+    this.eachCase(this.renderRoof.bind(this));
+    this.stopClipAroundPlayer();
   }
 
   eachCase(callback) {
@@ -85,7 +87,7 @@ export class Controller {
   renderCoordinates(x, y) {
     const wall = this.layers.walls.getTile(x, y);
 
-    if (wall && this.canvas.renderWalls)
+    if (wall)
       return this.renderWall(wall, x, y);
     for (var i = 0 ; i < this.renderObjects.length ; ++i) {
       const objectPosition = this.renderObjects[i].getPosition();
@@ -98,7 +100,7 @@ export class Controller {
     }
   }
 
-  renderRoofs(x, y) {
+  renderRoof(x, y) {
     const player = this.level.player;
 
     for (var i = 0 ; i < this.tilemap.roofs.length ; ++i) {
@@ -244,11 +246,6 @@ export class Controller {
     const coords = this.getHoveredCase(mouseX, mouseY);
 
     if (coords !== null)
-    {
-      if (!this.canvas.editingZone)
-        this.level.tileClicked(coords[0], coords[1])
-      else
-        this.canvas.toggleZoneTile(coords[0], coords[1]);
-    }
+      this.level.tileClicked(coords[0], coords[1]);
   }
 };

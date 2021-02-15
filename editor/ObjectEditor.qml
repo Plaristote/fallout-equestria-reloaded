@@ -112,7 +112,7 @@ Item {
           text: "groupable"
         }
 
-        CheckBox {
+        TerminalCheckBox {
           id: groupableInput
           checked: currentObject.isGroupable
         }
