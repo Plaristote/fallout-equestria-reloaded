@@ -30,6 +30,26 @@ Pane {
     }
   }
 
+  Button {
+    background: UiStyle.Label { style: parent.down ? "dark" : "base" }
+    FaceDisplay {
+      anchors.fill: parent
+      anchors.margins: 5
+      theme: characterSheet.faceTheme
+      color: characterSheet.faceColor
+      accessories: characterSheet.accessories
+    }
+    onClicked: faceEditor.open()
+    anchors { top: characterNameRow.top; left: characterNameRow.right; leftMargin: 10 }
+    height: characterNameRow.height
+    width: 50
+  }
+
+  FaceEditor {
+    id: faceEditor
+    characterSheet: root.characterSheet
+  }
+
   RowLayout {
     id: statisticsRow
     spacing: 10

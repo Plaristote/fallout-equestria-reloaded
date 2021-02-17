@@ -4,17 +4,17 @@
 <context>
     <name>CharacterSheet</name>
     <message>
-        <location filename="ui/CharacterSheet.qml" line="101"/>
+        <location filename="ui/CharacterSheet.qml" line="116"/>
         <source>Available skill points</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="ui/CharacterSheet.qml" line="181"/>
+        <location filename="ui/CharacterSheet.qml" line="196"/>
         <source>Confirm</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="ui/CharacterSheet.qml" line="186"/>
+        <location filename="ui/CharacterSheet.qml" line="201"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>

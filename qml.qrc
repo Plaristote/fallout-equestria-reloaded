@@ -146,5 +146,6 @@
         <file>editor/LootEditor.qml</file>
         <file>editor/AddItemDialog.qml</file>
         <file>editor/RemoveItemDialog.qml</file>
+        <file>ui/FaceEditor.qml</file>
     </qresource>
 </RCC>
