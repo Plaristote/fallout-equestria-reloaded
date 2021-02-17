@@ -58,6 +58,7 @@ public:
   Q_INVOKABLE void      removeControlZone();
   TileZone*             getControlZone() { return controlZone; }
 
+  Q_INVOKABLE bool      triggerInteraction(Character*, const QString& interactionType);
   Q_INVOKABLE void      scriptCall(const QString& method, const QString& message = "");
 
   const QList<QPoint>& getCurrentPath() const { return currentPath; }

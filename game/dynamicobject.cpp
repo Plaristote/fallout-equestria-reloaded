@@ -97,6 +97,27 @@ QStringList DynamicObject::getAvailableInteractions()
   return QStringList();
 }
 
+bool DynamicObject::triggerInteraction(Character* character, const QString &interactionType)
+{
+  QMap<QString, QString> callbackMap = {
+    {"talk-to",   "onTalkTo"},
+    {"use",       "onUse"},
+    {"use-skill", "onUseSkill"},
+    {"use-magic", "onUseMagic"},
+    {"look",      "onLook"}
+  };
+  QJSValue callback = script.property(callbackMap[interactionType]);
+
+  if (callback.isCallable())
+  {
+    QJSValueList args;
+
+    args << Game::get()->getScriptEngine().newQObject(character);
+    return Game::get()->scriptCall(callback, args, "triggerInteraction").toBool();
+  }
+  return false;
+}
+
 void DynamicObject::scriptCall(const QString& method, const QString& message)
 {
   QJSValue callback = script.property(method);

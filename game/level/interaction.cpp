@@ -63,14 +63,21 @@ void InteractionComponent::startPendingInteraction()
 {
   if (pendingInteraction.first)
   {
-    QString typeName(pendingInteraction.first->metaObject()->className());
+    bool handledByScript = pendingInteraction.first->triggerInteraction(Game::get()->getPlayer(), pendingInteraction.second);
 
-    if (pendingInteraction.second == "talk-to")
-      initializeDialog(reinterpret_cast<Character*>(pendingInteraction.first));
-    else if (pendingInteraction.second == "use" && typeName == "StorageObject")
-      initializeLooting(reinterpret_cast<StorageObject*>(pendingInteraction.first));
-    else
-      qDebug() << "InteractionComponent::startPendingInteraction: unknown interaciton type" << pendingInteraction.second;
+    if (!handledByScript)
+    {
+      QString typeName(pendingInteraction.first->metaObject()->className());
+
+      if (pendingInteraction.second == "talk-to")
+        initializeDialog(reinterpret_cast<Character*>(pendingInteraction.first));
+      else if (pendingInteraction.second == "use" && typeName == "StorageObject")
+        initializeLooting(reinterpret_cast<StorageObject*>(pendingInteraction.first));
+      else if (pendingInteraction.second == "use" && typeName == "Character" && !(reinterpret_cast<Character*>(pendingInteraction.first)->isAlive()))
+        initializeLooting(reinterpret_cast<StorageObject*>(pendingInteraction.first));
+      else
+        qDebug() << "InteractionComponent::startPendingInteraction: unknown interaciton type" << pendingInteraction.second;
+    }
   }
   else
     qDebug() << "InteractionComponent::startPendingInteraction: No more interaction target";
