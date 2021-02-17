@@ -33,7 +33,9 @@ public:
 
   }
   */
+  void onNextCombatTurn();
 
+  Q_INVOKABLE bool isInCombat(Character* character) const { return combattants.contains(character); }
   Q_INVOKABLE void joinCombat(Character* character);
   Q_INVOKABLE void leaveCombat(Character* character);
   Q_INVOKABLE bool tryToEndCombat();
@@ -46,9 +48,16 @@ signals:
   void combattantsChanged();
   void currentCombattantChanged();
 
-private:
+private slots:
+  void onMovementFinished(Character*);
+  void onCombattantReachedDestination();
+
+protected:
   void sortCombattants();
   void removeDeadCombattants();
+  void finalizeCharacterTurn(Character*);
+  void finalizeRound();
+  void initializeCharacterTurn(Character*);
 
   bool combat = false;
   int combatIterator = 0;

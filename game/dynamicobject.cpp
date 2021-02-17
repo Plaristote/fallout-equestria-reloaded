@@ -17,17 +17,20 @@ void DynamicObject::setScript(const QString& name)
 {
   QJSValue callback;
 
-  scriptName = name;
-  script     = Game::get()->loadScript(getScriptPath() + '/' + name);
-  callback   = script.property("initialize");
-  taskManager->setLocalModule(script);
+  scriptName   = name;
+  scriptModule = Game::get()->loadScript(getScriptPath() + '/' + name);
+  callback     = scriptModule.property("create");
   if (callback.isCallable())
   {
     QJSValueList args;
 
     args << Game::get()->getScriptEngine().newQObject(this);
-    Game::get()->scriptCall(callback, args, "initialize");
+    script = Game::get()->scriptCall(callback, args, "create");
+    Game::get()->scriptCall(script.property("initialize"), args, "initialize");
+    taskManager->setLocalModule(script);
   }
+  else
+    qDebug() << "/!\\ Missing create function from" << (getScriptPath() + '/' + name);
 }
 
 void DynamicObject::moveTo(int x, int y, QPoint renderPosition)
@@ -94,6 +97,8 @@ QStringList DynamicObject::getAvailableInteractions()
     retval = Game::get()->scriptCall(callback, args, "getAvailableInteractions");
     return retval.toVariant().toStringList();
   }
+  else
+    qDebug() << "/!\\ Missing getAvailableInteractions in" << objectName << "'s script";
   return QStringList();
 }
 

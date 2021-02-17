@@ -29,6 +29,9 @@ public:
   QString     getItemType() const;
   bool        isGroupable(InventoryItem* = nullptr);
 
+  Q_INVOKABLE bool canEquipInSlot(const QString&);
+  void onEquippedBy(Character*, bool on);
+
 signals:
   void itemTypeChanged();
   void nameChanged();
@@ -39,6 +42,9 @@ signals:
 private slots:
   void updateScript();
   void updateSprite();
+
+protected:
+  virtual QString getScriptPath() const override { return SCRIPTS_PATH + "items"; }
 
 private:
   int quantity;

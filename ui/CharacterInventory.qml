@@ -19,6 +19,11 @@ Pane {
 
   signal closed()
 
+  onSelectedObjectChanged: {
+    console.log("Selected object changed maggle");
+    slotsView.updateSlots();
+  }
+
   onCharacterChanged: character !== null ? itemsView.inventory = character.inventory : null
 
   Text {
@@ -109,6 +114,13 @@ Pane {
         InventoryItemPreview {
           anchors.left: parent.left; anchors.right: parent.right
           model: root.selectedObject
+        }
+
+        CharacterInventorySlots {
+          id: slotsView
+          inventory: root.character.inventory
+          selectedObject: root.selectedObject
+          onEquippedItem: root.selectedObject = null;
         }
       } // END Column
     }

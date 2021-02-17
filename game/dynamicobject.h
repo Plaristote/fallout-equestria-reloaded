@@ -28,9 +28,9 @@ public:
   explicit DynamicObject(QObject *parent = nullptr);
 
   virtual void update(qint64);
-
   virtual void load(const QJsonObject&);
   virtual void save(QJsonObject&) const;
+  virtual void setScript(const QString& name);
 
   inline bool isCharacter() const { return getObjectType() == "Character"; }
   inline bool isFloating() const { return floating; }
@@ -38,7 +38,6 @@ public:
 
   void setObjectName(const QString& value) { objectName = value; emit objectNameChanged(); }
   const QString& getObjectName() const { return objectName; }
-  void setScript(const QString& name);
   TaskRunner* getTaskManager() { return taskManager; }
 
   Q_INVOKABLE bool     hasVariable(const QString& name) const { return dataStore.contains(name); }
@@ -82,7 +81,7 @@ private slots:
 
 protected:
   virtual QString getScriptPath() const { return SCRIPTS_PATH + "behaviours"; }
-  QJSValue script;
+  QJSValue script, scriptModule;
   TaskRunner* taskManager;
   TileZone* controlZone = nullptr;
 private:

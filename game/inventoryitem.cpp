@@ -85,6 +85,33 @@ bool InventoryItem::remove(int amount)
   return false;
 }
 
+void InventoryItem::onEquippedBy(Character* user, bool on)
+{
+  QJSValue callback = script.property("onEquipped");
+
+  if (callback.isCallable())
+  {
+    QJSValueList args;
+
+    args << Game::get()->getScriptEngine().newQObject(user) << on;
+    Game::get()->scriptCall(callback, args, "Item::onEquipped");
+  }
+}
+
+bool InventoryItem::canEquipInSlot(const QString& slotType)
+{
+  QJSValue callback = script.property("canEquipInSlotType");
+
+  if (callback.isCallable())
+  {
+    QJSValueList args;
+
+    args << slotType;
+    return Game::get()->scriptCall(callback, args, "Item::canEquipInSlotType").toBool();
+  }
+  return  slotType == "any";
+}
+
 void InventoryItem::updateScript()
 {
   auto itemData = InventoryItemLibrary::get()->getObject(getObjectName());
@@ -92,7 +119,7 @@ void InventoryItem::updateScript()
 
   if (itemData.isObject())
     scriptName = itemData["script"].toString(scriptName);
-  script = Game::get()->loadScript(SCRIPTS_PATH + "items/" + scriptName);
+  setScript(scriptName);
 }
 
 void InventoryItem::updateSprite()

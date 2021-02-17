@@ -329,9 +329,22 @@ void LevelTask::update()
 {
   qint64 delta = clock.restart();
 
-  timeManager->addElapsedMilliseconds(delta);
-  for (DynamicObject* object : objects)
-    object->update(delta);
+  if (!combat)
+  {
+    timeManager->addElapsedMilliseconds(delta);
+    for (DynamicObject* object : objects)
+    {
+      object->update(delta);
+      object->getTaskManager()->update(delta);
+    }
+  }
+  else
+  {
+    for (DynamicObject* object : objects)
+      object->update(delta);
+    if (combattants.at(combatIterator)->getActionPoints() == 0)
+      onNextCombatTurn();
+  }
   CombatComponent::update(delta);
   emit updated();
 }

@@ -29,7 +29,7 @@ public:
   Q_INVOKABLE void setObjectPosition(DynamicObject*, int x, int y);
 
 protected slots:
-  void onMovementFinished(Character*);
+  virtual void onMovementFinished(Character*);
 
 protected:
   LevelGrid* grid;

@@ -5,11 +5,14 @@
 # include <QQmlListProperty>
 # include "inventoryitem.h"
 
+class Character;
+
 class Inventory : public QObject
 {
   Q_OBJECT
 
   Q_PROPERTY(QQmlListProperty<InventoryItem> items READ getQmlItems NOTIFY itemsChanged)
+  Q_PROPERTY(QStringList slotNames MEMBER slotNames NOTIFY slotsChanged)
   Q_PROPERTY(int totalWeight READ getTotalWeight NOTIFY totalWeightChanged)
   Q_PROPERTY(int totalValue  READ getTotalValue  NOTIFY totalValueChanged)
 public:
@@ -27,18 +30,29 @@ public:
   Q_INVOKABLE void addItemOfType(const QString& name, int quantity = 1);
   Q_INVOKABLE bool removeItemOfType(const QString& name, int quantity = 1);
 
+  Q_INVOKABLE bool equipItem(InventoryItem* item, const QString& slotName);
+  Q_INVOKABLE bool canEquipItem(InventoryItem* item, const QString& slotName) const;
+  Q_INVOKABLE void unequipItem(const QString& slotName, bool dropped = false);
+  Q_INVOKABLE InventoryItem* getEquippedItem(const QString& slotName) const;
+
   Q_INVOKABLE int count(const QString& name) const;
 
   int getTotalWeight() const;
   int getTotalValue() const;
 
+  void setSlots(const QMap<QString, QString>&);
+
 signals:
   void itemsChanged();
   void totalWeightChanged();
   void totalValueChanged();
+  void slotsChanged();
 
 private:
-  QList<InventoryItem*> items;
+  QList<InventoryItem*>         items;
+  QMap<QString, InventoryItem*> itemSlots;
+  QStringList                   slotNames;
+  QMap<QString, QString>        slotTypes;
 };
 
 #endif // INVENTORY_H

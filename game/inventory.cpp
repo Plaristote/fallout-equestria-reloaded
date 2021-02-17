@@ -104,6 +104,11 @@ int Inventory::getTotalWeight() const
 
   for (auto* inventoryItem : items)
     total += inventoryItem->getWeight();
+  for (auto* inventoryItem : itemSlots)
+  {
+    if (inventoryItem)
+      total += inventoryItem->getWeight();
+  }
   return total;
 }
 
@@ -116,8 +121,80 @@ int Inventory::getTotalValue() const
   return total;
 }
 
+bool Inventory::canEquipItem(InventoryItem *item, const QString &slotName) const
+{
+  return item && slotTypes.contains(slotName) && item->canEquipInSlot(slotTypes[slotName]);
+}
+
+bool Inventory::equipItem(InventoryItem *item, const QString& slotName)
+{
+  if (canEquipItem(item, slotName))
+  {
+    if (item->getQuantity() > 1)
+    {
+      item->remove(1);
+      item = new InventoryItem(this);
+      item->setObjectName(item->getObjectName());
+    }
+    else
+      removeItem(item);
+    unequipItem(slotName);
+    itemSlots[slotName] = item;
+    return true;
+  }
+  return false;
+}
+
+void Inventory::unequipItem(const QString &slotName, bool dropped)
+{
+  if (itemSlots.contains(slotName))
+  {
+    InventoryItem* oldItem = itemSlots[slotName];
+
+    if (oldItem)
+    {
+      itemSlots[slotName] = nullptr;
+      if (!dropped)
+        addItem(oldItem);
+      else
+        delete oldItem;
+    }
+  }
+}
+
+InventoryItem* Inventory::getEquippedItem(const QString &slotName) const
+{
+  if (itemSlots.contains(slotName))
+    return itemSlots[slotName];
+  return nullptr;
+}
+
+void Inventory::setSlots(const QMap<QString, QString>& slotTypes)
+{
+  this->slotTypes = slotTypes;
+  slotNames = slotTypes.keys();
+  // Discard removed slots
+  for (const QString& slotName : itemSlots.keys())
+  {
+    if (!slotNames.contains(slotName))
+    {
+      unequipItem(slotName);
+      itemSlots.remove(slotName);
+    }
+  }
+  // Insert new slots
+  for (const QString& slotName : slotNames)
+  {
+    if (!itemSlots.contains(slotName))
+      itemSlots.insert(slotName, nullptr);
+  }
+  emit slotsChanged();
+}
+
 void Inventory::load(const QJsonObject& data)
 {
+  QJsonObject slotsData = data["slots"].toObject();
+
   for (auto itemDataValue : data["items"].toArray())
   {
     QJsonObject itemData = itemDataValue.toObject();
@@ -126,11 +203,27 @@ void Inventory::load(const QJsonObject& data)
     item->load(itemData);
     addItem(item);
   }
+  for (auto it = slotsData.begin() ; it != slotsData.end() ; ++it)
+  {
+    QString        slotName = it.key();
+    QJsonObject    itemData = it.value().toObject();
+    InventoryItem* item     = nullptr;
+
+    if (itemData["hasItem"].toBool())
+    {
+      item = new InventoryItem(this);
+      item->load(itemData);
+    }
+    slotTypes.insert(slotName, itemData["slotType"].toString());
+    itemSlots.insert(slotName, item);
+  }
+  slotNames = slotTypes.keys();
 }
 
 void Inventory::save(QJsonObject& data) const
 {
   QJsonArray array;
+  QJsonObject slotsData;
 
   for (auto* inventoryItem : items)
   {
@@ -139,6 +232,17 @@ void Inventory::save(QJsonObject& data) const
     inventoryItem->save(itemData);
     array << itemData;
   }
-  data["items"] = array;
-}
+  for (auto it = slotTypes.begin() ; it != slotTypes.end() ; ++it)
+  {
+    QJsonObject    slotData;
+    InventoryItem* item = getEquippedItem(it.key());
 
+    slotData.insert("slotType", it.value());
+    slotData.insert("hasItem", item != nullptr);
+    if (item)
+      item->save(slotData);
+    slotsData.insert(it.key(), slotData);
+  }
+  data["items"] = array;
+  data["slots"] = slotsData;
+}

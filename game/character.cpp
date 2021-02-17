@@ -85,12 +85,67 @@ void Character::initializeFaction()
     faction = diplomacy->getFaction(characterSheet->getFaction());
 }
 
+bool Character::useActionPoints(int amount, const QString& actionType)
+{
+  if (amount <= actionPoints)
+  {
+    actionPoints -= amount;
+    emit actionPointsChanged();
+    return true;
+  }
+  return false;
+}
+
+void Character::resetActionPoints()
+{
+  actionPoints = getStatistics()->get_actionPoints();
+  emit actionPointsChanged();
+}
+
+void Character::updateInventorySlots()
+{
+  QMap<QString, QString> slotTypes({{"default", "any"}});
+  QJSValue callback = script.property("getItemSlots");
+
+  if (callback.isCallable())
+  {
+    QJSValueList args;
+    QJSValue retval = Game::get()->scriptCall(callback, args, "Character::getItemSlots");
+
+    if (retval.isArray())
+    {
+      slotTypes.clear();
+      for (QVariant slotData : retval.toVariant().toList())
+      {
+        auto pair = slotData.toStringList();
+
+        if (pair.size() == 2)
+          slotTypes.insert(pair[0], pair[1]);
+        else
+          qDebug() << "Character::getItemSlots: invalid slot type in " << getScriptPath();
+      }
+    }
+    else
+      qDebug() << "Character::getItemSlots: wrong return type in " << getScriptPath();
+  }
+  else
+    qDebug() << "Character::getItemsSlots: method undefined in " << getScriptPath();
+  inventory->setSlots(slotTypes);
+}
+
+void Character::setScript(const QString& scriptName)
+{
+  DynamicObject::setScript(scriptName);
+  updateInventorySlots();
+}
+
 void Character::load(const QJsonObject& data)
 {
   QString objectName = data["objectName"].toString();
 
   isUnique = data["uniq"].toBool();
   enemyFlag = static_cast<unsigned int>(data["enemyFlag"].toInt(0));
+  actionPoints = data["ap"].toInt();
   if (isUnique)
     statistics = Game::get()->getDataEngine()->makeStatModel(objectName);
   else
@@ -107,6 +162,7 @@ void Character::save(QJsonObject& data) const
 {
   data["uniq"] = isUnique;
   data["enemyFlag"] = static_cast<int>(enemyFlag);
+  data["ap"] = actionPoints;
   if (isUnique)
     Game::get()->getDataEngine()->saveStatModel(getObjectName(), statistics);
   else

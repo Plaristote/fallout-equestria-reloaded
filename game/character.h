@@ -13,12 +13,14 @@ class Character : public StorageObject
 
   Q_PROPERTY(StatModel*   statistics  MEMBER statistics)
   Q_PROPERTY(FieldOfView* fieldOfView MEMBER fieldOfView)
+  Q_PROPERTY(bool actionPoints MEMBER actionPoints NOTIFY actionPointsChanged)
 public:
   explicit Character(QObject *parent = nullptr);
 
   void update(qint64) override;
   void load(const QJsonObject&) override;
   void save(QJsonObject&) const override;
+  void setScript(const QString&) override;
 
   void         setStatistics(StatModel* value) { statistics = value; }
   StatModel*   getStatistics() const { return statistics; }
@@ -39,7 +41,14 @@ public:
   Q_INVOKABLE bool isSneaking() const { return sneakEnabled; }
   Q_INVOKABLE float getDistance(const DynamicObject*) const;
 
+  Q_INVOKABLE bool useActionPoints(int amount = 1, const QString& motive = "");
+  inline int       getActionPoints() const { return actionPoints; }
+  void             resetActionPoints();
+
+  Q_INVOKABLE void updateInventorySlots();
+
 signals:
+  void actionPointsChanged();
 
 protected:
   virtual QString getScriptPath() const override { return SCRIPTS_PATH + "pnjs"; }
@@ -53,6 +62,7 @@ private:
   bool isUnique = false;
   bool sneakEnabled = false;
   unsigned int enemyFlag = 0;
+  int actionPoints = 0;
 };
 
 #endif // CHARACTER_H
