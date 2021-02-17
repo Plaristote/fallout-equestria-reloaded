@@ -159,6 +159,10 @@ Item {
           visible: model !== null
           model: selectedObject && selectedObject.getObjectType() === "StorageObject" ? selectedObject : null
           Layout.fillWidth: true
+          onOpenStorageClicked: {
+            lootEditor.inventory = selectedObject.inventory;
+            lootEditor.open();
+          }
         }
 
         ControlZoneEditor {
@@ -177,6 +181,13 @@ Item {
     anchors.fill: parent
     anchors.margins: 50
     character: selectedCharacter
+    visible: false
+  }
+
+  LootEditor {
+    id: lootEditor
+    anchors.fill: parent
+    anchors.margins: 50
     visible: false
   }
 

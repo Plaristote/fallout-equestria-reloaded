@@ -31,40 +31,15 @@ CharacterInventory {
 
   onClosed: { character = null; visible = false }
 
-  Dialog {
+  AddItemDialog {
     id: addItemDialog
-    title: "Add item"
-    modal: true
-    anchors.centerIn: parent
-    standardButtons: Dialog.Ok | Dialog.Cancel
-    GridLayout {
-      columns: 2
-      Label { text: "Object" }
-      ComboBox { id: newItemSelect; model: itemLibrary.getObjectList() }
-      Label { text: "Quantity" }
-      TextField { id: newItemQuantityInput; text: "1" }
-    }
-    onAccepted: {
-      const inventory = characterInventory.character.inventory;
-      inventory.addItemOfType(newItemSelect.currentText, parseInt(newItemQuantityInput.text));
-    }
+    inventory: characterInventory.character.inventory
   }
 
-  Dialog {
+  RemoveItemDialog {
     id: removeItemDialog
-    title: "Remove items"
-    modal: true
-    anchors.centerIn: parent
-    standardButtons: Dialog.Ok | Dialog.Cancel
-    GridLayout {
-      columns: 2
-      Label { text: "How much" }
-      TextField { id: removeItemQuantityInput; text: "1" }
-    }
-    onAccepted: {
-      const inventory = characterInventory.character.inventory;
-      const itemType = characterInventory.selectedObject.objectName;
-      inventory.removeItemOfType(itemType, parseInt(removeItemQuantityInput.text));
-    }
+    inventory: characterInventory.character.inventory
+    selectedObject: characterInventory.selectedObject
   }
+
 }

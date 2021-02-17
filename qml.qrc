@@ -143,5 +143,8 @@
         <file>game/LevelMenu.qml</file>
         <file>game/LevelHud.qml</file>
         <file>game/LevelFrameRate.qml</file>
+        <file>editor/LootEditor.qml</file>
+        <file>editor/AddItemDialog.qml</file>
+        <file>editor/RemoveItemDialog.qml</file>
     </qresource>
 </RCC>
