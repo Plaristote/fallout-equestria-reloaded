@@ -25,20 +25,21 @@ void TextBubblesComponent::update(qint64 delta)
     emit textBubblesChanged();
 }
 
-void TextBubblesComponent::addTextBubble(DynamicObject* target, const QString& content, qint64 duration, const QString& color)
+TextBubble* TextBubblesComponent::getTextBubbleFor(DynamicObject* target) const
 {
-  TextBubble* textBubble = nullptr;
-  bool isNew = true;
-
   for (auto it = textBubbles.begin() ; it != textBubbles.end() ; ++it)
   {
     if ((*it)->getTarget() == target)
-    {
-      textBubble = *it;
-      isNew = false;
-      break ;
-    }
+      return *it;
   }
+  return nullptr;
+}
+
+void TextBubblesComponent::addTextBubble(DynamicObject* target, const QString& content, qint64 duration, const QString& color)
+{
+  TextBubble* textBubble = getTextBubbleFor(target);
+  bool isNew = !textBubble;
+
   if (!textBubble)
     textBubble = new TextBubble(this, target);
   textBubble->initialize(content, duration, color);
@@ -60,6 +61,8 @@ void TextBubblesComponent::unregisterDynamicObject(DynamicObject* object)
       delete *it;
       textBubbles.erase(it);
     }
+    else
+      ++it;
   }
   if (oldLength != textBubbles.size())
     emit textBubblesChanged();

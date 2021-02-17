@@ -103,15 +103,15 @@ void TaskRunner::load(const QJsonObject& data)
     task.infinite = taskData["infinite"].toBool();
     task.timeLeft = taskData["timeLeft"].toInt();
     scriptName = task.name + ".mjs";
-    if (task.type == LocalTask)
+    if (task.type == ModularTask)
     {
-      task.module = Game::get()->loadScript(SCRIPTS_PATH + "tasks/" + data["script"].toString(scriptName));
+      task.module = Game::get()->loadScript(SCRIPTS_PATH + "tasks/" + task.name + ".mjs");
       task.callback = task.module.property("onTriggered");
     }
     else
     {
       task.module = module;
-      task.callback = task.module.property(data["callback"].toString(task.name));
+      task.callback = task.module.property(task.name);
     }
     tasks << task;
   }

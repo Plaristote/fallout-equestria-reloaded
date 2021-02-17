@@ -56,6 +56,8 @@ signals:
   void textBubblesChanged();
 
 private:
+  TextBubble* getTextBubbleFor(DynamicObject* target) const;
+
   QList<TextBubble*> textBubbles;
 };
 
