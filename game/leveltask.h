@@ -38,6 +38,7 @@ public:
   const QString& getName() const { return name; }
   TileMap* getTileMap() const { return tilemap; }
   Character* getPlayer();
+  QList<Character*> findCharacters(std::function<bool (Character&)> compare);
 
   Q_INVOKABLE bool insertPartyIntoZone(CharacterParty*, const QString& zoneName = "");
   Q_INVOKABLE void tileClicked(int x, int y);

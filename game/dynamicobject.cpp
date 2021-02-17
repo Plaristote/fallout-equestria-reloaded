@@ -1,4 +1,5 @@
 #include "dynamicobject.h"
+#include "character.h"
 #include "game.h"
 #include "tilemap/tilezone.h"
 #include <QJsonArray>

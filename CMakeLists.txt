@@ -63,6 +63,8 @@ set(PROJECT_SOURCES
         game/characterparty.cpp
         game/characterdialog.h
         game/characterdialog.cpp
+        game/characters/field_of_view.hpp
+        game/characters/field_of_view.cpp
         game/lootingcontroller.h
         game/lootingcontroller.cpp
         game/sprite.h
@@ -85,6 +87,8 @@ set(PROJECT_SOURCES
         game/inventoryitem.cpp
         game/inventoryitemlibrary.h
         game/inventoryitemlibrary.cpp
+        game/diplomacy.hpp
+        game/diplomacy.cpp
         game/level/grid.h
         game/level/grid.cpp
         game/level/interaction.h

@@ -25,6 +25,29 @@ void DataEngine::setTimeData(const QJsonObject& timeData)
   data.insert("time", timeData);
 }
 
+QJsonObject DataEngine::getWorldDiplomacy() const
+{
+  return diplomacy;
+}
+
+void DataEngine::setWorldDiplomacy(const QJsonObject& diplomacyData)
+{
+  diplomacy = diplomacyData;
+  data.remove("diplomacy");
+  data.insert("diplomacy", diplomacy);
+}
+
+void DataEngine::registerFaction(const QString& name)
+{
+  if (!diplomacy.contains(name))
+  {
+    QJsonObject factionData;
+
+    factionData.insert("enemies", QJsonObject());
+    diplomacy.insert(name, factionData);
+  }
+}
+
 void DataEngine::loadFromFile(const QString &path)
 {
   QFile in(path.startsWith("./assets") ? path : "./saves/" + path);

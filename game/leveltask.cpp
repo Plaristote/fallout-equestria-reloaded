@@ -278,6 +278,23 @@ void LevelTask::unregisterControlZone(TileZone* zone)
   tilemap->removeTileZone(zone);
 }
 
+QList<Character*> LevelTask::findCharacters(std::function<bool (Character &)> compare)
+{
+  QList<Character*> characters;
+
+  for (DynamicObject* object : objects)
+  {
+    if (object->isCharacter())
+    {
+      Character* character = reinterpret_cast<Character*>(object);
+
+      if (compare(*character))
+        characters << character;
+    }
+  }
+  return characters;
+}
+
 DynamicObject* LevelTask::getObjectByName(const QString& name)
 {
   for (DynamicObject* object : objects)

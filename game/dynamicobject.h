@@ -11,6 +11,7 @@
 # include "taskrunner.h"
 
 class TileZone;
+class Character;
 
 class DynamicObject : public Sprite
 {
@@ -26,7 +27,7 @@ class DynamicObject : public Sprite
 public:
   explicit DynamicObject(QObject *parent = nullptr);
 
-  void update(qint64);
+  virtual void update(qint64);
 
   virtual void load(const QJsonObject&);
   virtual void save(QJsonObject&) const;

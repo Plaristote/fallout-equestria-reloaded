@@ -28,6 +28,10 @@ public:
   QJsonObject  getPlayerParty() const;
   void         setPlayerParty(const QJsonObject&);
 
+  QJsonObject  getWorldDiplomacy() const;
+  void         setWorldDiplomacy(const QJsonObject&);
+  void         registerFaction(const QString&);
+
   StatModel* makeStatModel(const QString& characterId, const QString& source = "");
   void       saveStatModel(const QString& characterId, StatModel*);
 
@@ -38,7 +42,7 @@ public:
 
 private:
   QJsonObject data;
-  QJsonObject levels, characters, time;
+  QJsonObject levels, characters, time, diplomacy;
 };
 
 #endif // DATAENGINE_H

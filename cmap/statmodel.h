@@ -45,8 +45,9 @@ class StatModel : public QObject
 {
   Q_OBJECT
 
-  Q_PROPERTY(QString name MEMBER name NOTIFY nameChanged)
-  Q_PROPERTY(int     age  MEMBER age  NOTIFY ageChanged)
+  Q_PROPERTY(QString name    MEMBER name    NOTIFY nameChanged)
+  Q_PROPERTY(int     age     MEMBER age     NOTIFY ageChanged)
+  Q_PROPERTY(QString faction MEMBER faction NOTIFY factionChanged)
 
   Q_PROPERTY(int  hitPoints      MEMBER hitPoints    NOTIFY hitPointsChanged)
   Q_PROPERTY(int  experience     READ getExperience  NOTIFY experienceChanged)
@@ -123,6 +124,7 @@ public:
   const QString& getName() const { return name; }
   int getExperience() const { return experience; }
   int getHitPoints() const { return hitPoints; }
+  QString getFaction() const { return faction; }
   Q_INVOKABLE void addExperience(int xp);
   Q_INVOKABLE bool isAcceptable() const;
   Q_INVOKABLE int getMaxTraits() const { return 2; }
@@ -185,12 +187,13 @@ signals:
   void faceAccessoriesChanged();
   void faceThemeChanged();
   void faceColorChanged();
+  void factionChanged();
 
 private slots:
   void updateBaseValues();
 
 private:
-  QString name;
+  QString name, faction;
   int age = 21;
   int strength, perception, endurance, charisma, intelligence, agility, luck;
   int hitPoints = 1;

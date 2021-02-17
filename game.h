@@ -7,6 +7,7 @@
 # include "game/characterparty.h"
 # include "game/timermanager.h"
 # include "game/worldmap.h"
+# include "game/diplomacy.hpp"
 # include <QJSEngine>
 # include "cmap/trait.h"
 
@@ -40,6 +41,7 @@ public:
 
   Q_INVOKABLE DataEngine* getDataEngine() const { return dataEngine; }
   TimeManager* getTimeManager() const { return timeManager; }
+  WorldDiplomacy* getDiplomacy() const { return diplomacy; }
   LevelTask* getLevel() const { return currentLevel; }
   QJSEngine& getScriptEngine() { return scriptEngine; }
   QJSValue loadScript(const QString& path);
@@ -65,6 +67,7 @@ public slots:
 private:
   DataEngine* dataEngine = nullptr;
   TimeManager* timeManager;
+  WorldDiplomacy* diplomacy;
   WorldMap* worldmap;
   LevelTask*  currentLevel = nullptr;
   CharacterParty* playerParty = nullptr;

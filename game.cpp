@@ -12,6 +12,7 @@ Game::Game(QObject *parent) : QObject(parent)
   instance = this;
   dataEngine = new DataEngine(this);
   timeManager = new TimeManager(this);
+  diplomacy = new WorldDiplomacy(*dataEngine);
   playerParty = new CharacterParty(this);
   worldmap = new WorldMap(this);
   scriptEngine.installExtensions(QJSEngine::ConsoleExtension);
@@ -27,6 +28,7 @@ Game::~Game()
   scriptEngine.collectGarbage();
   if (instance == this)
     instance = nullptr;
+  delete diplomacy;
 }
 
 void Game::deleteLater()
@@ -106,11 +108,11 @@ void Game::goToLevel(const QString& name)
   appendToConsole("You reached " + name);
   dataEngine->setCurrentLevel(name);
   currentLevel = new LevelTask(this);
+  scriptObject.setProperty("level", scriptEngine.newQObject(currentLevel));
   connect(currentLevel, &LevelTask::displayConsoleMessage, this, &Game::appendToConsole);
   connect(currentLevel, &LevelTask::exitZoneEntered, this, &Game::changeZone);
   currentLevel->load(name, dataEngine);
   currentLevel->setPaused(false);
-  scriptObject.setProperty("level", scriptEngine.newQObject(currentLevel));
   emit levelChanged();
 }
 
@@ -122,12 +124,12 @@ void Game::switchToLevel(const QString& name, const QString& targetZone)
     exitLevel(true);
   dataEngine->setCurrentLevel(name);
   currentLevel = new LevelTask(this);
+  scriptObject.setProperty("level", scriptEngine.newQObject(currentLevel));
   connect(currentLevel, &LevelTask::displayConsoleMessage, this, &Game::appendToConsole);
   connect(currentLevel, &LevelTask::exitZoneEntered, this, &Game::changeZone);
   currentLevel->load(name, dataEngine);
   currentLevel->insertPartyIntoZone(playerParty, targetZone);
   currentLevel->setPaused(false);
-  scriptObject.setProperty("level", scriptEngine.newQObject(currentLevel));
   emit levelSwapped();
 }
 
