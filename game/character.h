@@ -13,7 +13,7 @@ class Character : public StorageObject
 
   Q_PROPERTY(StatModel*   statistics  MEMBER statistics)
   Q_PROPERTY(FieldOfView* fieldOfView MEMBER fieldOfView)
-  Q_PROPERTY(bool actionPoints MEMBER actionPoints NOTIFY actionPointsChanged)
+  Q_PROPERTY(int actionPoints MEMBER actionPoints NOTIFY actionPointsChanged)
 public:
   explicit Character(QObject *parent = nullptr);
 

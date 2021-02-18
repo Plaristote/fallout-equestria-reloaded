@@ -38,12 +38,11 @@ Pane {
           border.color: "green"
           radius: 5
           color: "transparent"
-          Image {
+          ItemIcon {
             anchors.centerIn: parent
+            model: inventoryItem
             width: root.itemIconWidth
             height: root.itemIconHeight
-            source: fileProtocol + inventoryItem.getSpriteSource()
-            sourceClipRect: inventoryItem.getClippedRect()
           }
           Text {
             anchors.horizontalCenter: parent.horizontalCenter

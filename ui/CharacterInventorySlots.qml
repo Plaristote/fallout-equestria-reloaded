@@ -7,22 +7,21 @@ Repeater {
   id: root
   property QtObject inventory
   property QtObject selectedObject
+  property bool canEditArmor: true
 
   model: inventory.slotNames
 
-  signal equippedItem()
-
   function updateSlots() {
     model = [];
-    model = inventory.slotNames
+    model = inventory.slotNames;
   }
 
   delegate: Pane {
     property string slotName: inventory.slotNames[index]
     property QtObject equippedItem: inventory.getEquippedItem(slotName)
     background: UiStyle.Label {}
-    height: 125
-    width:  125
+    Layout.preferredHeight: 125
+    Layout.preferredWidth: 125
 
     ColumnLayout {
       anchors.fill: parent
@@ -34,14 +33,11 @@ Repeater {
         color: "yellow"
       }
 
-      Image {
+      ItemIcon {
         Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
-        visible:        equippedItem !== null
-        source:         equippedItem !== null ? fileProtocol + equippedItem.getSpriteSource() : ""
-        sourceClipRect: equippedItem !== null ? equippedItem.getClippedRect() : Qt.rect(0,0,0,0)
-        height:         50
-        width:          75
-        fillMode:       Image.PreserveAspectCrop
+        model:  equippedItem
+        height: 50
+        width:  75
       }
 
       Row {
@@ -52,10 +48,7 @@ Repeater {
           text: "-"
           height: 20
           width: 70 / 2
-          onClicked: {
-            inventory.unequipItem(slotName)
-            root.equippedItem()
-          }
+          onClicked: inventory.unequipItem(slotName)
         }
 
         Button {
@@ -63,10 +56,7 @@ Repeater {
           text: "+"
           height: 20
           width: 70 / 2
-          onClicked: {
-            inventory.equipItem(selectedObject, slotName);
-            root.equippedItem();
-          }
+          onClicked: inventory.equipItem(selectedObject, slotName);
         }
       }
     }

@@ -3,7 +3,7 @@
 
 Inventory::Inventory(QObject *parent) : QObject(parent)
 {
-
+  connect(this, &Inventory::equippedItemsChanged, this, &Inventory::totalWeightChanged);
 }
 
 void Inventory::addItem(InventoryItem* item)
@@ -140,6 +140,7 @@ bool Inventory::equipItem(InventoryItem *item, const QString& slotName)
       removeItem(item);
     unequipItem(slotName);
     itemSlots[slotName] = item;
+    emit equippedItemsChanged();
     return true;
   }
   return false;
@@ -159,6 +160,7 @@ void Inventory::unequipItem(const QString &slotName, bool dropped)
       else
         delete oldItem;
     }
+    emit equippedItemsChanged();
   }
 }
 

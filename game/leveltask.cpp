@@ -231,18 +231,32 @@ void LevelTask::tileClicked(int x, int y)
 
   if (getPlayer())
   {
-    // Cancel interaction if any is running
-    emit interactionRequired(nullptr, QStringList());
-    // Infer action type and proceed
-    if (occupant && openInteractionMenu(occupant))
-      return ;
-    else if (!moveTo(getPlayer(), x, y))
+    if (occupant)
+    {
+      QPoint interactionPosition = occupant->getInteractionPosition();
+      x = interactionPosition.x();
+      y = interactionPosition.y();
+    }
+    if (!moveTo(getPlayer(), x, y))
       emit displayConsoleMessage("No path towards [" + QString::number(x) + ',' + QString::number(y) + ']');
   }
   else
   {
     emit clickedOnCase(x, y);
     emit clickedOnObject(occupant);
+  }
+}
+
+void LevelTask::objectClicked(DynamicObject* object)
+{
+  switch (mouseMode)
+  {
+  case InteractionCursor:
+    openInteractionMenu(object);
+    break ;
+  case TargetCursor:
+    qDebug() << "TODO implement behaviour on target cursor clicked";
+    break ;
   }
 }
 
@@ -323,6 +337,21 @@ void LevelTask::onPauseChanged()
     updateTimer.start();
     clock.start();
   }
+}
+
+void LevelTask::swapMouseMode()
+{
+  switch (mouseMode)
+  {
+    case InteractionCursor:
+    case TargetCursor:
+      mouseMode = MovementCursor;
+      break ;
+    default:
+      mouseMode = InteractionCursor;
+      break ;
+  }
+  emit mouseModeChanged();
 }
 
 void LevelTask::update()

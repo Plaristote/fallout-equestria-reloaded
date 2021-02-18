@@ -38,12 +38,32 @@ Canvas {
   }
 
   MouseArea {
+    id: mouseArea
     anchors.fill: parent
     enabled: !levelController.paused
-    hoverEnabled: showHoverCoordinates
-    onClicked: controller.onMouseClick(mouse, mouseX, mouseY)
+    acceptedButtons: Qt.LeftButton | Qt.RightButton
+    hoverEnabled: true
+    onClicked: {
+      if (mouse.button === Qt.RightButton)
+        levelController.swapMouseMode();
+      else
+        controller.onMouseClick(mouse, mouseX, mouseY);
+    }
     onMouseXChanged: hoverTile = controller.getHoveredCase(mouseX, mouseY);
     onMouseYChanged: hoverTile = controller.getHoveredCase(mouseX, mouseY);
+    cursorShape: Qt.BlankCursor
+  }
+
+  Image {
+    property string cursorType: { ["move", "interaction", "target"][levelController.mouseMode] }
+    property size  size: { [Qt.size(40, 15), Qt.size(50, 35), Qt.size(40, 40)][levelController.mouseMode] }
+    property point offset: { levelController.mouseMode !== 1 ? Qt.point(size.width / 2, size.height / 2) : Qt.point(0, 0) }
+    x: mouseArea.mouseX - offset.x
+    y: mouseArea.mouseY - offset.y
+    height: size.height
+    width: size.width
+    source: `qrc:/assets/ui/cursors/${cursorType}.png`
+    visible: mouseArea.containsMouse
   }
 
   function initializeRenderer() {

@@ -18,13 +18,12 @@ Pane {
     anchors.leftMargin: 10
     anchors.rightMargin: 10
 
-    Image {
-      anchors.horizontalCenter: parent.horizontalCenter
+    ItemIcon {
       id: selectedObjectPreviewPicture
-      source:         fileProtocol + objectPreview.model.getSpriteSource()
-      sourceClipRect: objectPreview.model.getClippedRect()
-      height:         objectPreview.model.getClippedRect().height
-      width:          objectPreview.model.getClippedRect().width
+      model: objectPreview.model
+      anchors.horizontalCenter: parent.horizontalCenter
+      height:         sourceClipRect.height
+      width:          sourceClipRect.width
     }
 
     Text {

@@ -155,16 +155,23 @@ export class Controller {
     this.context.restore();
   }
 
-  renderSprite(sprite) {
-    const offset      = sprite.getSpritePosition();
-    const clippedRect = sprite.getClippedRect();
+  getAdjustedOffsetFor(sprite) {
+    const offset = sprite.getSpritePosition();
 
     if (sprite.renderOnTile()) {
+      const clippedRect = sprite.getClippedRect();
       const extraHeight = clippedRect.height - this.tileSize.height;
 
       offset.y -= extraHeight;
       offset.x += this.tileSize.width / 2 - clippedRect.width / 2;
     }
+    return offset;
+  }
+
+  renderSprite(sprite) {
+    const offset      = this.getAdjustedOffsetFor(sprite);
+    const clippedRect = sprite.getClippedRect();
+
     if (this.shouldRender(offset.x, offset.y, clippedRect.width, clippedRect.height)) {
       if (sprite.getShadowSource() !== "")
       {
@@ -225,10 +232,7 @@ export class Controller {
     this.context.clearRect(-this.origin.x, -this.origin.y, this.canvas.width * 100, this.canvas.height * 100);
   }
 
-  getHoveredCase(mouseX, mouseY) {
-    const posX = mouseX - this.canvas.origin.x;
-    const posY = mouseY - this.canvas.origin.y;
-
+  getHoveredCase(posX, posY) {
     for (var x = 0 ; x < this.mapSize.width; ++x) {
       for (var y = 0 ; y < this.mapSize.height; ++y) {
         const pos = this.getPointFor(x, y);
@@ -242,10 +246,43 @@ export class Controller {
     return null;
   }
 
+  getHoveredObject(posX, posY) {
+    for (var i = 0 ; i < this.level.dynamicObjects.length ; ++i) {
+      const sprite = this.level.dynamicObjects[i];
+      const offset = this.getAdjustedOffsetFor(sprite);
+      const clippedRect = sprite.getClippedRect();
+
+      if (posX >= offset.x && posX <= offset.x + clippedRect.width &&
+          posY >= offset.y && posY <= offset.y + clippedRect.height)
+        return sprite;
+    }
+    return null;
+  }
+
   onMouseClick(mouse, mouseX, mouseY) {
+    mouseX -= this.canvas.origin.x;
+    mouseY -= this.canvas.origin.y;
+    switch (this.level.mouseMode) {
+      case 0:
+        this.onMovementClick(mouseX, mouseY);
+        break ;
+      default:
+        this.onObjectClick(mouseX, mouseY);
+        break ;
+    }
+  }
+
+  onMovementClick(mouseX, mouseY) {
     const coords = this.getHoveredCase(mouseX, mouseY);
 
     if (coords !== null)
       this.level.tileClicked(coords[0], coords[1]);
+  }
+
+  onObjectClick(mouseX, mouseY) {
+    const object = this.getHoveredObject(mouseX, mouseY);
+
+    if (object !== null)
+      this.level.objectClicked(object);
   }
 };

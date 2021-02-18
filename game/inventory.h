@@ -47,6 +47,7 @@ signals:
   void totalWeightChanged();
   void totalValueChanged();
   void slotsChanged();
+  void equippedItemsChanged();
 
 private:
   QList<InventoryItem*>         items;

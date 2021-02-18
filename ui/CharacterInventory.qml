@@ -86,6 +86,7 @@ Pane {
     Item {
       Layout.fillHeight: true
       Layout.fillWidth: true
+      clip: true
 
       Column {
         anchors.left: parent.left; anchors.right: parent.right
@@ -116,13 +117,26 @@ Pane {
           model: root.selectedObject
         }
 
-        CharacterInventorySlots {
-          id: slotsView
-          inventory: root.character.inventory
-          selectedObject: root.selectedObject
-          onEquippedItem: root.selectedObject = null;
+        GridLayout {
+          columns: Math.min(2, parent.width / 125)
+          anchors.horizontalCenter: parent.horizontalCenter
+
+          CharacterInventorySlots {
+            id: slotsView
+            canEditArmor: root.canEditArmor
+            inventory: root.character.inventory
+            selectedObject: root.selectedObject
+          }
         }
       } // END Column
-    }
-  }
+
+      Connections {
+        target: root.character.inventory
+        function onEquippedItemsChanged() {
+          root.selectedObject = null;
+          slotsView.updateSlots();
+        }
+      } // END Inventory Connections
+    } // END Item
+  } // END RowLayout
 }

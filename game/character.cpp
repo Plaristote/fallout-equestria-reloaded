@@ -104,32 +104,8 @@ void Character::resetActionPoints()
 
 void Character::updateInventorySlots()
 {
-  QMap<QString, QString> slotTypes({{"default", "any"}});
-  QJSValue callback = script.property("getItemSlots");
+  QMap<QString, QString> slotTypes({{"armor", "armor"},{"saddle","saddle"},{"use-1","any"},{"use-2","any"}});
 
-  if (callback.isCallable())
-  {
-    QJSValueList args;
-    QJSValue retval = Game::get()->scriptCall(callback, args, "Character::getItemSlots");
-
-    if (retval.isArray())
-    {
-      slotTypes.clear();
-      for (QVariant slotData : retval.toVariant().toList())
-      {
-        auto pair = slotData.toStringList();
-
-        if (pair.size() == 2)
-          slotTypes.insert(pair[0], pair[1]);
-        else
-          qDebug() << "Character::getItemSlots: invalid slot type in " << getScriptPath();
-      }
-    }
-    else
-      qDebug() << "Character::getItemSlots: wrong return type in " << getScriptPath();
-  }
-  else
-    qDebug() << "Character::getItemsSlots: method undefined in " << getScriptPath();
   inventory->setSlots(slotTypes);
 }
 
