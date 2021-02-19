@@ -14,6 +14,13 @@ Pane {
   id: objectEditor
   background: UiStyle.TerminalPane {}
 
+  function setTilePosition(tileX, tileY) {
+    if (!model.floating) {
+      gridXInput.text = tileX;
+      gridYInput.text = tileY;
+    }
+  }
+
   function positionChanged() {
     const gridX = parseInt(gridXInput.text);
     const gridY = parseInt(gridYInput.text);

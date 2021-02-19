@@ -49,8 +49,8 @@ Canvas {
       else
         controller.onMouseClick(mouse, mouseX, mouseY);
     }
-    onMouseXChanged: hoverTile = controller.getHoveredCase(mouseX, mouseY);
-    onMouseYChanged: hoverTile = controller.getHoveredCase(mouseX, mouseY);
+    onMouseXChanged: hoverTile = controller.getHoveredCase(mouseX - canvas.origin.x, mouseY - canvas.origin.y);
+    onMouseYChanged: hoverTile = controller.getHoveredCase(mouseX - canvas.origin.x, mouseY - canvas.origin.y);
     cursorShape: enabled ? Qt.BlankCursor : Qt.ArrowCursor
   }
 

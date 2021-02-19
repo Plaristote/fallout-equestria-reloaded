@@ -89,6 +89,15 @@ Item {
         // Zone edition
         editingZone: controlZoneEditor.editingZone
         onToggleZoneTile: controlZoneEditor.toggleTile(tileX, tileY)
+        onPickedObject: {
+          objectSelectBox.currentIndex = objectList.indexOf(dynamicObject.objectName);
+        }
+        onPickedTile: {
+          [characterEditor, storageEditor].forEach(function(dynamicObjectEditor) {
+            if (dynamicObjectEditor.visible)
+              dynamicObjectEditor.setTilePosition(tileX, tileY);
+          });
+        }
       }
 
       GameComponents.ScreenEdges {
@@ -132,13 +141,28 @@ Item {
         }
 
         Row {
-          ComboBox {
+          anchors { left: parent.left; right: parent.right }
+          spacing: 5
+          SelectBox {
             id: objectSelectBox
             model: objectList
+            height: 40
+            width: parent.width - 100
           }
           Button {
             text: "Add object"
             onClicked: dialogAddObject.open()
+            contentItem: Text {
+              text: parent.text
+              color: "white"
+              font.family: application.titleFontName
+              font.pixelSize: 16
+              verticalAlignment: Text.AlignVCenter
+              horizontalAlignment: Text.AlignHCenter
+            }
+            background: UiStyle.Label { style: parent.down ? "dark" : "base" }
+            width: 100
+            height: 40
           }
         }
 

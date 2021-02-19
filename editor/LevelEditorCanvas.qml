@@ -9,6 +9,8 @@ GameComponents.LevelCanvas {
   property bool renderWalls: true
   property bool editingZone: false
 
+  signal pickedObject(QtObject dynamicObject)
+  signal pickedTile(int tileX, int tileY)
   signal toggleZoneTile(int tileX, int tileY)
 
   function initializeRenderer() {

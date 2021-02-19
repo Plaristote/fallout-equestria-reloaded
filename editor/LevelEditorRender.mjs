@@ -11,16 +11,19 @@ export class EditorController extends Controller {
       super.renderWall(wall, x, y);
   }
 
-  onMouseClick(mouse, mouseX, mouseY)
-  {
-    console.log("On mouze click, editing zone?", this.canvas.editingZone);
-    if (this.canvas.editingZone) {
-      const coords = this.getHoveredCase(mouseX, mouseY);
+  onObjectClick(mouseX, mouseY) {
+    const object = this.getHoveredObject(mouseX, mouseY);
 
-      if (coords !== null)
-        this.canvas.toggleZoneTile(coords[0], coords[1]);
-      return ;
-    }
-    super.onMouseClicked(mouse, mouseX, mouseY);
+    if (object)
+      this.canvas.pickedObject(object);
+  }
+
+  onMovementClick(mouseX, mouseY) {
+    const coords = this.getHoveredCase(mouseX, mouseY);
+
+    if (this.canvas.editingZone)
+      this.canvas.toggleZoneTile(coords[0], coords[1]);
+    else
+      this.canvas.pickedTile(coords[0], coords[1]);
   }
 };
