@@ -60,6 +60,7 @@ public:
   float                GetRadius(void)             const;
 
   void                 update(qint64 delta);
+  void                 reset();
 
 protected:
   void                 LoseTrackOfCharacters(std::list<Entry>&);

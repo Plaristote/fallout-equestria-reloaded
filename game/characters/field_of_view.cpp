@@ -45,6 +45,12 @@ void FieldOfView::update(qint64 delta)
     timeLeft -= delta;
 }
 
+void FieldOfView::reset()
+{
+  detected_characters.clear();
+  detected_enemies.clear();
+}
+
 FieldOfView::CharacterList FieldOfView::GetDetectedCharacters(void) const
 {
   CharacterList list;

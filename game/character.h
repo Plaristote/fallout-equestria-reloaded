@@ -24,6 +24,7 @@ public:
 
   void         setStatistics(StatModel* value) { statistics = value; }
   StatModel*   getStatistics() const { return statistics; }
+  FieldOfView* getFieldOfView() const { return fieldOfView; }
   QString      getFactionName() const { return faction ? faction->name : QString(); }
   unsigned int getFactionFlag() const { return faction ? faction->flag : 0; }
   QString      getDialogName();
