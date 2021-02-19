@@ -5,6 +5,7 @@
 Character::Character(QObject *parent) : StorageObject(parent)
 {
   fieldOfView = new FieldOfView(*this);
+  connect(inventory, &Inventory::unequippedItem, this, &Character::initializeEmptySlot);
 }
 
 void Character::update(qint64 delta)
@@ -109,10 +110,38 @@ void Character::updateInventorySlots()
   inventory->setSlots(slotTypes);
 }
 
+void Character::initializeEmptySlots()
+{
+  initializeEmptySlot("use-1");
+  initializeEmptySlot("use-2");
+}
+
+void Character::initializeEmptySlot(const QString& slotName)
+{
+  if (inventory->getEquippedItem(slotName) == nullptr)
+  {
+    InventoryItem* item = new InventoryItem(this);
+
+    item->setObjectName(getDefaultItemForSlot(slotName));
+    item->setVirtual(true);
+    inventory->equipItem(item, slotName);
+  }
+}
+
+QString Character::getDefaultItemForSlot(const QString& name)
+{
+  QJSValue callback = script.property("getDefaultItem");
+
+  if (callback.isCallable())
+    return Game::get()->scriptCall(callback, QJSValueList() << name, "Character::getDefaultItem").toString();
+  return "melee";
+}
+
 void Character::setScript(const QString& scriptName)
 {
   DynamicObject::setScript(scriptName);
   updateInventorySlots();
+  initializeEmptySlots();
 }
 
 void Character::load(const QJsonObject& data)

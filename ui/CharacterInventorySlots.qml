@@ -44,7 +44,7 @@ Repeater {
         Layout.alignment: Qt.AlignBottom | Qt.AlignHCenter
 
         Button {
-          visible: equippedItem !== null
+          visible: equippedItem !== null && equippedItem.isVirtual !== true
           text: "-"
           height: 20
           width: 70 / 2

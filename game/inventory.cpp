@@ -3,6 +3,7 @@
 
 Inventory::Inventory(QObject *parent) : QObject(parent)
 {
+  connect(this, &Inventory::unequippedItem, this, &Inventory::equippedItemsChanged);
   connect(this, &Inventory::equippedItemsChanged, this, &Inventory::totalWeightChanged);
 }
 
@@ -130,6 +131,9 @@ bool Inventory::equipItem(InventoryItem *item, const QString& slotName)
 {
   if (canEquipItem(item, slotName))
   {
+    auto* oldItem = getEquippedItem(slotName);
+    bool  shouldDestroyOldObject = oldItem && oldItem->isVirtual();
+
     if (item->getQuantity() > 1)
     {
       item->remove(1);
@@ -138,7 +142,7 @@ bool Inventory::equipItem(InventoryItem *item, const QString& slotName)
     }
     else
       removeItem(item);
-    unequipItem(slotName);
+    unequipItem(slotName, shouldDestroyOldObject);
     itemSlots[slotName] = item;
     emit equippedItemsChanged();
     return true;
@@ -159,8 +163,8 @@ void Inventory::unequipItem(const QString &slotName, bool dropped)
         addItem(oldItem);
       else
         delete oldItem;
+      emit unequippedItem(slotName);
     }
-    emit equippedItemsChanged();
   }
 }
 

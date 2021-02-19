@@ -55,7 +55,12 @@ protected:
 
 private slots:
   void initializeFaction();
+  void initializeEmptySlots();
+  void initializeEmptySlot(const QString& name);
+
 private:
+  QString getDefaultItemForSlot(const QString& name);
+
   StatModel* statistics = nullptr;
   FieldOfView* fieldOfView;
   WorldDiplomacy::Faction* faction = nullptr;

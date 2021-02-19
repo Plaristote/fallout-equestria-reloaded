@@ -48,6 +48,7 @@ signals:
   void totalValueChanged();
   void slotsChanged();
   void equippedItemsChanged();
+  void unequippedItem(const QString&);
 
 private:
   QList<InventoryItem*>         items;

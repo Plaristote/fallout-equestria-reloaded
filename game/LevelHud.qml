@@ -149,14 +149,21 @@ Pane {
             visible: parent.hovered
             color: Qt.rgba(255, 255, 255, 0.5)
           }
+          Text {
+            anchors.top: parent.top
+            anchors.left: parent.left
+            anchors.margins: 5
+            font.family: application.titleFontName
+            font.pixelSize: 14
+            color: "yellow"
+            text: slotItem ? slotItem.objectName : ""
+          }
           ItemIcon {
             anchors.centerIn: parent
             model: slotItem
           }
           onClicked: {
-            console.log("WTF", itemSlotsPane.inventory.slotNames, index);
             console.log("Clicked on item", slotName, slotItem);
-            console.log("Clicked on item", slotName, itemSlotsPane.inventory.getEquippedItem(slotName));
           }
         } // END Button
       } // END Repeater
