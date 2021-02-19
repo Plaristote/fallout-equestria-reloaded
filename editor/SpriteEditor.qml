@@ -187,7 +187,34 @@ Item {
       } // END form flickable
 
       Rectangle {
+        property int previewFrame: 0
+        id: animationLoopPreview
+        width: parseInt(widthInput.text)
+        height: parseInt(heightInput.text)
+        anchors.bottom: animationPreviewBis.top
+        anchors.bottomMargin: 10
+        border.color: "green"
+        border.width: 2
+        color: "transparent"
+        Image {
+          source: assetPath + "sprites/" + sourceInput.text
+          height: parseInt(heightInput.text)
+          width: parseInt(widthInput.text)
+          sourceClipRect: Qt.rect(parseInt(xInput.text) + parseInt(widthInput.text) * animationLoopPreview.previewFrame, parseInt(yInput.text), parseInt(widthInput.text), parseInt(heightInput.text))
+          Timer {
+            interval: parseInt(intervalInput.text)
+            running: animationName != ""
+            repeat: true
+            onTriggered: {
+              animationLoopPreview.previewFrame = animationLoopPreview.previewFrame + 1 >= parseInt(frameCountInput.text) ? 0 : animationLoopPreview.previewFrame + 1;
+            }
+          }
+        }
+      }
+
+      Rectangle {
         id: animationPreviewBis
+        clip: true
         width: parent.width
         height: animationPreview.height
         anchors.bottom: parent.bottom
