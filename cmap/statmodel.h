@@ -48,6 +48,8 @@ class StatModel : public QObject
   Q_PROPERTY(QString name    MEMBER name    NOTIFY nameChanged)
   Q_PROPERTY(int     age     MEMBER age     NOTIFY ageChanged)
   Q_PROPERTY(QString faction MEMBER faction NOTIFY factionChanged)
+  Q_PROPERTY(QString race    MEMBER race    NOTIFY raceChanged)
+  Q_PROPERTY(QString gender  MEMBER gender  NOTIFY genderChanged)
 
   Q_PROPERTY(int  hitPoints      MEMBER hitPoints    NOTIFY hitPointsChanged)
   Q_PROPERTY(int  experience     READ getExperience  NOTIFY experienceChanged)
@@ -169,6 +171,10 @@ public:
   STAT_GETTER(speech)
   STAT_GETTER(gambling)
 
+  // EDITOR
+  Q_INVOKABLE QStringList getAvailableRaces() const;
+  Q_INVOKABLE QStringList getGenders() const;
+
 signals:
   void damageReceived(int damage, QString type);
   void nameChanged();
@@ -188,6 +194,8 @@ signals:
   void faceThemeChanged();
   void faceColorChanged();
   void factionChanged();
+  void raceChanged();
+  void genderChanged();
 
 private slots:
   void updateBaseValues();
@@ -195,6 +203,8 @@ private slots:
 private:
   QString name, faction;
   int age = 21;
+  QString gender;
+  QString race;
   int strength, perception, endurance, charisma, intelligence, agility, luck;
   int hitPoints = 1;
   int skillPoints = 0;

@@ -2,6 +2,7 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
 import "../assets/ui" as UiStyle
+import "../ui"
 
 RowLayout {
   property QtObject characterSheet
@@ -20,6 +21,8 @@ RowLayout {
     color: "white"
     placeholderText: qsTr("Your name")
     placeholderTextColor: "lightgray"
+    font.family: application.titleFontName
+    font.pixelSize: 16
     background: UiStyle.Label {
       style: parent.focus ? "dark" : "base"
     }
@@ -36,60 +39,41 @@ RowLayout {
     placeholderText: qsTr("age")
     placeholderTextColor: "lightgray"
     validator: IntValidator { bottom: 15; top: 100 }
+    font.family: application.titleFontName
+    font.pixelSize: 16
     background: UiStyle.Label {
       style: parent.focus ? "dark" : "base"
     }
     onTextChanged: characterSheet.age = parseInt(text)
   }
 
-  ComboBox {
+  Connections {
+    target: characterSheet
+    function onGenderChanged() {
+      characterGender.currentIndex = characterGender.model.indexOf(characterSheet.gender);
+    }
+    function onRaceChanged() {
+      characterRace.currentIndex = characterRace.model.indexOf(characterSheet.race);
+    }
+  }
+
+  SelectBox {
     id: characterGender
     Layout.minimumWidth: 200
     Layout.fillHeight: true
     enabled: root.editable
-    textRole: "text"
-    valueRole: "value"
-    contentItem: Text {
-      verticalAlignment: Text.AlignVCenter
-      horizontalAlignment: Text.AlignHCenter
-      text: characterGender.currentText
-      color: "white"
-    }
-    background: UiStyle.Label {
-      style: parent.focus ? "dark" : "base"
-    }
-    model: [
-      { value: 0, text: qsTr("Stallion") },
-      { value: 1, text: qsTr("Mare") }
-    ]
-    onCurrentIndexChanged: {
-
-    }
+    model: characterSheet.getGenders()
+    currentIndex: characterSheet.getGenders().indexOf(characterSheet.gender)
+    onCurrentIndexChanged: characterSheet.gender = characterSheet.getGenders()[currentIndex];
   }
 
-  ComboBox {
+  SelectBox {
     id: characterRace
     Layout.minimumWidth: 200
     Layout.fillHeight: true
     enabled: root.editable
-    textRole: "text"
-    valueRole: "value"
-    contentItem: Text {
-      verticalAlignment: Text.AlignVCenter
-      horizontalAlignment: Text.AlignHCenter
-      text: characterRace.currentText
-      color: "white"
-    }
-    background: UiStyle.Label {
-      style: parent.focus ? "dark" : "base"
-    }
-    model: [
-      { value: 0, text: qsTr("Earth pony") },
-      { value: 1, text: qsTr("Unicorn") },
-      { value: 1, text: qsTr("Pegasus") }
-    ]
-    onCurrentIndexChanged: {
-
-    }
+    model: characterSheet.getAvailableRaces()
+    currentIndex: characterSheet.getAvailableRaces().indexOf(characterSheet.race)
+    onCurrentIndexChanged: characterSheet.race = characterSheet.getAvailableRaces()[currentIndex];
   }
 }

@@ -4,17 +4,17 @@
 <context>
     <name>CharacterSheet</name>
     <message>
-        <location filename="ui/CharacterSheet.qml" line="116"/>
+        <location filename="ui/CharacterSheet.qml" line="121"/>
         <source>Available skill points</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="ui/CharacterSheet.qml" line="196"/>
+        <location filename="ui/CharacterSheet.qml" line="201"/>
         <source>Confirm</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="ui/CharacterSheet.qml" line="201"/>
+        <location filename="ui/CharacterSheet.qml" line="206"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
@@ -79,38 +79,13 @@
 <context>
     <name>PersonalInfo</name>
     <message>
-        <location filename="cmap/PersonalInfo.qml" line="21"/>
+        <location filename="cmap/PersonalInfo.qml" line="22"/>
         <source>Your name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="cmap/PersonalInfo.qml" line="36"/>
+        <location filename="cmap/PersonalInfo.qml" line="37"/>
         <source>age</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="cmap/PersonalInfo.qml" line="62"/>
-        <source>Stallion</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="cmap/PersonalInfo.qml" line="63"/>
-        <source>Mare</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="cmap/PersonalInfo.qml" line="87"/>
-        <source>Earth pony</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="cmap/PersonalInfo.qml" line="88"/>
-        <source>Unicorn</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="cmap/PersonalInfo.qml" line="89"/>
-        <source>Pegasus</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -154,5 +154,6 @@
         <file>assets/ui/cursors/interaction.png</file>
         <file>assets/ui/cursors/move.png</file>
         <file>assets/ui/cursors/target.png</file>
+        <file>ui/SelectBox.qml</file>
     </qresource>
 </RCC>

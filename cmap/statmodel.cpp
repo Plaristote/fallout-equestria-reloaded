@@ -15,6 +15,16 @@ StatModel::StatModel(QObject *parent) : QObject(parent)
   connect(this, &StatModel::nameChanged,    this, &StatModel::acceptableChanged);
 }
 
+QStringList StatModel::getAvailableRaces() const
+{
+  return QStringList() << "Earth pony" << "Unicorn" << "Pegasus";
+}
+
+QStringList StatModel::getGenders() const
+{
+  return QStringList() << "Stallion" << "Mare";
+}
+
 int StatModel::getXpNextLevel() const
 {
   int level = this->level + 1;
@@ -103,7 +113,6 @@ void StatModel::toggleTrait(const QString& name, bool value)
 {
   auto traits = Game::get()->getCmapTraits();
 
-  qDebug() << "Euh... à l'huile ?";
   for (auto trait : traits)
   {
     if  (trait.name == name)
@@ -117,7 +126,9 @@ void StatModel::toggleTrait(const QString& name, bool value)
 void StatModel::fromJson(const QJsonObject& json)
 {
   name = json["name"].toString();
-  age  = json["age"].toInt();
+  age  = json["age"].toInt(21);
+  race           = json["race"].toString();
+  gender         = json["gender"].toString();
   hitPoints      = json["hp"].toInt(1);
   level          = json["lvl"].toInt();
   experience     = json["xp"].toInt();
@@ -199,12 +210,16 @@ void StatModel::fromJson(const QJsonObject& json)
   emit faceAccessoriesChanged();
   emit faceThemeChanged();
   emit faceColorChanged();
+  emit raceChanged();
+  emit genderChanged();
 }
 
 void StatModel::toJson(QJsonObject& json)
 {
   json["name"] = name;
   json["age"]  = age;
+  json["race"]   = race;
+  json["gender"] = gender;
   json["hp"]   = hitPoints;
   json["lvl"]  = level;
   json["xp"]   = experience;
