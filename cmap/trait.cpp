@@ -10,16 +10,10 @@ Trait::Trait()
 
 void Trait::toogle(StatModel* model, bool value)
 {
+  Game* game = Game::get();
   QJSValueList args;
-  QJSValue retval;
+  QJSValue callback = script.property("onToggled");
 
-  args << Game::get()->getScriptEngine().newQObject(model) << value;
-  retval = script.property("onToggled").call(args);
-  qDebug() << "Euh... allo ?";
-  if (retval.isError())
-  {
-    qDebug() << "Trait" << name << "crashed at line:" << retval.property("lineNumber").toInt() << ":" << retval.toString();
-  }
-  qDebug() << retval.toVariant().typeName() << retval.toString();
-  qDebug() << script.property("name").toString() << "zzz";
+  args << game->getScriptEngine().newQObject(model) << value;
+  game->scriptCall(callback, args, "Trait::onToggled");
 }
