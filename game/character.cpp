@@ -1,10 +1,12 @@
 #include "character.h"
 #include "game.h"
+#include "leveltask.h"
 #include <cmath>
 
 Character::Character(QObject *parent) : StorageObject(parent)
 {
   fieldOfView = new FieldOfView(*this);
+  inventory->setUser(this);
   connect(inventory, &Inventory::unequippedItem, this, &Character::initializeEmptySlot);
 }
 
@@ -43,7 +45,7 @@ QPoint Character::getInteractionPosition() const
 
 QString Character::getDialogName()
 {
-  return script.property("dialog").toString();
+  return script ? script->property("dialog").toString() : "";
 }
 
 bool Character::isAlly(const Character* other) const
@@ -88,13 +90,19 @@ void Character::initializeFaction()
 
 bool Character::useActionPoints(int amount, const QString& actionType)
 {
-  if (amount <= actionPoints)
+  auto* level = Game::get()->getLevel();
+
+  if (level && level->isInCombat(this))
   {
-    actionPoints -= amount;
-    emit actionPointsChanged();
-    return true;
+    if (amount <= actionPoints)
+    {
+      actionPoints -= amount;
+      emit actionPointsChanged();
+      return true;
+    }
+    return false;
   }
-  return false;
+  return true;
 }
 
 void Character::resetActionPoints()
@@ -130,16 +138,14 @@ void Character::initializeEmptySlot(const QString& slotName)
 
 QString Character::getDefaultItemForSlot(const QString& name)
 {
-  QJSValue callback = script.property("getDefaultItem");
-
-  if (callback.isCallable())
-    return Game::get()->scriptCall(callback, QJSValueList() << name, "Character::getDefaultItem").toString();
+  if (script && script->hasMethod("getDefaultItem"))
+    return script->call("getDefaultItem", QJSValueList() << name).toString();
   return "melee";
 }
 
-void Character::setScript(const QString& scriptName)
+void Character::setScript(const QString& name)
 {
-  DynamicObject::setScript(scriptName);
+  DynamicObject::setScript(name);
   updateInventorySlots();
   initializeEmptySlots();
 }

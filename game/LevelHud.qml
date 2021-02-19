@@ -145,9 +145,10 @@ Pane {
             border { left: 4; bottom: 4; right: 4; top: 4 }
           }
           ColorOverlay {
+            anchors.fill: parent
             source: background
             visible: parent.hovered
-            color: Qt.rgba(255, 255, 255, 0.5)
+            color: Qt.rgba(155, 155, 155, 0.3)
           }
           Text {
             anchors.top: parent.top
@@ -158,13 +159,20 @@ Pane {
             color: "yellow"
             text: slotItem ? slotItem.objectName : ""
           }
+          Text {
+            anchors.bottom: parent.bottom
+            anchors.right: parent.right
+            anchors.margins: 5
+            font.family: application.titleFontName
+            font.pixelSize: 14
+            color: "yellow"
+            text: slotItem ? slotItem.getActionPointCost() + " AP" : ""
+          }
           ItemIcon {
             anchors.centerIn: parent
             model: slotItem
           }
-          onClicked: {
-            console.log("Clicked on item", slotName, slotItem);
-          }
+          onClicked: levelController.setActiveItem(slotItem)
         } // END Button
       } // END Repeater
     } // END Row

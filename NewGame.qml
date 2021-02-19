@@ -17,7 +17,7 @@ Rectangle {
 
     onAccepted: {
       console.log("Start a new game");
-      gameManager.currentGame.goToLevel("eltest5");
+      gameManager.currentGame.onCityEntered("eltest5");
       application.popView();
     }
     onCanceled: {

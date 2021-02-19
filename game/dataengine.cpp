@@ -5,6 +5,12 @@
 #include <QFile>
 #include <QDebug>
 
+#ifndef RELEASE_BUILD
+static const char* initialGamePath = "./assets/game.json";
+#else
+static const char* initialGamePath = ":/assets/game.json";
+#endif
+
 DataEngine::DataEngine(QObject *parent) : QObject(parent)
 {
   data.insert("characters", characters);
@@ -50,7 +56,7 @@ void DataEngine::registerFaction(const QString& name)
 
 void DataEngine::loadFromFile(const QString &path)
 {
-  QFile in(path.startsWith("./assets") ? path : "./saves/" + path);
+  QFile in(path == "" ? QString(initialGamePath) : "./saves/" + path);
 
   if (in.open(QIODevice::ReadOnly))
   {

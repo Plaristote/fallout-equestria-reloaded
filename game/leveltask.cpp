@@ -247,19 +247,6 @@ void LevelTask::tileClicked(int x, int y)
   }
 }
 
-void LevelTask::objectClicked(DynamicObject* object)
-{
-  switch (mouseMode)
-  {
-  case InteractionCursor:
-    openInteractionMenu(object);
-    break ;
-  case TargetCursor:
-    qDebug() << "TODO implement behaviour on target cursor clicked";
-    break ;
-  }
-}
-
 void LevelTask::registerDynamicObject(DynamicObject* object)
 {
   objects.push_back(object);
@@ -337,21 +324,6 @@ void LevelTask::onPauseChanged()
     updateTimer.start();
     clock.start();
   }
-}
-
-void LevelTask::swapMouseMode()
-{
-  switch (mouseMode)
-  {
-    case InteractionCursor:
-    case TargetCursor:
-      mouseMode = MovementCursor;
-      break ;
-    default:
-      mouseMode = InteractionCursor;
-      break ;
-  }
-  emit mouseModeChanged();
 }
 
 void LevelTask::update()

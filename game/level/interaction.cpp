@@ -59,6 +59,56 @@ void InteractionComponent::interactOrderReceived(DynamicObject* target, const QS
     startPendingInteraction();
 }
 
+void InteractionComponent::swapMouseMode()
+{
+  switch (mouseMode)
+  {
+    case InteractionCursor:
+    case TargetCursor:
+      mouseMode = MovementCursor;
+      break ;
+    default:
+      mouseMode = InteractionCursor;
+      break ;
+  }
+  activeItem = nullptr;
+  emit mouseModeChanged();
+}
+
+void InteractionComponent::setActiveItem(InventoryItem* item)
+{
+  mouseMode = TargetCursor;
+  activeItem = item;
+  emit mouseModeChanged();
+}
+
+void InteractionComponent::objectClicked(DynamicObject* object)
+{
+  switch (mouseMode)
+  {
+  case InteractionCursor:
+    openInteractionMenu(object);
+    break ;
+  case TargetCursor:
+    if (activeItem)
+      useItemOn(object);
+    else
+      qDebug() << "TODO missing behaviour for target cursor";
+    break ;
+  }
+}
+
+void InteractionComponent::useItemOn(DynamicObject* target)
+{
+  if (activeItem->isInRange(target))
+  {
+    activeItem->useOn(target);
+    swapMouseMode();
+  }
+  else
+    Game::get()->appendToConsole("Out of range.");
+}
+
 void InteractionComponent::startPendingInteraction()
 {
   if (pendingInteraction.first)

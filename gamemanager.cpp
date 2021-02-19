@@ -34,6 +34,7 @@ void GameManager::startNewGame()
     currentGame = new Game(this);
     playerStats = new StatModel(currentGame);
     currentGame->newPlayerParty(playerStats);
+    currentGame->getDataEngine()->loadFromFile("");
     emit currentGameChanged();
   }
   else

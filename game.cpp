@@ -40,9 +40,11 @@ void Game::deleteLater()
 void Game::newPlayerParty(StatModel* statistics)
 {
   player = new Character;
+  player->setObjectName("player");
   player->setSpriteName("pony");
   player->setAnimation("idle-down");
   player->setStatistics(statistics);
+  player->setScript("player.mjs");
   playerParty->addCharacter(player);
 }
 
@@ -100,7 +102,6 @@ void Game::onCityEntered(QString name)
   currentLevel->insertPartyIntoZone(playerParty);
 }
 
-// Keep in mind that Player is not available during Level loading
 void Game::goToLevel(const QString& name)
 {
   auto scriptObject = scriptEngine.globalObject();

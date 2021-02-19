@@ -13,24 +13,19 @@ DynamicObject::DynamicObject(QObject *parent) : Sprite(parent)
   connect(this, &DynamicObject::controlZoneRemoved, this, &DynamicObject::controlZoneChanged);
 }
 
+DynamicObject::~DynamicObject()
+{
+  if (script)
+    delete script;
+}
+
 void DynamicObject::setScript(const QString& name)
 {
-  QJSValue callback;
-
-  scriptName   = name;
-  scriptModule = Game::get()->loadScript(getScriptPath() + '/' + name);
-  callback     = scriptModule.property("create");
-  if (callback.isCallable())
-  {
-    QJSValueList args;
-
-    args << Game::get()->getScriptEngine().newQObject(this);
-    script = Game::get()->scriptCall(callback, args, "create");
-    Game::get()->scriptCall(script.property("initialize"), args, "initialize");
-    taskManager->setLocalModule(script);
-  }
-  else
-    qDebug() << "/!\\ Missing create function from" << (getScriptPath() + '/' + name);
+  if (script)
+    delete script;
+  scriptName = name;
+  script     = new ScriptController(getScriptPath() + '/' + name, this);
+  //taskManager->setScriptController(script);
 }
 
 void DynamicObject::moveTo(int x, int y, QPoint renderPosition)
@@ -58,84 +53,52 @@ void DynamicObject::moveTo(int x, int y, QPoint renderPosition)
 
 void DynamicObject::onMovementEnded()
 {
-  QJSValue callback = script.property("onMovementEnded");
-
-  if (callback.isCallable())
-  {
-    QJSValueList args;
-
-    args << Game::get()->getScriptEngine().newQObject(this);
-    Game::get()->scriptCall(callback, args, "onMovementEnded");
-  }
-  //position = nextPosition;
-  //qDebug() << "new position" << position;
+  if (script)
+    script->call("onMovementEnded");
 }
 
 void DynamicObject::onDestinationReached()
 {
-  QJSValue callback = script.property("onDestinationReached");
-
-  if (callback.isCallable())
-  {
-    QJSValueList args;
-
-    args << Game::get()->getScriptEngine().newQObject(this);
-    Game::get()->scriptCall(callback, args, "onDestinationReached");
-  }
+  if (script)
+    script->call("onDestinationReached");
 }
 
 QStringList DynamicObject::getAvailableInteractions()
 {
-  QJSValue callback = script.property("getAvailableInteractions");
-
-  if (callback.isCallable())
+  if (script)
   {
-    QJSValueList args;
-    QJSValue retval;
-
-    args << Game::get()->getScriptEngine().newQObject(this);
-    retval = Game::get()->scriptCall(callback, args, "getAvailableInteractions");
-    return retval.toVariant().toStringList();
+    qDebug() << "Calling get available interactions on " << getObjectName();
+    return script->call("getAvailableInteractions").toVariant().toStringList();
   }
   else
-    qDebug() << "/!\\ Missing getAvailableInteractions in" << objectName << "'s script";
+    qDebug() << "/!\\ Missing script on object " << getObjectName();
   return QStringList();
 }
 
 bool DynamicObject::triggerInteraction(Character* character, const QString &interactionType)
 {
-  QMap<QString, QString> callbackMap = {
+  static const QMap<QString, QString> callbackMap = {
     {"talk-to",   "onTalkTo"},
     {"use",       "onUse"},
     {"use-skill", "onUseSkill"},
     {"use-magic", "onUseMagic"},
     {"look",      "onLook"}
   };
-  QJSValue callback = script.property(callbackMap[interactionType]);
 
-  if (callback.isCallable())
+  if (script)
   {
     QJSValueList args;
 
     args << Game::get()->getScriptEngine().newQObject(character);
-    return Game::get()->scriptCall(callback, args, "triggerInteraction").toBool();
+    return script->call(callbackMap[interactionType], args).toBool();
   }
   return false;
 }
 
 void DynamicObject::scriptCall(const QString& method, const QString& message)
 {
-  QJSValue callback = script.property(method);
-
-  if (callback.isCallable())
-  {
-    QJSValueList args;
-
-    args << message;
-    Game::get()->scriptCall(callback, args, "scriptCall");
-  }
-  else
-    qDebug() << "/!\\ Tried to call undefined" << method << "on object" << getObjectType() << ':' << objectName;
+  if (script)
+    script->call(method, QJSValueList() << message);
 }
 
 void DynamicObject::update(qint64 delta)
@@ -195,7 +158,6 @@ void DynamicObject::load(const QJsonObject& data)
   dataStore   = data["dataStore"].toObject();
   Sprite::load(data);
   setScript(scriptName);
-  taskManager->setLocalModule(script);
   taskManager->load(data);
 }
 

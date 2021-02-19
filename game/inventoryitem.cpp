@@ -51,19 +51,17 @@ int InventoryItem::getValue() const
 bool InventoryItem::isGroupable(InventoryItem* other)
 {
   auto itemData = InventoryItemLibrary::get()->getObject(getObjectName());
-  auto callback = script.property("isGroupable");
   bool result   = true;
 
   if (itemData.isObject())
     result = itemData["isGroupable"].toBool(result);
-  if (callback.isCallable())
+  if (script && script->hasMethod("isGroupable"))
   {
     QJSValueList args;
 
-    args << Game::get()->getScriptEngine().newQObject(this)
-         << Game::get()->getScriptEngine().newQObject(other)
+    args << Game::get()->getScriptEngine().newQObject(other)
          << result;
-    result = callback.call(args).toBool();
+    result = script->call("isGroupable", args).toBool();
   }
   return result;
 }
@@ -87,29 +85,65 @@ bool InventoryItem::remove(int amount)
 
 void InventoryItem::onEquippedBy(Character* user, bool on)
 {
-  QJSValue callback = script.property("onEquipped");
-
-  if (callback.isCallable())
+  if (script)
   {
     QJSValueList args;
 
     args << Game::get()->getScriptEngine().newQObject(user) << on;
-    Game::get()->scriptCall(callback, args, "Item::onEquipped");
+    script->call("onEquipped", args);
   }
 }
 
 bool InventoryItem::canEquipInSlot(const QString& slotType)
 {
-  QJSValue callback = script.property("canEquipInSlotType");
-
-  if (callback.isCallable())
+  if (script && script->hasMethod("canEquipInSlotType"))
   {
     QJSValueList args;
 
     args << slotType;
-    return Game::get()->scriptCall(callback, args, "Item::canEquipInSlotType").toBool();
+    return script->call("canEquipInSlotType", args).toBool();
   }
   return  slotType == "any";
+}
+
+int InventoryItem::getActionPointCost()
+{
+  if (script && script->hasMethod("getActionPointCost"))
+    return script->call("getActionPointCost").toInt();
+  return 2;
+}
+
+bool InventoryItem::isCombatItem()
+{
+  QJSValue value;
+
+  if (script)
+    value = script->property("triggersCombat");
+  return value.isBool() ? value.toBool() : false;
+}
+
+bool InventoryItem::isInRange(DynamicObject *target)
+{
+  if (script)
+  {
+    QJSValueList args;
+
+    args << Game::get()->getScriptEngine().newQObject(target);
+    return script->call("isInRange", args).toBool();
+  }
+  return true;
+}
+
+bool InventoryItem::useOn(DynamicObject* target)
+{
+  if (script)
+  {
+    QJSValueList args;
+
+    args << Game::get()->getScriptEngine().newQObject(target);
+    return script->call("attemptToUseOn", args).toBool();
+  }
+  return false;
 }
 
 void InventoryItem::updateScript()
@@ -135,11 +169,16 @@ void InventoryItem::updateSprite()
 void InventoryItem::save(QJsonObject& data) const
 {
   data["quantity"] = quantity;
+  if (virtualItem)
+    data["virtual"] = virtualItem;
   DynamicObject::save(data);
 }
 
 void InventoryItem::load(const QJsonObject& data)
 {
   quantity = data["quantity"].toInt(1);
+  virtualItem = data["virtual"].toBool();
   DynamicObject::load(data);
+  emit quantityChanged();
+  emit objectNameChanged();
 }

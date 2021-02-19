@@ -20,6 +20,7 @@ public:
 
   void load(const QJsonObject&);
   void save(QJsonObject&) const;
+  void setUser(Character* value) { user = value; }
 
   QQmlListProperty<InventoryItem> getQmlItems() { return QQmlListProperty<InventoryItem>(this, &items); }
   const QList<InventoryItem*>& getItems() const { return items; }
@@ -55,6 +56,7 @@ private:
   QMap<QString, InventoryItem*> itemSlots;
   QStringList                   slotNames;
   QMap<QString, QString>        slotTypes;
+  Character*                    user = nullptr;
 };
 
 #endif // INVENTORY_H

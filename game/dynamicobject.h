@@ -9,6 +9,7 @@
 # include <QJsonObject>
 # include "sprite.h"
 # include "taskrunner.h"
+# include "scriptcontroller.h"
 
 class TileZone;
 class Character;
@@ -26,11 +27,12 @@ class DynamicObject : public Sprite
 
 public:
   explicit DynamicObject(QObject *parent = nullptr);
+  virtual ~DynamicObject();
 
   virtual void update(qint64);
   virtual void load(const QJsonObject&);
   virtual void save(QJsonObject&) const;
-  virtual void setScript(const QString& name);
+  Q_INVOKABLE virtual void setScript(const QString& name);
 
   inline bool isCharacter() const { return getObjectType() == "Character"; }
   inline bool isFloating() const { return floating; }
@@ -81,10 +83,10 @@ private slots:
 
 protected:
   virtual QString getScriptPath() const { return SCRIPTS_PATH + "behaviours"; }
-  QJSValue script, scriptModule;
+  ScriptController* script = nullptr;
   TaskRunner* taskManager;
   TileZone* controlZone = nullptr;
-private:
+//private:
   QString objectName, scriptName;
   QPoint position, nextPosition;
   bool floating;

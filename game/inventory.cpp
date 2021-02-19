@@ -144,6 +144,7 @@ bool Inventory::equipItem(InventoryItem *item, const QString& slotName)
       removeItem(item);
     unequipItem(slotName, shouldDestroyOldObject);
     itemSlots[slotName] = item;
+    item->onEquippedBy(user, true);
     emit equippedItemsChanged();
     return true;
   }
@@ -159,6 +160,7 @@ void Inventory::unequipItem(const QString &slotName, bool dropped)
     if (oldItem)
     {
       itemSlots[slotName] = nullptr;
+      oldItem->onEquippedBy(user, false);
       if (!dropped)
         addItem(oldItem);
       else
@@ -219,6 +221,7 @@ void Inventory::load(const QJsonObject& data)
     {
       item = new InventoryItem(this);
       item->load(itemData);
+      item->onEquippedBy(user, true);
     }
     slotTypes.insert(slotName, itemData["slotType"].toString());
     itemSlots.insert(slotName, item);

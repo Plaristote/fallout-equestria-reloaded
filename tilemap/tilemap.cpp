@@ -59,7 +59,6 @@ bool TileMap::load(const QString& name)
           return false;
       }
     }
-    qDebug() << "HONTO NI HONTO TEXTURE LIST" << textureList;
 
     for (QJsonValue value : document["layers"].toArray())
     {

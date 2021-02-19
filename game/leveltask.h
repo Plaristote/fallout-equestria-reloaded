@@ -25,15 +25,8 @@ class LevelTask : public CombatComponent
   Q_PROPERTY(bool       paused  MEMBER paused NOTIFY pausedChanged)
   Q_PROPERTY(TileMap*   tilemap READ getTileMap NOTIFY tilemapReady)
   Q_PROPERTY(Character* player READ getPlayer)
-  Q_PROPERTY(int        mouseMode MEMBER mouseMode NOTIFY mouseModeChanged)
   Q_PROPERTY(QQmlListProperty<DynamicObject> dynamicObjects READ getQmlObjects NOTIFY objectsChanged)
 public:
-  enum MouseMode {
-    MovementCursor    = 0,
-    InteractionCursor = 1,
-    TargetCursor      = 2
-  };
-
   explicit LevelTask(QObject *parent = nullptr);
 
   void load(const QString& levelName, DataEngine*);
@@ -49,8 +42,6 @@ public:
 
   Q_INVOKABLE bool insertPartyIntoZone(CharacterParty*, const QString& zoneName = "");
   Q_INVOKABLE void tileClicked(int x, int y);
-  Q_INVOKABLE void objectClicked(DynamicObject*);
-  Q_INVOKABLE void swapMouseMode();
 
   void registerDynamicObject(DynamicObject*);
   void unregisterDynamicObject(DynamicObject*);
@@ -73,7 +64,6 @@ signals:
   void cameraFocusRequired(DynamicObject*);
   void clickedOnCase(int x, int y);
   void clickedOnObject(DynamicObject*);
-  void mouseModeChanged();
 
 private slots:
   void update();
@@ -93,7 +83,6 @@ private:
   TileMap*      tilemap = nullptr;
   TimeManager*  timeManager = nullptr;
   bool          paused = true;
-  int           mouseMode = 0;
 };
 
 #endif // LEVELTASK_H
