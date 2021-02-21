@@ -114,13 +114,45 @@ Pane {
   }
 
   Item {
+    id: actionPointPane
+    anchors.left: menuPane.right
+    width: 400
+    anchors.top: parent.top
+    anchors.topMargin: 20
+    height: 15
+
+    Row {
+      anchors.top: parent.top
+      anchors.bottom: parent.bottom
+      anchors.horizontalCenter: parent.horizontalCenter
+      spacing: 3
+      Repeater {
+        model: levelController.player.statistics.actionPoints
+        delegate: Image {
+          property bool available: index < levelController.player.actionPoints
+          source: "qrc:/assets/ui/hud.png"
+          sourceClipRect: Qt.rect(available ? 404 : 374, 92, 30, 30)
+          height: 15
+          width:  15
+        }
+      }
+    }
+
+    ColorOverlay {
+      source: parent
+      anchors.fill: parent
+      color: "black"
+      visible: !levelController.combat
+    }
+  }
+
+  Item {
     property QtObject inventory: levelController.player.inventory
     property int focusedItem: 0
     id: itemSlotsPane
     anchors.left: menuPane.right
     anchors.leftMargin: 5
-    anchors.top: parent.top
-    anchors.topMargin: 20
+    anchors.top: actionPointPane.bottom
     anchors.bottom: parent.bottom
     anchors.bottomMargin: 1
 

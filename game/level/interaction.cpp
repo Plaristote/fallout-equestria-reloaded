@@ -79,6 +79,7 @@ void InteractionComponent::setActiveItem(InventoryItem* item)
 {
   mouseMode = TargetCursor;
   activeItem = item;
+  emit activeItemChanged();
   emit mouseModeChanged();
 }
 

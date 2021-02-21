@@ -92,29 +92,35 @@ Pane {
         anchors.left: parent.left; anchors.right: parent.right
         spacing: 10
 
-        Pane {
-          background: UiStyle.TerminalPane {}
+        RowLayout {
           anchors.left: parent.left; anchors.right: parent.right
-          anchors.margins: 10
-          height: characterPreviewColumn.height + 20
 
-          Column {
-            id: characterPreviewColumn
-            anchors.left: parent.left; anchors.right: parent.right
+          Pane {
+            background: UiStyle.TerminalPane {}
+            Layout.preferredWidth: parent.width / 2
+            Layout.fillHeight: true
+            anchors.margins: 10
+            height: characterPreviewColumn.height + 20
 
-            Image {
-              anchors.horizontalCenter: parent.horizontalCenter
-              source: fileProtocol + character.getSpriteSource()
-              sourceClipRect: character.getClippedRect()
-              height: character.getClippedRect().height
-              width: character.getClippedRect().height
+            Column {
+              id: characterPreviewColumn
+              anchors.left: parent.left; anchors.right: parent.right
+
+              Image {
+                anchors.horizontalCenter: parent.horizontalCenter
+                source: fileProtocol + character.getSpriteSource()
+                sourceClipRect: character.getClippedRect()
+                height: character.getClippedRect().height
+                width: character.getClippedRect().height
+              }
             }
           }
-        }
 
-        InventoryItemPreview {
-          anchors.left: parent.left; anchors.right: parent.right
-          model: root.selectedObject
+          InventoryItemPreview {
+            Layout.fillHeight: true
+            Layout.preferredWidth: parent.width / 2
+            model: root.selectedObject
+          }
         }
 
         GridLayout {

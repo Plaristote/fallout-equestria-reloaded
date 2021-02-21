@@ -37,6 +37,7 @@ signals:
   void interactionRequired(DynamicObject* target, QStringList options);
   void startDialog(CharacterDialog*);
   void startLooting(LootingController*);
+  void activeItemChanged();
 
 protected slots:
   void startPendingInteraction();

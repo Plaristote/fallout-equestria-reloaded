@@ -5,7 +5,19 @@
 
 CombatComponent::CombatComponent(QObject *parent) : TextBubblesComponent(parent)
 {
+  connect(this, &InteractionComponent::activeItemChanged, this, &CombatComponent::onActiveItemChanged);
+}
 
+bool CombatComponent::isPlayerTurn() const
+{
+  return combattants[combatIterator] == Game::get()->getPlayer();
+}
+
+void CombatComponent::onActiveItemChanged()
+{
+  qDebug() << "onActiveItemChaned";
+  if (activeItem && activeItem->isCombatItem())
+    joinCombat(Game::get()->getPlayer());
 }
 
 void CombatComponent::joinCombat(Character* character)
@@ -18,6 +30,7 @@ void CombatComponent::joinCombat(Character* character)
     {
       combat = true;
       emit combatChanged();
+      emit currentCombattantChanged();
     }
     else
       sortCombattants();
@@ -41,6 +54,9 @@ bool CombatComponent::tryToEndCombat()
 {
   if (isCombatEnabled()) { return false; }
   combat = false;
+  combatIterator = 0;
+  combattants.clear();
+  emit combatChanged();
   return true;
 }
 
@@ -71,6 +87,8 @@ void CombatComponent::onNextCombatTurn()
   Character* current;
 
   previous = combattants.at(combatIterator);
+  if (isPlayerTurn() && tryToEndCombat())
+    return ;
   combatIterator = combatIterator + 1 >= combattants.size() ? 0 : combatIterator  + 1;
   current  = combattants.at(combatIterator);
   if (previous && previous->isAlive())
@@ -79,6 +97,7 @@ void CombatComponent::onNextCombatTurn()
     finalizeRound();
   if (!tryToEndCombat())
     initializeCharacterTurn(current);
+  emit currentCombattantChanged();
 }
 
 void CombatComponent::initializeCharacterTurn(Character* character)
@@ -95,15 +114,20 @@ void CombatComponent::finalizeCharacterTurn(Character* character)
 void CombatComponent::finalizeRound()
 {
   Game::get()->getTimeManager()->addElapsedMilliseconds(WORLDTIME_TURN_DURATION);
+  sortCombattants();
 }
 
 void CombatComponent::onMovementFinished(Character* character)
 {
   if (combat)
   {
+    qDebug() << "Combat/onMovementZinizhed zor" << character->getObjectName();
     character->useActionPoints(1, "movement");
     if (character->getActionPoints() == 0)
+    {
       character->rcurrentPath().clear();
+      character->setAnimation("idle-down");
+    }
   }
   GridComponent::onMovementFinished(character);
 }

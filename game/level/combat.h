@@ -13,6 +13,7 @@ class CombatComponent : public TextBubblesComponent
   Q_PROPERTY(bool combat MEMBER combat NOTIFY combatChanged)
   Q_PROPERTY(QQmlListProperty<Character> combattants READ getQmlCombattants NOTIFY combattantsChanged)
   Q_PROPERTY(int  turn MEMBER combatIterator NOTIFY currentCombattantChanged)
+  Q_PROPERTY(bool isPlayerTurn READ isPlayerTurn NOTIFY currentCombattantChanged)
 public:
   explicit CombatComponent(QObject* parent = nullptr);
 
@@ -34,6 +35,7 @@ public:
   }
   */
   void onNextCombatTurn();
+  bool isPlayerTurn() const;
 
   Q_INVOKABLE bool isInCombat(Character* character) const { return combattants.contains(character); }
   Q_INVOKABLE void joinCombat(Character* character);
@@ -51,6 +53,7 @@ signals:
 private slots:
   void onMovementFinished(Character*);
   void onCombattantReachedDestination();
+  void onActiveItemChanged();
 
 protected:
   void sortCombattants();

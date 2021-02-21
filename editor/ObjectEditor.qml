@@ -177,11 +177,17 @@ Item {
         border.width: 1
         border.color: "green"
         color: "transparent"
-        TextEdit {
-          id: scriptEditor
-          anchors.fill: parent
-          anchors.margins: 5
-          color: "white"
+        ScrollView {
+          anchors.fill: parent;
+          clip: true
+          contentHeight: scriptEditor.contentHeight
+          contentWidth: scriptEditor.contentWidth
+          TextEdit {
+            id: scriptEditor
+            padding: 5
+            color: "white"
+            selectByMouse: true
+          }
         }
       }
     }

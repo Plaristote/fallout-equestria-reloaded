@@ -260,15 +260,17 @@ export class Controller {
   }
 
   onMouseClick(mouse, mouseX, mouseY) {
-    mouseX -= this.canvas.origin.x;
-    mouseY -= this.canvas.origin.y;
-    switch (this.level.mouseMode) {
-      case 0:
-        this.onMovementClick(mouseX, mouseY);
-        break ;
-      default:
-        this.onObjectClick(mouseX, mouseY);
-        break ;
+    if (!this.level.combat || this.level.isPlayerTurn) {
+      mouseX -= this.canvas.origin.x;
+      mouseY -= this.canvas.origin.y;
+      switch (this.level.mouseMode) {
+        case 0:
+          this.onMovementClick(mouseX, mouseY);
+          break ;
+        default:
+          this.onObjectClick(mouseX, mouseY);
+          break ;
+      }
     }
   }
 

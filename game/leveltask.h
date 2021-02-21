@@ -24,7 +24,7 @@ class LevelTask : public CombatComponent
   Q_PROPERTY(QString    name MEMBER name)
   Q_PROPERTY(bool       paused  MEMBER paused NOTIFY pausedChanged)
   Q_PROPERTY(TileMap*   tilemap READ getTileMap NOTIFY tilemapReady)
-  Q_PROPERTY(Character* player READ getPlayer)
+  Q_PROPERTY(Character* player READ getPlayer NOTIFY playerChanged)
   Q_PROPERTY(QQmlListProperty<DynamicObject> dynamicObjects READ getQmlObjects NOTIFY objectsChanged)
 public:
   explicit LevelTask(QObject *parent = nullptr);
@@ -64,6 +64,7 @@ signals:
   void cameraFocusRequired(DynamicObject*);
   void clickedOnCase(int x, int y);
   void clickedOnObject(DynamicObject*);
+  void playerChanged();
 
 private slots:
   void update();
