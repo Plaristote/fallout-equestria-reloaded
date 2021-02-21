@@ -16,31 +16,53 @@ void Character::update(qint64 delta)
   fieldOfView->update(delta);
 }
 
+void Character::takeDamage(int damage, Character* dealer)
+{
+  auto hp = getStatistics()->getHitPoints() - damage;
+
+  getStatistics()->setHitPoints(hp);
+  qDebug() << "took damage" << hp;
+  if (hp <= 0)
+  {
+      qDebug() << "character dying";
+    setAnimation("death");
+    emit died();
+  }
+  else if (dealer != nullptr && !isAlly(dealer) && !isEnemy(dealer))
+  {
+    setAsEnemy(dealer);
+    emit requireJoinCombat();
+  }
+}
+
 QPoint Character::getInteractionPosition() const
 {
-  auto* player = Game::get()->getPlayerParty()->getCharacters().first();
-  auto* level  = Game::get()->getLevel();
-  auto* grid   = level->getGrid();
-  auto  center = getPosition();
-
-  for (int x = -1 ; x <= 1 ; ++x)
+  if (isAlive())
   {
-    if (x < 0) continue ;
-    for (int y = -1 ; y <= 1 ; ++y)
-    {
-      QPoint position(center);
-      DynamicObject* occupant;
+    auto* player = Game::get()->getPlayer();
+    auto* level  = Game::get()->getLevel();
+    auto* grid   = level->getGrid();
+    auto  center = getPosition();
 
-      if (y < 0) continue ;
-      position.rx() += x;
-      position.ry() += y;
-      occupant = grid->getOccupant(position.x(), position.y());
-      if (!grid->isOccupied(position.x(), position.y()) || occupant == player)
-        return position;
+    for (int x = -1 ; x <= 1 ; ++x)
+    {
+      if (x < 0) continue ;
+      for (int y = -1 ; y <= 1 ; ++y)
+      {
+        QPoint position(center);
+        DynamicObject* occupant;
+
+        if (y < 0) continue ;
+        position.rx() += x;
+        position.ry() += y;
+        occupant = grid->getOccupant(position.x(), position.y());
+        if (!grid->isOccupied(position.x(), position.y()) || occupant == player)
+          return position;
+      }
     }
+    qDebug() << "Character::getInteractionPosition: No path to reach character" << getObjectName();
   }
-  qDebug() << "No path to reach character";
-  return QPoint(-1, -1);
+  return getPosition();
 }
 
 QString Character::getDialogName()
@@ -67,6 +89,23 @@ bool Character::isEnemy(const Character* other) const
 bool Character::hasLineOfSight(const Character *) const
 {
   return true;
+}
+
+void Character::setAsEnemy(Character* other)
+{
+  auto* diplomacy = Game::get()->getDiplomacy();
+  auto* faction   = diplomacy->getFaction(other->getFactionFlag());
+
+  if (other->getFactionName() != "") {
+    if (faction)
+      diplomacy->setAsEnemy(true, getFactionFlag(), other->getFactionFlag());
+    else if (!faction)
+      enemyFlag += other->getFactionFlag();
+  }
+  else if (faction)
+    other->setAsEnemy(this);
+  else
+    qDebug() << "Character::setAsEnemy: both characters lack a faction:" << getObjectName() << "and" << other->getObjectName();
 }
 
 float Character::getDistance(const DynamicObject* target) const

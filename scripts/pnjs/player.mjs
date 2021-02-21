@@ -9,6 +9,9 @@ class Player extends CharacterBehaviour {
     return [];
     return super.getAvailableInteractions(); // TODO
   }
+
+  onTurnStart() {
+  }
 }
 
 export function create(model) {

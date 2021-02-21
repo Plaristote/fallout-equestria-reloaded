@@ -30,11 +30,14 @@ public:
 
 protected slots:
   virtual void onMovementFinished(Character*);
+  virtual void onCharacterDied(Character*);
 
 protected:
+  void addCharacterObserver(Character*, QMetaObject::Connection);
+
   LevelGrid* grid;
 private:
-  QMap<Character*, QMetaObject::Connection> characterObservers;
+  QMap<Character*, QVector<QMetaObject::Connection>> characterObservers;
 };
 
 #endif // GRIDCOMPONENT_H

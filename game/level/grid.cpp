@@ -11,9 +11,12 @@ void GridComponent::registerDynamicObject(DynamicObject* object)
   {
     Character* character = reinterpret_cast<Character*>(object);
 
-    characterObservers.insert(character, connect(
-      character, &Sprite::movementFinished, this, [this, character]() { onMovementFinished(character); }
-    ));
+    characterObservers.insert(character, {
+      connect(character, &Sprite::movementFinished, this, [this, character]() { onMovementFinished(character); }),
+      connect(character, &Character::died, this, [this, character]() {
+                                  qDebug() << "vbvbvbzbitoiu";
+                                  onCharacterDied(character); })
+    });
   }
 }
 
@@ -24,14 +27,26 @@ void GridComponent::unregisterDynamicObject(DynamicObject* object)
     Character* character = reinterpret_cast<Character*>(object);
 
     character->setAnimation("idle-down");
-    disconnect(characterObservers.value(character));
+    for (auto observer : characterObservers.value(character))
+      disconnect(observer);
     characterObservers.remove(character);
   }
+}
+
+void GridComponent::addCharacterObserver(Character* character, QMetaObject::Connection observer)
+{
+  characterObservers[character].push_back(observer);
 }
 
 DynamicObject* GridComponent::getOccupantAt(QPoint position)
 {
   return grid->getOccupant(position.x(), position.y());
+}
+
+void GridComponent::onCharacterDied(Character* character)
+{
+  qDebug() << "character died " << character;
+  grid->removeObject(character);
 }
 
 void GridComponent::onMovementFinished(Character* object)

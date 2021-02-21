@@ -11,10 +11,10 @@ export class Weapon extends Item {
   }
 
   useOn(target) {
-    var damage = this.getValueFromRange(this.getDamageRange());
+    var damage = this.getValueFromRange(...this.getDamageRange());
 
     damage -= target.statistics.damageResistance;
-    damage = Math.max(0, dmage);
+    damage = Math.max(0, damage);
     game.appendToConsole(
       this.user.statistics.name +
       " used " +
@@ -24,7 +24,7 @@ export class Weapon extends Item {
       " for " +
       damage + " damage."
     );
-    target.statistics.hitPoints -= damage;
+    target.takeDamage(damage, this.user);
     return true;
   }
 }

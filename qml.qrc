@@ -159,5 +159,6 @@
         <file>game/hud/HudActionPoints.qml</file>
         <file>game/hud/HudConsole.qml</file>
         <file>game/hud/HudMenu.qml</file>
+        <file>game/hud/HudCounter.qml</file>
     </qresource>
 </RCC>

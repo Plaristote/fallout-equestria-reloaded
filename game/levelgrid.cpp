@@ -158,7 +158,8 @@ void LevelGrid::removeObject(DynamicObject* object)
   if (gridCase && gridCase->occupant == object)
   {
     setCaseOccupant(*gridCase, nullptr);
-    emit gridCase->zone->exitedZone(object, gridCase->zone);
+    if (gridCase->zone)
+      emit gridCase->zone->exitedZone(object, gridCase->zone);
   }
 }
 

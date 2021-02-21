@@ -19,6 +19,9 @@ public:
 
   QQmlListProperty<Character> getQmlCombattants() { return QQmlListProperty<Character>(this, &combattants); }
 
+  void registerDynamicObject(DynamicObject*);
+  void unregisterDynamicObject(DynamicObject*);
+
   /*
    * TODO: find a way for characters to schedule orders.
    *
@@ -37,10 +40,12 @@ public:
   void onNextCombatTurn();
   bool isPlayerTurn() const;
 
+  Q_INVOKABLE bool isCharacterTurn(Character* charcter) const;
   Q_INVOKABLE bool isInCombat(Character* character) const { return combattants.contains(character); }
   Q_INVOKABLE void joinCombat(Character* character);
   Q_INVOKABLE void leaveCombat(Character* character);
   Q_INVOKABLE bool tryToEndCombat();
+  Q_INVOKABLE void passTurn(Character* character);
 
   // TODO write a real check for that
   bool isCombatEnabled() const { return combattants.length() > 1 && combat == true; }
@@ -54,6 +59,7 @@ private slots:
   void onMovementFinished(Character*);
   void onCombattantReachedDestination();
   void onActiveItemChanged();
+  virtual void onCharacterDied(Character*);
 
 protected:
   void sortCombattants();

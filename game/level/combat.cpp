@@ -8,9 +8,33 @@ CombatComponent::CombatComponent(QObject *parent) : TextBubblesComponent(parent)
   connect(this, &InteractionComponent::activeItemChanged, this, &CombatComponent::onActiveItemChanged);
 }
 
+void CombatComponent::registerDynamicObject(DynamicObject* object)
+{
+  TextBubblesComponent::registerDynamicObject(object);
+  if (object->isCharacter())
+  {
+    auto* character = dynamic_cast<Character*>(object);
+
+    addCharacterObserver(
+      character,
+      connect(character, &Character::requireJoinCombat, [this, character]() { joinCombat(character); })
+    );
+  }
+}
+
+void CombatComponent::unregisterDynamicObject(DynamicObject* object)
+{
+  TextBubblesComponent::unregisterDynamicObject(object);
+}
+
 bool CombatComponent::isPlayerTurn() const
 {
-  return combattants[combatIterator] == Game::get()->getPlayer();
+  return isCharacterTurn(Game::get()->getPlayer());
+}
+
+bool CombatComponent::isCharacterTurn(Character *character) const
+{
+  return combattants[combatIterator] == character;
 }
 
 void CombatComponent::onActiveItemChanged()
@@ -100,9 +124,33 @@ void CombatComponent::onNextCombatTurn()
   emit currentCombattantChanged();
 }
 
+void CombatComponent::onCharacterDied(Character* character)
+{
+  int characterIt = combattants.indexOf(character);
+
+  if (characterIt >= 0)
+  {
+    if (isCharacterTurn(character))
+    {
+      onNextCombatTurn();
+      combattants.removeAll(character);
+      combatIterator--;
+    }
+    else if (characterIt < combatIterator)
+    {
+      combattants.removeAll(character);
+      combatIterator--;
+    }
+    else
+      combattants.removeAll(character);
+    emit combattantsChanged();
+  }
+  TextBubblesComponent::onCharacterDied(character);
+}
+
 void CombatComponent::initializeCharacterTurn(Character* character)
 {
-
+  character->scriptCall("onTurnStart");
 }
 
 void CombatComponent::finalizeCharacterTurn(Character* character)
@@ -135,4 +183,10 @@ void CombatComponent::onMovementFinished(Character* character)
 void CombatComponent::onCombattantReachedDestination()
 {
 
+}
+
+void CombatComponent::passTurn(Character *character)
+{
+  if (isCharacterTurn(character))
+    onNextCombatTurn();
 }

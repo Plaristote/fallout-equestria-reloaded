@@ -126,6 +126,7 @@ public:
   const QString& getName() const { return name; }
   int getExperience() const { return experience; }
   int getHitPoints() const { return hitPoints; }
+  void setHitPoints(int value) { hitPoints = value; emit hitPointsChanged(); }
   QString getFaction() const { return faction; }
   Q_INVOKABLE void addExperience(int xp);
   Q_INVOKABLE bool isAcceptable() const;

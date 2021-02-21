@@ -38,10 +38,12 @@ public:
   Q_INVOKABLE bool isAlive() const { return getStatistics()->getHitPoints() > 0; }
   Q_INVOKABLE bool isAlly(const Character*) const;
   Q_INVOKABLE bool isEnemy(const Character*) const;
+  Q_INVOKABLE void setAsEnemy(Character*);
   Q_INVOKABLE bool hasLineOfSight(const Character*) const;
   Q_INVOKABLE bool isSneaking() const { return sneakEnabled; }
   Q_INVOKABLE float getDistance(const DynamicObject*) const;
 
+  Q_INVOKABLE void takeDamage(int damage, Character* dealer);
   Q_INVOKABLE bool useActionPoints(int amount = 1, const QString& motive = "");
   inline int       getActionPoints() const { return actionPoints; }
   void             resetActionPoints();
@@ -50,6 +52,8 @@ public:
 
 signals:
   void actionPointsChanged();
+  void requireJoinCombat();
+  void died();
 
 protected:
   virtual QString getScriptPath() const override { return SCRIPTS_PATH + "pnjs"; }

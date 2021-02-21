@@ -16,7 +16,11 @@ export class CharacterBehaviour {
   }
 
   onLook() {
-    game.appendToConsole("You see " + this.model.statistics.name);
+    var message = "You see " + this.model.statistics.name + ".";
+
+    message += " " + this.model.statistics.hitPoints + "/" + this.model.statistics.maxHitPoints + " HP";
+    game.appendToConsole(message);
+    return true;
   }
 
   onTalkTo() {
@@ -38,6 +42,11 @@ export class CharacterBehaviour {
 
   onDestinationReached() {
     console.log(this.model, "reached destination", this.model.position.x, this.model.position.y);
+  }
+
+  onTurnStart() {
+    console.log("Lol, I dunno what to do, skipping turn");
+    level.passTurn(this.model);
   }
 }
 

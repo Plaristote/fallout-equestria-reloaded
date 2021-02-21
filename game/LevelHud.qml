@@ -58,4 +58,52 @@ Pane {
     anchors.bottomMargin: 1
     onItemActivated: levelController.setActiveItem(activatedItem)
   }
+
+  Row {
+    anchors.bottom: actionPointPane.top
+    anchors.bottomMargin: 10
+    anchors.horizontalCenter: actionPointPane.horizontalCenter
+    clip: true
+    spacing: 10
+    Repeater {
+      model: levelController.combattants
+      delegate: Rectangle {
+        property QtObject character: levelController.combattants[index]
+
+        height: 20
+        width: 20
+        border.width: 2
+        border.color: levelController.turn === index ? "yellow" : "black"
+        color: character === levelController.player ? "lightgreen" : "blue"
+      }
+    }
+  }
+
+  Column {
+    anchors.left: actionPointPane.right
+    anchors.leftMargin: 20
+    anchors.bottom: parent.bottom
+
+    Text {
+      anchors.horizontalCenter: parent.horizontalCenter
+      text: "HP"
+      color: "white"
+      font.family: application.titleFontName
+    }
+
+    HudCounter {
+      source: levelController.player.statistics.hitPoints
+    }
+
+    Text {
+      anchors.horizontalCenter: parent.horizontalCenter
+      text: "AP"
+      color: "white"
+      font.family: application.titleFontName
+    }
+
+    HudCounter {
+      source: levelController.player.statistics.armorClass
+    }
+  }
 }
