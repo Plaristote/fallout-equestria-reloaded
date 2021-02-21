@@ -1,50 +1,8 @@
 #include "actionqueue.h"
 #include "game.h"
-
-class MovementAction : public ActionBase
-{
-public:
-  MovementAction(Character* character, QPoint target) : ActionBase(character), target(target)
-  {
-  }
-
-  int  getApCost() const override;
-  bool trigger() override;
-  bool isOver() override;
-
-protected:
-  QPoint target;
-};
-
-class InteractionAction : public ActionBase
-{
-public:
-  InteractionAction(Character* character, DynamicObject* target, QString actionName) : ActionBase(character), target(target), actionName(actionName)
-  {
-  }
-
-  int  getApCost() const override;
-  bool trigger() override;
-
-protected:
-  DynamicObject* target;
-  QString        actionName;
-};
-
-class ItemAction : public ActionBase
-{
-public:
-  ItemAction(Character* character, DynamicObject* target, QString itemSlot) : ActionBase(character), target(target), itemSlot(itemSlot)
-  {
-  }
-
-  int  getApCost() const override;
-  bool trigger() override;
-
-protected:
-  DynamicObject* target;
-  QString        itemSlot;
-};
+#include "actions/itemUse.h"
+#include "actions/interaction.h"
+#include "actions/movement.h"
 
 ActionQueue::ActionQueue(QObject *parent) : QObject(parent), character(reinterpret_cast<Character*>(parent))
 {
@@ -140,69 +98,4 @@ void ActionQueue::pushItemUse(DynamicObject *target, const QString &itemSlot)
 int ActionQueue::getItemUseApCost(DynamicObject *target, const QString &itemSlot) const
 {
   return ItemAction(character, target, itemSlot).getApCost();
-}
-
-bool MovementAction::trigger()
-{
-  auto* level = Game::get()->getLevel();
-
-  return level->moveTo(character, target);
-}
-
-bool MovementAction::isOver()
-{
-  return character->getPosition() == target && !character->isMoving();
-}
-
-int MovementAction::getApCost() const
-{
-  return character->getCurrentPath().size();
-}
-
-bool InteractionAction::trigger()
-{
-  auto* level = Game::get()->getLevel();
-  bool handledByScript = target->triggerInteraction(character, actionName);
-
-  if (!handledByScript && character == level->getPlayer())
-  {
-    QString typeName = target->metaObject()->className();
-
-    if (actionName == "talk-to" && typeName == "Character")
-      level->initializeDialog(reinterpret_cast<Character*>(target));
-    else if (actionName == "use" && typeName == "StorageObject")
-      level->initializeLooting(reinterpret_cast<StorageObject*>(target));
-    else if (actionName == "use" && typeName == "Character" && !(reinterpret_cast<Character*>(target)->isAlive()))
-      level->initializeLooting(reinterpret_cast<StorageObject*>(target));
-    return false; // Always clear the queue on player interaction
-  }
-  return handledByScript;
-}
-
-int InteractionAction::getApCost() const
-{
-  return 2;
-}
-
-bool ItemAction::trigger()
-{
-  InventoryItem* item = character->getInventory()->getEquippedItem(itemSlot);
-
-  if (item)
-  {
-    item->useOn(target);
-    return true;
-  }
-  else
-    qDebug() << "no item to uqe";
-  return false;
-}
-
-int ItemAction::getApCost() const
-{
-  InventoryItem* item = character->getInventory()->getEquippedItem(itemSlot);
-
-  if (item)
-    return item->getActionPointCost();
-  return 2;
 }

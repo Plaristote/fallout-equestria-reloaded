@@ -2,22 +2,9 @@
 # define MY_ACTIONQUEUE_H
 
 # include "game/dynamicobject.h"
-# include "game/character.h"
 # include <QVector>
 
-class ActionBase
-{
-public:
-  ActionBase(Character* character) : character(character) {}
-  virtual ~ActionBase() {}
-
-  virtual int  getApCost() const = 0;
-  virtual bool trigger() = 0;
-  virtual bool isOver() { return true; }
-
-protected:
-  Character* character;
-};
+class ActionBase;
 
 class ActionQueue : public QObject
 {
