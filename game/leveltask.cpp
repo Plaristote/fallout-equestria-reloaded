@@ -38,8 +38,6 @@ void LevelTask::load(const QString& levelName, DataEngine* dataEngine)
 
   if (dataEngine->isLevelActive(name))
     loadObjectsFromDataEngine(dataEngine);
-  else
-    loadObjectsFromTilemap();
   for (auto* zone : tilemap->getZones())
   {
     connect(zone, &TileZone::enteredZone, this, &LevelTask::onZoneEntered, Qt::QueuedConnection);
@@ -47,122 +45,9 @@ void LevelTask::load(const QString& levelName, DataEngine* dataEngine)
   }
 }
 
-void LevelTask::loadObjectsFromTilemap()
-{
-  displayConsoleMessage("Level loaded from TileMap");
-
-  // TODO thatz tezt data
-  /*
-  CharacterParty* otherParty = new CharacterParty(this);
-  Character* otherChar = new Character;
-  otherChar->setStatistics(Game::get()->getDataEngine()->makeStatModel("tintin", "toto"));
-  otherChar->setSpriteName("pony-green");
-  otherChar->setAnimation("idle-down");
-  otherChar->setScript("dummy.mjs");
-  setCharacterPosition(otherChar, 8, 0);
-  otherParty->addCharacter(otherChar);
-
-  insertPartyIntoZone(Game::get()->getPlayerParty());
-  insertPartyIntoZone(otherParty);
-  */
-  // END tezt data
-
-  for (QJsonObject objectData : tilemap->getObjects())
-  {
-    DynamicObject*  object;
-    QJsonArray      objectTiles = objectData["objects"].toArray();
-    QJsonObject     objectTile;
-    int             gid;
-    QString         type;
-    QPoint          drawAt, interactionPosition;
-    QString         scriptName, dialogName, characterSheetName;
-    QPoint          renderPosition;
-    SpriteAnimation customDisplay;
-    bool            unique = false;
-
-    qDebug() << ">>>>>>>>>>>>>>>>>>>>> Loading object" << objectData["name"].toString();
-    if (objectTiles.size() == 0)
-      continue ;
-    objectTile  = objectTiles.first().toObject();
-    gid         = objectTile["gid"].toInt();
-    customDisplay.name   = "tiled-object";
-    customDisplay.source = tilemap->getObjectSource(gid);
-    customDisplay.clippedRect.setSize(tilemap->getObjectSize(gid));
-    customDisplay.frameCount = 1;
-    renderPosition.setX(static_cast<int>(objectTile["x"].toDouble())); // unreliable, use properties x/y
-    renderPosition.setY(static_cast<int>(objectTile["y"].toDouble()));
-    for (QJsonValue property : objectData["properties"].toArray())
-    {
-        QString propertyName = property["name"].toString();
-        QJsonValue propertyValue = property["value"];
-
-        if (propertyName == "type")
-          type = propertyValue.toString();
-        else if (propertyName == "drawAtX")
-          drawAt.setX(propertyValue.toInt());
-        else if (propertyName == "drawAtY")
-          drawAt.setY(propertyValue.toInt());
-        else if (propertyName == "interactionPositionX")
-          interactionPosition.setX(propertyValue.toInt());
-        else if (propertyName == "interactionPositionY")
-          interactionPosition.setY(propertyValue.toInt());
-        else if (propertyName == "script")
-          scriptName = propertyValue.toString();
-        else if (propertyName == "dialog")
-          dialogName = propertyValue.toString();
-        else if (propertyName == "characterSheet")
-          characterSheetName = propertyValue.toString();
-        else if (propertyName == "unique")
-          characterSheetName = propertyValue.toBool();
-
-        else if (propertyName == "x")
-          renderPosition.setX(propertyValue.toInt() - this->tilemap->getPixelWidth() / 2 + customDisplay.clippedRect.width() / 2 + 5);
-        else if (propertyName == "y")
-          renderPosition.setY(propertyValue.toInt());
-    }
-
-    if (type == "character")
-    {
-      Character* character = new Character(this);
-
-      character->setUnique(unique);
-      character->setStatistics(
-        Game::get()->getDataEngine()->makeStatModel(character->getObjectName(), characterSheetName)
-      );
-      object = character;
-    }
-    else if (type == "storage")
-    {
-      StorageObject* storageObject = new StorageObject(this);
-
-      object = storageObject;
-      // LOOTING TEsT
-      InventoryItem* toto = new InventoryItem(this);
-      toto->setObjectName("testItem");
-      storageObject->getInventory()->addItem(toto);
-    }
-    else
-    {
-      object = new DynamicObject(this);
-    }
-    object->setObjectName(objectData["name"].toString());
-    grid->moveObject(object, drawAt.x(), drawAt.y());
-    object->setPosition(drawAt);
-    object->setRenderPosition(renderPosition);
-    object->setInteractionPosition(interactionPosition);
-    object->setSpriteAnimation(customDisplay);
-    if (!scriptName.isEmpty())
-      object->setScript(scriptName);
-    registerDynamicObject(object);
-  }
-  //moveTo(otherChar, 0, 0);
-}
-
 void LevelTask::loadObjectsFromDataEngine(DataEngine* dataEngine)
 {
   QJsonObject levelData = dataEngine->getLevelData(name);
-
-  displayConsoleMessage("Level loaded from DataEngine");
 
   for (QJsonValue objectData : levelData["objects"].toArray())
   {

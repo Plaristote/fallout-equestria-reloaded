@@ -30,7 +30,6 @@ public:
   explicit LevelTask(QObject *parent = nullptr);
 
   void load(const QString& levelName, DataEngine*);
-  void loadObjectsFromTilemap();
   void loadObjectsFromDataEngine(DataEngine*);
   void save(DataEngine*);
   void setPaused(bool value) { paused = value; emit pausedChanged(); }
