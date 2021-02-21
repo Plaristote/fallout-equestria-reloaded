@@ -15,6 +15,7 @@ class Character : public StorageObject
 
   Q_PROPERTY(StatModel*   statistics  MEMBER statistics)
   Q_PROPERTY(FieldOfView* fieldOfView MEMBER fieldOfView)
+  Q_PROPERTY(ActionQueue* actionQueue MEMBER actionQueue)
   Q_PROPERTY(int actionPoints MEMBER actionPoints NOTIFY actionPointsChanged)
 public:
   explicit Character(QObject *parent = nullptr);
@@ -27,6 +28,7 @@ public:
   void         setStatistics(StatModel* value) { statistics = value; }
   StatModel*   getStatistics() const { return statistics; }
   FieldOfView* getFieldOfView() const { return fieldOfView; }
+  ActionQueue* getActionQueue() const { return actionQueue; }
   QString      getFactionName() const { return faction ? faction->name : QString(); }
   unsigned int getFactionFlag() const { return faction ? faction->flag : 0; }
   QString      getDialogName();
@@ -45,7 +47,6 @@ public:
   Q_INVOKABLE bool hasLineOfSight(const Character*) const;
   Q_INVOKABLE bool isSneaking() const { return sneakEnabled; }
   Q_INVOKABLE float getDistance(const DynamicObject*) const;
-  Q_INVOKABLE ActionQueue* getActionQueue() const { return actionQueue; }
 
   Q_INVOKABLE void takeDamage(int damage, Character* dealer);
   Q_INVOKABLE bool useActionPoints(int amount = 1, const QString& motive = "");

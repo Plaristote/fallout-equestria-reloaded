@@ -1,4 +1,5 @@
 #include "grid.h"
+#include "game/characters/actionqueue.h"
 
 GridComponent::GridComponent(QObject *parent) : QObject(parent)
 {
@@ -62,7 +63,11 @@ void GridComponent::onMovementFinished(Character* object)
       QPoint nextCase = object->getCurrentPath().first();
 
       if (!startCharacterMoveToTile(object, nextCase.x(), nextCase.y()))
-        emit object->pathBlocked();
+      {
+        object->getActionQueue()->reset();
+        emit object->getActionQueue()->queueCompleted();
+        emit object->pathBlocked(); // Remove ?
+      }
     }
     else
     {

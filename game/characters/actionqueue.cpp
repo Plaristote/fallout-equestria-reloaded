@@ -62,14 +62,29 @@ void ActionQueue::pushMovement(QPoint target)
   queue << (new MovementAction(character, target));
 }
 
+int ActionQueue::getMovementCost(QPoint target) const
+{
+  return MovementAction(character, target).getApCost();
+}
+
 void ActionQueue::pushInteraction(DynamicObject *target, const QString &interactionName)
 {
   queue << (new InteractionAction(character, target, interactionName));
 }
 
+int ActionQueue::getInteractionApCost(DynamicObject* target, const QString &interactionName) const
+{
+  return InteractionAction(character, target, interactionName).getApCost();
+}
+
 void ActionQueue::pushItemUse(DynamicObject *target, const QString &itemSlot)
 {
   queue << (new ItemAction(character, target, itemSlot));
+}
+
+int ActionQueue::getItemUseApCost(DynamicObject *target, const QString &itemSlot) const
+{
+  return ItemAction(character, target, itemSlot).getApCost();
 }
 
 bool ActionQueue::MovementAction::trigger()
@@ -82,6 +97,11 @@ bool ActionQueue::MovementAction::trigger()
 bool ActionQueue::MovementAction::isOver()
 {
   return character->getPosition() == target && !character->isMoving();
+}
+
+int ActionQueue::MovementAction::getApCost() const
+{
+  return character->getCurrentPath().size();
 }
 
 bool ActionQueue::InteractionAction::trigger()
@@ -104,9 +124,14 @@ bool ActionQueue::InteractionAction::trigger()
   return handledByScript;
 }
 
+int ActionQueue::InteractionAction::getApCost() const
+{
+  return 2;
+}
+
 bool ActionQueue::ItemAction::trigger()
 {
-  auto* item = character->getInventory()->getEquippedItem(itemSlot);
+  InventoryItem* item = character->getInventory()->getEquippedItem(itemSlot);
 
   if (item)
   {
@@ -114,4 +139,13 @@ bool ActionQueue::ItemAction::trigger()
     return true;
   }
   return false;
+}
+
+int ActionQueue::ItemAction::getApCost() const
+{
+  InventoryItem* item = character->getInventory()->getEquippedItem(itemSlot);
+
+  if (item)
+    return item->getActionPointCost();
+  return 2;
 }
