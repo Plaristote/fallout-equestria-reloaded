@@ -29,8 +29,12 @@ public:
   bool             openInteractionMenu(DynamicObject* target);
   Q_INVOKABLE void interactOrderReceived(DynamicObject* target, const QString& interactionType);
   Q_INVOKABLE void swapMouseMode();
-  Q_INVOKABLE void setActiveItem(InventoryItem*);
+  Q_INVOKABLE void setActiveItem(const QString&);
   Q_INVOKABLE void objectClicked(DynamicObject*);
+
+  void useItemOn(DynamicObject* object);
+  void initializeDialog(Character* npc);
+  void initializeLooting(StorageObject*);
 
 signals:
   void mouseModeChanged();
@@ -39,19 +43,10 @@ signals:
   void startLooting(LootingController*);
   void activeItemChanged();
 
-protected slots:
-  void startPendingInteraction();
-
-private:
-  void useItemOn(DynamicObject* object);
-  void initializeDialog(Character* npc);
-  void initializeLooting(StorageObject*);
-
 protected:
-  QMetaObject::Connection        playerReachedDestinationObserver;
-  QPair<DynamicObject*, QString> pendingInteraction;
-  InventoryItem*                 activeItem = nullptr;
-  int                            mouseMode = MovementCursor;
+  QString        activeItemSlot;
+  InventoryItem* activeItem = nullptr;
+  int            mouseMode = MovementCursor;
 };
 
 #endif // INTERACTIONCOMPONENT_H

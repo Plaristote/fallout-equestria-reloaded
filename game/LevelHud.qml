@@ -56,7 +56,7 @@ Pane {
     anchors.top: actionPointPane.bottom
     anchors.bottom: parent.bottom
     anchors.bottomMargin: 1
-    onItemActivated: levelController.setActiveItem(activatedItem)
+    onItemActivated: levelController.setActiveItem(activatedSlot)
   }
 
   Row {

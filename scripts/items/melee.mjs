@@ -1,6 +1,10 @@
 import {Weapon} from "./weapon.mjs";
 
 export class MeleeAttack extends Weapon {
+  constructor(model) {
+    super(model);
+  }
+
   getActionPointCost() {
     return 3;
   }
@@ -22,6 +26,6 @@ export class MeleeAttack extends Weapon {
   }
 };
 
-export function create() {
-  return new MeleeAttack();
+export function create(model) {
+  return new MeleeAttack(model);
 }

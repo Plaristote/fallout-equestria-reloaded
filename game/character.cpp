@@ -1,19 +1,28 @@
 #include "character.h"
 #include "game.h"
 #include "leveltask.h"
+#include "characters/actionqueue.h"
 #include <cmath>
 
 Character::Character(QObject *parent) : StorageObject(parent)
 {
   fieldOfView = new FieldOfView(*this);
+  actionQueue = new ActionQueue(this);
   inventory->setUser(this);
   connect(inventory, &Inventory::unequippedItem, this, &Character::initializeEmptySlot);
+  connect(actionQueue, &ActionQueue::queueCompleted, this, &Character::onActionQueueCompleted);
 }
 
 void Character::update(qint64 delta)
 {
   DynamicObject::update(delta);
   fieldOfView->update(delta);
+}
+
+void Character::onActionQueueCompleted()
+{
+  if (script)
+    script->call("onActionQueueCompleted");
 }
 
 void Character::takeDamage(int damage, Character* dealer)

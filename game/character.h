@@ -7,6 +7,8 @@
 # include "diplomacy.hpp"
 # include "characters/field_of_view.hpp"
 
+class ActionQueue;
+
 class Character : public StorageObject
 {
   Q_OBJECT
@@ -30,6 +32,7 @@ public:
   QString      getDialogName();
   bool         getIsUnique() const { return isUnique; }
   void         setUnique(bool value) { isUnique = value; }
+  bool         isMoving() const { return Sprite::isMoving() || currentPath.size() > 0; }
 
   Q_INVOKABLE bool renderOnTile() const { return true; }
   Q_INVOKABLE QPoint getInteractionPosition() const override;
@@ -42,6 +45,7 @@ public:
   Q_INVOKABLE bool hasLineOfSight(const Character*) const;
   Q_INVOKABLE bool isSneaking() const { return sneakEnabled; }
   Q_INVOKABLE float getDistance(const DynamicObject*) const;
+  Q_INVOKABLE ActionQueue* getActionQueue() const { return actionQueue; }
 
   Q_INVOKABLE void takeDamage(int damage, Character* dealer);
   Q_INVOKABLE bool useActionPoints(int amount = 1, const QString& motive = "");
@@ -62,12 +66,14 @@ private slots:
   void initializeFaction();
   void initializeEmptySlots();
   void initializeEmptySlot(const QString& name);
+  void onActionQueueCompleted();
 
 private:
   QString getDefaultItemForSlot(const QString& name);
 
   StatModel* statistics = nullptr;
   FieldOfView* fieldOfView;
+  ActionQueue* actionQueue;
   WorldDiplomacy::Faction* faction = nullptr;
   bool isUnique = false;
   bool sneakEnabled = false;

@@ -1,5 +1,6 @@
 #include "combat.h"
 #include "game.h"
+#include "game/characters/actionqueue.h"
 #define WORLDTIME_TURN_DURATION_IN_SECONDS 10
 #define WORLDTIME_TURN_DURATION WORLDTIME_TURN_DURATION_IN_SECONDS * 1000
 
@@ -155,6 +156,7 @@ void CombatComponent::initializeCharacterTurn(Character* character)
 
 void CombatComponent::finalizeCharacterTurn(Character* character)
 {
+  character->getActionQueue()->reset();
   character->resetActionPoints();
   character->getTaskManager()->update(WORLDTIME_TURN_DURATION);
 }

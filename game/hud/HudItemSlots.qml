@@ -11,7 +11,7 @@ Item {
 
   Component.onCompleted: refreshUsableSlots(itemSlotsRepeater)
 
-  signal itemActivated(QtObject activatedItem)
+  signal itemActivated(string activatedSlot)
 
   Connections {
     target: inventory
@@ -78,7 +78,7 @@ Item {
           anchors.centerIn: parent
           model: slotItem
         }
-        onClicked: itemActivated(slotItem)
+        onClicked: itemActivated(slotName)
       } // END Button
     } // END Repeater
   } // END Row

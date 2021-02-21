@@ -2,6 +2,7 @@
 #include "game.h"
 #include "../characterdialog.h"
 #include "../lootingcontroller.h"
+#include "game/characters/actionqueue.h"
 
 InteractionComponent::InteractionComponent(QObject *parent) : GridComponent(parent)
 {
@@ -10,19 +11,13 @@ InteractionComponent::InteractionComponent(QObject *parent) : GridComponent(pare
 
 void InteractionComponent::registerDynamicObject(DynamicObject* object)
 {
-  auto* player = Game::get()->getPlayer();
-
-  if (object == player)
-    playerReachedDestinationObserver = connect(player, &Character::reachedDestination, this, &InteractionComponent::startPendingInteraction);
   GridComponent::registerDynamicObject(object);
 }
 
 void InteractionComponent::unregisterDynamicObject(DynamicObject* object)
 {
-  auto* player = Game::get()->getPlayer();
-
-  if (object == player)
-    disconnect(playerReachedDestinationObserver);
+  if (object->isCharacter())
+    reinterpret_cast<Character*>(object)->getActionQueue()->reset();
   GridComponent::unregisterDynamicObject(object);
 }
 
@@ -44,19 +39,12 @@ void InteractionComponent::interactOrderReceived(DynamicObject* target, const QS
 {
   auto  position = target->getInteractionPosition();
   auto* player = Game::get()->getPlayer();
+  auto* actions = player->getActionQueue();
 
-  pendingInteraction.first  = target;
-  pendingInteraction.second = interactionType;
-  if (player->getPosition() != position)
-  {
-    if (position.x() != -1 && !moveTo(player, position.x(), position.y()))
-    {
-      pendingInteraction.first = nullptr;
-      Game::get()->appendToConsole("You cannot go there.");
-    }
-  }
-  else
-    startPendingInteraction();
+  actions->reset();
+  actions->pushMovement(position);
+  actions->pushInteraction(target, interactionType);
+  actions->start();
 }
 
 void InteractionComponent::swapMouseMode()
@@ -75,10 +63,12 @@ void InteractionComponent::swapMouseMode()
   emit mouseModeChanged();
 }
 
-void InteractionComponent::setActiveItem(InventoryItem* item)
+void InteractionComponent::setActiveItem(const QString& slotName)
 {
   mouseMode = TargetCursor;
-  activeItem = item;
+  activeItemSlot = slotName;
+
+  activeItem = Game::get()->getPlayer()->getInventory()->getEquippedItem(slotName);
   emit activeItemChanged();
   emit mouseModeChanged();
 }
@@ -101,38 +91,18 @@ void InteractionComponent::objectClicked(DynamicObject* object)
 
 void InteractionComponent::useItemOn(DynamicObject* target)
 {
-  if (activeItem->isInRange(target))
+  auto* actions = Game::get()->getPlayer()->getActionQueue();
+
+  actions->reset();
+  if (!activeItem->isInRange(target))
   {
-    activeItem->useOn(target);
+    auto  position = target->getInteractionPosition();
+
+    actions->pushMovement(position);
+  }
+  actions->pushItemUse(target, activeItemSlot);
+  if (actions->start())
     swapMouseMode();
-  }
-  else
-    Game::get()->appendToConsole("Out of range.");
-}
-
-void InteractionComponent::startPendingInteraction()
-{
-  if (pendingInteraction.first)
-  {
-    bool handledByScript = pendingInteraction.first->triggerInteraction(Game::get()->getPlayer(), pendingInteraction.second);
-
-    if (!handledByScript)
-    {
-      QString typeName(pendingInteraction.first->metaObject()->className());
-
-      if (pendingInteraction.second == "talk-to")
-        initializeDialog(reinterpret_cast<Character*>(pendingInteraction.first));
-      else if (pendingInteraction.second == "use" && typeName == "StorageObject")
-        initializeLooting(reinterpret_cast<StorageObject*>(pendingInteraction.first));
-      else if (pendingInteraction.second == "use" && typeName == "Character" && !(reinterpret_cast<Character*>(pendingInteraction.first)->isAlive()))
-        initializeLooting(reinterpret_cast<StorageObject*>(pendingInteraction.first));
-      else
-        qDebug() << "InteractionComponent::startPendingInteraction: unknown interaciton type" << pendingInteraction.second;
-    }
-  }
-  else
-    qDebug() << "InteractionComponent::startPendingInteraction: No more interaction target";
-  pendingInteraction.first = nullptr;
 }
 
 void InteractionComponent::initializeDialog(Character* npc)

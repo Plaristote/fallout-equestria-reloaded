@@ -67,6 +67,8 @@ set(PROJECT_SOURCES
         game/characterdialog.cpp
         game/characters/field_of_view.hpp
         game/characters/field_of_view.cpp
+        game/characters/actionqueue.h
+        game/characters/actionqueue.cpp
         game/lootingcontroller.h
         game/lootingcontroller.cpp
         game/sprite.h

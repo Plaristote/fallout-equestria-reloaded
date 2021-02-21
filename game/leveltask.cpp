@@ -3,11 +3,12 @@
 #include "characterdialog.h"
 #include <QJsonArray>
 #include "inventoryitem.h"
+#include "characters/actionqueue.h"
 
 LevelTask::LevelTask(QObject *parent) : CombatComponent(parent)
 {
   tilemap = new TileMap(this);
-  updateTimer.setInterval(30);
+  updateTimer.setInterval(15);
   updateTimer.setSingleShot(false);
   connect(&updateTimer, &QTimer::timeout, this, &LevelTask::update);
   connect(this, &LevelTask::pausedChanged, this, &LevelTask::onPauseChanged);
@@ -337,14 +338,23 @@ void LevelTask::update()
     {
       object->update(delta);
       object->getTaskManager()->update(delta);
+      if (object->isCharacter())
+        reinterpret_cast<Character*>(object)->getActionQueue()->update();
     }
   }
   else
   {
     for (DynamicObject* object : objects)
       object->update(delta);
-    if (combattants.at(combatIterator)->getActionPoints() == 0)
-      onNextCombatTurn();
+    if (combattants.size() > combatIterator)
+    {
+      auto* combattant = combattants.at(combatIterator);
+
+      if (combattant->getActionPoints() > 0)
+        combattant->getActionQueue()->update();
+      else
+        onNextCombatTurn();
+    }
   }
   CombatComponent::update(delta);
   emit updated();
