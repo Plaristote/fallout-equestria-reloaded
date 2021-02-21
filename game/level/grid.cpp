@@ -111,9 +111,16 @@ void GridComponent::setObjectPosition(DynamicObject* object, int x, int y)
 bool GridComponent::moveTo(Character* character, QPoint targetPosition)
 {
   QPoint position = character->getPosition();
+  QList<QPoint> path;
 
-  if (grid->findPath(position, targetPosition, character->rcurrentPath()))
+  if (grid->findPath(position, targetPosition, path))
   {
+    auto& currentPath = character->rcurrentPath();
+
+    while (currentPath.size() > 1)
+      currentPath.pop_back();
+    for (auto point : path)
+      currentPath.append(point);
     if (character->getCurrentPath().size() > 0)
     {
       QPoint nextCase = character->getCurrentPath().first();

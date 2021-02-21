@@ -16,6 +16,61 @@ FieldOfView::~FieldOfView()
 {
 }
 
+QJSValue FieldOfView::getEnemies() const
+{
+  auto& engine = Game::get()->getScriptEngine();
+  QJSValue retval = engine.newArray();
+  QJSValue push = retval.property("push");
+
+  for (Character* character : GetDetectedEnemies())
+    push.callWithInstance(retval, QJSValueList() << engine.newQObject(character));
+  return retval;
+}
+
+QJSValue FieldOfView::getCharactersInRange() const
+{
+  auto& engine = Game::get()->getScriptEngine();
+  QJSValue retval = engine.newArray();
+  QJSValue push = retval.property("push");
+
+  for (Character* character : GetCharactersInRange())
+    push.callWithInstance(retval, QJSValueList() << engine.newQObject(character));
+  return retval;
+}
+
+QJSValue FieldOfView::getAllies() const
+{
+  auto& engine = Game::get()->getScriptEngine();
+  QJSValue retval = engine.newArray();
+  QJSValue push = retval.property("push");
+
+  for (Character* character : GetDetectedAllies())
+    push.callWithInstance(retval, QJSValueList() << engine.newQObject(character));
+  return retval;
+}
+
+QJSValue FieldOfView::getNonHostiles() const
+{
+  auto& engine = Game::get()->getScriptEngine();
+  QJSValue retval = engine.newArray();
+  QJSValue push = retval.property("push");
+
+  for (Character* character : GetDetectedNonHostile())
+    push.callWithInstance(retval, QJSValueList() << engine.newQObject(character));
+  return retval;
+}
+
+QJSValue FieldOfView::getCharacters() const
+{
+  auto& engine = Game::get()->getScriptEngine();
+  QJSValue retval = engine.newArray();
+  QJSValue push = retval.property("push");
+
+  for (Character* character : GetDetectedCharacters())
+    push.callWithInstance(retval, QJSValueList() << engine.newQObject(character));
+  return retval;
+}
+
 void FieldOfView::SetIntervalDurationFromStatistics(void)
 {
   unsigned short   duration   = 3;
@@ -34,15 +89,18 @@ void FieldOfView::SetIntervalDurationFromStatistics(void)
 void FieldOfView::update(qint64 delta)
 {
   if (timeLeft <= delta && character.getStatistics()->getHitPoints() > 0)
-  {
-    SetIntervalDurationFromStatistics();
-    LoseTrackOfCharacters(detected_enemies);
-    LoseTrackOfCharacters(detected_characters);
-    DetectCharacters();
-    timeLeft = interval;
-  }
+    runTask();
   else
     timeLeft -= delta;
+}
+
+void FieldOfView::runTask()
+{
+  SetIntervalDurationFromStatistics();
+  LoseTrackOfCharacters(detected_enemies);
+  LoseTrackOfCharacters(detected_characters);
+  DetectCharacters();
+  timeLeft = interval;
 }
 
 void FieldOfView::reset()

@@ -11,6 +11,7 @@ Character::Character(QObject *parent) : StorageObject(parent)
   inventory->setUser(this);
   connect(inventory, &Inventory::unequippedItem, this, &Character::initializeEmptySlot);
   connect(actionQueue, &ActionQueue::queueCompleted, this, &Character::onActionQueueCompleted);
+  connect(this, &Character::died, [this]() { if (script) { script->call("onDied"); } });
 }
 
 void Character::update(qint64 delta)
@@ -30,10 +31,10 @@ void Character::takeDamage(int damage, Character* dealer)
   auto hp = getStatistics()->getHitPoints() - damage;
 
   getStatistics()->setHitPoints(hp);
-  qDebug() << "took damage" << hp;
+  if (script && hp > 0)
+    script->call("onDamageTaken", QJSValueList() << damage << Game::get()->getScriptEngine().newQObject(dealer));
   if (hp <= 0)
   {
-      qDebug() << "character dying";
     setAnimation("death");
     emit died();
   }
@@ -65,7 +66,7 @@ QPoint Character::getInteractionPosition() const
         position.rx() += x;
         position.ry() += y;
         occupant = grid->getOccupant(position.x(), position.y());
-        if (!grid->isOccupied(position.x(), position.y()) || occupant == player)
+        if (!grid->isOccupied(position.x(), position.y()) || (this != player && occupant == player))
           return position;
       }
     }
@@ -234,3 +235,36 @@ void Character::save(QJsonObject& data) const
   StorageObject::save(data);
 }
 
+// TODO GET RID O THAT
+int Character::a_getInteractionApCost(DynamicObject* a, const QString& interactionName) const
+{
+  return getActionQueue()->getInteractionApCost(a, interactionName);
+}
+int Character::a_getItemUseApCost(DynamicObject* target, const QString& itemSlot) const
+{
+  return getActionQueue()->getItemUseApCost(target, itemSlot);
+}
+int Character::a__getMovementApCost(QPoint target) const
+{
+  return getActionQueue()->getMovementApCost(target);
+}
+void Character::a_pushInteraction(DynamicObject* target, const QString& interactionName)
+{
+  getActionQueue()->pushInteraction(target, interactionName);
+}
+void Character::a_pushItemUse(DynamicObject* target, const QString& itemSlot)
+{
+  getActionQueue()->pushItemUse(target, itemSlot);
+}
+void Character::a__pushMovement(QPoint target)
+{
+  getActionQueue()->pushMovement(target);
+}
+bool Character::a_start()
+{
+  return getActionQueue()->start();
+}
+void Character::a_reset()
+{
+  return getActionQueue()->reset();
+}

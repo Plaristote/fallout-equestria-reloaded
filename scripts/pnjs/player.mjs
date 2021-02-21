@@ -12,6 +12,9 @@ class Player extends CharacterBehaviour {
 
   onTurnStart() {
   }
+
+  onActionQueueCompleted() {
+  }
 }
 
 export function create(model) {

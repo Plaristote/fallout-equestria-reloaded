@@ -1,6 +1,51 @@
 #include "actionqueue.h"
 #include "game.h"
 
+class MovementAction : public ActionBase
+{
+public:
+  MovementAction(Character* character, QPoint target) : ActionBase(character), target(target)
+  {
+  }
+
+  int  getApCost() const override;
+  bool trigger() override;
+  bool isOver() override;
+
+protected:
+  QPoint target;
+};
+
+class InteractionAction : public ActionBase
+{
+public:
+  InteractionAction(Character* character, DynamicObject* target, QString actionName) : ActionBase(character), target(target), actionName(actionName)
+  {
+  }
+
+  int  getApCost() const override;
+  bool trigger() override;
+
+protected:
+  DynamicObject* target;
+  QString        actionName;
+};
+
+class ItemAction : public ActionBase
+{
+public:
+  ItemAction(Character* character, DynamicObject* target, QString itemSlot) : ActionBase(character), target(target), itemSlot(itemSlot)
+  {
+  }
+
+  int  getApCost() const override;
+  bool trigger() override;
+
+protected:
+  DynamicObject* target;
+  QString        itemSlot;
+};
+
 ActionQueue::ActionQueue(QObject *parent) : QObject(parent), character(reinterpret_cast<Character*>(parent))
 {
 
@@ -45,7 +90,10 @@ bool ActionQueue::start()
   if (queue.size() >= 1)
   {
     if (!(queue.first()->trigger()))
+    {
       reset();
+      emit queueCompleted();
+    }
   }
   return !queue.empty();
 }
@@ -62,9 +110,16 @@ void ActionQueue::pushMovement(QPoint target)
   queue << (new MovementAction(character, target));
 }
 
-int ActionQueue::getMovementCost(QPoint target) const
+int ActionQueue::getMovementApCost(QPoint target) const
 {
-  return MovementAction(character, target).getApCost();
+  LevelGrid* grid;
+  QList<QPoint> path;
+
+  if (character->getPosition() == target)
+    return 0;
+  grid = Game::get()->getLevel()->getGrid();
+  grid->findPath(character->getPosition(), target, path);
+  return path.size() >  0 ? path.size() : -1;
 }
 
 void ActionQueue::pushInteraction(DynamicObject *target, const QString &interactionName)
@@ -87,24 +142,24 @@ int ActionQueue::getItemUseApCost(DynamicObject *target, const QString &itemSlot
   return ItemAction(character, target, itemSlot).getApCost();
 }
 
-bool ActionQueue::MovementAction::trigger()
+bool MovementAction::trigger()
 {
   auto* level = Game::get()->getLevel();
 
   return level->moveTo(character, target);
 }
 
-bool ActionQueue::MovementAction::isOver()
+bool MovementAction::isOver()
 {
   return character->getPosition() == target && !character->isMoving();
 }
 
-int ActionQueue::MovementAction::getApCost() const
+int MovementAction::getApCost() const
 {
   return character->getCurrentPath().size();
 }
 
-bool ActionQueue::InteractionAction::trigger()
+bool InteractionAction::trigger()
 {
   auto* level = Game::get()->getLevel();
   bool handledByScript = target->triggerInteraction(character, actionName);
@@ -124,12 +179,12 @@ bool ActionQueue::InteractionAction::trigger()
   return handledByScript;
 }
 
-int ActionQueue::InteractionAction::getApCost() const
+int InteractionAction::getApCost() const
 {
   return 2;
 }
 
-bool ActionQueue::ItemAction::trigger()
+bool ItemAction::trigger()
 {
   InventoryItem* item = character->getInventory()->getEquippedItem(itemSlot);
 
@@ -138,10 +193,12 @@ bool ActionQueue::ItemAction::trigger()
     item->useOn(target);
     return true;
   }
+  else
+    qDebug() << "no item to uqe";
   return false;
 }
 
-int ActionQueue::ItemAction::getApCost() const
+int ItemAction::getApCost() const
 {
   InventoryItem* item = character->getInventory()->getEquippedItem(itemSlot);
 

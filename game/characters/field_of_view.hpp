@@ -3,14 +3,9 @@
 
 # include <QObject>
 # include <QQmlListProperty>
+# include <QJSValue>
 # define FLAG_CHARACTER_SNEAK 1
 # define FOV_TTL              5
-# define FOV_QML_READER(methodName) \
-  QmlCharacterList qml##methodName() \
-  { \
-    qmlTemporaryList = methodName(); \
-    return QmlCharacterList(this, &qmlTemporaryList); \
-  }
 
 class Level;
 class Character;
@@ -21,12 +16,6 @@ class FieldOfView : public QObject
 
   typedef QList<Character*>           CharacterList;
   typedef QQmlListProperty<Character> QmlCharacterList;
-
-  Q_PROPERTY(QmlCharacterList charactersInRange READ qmlGetCharactersInRange)
-  Q_PROPERTY(QmlCharacterList enemies           READ qmlGetDetectedEnemies)
-  Q_PROPERTY(QmlCharacterList allies            READ qmlGetDetectedAllies)
-  Q_PROPERTY(QmlCharacterList nonHostiles       READ qmlGetDetectedNonHostile)
-  Q_PROPERTY(QmlCharacterList characters        READ qmlGetDetectedCharacters)
 
   struct Entry
   {
@@ -50,6 +39,12 @@ public:
   Q_INVOKABLE bool     isDetected(const Character*) const;
   Q_INVOKABLE bool     hasLivingEnemiesInSight(void) const;
 
+  Q_INVOKABLE QJSValue getCharactersInRange() const;
+  Q_INVOKABLE QJSValue getEnemies() const;
+  Q_INVOKABLE QJSValue getAllies() const;
+  Q_INVOKABLE QJSValue getNonHostiles() const;
+  Q_INVOKABLE QJSValue getCharacters() const;
+
   Q_INVOKABLE void     setEnemyDetected(Character* enemy);
   Q_INVOKABLE void     setCharacterDetected(Character* character);
   CharacterList        GetCharactersInRange(void)  const;
@@ -60,6 +55,7 @@ public:
   float                GetRadius(void)             const;
 
   void                 update(qint64 delta);
+  void                 runTask();
   void                 reset();
 
 protected:
@@ -77,13 +73,6 @@ private:
   Character&           character;
   std::list<Entry>     detected_enemies;
   std::list<Entry>     detected_characters;
-
-  CharacterList qmlTemporaryList;
-  FOV_QML_READER(GetCharactersInRange)
-  FOV_QML_READER(GetDetectedEnemies)
-  FOV_QML_READER(GetDetectedAllies)
-  FOV_QML_READER(GetDetectedNonHostile)
-  FOV_QML_READER(GetDetectedCharacters)
 };
 
 #endif

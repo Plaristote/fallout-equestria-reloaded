@@ -82,6 +82,7 @@ bool CombatComponent::tryToEndCombat()
   combatIterator = 0;
   combattants.clear();
   emit combatChanged();
+  emit combattantsChanged();
   return true;
 }
 
@@ -151,6 +152,7 @@ void CombatComponent::onCharacterDied(Character* character)
 
 void CombatComponent::initializeCharacterTurn(Character* character)
 {
+  character->getFieldOfView()->runTask();
   character->scriptCall("onTurnStart");
 }
 
@@ -171,7 +173,6 @@ void CombatComponent::onMovementFinished(Character* character)
 {
   if (combat)
   {
-    qDebug() << "Combat/onMovementZinizhed zor" << character->getObjectName();
     character->useActionPoints(1, "movement");
     if (character->getActionPoints() == 0)
     {
