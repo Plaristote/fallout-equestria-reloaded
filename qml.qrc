@@ -155,5 +155,9 @@
         <file>assets/ui/cursors/move.png</file>
         <file>assets/ui/cursors/target.png</file>
         <file>ui/SelectBox.qml</file>
+        <file>game/hud/HudItemSlots.qml</file>
+        <file>game/hud/HudActionPoints.qml</file>
+        <file>game/hud/HudConsole.qml</file>
+        <file>game/hud/HudMenu.qml</file>
     </qresource>
 </RCC>

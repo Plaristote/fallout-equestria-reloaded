@@ -84,7 +84,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="cmap/PersonalInfo.qml" line="37"/>
+        <location filename="cmap/PersonalInfo.qml" line="39"/>
         <source>age</source>
         <translation type="unfinished"></translation>
     </message>
