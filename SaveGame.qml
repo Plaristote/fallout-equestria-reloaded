@@ -70,7 +70,7 @@ SaveGameUi {
     modal: true
     standardButtons: Dialog.Ok | Dialog.Cancel
     onAccepted: {
-      gameManager.saveGame(root.savedGameList[root.selectedIndex]);
+      gameManager.saveGame(root.savedGameList[root.selectedIndex - 1]);
       application.popView();
     }
   }
