@@ -72,12 +72,14 @@ int ActionQueue::getMovementApCost(QPoint target) const
 {
   LevelGrid* grid;
   QList<QPoint> path;
+  QPoint from = character->getPosition();
 
-  if (character->getPosition() == target)
+  if (from == target)
     return 0;
   grid = Game::get()->getLevel()->getGrid();
-  grid->findPath(character->getPosition(), target, path);
-  return path.size() >  0 ? path.size() : -1;
+  if (grid->findPath(from, target, path))
+    return path.size();
+  return -1;
 }
 
 void ActionQueue::pushInteraction(DynamicObject *target, const QString &interactionName)

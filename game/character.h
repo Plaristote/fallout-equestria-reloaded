@@ -36,23 +36,12 @@ public:
   void         setUnique(bool value) { isUnique = value; }
   bool         isMoving() const { return Sprite::isMoving() || currentPath.size() > 0; }
 
-  // TODO ger rid o that
-  Q_INVOKABLE int a_getInteractionApCost(DynamicObject*, const QString& interactionName) const;
-  Q_INVOKABLE int a_getItemUseApCost(DynamicObject* target, const QString& itemSlot) const;
-  int a__getMovementApCost(QPoint target) const;
-  Q_INVOKABLE int a_getMovementApCost(int x, int y) const { return a__getMovementApCost(QPoint(x, y)); }
-  Q_INVOKABLE void a_pushInteraction(DynamicObject* target, const QString& interactionName);
-  Q_INVOKABLE void a_pushItemUse(DynamicObject* target, const QString& itemSlot);
-  void a__pushMovement(QPoint target);
-  Q_INVOKABLE void a_pushMovement(int x, int y) { return a__pushMovement(QPoint(x, y)); }
-  Q_INVOKABLE void a_reset();
-  Q_INVOKABLE bool a_start();
-  // END TODO
 
   Q_INVOKABLE bool renderOnTile() const { return true; }
   Q_INVOKABLE QPoint getInteractionPosition() const override;
   bool isBlockingPath() const override { return isAlive(); }
 
+  Q_INVOKABLE QJSValue getActions();
   Q_INVOKABLE bool isAlive() const { return getStatistics()->getHitPoints() > 0; }
   Q_INVOKABLE bool isAlly(const Character*) const;
   Q_INVOKABLE bool isEnemy(const Character*) const;

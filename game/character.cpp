@@ -247,36 +247,7 @@ void Character::save(QJsonObject& data) const
   StorageObject::save(data);
 }
 
-// TODO GET RID O THAT
-int Character::a_getInteractionApCost(DynamicObject* a, const QString& interactionName) const
+QJSValue Character::getActions()
 {
-  return getActionQueue()->getInteractionApCost(a, interactionName);
-}
-int Character::a_getItemUseApCost(DynamicObject* target, const QString& itemSlot) const
-{
-  return getActionQueue()->getItemUseApCost(target, itemSlot);
-}
-int Character::a__getMovementApCost(QPoint target) const
-{
-  return getActionQueue()->getMovementApCost(target);
-}
-void Character::a_pushInteraction(DynamicObject* target, const QString& interactionName)
-{
-  getActionQueue()->pushInteraction(target, interactionName);
-}
-void Character::a_pushItemUse(DynamicObject* target, const QString& itemSlot)
-{
-  getActionQueue()->pushItemUse(target, itemSlot);
-}
-void Character::a__pushMovement(QPoint target)
-{
-  getActionQueue()->pushMovement(target);
-}
-bool Character::a_start()
-{
-  return getActionQueue()->start();
-}
-void Character::a_reset()
-{
-  return getActionQueue()->reset();
+  return Game::get()->getScriptEngine().newQObject(getActionQueue());
 }

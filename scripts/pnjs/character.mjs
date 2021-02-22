@@ -1,4 +1,4 @@
-export function findPathTo(source, actions, target) {
+export function findPathTo(actions, target) {
   var lowestCost = -1;
   var choice;
 
@@ -6,12 +6,14 @@ export function findPathTo(source, actions, target) {
     for (var y = -1 ; y <= 1 ; ++y) {
       const tx = target.x + x;
       const ty = target.y + y;
-      const apCost = actions.a_getMovementApCost(tx, ty);
+      const apCost = actions.getMovementApCost(tx, ty);
 
-      if (tx == source.x && ty == source.y) { return { ap: 0, position: source }; }
-      if (apCost > 0 && (lowestCost < 0 || apCost < lowestCost)) {
+      //console.log("Trying path", tx, ty, "cost", apCost, "currentLowest", lowestCost);
+      if (apCost >= 0 && (lowestCost < 0 || apCost < lowestCost)) {
         lowestCost = apCost;
         choice = { x: tx, y: ty };
+        if (apCost == 0)
+          break ;
       }
     }
   }
@@ -78,32 +80,27 @@ export class CharacterBehaviour {
       this.combatTarget = enemies[0];
     }
     if (this.combatTarget) {
-      const actions = this.model;//.actionQueue;
-      const movement = findPathTo(this.model.getPosition(), actions, this.combatTarget.getPosition());
-      const itemAp = Math.max(1, actions.a_getItemUseApCost(this.combatTarget, "use-1"));
+      const actions = this.model.getActions();
+      const movement = findPathTo(actions, this.combatTarget.getPosition());
+      const itemAp = Math.max(1, actions.getItemUseApCost(this.combatTarget, "use-1"));
       var   ap = this.model.actionPoints;
 
-      if (movement.ap < 0)
-        return level.passTurn(this.model);
-      console.log("AP Movement:", movement.ap, "AP action", itemAp);
-      actions.a_reset();
-      if (movement.ap > 0) {
-        ap -= movement.ap;
-        actions.a_pushMovement(movement.position.x, movement.position.y);
+      if (movement.ap >= 0) {
+        actions.reset();
+        if (movement.ap > 0) {
+          ap -= movement.ap;
+          actions.pushMovement(movement.position.x, movement.position.y);
+        }
+        while (ap > itemAp) {
+          actions.pushItemUse(this.combatTarget, "use-1");
+          ap -= itemAp;
+        }
+        console.log(ap, '/', this.model.actionPoints);
+        if (ap != this.model.actionPoints)
+          return actions.start();
       }
-      while (ap > itemAp)
-      {
-        actions.a_pushItemUse(this.combatTarget, "use-1");
-        ap -= itemAp;
-      }
-      console.log(ap, '/', this.model.actionPoints);
-      if (ap != this.model.actionPoints)
-        actions.a_start();
-      else
-        level.passTurn(this.model);
     }
-    else
-      level.passTurn(this.model);
+    level.passTurn(this.model);
   }
 
   onActionQueueCompleted() {
@@ -112,7 +109,7 @@ export class CharacterBehaviour {
   }
 
   onCombatActionQueueCompleted() {
-	  console.log("passing turn, actionV completed");
+	  console.log("passing turn, action completed");
     level.passTurn(this.model);
   }
 }

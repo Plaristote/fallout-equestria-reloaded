@@ -14,14 +14,16 @@ public:
   ~ActionQueue();
 
   void update();
-  void reset();
+  Q_INVOKABLE void reset();
 
   Q_INVOKABLE int getInteractionApCost(DynamicObject*, const QString& interactionName) const;
   Q_INVOKABLE int getItemUseApCost(DynamicObject* target, const QString& itemSlot) const;
-  Q_INVOKABLE int getMovementApCost(QPoint target) const;
+  int             getMovementApCost(QPoint target) const;
+  Q_INVOKABLE int getMovementApCost(int x, int y) const { return getMovementApCost(QPoint(x, y)); }
   Q_INVOKABLE void pushInteraction(DynamicObject* target, const QString& interactionName);
   Q_INVOKABLE void pushItemUse(DynamicObject* target, const QString& itemSlot);
-  Q_INVOKABLE void pushMovement(QPoint target);
+  void             pushMovement(QPoint target);
+  Q_INVOKABLE void pushMovement(int x, int y) { pushMovement(QPoint(x, y)); }
   Q_INVOKABLE bool start();
 
 signals:
