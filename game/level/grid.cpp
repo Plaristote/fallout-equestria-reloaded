@@ -27,6 +27,7 @@ void GridComponent::unregisterDynamicObject(DynamicObject* object)
   {
     Character* character = reinterpret_cast<Character*>(object);
 
+    character->rcurrentPath().clear();
     character->setAnimation("idle-down");
     for (auto observer : characterObservers.value(character))
       disconnect(observer);
@@ -46,7 +47,6 @@ DynamicObject* GridComponent::getOccupantAt(QPoint position)
 
 void GridComponent::onCharacterDied(Character* character)
 {
-  qDebug() << "character died " << character;
   grid->removeObject(character);
 }
 
@@ -93,6 +93,7 @@ bool GridComponent::startCharacterMoveToTile(Character* character, int x, int y)
 
 void GridComponent::setCharacterPosition(Character* character, int x, int y)
 {
+  character->rcurrentPath().clear();
   setObjectPosition(character, x, y);
 }
 

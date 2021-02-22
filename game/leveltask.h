@@ -28,6 +28,7 @@ class LevelTask : public CombatComponent
   Q_PROPERTY(QQmlListProperty<DynamicObject> dynamicObjects READ getQmlObjects NOTIFY objectsChanged)
 public:
   explicit LevelTask(QObject *parent = nullptr);
+  virtual ~LevelTask();
 
   void load(const QString& levelName, DataEngine*);
   void loadObjectsFromDataEngine(DataEngine*);
@@ -64,6 +65,9 @@ signals:
   void clickedOnCase(int x, int y);
   void clickedOnObject(DynamicObject*);
   void playerChanged();
+
+public slots:
+  void deleteLater();
 
 private slots:
   void update();

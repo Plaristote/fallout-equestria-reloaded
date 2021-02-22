@@ -40,7 +40,7 @@ void DataEngine::setWorldDiplomacy(const QJsonObject& diplomacyData)
 {
   diplomacy = diplomacyData;
   data.remove("diplomacy");
-  data.insert("diplomacy", diplomacy);
+  data.insert("diplomacy", diplomacyData);
 }
 
 void DataEngine::registerFaction(const QString& name)
@@ -51,6 +51,8 @@ void DataEngine::registerFaction(const QString& name)
 
     factionData.insert("enemies", QJsonObject());
     diplomacy.insert(name, factionData);
+    data.remove("diplomacy");
+    data.insert("diplomacy", diplomacy);
   }
 }
 
@@ -66,6 +68,7 @@ void DataEngine::loadFromFile(const QString &path)
     levels     = data["levels"].toObject();
     characters = data["characters"].toObject();
     time       = data["time"].toObject();
+    diplomacy  = data["diplomacy"].toObject();
   }
   else
     qDebug() << "Could not load save file" << path;
@@ -74,6 +77,9 @@ void DataEngine::loadFromFile(const QString &path)
 void DataEngine::saveToFile(const QString &path)
 {
   QFile out(path.startsWith("./assets") ? path : "./saves/" + path);
+
+  qDebug() << "Diplomacy data:" << QJsonDocument(diplomacy).toJson();
+  data.insert("diplomacy", diplomacy);
 
   if (out.open(QIODevice::WriteOnly))
     out.write(QJsonDocument(data).toJson());

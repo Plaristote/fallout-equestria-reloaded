@@ -6,6 +6,7 @@ using namespace std;
 
 WorldDiplomacy::WorldDiplomacy(DataEngine& de) : _data_engine(de)
 {
+  _next_flag = 1;
 }
 
 WorldDiplomacy::~WorldDiplomacy()
@@ -16,7 +17,6 @@ void WorldDiplomacy::initialize(void)
 {
   QJsonObject factions = _data_engine.getWorldDiplomacy();
 
-  _next_flag = 1;
   _factions.clear();
   for (auto it = factions.begin() ; it != factions.end() ; ++it)
     addFaction(it.key());

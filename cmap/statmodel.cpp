@@ -140,7 +140,9 @@ void StatModel::fromJson(const QJsonObject& json)
   perception   = json["per"].toInt();
   charisma     = json["cha"].toInt();
   intelligence = json["int"].toInt();
+  agility      = json["agi"].toInt();
   luck         = json["luc"].toInt();
+  faction      = json["faction"].toString();
   traits.clear();
   perks.clear();
   for (QJsonValue value : json["traits"].toArray())
@@ -212,6 +214,7 @@ void StatModel::fromJson(const QJsonObject& json)
   emit faceColorChanged();
   emit raceChanged();
   emit genderChanged();
+  emit factionChanged();
 }
 
 void StatModel::toJson(QJsonObject& json)
@@ -231,7 +234,9 @@ void StatModel::toJson(QJsonObject& json)
   json["per"] = perception;
   json["cha"] = charisma;
   json["int"] = intelligence;
+  json["agi"] = agility;
   json["luc"] = luck;
+  json["faction"] = faction;
   json["perks"]  = QJsonArray::fromStringList(perks);
   json["traits"] = QJsonArray::fromStringList(traits);
 

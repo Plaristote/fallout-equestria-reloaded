@@ -22,7 +22,8 @@ Pane {
     anchors.left: parent.left
     anchors.top: parent.top
     anchors.bottom: parent.bottom
-    width: 240
+    anchors.margins: -9
+    width: 250
   }
 
   HudMenu {
@@ -80,6 +81,7 @@ Pane {
   }
 
   Column {
+    id: countersDisplay
     anchors.left: actionPointPane.right
     anchors.leftMargin: 20
     anchors.bottom: parent.bottom
@@ -104,6 +106,52 @@ Pane {
 
     HudCounter {
       source: levelController.player.statistics.armorClass
+    }
+  }
+
+  Column {
+    id: rightMenu
+    anchors {
+      right: parent.right
+      bottom: parent.bottom
+      margins: 5
+    }
+
+    spacing: 2
+
+    UiStyle.TinyButton {
+      text: "skilldex"
+    }
+
+    UiStyle.TinyButton {
+      text: "spellbook"
+    }
+
+    UiStyle.TinyButton {
+      text: "Pipboy"
+      onClicked: application.pushView("game/PipBoy.qml")
+    }
+  }
+
+  Pane {
+    anchors {
+      right: rightMenu.left
+      bottom: parent.bottom
+      left: countersDisplay.right
+      top: parent.top
+      margins: 5
+    }
+
+    background: UiStyle.Pane {}
+
+    Column {
+      anchors.centerIn: parent
+
+      UiStyle.TinyButton {
+        text: "Pass turn"
+        enabled: levelController.combat
+        onClicked: levelController.passTurn(levelController.player)
+      }
     }
   }
 }

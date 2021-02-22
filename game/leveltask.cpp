@@ -14,6 +14,17 @@ LevelTask::LevelTask(QObject *parent) : CombatComponent(parent)
   connect(this, &LevelTask::pausedChanged, this, &LevelTask::onPauseChanged);
 }
 
+LevelTask::~LevelTask()
+{
+  qDebug() << "LevelTask::destroyed";
+}
+
+void LevelTask::deleteLater()
+{
+  updateTimer.stop();
+  CombatComponent::deleteLater();
+}
+
 Character* LevelTask::getPlayer()
 {
   return Game::get()->getPlayer();
@@ -146,6 +157,15 @@ void LevelTask::registerDynamicObject(DynamicObject* object)
 
 void LevelTask::unregisterDynamicObject(DynamicObject* object)
 {
+  if (object->isCharacter())
+  {
+    auto* character = reinterpret_cast<Character*>(object);
+    for (auto* entry : objects)
+    {
+      if (entry->isCharacter())
+        reinterpret_cast<Character*>(entry)->getFieldOfView()->removeCharacter(character);
+    }
+  }
   objects.removeAll(object);
   CombatComponent::unregisterDynamicObject(object);
   disconnect(object, &DynamicObject::controlZoneAdded,   this, &LevelTask::registerControlZone);

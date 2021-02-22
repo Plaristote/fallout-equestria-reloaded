@@ -25,7 +25,7 @@ public:
   void save(QJsonObject&) const override;
   void setScript(const QString&) override;
 
-  void         setStatistics(StatModel* value) { statistics = value; }
+  void         setStatistics(StatModel* value);
   StatModel*   getStatistics() const { return statistics; }
   FieldOfView* getFieldOfView() const { return fieldOfView; }
   ActionQueue* getActionQueue() const { return actionQueue; }

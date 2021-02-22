@@ -52,6 +52,7 @@ void Game::loadFromDataEngine()
 {
   QString currentLevelName = dataEngine->getCurrentLevel();
 
+  diplomacy->initialize();
   timeManager->load(dataEngine->getTimeData());
   playerParty->load(dataEngine->getPlayerParty());
   player = playerParty->getCharacters().first();

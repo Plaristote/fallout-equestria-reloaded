@@ -109,6 +109,28 @@ void FieldOfView::reset()
   detected_enemies.clear();
 }
 
+void FieldOfView::removeCharacter(Character* character)
+{
+  for (auto it = detected_characters.begin() ; it != detected_characters.end() ;)
+  {
+    if (it->character == character)
+    {
+      it = detected_characters.erase(it);
+      break ;
+    }
+    ++it;
+  }
+  for (auto it = detected_enemies.begin() ; it != detected_enemies.end() ;)
+  {
+    if (it->character == character)
+    {
+      it = detected_enemies.erase(it);
+      break ;
+    }
+    ++it;
+  }
+}
+
 FieldOfView::CharacterList FieldOfView::GetDetectedCharacters(void) const
 {
   CharacterList list;

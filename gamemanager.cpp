@@ -35,6 +35,8 @@ void GameManager::startNewGame()
     playerStats = new StatModel(currentGame);
     currentGame->newPlayerParty(playerStats);
     currentGame->getDataEngine()->loadFromFile("");
+    currentGame->getDiplomacy()->addFaction("player");
+    currentGame->getPlayer()->getStatistics()->setProperty("faction", "player");
     emit currentGameChanged();
   }
   else

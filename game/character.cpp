@@ -16,8 +16,12 @@ Character::Character(QObject *parent) : StorageObject(parent)
 
 void Character::update(qint64 delta)
 {
+  auto* level = Game::get()->getLevel();
+
   DynamicObject::update(delta);
   fieldOfView->update(delta);
+  if (level->getPlayer() != this && fieldOfView->hasLivingEnemiesInSight())
+    level->joinCombat(this);
 }
 
 void Character::onActionQueueCompleted()
@@ -107,15 +111,13 @@ void Character::setAsEnemy(Character* other)
   auto* faction   = diplomacy->getFaction(other->getFactionFlag());
 
   if (other->getFactionName() != "") {
-    if (faction)
+    if (getFactionFlag() > 0)
       diplomacy->setAsEnemy(true, getFactionFlag(), other->getFactionFlag());
-    else if (!faction)
+    else
       enemyFlag += other->getFactionFlag();
   }
   else if (faction)
     other->setAsEnemy(this);
-  else
-    qDebug() << "Character::setAsEnemy: both characters lack a faction:" << getObjectName() << "and" << other->getObjectName();
 }
 
 float Character::getDistance(const DynamicObject* target) const
@@ -199,22 +201,32 @@ void Character::setScript(const QString& name)
   initializeEmptySlots();
 }
 
+void Character::setStatistics(StatModel *value)
+{
+  if (statistics)
+    disconnect(statistics, &StatModel::factionChanged, this, &Character::initializeFaction);
+  statistics = value;
+  connect(statistics, &StatModel::factionChanged, this, &Character::initializeFaction);
+  qDebug() << "set stat sheet on" << getObjectName() << ':' << statistics->getName() << " with faction " << statistics->property("faction").toString();
+  initializeFaction();
+}
+
 void Character::load(const QJsonObject& data)
 {
   QString objectName = data["objectName"].toString();
+  StatModel* charSheet;
 
   isUnique = data["uniq"].toBool();
   enemyFlag = static_cast<unsigned int>(data["enemyFlag"].toInt(0));
   actionPoints = data["ap"].toInt();
   if (isUnique)
-    statistics = Game::get()->getDataEngine()->makeStatModel(objectName);
+    charSheet = Game::get()->getDataEngine()->makeStatModel(objectName);
   else
   {
-    statistics = new StatModel(this);
-    statistics->fromJson(data["stats"].toObject());
+    charSheet = new StatModel(this);
+    charSheet->fromJson(data["stats"].toObject());
   }
-  connect(statistics, &StatModel::factionChanged, this, &Character::initializeFaction);
-  initializeFaction();
+  setStatistics(charSheet);
   StorageObject::load(data);
 }
 

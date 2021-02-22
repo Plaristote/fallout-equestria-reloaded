@@ -75,7 +75,6 @@ bool CharacterParty::insertIntoZone(LevelTask* level, const QString &zoneName)
 
   for (auto* zone : tileMap->getZones())
   {
-    qDebug() << "Detected" << zone->getType() << "zone" << zone->getName() << zone->getIsDefault();
     if (zone->getName() == zoneName)
       return insertIntoZone(level, zone);
   }

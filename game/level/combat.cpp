@@ -49,6 +49,8 @@ void CombatComponent::joinCombat(Character* character)
 {
   if (!isInCombat(character))
   {
+    auto* playerParty = Game::get()->getPlayerParty();
+
     character->resetActionPoints();
     combattants << character;
     if (combat == false)
@@ -56,10 +58,13 @@ void CombatComponent::joinCombat(Character* character)
       combat = true;
       emit combatChanged();
       emit currentCombattantChanged();
+      initializeCharacterTurn(character);
     }
     else
       sortCombattants();
     emit combattantsChanged();
+    for (auto* playerPartyMember : playerParty->getCharacters())
+      joinCombat(playerPartyMember);
   }
 }
 

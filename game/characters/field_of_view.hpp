@@ -57,6 +57,7 @@ public:
   void                 update(qint64 delta);
   void                 runTask();
   void                 reset();
+  void                 removeCharacter(Character*);
 
 protected:
   void                 LoseTrackOfCharacters(std::list<Entry>&);

@@ -38,6 +38,22 @@ Pane {
 
   signal removeClicked()
 
+  onModelChanged: {
+    const posMode        = model.floating ? 1 : 0;
+    const spriteName     = model.getSpriteName();
+    const animationName  = model.getAnimation();
+    const position       = model.getPosition();
+    const renderPosition = model.getSpritePosition();
+
+    spriteInput.currentIndex      = spriteInput.model.indexOf(spriteName);
+    animationInput.currentIndex   = animationInput.model.indexOf(animationName);
+    positioningInput.currentIndex = posMode
+    gridXInput.text   = position.x;
+    gridYInput.text   = position.y;
+    renderXInput.text = renderPosition.x;
+    renderYInput.text = renderPosition.y;
+  }
+
   Column {
     spacing: 5
 
@@ -57,14 +73,14 @@ Pane {
       TerminalLabel { text: "Render position"; visible: objectEditor.model.floating }
       Row {
         visible: objectEditor.model.floating
-        TerminalField { id: renderXInput; text: model.getSpritePosition().x; onTextChanged: objectEditor.renderPositionChanged() }
-        TerminalField { id: renderYInput; text: model.getSpritePosition().y; onTextChanged: objectEditor.renderPositionChanged() }
+        TerminalField { id: renderXInput; onTextChanged: objectEditor.renderPositionChanged() }
+        TerminalField { id: renderYInput; onTextChanged: objectEditor.renderPositionChanged() }
       }
 
       TerminalLabel { text: "Grid position" }
       Row {
-        TerminalField { id: gridXInput; text: model.position.x; onTextChanged: objectEditor.positionChanged() }
-        TerminalField { id: gridYInput; text: model.position.y; onTextChanged: objectEditor.positionChanged() }
+        TerminalField { id: gridXInput; onTextChanged: objectEditor.positionChanged() }
+        TerminalField { id: gridYInput; onTextChanged: objectEditor.positionChanged() }
       }
 
       TerminalLabel { text: "Script" }
@@ -88,7 +104,7 @@ Pane {
 
       TerminalLabel { text: "Animation" }
       TerminalComboBox {
-        id: characterAnimationInput
+        id: animationInput
         model: animationLibrary.getAnimationList(spriteInput.currentText);
         currentIndex: model.indexOf(objectEditor.model.getAnimation())
         onCurrentTextChanged: {

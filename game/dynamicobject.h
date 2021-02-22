@@ -89,7 +89,7 @@ protected:
 //private:
   QString objectName, scriptName;
   QPoint position, nextPosition;
-  bool floating;
+  bool floating = false;
   QList<QPoint> currentPath;
   QString currentZone;
   QPoint interactionPosition;
