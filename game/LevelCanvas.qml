@@ -12,6 +12,7 @@ Canvas {
   property point origin;
   property var controller;
   property var hoverTile: [];
+  property bool hoverTileHintVisible: false
 
   Component.onCompleted: {
     preloadImages();
@@ -54,16 +55,11 @@ Canvas {
     cursorShape: enabled ? Qt.BlankCursor : Qt.ArrowCursor
   }
 
-  Image {
-    property string cursorType: { ["move", "interaction", "target"][levelController.mouseMode] }
-    property size  size: { [Qt.size(40, 15), Qt.size(50, 35), Qt.size(40, 40)][levelController.mouseMode] }
-    property point offset: { levelController.mouseMode !== 1 ? Qt.point(size.width / 2, size.height / 2) : Qt.point(0, 0) }
-    x: mouseArea.mouseX - offset.x
-    y: mouseArea.mouseY - offset.y
-    height: size.height
-    width: size.width
-    source: `qrc:/assets/ui/cursors/${cursorType}.png`
-    visible: mouseArea.containsMouse
+  LevelCursor {
+    visible: mouseArea.containsMouse && (mouseMode !== 0 || !canvas.hoverTileHintVisible)
+    mouseMode: levelController.mouseMode
+    mouseX: mouseArea.mouseX
+    mouseY: mouseArea.mouseY
   }
 
   function initializeRenderer() {
@@ -84,6 +80,7 @@ Canvas {
         loadImage("../" + texturePath);
         images.push(texturePath);
       }
+      loadImage("../assets/ui/cursors/move-tile.png");
     }
 
     animationLibrary.getSources().forEach(function(texture) {

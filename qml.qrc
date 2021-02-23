@@ -160,5 +160,7 @@
         <file>game/hud/HudConsole.qml</file>
         <file>game/hud/HudMenu.qml</file>
         <file>game/hud/HudCounter.qml</file>
+        <file>game/LevelCursor.qml</file>
+        <file>assets/ui/cursors/move-tile.png</file>
     </qresource>
 </RCC>

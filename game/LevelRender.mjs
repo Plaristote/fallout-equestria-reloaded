@@ -33,6 +33,8 @@ export class Controller {
     this.renderZones();
     this.eachCase(this.renderCoordinates.bind(this));
     this.renderRoofs();
+    if (this.level.mouseMode === 0) // if cursor is movement mode
+      this.renderMoveCursor();
     this.frameCount++;
   }
 
@@ -82,6 +84,25 @@ export class Controller {
 
     if (tile)
       this.renderImage(this.pathPrefix + tile.image, tile.renderPosition, this.tileSize.width, this.tileSize.height, tile.clippedRect);
+  }
+
+  renderMoveCursor() {
+    const coordinates = this.canvas.hoverTile;
+
+    if (coordinates && coordinates.length === 2) {
+      const tile = this.layers.ground.getTile(coordinates[0], coordinates[1]);
+
+      if (tile)
+      {
+        const occupied = this.level.grid.isOccupied(coordinates[0], coordinates[1]);
+        const texture  = !occupied ? "move-tile.png" : "move-tile-unavailable.png";
+
+        this.canvas.hoverTileHintVisible = true;
+        this.renderImage(`../assets/ui/cursors/${texture}`, tile.renderPosition, this.tileSize.width, this.tileSize.height);
+        return ;
+      }
+    }
+    this.canvas.hoverTileHintVisible = false;
   }
 
   renderCoordinates(x, y) {
