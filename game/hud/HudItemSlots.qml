@@ -78,6 +78,10 @@ Item {
           anchors.centerIn: parent
           model: slotItem
         }
+        Shortcut {
+          sequence: (index + 1).toString()
+          onActivated: itemActivated(slotName)
+        }
         onClicked: itemActivated(slotName)
       } // END Button
     } // END Repeater

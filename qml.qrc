@@ -162,5 +162,6 @@
         <file>game/hud/HudCounter.qml</file>
         <file>game/LevelCursor.qml</file>
         <file>assets/ui/cursors/move-tile.png</file>
+        <file>assets/ui/cursors/move-tile-unavailable.png</file>
     </qresource>
 </RCC>
