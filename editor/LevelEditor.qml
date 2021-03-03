@@ -141,7 +141,7 @@ Item {
         }
 
         Row {
-          anchors { left: parent.left; right: parent.right }
+          Layout.fillWidth: true
           spacing: 5
           SelectBox {
             id: objectSelectBox
@@ -182,6 +182,7 @@ Item {
           id: storageEditor
           visible: model !== null
           model: selectedObject && selectedObject.getObjectType() === "StorageObject" ? selectedObject : null
+          gameController: root.gameController
           Layout.fillWidth: true
           onOpenStorageClicked: {
             lootEditor.inventory = selectedObject.inventory;
