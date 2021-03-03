@@ -163,5 +163,6 @@
         <file>game/LevelCursor.qml</file>
         <file>assets/ui/cursors/move-tile.png</file>
         <file>assets/ui/cursors/move-tile-unavailable.png</file>
+        <file>game/Skilldex.qml</file>
     </qresource>
 </RCC>

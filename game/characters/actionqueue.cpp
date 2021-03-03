@@ -1,6 +1,7 @@
 #include "actionqueue.h"
 #include "game.h"
 #include "actions/itemUse.h"
+#include "actions/skillUse.h"
 #include "actions/interaction.h"
 #include "actions/movement.h"
 
@@ -100,4 +101,14 @@ void ActionQueue::pushItemUse(DynamicObject *target, const QString &itemSlot)
 int ActionQueue::getItemUseApCost(DynamicObject *target, const QString &itemSlot) const
 {
   return ItemAction(character, target, itemSlot).getApCost();
+}
+
+void ActionQueue::pushSkillUse(DynamicObject *target, const QString &skillName)
+{
+  queue << (new SkillAction(character, target, skillName));
+}
+
+int ActionQueue::getSkillUseApCost(DynamicObject* target, const QString& skillName) const
+{
+  return SkillAction(character, target, skillName).getApCost();
 }

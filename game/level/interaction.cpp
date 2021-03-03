@@ -60,6 +60,7 @@ void InteractionComponent::swapMouseMode()
       break ;
   }
   activeItem = nullptr;
+  activeSkill = "";
   emit mouseModeChanged();
 }
 
@@ -67,8 +68,8 @@ void InteractionComponent::setActiveItem(const QString& slotName)
 {
   mouseMode = TargetCursor;
   activeItemSlot = slotName;
-
   activeItem = Game::get()->getPlayer()->getInventory()->getEquippedItem(slotName);
+  activeSkill = "";
   emit activeItemChanged();
   emit mouseModeChanged();
 }
@@ -83,10 +84,38 @@ void InteractionComponent::objectClicked(DynamicObject* object)
   case TargetCursor:
     if (activeItem)
       useItemOn(object);
+    else if (activeSkill.length() > 0)
+      useSkillOn(Game::get()->getPlayer(), object, activeSkill);
     else
       qDebug() << "TODO missing behaviour for target cursor";
     break ;
   }
+}
+
+void InteractionComponent::useSkill(const QString &skill)
+{
+  if (skill == "sneak")
+    qDebug() << "TODO: implement sneak skill";
+  else
+  {
+    activeSkill = skill;
+    mouseMode = TargetCursor;
+    activeItem = nullptr;
+    emit activeItemChanged();
+    emit mouseModeChanged();
+  }
+}
+
+void InteractionComponent::useSkillOn(Character* user, DynamicObject* target, const QString &skill)
+{
+  auto* actions = user->getActionQueue();
+
+  actions->reset();
+  actions->pushMovement(target->getInteractionPosition());
+  actions->pushSkillUse(target, activeSkill);
+  if (actions->start())
+    swapMouseMode();
+  activeSkill = "";
 }
 
 void InteractionComponent::useItemOn(DynamicObject* target)

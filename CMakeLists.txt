@@ -75,6 +75,8 @@ set(PROJECT_SOURCES
         game/characters/actions/interaction.cpp
         game/characters/actions/itemUse.h
         game/characters/actions/itemUse.cpp
+        game/characters/actions/skillUse.h
+        game/characters/actions/skillUse.cpp
         game/lootingcontroller.h
         game/lootingcontroller.cpp
         game/sprite.h

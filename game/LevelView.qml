@@ -44,6 +44,15 @@ Item {
     }
   }
 
+  Action {
+    id: openSkilldexAction
+    shortcut: Shortcut {
+      sequence: "s"
+      onActivated: openSkilldexAction.trigger()
+    }
+    onTriggered: skilldex.visible = !skilldex.visible
+  }
+
   LevelCanvas {
     id: canvas
     levelController: parent.levelController
@@ -159,6 +168,20 @@ Item {
 
     onOpenMenu: openMenuAction.trigger()
     onOpenInventory: openInventoryAction.trigger()
+    onOpenSkilldex: openSkilldexAction.trigger()
+  }
+
+  Skilldex {
+    id: skilldex
+    anchors.bottom: levelHud.top
+    anchors.right: parent.right
+    width: 240
+    visible: false
+    character: levelController.player
+    onPickedSkill: {
+      openSkilldexAction.trigger();
+      levelController.useSkill(skillName);
+    }
   }
 
   CharacterInventory {

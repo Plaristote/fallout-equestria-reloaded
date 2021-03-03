@@ -31,6 +31,8 @@ public:
   Q_INVOKABLE void swapMouseMode();
   Q_INVOKABLE void setActiveItem(const QString&);
   Q_INVOKABLE void objectClicked(DynamicObject*);
+  Q_INVOKABLE void useSkill(const QString& skill);
+  Q_INVOKABLE void useSkillOn(Character* user, DynamicObject* object, const QString& skill);
 
   void useItemOn(DynamicObject* object);
   void initializeDialog(Character* npc);
@@ -44,7 +46,7 @@ signals:
   void activeItemChanged();
 
 protected:
-  QString        activeItemSlot;
+  QString        activeItemSlot, activeSkill;
   InventoryItem* activeItem = nullptr;
   int            mouseMode = MovementCursor;
 };

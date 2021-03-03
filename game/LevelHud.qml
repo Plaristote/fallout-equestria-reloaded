@@ -1,5 +1,6 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+import QtQuick.Layouts 1.15
 import "qrc:/assets/ui" as UiStyle
 import "../ui"
 import "./hud"
@@ -15,6 +16,8 @@ Pane {
 
   signal openMenu()
   signal openInventory()
+  signal openSkilldex()
+  signal openSpellbook()
 
   HudConsole {
     id: terminalPane
@@ -109,7 +112,7 @@ Pane {
     }
   }
 
-  Column {
+  ColumnLayout {
     id: rightMenu
     anchors {
       right: parent.right
@@ -121,14 +124,19 @@ Pane {
 
     UiStyle.TinyButton {
       text: "skilldex"
+      Layout.fillWidth: true
+      onClicked: openSkilldex()
     }
 
     UiStyle.TinyButton {
       text: "spellbook"
+      Layout.fillWidth: true
+      onClicked: openSpellbook()
     }
 
     UiStyle.TinyButton {
       text: "Pipboy"
+      Layout.fillWidth: true
       onClicked: application.pushView("game/PipBoy.qml")
     }
   }
