@@ -176,6 +176,7 @@ Item {
             characterInventory.character = characterEditor.model;
             characterInventory.open();
           }
+          onRemoveClicked: gameController.level.deleteObject(model)
         }
 
         StorageObjectEditor {
@@ -188,6 +189,7 @@ Item {
             lootEditor.inventory = selectedObject.inventory;
             lootEditor.open();
           }
+          onRemoveClicked: gameController.level.deleteObject(model)
         }
 
         ControlZoneEditor {

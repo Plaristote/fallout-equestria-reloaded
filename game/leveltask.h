@@ -51,6 +51,7 @@ public:
 
   Q_INVOKABLE Character* generateCharacter(const QString& name, const QString& characterSheet);
   Q_INVOKABLE StorageObject* generateStorageObject(const QString& name);
+  Q_INVOKABLE void deleteObject(DynamicObject* o) { unregisterDynamicObject(o); }
 
   QQmlListProperty<DynamicObject> getQmlObjects() { return QQmlListProperty<DynamicObject>(this, &objects); }
 
