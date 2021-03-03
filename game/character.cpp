@@ -19,9 +19,12 @@ void Character::update(qint64 delta)
   auto* level = Game::get()->getLevel();
 
   DynamicObject::update(delta);
-  fieldOfView->update(delta);
-  if (level->getPlayer() != this && fieldOfView->hasLivingEnemiesInSight())
-    level->joinCombat(this);
+  if (isAlive())
+  {
+    fieldOfView->update(delta);
+    if (level->getPlayer() != this && fieldOfView->hasLivingEnemiesInSight())
+      level->joinCombat(this);
+  }
 }
 
 void Character::onActionQueueCompleted()
