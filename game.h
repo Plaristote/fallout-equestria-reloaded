@@ -58,6 +58,7 @@ signals:
   void levelChanged();
   void levelSwapped();
   void consoleUpdated();
+  void gameOver();
 
 public slots:
   void onCityEntered(QString name);

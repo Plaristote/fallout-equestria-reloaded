@@ -164,5 +164,8 @@
         <file>assets/ui/cursors/move-tile.png</file>
         <file>assets/ui/cursors/move-tile-unavailable.png</file>
         <file>game/Skilldex.qml</file>
+        <file>assets/backgrounds/game-over.png</file>
+        <file>game/slideshows/LoadingScreen.qml</file>
+        <file>game/slideshows/GameOverScreen.qml</file>
     </qresource>
 </RCC>

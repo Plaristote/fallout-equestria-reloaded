@@ -46,9 +46,17 @@
     </message>
 </context>
 <context>
-    <name>Game</name>
+    <name>GameOverScreen</name>
     <message>
-        <location filename="Game.qml" line="131"/>
+        <location filename="game/slideshows/GameOverScreen.qml" line="29"/>
+        <source>Ç&apos;en est fini de toi. Ton village est perdu et mourra de faim.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>LoadingScreen</name>
+    <message>
+        <location filename="game/slideshows/LoadingScreen.qml" line="18"/>
         <source>Loading</source>
         <translation type="unfinished"></translation>
     </message>

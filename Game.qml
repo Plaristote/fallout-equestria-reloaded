@@ -2,6 +2,7 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 import "qrc:/assets/ui" as UiStyle
 import "game/"
+import "game/slideshows/"
 
 Item {
   id: root
@@ -76,6 +77,15 @@ Item {
     onTriggered: application.popView();
   }
 
+  Timer {
+    id: deferredGameOverScreen
+    interval: 1000
+    onTriggered: {
+      gameOverScreen.visible = true;
+      application.popView();
+    }
+  }
+
   Connections {
     target: gameManager
 
@@ -95,53 +105,34 @@ Item {
     target: gameManager.currentGame
 
     function onLevelChanged() {
-      console.log("Game.kml onLevelChanged haz been called");
+      console.log("Game.qml onLevelChanged has been called", gameController.level);
       if (gameController.level)
         deferredLevelLoading.running = true;
       else
       {
-        console.log("Zuce mon zboub");
         deferredWorldmapDisplay.running = true;
         application.popView();
       }
     }
 
     function onLevelSwapped() {
+      console.log("Game.qml onLevelSwapped has been called");
       deferredLevelLoading.running = true;
       application.popView();
     }
+
+    function onGameOver() {
+      console.log("Game.qml onGameOver has been called");
+      deferredGameOverScreen.running = true;
+    }
   }
 
-  // Loading screen
-  Image {
-    source: "assets/backgrounds/ministry-of-peace.jpg"
-    anchors.fill: parent
-    fillMode: Image.PreserveAspectCrop
+  LoadingScreen {
+    visible: !gameOverScreen.visible
+  }
 
-    Rectangle {
-      anchors.centerIn: parent
-      width: parent.width
-      height: 100
-      color: Qt.rgba(0, 0, 0, 0.5)
-
-      Text {
-        id: loadingLabel
-        anchors.centerIn: parent
-        color: "white"
-        text: qsTr("Loading")
-      }
-      Text {
-        y: loadingLabel.y
-        anchors.left: loadingLabel.right
-        text: "..."
-        color: "white"
-        Timer {
-          running: root.visible
-          repeat: true
-          interval: 300
-          onTriggered: parent.text = parent.text.length >= 3 ? '.' : parent.text + '.'
-        }
-      }
-    }
+  GameOverScreen {
+    id: gameOverScreen
+    onClicked: gameManager.endGame()
   }
 }

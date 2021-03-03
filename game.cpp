@@ -46,6 +46,7 @@ void Game::newPlayerParty(StatModel* statistics)
   player->setStatistics(statistics);
   player->setScript("player.mjs");
   playerParty->addCharacter(player);
+  connect(player, &Character::died, this, &Game::gameOver);
 }
 
 void Game::loadFromDataEngine()
@@ -56,6 +57,7 @@ void Game::loadFromDataEngine()
   timeManager->load(dataEngine->getTimeData());
   playerParty->load(dataEngine->getPlayerParty());
   player = playerParty->getCharacters().first();
+  connect(player, &Character::died, this, &Game::gameOver);
   if (currentLevelName != "")
   {
     goToLevel(currentLevelName);

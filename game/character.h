@@ -37,7 +37,6 @@ public:
   bool         isMoving() const { return Sprite::isMoving() || currentPath.size() > 0; }
   int          getZIndex() const override { return isAlive() ? 2 : 1; }
 
-
   Q_INVOKABLE bool renderOnTile() const { return true; }
   Q_INVOKABLE QPoint getInteractionPosition() const override;
   bool isBlockingPath() const override { return isAlive(); }
