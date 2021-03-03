@@ -21,8 +21,20 @@ export class Controller {
 
   initializeRenderObjects() {
     this.renderObjects = [];
-    for (var i = 0 ; i < this.level.dynamicObjects.length ; ++i)
-      this.renderObjects.push(this.level.dynamicObjects[i]);
+    for (var x = 0 ; x < this.mapSize.width ; ++x) {
+      this.renderObjects[x] = [];
+      for (var y = 0 ; y < this.mapSize.height ; ++y)
+        this.renderObjects[x][y] = [];
+    }
+    for (var i = 0 ; i < this.level.dynamicObjects.length ; ++i) {
+      const object = this.level.dynamicObjects[i];
+      const position = object.getPosition();
+
+      this.renderObjects[position.x][position.y].push(object);
+      this.renderObjects[position.x][position.y].sort(function(a, b) {
+        return a.getZIndex() < b.getZIndex();
+      });
+    }
   }
 
   render() {
@@ -110,15 +122,7 @@ export class Controller {
 
     if (wall)
       return this.renderWall(wall, x, y);
-    for (var i = 0 ; i < this.renderObjects.length ; ++i) {
-      const objectPosition = this.renderObjects[i].getPosition();
-
-      if (objectPosition.x === x && objectPosition.y === y) {
-        this.renderSprite(this.renderObjects[i]);
-        this.renderObjects.splice(i, 1);
-        break ;
-      }
-    }
+    this.renderObjects[x][y].forEach(this.renderSprite.bind(this));
   }
 
   renderRoof(x, y) {
