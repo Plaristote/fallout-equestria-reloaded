@@ -95,6 +95,24 @@ bool DynamicObject::triggerInteraction(Character* character, const QString &inte
   return false;
 }
 
+bool DynamicObject::triggerSkillUse(Character *user, const QString &skillName)
+{
+  QString methodName = skillName;
+
+  methodName[0] = methodName[0].toUpper();
+  methodName = "onUse" + methodName;
+  if (script && script->hasMethod(methodName))
+  {
+    QJSValueList args;
+
+    args << Game::get()->getScriptEngine().newQObject(user);
+    return script->call(methodName, args).toBool();
+  }
+  else if (user == Game::get()->getPlayer())
+    Game::get()->appendToConsole("You use " + skillName + " on " + getObjectName() + ". It does nothing.");
+  return false;
+}
+
 void DynamicObject::scriptCall(const QString& method, const QString& message)
 {
   if (script)

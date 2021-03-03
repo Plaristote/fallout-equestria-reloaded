@@ -1,24 +1,5 @@
-export function findPathTo(actions, target) {
-  var lowestCost = -1;
-  var choice;
-
-  for (var x = -1 ; x <= 1 ; ++x) {
-    for (var y = -1 ; y <= 1 ; ++y) {
-      const tx = target.x + x;
-      const ty = target.y + y;
-      const apCost = actions.getMovementApCost(tx, ty);
-
-      //console.log("Trying path", tx, ty, "cost", apCost, "currentLowest", lowestCost);
-      if (apCost >= 0 && (lowestCost < 0 || apCost < lowestCost)) {
-        lowestCost = apCost;
-        choice = { x: tx, y: ty };
-        if (apCost == 0)
-          break ;
-      }
-    }
-  }
-  return { ap: lowestCost, position: choice };
-}
+import {getValueFromRange} from "../behaviour/random.mjs";
+import {findPathTo} from "../behaviour/pathfinding.mjs";
 
 export class CharacterBehaviour {
   constructor(model) {
@@ -57,6 +38,28 @@ export class CharacterBehaviour {
     const textBubble = this.textBubbles[it];
 
     level.addTextBubble(this.model, textBubble.content, textBubble.duration, textBubble.color || "white");
+  }
+
+  onUseMedicine(user) {
+    if (!level.isInCombat(user))
+    {
+      const stats   = this.model.statistics;
+      const maxHeal = stats.maxHitPoints - stats.hitPoints;
+      var   healed  = getValueFromRange(0, 10) + user.statistics.medicine / 10;
+ 
+      healed = healed * user.statistics.medicine / 100;
+      healed = Math.min(healed, maxHeal);
+      stats.hitPoints += healed;
+      game.appendToConsole(`${user.statistics.name} used medicine on ${stats.name} and healed it for ${healed} hit points.`);
+      level.addTextBubble(this.model, "Thank you kindly !", 5000, "lightgreen");
+      return true;
+    }
+    else
+      game.appendToConsole("You can't use medicine during combat.");
+    return false;
+  }
+
+  onUseSteal(user) {
   }
 
   onMovementEnded() {

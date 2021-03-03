@@ -1,4 +1,5 @@
 import {Item} from "./item.mjs";
+import {getValueFromRange} from "../behaviour/random.mjs";
 
 export class Weapon extends Item {
   constructor(model) {
@@ -11,7 +12,7 @@ export class Weapon extends Item {
   }
 
   useOn(target) {
-    var damage = this.getValueFromRange(...this.getDamageRange());
+    var damage = getValueFromRange(...this.getDamageRange());
 
     damage -= target.statistics.damageResistance;
     damage = Math.max(0, damage);

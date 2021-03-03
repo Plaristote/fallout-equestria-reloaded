@@ -1,4 +1,5 @@
 import {Item} from "./item.mjs";
+import {getValueFromRange} from "../behaviour/random.mjs";
 
 class Medikit extends Item {
   constructor(model) {
@@ -12,7 +13,7 @@ class Medikit extends Item {
   useOn(target) {
     const stats   = target.statistics;
     const maxHeal = stats.maxHitPoints - stats.hitPoints;
-    var   healed  = this.getValueFromRange(15, 30);
+    var   healed  = getValueFromRange(15, 30);
 
     healed = healed * this.user.statistics.medicine / 100;
     healed = Math.min(healed, maxHeal);

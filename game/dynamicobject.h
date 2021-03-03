@@ -61,6 +61,7 @@ public:
   TileZone*             getControlZone() { return controlZone; }
 
   Q_INVOKABLE bool      triggerInteraction(Character*, const QString& interactionType);
+  Q_INVOKABLE bool      triggerSkillUse(Character* user, const QString& skillName);
   Q_INVOKABLE void      scriptCall(const QString& method, const QString& message = "");
 
   const QList<QPoint>& getCurrentPath() const { return currentPath; }

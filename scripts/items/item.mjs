@@ -1,3 +1,5 @@
+import {areInContact} from "../behaviour/pathfinding.mjs";
+
 export class Item {
   constructor(model) {
     this.model = model;
@@ -10,10 +12,6 @@ export class Item {
     this.user = on ? character : null;
   }
 
-  getValueFromRange(from, to) {
-    return from + Math.floor(Math.random() * (to + 1));
-  }
-
   getActionPointCost() {
     return 2;
   }
@@ -23,15 +21,12 @@ export class Item {
   }
 
   isInRange(object) {
-    console.log("IzInRange", this.user, object);
     if (this.user) {
       const pos1  = this.user.position;
       const pos2  = object.position;
-      const distX = Math.max(pos1.x, pos2.x) - Math.min(pos1.x, pos2.y);
-      const distY = Math.max(pos1.y, pos2.y) - Math.min(pos1.y, pos2.y);
 
-      console.log("Diztance:", pos1, pos2, distX, distY);
-      return distX <= 1 && distY <= 1;
+      // TODO implement items with actual range
+      return areInContact(pos1, pos2);
     }
     return false;
   }
