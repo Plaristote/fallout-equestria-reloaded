@@ -151,7 +151,6 @@ void DynamicObject::load(const QJsonObject& data)
   position.setX(data["x"].toInt()); position.setY(data["y"].toInt());
   nextPosition.setX(data["nextX"].toInt()); nextPosition.setY(data["nextY"].toInt());
   interactionPosition.setX(data["intX"].toInt()); interactionPosition.setY(data["intY"].toInt());
-  floating = data["float"].toBool(false);
   for (QJsonValue pathPointData : data["currentPath"].toArray())
   {
     QPoint pathPoint;
@@ -187,7 +186,6 @@ void DynamicObject::save(QJsonObject& data) const
   data["x"] = position.x(); data["y"] = position.y();
   data["nextX"] = nextPosition.x(); data["nextY"] = nextPosition.y();
   data["intX"] = interactionPosition.x(); data["intY"] = interactionPosition.y();
-  data["float"] = floating;
   for (QPoint pathPoint : currentPath)
   {
     QJsonObject pathPointData;

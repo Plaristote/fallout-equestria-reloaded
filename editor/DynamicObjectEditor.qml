@@ -11,6 +11,7 @@ Pane {
   property QtObject model
   property string scriptCategory: "behaviours"
   property alias fields: additionalFields.children
+  property bool readOnlyPositionType: false
   id: objectEditor
   background: UiStyle.TerminalPane {}
 
@@ -52,6 +53,7 @@ Pane {
     gridYInput.text   = position.y;
     renderXInput.text = renderPosition.x;
     renderYInput.text = renderPosition.y;
+    readOnlyPositionType = model.getObjectType() === "Character";
   }
 
   Column {
@@ -61,9 +63,10 @@ Pane {
       columns: 2
       spacing: 5
 
-      TerminalLabel { text: "Positionning" }
+      TerminalLabel { text: "Positionning"; visible: !objectEditor.readOnlyPositionType }
       TerminalComboBox {
         id: positioningInput
+        visible: !objectEditor.readOnlyPositionType
         model: ["Tile-based", "Floating"]
         currentIndex: objectEditor.model.floating ? 1 : 0
         onCurrentTextChanged: {

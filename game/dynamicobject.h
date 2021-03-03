@@ -22,7 +22,6 @@ class DynamicObject : public Sprite
   Q_PROPERTY(QPoint  position    READ getPosition)
   Q_PROPERTY(QString currentZone READ getCurrentZone)
   Q_PROPERTY(TaskRunner* tasks MEMBER taskManager)
-  Q_PROPERTY(bool floating MEMBER floating NOTIFY floatingChanged)
   Q_PROPERTY(TileZone* controlZone MEMBER controlZone NOTIFY controlZoneChanged)
 
 public:
@@ -35,7 +34,6 @@ public:
   Q_INVOKABLE virtual void setScript(const QString& name);
 
   inline bool isCharacter() const { return getObjectType() == "Character"; }
-  inline bool isFloating() const { return floating; }
   virtual bool isBlockingPath() const { return true; }
 
   void setObjectName(const QString& value) { objectName = value; emit objectNameChanged(); }
@@ -74,7 +72,6 @@ signals:
   void objectNameChanged();
   void reachedDestination();
   void pathBlocked();
-  void floatingChanged();
   void controlZoneChanged();
   void controlZoneAdded(TileZone*);
   void controlZoneRemoved(TileZone*);
@@ -91,7 +88,6 @@ protected:
 //private:
   QString objectName, scriptName;
   QPoint position, nextPosition;
-  bool floating = false;
   QList<QPoint> currentPath;
   QString currentZone;
   QPoint interactionPosition;

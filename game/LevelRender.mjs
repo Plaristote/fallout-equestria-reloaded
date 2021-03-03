@@ -183,7 +183,7 @@ export class Controller {
   getAdjustedOffsetFor(sprite) {
     const offset = sprite.getSpritePosition();
 
-    if (sprite.renderOnTile()) {
+    if (!sprite.floating) {
       const clippedRect = sprite.getClippedRect();
       const extraHeight = clippedRect.height - this.tileSize.height;
 

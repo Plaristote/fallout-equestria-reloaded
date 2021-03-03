@@ -6,6 +6,7 @@
 
 Character::Character(QObject *parent) : StorageObject(parent)
 {
+  setProperty("float", true);
   fieldOfView = new FieldOfView(*this);
   actionQueue = new ActionQueue(this);
   inventory->setUser(this);

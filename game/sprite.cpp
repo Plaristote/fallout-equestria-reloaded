@@ -87,6 +87,7 @@ void Sprite::load(const QJsonObject& data)
   name = data["spriteName"].toString();
   spritePosition.setX(data["rx"].toInt()); spritePosition.setY(data["ry"].toInt());
   spriteMovementTarget.setX(data["mtx"].toInt()); spriteMovementTarget.setY(data["mty"].toInt());
+  floating = data["float"].toBool();
   if (data["animation"].toString() == "tiled-object")
   {
     animation.name   = data["animation"].toString();
@@ -112,6 +113,7 @@ void Sprite::save(QJsonObject& data) const
   data["rx"]  = spritePosition.x();       data["ry"] = spritePosition.y();
   data["mtx"] = spriteMovementTarget.x(); data["mty"] = spriteMovementTarget.y();
   data["animation"] = animation.name;
+  data["float"] = floating;
   if (animation.name == "tiled-object")
   {
     data["animation-src"] = animation.source;

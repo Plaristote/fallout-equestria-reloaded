@@ -12,6 +12,7 @@ class Sprite : public QObject
 {
   Q_OBJECT
 
+  Q_PROPERTY(bool floating MEMBER floating NOTIFY floatingChanged)
 public:
   explicit Sprite(QObject *parent = nullptr);
 
@@ -25,13 +26,13 @@ public:
   Q_INVOKABLE void setRenderPosition(QPoint coordinates);
   void setSpriteAnimation(const SpriteAnimation& value) { animation = value; }
   virtual bool isMoving() const { return spritePosition != spriteMovementTarget; }
+  inline bool isFloating() const { return floating; }
 
   Q_INVOKABLE QString getSpriteSource() const { return animation.source; }
   Q_INVOKABLE QRect   getClippedRect() const  { return animation.clippedRect; }
   Q_INVOKABLE QPoint  getSpritePosition() const { return spritePosition; }
   Q_INVOKABLE QString getCurrentAnimation() const { return animation.name; }
   Q_INVOKABLE QString getShadowSource() const { return shadow.source; }
-  Q_INVOKABLE bool    renderOnTile() const { return false; }
 
   void load(const QJsonObject&);
   void save(QJsonObject&) const;
@@ -39,6 +40,7 @@ public:
 signals:
   void animationFinished();
   void movementFinished(Sprite*);
+  void floatingChanged();
 
 private:
   void runAnimation();
@@ -46,6 +48,7 @@ private:
 
 private:
   QPoint          spritePosition, spriteMovementTarget;
+  bool            floating = false;
   QString         name;
   SpriteAnimation shadow;
   SpriteAnimation animation;
