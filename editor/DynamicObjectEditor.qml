@@ -12,6 +12,7 @@ Pane {
   property string scriptCategory: "behaviours"
   property alias fields: additionalFields.children
   property bool readOnlyPositionType: false
+  property bool readOnlyAnimation: false
   id: objectEditor
   background: UiStyle.TerminalPane {}
 
@@ -46,6 +47,8 @@ Pane {
     const position       = model.getPosition();
     const renderPosition = model.getSpritePosition();
 
+    readOnlyPositionType = model.getObjectType() === "Character";
+    readOnlyAnimation    = model.getObjectType() === "Character";
     spriteInput.currentIndex      = spriteInput.model.indexOf(spriteName);
     animationInput.currentIndex   = animationInput.model.indexOf(animationName);
     positioningInput.currentIndex = posMode
@@ -53,7 +56,6 @@ Pane {
     gridYInput.text   = position.y;
     renderXInput.text = renderPosition.x;
     renderYInput.text = renderPosition.y;
-    readOnlyPositionType = model.getObjectType() === "Character";
   }
 
   Column {
@@ -102,16 +104,22 @@ Pane {
         currentIndex: model.indexOf(objectEditor.model.getSpriteName())
         onCurrentTextChanged: {
           objectEditor.model.setSpriteName(currentText);
+          if (objectEditor.model.getObjectType() === "Character")
+            objectEditor.model.setAnimation("idle");
+          else
+            objectEditor.model.setAnimation(objectEditor.model.getAnimation())
         }
       }
 
-      TerminalLabel { text: "Animation" }
+      TerminalLabel { text: "Animation"; visible: !readOnlyAnimation }
       TerminalComboBox {
         id: animationInput
+        visible: !readOnlyAnimation
         model: animationLibrary.getAnimationList(spriteInput.currentText);
         currentIndex: model.indexOf(objectEditor.model.getAnimation())
         onCurrentTextChanged: {
-          objectEditor.model.setAnimation(currentText);
+          if (!readOnlyAnimation)
+            objectEditor.model.setAnimation(currentText);
         }
       }
     }

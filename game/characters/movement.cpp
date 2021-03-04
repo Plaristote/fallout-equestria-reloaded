@@ -4,6 +4,7 @@
 
 CharacterMovement::CharacterMovement(QObject *parent) : CHARACTER_BASE_OBJECT(parent)
 {
+  orientation  = "down";
   movementMode = "walking";
   connect(this, &Sprite::movementFinished,              this, &CharacterMovement::onMovementEnded);
   connect(this, &CharacterMovement::reachedDestination, this, &CharacterMovement::onDestinationReached);
@@ -82,6 +83,8 @@ void CharacterMovement::load(const QJsonObject& data)
     currentPath << pathPoint;
   }
   orientation = data["orientation"].toString("down");
+  if (orientation.length() == 0)
+    orientation = "down";
   setMovementMode(data["moveMode"].toString("walking"));
   CHARACTER_BASE_OBJECT::load(data);
 }
