@@ -88,23 +88,7 @@ void Sprite::load(const QJsonObject& data)
   spritePosition.setX(data["rx"].toInt()); spritePosition.setY(data["ry"].toInt());
   spriteMovementTarget.setX(data["mtx"].toInt()); spriteMovementTarget.setY(data["mty"].toInt());
   floating = data["float"].toBool();
-  if (data["animation"].toString() == "tiled-object")
-  {
-    animation.name   = data["animation"].toString();
-    animation.source = data["animation-src"].toString();
-    animation.firstFramePosition.setX(data["animation-fx"].toInt());
-    animation.firstFramePosition.setY(data["animation-fy"].toInt());
-    animation.clippedRect.setX(data["animation-x"].toInt());
-    animation.clippedRect.setY(data["animation-y"].toInt());
-    animation.clippedRect.setWidth(data["animation-w"].toInt());
-    animation.clippedRect.setHeight(data["animation-h"].toInt());
-    animation.frameCount    = data["animation-fc"].toInt();
-    animation.frameInterval = data["animation-fi"].toInt();
-    animation.repeat        = data["animation-rp"].toBool();
-    animation.currentFrame  = data["animation-cf"].toInt();
-  }
-  else
-    setAnimation(data["animation"].toString());
+  Sprite::setAnimation(data["animation"].toString());
 }
 
 void Sprite::save(QJsonObject& data) const

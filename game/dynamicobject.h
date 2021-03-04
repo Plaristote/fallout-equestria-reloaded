@@ -52,37 +52,23 @@ public:
   virtual QStringList getAvailableInteractions();
   void setPosition(QPoint value) { position = value; }
   void setInteractionPosition(QPoint value) { interactionPosition = value; }
-  void moveTo(int x, int y, QPoint renderPosition);
 
   Q_INVOKABLE TileZone* addControlZone();
   Q_INVOKABLE void      removeControlZone();
   TileZone*             getControlZone() { return controlZone; }
 
-  Q_INVOKABLE void      lookTo(int x, int y);
   Q_INVOKABLE bool      triggerInteraction(Character*, const QString& interactionType);
   Q_INVOKABLE bool      triggerSkillUse(Character* user, const QString& skillName);
   Q_INVOKABLE void      scriptCall(const QString& method, const QString& message = "");
 
-  const QList<QPoint>& getCurrentPath() const { return currentPath; }
-  QList<QPoint>& rcurrentPath() { return currentPath; }
-
   const QString& getCurrentZone() const { return currentZone; }
   void setCurrentZone(const QString& value) { currentZone = value; }
 
-public slots:
-  void onIdle();
-
 signals:
   void objectNameChanged();
-  void reachedDestination();
-  void pathBlocked();
   void controlZoneChanged();
   void controlZoneAdded(TileZone*);
   void controlZoneRemoved(TileZone*);
-
-private slots:
-  void onMovementEnded();
-  void onDestinationReached();
 
 protected:
   virtual QString getScriptPath() const { return SCRIPTS_PATH + "behaviours"; }
@@ -92,7 +78,6 @@ protected:
 //private:
   QString objectName, scriptName;
   QPoint position, nextPosition;
-  QList<QPoint> currentPath;
   QString currentZone;
   QPoint interactionPosition;
   QJsonObject dataStore;

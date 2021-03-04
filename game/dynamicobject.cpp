@@ -7,8 +7,6 @@
 DynamicObject::DynamicObject(QObject *parent) : Sprite(parent)
 {
   taskManager = new TaskRunner(this);
-  connect(this, &Sprite::movementFinished, this, &DynamicObject::onMovementEnded);
-  connect(this, &DynamicObject::reachedDestination, this, &DynamicObject::onDestinationReached);
   connect(this, &DynamicObject::controlZoneAdded,   this, &DynamicObject::controlZoneChanged);
   connect(this, &DynamicObject::controlZoneRemoved, this, &DynamicObject::controlZoneChanged);
 }
@@ -26,51 +24,6 @@ void DynamicObject::setScript(const QString& name)
   scriptName = name;
   script     = new ScriptController(getScriptPath() + '/' + name, this);
   //taskManager->setScriptController(script);
-}
-
-void DynamicObject::lookTo(int x, int y)
-{
-  if (position.x() > x && position.y() > y)
-    orientation = "up";
-  else if (position.x() < x && position.y() < y)
-    orientation = "down";
-  else if (position.x() == x && position.y() > y)
-    orientation = "right";
-  else if (position.x() == x && position.y() < y)
-    orientation = "left";
-  else if (position.x() >= x)
-    orientation = "left";
-  else
-    orientation = "right";
-}
-
-void DynamicObject::moveTo(int x, int y, QPoint renderPosition)
-{
-  QString animationName;
-
-  lookTo(x, y);
-  animationName = "walking-" + orientation;
-  position = QPoint(x, y);
-  moveToCoordinates(renderPosition);
-  if (getCurrentAnimation() != animationName)
-    setAnimation(animationName);
-}
-
-void DynamicObject::onIdle()
-{
-  setAnimation("idle-" + orientation);
-}
-
-void DynamicObject::onMovementEnded()
-{
-  if (script)
-    script->call("onMovementEnded");
-}
-
-void DynamicObject::onDestinationReached()
-{
-  if (script)
-    script->call("onDestinationReached");
 }
 
 QStringList DynamicObject::getAvailableInteractions()
@@ -161,14 +114,6 @@ void DynamicObject::load(const QJsonObject& data)
   position.setX(data["x"].toInt()); position.setY(data["y"].toInt());
   nextPosition.setX(data["nextX"].toInt()); nextPosition.setY(data["nextY"].toInt());
   interactionPosition.setX(data["intX"].toInt()); interactionPosition.setY(data["intY"].toInt());
-  for (QJsonValue pathPointData : data["currentPath"].toArray())
-  {
-    QPoint pathPoint;
-
-    pathPoint.setX(pathPointData["x"].toInt());
-    pathPoint.setY(pathPointData["y"].toInt());
-    currentPath << pathPoint;
-  }
   if (data["zone"].isArray())
   {
     controlZone = controlZone ? controlZone : new TileZone(this);
@@ -190,20 +135,10 @@ void DynamicObject::load(const QJsonObject& data)
 
 void DynamicObject::save(QJsonObject& data) const
 {
-  QJsonArray currentPathData;
-
   data["objectName"] = objectName;
   data["x"] = position.x(); data["y"] = position.y();
   data["nextX"] = nextPosition.x(); data["nextY"] = nextPosition.y();
   data["intX"] = interactionPosition.x(); data["intY"] = interactionPosition.y();
-  for (QPoint pathPoint : currentPath)
-  {
-    QJsonObject pathPointData;
-
-    pathPointData["x"] = pathPoint.x();
-    pathPointData["y"] = pathPoint.y();
-    currentPathData << pathPointData;
-  }
   if (controlZone)
   {
     QJsonArray zoneArray;
@@ -217,7 +152,6 @@ void DynamicObject::save(QJsonObject& data) const
     }
     data["zone"] = zoneArray;
   }
-  data["currentPath"] = currentPathData;
   data["currentZone"] = currentZone;
   data["script"]      = scriptName;
   data["dataStore"]   = dataStore;

@@ -2,14 +2,14 @@
 # define CHARACTER_H
 
 # include "globals.h"
-# include "storageobject.h"
 # include "cmap/statmodel.h"
 # include "diplomacy.hpp"
+# include "characters/movement.h"
 # include "characters/field_of_view.hpp"
 
 class ActionQueue;
 
-class Character : public StorageObject
+class Character : public CharacterMovement
 {
   Q_OBJECT
 

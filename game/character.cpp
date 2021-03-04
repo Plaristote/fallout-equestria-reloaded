@@ -4,10 +4,9 @@
 #include "characters/actionqueue.h"
 #include <cmath>
 
-Character::Character(QObject *parent) : StorageObject(parent)
+Character::Character(QObject *parent) : CharacterMovement(parent)
 {
   setProperty("float", true);
-  orientation = "down";
   fieldOfView = new FieldOfView(*this);
   actionQueue = new ActionQueue(this);
   inventory->setUser(this);
@@ -39,6 +38,7 @@ void Character::takeDamage(int damage, Character* dealer)
 {
   auto hp = getStatistics()->getHitPoints() - damage;
 
+  setAnimation("damaged");
   getStatistics()->setHitPoints(hp);
   if (script && hp > 0)
     script->call("onDamageTaken", QJSValueList() << damage << Game::get()->getScriptEngine().newQObject(dealer));
@@ -224,7 +224,6 @@ void Character::load(const QJsonObject& data)
   isUnique = data["uniq"].toBool();
   enemyFlag = static_cast<unsigned int>(data["enemyFlag"].toInt(0));
   actionPoints = data["ap"].toInt();
-  orientation = data["orientation"].toString("down");
   if (isUnique)
     charSheet = Game::get()->getDataEngine()->makeStatModel(objectName);
   else
@@ -233,7 +232,7 @@ void Character::load(const QJsonObject& data)
     charSheet->fromJson(data["stats"].toObject());
   }
   setStatistics(charSheet);
-  StorageObject::load(data);
+  CharacterMovement::load(data);
 }
 
 void Character::save(QJsonObject& data) const
@@ -241,7 +240,6 @@ void Character::save(QJsonObject& data) const
   data["uniq"] = isUnique;
   data["enemyFlag"] = static_cast<int>(enemyFlag);
   data["ap"] = actionPoints;
-  data["orientation"] = orientation;
   if (isUnique)
     Game::get()->getDataEngine()->saveStatModel(getObjectName(), statistics);
   else
@@ -251,7 +249,7 @@ void Character::save(QJsonObject& data) const
     statistics->toJson(statData);
     data.insert("stats", statData);
   }
-  StorageObject::save(data);
+  CharacterMovement::save(data);
 }
 
 QJSValue Character::getActions()

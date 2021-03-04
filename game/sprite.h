@@ -20,7 +20,7 @@ public:
 
   Q_INVOKABLE void setSpriteName(const QString& value) { name = value; }
   Q_INVOKABLE QString getSpriteName() const { return name; }
-  Q_INVOKABLE void setAnimation(const QString& animationName);
+  Q_INVOKABLE virtual void setAnimation(const QString& animationName);
   Q_INVOKABLE QString getAnimation() const { return animation.name; }
   void moveToCoordinates(QPoint coordinates);
   Q_INVOKABLE void setRenderPosition(QPoint coordinates);
@@ -53,6 +53,7 @@ private:
   SpriteAnimation shadow;
   SpriteAnimation animation;
   qint64          animationElapsedTime;
+protected:
   float           movementSpeed;
 };
 

@@ -83,6 +83,7 @@
         }
     },
     "pony": {
+        "defaultSource": "characters/earthpony-purple.png",
         "damaged-down": {
             "frameCount": 6,
             "frameInterval": 100,
@@ -90,7 +91,6 @@
             "offsetX": 144,
             "offsetY": 0,
             "repeat": false,
-            "source": "characters/earthpony-purple.png",
             "width": 46
         },
         "damaged-left": {
@@ -100,7 +100,6 @@
             "offsetX": 144,
             "offsetY": 48,
             "repeat": false,
-            "source": "characters/earthpony-purple.png",
             "width": 46
         },
         "damaged-right": {
@@ -110,7 +109,6 @@
             "offsetX": 144,
             "offsetY": 96,
             "repeat": false,
-            "source": "characters/earthpony-purple.png",
             "width": 46
         },
         "damaged-up": {
@@ -120,7 +118,6 @@
             "offsetX": 144,
             "offsetY": 144,
             "repeat": false,
-            "source": "characters/earthpony-purple.png",
             "width": 46
         },
         "death": {
@@ -128,7 +125,6 @@
             "source": "tombstone.png",
             "width": 46
         },
-        "defaultSource": "characters/earthpony-purple.png",
         "idle-down": {
             "frameCount": 1,
             "frameInterval": 100,
@@ -136,7 +132,6 @@
             "offsetX": 46,
             "offsetY": 0,
             "repeat": false,
-            "source": "characters/earthpony-purple.png",
             "width": 48
         },
         "idle-left": {
@@ -146,7 +141,6 @@
             "offsetX": 46,
             "offsetY": 48,
             "repeat": false,
-            "source": "characters/earthpony-purple.png",
             "width": 46
         },
         "idle-right": {
@@ -156,7 +150,6 @@
             "offsetX": 46,
             "offsetY": 96,
             "repeat": false,
-            "source": "characters/earthpony-purple.png",
             "width": 48
         },
         "idle-up": {
@@ -166,7 +159,6 @@
             "offsetX": 46,
             "offsetY": 144,
             "repeat": false,
-            "source": "characters/earthpony-purple.png",
             "width": 48
         },
         "shadow": {
@@ -181,7 +173,6 @@
             "offsetX": 280,
             "offsetY": 0,
             "repeat": false,
-            "source": "characters/earthpony-purple.png",
             "width": 47
         },
         "walking-down": {
@@ -209,7 +200,6 @@
             "offsetX": 0,
             "offsetY": 96,
             "repeat": true,
-            "source": "characters/earthpony-purple.png",
             "width": 48
         },
         "walking-up": {
@@ -219,34 +209,110 @@
             "offsetX": 0,
             "offsetY": 144,
             "repeat": true,
-            "source": "characters/earthpony-purple.png",
             "width": 48
         }
     },
     "pony-green": {
+        "defaultSource": "characters/earthpony-green.png",
+        "damaged-down": {
+            "frameCount": 6,
+            "frameInterval": 100,
+            "height": 46,
+            "offsetX": 144,
+            "offsetY": 0,
+            "repeat": false,
+            "width": 46
+        },
+        "damaged-left": {
+            "frameCount": 6,
+            "frameInterval": 100,
+            "height": 46,
+            "offsetX": 144,
+            "offsetY": 48,
+            "repeat": false,
+            "width": 46
+        },
+        "damaged-right": {
+            "frameCount": 6,
+            "frameInterval": 100,
+            "height": 46,
+            "offsetX": 144,
+            "offsetY": 96,
+            "repeat": false,
+            "width": 46
+        },
+        "damaged-up": {
+            "frameCount": 6,
+            "frameInterval": 100,
+            "height": 46,
+            "offsetX": 144,
+            "offsetY": 144,
+            "repeat": false,
+            "width": 46
+        },
         "death": {
             "height": 46,
             "source": "tombstone.png",
             "width": 46
         },
-        "defaultSource": "ZEkA10000-green.png",
         "idle-down": {
+            "frameCount": 1,
+            "frameInterval": 100,
             "height": 46,
             "offsetX": 46,
             "offsetY": 0,
+            "repeat": false,
+            "width": 48
+        },
+        "idle-left": {
+            "frameCount": 1,
+            "frameInterval": 100,
+            "height": 46,
+            "offsetX": 46,
+            "offsetY": 48,
+            "repeat": false,
             "width": 46
+        },
+        "idle-right": {
+            "frameCount": 1,
+            "frameInterval": 100,
+            "height": 46,
+            "offsetX": 46,
+            "offsetY": 96,
+            "repeat": false,
+            "width": 48
+        },
+        "idle-up": {
+            "frameCount": 1,
+            "frameInterval": 100,
+            "height": 46,
+            "offsetX": 46,
+            "offsetY": 144,
+            "repeat": false,
+            "width": 48
         },
         "shadow": {
             "height": 46,
             "source": "pony-shadow.png",
             "width": 46
         },
+        "uppercut-down": {
+            "frameCount": 7,
+            "frameInterval": 50,
+            "height": 46,
+            "offsetX": 280,
+            "offsetY": 0,
+            "repeat": false,
+            "width": 47
+        },
         "walking-down": {
             "frameCount": 3,
             "frameInterval": 250,
             "height": 46,
+            "offsetX": 0,
+            "offsetY": 0,
             "repeat": true,
-            "width": 46
+            "width": 48
         },
         "walking-left": {
             "frameCount": 3,
@@ -264,7 +330,7 @@
             "offsetX": 0,
             "offsetY": 96,
             "repeat": true,
-            "width": 46
+            "width": 48
         },
         "walking-up": {
             "frameCount": 3,
@@ -273,7 +339,7 @@
             "offsetX": 0,
             "offsetY": 144,
             "repeat": true,
-            "width": 46
+            "width": 48
         }
     }
 }

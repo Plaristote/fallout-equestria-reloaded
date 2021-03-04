@@ -67,8 +67,11 @@ set(PROJECT_SOURCES
         game/characterdialog.cpp
         game/characters/field_of_view.hpp
         game/characters/field_of_view.cpp
+        game/characters/movement.h
+        game/characters/movement.cpp
         game/characters/actionqueue.h
         game/characters/actionqueue.cpp
+        game/characters/actions/base.h
         game/characters/actions/movement.h
         game/characters/actions/movement.cpp
         game/characters/actions/interaction.h
