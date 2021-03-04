@@ -10,7 +10,7 @@ Item {
   property alias currentCharacter: characterSheetSelect.currentName
 
   onCurrentCharacterChanged: {
-    scriptController.loadCharacterSheet(currentCharacter, statController)
+    scriptController.loadCharacterSheet(currentCharacter, statController);
     statController.specialPoints = Math.max(0, 40 - (statController.strength + statController.perception + statController.endurance + statController.charisma + statController.intelligence + statController.agility + statController.luck));
   }
 

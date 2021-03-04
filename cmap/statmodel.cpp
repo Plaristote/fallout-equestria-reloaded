@@ -10,6 +10,7 @@ StatModel::StatModel(QObject *parent) : QObject(parent)
   skillPoints = 0;
   experience = 0;
   connect(this, &StatModel::specialChanged, this, &StatModel::updateBaseValues);
+  connect(this, &StatModel::traitsChanged,  this, &StatModel::updateBaseValues);
   connect(this, &StatModel::specialChanged, this, &StatModel::acceptableChanged);
   connect(this, &StatModel::traitsChanged,  this, &StatModel::acceptableChanged);
   connect(this, &StatModel::nameChanged,    this, &StatModel::acceptableChanged);
@@ -90,6 +91,45 @@ void StatModel::updateBaseValues()
   data.speech       = 5 * charisma + intelligence;
   data.gambling     = charisma + 4 * luck;
 
+  auto allTraits = Game::get()->getCmapTraits();
+
+  for (auto trait : allTraits)
+  {
+    if  (traits.contains(trait.name))
+    {
+      data.actionPoints        = trait.modifyBaseStatistic(this, "actionPoints",        data.actionPoints);
+      data.armorClass          = trait.modifyBaseStatistic(this, "armorClass",          data.armorClass);
+      data.carryWeight         = trait.modifyBaseStatistic(this, "carryWeight",         data.carryWeight);
+      data.criticalChance      = trait.modifyBaseStatistic(this, "criticalChance",      data.criticalChance);
+      data.damageResistance    = trait.modifyBaseStatistic(this, "damageResistance",    data.damageResistance);
+      data.healingRate         = trait.modifyBaseStatistic(this, "healingRate",         data.healingRate);
+      data.maxHitPoints        = trait.modifyBaseStatistic(this, "maxHitPoints",        data.maxHitPoints);
+      data.meleeDamage         = trait.modifyBaseStatistic(this, "meleeDamage",         data.meleeDamage);
+      data.perkRate            = trait.modifyBaseStatistic(this, "perkRate",            data.perkRate);
+      data.poisonResistance    = trait.modifyBaseStatistic(this, "poisonResistance",    data.poisonResistance);
+      data.radiationResistance = trait.modifyBaseStatistic(this, "radiationResistance", data.radiationResistance);
+      data.skillRate           = trait.modifyBaseStatistic(this, "skillRate",           data.skillRate);
+
+      data.smallGuns    = trait.modifyBaseSkill(this, "smallGuns",    data.smallGuns);
+      data.bigGuns      = trait.modifyBaseSkill(this, "bigGuns",      data.bigGuns);
+      data.energyGuns   = trait.modifyBaseSkill(this, "energyGuns",   data.energyGuns);
+      data.explosives   = trait.modifyBaseSkill(this, "explosives",   data.explosives);
+      data.unarmed      = trait.modifyBaseSkill(this, "unarmed",      data.unarmed);
+      data.meleeWeapons = trait.modifyBaseSkill(this, "meleeWeapons", data.meleeWeapons);
+      data.lockpick     = trait.modifyBaseSkill(this, "lockpick",     data.lockpick);
+      data.medicine     = trait.modifyBaseSkill(this, "medicine",     data.medicine);
+      data.repair       = trait.modifyBaseSkill(this, "repair",       data.repair);
+      data.science      = trait.modifyBaseSkill(this, "science",      data.science);
+      data.sneak        = trait.modifyBaseSkill(this, "sneak",        data.sneak);
+      data.spellcasting = trait.modifyBaseSkill(this, "spellcasting", data.spellcasting);
+      data.steal        = trait.modifyBaseSkill(this, "steal",        data.steal);
+      data.barter       = trait.modifyBaseSkill(this, "barter",       data.barter);
+      data.outdoorsman  = trait.modifyBaseSkill(this, "outdoorsman",  data.outdoorsman);
+      data.speech       = trait.modifyBaseSkill(this, "speech",       data.speech);
+      data.gambling     = trait.modifyBaseSkill(this, "gambling",     data.gambling);
+    }
+  }
+
   emit statisticsChanged();
 }
 
@@ -105,7 +145,6 @@ QStringList StatModel::getAvailableTraits()
 
   for (auto trait : traits)
     results << trait.name;
-  qDebug() << "GET TRAITZ" << results;
   return results;
 }
 
@@ -125,6 +164,9 @@ void StatModel::toggleTrait(const QString& name, bool value)
 
 void StatModel::fromJson(const QJsonObject& json)
 {
+  const QJsonArray jsonTraits = json["traits"].toArray();
+  const QJsonArray jsonPerks  = json["perks"].toArray();
+
   name = json["name"].toString();
   age  = json["age"].toInt(21);
   race           = json["race"].toString();
@@ -135,19 +177,19 @@ void StatModel::fromJson(const QJsonObject& json)
   skillPoints    = json["skill-points"].toInt(0);
   availablePerks = json["available-perks"].toInt(0);
   lastPerk = json["last-perk"].toInt(0);
-  strength     = json["str"].toInt();
-  endurance    = json["end"].toInt();
-  perception   = json["per"].toInt();
-  charisma     = json["cha"].toInt();
-  intelligence = json["int"].toInt();
-  agility      = json["agi"].toInt();
-  luck         = json["luc"].toInt();
+  strength     = json["str"].toInt(5);
+  endurance    = json["end"].toInt(5);
+  perception   = json["per"].toInt(5);
+  charisma     = json["cha"].toInt(5);
+  intelligence = json["int"].toInt(5);
+  agility      = json["agi"].toInt(5);
+  luck         = json["luc"].toInt(5);
   faction      = json["faction"].toString();
   traits.clear();
   perks.clear();
-  for (QJsonValue value : json["traits"].toArray())
+  for (const QJsonValue& value : jsonTraits)
     traits.push_back(value.toString());
-  for (QJsonValue value : json["perks"].toArray())
+  for (const QJsonValue& value : jsonPerks)
     perks.push_back(value.toString());
 
   auto loadStatData = [&json](const QString& prefix, StatData& obj) {

@@ -11,6 +11,8 @@ public:
   Trait();
 
   void toogle(StatModel*, bool);
+  int modifyBaseStatistic(StatModel*, const QString& attribute, int baseValue);
+  int modifyBaseSkill(StatModel*, const QString& attribute, int baseValue);
 
   QString  name;
   QJSValue script;

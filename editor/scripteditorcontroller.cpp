@@ -71,6 +71,8 @@ void ScriptEditorController::loadCharacterSheet(const QString &name, StatModel* 
     model->fromJson(QJsonDocument::fromJson(file.readAll()).object());
     file.close();
   }
+  else
+    model->fromJson(QJsonObject());
 }
 
 QStringList ScriptEditorController::getLevels()
