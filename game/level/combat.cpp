@@ -182,7 +182,7 @@ void CombatComponent::onMovementFinished(Character* character)
     if (character->getActionPoints() == 0)
     {
       character->rcurrentPath().clear();
-      character->setAnimation("idle-down");
+      character->onIdle();
     }
   }
   GridComponent::onMovementFinished(character);

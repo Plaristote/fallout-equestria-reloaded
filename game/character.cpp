@@ -7,6 +7,7 @@
 Character::Character(QObject *parent) : StorageObject(parent)
 {
   setProperty("float", true);
+  orientation = "down";
   fieldOfView = new FieldOfView(*this);
   actionQueue = new ActionQueue(this);
   inventory->setUser(this);
@@ -223,6 +224,7 @@ void Character::load(const QJsonObject& data)
   isUnique = data["uniq"].toBool();
   enemyFlag = static_cast<unsigned int>(data["enemyFlag"].toInt(0));
   actionPoints = data["ap"].toInt();
+  orientation = data["orientation"].toString("down");
   if (isUnique)
     charSheet = Game::get()->getDataEngine()->makeStatModel(objectName);
   else
@@ -239,6 +241,7 @@ void Character::save(QJsonObject& data) const
   data["uniq"] = isUnique;
   data["enemyFlag"] = static_cast<int>(enemyFlag);
   data["ap"] = actionPoints;
+  data["orientation"] = orientation;
   if (isUnique)
     Game::get()->getDataEngine()->saveStatModel(getObjectName(), statistics);
   else

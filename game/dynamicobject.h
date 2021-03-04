@@ -58,6 +58,7 @@ public:
   Q_INVOKABLE void      removeControlZone();
   TileZone*             getControlZone() { return controlZone; }
 
+  Q_INVOKABLE void      lookTo(int x, int y);
   Q_INVOKABLE bool      triggerInteraction(Character*, const QString& interactionType);
   Q_INVOKABLE bool      triggerSkillUse(Character* user, const QString& skillName);
   Q_INVOKABLE void      scriptCall(const QString& method, const QString& message = "");
@@ -67,6 +68,9 @@ public:
 
   const QString& getCurrentZone() const { return currentZone; }
   void setCurrentZone(const QString& value) { currentZone = value; }
+
+public slots:
+  void onIdle();
 
 signals:
   void objectNameChanged();
@@ -92,6 +96,8 @@ protected:
   QString currentZone;
   QPoint interactionPosition;
   QJsonObject dataStore;
+
+  QString orientation;
 };
 
 #endif // DYNAMICOBJECT_H

@@ -28,7 +28,7 @@ void GridComponent::unregisterDynamicObject(DynamicObject* object)
     Character* character = reinterpret_cast<Character*>(object);
 
     character->rcurrentPath().clear();
-    character->setAnimation("idle-down");
+    character->onIdle();
     for (auto observer : characterObservers.value(character))
       disconnect(observer);
     characterObservers.remove(character);
@@ -71,7 +71,7 @@ void GridComponent::onMovementFinished(Character* object)
     }
     else
     {
-      object->setAnimation("idle-down");
+      object->onIdle();
       emit object->reachedDestination();
     }
   }
