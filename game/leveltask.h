@@ -7,6 +7,7 @@
 # include "tilemap/tilemap.h"
 # include "levelgrid.h"
 # include "timermanager.h"
+# include "soundmanager.h"
 
 # include "character.h"
 # include "dynamicobject.h"
@@ -25,6 +26,7 @@ class LevelTask : public CombatComponent
   Q_PROPERTY(bool       paused  MEMBER paused NOTIFY pausedChanged)
   Q_PROPERTY(TileMap*   tilemap READ getTileMap NOTIFY tilemapReady)
   Q_PROPERTY(Character* player READ getPlayer NOTIFY playerChanged)
+  Q_PROPERTY(SoundManager* sounds READ getSoundManager)
   Q_PROPERTY(QQmlListProperty<DynamicObject> dynamicObjects READ getQmlObjects NOTIFY objectsChanged)
 public:
   explicit LevelTask(QObject *parent = nullptr);
@@ -37,6 +39,7 @@ public:
 
   const QString& getName() const { return name; }
   TileMap* getTileMap() const { return tilemap; }
+  SoundManager* getSoundManager() const { return soundManager; }
   Character* getPlayer();
   QList<Character*> findCharacters(std::function<bool (Character&)> compare);
 
@@ -87,6 +90,7 @@ private:
   QString       name;
   TileMap*      tilemap = nullptr;
   TimeManager*  timeManager = nullptr;
+  SoundManager* soundManager = nullptr;
   bool          paused = true;
 };
 

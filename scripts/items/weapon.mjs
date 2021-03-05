@@ -26,6 +26,7 @@ export class Weapon extends Item {
       damage + " damage."
     );
     target.takeDamage(damage, this.user);
+    level.sounds.play("hoof2hoof/punch");
     return true;
   }
 }

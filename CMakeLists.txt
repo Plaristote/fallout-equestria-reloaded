@@ -106,6 +106,8 @@ set(PROJECT_SOURCES
         game/inventoryitemlibrary.cpp
         game/diplomacy.hpp
         game/diplomacy.cpp
+        game/soundmanager.h
+        game/soundmanager.cpp
         game/level/grid.h
         game/level/grid.cpp
         game/level/interaction.h

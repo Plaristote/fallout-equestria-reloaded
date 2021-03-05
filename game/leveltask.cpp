@@ -8,6 +8,7 @@
 LevelTask::LevelTask(QObject *parent) : CombatComponent(parent)
 {
   tilemap = new TileMap(this);
+  soundManager = new SoundManager(this);
   updateTimer.setInterval(15);
   updateTimer.setSingleShot(false);
   connect(&updateTimer, &QTimer::timeout, this, &LevelTask::update);
@@ -261,6 +262,7 @@ void LevelTask::update()
         onNextCombatTurn();
     }
   }
+  soundManager->update();
   CombatComponent::update(delta);
   emit updated();
 }
