@@ -162,6 +162,54 @@ void StatModel::toggleTrait(const QString& name, bool value)
   }
 }
 
+void StatModel::confirmChanges()
+{
+  spentPoints = SkillData();
+}
+
+void StatModel::cancelChanges()
+{
+  skillPoints += (
+    spentPoints.smallGuns +
+    spentPoints.bigGuns +
+    spentPoints.energyGuns +
+    spentPoints.explosives +
+    spentPoints.unarmed +
+    spentPoints.lockpick +
+    spentPoints.meleeWeapons +
+    spentPoints.medicine +
+    spentPoints.repair +
+    spentPoints.science +
+    spentPoints.sneak +
+    spentPoints.spellcasting +
+    spentPoints.steal +
+    spentPoints.barter +
+    spentPoints.outdoorsman +
+    spentPoints.speech +
+    spentPoints.gambling
+  );
+  modifiers.smallGuns    -= spentPoints.smallGuns;
+  modifiers.bigGuns      -= spentPoints.bigGuns;
+  modifiers.energyGuns   -= spentPoints.energyGuns;
+  modifiers.explosives   -= spentPoints.explosives;
+  modifiers.unarmed      -= spentPoints.unarmed;
+  modifiers.lockpick     -= spentPoints.lockpick;
+  modifiers.meleeWeapons -= spentPoints.meleeWeapons;
+  modifiers.medicine     -= spentPoints.medicine;
+  modifiers.repair       -= spentPoints.repair;
+  modifiers.science      -= spentPoints.science;
+  modifiers.sneak        -= spentPoints.sneak;
+  modifiers.spellcasting -= spentPoints.spellcasting;
+  modifiers.steal        -= spentPoints.steal;
+  modifiers.barter       -= spentPoints.barter;
+  modifiers.outdoorsman  -= spentPoints.outdoorsman;
+  modifiers.speech       -= spentPoints.speech;
+  modifiers.gambling     -= spentPoints.gambling;
+  spentPoints = SkillData();
+  emit statisticsChanged();
+  emit skillPointsChanged();
+}
+
 void StatModel::fromJson(const QJsonObject& json)
 {
   const QJsonArray jsonTraits = json["traits"].toArray();

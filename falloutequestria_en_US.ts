@@ -9,12 +9,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="ui/CharacterSheet.qml" line="201"/>
+        <location filename="ui/CharacterSheet.qml" line="202"/>
         <source>Confirm</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="ui/CharacterSheet.qml" line="206"/>
+        <location filename="ui/CharacterSheet.qml" line="208"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>

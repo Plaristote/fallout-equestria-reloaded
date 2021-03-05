@@ -11,7 +11,6 @@ Item {
 
   onCurrentCharacterChanged: {
     scriptController.loadCharacterSheet(currentCharacter, statController);
-    statController.specialPoints = Math.max(0, 40 - (statController.strength + statController.perception + statController.endurance + statController.charisma + statController.intelligence + statController.agility + statController.luck));
   }
 
   StatModel {

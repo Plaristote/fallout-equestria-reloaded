@@ -7,6 +7,7 @@ Pane {
   id: root
   property QtObject characterSheet
   property string selectedProperty
+  property bool canEdit: false
   property var list: [
     "smallGuns", "bigGuns", "energyGuns",
     "explosives", "unarmed", "meleeWeapons",
@@ -18,10 +19,6 @@ Pane {
   background: UiStyle.TerminalPane {}
 
   signal selectProperty(string selectedName)
-
-  function canEdit() {
-    return true;
-  }
 
   Flickable {
     anchors.fill: parent
@@ -44,7 +41,7 @@ Pane {
           Text {
             text: qsTr(propertyName)
             color: textColor
-            width: Math.max(150, root.width - (root.canEdit() ? 150 : 50))
+            width: Math.max(150, root.width - (root.canEdit ? 175 : 100))
             font.family: application.consoleFontName
             font.pointSize: 8
             MouseArea { anchors.fill: parent; onClicked: root.selectProperty(propertyName) }
@@ -58,21 +55,27 @@ Pane {
             MouseArea { anchors.fill: parent; onClicked: root.selectProperty(propertyName) }
           }
           UiStyle.TerminalButton {
-            visible: root.canEdit()
+            visible: root.canEdit
             enabled: characterSheet.skillPoints > 0
             text: "+"
             onClicked: {
-              characterSheet[root.list[index]] += 1;
-              characterSheet.skillPoints -= 1;
+              const method = root.list[index] + "Increase";
+              characterSheet[method]();
               root.selectProperty(propertyName);
             }
           }
           UiStyle.TerminalButton {
-            visible: root.canEdit()
+            visible: root.canEdit
             text: "-"
             onClicked: {
-              characterSheet[root.list[index]] -= 1;
-              characterSheet.skillPoints += 1;
+              const prefix      = root.list[index];
+              const checkMethod = prefix + "CanDecrease";
+
+              if (characterSheet[checkMethod]())
+              {
+                const method = prefix + "Decrease";
+                characterSheet[method]();
+              }
               root.selectProperty(propertyName);
             }
           }

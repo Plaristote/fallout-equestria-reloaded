@@ -12,6 +12,7 @@ Pane {
   readonly property bool gameEditorMode: mode === "gameEditor"
   readonly property bool createMode: mode === "create" || mode === "gameEditor"
   readonly property bool editMode: mode === "edit"
+  readonly property bool viewMode: mode === "view"
   property string selectedProperty: ""
 
   background: UiStyle.Pane {}
@@ -107,6 +108,7 @@ Pane {
     anchors.leftMargin: 10
 
     CMAP.Skills {
+      canEdit: root.editMode || root.gameEditorMode
       characterSheet: root.characterSheet
       selectedProperty: root.selectedProperty
       onSelectProperty: root.selectedProperty = selectedName
@@ -198,12 +200,14 @@ Pane {
     id: controls
     anchors { bottom: parent.bottom; right: parent.right }
     MenuButton {
+      visible: createMode || editMode
       text: qsTr("Confirm")
       enabled: characterSheet.acceptable
       onClicked: root.accepted()
     }
     MenuButton {
-      text: qsTr("Cancel")
+      visible: !gameEditorMode
+      text: viewMode ? qsTr("Close") : qsTr("Cancel")
       onClicked: root.canceled()
     }
   }

@@ -9,9 +9,21 @@ CharacterSheet {
 
   Component.onCompleted: {
     gameController.level.paused = true;
+    if (characterSheet.skillPoints > 0)
+      mode = "edit";
+  }
+
+  onAccepted: {
+    characterSheet.confirmChanges();
+    close();
   }
 
   onCanceled: {
+    characterSheet.cancelChanges();
+    close();
+  }
+
+  function close() {
     gameController.level.paused = false;
     application.popView();
   }

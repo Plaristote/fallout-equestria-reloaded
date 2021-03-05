@@ -72,7 +72,10 @@ void ScriptEditorController::loadCharacterSheet(const QString &name, StatModel* 
     file.close();
   }
   else
+  {
     model->fromJson(QJsonObject());
+    model->setProperty("specialPoints", 5);
+  }
 }
 
 QStringList ScriptEditorController::getLevels()

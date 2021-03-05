@@ -6,22 +6,8 @@
 # include <QJsonDocument>
 # include <QJsonObject>
 
-struct StatData
+struct SkillData
 {
-  int maxHitPoints = 0;
-  int armorClass = 0;
-  int actionPoints = 0;
-  int carryWeight = 0;
-  int meleeDamage = 0;
-  int damageResistance = 0;
-  int poisonResistance = 0;
-  int radiationResistance = 0;
-  int sequence = 0;
-  int healingRate = 0;
-  int criticalChance = 0;
-  int skillRate = 0;
-  int perkRate = 0;
-
   int smallGuns = 0;
   int bigGuns = 0;
   int energyGuns = 0;
@@ -39,6 +25,23 @@ struct StatData
   int outdoorsman = 0;
   int speech = 0;
   int gambling = 0;
+};
+
+struct StatData : public SkillData
+{
+  int maxHitPoints = 0;
+  int armorClass = 0;
+  int actionPoints = 0;
+  int carryWeight = 0;
+  int meleeDamage = 0;
+  int damageResistance = 0;
+  int poisonResistance = 0;
+  int radiationResistance = 0;
+  int sequence = 0;
+  int healingRate = 0;
+  int criticalChance = 0;
+  int skillRate = 0;
+  int perkRate = 0;
 };
 
 class StatModel : public QObject
@@ -135,42 +138,51 @@ public:
   Q_INVOKABLE void toggleTrait(const QString& name, bool);
   Q_INVOKABLE void setFaceColor(int r, int g, int b, int a) { faceColor = QColor(r, g, b, a); emit faceColorChanged(); }
 
-#define STAT_GETTER(statName) \
+  Q_INVOKABLE void confirmChanges();
+  Q_INVOKABLE void cancelChanges();
+
+#define STAT_METHODS(statName) \
   int get_##statName() const { return data.statName + modifiers.statName; } \
   void  set_##statName(int value) { modifiers.statName = value - data.statName; emit statisticsChanged(); }
 
+#define SKILL_METHODS(skillName) \
+  STAT_METHODS(skillName) \
+  Q_INVOKABLE bool skillName##CanDecrease() { return spentPoints.skillName > 0; } \
+  Q_INVOKABLE void skillName##Increase() { spentPoints.skillName++; modifiers.skillName++; skillPoints--; emit skillPointsChanged(); emit statisticsChanged(); } \
+  Q_INVOKABLE void skillName##Decrease() { spentPoints.skillName--; modifiers.skillName--; skillPoints++; emit skillPointsChanged(); emit statisticsChanged(); }
+
   // Statistics
-  STAT_GETTER(maxHitPoints)
-  STAT_GETTER(armorClass)
-  STAT_GETTER(actionPoints)
-  STAT_GETTER(carryWeight)
-  STAT_GETTER(meleeDamage)
-  STAT_GETTER(damageResistance)
-  STAT_GETTER(poisonResistance)
-  STAT_GETTER(radiationResistance)
-  STAT_GETTER(sequence)
-  STAT_GETTER(healingRate)
-  STAT_GETTER(criticalChance)
-  STAT_GETTER(skillRate)
-  STAT_GETTER(perkRate)
+  STAT_METHODS(maxHitPoints)
+  STAT_METHODS(armorClass)
+  STAT_METHODS(actionPoints)
+  STAT_METHODS(carryWeight)
+  STAT_METHODS(meleeDamage)
+  STAT_METHODS(damageResistance)
+  STAT_METHODS(poisonResistance)
+  STAT_METHODS(radiationResistance)
+  STAT_METHODS(sequence)
+  STAT_METHODS(healingRate)
+  STAT_METHODS(criticalChance)
+  STAT_METHODS(skillRate)
+  STAT_METHODS(perkRate)
   // Skills
-  STAT_GETTER(smallGuns)
-  STAT_GETTER(bigGuns)
-  STAT_GETTER(energyGuns)
-  STAT_GETTER(explosives)
-  STAT_GETTER(unarmed)
-  STAT_GETTER(lockpick)
-  STAT_GETTER(meleeWeapons)
-  STAT_GETTER(medicine)
-  STAT_GETTER(repair)
-  STAT_GETTER(science)
-  STAT_GETTER(sneak)
-  STAT_GETTER(spellcasting)
-  STAT_GETTER(steal)
-  STAT_GETTER(barter)
-  STAT_GETTER(outdoorsman)
-  STAT_GETTER(speech)
-  STAT_GETTER(gambling)
+  SKILL_METHODS(smallGuns)
+  SKILL_METHODS(bigGuns)
+  SKILL_METHODS(energyGuns)
+  SKILL_METHODS(explosives)
+  SKILL_METHODS(unarmed)
+  SKILL_METHODS(lockpick)
+  SKILL_METHODS(meleeWeapons)
+  SKILL_METHODS(medicine)
+  SKILL_METHODS(repair)
+  SKILL_METHODS(science)
+  SKILL_METHODS(sneak)
+  SKILL_METHODS(spellcasting)
+  SKILL_METHODS(steal)
+  SKILL_METHODS(barter)
+  SKILL_METHODS(outdoorsman)
+  SKILL_METHODS(speech)
+  SKILL_METHODS(gambling)
 
   // EDITOR
   Q_INVOKABLE QStringList getAvailableRaces() const;
@@ -215,8 +227,9 @@ private:
   int experience = 0;
   int specialPoints = 0;
 
-  StatData data;
-  StatData modifiers;
+  StatData  data;
+  StatData  modifiers;
+  SkillData spentPoints;
 
   QStringList traits, perks;
   QJsonDocument variables;
