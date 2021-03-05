@@ -1,5 +1,6 @@
 #include "globals.h"
 #include "game.h"
+#include "musicmanager.h"
 #include <QFile>
 #include <QDir>
 
@@ -17,6 +18,7 @@ Game::Game(QObject *parent) : QObject(parent)
   worldmap = new WorldMap(this);
   scriptEngine.installExtensions(QJSEngine::ConsoleExtension);
   scriptEngine.globalObject().setProperty("game", scriptEngine.newQObject(this));
+  scriptEngine.globalObject().setProperty("musicManager", scriptEngine.newQObject(MusicManager::get()));
   loadCmapTraits();
   scriptEngine.evaluate("level.displayConsoleMessage(\"Coucou Script Engine\")");
 
@@ -110,6 +112,7 @@ void Game::goToLevel(const QString& name)
   auto scriptObject = scriptEngine.globalObject();
 
   appendToConsole("You reached " + name);
+  MusicManager::get()->play(name);
   dataEngine->setCurrentLevel(name);
   currentLevel = new LevelTask(this);
   scriptObject.setProperty("level", scriptEngine.newQObject(currentLevel));
@@ -126,6 +129,7 @@ void Game::switchToLevel(const QString& name, const QString& targetZone)
 
   if (currentLevel)
     exitLevel(true);
+  MusicManager::get()->play(name);
   dataEngine->setCurrentLevel(name);
   currentLevel = new LevelTask(this);
   scriptObject.setProperty("level", scriptEngine.newQObject(currentLevel));
@@ -141,6 +145,7 @@ void Game::exitLevel(bool silent)
 {
   auto scriptObject = scriptEngine.globalObject();
 
+  MusicManager::get()->play("worldmap");
   playerParty->extractFromLevel(currentLevel);
   currentLevel->save(dataEngine);
   currentLevel->deleteLater();

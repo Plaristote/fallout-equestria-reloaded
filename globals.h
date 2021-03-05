@@ -14,5 +14,6 @@
 
 # define SCRIPTS_PATH (ROOT_PATH + "scripts/")
 # define ASSETS_PATH  (ROOT_PATH + "assets/")
+# define SOUNDS_PATH  (ASSETS_PATH + "audio/")
 
 #endif // MY_GLOBALS_H

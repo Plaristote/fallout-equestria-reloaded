@@ -19,6 +19,7 @@
 #include "game/characterdialog.h"
 #include "game/lootingcontroller.h"
 #include "gamemanager.h"
+#include "musicmanager.h"
 
 #include "cmap/statmodel.h"
 
@@ -65,6 +66,7 @@ int main(int argc, char *argv[])
   qmlRegisterType<CharacterDialog>("Game", 1,0, "CharacterDialog");
   qmlRegisterType<LootingController>("Game", 1,0, "LootingController");
   qmlRegisterType<GameManager>("Game", 1,0, "GameManager");
+  qmlRegisterType<MusicManager>("Game", 1,0, "MusicManager");
   qmlRegisterType<WorldMap>("Game", 1,0, "WorldMap");
   qmlRegisterType<WorldMapCity>("Game", 1,0, "WorldMapCity");
   qmlRegisterType<Inventory>("Game", 1,0, "Inventory");
@@ -75,9 +77,11 @@ int main(int argc, char *argv[])
   qmlRegisterType<QmlSpriteAnimation>("Game", 1,0, "SpriteAnimation");
   // END GAME EDITOR
 
-  GameManager* gameManager = new GameManager();
+  MusicManager* musicManager = new MusicManager(&app);
+  GameManager*  gameManager = new GameManager();
 
   engine.rootContext()->setContextProperty("gameManager", gameManager);
+  engine.rootContext()->setContextProperty("musicManager", musicManager);
   engine.rootContext()->setContextProperty("animationLibrary", &animationLibrary);
   engine.rootContext()->setContextProperty("itemLibrary", &itemLibrary);
   engine.rootContext()->setContextProperty("fileProtocol", fileProtocol);

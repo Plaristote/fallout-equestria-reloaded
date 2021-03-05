@@ -171,5 +171,6 @@
         <file>assets/sprites/characters/earthpony-purple.png</file>
         <file>assets/sprites/characters/pegasus-purple.png</file>
         <file>assets/sprites/characters/unicorn-purple.png</file>
+        <file>assets/musics.json</file>
     </qresource>
 </RCC>

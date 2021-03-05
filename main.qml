@@ -35,6 +35,11 @@ Window {
     id: mainView
     initialItem: "MainMenu.qml"
     anchors.fill: parent
+
+    onCurrentItemChanged: {
+      if (depth === 1)
+        musicManager.play("mainmenu");
+    }
   }
 
   Timer {

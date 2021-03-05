@@ -24,10 +24,12 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 #    endif()
 #endif()
 
-find_package(QT NAMES Qt6 Qt5 COMPONENTS Core Quick LinguistTools REQUIRED)
+find_package(QT NAMES Qt6 Qt5 COMPONENTS Core Quick LinguistTools MREQUIRED)
 find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Quick LinguistTools REQUIRED)
+find_package(Qt5Multimedia REQUIRED)
 
 set(TS_FILES falloutequestria_en_US.ts)
+set(QT_USE_QTMULTIMEDIA TRUE)
 
 set(PROJECT_SOURCES
         main.cpp
@@ -116,6 +118,8 @@ set(PROJECT_SOURCES
         editor/scripteditorcontroller.cpp
         gamemanager.h
         gamemanager.cpp
+        musicmanager.h
+        musicmanager.cpp
         game.h
         game.cpp
         qml.qrc
@@ -145,4 +149,7 @@ endif()
 target_compile_definitions(falloutequestria
   PRIVATE $<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:QT_QML_DEBUG>)
 target_link_libraries(falloutequestria
-  PRIVATE Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Quick)
+  PRIVATE Qt${QT_VERSION_MAJOR}::Core
+          Qt${QT_VERSION_MAJOR}::Quick
+          Qt${QT_VERSION_MAJOR}::Multimedia
+)
