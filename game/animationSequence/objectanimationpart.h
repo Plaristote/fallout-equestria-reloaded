@@ -14,12 +14,13 @@ class ObjectAnimationPart : public IAnimationPart
   bool           over = false;
 public:
   void initialize(QJSValue& value) override;
+  void initialize(DynamicObject*, const QString& animationName, const QString& postAnimationName = "");
   void start() override;
   void finish() override;
   bool isOver() const { return over; }
 
 private slots:
-  void onAnimationFinished() { over = true; }
+  void onAnimationFinished();
 };
 
 #endif // OBJECTANIMATIONPART_H

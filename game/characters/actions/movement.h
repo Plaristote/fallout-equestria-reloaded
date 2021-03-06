@@ -13,7 +13,7 @@ public:
 
   int  getApCost() const override;
   bool trigger() override;
-  bool isOver() override;
+  void update() override;
 
 protected:
   QPoint target;

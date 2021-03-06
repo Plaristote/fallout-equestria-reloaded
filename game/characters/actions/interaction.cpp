@@ -1,8 +1,34 @@
 #include "interaction.h"
 #include "game.h"
+#include "game/animationSequence/objectanimationpart.h"
 
 bool InteractionAction::trigger()
 {
+  if (actionName == "talk-to" || actionName == "look")
+    performAction();
+  else
+  {
+    auto* animationPart = new ObjectAnimationPart;
+
+    animationPart->initialize(character, "use", "idle");
+    animation.addAnimationPart(animationPart);
+    animation.start();
+    state = InProgress;
+  }
+  return state != Interrupted;
+}
+
+void InteractionAction::update()
+{
+  bool animationContinues = animation.update();
+
+  if (!animationContinues && state == InProgress)
+    performAction();
+}
+
+void InteractionAction::performAction()
+{
+  qDebug() << "InteractionAction::performAction";
   auto* level = Game::get()->getLevel();
   bool handledByScript = target->triggerInteraction(character, actionName);
 
@@ -16,9 +42,10 @@ bool InteractionAction::trigger()
       level->initializeLooting(reinterpret_cast<StorageObject*>(target));
     else if (actionName == "use" && typeName == "Character" && !(reinterpret_cast<Character*>(target)->isAlive()))
       level->initializeLooting(reinterpret_cast<StorageObject*>(target));
-    return false; // Always clear the queue on player interaction
+    state = Interrupted;
   }
-  return handledByScript;
+  else
+    state = Done;
 }
 
 int InteractionAction::getApCost() const

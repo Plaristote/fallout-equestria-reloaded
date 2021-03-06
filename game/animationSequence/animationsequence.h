@@ -11,6 +11,8 @@ class AnimationSequence
 {
 public:
   void initialize(QJSValue& value);
+  void addAnimationPart(IAnimationPart*);
+  void start();
   bool update();
 
 private:

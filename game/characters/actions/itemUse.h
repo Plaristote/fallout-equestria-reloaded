@@ -2,6 +2,7 @@
 # define ITEM_USE_ACTION_H
 
 # include "base.h"
+# include "game/animationSequence/animationsequence.h"
 
 class ItemAction : public ActionBase
 {
@@ -12,10 +13,15 @@ public:
 
   int  getApCost() const override;
   bool trigger() override;
+  void update() override;
 
 protected:
-  DynamicObject* target;
-  QString        itemSlot;
+  void performAction();
+
+  DynamicObject*    target;
+  QString           itemSlot;
+  QJSValue          callback;
+  AnimationSequence animation;
 };
 
 #endif

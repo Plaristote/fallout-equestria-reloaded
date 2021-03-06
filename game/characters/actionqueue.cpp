@@ -22,10 +22,18 @@ void ActionQueue::update()
   {
     auto* action = queue.first();
 
-    if (action->isOver())
+    action->update();
+    switch (action->getState())
     {
+    case ActionBase::Done:
       onActionOver();
       delete action;
+      break ;
+    case ActionBase::Interrupted:
+      reset();
+    case ActionBase::Pending:
+    case ActionBase::InProgress:
+      break ;
     }
   }
 }

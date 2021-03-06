@@ -10,28 +10,40 @@ void ObjectAnimationPart::initialize(QJSValue& value)
   {
     QJSValue jsPostAnimationName = value.property("afterAnimation");
 
-    target = reinterpret_cast<DynamicObject*>(value.property("object").toQObject());
-    animationName = value.property("animation").toString();
-    if (jsPostAnimationName.isString())
-      postAnimationName = jsPostAnimationName.toString();
-    else
-      postAnimationName = "idle";
-    connect(target, &Sprite::animationFinished, this, &ObjectAnimationPart::onAnimationFinished);
+    initialize(
+      reinterpret_cast<DynamicObject*>(value.property("object").toQObject()),
+      value.property("animation").toString(),
+      jsPostAnimationName.isString() ? jsPostAnimationName.toString() : "idle"
+    );
   }
   else
-  {
-    qDebug() << "ObjectAnimation: attempted to initialize animation without an object";
     over = true;
-  }
+}
+
+void ObjectAnimationPart::initialize(DynamicObject* target, const QString& animationName, const QString& postAnimationName)
+{
+  this->target            = target;
+  this->animationName     = animationName;
+  this->postAnimationName = postAnimationName;
+  connect(target, &Sprite::animationFinished, this, &ObjectAnimationPart::onAnimationFinished);
 }
 
 void ObjectAnimationPart::start()
 {
-  target->setAnimation(animationName);
+  if (target)
+    target->setAnimation(animationName);
+  else
+    qDebug() << "/!\\ Invalid object set for ObjectAnimationPart";
 }
 
 void ObjectAnimationPart::finish()
 {
   if (postAnimationName.length())
     target->setAnimation(postAnimationName);
+}
+
+void ObjectAnimationPart::onAnimationFinished()
+{
+  over = true;
+  finish();
 }

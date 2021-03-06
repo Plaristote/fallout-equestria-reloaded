@@ -5,12 +5,14 @@ bool MovementAction::trigger()
 {
   auto* level = Game::get()->getLevel();
 
+  state = InProgress;
   return level->moveTo(character, target);
 }
 
-bool MovementAction::isOver()
+void MovementAction::update()
 {
-  return character->getPosition() == target && !character->isMoving();
+  if (character->getPosition() == target && !character->isMoving())
+    state = Done;
 }
 
 int MovementAction::getApCost() const

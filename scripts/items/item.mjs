@@ -31,12 +31,21 @@ export class Item {
     return false;
   }
 
+  getAnimationSteps(target) {
+    return [{ type: "Animation", animation: "use", object: this.user }];
+  }
+
   attemptToUseOn(target) {
     console.log("Attempt to uze on", this, this.isValidTarget, this.model, this.triggersCombat, this.getActionPointCost);
     if (this.isValidTarget(target)) {
       if (this.isInRange(target)) {
-        if (this.user.useActionPoints(this.getActionPointCost()))
+        if (this.user.useActionPoints(this.getActionPointCost())) {
+          return {
+            steps:    this.getAnimationSteps(target),
+            callback: this.useOn.bind(this, target)
+	  };
           return this.useOn(target);
+	}
         else
           this.logFailure("Not enough action points.");
       }

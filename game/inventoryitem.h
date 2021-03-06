@@ -35,10 +35,10 @@ public:
   Q_INVOKABLE bool canEquipInSlot(const QString&);
   void onEquippedBy(Character*, bool on);
 
-  Q_INVOKABLE int  getActionPointCost();
-  Q_INVOKABLE bool isCombatItem();
-  Q_INVOKABLE bool isInRange(DynamicObject* target);
-  Q_INVOKABLE bool useOn(DynamicObject* target);
+  Q_INVOKABLE int      getActionPointCost();
+  Q_INVOKABLE bool     isCombatItem();
+  Q_INVOKABLE bool     isInRange(DynamicObject* target);
+  Q_INVOKABLE QJSValue useOn(DynamicObject* target);
 
 signals:
   void itemTypeChanged();

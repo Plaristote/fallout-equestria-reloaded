@@ -6,15 +6,25 @@
 class ActionBase
 {
 public:
+  enum State
+  {
+    Pending,
+    InProgress,
+    Done,
+    Interrupted
+  };
+
   ActionBase(Character* character) : character(character) {}
   virtual ~ActionBase() {}
 
   virtual int  getApCost() const = 0;
+  virtual void update() {}
   virtual bool trigger() = 0;
-  virtual bool isOver() { return true; }
+  State        getState() { return state; }
 
 protected:
   Character* character;
+  State      state = Pending;
 };
 
 #endif

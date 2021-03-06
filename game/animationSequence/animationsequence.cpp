@@ -18,20 +18,30 @@ void AnimationSequence::initialize(QJSValue& value)
       auto* part = new SpriteAnimationPart;
 
       part->initialize(animationDescriptor);
-      parts << QSharedPointer<IAnimationPart>(part);
+      addAnimationPart(part);
     }
     else if (type == "Animation")
     {
       auto* part = new ObjectAnimationPart;
 
       part->initialize(animationDescriptor);
-      parts << QSharedPointer<IAnimationPart>(part);
+      addAnimationPart(part);
     }
     else
       qDebug() << "ActionAnimation: unknown animation type" << type;
   }
+}
+
+void AnimationSequence::start()
+{
   if (parts.length() > 0)
     parts.first()->start();
+}
+
+void AnimationSequence::addAnimationPart(IAnimationPart* part)
+{
+  part->setParent(nullptr);
+  parts << QSharedPointer<IAnimationPart>(part);
 }
 
 bool AnimationSequence::update()

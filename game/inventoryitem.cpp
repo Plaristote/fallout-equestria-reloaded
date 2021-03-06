@@ -134,14 +134,14 @@ bool InventoryItem::isInRange(DynamicObject *target)
   return true;
 }
 
-bool InventoryItem::useOn(DynamicObject* target)
+QJSValue InventoryItem::useOn(DynamicObject* target)
 {
   if (script)
   {
     QJSValueList args;
 
     args << Game::get()->getScriptEngine().newQObject(target);
-    return script->call("attemptToUseOn", args).toBool();
+    return script->call("attemptToUseOn", args);
   }
   return false;
 }
