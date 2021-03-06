@@ -9,7 +9,7 @@ Sprite::Sprite(QObject *parent) : QObject(parent)
 
 void Sprite::update(qint64 delta)
 {
-  if (animation.repeat || animation.currentFrame + 1 < animation.frameCount)
+  if (animation.repeat || animation.currentFrame + 1 <= animation.frameCount)
   {
     animationElapsedTime += delta;
     if (animationElapsedTime > animation.frameInterval)
@@ -36,10 +36,12 @@ void Sprite::runAnimation()
   animation.currentFrame++;
   if (animation.currentFrame >= animation.frameCount)
   {
-    animation.currentFrame = 0;
-    animation.clippedRect.setX(animation.firstFramePosition.x());
-    animation.clippedRect.setWidth(width);
-    if (!animation.repeat)
+    if (animation.repeat) {
+      animation.currentFrame = 0;
+      animation.clippedRect.setX(animation.firstFramePosition.x());
+      animation.clippedRect.setWidth(width);
+    }
+    else
       emit animationFinished();
   }
   else
