@@ -116,6 +116,13 @@ set(PROJECT_SOURCES
         game/level/combat.cpp
         game/level/textbubbles.h
         game/level/textbubbles.cpp
+        game/animationSequence/ianimationpart.h
+        game/animationSequence/objectanimationpart.h
+        game/animationSequence/objectanimationpart.cpp
+        game/animationSequence/spriteanimationpart.h
+        game/animationSequence/spriteanimationpart.cpp
+        game/animationSequence/animationsequence.h
+        game/animationSequence/animationsequence.cpp
         editor/scripteditorcontroller.h
         editor/scripteditorcontroller.cpp
         gamemanager.h

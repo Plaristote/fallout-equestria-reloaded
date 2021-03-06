@@ -58,6 +58,7 @@ int main(int argc, char *argv[])
 
   qmlRegisterType<Game>("Game", 1,0, "Controller");
   qmlRegisterType<StatModel>("Game", 1,0, "StatModel");
+  qmlRegisterType<Sprite>("Game", 1,0, "Sprite");
   qmlRegisterType<DynamicObject>("Game", 1,0, "DynamicObject");
   qmlRegisterType<Character>("Game", 1,0, "Character");
   qmlRegisterType<StorageObject>("Game", 1,0, "StorageObject");

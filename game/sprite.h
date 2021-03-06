@@ -27,6 +27,7 @@ public:
   void setSpriteAnimation(const SpriteAnimation& value) { animation = value; }
   virtual bool isMoving() const { return spritePosition != spriteMovementTarget; }
   inline bool isFloating() const { return floating; }
+  void setMovementSpeed(float value) { movementSpeed = value; }
 
   Q_INVOKABLE QString getSpriteSource() const { return animation.source; }
   Q_INVOKABLE QRect   getClippedRect() const  { return animation.clippedRect; }

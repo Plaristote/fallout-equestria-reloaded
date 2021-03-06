@@ -28,6 +28,7 @@ class LevelTask : public CombatComponent
   Q_PROPERTY(Character* player READ getPlayer NOTIFY playerChanged)
   Q_PROPERTY(SoundManager* sounds READ getSoundManager)
   Q_PROPERTY(QQmlListProperty<DynamicObject> dynamicObjects READ getQmlObjects NOTIFY objectsChanged)
+  Q_PROPERTY(QQmlListProperty<Sprite>        visualEffects READ getQmlVisualEffects NOTIFY visualEffectsChanged)
 public:
   explicit LevelTask(QObject *parent = nullptr);
   virtual ~LevelTask();
@@ -48,6 +49,8 @@ public:
 
   void registerDynamicObject(DynamicObject*);
   void unregisterDynamicObject(DynamicObject*);
+  void registerVisualEffect(Sprite*);
+  void unregisterVisualEffect(Sprite*);
 
   Q_INVOKABLE QPoint getRenderPositionForTile(int x, int y);
   Q_INVOKABLE DynamicObject* getObjectByName(const QString&);
@@ -57,11 +60,13 @@ public:
   Q_INVOKABLE void deleteObject(DynamicObject* o) { unregisterDynamicObject(o); }
 
   QQmlListProperty<DynamicObject> getQmlObjects() { return QQmlListProperty<DynamicObject>(this, &objects); }
+  QQmlListProperty<Sprite> getQmlVisualEffects() { return QQmlListProperty<Sprite>(this, &visualEffects); }
 
 signals:
   void updated();
   void pausedChanged();
   void objectsChanged();
+  void visualEffectsChanged();
   void tilemapReady();
   void displayConsoleMessage(const QString&);
   void exitZoneEntered(TileZone*);
@@ -84,6 +89,7 @@ private slots:
 
 private:
   QList<DynamicObject*> objects;
+  QList<Sprite*> visualEffects;
 
   QTimer        updateTimer;
   QElapsedTimer clock;

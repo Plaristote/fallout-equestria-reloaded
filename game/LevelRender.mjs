@@ -44,10 +44,18 @@ export class Controller {
     this.eachCase(this.renderTile.bind(this));
     this.renderZones();
     this.eachCase(this.renderCoordinates.bind(this));
+    this.renderVisualEffects();
     this.renderRoofs();
     if (this.level.mouseMode === 0) // if cursor is movement mode
       this.renderMoveCursor();
     this.frameCount++;
+  }
+
+  renderVisualEffects() {
+    const visualEffects = this.level.visualEffects;
+
+    for (var i = 0 ; i < visualEffects.length ; ++i)
+      this.renderSprite(visualEffects[i]);
   }
 
   renderRoofs() {
