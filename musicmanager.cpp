@@ -20,7 +20,8 @@ MusicManager::MusicManager(QObject* parent) : QObject(parent)
   fadingTimer.setSingleShot(false);
   // TODO implements OptionsManager
   //connect(OptionsManager::get(), &OptionsManager::updated, this, &MusicManager::setVolumeToDefault);
-  connect(&fadingTimer,  &QTimer::timeout,            this, &MusicManager::fadeVolume);
+  connect(&fadingTimer, &QTimer::timeout,            this, &MusicManager::fadeVolume);
+  connect(audioManager, &QMediaPlayer::stateChanged, this, &MusicManager::onStateChanged);
   setVolumeToDefault();
 }
 
@@ -87,7 +88,11 @@ void MusicManager::startTrack(const QString& filename)
     throw "quoi";
   currentTrack = filename;
   nextTrack    = currentTrack;
-  delete audioManager;
+  if (audioManager)
+  {
+    disconnect(audioManager, &QMediaPlayer::stateChanged, this, &MusicManager::onStateChanged);
+    audioManager->deleteLater();
+  }
   audioManager = new QMediaPlayer(this);
   audioManager->setMedia(QUrl::fromLocalFile(ASSETS_PATH + "audio/" + currentTrack));
   audioManager->play();
