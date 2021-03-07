@@ -21,7 +21,7 @@ export function findPathTo(actions, target) {
 }
 
 export function areInContact(pos1, pos2) {
-  const distX = Math.max(pos1.x, pos2.x) - Math.min(pos1.x, pos2.y);
+  const distX = Math.max(pos1.x, pos2.x) - Math.min(pos1.x, pos2.x);
   const distY = Math.max(pos1.y, pos2.y) - Math.min(pos1.y, pos2.y);
 
   console.log("Pathfinding.areInContact:", pos1, pos2, distX, distY);

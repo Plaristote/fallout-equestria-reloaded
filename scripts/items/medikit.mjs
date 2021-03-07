@@ -17,6 +17,7 @@ class Medikit extends Item {
 
     healed = healed * this.user.statistics.medicine / 100;
     healed = Math.min(healed, maxHeal);
+    healed = Math.floor(healed);
     stats.hitPoints += healed;
     game.appendToConsole(this.user.statistics.name + " used " + this.model.objectName);
     game.appendToConsole(target.statistics.name + " was healed for " + healed + " hit points");
