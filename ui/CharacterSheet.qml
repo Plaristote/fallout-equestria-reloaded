@@ -38,7 +38,7 @@ Pane {
       anchors.margins: 5
       theme: characterSheet.faceTheme
       color: characterSheet.faceColor
-      accessories: characterSheet.accessories
+      accessories: characterSheet.faceAccessories
     }
     onClicked: faceEditor.open()
     anchors { top: characterNameRow.top; left: characterNameRow.right; leftMargin: 10 }

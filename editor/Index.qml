@@ -11,6 +11,7 @@ Pane {
 
   Controller {
     id: game
+    isGameEditor: true
     Component.onCompleted: {
       getDataEngine().loadFromFile("");
     }

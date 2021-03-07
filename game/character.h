@@ -17,6 +17,8 @@ class Character : public CharacterMovement
   Q_PROPERTY(FieldOfView* fieldOfView MEMBER fieldOfView)
   Q_PROPERTY(ActionQueue* actionQueue MEMBER actionQueue)
   Q_PROPERTY(int actionPoints MEMBER actionPoints NOTIFY actionPointsChanged)
+  // Editor properties
+  Q_PROPERTY(bool isUnique MEMBER isUnique NOTIFY uniqueChanged)
 public:
   explicit Character(QObject *parent = nullptr);
 
@@ -24,6 +26,7 @@ public:
   void load(const QJsonObject&) override;
   void save(QJsonObject&) const override;
   void setScript(const QString&) override;
+  void setCharacterSheet(const QString&);
 
   void         setStatistics(StatModel* value);
   StatModel*   getStatistics() const { return statistics; }
@@ -60,6 +63,8 @@ signals:
   void actionPointsChanged();
   void requireJoinCombat();
   void died();
+  // EDITOR signals
+  void uniqueChanged();
 
 protected:
   virtual QString getScriptPath() const override { return SCRIPTS_PATH + "pnjs"; }
@@ -73,6 +78,7 @@ private slots:
 private:
   QString getDefaultItemForSlot(const QString& name);
 
+  QString characterSheet;
   StatModel* statistics = nullptr;
   FieldOfView* fieldOfView;
   ActionQueue* actionQueue;

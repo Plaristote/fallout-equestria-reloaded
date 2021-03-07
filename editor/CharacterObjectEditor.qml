@@ -20,6 +20,22 @@ DynamicObjectEditor {
       currentIndex: scriptController.getScript("dialogs").indexOf(characterEditor.model.getDialog())
     },
 
+    TerminalLabel { text: "Faction" },
+    TerminalField {
+      text: model.statistics.faction
+      onTextChanged: {
+        model.statistics.faction = text
+      }
+    },
+
+    TerminalLabel { text: "Unique" },
+    TerminalCheckBox {
+      checked: model.isUnique
+      onCheckedChanged: {
+        model.isUnique = checked
+      }
+    },
+
     TerminalButton {
       Layout.columnSpan: 2
       Layout.alignment: Qt.AlignCenter

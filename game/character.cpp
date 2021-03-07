@@ -206,6 +206,15 @@ void Character::setScript(const QString& name)
   initializeEmptySlots();
 }
 
+void Character::setCharacterSheet(const QString& name)
+{
+  auto* charSheet = Game::get()->getDataEngine()->makeStatModel(getObjectName(), name);
+
+  characterSheet = name;
+  charSheet->setParent(this);
+  setStatistics(charSheet);
+}
+
 void Character::setStatistics(StatModel *value)
 {
   if (statistics)
@@ -221,15 +230,22 @@ void Character::load(const QJsonObject& data)
   QString objectName = data["objectName"].toString();
   StatModel* charSheet;
 
+  characterSheet = data["charsheet"].toString(objectName);
   isUnique = data["uniq"].toBool();
   enemyFlag = static_cast<unsigned int>(data["enemyFlag"].toInt(0));
   actionPoints = data["ap"].toInt();
   if (isUnique)
-    charSheet = Game::get()->getDataEngine()->makeStatModel(objectName);
+  {
+    charSheet = Game::get()->getDataEngine()->makeStatModel(getObjectName(), characterSheet);
+    charSheet->setParent(this);
+  }
   else
   {
     charSheet = new StatModel(this);
-    charSheet->fromJson(data["stats"].toObject());
+    if (data["stats"]["name"].toString().length() == 0)
+      charSheet = Game::get()->getDataEngine()->makeStatModel(getObjectName(), characterSheet);
+    else
+      charSheet->fromJson(data["stats"].toObject());
   }
   setStatistics(charSheet);
   CharacterMovement::load(data);
@@ -237,17 +253,21 @@ void Character::load(const QJsonObject& data)
 
 void Character::save(QJsonObject& data) const
 {
+  data["charsheet"] = characterSheet;
   data["uniq"] = isUnique;
   data["enemyFlag"] = static_cast<int>(enemyFlag);
   data["ap"] = actionPoints;
-  if (isUnique)
-    Game::get()->getDataEngine()->saveStatModel(getObjectName(), statistics);
-  else
+  if (!(Game::get()->property("isGameEditor").toBool()))
   {
-    QJsonObject statData;
+    if (isUnique)
+      Game::get()->getDataEngine()->saveStatModel(getObjectName(), statistics);
+    else
+    {
+      QJsonObject statData;
 
-    statistics->toJson(statData);
-    data.insert("stats", statData);
+      statistics->toJson(statData);
+      data.insert("stats", statData);
+    }
   }
   CharacterMovement::save(data);
 }

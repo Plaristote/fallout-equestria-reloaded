@@ -75,6 +75,7 @@ void ScriptEditorController::loadCharacterSheet(const QString &name, StatModel* 
   {
     model->fromJson(QJsonObject());
     model->setProperty("specialPoints", 5);
+    model->setHitPoints(model->get_maxHitPoints());
   }
 }
 

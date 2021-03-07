@@ -4,14 +4,16 @@ import "./ui"
 
 Rectangle {
   property QtObject gameController
+  property QtObject statModel: gameController.getPlayerStatistics()
   anchors.fill: parent
   color: "black"
 
   CharacterSheet {
     anchors.fill: parent
-    characterSheet: gameController.getPlayerStatistics()
+    characterSheet: statModel
 
     Component.onCompleted: {
+      characterSheet.hitPoints = characterSheet.maxHitPoints
       characterSheet.specialPoints = 5;
     }
 
@@ -23,6 +25,13 @@ Rectangle {
     onCanceled: {
       application.popView()
       gameManager.endGame();
+    }
+  }
+
+  Connections {
+    target: statModel
+    function onStatisticsChanged() {
+      statModel.hitPoints = statModel.maxHitPoints
     }
   }
 }

@@ -283,7 +283,7 @@ Character* LevelTask::generateCharacter(const QString &name, const QString &char
 {
   Character* object = new Character(this);
   object->setObjectName(name);
-  object->setStatistics(Game::get()->getDataEngine()->makeStatModel(characterSheet));
+  object->setCharacterSheet(characterSheet);
   registerDynamicObject(object);
   return object;
 }

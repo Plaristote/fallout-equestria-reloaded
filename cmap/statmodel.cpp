@@ -46,16 +46,17 @@ void StatModel::levelUp()
   level       += 1;
   skillPoints += get_skillRate();
   lastPerk    += 1;
-  hitPoints   += endurance / 3 > 0 ? 1 : endurance / 3;
+  hitPoints   += 3;
   if (lastPerk >= get_perkRate())
   {
     availablePerks++;
     lastPerk = 0;
     emit availablePerksChanged();
   }
+  updateBaseValues();
   emit levelChanged();
   emit skillPointsChanged();
-  emit statisticsChanged();
+  emit hitPointsChanged();
 }
 
 void StatModel::updateBaseValues()
@@ -160,6 +161,15 @@ void StatModel::toggleTrait(const QString& name, bool value)
       break ;
     }
   }
+}
+
+void StatModel::toggleFaceAccessory(const QString& name)
+{
+  if (faceAccessories.indexOf(name) >= 0)
+    faceAccessories.removeAll(name);
+  else
+    faceAccessories << name;
+  emit faceAccessoriesChanged();
 }
 
 void StatModel::confirmChanges()

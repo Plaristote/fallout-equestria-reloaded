@@ -15,6 +15,9 @@ Item {
 
   StatModel {
     id: statController
+    onStatisticsChanged: {
+      hitPoints = maxHitPoints;
+    }
   }
 
   Dialog {

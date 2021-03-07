@@ -21,6 +21,7 @@ class Game : public QObject
   Q_PROPERTY(CharacterParty* playerParty MEMBER playerParty)
   Q_PROPERTY(DataEngine*     dataEngine  MEMBER dataEngine)
   Q_PROPERTY(TimeManager*    timeManager MEMBER timeManager)
+  Q_PROPERTY(bool isGameEditor MEMBER isGameEditor)
 
   static Game* instance;
 
@@ -66,6 +67,7 @@ public slots:
   void deleteLater();
 
 private:
+  bool isGameEditor = false;
   DataEngine* dataEngine = nullptr;
   TimeManager* timeManager;
   WorldDiplomacy* diplomacy;
