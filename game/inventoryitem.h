@@ -39,6 +39,7 @@ public:
   Q_INVOKABLE bool     isCombatItem();
   Q_INVOKABLE bool     isInRange(DynamicObject* target);
   Q_INVOKABLE QJSValue useOn(DynamicObject* target);
+  Q_INVOKABLE int      getUseSuccessRate(DynamicObject* target);
 
 signals:
   void itemTypeChanged();

@@ -173,5 +173,22 @@
         <file>assets/sprites/characters/unicorn-purple.png</file>
         <file>assets/musics.json</file>
         <file>assets/audio.json</file>
+        <file>assets/faces/stallion-basic/accessories/eye-patch.png</file>
+        <file>assets/faces/stallion-basic/accessories/eye-scar.png</file>
+        <file>assets/faces/stallion-basic/accessories/fancypants.png</file>
+        <file>assets/faces/stallion-basic/accessories/square-glasses.png</file>
+        <file>assets/faces/stallion-basic/eyes/angry.png</file>
+        <file>assets/faces/stallion-basic/eyes/cocky.png</file>
+        <file>assets/faces/stallion-basic/eyes/neutral.png</file>
+        <file>assets/faces/stallion-basic/eyes/sad.png</file>
+        <file>assets/faces/stallion-basic/eyes/smile.png</file>
+        <file>assets/faces/stallion-basic/mouthes/angry.png</file>
+        <file>assets/faces/stallion-basic/mouthes/cocky.png</file>
+        <file>assets/faces/stallion-basic/mouthes/neutral.png</file>
+        <file>assets/faces/stallion-basic/mouthes/sad.png</file>
+        <file>assets/faces/stallion-basic/mouthes/smile.png</file>
+        <file>assets/faces/stallion-basic/base.png</file>
+        <file>game/LevelInteractionOverlay.qml</file>
+        <file>game/UsageSuccessHint.qml</file>
     </qresource>
 </RCC>

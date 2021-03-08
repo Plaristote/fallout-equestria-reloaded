@@ -13,6 +13,8 @@ Canvas {
   property var controller;
   property var hoverTile: [];
   property bool hoverTileHintVisible: false
+  property QtObject hoveredObject
+  property bool hoveredObjectEnabled: levelController.mouseMode === 2
 
   Component.onCompleted: {
     preloadImages();
@@ -50,16 +52,35 @@ Canvas {
       else
         controller.onMouseClick(mouse, mouseX, mouseY);
     }
-    onMouseXChanged: hoverTile = controller.getHoveredCase(mouseX - canvas.origin.x, mouseY - canvas.origin.y);
-    onMouseYChanged: hoverTile = controller.getHoveredCase(mouseX - canvas.origin.x, mouseY - canvas.origin.y);
+    onMouseXChanged: onMouseMoved()
+    onMouseYChanged: onMouseMoved()
     cursorShape: enabled ? Qt.BlankCursor : Qt.ArrowCursor
+
+    function onMouseMoved() {
+      hoverTile = controller.getHoveredCase(mouseX - canvas.origin.x, mouseY - canvas.origin.y);
+      if (hoveredObjectEnabled)
+        hoveredObject = controller.getHoveredObject(mouseX - canvas.origin.x, mouseY - canvas.origin.y);
+      else
+        hoveredObject = null;
+    }
+  }
+
+  LevelInteractionOverlay {
+    levelController: canvas.levelController
+    controller:      canvas.controller
   }
 
   LevelCursor {
+    id: levelCursor
     visible: mouseArea.containsMouse && (mouseMode !== 0 || !canvas.hoverTileHintVisible)
     mouseMode: levelController.mouseMode
     mouseX: mouseArea.mouseX
     mouseY: mouseArea.mouseY
+
+    UsageSuccessHint {
+      levelController: canvas.levelController
+      target: hoveredObject
+    }
   }
 
   function initializeRenderer() {

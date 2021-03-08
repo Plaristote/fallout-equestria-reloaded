@@ -26,6 +26,8 @@ void Sprite::setAnimation(const QString &animationName)
   animationElapsedTime = 0;
   animation = library->getAnimation(name, animationName);
   shadow = library->getAnimation(name, "shadow");
+  emit spriteSourceChanged();
+  emit clippedRectChanged();
 }
 
 void Sprite::runAnimation()
@@ -46,12 +48,14 @@ void Sprite::runAnimation()
   }
   else
     animation.clippedRect.adjust(width, 0, width, 0);
+  emit clippedRectChanged();
 }
 
 void Sprite::setRenderPosition(QPoint coordinates)
 {
   spritePosition = coordinates;
   spriteMovementTarget = coordinates;
+  emit spritePositionChanged();
 }
 
 void Sprite::moveToCoordinates(QPoint coordinates)
@@ -80,6 +84,7 @@ void Sprite::runMovement(qint64 delta)
   else if (distY > distX) { movementSpeedX = movementSpeed * (static_cast<float>(distX) / static_cast<float>(distY)); }
   spritePosition.setX(axisMovement(spritePosition.x(), spriteMovementTarget.x(), static_cast<int>(movementSpeedX)));
   spritePosition.setY(axisMovement(spritePosition.y(), spriteMovementTarget.y(), static_cast<int>(movementSpeedY)));
+  emit spritePositionChanged();
   if (spritePosition == spriteMovementTarget)
     emit movementFinished(this);
 }

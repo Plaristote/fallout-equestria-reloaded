@@ -18,7 +18,7 @@ QString InventoryItem::getItemType() const
 
   if (itemData.isObject())
     return itemData["type"].toString("misc");
-  return "misc";
+  return "weapon";
 }
 
 QStringList InventoryItem::getAvailableInteractions()
@@ -144,6 +144,20 @@ QJSValue InventoryItem::useOn(DynamicObject* target)
     return script->call("attemptToUseOn", args);
   }
   return false;
+}
+
+int InventoryItem::getUseSuccessRate(DynamicObject* target)
+{
+  if (script && script->hasMethod("getUseSuccessRate"))
+  {
+    QJSValueList args;
+
+    args << Game::get()->getScriptEngine().newQObject(target);
+    return script->call("getUseSuccessRate", args).toInt();
+  }
+  else if (isInRange(target))
+    return 95;
+  return 0;
 }
 
 void InventoryItem::updateScript()

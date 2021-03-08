@@ -13,6 +13,9 @@ class Sprite : public QObject
   Q_OBJECT
 
   Q_PROPERTY(bool floating MEMBER floating NOTIFY floatingChanged)
+  Q_PROPERTY(QString spriteSource   READ getSpriteSource   NOTIFY spriteSourceChanged)
+  Q_PROPERTY(QPoint  spritePosition READ getSpritePosition NOTIFY spritePositionChanged)
+  Q_PROPERTY(QRect   clippedRect    READ getClippedRect    NOTIFY clippedRectChanged)
 public:
   explicit Sprite(QObject *parent = nullptr);
 
@@ -24,7 +27,6 @@ public:
   Q_INVOKABLE QString getAnimation() const { return animation.name; }
   void moveToCoordinates(QPoint coordinates);
   Q_INVOKABLE void setRenderPosition(QPoint coordinates);
-  void setSpriteAnimation(const SpriteAnimation& value) { animation = value; }
   virtual bool isMoving() const { return spritePosition != spriteMovementTarget; }
   inline bool isFloating() const { return floating; }
   void setMovementSpeed(float value) { movementSpeed = value; }
@@ -39,6 +41,9 @@ public:
   void save(QJsonObject&) const;
 
 signals:
+  void spriteSourceChanged();
+  void spritePositionChanged();
+  void clippedRectChanged();
   void animationFinished();
   void movementFinished(Sprite*);
   void floatingChanged();

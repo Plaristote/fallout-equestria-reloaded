@@ -188,16 +188,20 @@ export class Controller {
     this.context.restore();
   }
 
+  getAdjustedOffset(offset, clippedRect) {
+    const extraHeight = clippedRect.height - this.tileSize.height;
+
+    return Qt.point(
+      offset.x + (this.tileSize.width / 2 - clippedRect.width / 2),
+      offset.y - extraHeight
+    );
+  }
+
   getAdjustedOffsetFor(sprite) {
     const offset = sprite.getSpritePosition();
 
-    if (!sprite.floating) {
-      const clippedRect = sprite.getClippedRect();
-      const extraHeight = clippedRect.height - this.tileSize.height;
-
-      offset.y -= extraHeight;
-      offset.x += this.tileSize.width / 2 - clippedRect.width / 2;
-    }
+    if (!sprite.floating)
+      return this.getAdjustedOffset(offset, sprite.getClippedRect());
     return offset;
   }
 

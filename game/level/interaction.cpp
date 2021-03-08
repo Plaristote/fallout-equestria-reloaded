@@ -69,9 +69,17 @@ void InteractionComponent::setActiveItem(const QString& slotName)
   mouseMode = TargetCursor;
   activeItemSlot = slotName;
   activeItem = Game::get()->getPlayer()->getInventory()->getEquippedItem(slotName);
+  activeItem->getItemType();
   activeSkill = "";
   emit activeItemChanged();
   emit mouseModeChanged();
+}
+
+int InteractionComponent::getTargetMode() const
+{
+  if (activeItem && activeItem->getItemType() == "weapon")
+    return CharacterTarget;
+  return AnyTarget;
 }
 
 void InteractionComponent::objectClicked(DynamicObject* object)
