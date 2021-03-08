@@ -118,8 +118,13 @@ void CombatComponent::onNextCombatTurn()
   Character* current;
 
   previous = combattants.at(combatIterator);
-  if (isPlayerTurn() && tryToEndCombat())
-    return ;
+  if (isPlayerTurn())
+  {
+    if (mouseMode != MovementCursor)
+      swapMouseMode();
+    if (tryToEndCombat())
+      return ;
+  }
   combatIterator = combatIterator + 1 >= combattants.size() ? 0 : combatIterator  + 1;
   current  = combattants.at(combatIterator);
   if (previous && previous->isAlive())

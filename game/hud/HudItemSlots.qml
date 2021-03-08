@@ -6,6 +6,7 @@ import "../../ui"
 
 Item {
   property QtObject inventory
+  property QtObject activeItem
   property int focusedItem: 0
   id: itemSlotsPane
 
@@ -42,6 +43,7 @@ Item {
       delegate: Button {
         property string slotName: itemSlotsRepeater.model[index]
         property QtObject slotItem: itemSlotsPane.inventory.getEquippedItem(slotName)
+        property bool activated: activeItem === slotItem
 
         anchors { top: parent.top; bottom: parent.bottom }
         width: 200
@@ -55,6 +57,12 @@ Item {
           source: background
           visible: parent.hovered
           color: Qt.rgba(155, 155, 155, 0.3)
+        }
+        ColorOverlay {
+          anchors.fill: parent
+          source: background
+          visible: parent.activated
+          color: Qt.rgba(200, 200, 0, 0.5)
         }
         Text {
           anchors.top: parent.top

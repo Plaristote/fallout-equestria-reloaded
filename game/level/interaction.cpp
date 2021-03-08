@@ -59,7 +59,10 @@ void InteractionComponent::swapMouseMode()
       mouseMode = InteractionCursor;
       break ;
   }
-  activeItem = nullptr;
+  if (activeItem) {
+    activeItem = nullptr;
+    emit activeItemChanged();
+  }
   activeSkill = "";
   emit mouseModeChanged();
 }

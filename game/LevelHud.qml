@@ -60,6 +60,7 @@ Pane {
     anchors.top: actionPointPane.bottom
     anchors.bottom: parent.bottom
     anchors.bottomMargin: 1
+    activeItem: levelController.activeItem
     onItemActivated: levelController.setActiveItem(activatedSlot)
   }
 
