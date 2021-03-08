@@ -135,6 +135,16 @@ float Character::getDistance(const DynamicObject* target) const
   return std::sqrt(static_cast<float>(a * a + b * b));
 }
 
+float Character::getDistance(DynamicObject* target) const
+{
+  auto self  = getPosition();
+  auto other = target->getPosition();
+  auto a = self.x() - other.x();
+  auto b = self.y() - other.y();
+
+  return std::sqrt(static_cast<float>(a * a + b * b));
+}
+
 void Character::initializeFaction()
 {
   auto* characterSheet = getStatistics();

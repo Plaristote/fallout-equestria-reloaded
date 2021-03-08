@@ -50,7 +50,8 @@ public:
   Q_INVOKABLE void setAsEnemy(Character*);
   Q_INVOKABLE bool hasLineOfSight(const Character*) const;
   Q_INVOKABLE bool isSneaking() const { return sneakEnabled; }
-  Q_INVOKABLE float getDistance(const DynamicObject*) const;
+  float             getDistance(const DynamicObject*) const;
+  Q_INVOKABLE float getDistance(DynamicObject* v) const;
 
   Q_INVOKABLE void takeDamage(int damage, Character* dealer);
   Q_INVOKABLE bool useActionPoints(int amount = 1, const QString& motive = "");
