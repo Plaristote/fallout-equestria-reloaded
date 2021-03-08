@@ -9,6 +9,7 @@ import Game 1.0
 DynamicObjectEditor {
   id: characterEditor
   scriptCategory: "pnjs"
+  withInteractionPosition: false
 
   signal openInventoryClicked()
 

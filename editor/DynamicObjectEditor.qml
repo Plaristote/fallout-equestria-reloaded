@@ -13,6 +13,7 @@ Pane {
   property alias fields: additionalFields.children
   property bool readOnlyPositionType: false
   property bool readOnlyAnimation: false
+  property bool withInteractionPosition: true
   id: objectEditor
   background: UiStyle.TerminalPane {}
 
@@ -38,24 +39,34 @@ Pane {
     model.setRenderPosition(Qt.point(renderX, renderY));
   }
 
+  function interactionPositionChanged() {
+    model.setInteractionPosition(
+      parseInt(interactionXInput.text),
+      parseInt(interactionYInput.text)
+    );
+  }
+
   signal removeClicked()
 
   onModelChanged: {
-    const posMode        = model.floating ? 1 : 0;
-    const spriteName     = model.getSpriteName();
-    const animationName  = model.getAnimation();
-    const position       = model.getPosition();
-    const renderPosition = model.getSpritePosition();
+    const posMode             = model.floating ? 1 : 0;
+    const spriteName          = model.getSpriteName();
+    const animationName       = model.getAnimation();
+    const position            = model.getPosition();
+    const renderPosition      = model.getSpritePosition();
+    const interactionPosition = model.getInteractionPosition();
 
     readOnlyPositionType = model.getObjectType() === "Character";
     readOnlyAnimation    = model.getObjectType() === "Character";
     spriteInput.currentIndex      = spriteInput.model.indexOf(spriteName);
     animationInput.currentIndex   = animationInput.model.indexOf(animationName);
     positioningInput.currentIndex = posMode
-    gridXInput.text   = position.x;
-    gridYInput.text   = position.y;
-    renderXInput.text = renderPosition.x;
-    renderYInput.text = renderPosition.y;
+    gridXInput.text        = position.x;
+    gridYInput.text        = position.y;
+    renderXInput.text      = renderPosition.x;
+    renderYInput.text      = renderPosition.y;
+    interactionXInput.text = interactionPosition.x;
+    interactionYInput.text = interactionPosition.y;
   }
 
   Column {
@@ -86,6 +97,13 @@ Pane {
       Row {
         TerminalField { id: gridXInput; onTextChanged: objectEditor.positionChanged() }
         TerminalField { id: gridYInput; onTextChanged: objectEditor.positionChanged() }
+      }
+
+      TerminalLabel { text: "Interaction position"; visible: objectEditor.withInteractionPosition }
+      Row {
+        visible: objectEditor.withInteractionPosition
+        TerminalField { id: interactionXInput; onTextChanged: objectEditor.interactionPositionChanged(); }
+        TerminalField { id: interactionYInput; onTextChanged: objectEditor.interactionPositionChanged(); }
       }
 
       TerminalLabel { text: "Script" }

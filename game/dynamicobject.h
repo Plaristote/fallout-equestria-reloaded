@@ -51,6 +51,7 @@ public:
   Q_INVOKABLE virtual QPoint getInteractionPosition() const { return interactionPosition; }
   virtual QStringList getAvailableInteractions();
   void setPosition(QPoint value) { position = value; }
+  Q_INVOKABLE void setInteractionPosition(int x, int y) { setInteractionPosition(QPoint(x, y)); }
   void setInteractionPosition(QPoint value) { interactionPosition = value; }
 
   Q_INVOKABLE TileZone* addControlZone();
