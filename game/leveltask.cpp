@@ -268,7 +268,7 @@ void LevelTask::update()
     {
       auto* combattant = combattants.at(combatIterator);
 
-      if (combattant->getActionPoints() > 0)
+      if (combattant->getActionPoints() > 0 || !combattant->getActionQueue()->isEmpty())
         combattant->getActionQueue()->update();
       else
         onNextCombatTurn();

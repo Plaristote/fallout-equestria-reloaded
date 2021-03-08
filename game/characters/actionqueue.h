@@ -15,6 +15,7 @@ public:
 
   void update();
   Q_INVOKABLE void reset();
+  Q_INVOKABLE inline bool isEmpty() { return queue.empty(); }
 
   Q_INVOKABLE int getInteractionApCost(DynamicObject*, const QString& interactionName) const;
   Q_INVOKABLE int getItemUseApCost(DynamicObject* target, const QString& itemSlot) const;
