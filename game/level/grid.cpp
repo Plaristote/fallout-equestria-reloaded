@@ -1,9 +1,24 @@
 #include "grid.h"
 #include "game/characters/actionqueue.h"
+#include "tilemap/tilezone.h"
 
 GridComponent::GridComponent(QObject *parent) : QObject(parent)
 {
   grid = new LevelGrid(this);
+}
+
+void GridComponent::registerZone(TileZone* zone)
+{
+  grid->registerZone(zone);
+  connect(zone, &TileZone::enteredZone, this, &GridComponent::onZoneEntered, Qt::QueuedConnection);
+  connect(zone, &TileZone::exitedZone,  this, &GridComponent::onZoneExited,  Qt::QueuedConnection);
+}
+
+void GridComponent::unregisterZone(TileZone* zone)
+{
+  disconnect(zone, &TileZone::enteredZone, this, &GridComponent::onZoneEntered);
+  disconnect(zone, &TileZone::exitedZone,  this, &GridComponent::onZoneExited);
+  grid->unregisterZone(zone);
 }
 
 void GridComponent::registerDynamicObject(DynamicObject* object)
@@ -14,9 +29,7 @@ void GridComponent::registerDynamicObject(DynamicObject* object)
 
     characterObservers.insert(character, {
       connect(character, &Sprite::movementFinished, this, [this, character]() { onMovementFinished(character); }),
-      connect(character, &Character::died, this, [this, character]() {
-                                  qDebug() << "vbvbvbzbitoiu";
-                                  onCharacterDied(character); })
+      connect(character, &Character::died, this, [this, character]() { onCharacterDied(character); })
     });
   }
 }
@@ -43,6 +56,27 @@ void GridComponent::addCharacterObserver(Character* character, QMetaObject::Conn
 DynamicObject* GridComponent::getOccupantAt(QPoint position)
 {
   return grid->getOccupant(position.x(), position.y());
+}
+
+void GridComponent::onZoneEntered(DynamicObject* object, TileZone* zone)
+{
+  if (object->isCharacter())
+  {
+    Character* character = reinterpret_cast<Character*>(object);
+
+    if (!character->isInZone(zone))
+    {
+      character->onZoneEntered(zone);
+      if (zone->getType() == "exit" && object == getPlayer())
+        emit exitZoneEntered(zone);
+    }
+  }
+}
+
+void GridComponent::onZoneExited(DynamicObject* object, TileZone* zone)
+{
+  if (object->isCharacter())
+    reinterpret_cast<Character*>(object)->onZoneExited(zone);
 }
 
 void GridComponent::onCharacterDied(Character* character)
@@ -120,7 +154,7 @@ bool GridComponent::moveTo(Character* character, QPoint targetPosition)
 
     while (currentPath.size() > 1)
       currentPath.pop_back();
-    for (auto point : path)
+    for (auto point : qAsConst(path))
       currentPath.append(point);
     if (character->getCurrentPath().size() > 0)
     {

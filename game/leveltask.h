@@ -69,7 +69,6 @@ signals:
   void visualEffectsChanged();
   void tilemapReady();
   void displayConsoleMessage(const QString&);
-  void exitZoneEntered(TileZone*);
   void cameraFocusRequired(DynamicObject*);
   void clickedOnCase(int x, int y);
   void clickedOnObject(DynamicObject*);
@@ -82,8 +81,6 @@ private slots:
   void update();
   void onPauseChanged();
 
-  void onZoneEntered(DynamicObject*, TileZone*);
-  void onZoneExited(DynamicObject*, TileZone*);
   void registerControlZone(TileZone*);
   void unregisterControlZone(TileZone*);
 

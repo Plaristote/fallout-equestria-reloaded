@@ -8,6 +8,7 @@
 class TileMap;
 class TileZone;
 class DynamicObject;
+class Character;
 
 class LevelGrid : public QObject
 {
@@ -17,9 +18,9 @@ class LevelGrid : public QObject
   {
     bool                      occupied = false;
     DynamicObject*            occupant = nullptr;
-    TileZone*                 zone     = nullptr;
     QPoint                    position;
     std::vector<CaseContent*> successors;
+    QVector<TileZone*>        zones;
 
     bool  isBlocked() const;
     bool  operator==(const CaseContent& other) { return position == other.position; }
@@ -41,7 +42,10 @@ public:
   bool findPath(QPoint from, QPoint to, QList<QPoint>& path);
   bool moveObject(DynamicObject*, int x, int y);
   void removeObject(DynamicObject*);
-  void triggerZone(DynamicObject*, int x, int y);
+  void triggerZone(Character*, int x, int y);
+  void registerZone(TileZone*);
+  void unregisterZone(TileZone*);
+  void eachCase(std::function<void (int x, int y, CaseContent&)> callback, QPoint from = QPoint(0,0), QPoint to = QPoint(0,0));
 
 private:
   CaseContent* getGridCase(int x, int y);

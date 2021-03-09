@@ -13,6 +13,7 @@ class GridComponent : public QObject
 public:
   explicit GridComponent(QObject *parent = nullptr);
 
+  virtual Character* getPlayer() = 0;
   virtual QPoint getRenderPositionForTile(int x, int y) = 0;
 
   LevelGrid*                 getGrid() const { return grid; }
@@ -21,6 +22,8 @@ public:
 
   void             registerDynamicObject(DynamicObject*);
   void             unregisterDynamicObject(DynamicObject*);
+  void             registerZone(TileZone*);
+  void             unregisterZone(TileZone*);
   Q_INVOKABLE bool moveTo(Character* character, int x, int y) { return moveTo(character, QPoint(x, y)); }
   bool             moveTo(Character*, QPoint);
 
@@ -28,14 +31,19 @@ public:
   void setCharacterPosition(Character*, int x, int y);
   Q_INVOKABLE void setObjectPosition(DynamicObject*, int x, int y);
 
+signals:
+  void exitZoneEntered(TileZone*);
+
 protected slots:
   virtual void onMovementFinished(Character*);
   virtual void onCharacterDied(Character*);
+  void         onZoneEntered(DynamicObject*, TileZone*);
+  void         onZoneExited(DynamicObject*, TileZone*);
 
 protected:
   void addCharacterObserver(Character*, QMetaObject::Connection);
 
-  LevelGrid* grid;
+  LevelGrid* grid = nullptr;
 private:
   QMap<Character*, QVector<QMetaObject::Connection>> characterObservers;
 };

@@ -39,6 +39,7 @@ public:
   void         setUnique(bool value) { isUnique = value; }
   bool         isMoving() const { return Sprite::isMoving() || currentPath.size() > 0; }
   int          getZIndex() const override { return isAlive() ? 2 : 1; }
+  const QVector<TileZone*>& getCurrentZones() const { return currentZones; }
 
   Q_INVOKABLE QPoint getInteractionPosition() const override;
   bool isBlockingPath() const override { return isAlive(); }
@@ -47,6 +48,7 @@ public:
   Q_INVOKABLE bool isAlive() const { return getStatistics()->getHitPoints() > 0; }
   Q_INVOKABLE bool isAlly(const Character*) const;
   Q_INVOKABLE bool isEnemy(const Character*) const;
+  Q_INVOKABLE bool isInZone(TileZone* value) const { return currentZones.indexOf(value) >= 0; }
   Q_INVOKABLE void setAsEnemy(Character*);
   Q_INVOKABLE bool hasLineOfSight(const Character*) const;
   Q_INVOKABLE bool isSneaking() const { return sneakEnabled; }
@@ -66,9 +68,11 @@ signals:
   void died();
   // EDITOR signals
   void uniqueChanged();
+  void statisticsChanged();
 
-protected:
-  virtual QString getScriptPath() const override { return SCRIPTS_PATH + "pnjs"; }
+public slots:
+  void onZoneEntered(TileZone* value) { currentZones.append(value); }
+  void onZoneExited(TileZone* value) { currentZones.removeOne(value); }
 
 private slots:
   void initializeFaction();
@@ -77,6 +81,7 @@ private slots:
   void onActionQueueCompleted();
 
 private:
+  virtual QString getScriptPath() const override { return SCRIPTS_PATH + "pnjs"; }
   QString getDefaultItemForSlot(const QString& name);
 
   QString characterSheet;
@@ -88,6 +93,7 @@ private:
   bool sneakEnabled = false;
   unsigned int enemyFlag = 0;
   int actionPoints = 0;
+  QVector<TileZone*> currentZones;
 };
 
 #endif // CHARACTER_H

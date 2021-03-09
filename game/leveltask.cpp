@@ -51,10 +51,7 @@ void LevelTask::load(const QString& levelName, DataEngine* dataEngine)
   if (dataEngine->isLevelActive(name))
     loadObjectsFromDataEngine(dataEngine);
   for (auto* zone : tilemap->getZones())
-  {
-    connect(zone, &TileZone::enteredZone, this, &LevelTask::onZoneEntered, Qt::QueuedConnection);
-    connect(zone, &TileZone::exitedZone,  this, &LevelTask::onZoneExited,  Qt::QueuedConnection);
-  }
+    registerZone(zone);
 }
 
 void LevelTask::loadObjectsFromDataEngine(DataEngine* dataEngine)
@@ -103,24 +100,6 @@ void LevelTask::save(DataEngine* dataEngine)
   }
   levelData["objects"] = objectArray;
   dataEngine->setLevelData(name, levelData);
-}
-
-void LevelTask::onZoneEntered(DynamicObject* object, TileZone* zone)
-{
-  if (object == getPlayer())
-  {
-    displayConsoleMessage("Zone entered: " + zone->getName());
-    if (zone->getType() == "exit")
-      emit exitZoneEntered(zone);
-  }
-}
-
-void LevelTask::onZoneExited(DynamicObject* object, TileZone* zone)
-{
-  if (object == getPlayer())
-  {
-    displayConsoleMessage("Zone exited: " + zone->getName());
-  }
 }
 
 void LevelTask::tileClicked(int x, int y)
@@ -190,12 +169,12 @@ void LevelTask::unregisterVisualEffect(Sprite* sprite)
 
 void LevelTask::registerControlZone(TileZone* zone)
 {
-  tilemap->addTileZone(zone);
+  registerZone(zone);
 }
 
 void LevelTask::unregisterControlZone(TileZone* zone)
 {
-  tilemap->removeTileZone(zone);
+  unregisterZone(zone);
 }
 
 QList<Character*> LevelTask::findCharacters(std::function<bool (Character &)> compare)

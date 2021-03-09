@@ -1,14 +1,22 @@
 #include "levelgrid.h"
 #include "tilemap/tilemap.h"
 #include "dynamicobject.h"
+#include "character.h"
 #include "astar.hpp"
 #include <cmath>
 
 bool LevelGrid::CaseContent::isBlocked() const
 {
-  if (zone && zone->getAccessBlocked())
-    return true;
-  return occupied;
+  if (!occupied)
+  {
+    for (const auto* zone : zones)
+    {
+      if (zone->getAccessBlocked())
+        return true;
+    }
+    return false;
+  }
+  return true;
 }
 
 LevelGrid::LevelGrid(QObject *parent) : QObject(parent)
@@ -22,26 +30,50 @@ void LevelGrid::initializeGrid(TileMap* tilemap)
 
   size = tilemap->getSize();
   grid.resize(size.width() * size.height());
-  for (int x = 0 ; x < size.width() ; ++x)
+  eachCase([wallLayer](int x, int y, CaseContent& gridCase)
   {
-    for (int y = 0 ; y < size.height() ; ++y)
+    gridCase.occupied = wallLayer->getTile(x, y) != nullptr;
+    gridCase.position = QPoint(x, y);
+  });
+  initializePathfinding();
+}
+
+void LevelGrid::eachCase(std::function<void (int x, int y, CaseContent&)> callback, QPoint from, QPoint to)
+{
+  if (to.x() == 0 && to.y() == 0)
+    to = QPoint(size.width(), size.height());
+  for (int x = from.x() ; x < to.x() ; ++x)
+  {
+    for (int y = from.y() ; y < to.y() ; ++y)
     {
-      int position = y * size.width() + x;
+      int          position = y * size.width() + x;
       CaseContent& gridCase = grid[position];
 
-      gridCase.occupied = wallLayer->getTile(x, y) != nullptr;
-      gridCase.position = QPoint(x, y);
-      for (auto* zone : zones)
-      {
-        if (zone->isInside(x, y))
-        {
-          gridCase.zone = zone;
-          break ;
-        }
-      }
+      callback(x, y, gridCase);
     }
   }
-  initializePathfinding();
+}
+
+void LevelGrid::registerZone(TileZone* zone)
+{
+  for (const QPoint position : zone->getPositions())
+  {
+    CaseContent* gridCase = getGridCase(position.x(), position.y());
+
+    if (gridCase)
+      gridCase->zones.append(zone);
+  }
+}
+
+void LevelGrid::unregisterZone(TileZone* zone)
+{
+  for (const QPoint position : zone->getPositions())
+  {
+    CaseContent* gridCase = getGridCase(position.x(), position.y());
+
+    if (gridCase)
+      gridCase->zones.removeOne(zone);
+  }
 }
 
 void LevelGrid::initializePathfinding()
@@ -161,8 +193,12 @@ void LevelGrid::removeObject(DynamicObject* object)
   if (gridCase && gridCase->occupant == object)
   {
     setCaseOccupant(*gridCase, nullptr);
-    if (gridCase->zone)
-      emit gridCase->zone->exitedZone(object, gridCase->zone);
+    for (auto* zone : gridCase->zones)
+    {
+      if (object->isCharacter())
+        reinterpret_cast<Character*>(object)->onZoneExited(zone);
+      emit zone->exitedZone(object, zone);
+    }
   }
 }
 
@@ -176,11 +212,7 @@ bool LevelGrid::moveObject(DynamicObject* object, int x, int y)
     auto*  oldCase = getGridCase(currentPosition.x(), currentPosition.y());
 
     if (oldCase && oldCase->occupant == object)
-    {
       setCaseOccupant(*oldCase, nullptr);
-      if (oldCase->zone && oldCase->zone != gridCase->zone)
-        emit oldCase->zone->exitedZone(object, oldCase->zone);
-    }
     setCaseOccupant(*gridCase, object);
     return true;
   }
@@ -193,15 +225,19 @@ bool LevelGrid::moveObject(DynamicObject* object, int x, int y)
   return false;
 }
 
-void LevelGrid::triggerZone(DynamicObject* object, int x, int y)
+void LevelGrid::triggerZone(Character* character, int x, int y)
 {
   auto* gridCase = getGridCase(x, y);
+  const QVector<TileZone*> lastZones = character->getCurrentZones();
 
-  if (gridCase && gridCase->zone && gridCase->zone->getName() != object->getCurrentZone())
+  for (auto* zone : qAsConst(gridCase->zones))
   {
-    object->setCurrentZone(gridCase->zone->getName());
-    emit gridCase->zone->enteredZone(object, gridCase->zone);
+    if (!(character->isInZone(zone)))
+      emit zone->enteredZone(character, zone);
   }
-  else if (object->getCurrentZone() != "" && (!gridCase || !gridCase->zone))
-    object->setCurrentZone("");
+  for (auto* zone : lastZones)
+  {
+    if (!(zone->isInside(x, y)))
+      emit zone->exitedZone(character, zone);
+  }
 }
