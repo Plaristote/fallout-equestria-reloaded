@@ -33,6 +33,14 @@ int StatModel::getXpNextLevel() const
   return ((level * (level - 1) / 2) * 1000);
 }
 
+void StatModel::addKill(const QString &race, unsigned int amount)
+{
+  if (kills.contains(race))
+    kills[race] += amount;
+  else
+    kills.insert(race, amount);
+}
+
 void StatModel::addExperience(int xp)
 {
   experience += xp;
@@ -287,6 +295,9 @@ void StatModel::fromJson(const QJsonObject& json)
   loadStatData("base", data);
   loadStatData("mod", modifiers);
 
+  for (const QString& race : json["kills"].toObject().keys())
+    addKill(race, json["kills"][race].toVariant().toUInt());
+
   auto faceColorArray = json["face-color"].toArray();
   spriteTheme = json["sprite-theme"].toString();
   faceTheme   = json["face-theme"].toString();
@@ -376,6 +387,11 @@ void StatModel::toJson(QJsonObject& json)
 
   storeStatData("base", data);
   storeStatData("mod", modifiers);
+
+  QJsonObject killData;
+  for (const QString& killedRace : getKilledRaces())
+    killData.insert(killedRace, QJsonValue::fromVariant(getKillCount(killedRace)));
+  json.insert("kills", killData);
 
   json["sprite-theme"]     = spriteTheme;
   json["face-theme"]       = faceTheme;

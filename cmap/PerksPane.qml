@@ -12,7 +12,7 @@ Pane {
 
   Column {
     Text { text: "Traits"; color: "lightgreen" }
-    Rectangle { height: 1; width: perksPane.width; color: "lightgreen" }
+    Rectangle { height: 1; width: perksPane.width - 25; color: "lightgreen" }
     Repeater {
       model: characterSheet.traits
       delegate: Text {
@@ -26,7 +26,7 @@ Pane {
     Rectangle { height: 5; width: perksPane.width; color: "transparent" }
 
     Text { text: "Perks"; color: "lightgreen" }
-    Rectangle { height: 1; width: perksPane.width; color: "lightgreen" }
+    Rectangle { height: 1; width: perksPane.width - 25; color: "lightgreen" }
     Repeater {
       model: characterSheet.perks
       delegate: Text {

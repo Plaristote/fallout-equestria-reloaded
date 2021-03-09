@@ -221,14 +221,17 @@ QPoint LevelTask::getRenderPositionForTile(int x, int y)
 void LevelTask::onCharacterKill(Character* victim, Character* killer)
 {
   auto* playerParty = Game::get()->getPlayerParty();
+  auto* victimSheet = victim->getStatistics();
+  QString victimRace = victimSheet->property("race").toString();
 
+  killer->getStatistics()->addKill(victimRace.length() > 0 ? victimRace : "Others");
   if (playerParty->containsCharacter(killer))
   {
     const unsigned int xp         = victim->getXpValue();
-    const QString      victimName = victim->getStatistics()->getName();
+    const QString      victimName = victimSheet->getName();
 
     playerParty->grantXp(xp);
-    displayConsoleMessage("You killed " + victim->getStatistics()->getName() + " and earned " + QString::number(xp) + " experience points.");
+    displayConsoleMessage("You killed " + victimName + " and earned " + QString::number(xp) + " experience points.");
   }
 }
 

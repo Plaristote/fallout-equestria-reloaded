@@ -190,5 +190,6 @@
         <file>assets/faces/stallion-basic/base.png</file>
         <file>game/LevelInteractionOverlay.qml</file>
         <file>game/UsageSuccessHint.qml</file>
+        <file>cmap/KillsPane.qml</file>
     </qresource>
 </RCC>

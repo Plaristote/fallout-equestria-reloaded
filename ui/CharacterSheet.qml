@@ -173,11 +173,11 @@ Pane {
       visible: tabList.currentTab === "perks"
     }
 
-    Pane {
-      id: traitsPane
+    CMAP.KillsPane {
+      id: killsPane
+      characterSheet: root.characterSheet
       anchors { top: tabList.bottom; left: parent.left; bottom: parent.bottom; right: parent.right }
-      visible: tabList.currentTab === "traits"
-      background: UiStyle.Pane {}
+      visible: tabList.currentTab === "kills"
     }
   }
 

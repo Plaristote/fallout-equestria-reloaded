@@ -185,6 +185,10 @@ public:
   SKILL_METHODS(speech)
   SKILL_METHODS(gambling)
 
+  Q_INVOKABLE QStringList  getKilledRaces() const { return kills.keys(); }
+  Q_INVOKABLE unsigned int getKillCount(const QString& race) const { return kills.contains(race) ? kills[race] : 0; }
+  Q_INVOKABLE void         addKill(const QString& race, unsigned int amount = 1);
+
   // EDITOR
   Q_INVOKABLE QStringList getAvailableRaces() const;
   Q_INVOKABLE QStringList getGenders() const;
@@ -234,6 +238,7 @@ private:
 
   QStringList traits, perks;
   QJsonDocument variables;
+  QMap<QString, unsigned int> kills;
 
   QString     spriteTheme, faceTheme;
   QColor      faceColor;
