@@ -4,20 +4,14 @@
 # include <QObject>
 # include <QJSValue>
 # include <QJsonObject>
+# include "scriptcontroller.h"
 
 class TaskRunner : public QObject
 {
   Q_OBJECT
 
-  enum TaskType
-  {
-    LocalTask = 0,
-    ModularTask = 1
-  };
-
   struct Task
   {
-    TaskType    type;
     QString     name;
     int         iterationCount = 1;
     bool        infinite = false;
@@ -31,12 +25,11 @@ public:
 
   void update(qint64);
 
-  void setLocalModule(QJSValue v) { module = v; }
+  void setScriptController(ScriptController* v) { script = v; }
   void load(const QJsonObject&);
   void save(QJsonObject&) const;
 
   Q_INVOKABLE void addTask(const QString& name, qint64 interval, int iterationCount = 1);
-  Q_INVOKABLE void addLocalTask(const QString& name, qint64 interval, int iterationCount = 1);
 
 signals:
 
@@ -45,6 +38,7 @@ private:
 
   QList<Task> tasks;
   QJSValue    module;
+  ScriptController* script = nullptr;
 };
 
 #endif // TASKRUNNER_H

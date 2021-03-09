@@ -41,19 +41,22 @@ void TaskRunner::update(qint64 delta)
 
 bool TaskRunner::runTask(Task& task)
 {
-  QJSValueList args;
-  auto& scriptEngine = Game::get()->getScriptEngine();
+  if (script)
+  {
+    QJSValue retval;
 
-  args << scriptEngine.newQObject(parent());
-  return Game::get()->scriptCall(task.callback, args, "TaskRunner").toBool();
+    script->call(task.name);
+    return retval.isBool() ? retval.toBool() : true;
+  }
+  else
+    qDebug() << "TaskRunner::runTask: script controller uninitialized";
+  return false;
 }
 
 void TaskRunner::addTask(const QString &name, qint64 interval, int iterationCount)
 {
   Task task;
-  QString scriptName = name + ".mjs";
 
-  task.type = ModularTask;
   task.name = name;
   task.interval = interval;
   task.timeLeft = interval;
@@ -64,28 +67,6 @@ void TaskRunner::addTask(const QString &name, qint64 interval, int iterationCoun
   }
   else
     task.iterationCount = iterationCount;
-  task.module = Game::get()->loadScript(SCRIPTS_PATH + "tasks/" + scriptName);
-  task.callback = task.module.property("onTriggered");
-  tasks << task;
-}
-
-void TaskRunner::addLocalTask(const QString &name, qint64 interval, int iterationCount)
-{
-  Task task;
-
-  task.type = LocalTask;
-  task.name = name;
-  task.interval = interval;
-  task.timeLeft = interval;
-  if (iterationCount < 1)
-  {
-    task.infinite = true;
-    task.iterationCount = 1;
-  }
-  else
-    task.iterationCount = iterationCount;
-  task.module = module;
-  task.callback = task.module.property(name);
   tasks << task;
 }
 
@@ -95,24 +76,12 @@ void TaskRunner::load(const QJsonObject& data)
   {
     QJsonObject taskData(jvalue.toObject());
     Task task;
-    QString scriptName;
 
-    task.type = taskData["type"].toInt(0) == 0 ? LocalTask : ModularTask;
-    task.name = taskData["name"].toString();
-    task.interval = taskData["interval"].toInt();
-    task.infinite = taskData["infinite"].toBool();
-    task.timeLeft = taskData["timeLeft"].toInt();
-    scriptName = task.name + ".mjs";
-    if (task.type == ModularTask)
-    {
-      task.module = Game::get()->loadScript(SCRIPTS_PATH + "tasks/" + task.name + ".mjs");
-      task.callback = task.module.property("onTriggered");
-    }
-    else
-    {
-      task.module = module;
-      task.callback = task.module.property(task.name);
-    }
+    task.name           = taskData["name"].toString();
+    task.iterationCount = taskData["count"].toInt();
+    task.interval       = taskData["interval"].toInt();
+    task.infinite       = taskData["infinite"].toBool();
+    task.timeLeft       = taskData["timeLeft"].toInt();
     tasks << task;
   }
 }
@@ -125,9 +94,8 @@ void TaskRunner::save(QJsonObject& data) const
   {
     QJsonObject taskData;
 
-    taskData["type"] = task.type == LocalTask ? 0 : 1;
-    taskData["name"] = task.name;
-    taskData["iteractionCount"] = task.iterationCount;
+    taskData["name"]     = task.name;
+    taskData["count"]    = task.iterationCount;
     taskData["infinite"] = task.infinite;
     taskData["interval"] = task.interval;
     taskData["timeLeft"] = task.timeLeft;

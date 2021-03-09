@@ -36,6 +36,7 @@ public:
   void initializeGrid(TileMap*);
   void initializePathfinding();
 
+  Q_INVOKABLE inline QSize   getSize() const { return size; }
   Q_INVOKABLE bool           isOccupied(int x, int y) const;
   Q_INVOKABLE DynamicObject* getOccupant(int x, int y);
 

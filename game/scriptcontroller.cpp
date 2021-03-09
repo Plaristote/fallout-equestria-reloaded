@@ -1,13 +1,19 @@
 #include "scriptcontroller.h"
 #include "game.h"
 
-ScriptController::ScriptController(const QString& modulePath, QObject* object) :
+ScriptController::ScriptController(const QString& modulePath) :
   engine(Game::get()->getScriptEngine()), path(modulePath)
 {
-  QJSValue createCallback;
-  Game*    game = Game::get();
+  Game* game = Game::get();
 
   module = game->loadScript(path);
+}
+
+void ScriptController::initialize(QObject* object)
+{
+  Game*     game = Game::get();
+  QJSValue createCallback;
+
   createCallback = module.property("create");
   if (createCallback.isCallable())
     instance = game->scriptCall(createCallback, QJSValueList() << engine.newQObject(object), path);

@@ -22,8 +22,9 @@ void DynamicObject::setScript(const QString& name)
   if (script)
     delete script;
   scriptName = name;
-  script     = new ScriptController(getScriptPath() + '/' + name, this);
-  //taskManager->setScriptController(script);
+  script     = new ScriptController(getScriptPath() + '/' + name);
+  taskManager->setScriptController(script);
+  script->initialize(this);
 }
 
 QStringList DynamicObject::getAvailableInteractions()

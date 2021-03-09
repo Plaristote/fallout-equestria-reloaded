@@ -7,8 +7,9 @@
 class ScriptController
 {
 public:
-  ScriptController(const QString& modulePath, QObject* object);
+  ScriptController(const QString& modulePath);
 
+  void     initialize(QObject* object);
   bool     hasMethod(const QString& method);
   QJSValue call(const QString& method, const QJSValueList& = QJSValueList());
   QJSValue property(const QString& name);
