@@ -191,5 +191,8 @@
         <file>game/LevelInteractionOverlay.qml</file>
         <file>game/UsageSuccessHint.qml</file>
         <file>cmap/KillsPane.qml</file>
+        <file>game/PipBoy.qml</file>
+        <file>game/pipboy/TimeDisplay.qml</file>
+        <file>game/pipboy/TimeApplication.qml</file>
     </qresource>
 </RCC>

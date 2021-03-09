@@ -31,7 +31,8 @@ void TimeManager::addElapsedMilliseconds(qint64 value)
   {
     qint64 seconds = milliseconds / 1000;
 
-    addElapsedTime(DateTime::Seconds(static_cast<unsigned int>(seconds)));
+    if (seconds > 0)
+      addElapsedTime(DateTime::Seconds(static_cast<unsigned int>(seconds)));
     milliseconds %= 1000;
   }
 }
@@ -39,5 +40,11 @@ void TimeManager::addElapsedMilliseconds(qint64 value)
 void TimeManager::addElapsedTime(DateTime::TimeUnit time)
 {
   dateTime = dateTime + time;
+  emit dateChanged();
+}
+
+void TimeManager::addElapsedMinutes(int minutes)
+{
+  dateTime = dateTime + DateTime::Minutes(minutes);
   emit dateChanged();
 }

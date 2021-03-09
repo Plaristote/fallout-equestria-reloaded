@@ -27,6 +27,7 @@ public:
 
   Q_INVOKABLE void addElapsedMilliseconds(qint64);
   Q_INVOKABLE void addElapsedTime(DateTime::TimeUnit);
+  Q_INVOKABLE void addElapsedMinutes(int);
 
   int getYear()   const { return dateTime.GetYear(); }
   int getMonth()  const { return dateTime.GetMonth(); }

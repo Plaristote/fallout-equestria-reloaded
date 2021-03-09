@@ -138,7 +138,7 @@ Pane {
     UiStyle.TinyButton {
       text: "Pipboy"
       Layout.fillWidth: true
-      onClicked: application.pushView("game/PipBoy.qml")
+      onClicked: application.pushView("game/PipBoy.qml", {gameController: gameController, levelController: levelController})
     }
   }
 

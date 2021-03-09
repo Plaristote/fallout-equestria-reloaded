@@ -1,4 +1,5 @@
 #include "worldmap.h"
+#include "game.h"
 #include <QDebug>
 
 WorldMap::WorldMap(QObject* parent) : QObject(parent)
@@ -7,7 +8,7 @@ WorldMap::WorldMap(QObject* parent) : QObject(parent)
   updateTimer.setSingleShot(false);
   connect(&updateTimer, &QTimer::timeout, this, &WorldMap::update);
   connect(this, &WorldMap::targetPositionChanged, this, &WorldMap::onTargetPositionChanged);
-  timeManager = new TimeManager(this);
+  timeManager = Game::get()->getTimeManager();
 
   // Draftin citiez
   currentPosition = QPoint(300, 184);
