@@ -47,6 +47,12 @@ Character* CharacterParty::get(const QString& name)
   return nullptr;
 }
 
+void CharacterParty::grantXp(unsigned int value)
+{
+  for (auto* character : qAsConst(list))
+    character->getStatistics()->addExperience(static_cast<int>(value));
+}
+
 bool CharacterParty::insertIntoZone(LevelTask* level, TileZone* zone)
 {
   auto* grid = level->getGrid();

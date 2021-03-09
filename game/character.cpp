@@ -12,6 +12,7 @@ Character::Character(QObject *parent) : CharacterMovement(parent)
   inventory->setUser(this);
   connect(inventory, &Inventory::unequippedItem, this, &Character::initializeEmptySlot);
   connect(actionQueue, &ActionQueue::queueCompleted, this, &Character::onActionQueueCompleted);
+  connect(this, &Character::characterKill, this, &Character::died);
   connect(this, &Character::died, [this]() { if (script) { script->call("onDied"); } });
 }
 
@@ -45,7 +46,7 @@ void Character::takeDamage(int damage, Character* dealer)
   if (hp <= 0)
   {
     setAnimation("death");
-    emit died();
+    emit characterKill(this, dealer);
   }
   else if (dealer != nullptr && !isAlly(dealer) && !isEnemy(dealer))
   {
@@ -87,6 +88,11 @@ QPoint Character::getInteractionPosition() const
 QString Character::getDialogName()
 {
   return script ? script->property("dialog").toString() : "";
+}
+
+unsigned int Character::getXpValue() const
+{
+  return script ? script->property("xpValue").toUInt() : 25;
 }
 
 bool Character::isAlly(const Character* other) const

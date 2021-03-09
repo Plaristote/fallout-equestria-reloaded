@@ -35,6 +35,7 @@ public:
   QString      getFactionName() const { return faction ? faction->name : QString(); }
   unsigned int getFactionFlag() const { return faction ? faction->flag : 0; }
   QString      getDialogName();
+  unsigned int getXpValue() const;
   bool         getIsUnique() const { return isUnique; }
   void         setUnique(bool value) { isUnique = value; }
   bool         isMoving() const { return Sprite::isMoving() || currentPath.size() > 0; }
@@ -66,6 +67,7 @@ signals:
   void actionPointsChanged();
   void requireJoinCombat();
   void died();
+  void characterKill(Character* victim, Character* killer);
   // EDITOR signals
   void uniqueChanged();
   void statisticsChanged();

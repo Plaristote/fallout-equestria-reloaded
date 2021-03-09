@@ -4,8 +4,9 @@ import {findPathTo} from "../behaviour/pathfinding.mjs";
 export class CharacterBehaviour {
   constructor(model) {
     this.model = model;
+    this.xpValue = 25;
     this.textBubbles = [
-      { content: "Buck you filly", duration: 5000, color: "red" }
+      { content: "Lorem ipsum dolor sit amet, et toute ces sortes de choses.", duration: 5000, color: "yellow" }
     ];
   }
 

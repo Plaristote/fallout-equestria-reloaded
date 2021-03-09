@@ -132,6 +132,12 @@ void LevelTask::registerDynamicObject(DynamicObject* object)
   connect(object, &DynamicObject::controlZoneRemoved, this, &LevelTask::unregisterControlZone);
   if (object->getControlZone())
     registerControlZone(object->getControlZone());
+  if (object->isCharacter())
+  {
+    Character* character = reinterpret_cast<Character*>(object);
+
+    addCharacterObserver(character, connect(character, &Character::characterKill, this, &LevelTask::onCharacterKill));
+  }
   emit objectsChanged();
 }
 
@@ -210,6 +216,20 @@ QPoint LevelTask::getRenderPositionForTile(int x, int y)
   auto* tile  = layer ? layer->getTile(x, y) : nullptr;
 
   return tile ? tile->getRenderPosition() : QPoint();
+}
+
+void LevelTask::onCharacterKill(Character* victim, Character* killer)
+{
+  auto* playerParty = Game::get()->getPlayerParty();
+
+  if (playerParty->containsCharacter(killer))
+  {
+    const unsigned int xp         = victim->getXpValue();
+    const QString      victimName = victim->getStatistics()->getName();
+
+    playerParty->grantXp(xp);
+    displayConsoleMessage("You killed " + victim->getStatistics()->getName() + " and earned " + QString::number(xp) + " experience points.");
+  }
 }
 
 void LevelTask::onPauseChanged()

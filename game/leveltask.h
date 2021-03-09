@@ -80,6 +80,7 @@ public slots:
 private slots:
   void update();
   void onPauseChanged();
+  void onCharacterKill(Character* victim, Character* killer);
 
   void registerControlZone(TileZone*);
   void unregisterControlZone(TileZone*);
