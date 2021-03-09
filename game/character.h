@@ -13,7 +13,7 @@ class Character : public CharacterMovement
 {
   Q_OBJECT
 
-  Q_PROPERTY(StatModel*   statistics  MEMBER statistics)
+  Q_PROPERTY(StatModel*   statistics  MEMBER statistics NOTIFY statisticsChanged)
   Q_PROPERTY(FieldOfView* fieldOfView MEMBER fieldOfView)
   Q_PROPERTY(ActionQueue* actionQueue MEMBER actionQueue)
   Q_PROPERTY(int actionPoints MEMBER actionPoints NOTIFY actionPointsChanged)
