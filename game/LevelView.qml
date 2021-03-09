@@ -109,6 +109,10 @@ Item {
     x: interactionPosition.x + canvas.origin.x
     y: interactionPosition.y + canvas.origin.y
 
+    onVisibleChanged: {
+      levelController.paused = visible;
+    }
+
     Column {
       Repeater {
         model: interactionMenu.interactionTypes

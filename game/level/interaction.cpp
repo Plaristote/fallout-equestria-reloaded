@@ -27,6 +27,7 @@ bool InteractionComponent::openInteractionMenu(DynamicObject* object)
 
   if (entries.length() > 0)
   {
+    swapMouseMode();
     emit interactionRequired(object, entries);
     return true;
   }
