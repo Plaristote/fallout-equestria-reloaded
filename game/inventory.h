@@ -45,6 +45,7 @@ public:
 
 signals:
   void itemsChanged();
+  void itemPicked(InventoryItem*);
   void totalWeightChanged();
   void totalValueChanged();
   void slotsChanged();

@@ -6,6 +6,7 @@
 # include "game/leveltask.h"
 # include "game/characterparty.h"
 # include "game/timermanager.h"
+# include "game/questmanager.h"
 # include "game/worldmap.h"
 # include "game/diplomacy.hpp"
 # include <QJSEngine>
@@ -43,6 +44,7 @@ public:
   Q_INVOKABLE DataEngine* getDataEngine() const { return dataEngine; }
   TimeManager* getTimeManager() const { return timeManager; }
   WorldDiplomacy* getDiplomacy() const { return diplomacy; }
+  Q_INVOKABLE QuestManager* getQuestManager() const { return quests; }
   LevelTask* getLevel() const { return currentLevel; }
   QJSEngine& getScriptEngine() { return scriptEngine; }
   QJSValue loadScript(const QString& path);
@@ -71,6 +73,7 @@ private:
   DataEngine* dataEngine = nullptr;
   TimeManager* timeManager;
   WorldDiplomacy* diplomacy;
+  QuestManager* quests;
   WorldMap* worldmap;
   LevelTask*  currentLevel = nullptr;
   CharacterParty* playerParty = nullptr;

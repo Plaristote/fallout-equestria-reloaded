@@ -36,6 +36,7 @@ void GameManager::startNewGame()
     currentGame->newPlayerParty(playerStats);
     currentGame->getDataEngine()->loadFromFile("");
     currentGame->getDiplomacy()->addFaction("player");
+    // TODO initialize other factions
     currentGame->getPlayer()->getStatistics()->setProperty("faction", "player");
     emit currentGameChanged();
   }

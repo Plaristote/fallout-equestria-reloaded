@@ -17,6 +17,7 @@ DataEngine::DataEngine(QObject *parent) : QObject(parent)
   data.insert("levels", levels);
   data.insert("playerParty", QJsonObject());
   data.insert("time", time);
+  data.insert("quests", quests);
 }
 
 QJsonObject DataEngine::getTimeData() const
@@ -28,7 +29,7 @@ void DataEngine::setTimeData(const QJsonObject& timeData)
 {
   time = timeData;
   data.remove("time");
-  data.insert("time", timeData);
+  data.insert("time", time);
 }
 
 QJsonObject DataEngine::getWorldDiplomacy() const
@@ -40,7 +41,7 @@ void DataEngine::setWorldDiplomacy(const QJsonObject& diplomacyData)
 {
   diplomacy = diplomacyData;
   data.remove("diplomacy");
-  data.insert("diplomacy", diplomacyData);
+  data.insert("diplomacy", diplomacy);
 }
 
 void DataEngine::registerFaction(const QString& name)
@@ -56,6 +57,18 @@ void DataEngine::registerFaction(const QString& name)
   }
 }
 
+QJsonObject DataEngine::getQuests() const
+{
+  return quests;
+}
+
+void DataEngine::setQuests(const QJsonObject& questData)
+{
+  quests = questData;
+  data.remove("quests");
+  data.insert("quests", quests);
+}
+
 void DataEngine::loadFromFile(const QString &path)
 {
   QFile in(path == "" ? QString(initialGamePath) : "./saves/" + path);
@@ -69,6 +82,7 @@ void DataEngine::loadFromFile(const QString &path)
     characters = data["characters"].toObject();
     time       = data["time"].toObject();
     diplomacy  = data["diplomacy"].toObject();
+    quests     = data["quests"].toObject();
   }
   else
     qDebug() << "Could not load save file" << path;
@@ -80,6 +94,7 @@ void DataEngine::saveToFile(const QString &path)
 
   qDebug() << "Diplomacy data:" << QJsonDocument(diplomacy).toJson();
   data.insert("diplomacy", diplomacy);
+  data.insert("quests", quests);
 
   if (out.open(QIODevice::WriteOnly))
     out.write(QJsonDocument(data).toJson());

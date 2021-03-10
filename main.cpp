@@ -68,6 +68,8 @@ int main(int argc, char *argv[])
   qmlRegisterType<LootingController>("Game", 1,0, "LootingController");
   qmlRegisterType<GameManager>("Game", 1,0, "GameManager");
   qmlRegisterType<MusicManager>("Game", 1,0, "MusicManager");
+  qmlRegisterType<QuestManager>("Game", 1,0, "QuestManager");
+  qmlRegisterType<Quest>("Game", 1,0, "Quest");
   qmlRegisterType<WorldMap>("Game", 1,0, "WorldMap");
   qmlRegisterType<WorldMapCity>("Game", 1,0, "WorldMapCity");
   qmlRegisterType<Inventory>("Game", 1,0, "Inventory");

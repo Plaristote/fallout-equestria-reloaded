@@ -5,11 +5,12 @@ Inventory::Inventory(QObject *parent) : QObject(parent)
 {
   connect(this, &Inventory::unequippedItem, this, &Inventory::equippedItemsChanged);
   connect(this, &Inventory::equippedItemsChanged, this, &Inventory::totalWeightChanged);
+  connect(this, &Inventory::itemPicked, this, &Inventory::itemsChanged);
 }
 
 void Inventory::addItem(InventoryItem* item)
 {
-  for (auto* inventoryItem : items)
+  for (auto* inventoryItem : qAsConst(items))
   {
     if (inventoryItem->getObjectName() == item->getObjectName() && inventoryItem->isGroupable(item))
     {
@@ -24,7 +25,7 @@ void Inventory::addItem(InventoryItem* item)
   connect(item, &InventoryItem::valueChanged, this, &Inventory::totalValueChanged);
   emit totalWeightChanged();
   emit totalValueChanged();
-  emit itemsChanged();
+  emit itemPicked(item);
 }
 
 void Inventory::removeItem(InventoryItem *item)
@@ -41,7 +42,7 @@ void Inventory::addItemOfType(const QString &name, int quantity)
 {
   InventoryItem* item;
 
-  for (auto* inventoryItem : items)
+  for (auto* inventoryItem : qAsConst(items))
   {
     if (inventoryItem->getObjectName() == name && inventoryItem->isGroupable())
     {

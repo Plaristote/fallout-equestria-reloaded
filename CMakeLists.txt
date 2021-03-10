@@ -108,6 +108,10 @@ set(PROJECT_SOURCES
         game/diplomacy.cpp
         game/soundmanager.h
         game/soundmanager.cpp
+        game/questmanager.h
+        game/questmanager.cpp
+        game/quest.h
+        game/quest.cpp
         game/level/grid.h
         game/level/grid.cpp
         game/level/interaction.h

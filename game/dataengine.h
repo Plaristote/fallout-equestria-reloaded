@@ -32,6 +32,9 @@ public:
   void         setWorldDiplomacy(const QJsonObject&);
   void         registerFaction(const QString&);
 
+  QJsonObject  getQuests() const;
+  void         setQuests(const QJsonObject&);
+
   StatModel* makeStatModel(const QString& characterId, const QString& source = "");
   void       saveStatModel(const QString& characterId, StatModel*);
 
@@ -42,7 +45,7 @@ public:
 
 private:
   QJsonObject data;
-  QJsonObject levels, characters, time, diplomacy;
+  QJsonObject levels, characters, time, diplomacy, quests;
 };
 
 #endif // DATAENGINE_H

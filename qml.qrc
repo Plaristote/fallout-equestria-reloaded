@@ -194,5 +194,6 @@
         <file>game/PipBoy.qml</file>
         <file>game/pipboy/TimeDisplay.qml</file>
         <file>game/pipboy/TimeApplication.qml</file>
+        <file>game/pipboy/QuestsApplication.qml</file>
     </qresource>
 </RCC>

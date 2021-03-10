@@ -16,8 +16,10 @@ Game::Game(QObject *parent) : QObject(parent)
   diplomacy = new WorldDiplomacy(*dataEngine);
   playerParty = new CharacterParty(this);
   worldmap = new WorldMap(this);
+  quests = new QuestManager(this);
   scriptEngine.installExtensions(QJSEngine::ConsoleExtension);
   scriptEngine.globalObject().setProperty("game", scriptEngine.newQObject(this));
+  scriptEngine.globalObject().setProperty("quests", scriptEngine.newQObject(quests));
   scriptEngine.globalObject().setProperty("musicManager", scriptEngine.newQObject(MusicManager::get()));
   loadCmapTraits();
   scriptEngine.evaluate("level.displayConsoleMessage(\"Coucou Script Engine\")");
@@ -48,6 +50,7 @@ void Game::newPlayerParty(StatModel* statistics)
   player->setStatistics(statistics);
   player->setScript("player.mjs");
   playerParty->addCharacter(player);
+  connect(player->getInventory(), &Inventory::itemPicked, quests, &QuestManager::onItemPicked);
   connect(player, &Character::died, this, &Game::gameOver);
 }
 
@@ -58,6 +61,8 @@ void Game::loadFromDataEngine()
   diplomacy->initialize();
   timeManager->load(dataEngine->getTimeData());
   playerParty->load(dataEngine->getPlayerParty());
+  quests->load(dataEngine->getQuests());
+  quests->addQuest("quest-test");
   player = playerParty->getCharacters().first();
   connect(player, &Character::died, this, &Game::gameOver);
   if (currentLevelName != "")
@@ -179,6 +184,7 @@ void Game::save()
   if (currentLevel)
     currentLevel->save(dataEngine);
   dataEngine->setTimeData(timeData);
+  dataEngine->setQuests(quests->save());
   dataEngine->setPlayerParty(partyData);
 }
 

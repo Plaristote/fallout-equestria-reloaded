@@ -38,6 +38,7 @@ Pane {
         Column {
           MenuButton {
             text: "Quests"
+            onClicked: contentApplication.sourceComponent = questsApplication
           }
           MenuButton {
             text: "Archives"
@@ -63,6 +64,7 @@ Pane {
         id: contentApplication
         anchors.fill: parent
         anchors.margins: 10
+        clip: true
       }
     }
 
@@ -71,6 +73,13 @@ Pane {
       id: waitApplication
       PipBoyUi.TimeApplication {
         gameController: root.gameController
+      }
+    }
+
+    Component {
+      id: questsApplication
+      PipBoyUi.QuestsApplication {
+        questManager: root.gameController.getQuestManager()
       }
     }
   }

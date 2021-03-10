@@ -224,7 +224,9 @@ void LevelTask::onCharacterKill(Character* victim, Character* killer)
   auto* victimSheet = victim->getStatistics();
   QString victimRace = victimSheet->property("race").toString();
 
-  killer->getStatistics()->addKill(victimRace.length() > 0 ? victimRace : "Others");
+  Game::get()->getQuestManager()->onCharacterKilled(victim, killer);
+  if (killer)
+    killer->getStatistics()->addKill(victimRace.length() > 0 ? victimRace : "Others");
   if (playerParty->containsCharacter(killer))
   {
     const unsigned int xp         = victim->getXpValue();
