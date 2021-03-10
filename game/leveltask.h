@@ -59,8 +59,12 @@ public:
   Q_INVOKABLE StorageObject* generateStorageObject(const QString& name);
   Q_INVOKABLE void deleteObject(DynamicObject* o) { unregisterDynamicObject(o); }
 
+  Q_INVOKABLE void advanceTime(unsigned int minutes);
+
   QQmlListProperty<DynamicObject> getQmlObjects() { return QQmlListProperty<DynamicObject>(this, &objects); }
   QQmlListProperty<Sprite> getQmlVisualEffects() { return QQmlListProperty<Sprite>(this, &visualEffects); }
+
+  void finalizeRound() override;
 
 signals:
   void updated();

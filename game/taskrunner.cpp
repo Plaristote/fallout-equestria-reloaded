@@ -18,6 +18,7 @@ void TaskRunner::update(qint64 delta)
       if (it->timeLeft <= elapsedTime)
       {
         it->timeLeft = it->interval;
+        elapsedTime -= it->timeLeft;
         if (!it->infinite)
           it->iterationCount -= 1;
         if (!runTask(*it))

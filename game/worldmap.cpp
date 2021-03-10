@@ -54,7 +54,7 @@ void WorldMap::update()
   emit currentPositionChanged();
   if (currentPosition == targetPosition)
     emit onTargetPositionReached();
-  timeManager->addElapsedTime(DateTime::Minutes(14));
+  Game::get()->advanceTime(14);
 }
 
 void WorldMap::onTargetPositionChanged()

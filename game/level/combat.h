@@ -6,6 +6,9 @@
 # include "../character.h"
 # include "textbubbles.h"
 
+# define WORLDTIME_TURN_DURATION_IN_SECONDS 10
+# define WORLDTIME_TURN_DURATION WORLDTIME_TURN_DURATION_IN_SECONDS * 1000
+
 class CombatComponent : public TextBubblesComponent
 {
   Q_OBJECT
@@ -65,7 +68,7 @@ protected:
   void sortCombattants();
   void removeDeadCombattants();
   void finalizeCharacterTurn(Character*);
-  void finalizeRound();
+  virtual void finalizeRound();
   void initializeCharacterTurn(Character*);
 
   bool combat = false;

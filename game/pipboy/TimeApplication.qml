@@ -44,7 +44,7 @@ Column {
         value = 12;
       else if (remainingMinutes > 360)
         value = 68;
-      timeManager.addElapsedMinutes(value);
+      gameController.advanceTime(value);
       remainingMinutes -= value;
       //
       if (waitingHint.text.length > 2)

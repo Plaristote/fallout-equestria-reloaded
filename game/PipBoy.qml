@@ -12,6 +12,10 @@ Pane {
 
   background: UiStyle.Pane {}
 
+  Component.onCompleted: {
+    levelController.paused = true;
+  }
+
   RowLayout {
     anchors.fill: parent
 
@@ -48,7 +52,10 @@ Pane {
           }
           MenuButton {
             text: "Close"
-            onClicked: application.popView()
+            onClicked: {
+              levelController.paused = false;
+              application.popView();
+            }
           }
         }
       }

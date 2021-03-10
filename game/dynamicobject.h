@@ -28,7 +28,7 @@ public:
   explicit DynamicObject(QObject *parent = nullptr);
   virtual ~DynamicObject();
 
-  virtual void update(qint64);
+  virtual void update(qint64 v) { Sprite::update(v); }
   virtual void load(const QJsonObject&);
   virtual void save(QJsonObject&) const;
   Q_INVOKABLE virtual void setScript(const QString& name);

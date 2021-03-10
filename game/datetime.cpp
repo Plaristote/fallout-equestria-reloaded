@@ -3,6 +3,21 @@
 
 using namespace std;
 
+DateTime DateTime::operator-(const DateTime& date) const
+{
+  return operator-(static_cast<unsigned int>(date.GetTimestamp()));
+}
+
+DateTime DateTime::operator-(unsigned int seconds) const
+{
+  return DateTime(GetTimestamp() - seconds);
+}
+
+DateTime DateTime::operator-(TimeUnit time_unit) const
+{
+  return operator-(time_unit.seconds);
+}
+
 DateTime DateTime::operator+(const DateTime& date) const
 {
   DateTime result(*this);
@@ -225,7 +240,7 @@ unsigned short DateTime::GetDayOfTheYear() const
   return (result + day);
 }
 
-static float ComputeLengthOfDay(unsigned char day)
+static float ComputeLengthOfDay(unsigned short day)
 {
   float         length_of_day;
 
@@ -262,7 +277,7 @@ static float ComputeLengthOfDay(unsigned char day)
 DateTime::DayLength DateTime::GetDayLength() const
 {
   static DayLength day_lengths[357];
-  unsigned char    day = GetDayOfTheYear();
+  unsigned short   day = GetDayOfTheYear();
 
   if (day <= 356)
   {

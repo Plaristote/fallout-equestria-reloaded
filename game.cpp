@@ -209,3 +209,15 @@ void Game::appendToConsole(const QString& message)
   emit consoleUpdated();
   qDebug() << "[Console] :> " << message;
 }
+
+void Game::advanceTime(unsigned int minutes)
+{
+  timeManager->addElapsedMinutes(minutes);
+  if (currentLevel)
+    currentLevel->advanceTime(minutes);
+  else
+  {
+    for (Character* character : playerParty->getCharacters())
+      character->getTaskManager()->update(minutes);
+  }
+}

@@ -83,12 +83,6 @@ void DynamicObject::scriptCall(const QString& method, const QString& message)
     script->call(method, QJSValueList() << message);
 }
 
-void DynamicObject::update(qint64 delta)
-{
-  Sprite::update(delta);
-  taskManager->update(delta);
-}
-
 TileZone* DynamicObject::addControlZone()
 {
   if (controlZone == nullptr)

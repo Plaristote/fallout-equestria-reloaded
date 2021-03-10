@@ -1,8 +1,6 @@
 #include "combat.h"
 #include "game.h"
 #include "game/characters/actionqueue.h"
-#define WORLDTIME_TURN_DURATION_IN_SECONDS 10
-#define WORLDTIME_TURN_DURATION WORLDTIME_TURN_DURATION_IN_SECONDS * 1000
 
 CombatComponent::CombatComponent(QObject *parent) : TextBubblesComponent(parent)
 {

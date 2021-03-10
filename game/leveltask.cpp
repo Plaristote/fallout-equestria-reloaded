@@ -245,14 +245,26 @@ void LevelTask::onPauseChanged()
   else
   {
     updateTimer.start();
-    clock.start();
+    clock.restart();
+  }
+}
+
+void LevelTask::advanceTime(unsigned int minutes)
+{
+  qint64 delta = minutes * 60 * 1000;
+
+  for (DynamicObject* object : qAsConst(objects))
+  {
+    object->update(delta);
+    object->getTaskManager()->update(delta);
+    if (object->isCharacter())
+      reinterpret_cast<Character*>(object)->getActionQueue()->update();
   }
 }
 
 void LevelTask::update()
 {
   qint64 delta = clock.restart();
-
   if (!combat)
   {
     timeManager->addElapsedMilliseconds(delta);
@@ -281,6 +293,16 @@ void LevelTask::update()
   soundManager->update();
   CombatComponent::update(delta);
   emit updated();
+}
+
+void LevelTask::finalizeRound()
+{
+  for (DynamicObject* object : qAsConst(objects))
+  {
+    if (!object->isCharacter() || !isInCombat(reinterpret_cast<Character*>(object)))
+      object->getTaskManager()->update(WORLDTIME_TURN_DURATION);
+  }
+  CombatComponent::finalizeRound();
 }
 
 Character* LevelTask::generateCharacter(const QString &name, const QString &characterSheet)

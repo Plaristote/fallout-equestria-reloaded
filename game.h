@@ -56,6 +56,7 @@ public:
   Q_INVOKABLE CharacterParty* getPlayerParty() { return playerParty; }
   Q_INVOKABLE Character* getPlayer() { return player; }
   Q_INVOKABLE StatModel* getPlayerStatistics() { return getPlayer()->getStatistics(); }
+  Q_INVOKABLE void       advanceTime(unsigned int minutes);
 
 signals:
   void levelChanged();
