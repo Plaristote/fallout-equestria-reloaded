@@ -92,8 +92,8 @@ Item {
       delegate: Rectangle {
         property QtObject city: controller.cities[index]
         x: city.position.x - width / 2; y: city.position.y - height / 2
-        width: city.size
-        height: city.size
+        width: city.size * 2 - border.width * 2
+        height: city.size * 2 - border.width * 2
         radius: width * 0.5
         border.color: "yellow"
         border.width: 4
