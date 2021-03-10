@@ -13,10 +13,11 @@ class WorldMapCity : public QObject
   Q_PROPERTY(QPoint  position MEMBER position NOTIFY positionChanged)
   Q_PROPERTY(int     size     MEMBER size     NOTIFY sizeChanged)
 public:
-  WorldMapCity(QObject* parent = nullptr);
+  explicit WorldMapCity(QObject* parent = nullptr);
 
   const QString& getName() const { return name; }
   QPoint         getPosition() const { return position; }
+  int            getSize() const { return size; }
 
   void setName(const QString& value) { name = value; }
   void setPosition(QPoint value) { position = value; }

@@ -32,8 +32,8 @@ Item {
 
   Flickable {
     clip: true
-    contentHeight: mapImage.sourceSize.height
-    contentWidth:  mapImage.sourceSize.width
+    contentHeight: mapImage.height
+    contentWidth:  mapImage.width
     anchors { top: parent.top; left: parent.left; bottom: parent.bottom; right: sidebar.left }
 
     ScrollBar.vertical:   UiStyle.HudScrollbar { orientation: Qt.Vertical }
@@ -42,8 +42,36 @@ Item {
     Image {
       id: mapImage
       source: "qrc:/assets/worldmap.png"
-      height: sourceSize.height
-      width: sourceSize.width
+      height: controller.mapSize.height
+      width: controller.mapSize.width
+
+      Column {
+        Repeater {
+          model: controller.caseCount.height
+          delegate: Row {
+            property int indexY: index
+            Repeater {
+              model: controller.caseCount.width
+              delegate: Rectangle {
+                id: caseRectangle
+                property int indexX: index
+                height: controller.caseSize.height - 2
+                width:  controller.caseSize.width - 2
+                border.width: 1
+                border.color: "green"
+                color: controller.isVisible(indexX, indexY) ? "transparent" : "black"
+                Connections {
+                  target: controller
+                  function onCaseRevealed(caseX, caseY) {
+                    if (caseX === indexX && caseY === indexY)
+                      caseRectangle.color = "transparent";
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
 
       MouseArea {
         id: mapMouseArea

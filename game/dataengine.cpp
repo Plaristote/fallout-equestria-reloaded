@@ -18,6 +18,7 @@ DataEngine::DataEngine(QObject *parent) : QObject(parent)
   data.insert("playerParty", QJsonObject());
   data.insert("time", time);
   data.insert("quests", quests);
+  data.insert("worldmap", worldmap);
 }
 
 QJsonObject DataEngine::getTimeData() const
@@ -69,6 +70,18 @@ void DataEngine::setQuests(const QJsonObject& questData)
   data.insert("quests", quests);
 }
 
+QJsonObject DataEngine::getWorldmap() const
+{
+  return worldmap;
+}
+
+void DataEngine::setWorldmap(const QJsonObject& worldmapData)
+{
+  worldmap = worldmapData;
+  data.remove("worldmap");
+  data.insert("worldmap", worldmap);
+}
+
 void DataEngine::loadFromFile(const QString &path)
 {
   QFile in(path == "" ? QString(initialGamePath) : "./saves/" + path);
@@ -83,6 +96,7 @@ void DataEngine::loadFromFile(const QString &path)
     time       = data["time"].toObject();
     diplomacy  = data["diplomacy"].toObject();
     quests     = data["quests"].toObject();
+    worldmap   = data["worldmap"].toObject();
   }
   else
     qDebug() << "Could not load save file" << path;

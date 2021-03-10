@@ -61,6 +61,7 @@ void Game::loadFromDataEngine()
   diplomacy->initialize();
   timeManager->load(dataEngine->getTimeData());
   playerParty->load(dataEngine->getPlayerParty());
+  worldmap->load(dataEngine->getWorldmap());
   quests->load(dataEngine->getQuests());
   quests->addQuest("quest-test");
   player = playerParty->getCharacters().first();
@@ -185,6 +186,7 @@ void Game::save()
     currentLevel->save(dataEngine);
   dataEngine->setTimeData(timeData);
   dataEngine->setQuests(quests->save());
+  dataEngine->setWorldmap(worldmap->save());
   dataEngine->setPlayerParty(partyData);
 }
 

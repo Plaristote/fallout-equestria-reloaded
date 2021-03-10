@@ -45,6 +45,7 @@ public:
   TimeManager* getTimeManager() const { return timeManager; }
   WorldDiplomacy* getDiplomacy() const { return diplomacy; }
   Q_INVOKABLE QuestManager* getQuestManager() const { return quests; }
+  WorldMap* getWorldmap() const { return worldmap; }
   LevelTask* getLevel() const { return currentLevel; }
   QJSEngine& getScriptEngine() { return scriptEngine; }
   QJSValue loadScript(const QString& path);
