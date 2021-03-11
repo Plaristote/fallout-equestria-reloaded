@@ -7,22 +7,24 @@ import Game 1.0 as MyGame
 Item {
   property QtObject controller // WorldMap
   property point movementStart: controller.currentPosition
-  property var gameClock: ({ hour: 8, minutes: 30 })
+  id: root
 
   function clickedOnPlayer() {
     console.log("Clicked on player at", controller.currentPosition);
-    application.popView();
+    //application.popView();
     for (var i = 0 ; i < controller.cities.length ; ++i) {
-      if (controller.cities[i].isInside(controller.currentPosition))
+      if (controller.cities[i].isInside(controller.currentPosition)) {
+        application.popView();
         return controller.getIntoCity(controller.cities[i]);
+      }
     }
     controller.getIntoWasteland(controller.currentPosition);
   }
 
   function clickedOnMap() {
-    console.log("Clicked on map", mapMouseArea.mouseX, mapMouseArea.mouseY);
+    console.log("Clicked on map", worldmapView.mouseX, worldmapView.mouseY);
     movementStart = controller.currentPosition;
-    controller.targetPosition = Qt.point(mapMouseArea.mouseX, mapMouseArea.mouseY);
+    controller.targetPosition = Qt.point(worldmapView.mouseX, worldmapView.mouseY);
   }
 
   function clickedOnCity(city) {
@@ -30,55 +32,11 @@ Item {
     controller.targetPosition = city.position;
   }
 
-  Flickable {
-    clip: true
-    contentHeight: mapImage.height
-    contentWidth:  mapImage.width
+  WorldmapView {
+    id: worldmapView
     anchors { top: parent.top; left: parent.left; bottom: parent.bottom; right: sidebar.left }
-
-    ScrollBar.vertical:   UiStyle.HudScrollbar { orientation: Qt.Vertical }
-    ScrollBar.horizontal: UiStyle.HudScrollbar { orientation: Qt.Horizontal }
-
-    Image {
-      id: mapImage
-      source: "qrc:/assets/worldmap.png"
-      height: controller.mapSize.height
-      width: controller.mapSize.width
-
-      Column {
-        Repeater {
-          model: controller.caseCount.height
-          delegate: Row {
-            property int indexY: index
-            Repeater {
-              model: controller.caseCount.width
-              delegate: Rectangle {
-                id: caseRectangle
-                property int indexX: index
-                height: controller.caseSize.height - 2
-                width:  controller.caseSize.width - 2
-                border.width: 1
-                border.color: "green"
-                color: controller.isVisible(indexX, indexY) ? "transparent" : "black"
-                Connections {
-                  target: controller
-                  function onCaseRevealed(caseX, caseY) {
-                    if (caseX === indexX && caseY === indexY)
-                      caseRectangle.color = "transparent";
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-
-      MouseArea {
-        id: mapMouseArea
-        anchors.fill: parent
-        onClicked: clickedOnMap()
-      }
-    }
+    controller: root.controller
+    onMapClicked: clickedOnMap()
 
     Shape {
       anchors.fill: parent
@@ -115,18 +73,8 @@ Item {
       }
     }
 
-    Repeater {
+    WorldmapCities {
       model: controller.cities
-      delegate: Rectangle {
-        property QtObject city: controller.cities[index]
-        x: city.position.x - width / 2; y: city.position.y - height / 2
-        width: city.size * 2 - border.width * 2
-        height: city.size * 2 - border.width * 2
-        radius: width * 0.5
-        border.color: "yellow"
-        border.width: 4
-        color: Qt.rgba(255, 255, 0, 0.5);
-      }
     }
   }
 

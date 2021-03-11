@@ -12,9 +12,7 @@ Pane {
   Controller {
     id: game
     isGameEditor: true
-    Component.onCompleted: {
-      getDataEngine().loadFromFile("");
-    }
+    Component.onCompleted: prepareEditor()
   }
 
   TabRow {
@@ -22,15 +20,19 @@ Pane {
     anchors.top: parent.top
     anchors.left: parent.left
     anchors.right: parent.right
-    tabs: ["sprites", "objects", "npcs", "levels", "worldmap"]
-    labels: ["Sprites", "Objects", "NPCs", "Levels", "Worldmap"]
+    tabs: ["worldmap", "levels", "npcs", "objects", "sprites"]
+    labels: ["Worldmap", "Levels", "NPCs", "Items", "Sprites"]
     currentTab: tabs[0]
   }
 
-  MenuButton {
+  Button {
+    background: UiStyle.Label { style: parent.down ? "dark" : "base" }
     anchors.right: parent.right
     anchors.top: parent.top
-    text: "Exit"
+    contentItem: Text {
+      color: "white"
+      text: "Exit"
+    }
     onClicked: application.popView()
   }
 
@@ -53,5 +55,12 @@ Pane {
     visible: header.currentTab == "levels"
     anchors { top: header.bottom; left: parent.left; right: parent.right; bottom: parent.bottom }
     gameController: game
+  }
+
+  WorldMapEditor {
+    visible: header.currentTab == "worldmap"
+    anchors { top: header.bottom; left: parent.left; right: parent.right; bottom: parent.bottom }
+    gameController: game
+    worldMap: game.worldmap
   }
 }

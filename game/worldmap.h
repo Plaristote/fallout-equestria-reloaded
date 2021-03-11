@@ -8,18 +8,20 @@
 # include <QQmlListProperty>
 # include "timermanager.h"
 # include "worldmapcity.h"
+# include "worldmapzone.h"
 
 class WorldMap : public QObject
 {
   Q_OBJECT
 
-  Q_PROPERTY(QSize  mapSize MEMBER mapSize NOTIFY mapSizeChanged)
-  Q_PROPERTY(QSize  caseSize MEMBER caseSize NOTIFY mapSizeChanged)
-  Q_PROPERTY(QSize  caseCount MEMBER caseCount NOTIFY mapSizeChanged)
+  Q_PROPERTY(QSize  mapSize   MEMBER mapSize NOTIFY mapSizeChanged)
+  Q_PROPERTY(QSize  caseSize  MEMBER caseSize NOTIFY mapSizeChanged)
+  Q_PROPERTY(QSize  caseCount MEMBER caseCount NOTIFY caseCountChanged)
   Q_PROPERTY(QPoint currentPosition MEMBER currentPosition NOTIFY currentPositionChanged)
   Q_PROPERTY(QPoint targetPosition  MEMBER targetPosition  NOTIFY targetPositionChanged)
   Q_PROPERTY(TimeManager* timeManager MEMBER timeManager NOTIFY timeManagerChanged)
   Q_PROPERTY(QQmlListProperty<WorldMapCity> cities READ getCitiesQml NOTIFY citiesChanged)
+  Q_PROPERTY(QQmlListProperty<WorldMapZone> zones READ getZonesQml NOTIFY zonesChanged)
 public:
   WorldMap(QObject* parent = nullptr);
 
@@ -27,6 +29,7 @@ public:
   QJsonObject save() const;
 
   QQmlListProperty<WorldMapCity> getCitiesQml() { return QQmlListProperty<WorldMapCity>(this, &cities); }
+  QQmlListProperty<WorldMapZone> getZonesQml() { return QQmlListProperty<WorldMapZone>(this, &zones); }
 
   Q_INVOKABLE void getIntoCity(WorldMapCity*);
   Q_INVOKABLE void getIntoWasteland(QPoint);
@@ -34,13 +37,22 @@ public:
   Q_INVOKABLE void revealCaseAt(int x, int y) { revealCaseAt(QPoint(x, y)); }
   void             revealCaseAt(const QPoint);
 
+  Q_INVOKABLE WorldMapCity* createCity(const QString& name);
+  Q_INVOKABLE WorldMapZone* createZone(const QString& name);
+  Q_INVOKABLE void removeCity(WorldMapCity*);
+  Q_INVOKABLE void removeZone(WorldMapZone*);
+
+  Q_INVOKABLE WorldMapZone* getCurrentZone() const;
+
 signals:
   void currentPositionChanged();
   void targetPositionChanged();
   void mapSizeChanged();
+  void caseCountChanged();
   void timeManagerChanged();
   void citiesChanged();
   void cityEntered(QString);
+  void zonesChanged();
   void caseRevealed(int caseX, int caseY);
 
 private slots:
@@ -49,11 +61,17 @@ private slots:
   void onTargetPositionChanged();
   void onTargetPositionReached();
 
+private slots:
+  void onMapSizeChanged();
+
 private:
+  float getCurrentMovementSpeed() const;
+
   QTimer updateTimer;
   QPoint currentPosition, targetPosition;
   TimeManager* timeManager;
   QList<WorldMapCity*> cities;
+  QList<WorldMapZone*> zones;
   QVector<bool> discovered;
   QSize         mapSize;
   QSize         caseSize, caseCount;

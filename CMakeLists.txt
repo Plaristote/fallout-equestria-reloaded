@@ -96,6 +96,8 @@ set(PROJECT_SOURCES
         game/worldmap.cpp
         game/worldmapcity.h
         game/worldmapcity.cpp
+        game/worldmapzone.h
+        game/worldmapzone.cpp
         game/taskrunner.h
         game/taskrunner.cpp
         game/inventory.h

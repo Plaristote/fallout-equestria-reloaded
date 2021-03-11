@@ -195,5 +195,11 @@
         <file>game/pipboy/TimeDisplay.qml</file>
         <file>game/pipboy/TimeApplication.qml</file>
         <file>game/pipboy/QuestsApplication.qml</file>
+        <file>editor/WorldMapEditor.qml</file>
+        <file>game/WorldmapView.qml</file>
+        <file>game/WorldmapCities.qml</file>
+        <file>editor/worldmap/MapSizePane.qml</file>
+        <file>editor/worldmap/CityEditor.qml</file>
+        <file>editor/worldmap/CityForm.qml</file>
     </qresource>
 </RCC>

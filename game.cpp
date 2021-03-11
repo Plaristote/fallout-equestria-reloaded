@@ -73,6 +73,12 @@ void Game::loadFromDataEngine()
   }
 }
 
+void Game::prepareEditor()
+{
+  getDataEngine()->loadFromFile("");
+  worldmap->load(dataEngine->getWorldmap());
+}
+
 QJSValue Game::loadScript(const QString& path)
 {
   auto module = scriptEngine.importModule(path);

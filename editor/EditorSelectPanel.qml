@@ -27,6 +27,8 @@ Pane {
         text: "+ Add"
         onClicked: newClicked()
         visible: !readOnly
+        width: parent.width
+        height: 20
       }
 
       Repeater {
