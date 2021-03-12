@@ -15,7 +15,16 @@ Pane {
 
   signal newClicked()
 
+  TerminalButton {
+    visible: model.length === 0 && !readOnly
+    text: "+ Add"
+    onClicked: newClicked()
+    width: parent.width
+    height: 20
+  }
+
   Flickable {
+    visible: model.length > 0
     anchors.fill: parent
     contentHeight: column.height
     clip: true
