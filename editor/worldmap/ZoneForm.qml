@@ -45,7 +45,7 @@ Pane {
       }
 
       TerminalLabel {
-        text: "Movement speed"
+        text: "Mov.speed"
       }
 
       TerminalField {

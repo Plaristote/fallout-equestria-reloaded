@@ -30,54 +30,7 @@ Item {
     }
 
     Loader {
-      sourceComponent: selectedZone ? zoneHintComponent : null
-    }
-
-    Component {
-      id: zoneHintComponent
-
-      Column {
-        Repeater {
-          model: worldMapView.controller.caseCount.height
-          delegate: Row {
-            property int indexY: index
-            Repeater {
-              model: worldMapView.controller.caseCount.width
-              delegate: Rectangle {
-                id: caseRectangle
-                property int indexX: index
-                height: worldMapView.controller.caseSize.height - 2
-                width:  worldMapView.controller.caseSize.width - 2
-                border.width: 1
-                border.color: "green"
-                color: getColor()
-
-                function getColor() {
-                  if (selectedZone.containsCase(indexX, indexY))
-                    return Qt.rgba(0, 0, 255, 0.5);
-                  return "transparent";
-                }
-
-                Connections {
-                  target: selectedZone
-                  function onCasesChanged() {
-                    caseRectangle.color = caseRectangle.getColor();
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-
-    WorldmapCities {
-      model: worldMap.cities
-      clickEnabled: true
-      onCityClicked: {
-        tabRow.currentTab = "cities";
-        selectedCity = city;
-      }
+      sourceComponent: selectedZone ? zoneHintComponent : citiesPreviewComponent
     }
   }
 
@@ -111,43 +64,8 @@ Item {
         sourceComponent: tabRow.currentTab === "cities" ? cityTab : zoneTab
       }
 
-      Component {
-        id: cityTab
-        CityEditor {
-          id: cityEditor
-          list: root.worldMap.cities
-          worldMap: root.worldMap
-
-          Connections {
-            target: root
-            function onSelectedCityChanged() {
-              cityEditor.selectedCity = root.selectedCity.name
-            }
-          }
-        }
-      }
-
-      Component {
-        id: zoneTab
-        ZoneEditor {
-          id: zoneEditor
-          list: root.worldMap.zones
-          worldMap: root.worldMap
-
-          onCurrentModelChanged: {
-            selectedZone = currentModel;
-          }
-
-          Connections {
-            target: worldMapView
-            function onMapClicked() {
-              zoneEditor.onMapClicked(worldMapView.mouseX, worldMapView.mouseY);
-            }
-          }
-        }
-      } // END ZoneEditor component
     }
-  } // END Sidebar
+  }
 
   MenuButton {
     id: formControls
@@ -158,5 +76,60 @@ Item {
       gameController.save();
       gameController.getDataEngine().saveToFile("./assets/game.json");
     }
+  }
+
+  // CITY COMPONENTS
+  Component {
+    id: cityTab
+    CityEditor {
+      id: cityEditor
+      list: root.worldMap.cities
+      worldMap: root.worldMap
+
+      Connections {
+        target: root
+        function onSelectedCityChanged() {
+          cityEditor.selectedName = root.selectedCity.name
+        }
+      }
+    }
+  }
+
+  Component {
+    id: citiesPreviewComponent
+    WorldmapCities {
+      model: worldMap.cities
+      clickEnabled: true
+      onCityClicked: {
+        tabRow.currentTab = "cities";
+        selectedCity = city;
+      }
+    }
+  }
+
+  // ZONE COMPONENTS
+  Component {
+    id: zoneTab
+    ZoneEditor {
+      id: zoneEditor
+      list: root.worldMap.zones
+      worldMap: root.worldMap
+
+      onCurrentModelChanged: {
+        selectedZone = currentModel;
+      }
+
+      Connections {
+        target: worldMapView
+        function onMapClicked() {
+          zoneEditor.onMapClicked(worldMapView.mouseX, worldMapView.mouseY);
+        }
+      }
+    }
+  }
+
+  Component {
+    id: zoneHintComponent
+    ZonePreview { controller: worldMap; zone: selectedZone }
   }
 }

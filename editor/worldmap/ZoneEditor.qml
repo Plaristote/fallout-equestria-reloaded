@@ -5,21 +5,8 @@ import "qrc:/assets/ui" as UiStyle
 import ".."
 import "../../ui"
 
-Item {
+WorldmapListEditor {
   id: root
-  property QtObject worldMap
-  property var list
-  property var cityNames: []
-  property string selectedCity
-  property QtObject currentModel
-
-  function refreshNames() {
-    const newArray = [];
-
-    for (var i = 0 ; i < list.length ; ++i)
-      newArray.push(list[i].name);
-    cityNames = newArray;
-  }
 
   function onMapClicked(x, y) {
     if (currentModel) {
@@ -34,37 +21,11 @@ Item {
 
   onListChanged: refreshNames()
 
-  onSelectedCityChanged: {
-    currentModel = null;
-    for (var i = 0 ; i < list.length ; ++i) {
-      if (list[i].name === selectedCity) {
-        currentModel = list[i];
-        break ;
-      }
-    }
-  }
-
-  Loader {
-    anchors.fill: parent
-    sourceComponent: currentModel ? cityComponent : citySelectComponent
-  }
-
-  Component {
-    id: citySelectComponent
-    EditorSelectPanel {
-      id: citySelect
-      model: cityNames
-      onCurrentNameChanged: root.selectedCity = currentName
-      onNewClicked: addCityDialog.open()
-    }
-  }
-
-  Component {
-    id: cityComponent
+  formComponent: Component {
     ZoneForm {
       zoneModel: root.currentModel
       onNameChanged: root.refreshNames()
-      onPreviousClicked: root.selectedCity = ""
+      onPreviousClicked: root.selectedName = ""
       onDestroyClicked: {
         worldMap.removeZone(root.currentModel);
         root.refreshNames();
@@ -72,8 +33,7 @@ Item {
     }
   }
 
-  Dialog {
-    id: addCityDialog
+  addDialog:  Dialog {
     title: "Add zone"
     modal: true
     anchors.centerIn: parent.parent.parent.parent
@@ -85,7 +45,7 @@ Item {
     }
     onAccepted: {
       worldMap.createZone(newCityNameInput.text);
-      selectedCity = newCityNameInput.text;
+      selectedName = newCityNameInput.text;
     }
   }
 }
