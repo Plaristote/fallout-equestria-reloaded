@@ -6,6 +6,7 @@ Flickable {
   property QtObject controller;
   property alias mouseX: mapMouseArea.mouseX
   property alias mouseY: mapMouseArea.mouseY
+  property alias content: beforeCases.children
   signal mapClicked();
 
   clip: true
@@ -20,6 +21,11 @@ Flickable {
     source: "qrc:/assets/worldmap.png"
     height: controller.mapSize.height
     width: controller.mapSize.width
+
+    Item {
+      id: beforeCases
+      anchors.fill: parent
+    }
 
     Column {
       Repeater {

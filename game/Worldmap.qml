@@ -38,6 +38,12 @@ Item {
     controller: root.controller
     onMapClicked: clickedOnMap()
 
+    content: [
+      WorldmapCities {
+        model: controller.cities
+      }
+    ]
+
     Shape {
       anchors.fill: parent
       ShapePath {
@@ -71,10 +77,6 @@ Item {
         hoverEnabled: true
         onClicked: clickedOnPlayer()
       }
-    }
-
-    WorldmapCities {
-      model: controller.cities
     }
   }
 
