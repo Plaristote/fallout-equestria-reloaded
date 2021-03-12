@@ -59,28 +59,22 @@ QPoint Character::getInteractionPosition() const
 {
   if (isAlive())
   {
-    auto* player = Game::get()->getPlayer();
-    auto* level  = Game::get()->getLevel();
-    auto* grid   = level->getGrid();
-    auto  center = getPosition();
+    auto* level = Game::get()->getLevel();
 
-    for (int x = -1 ; x <= 1 ; ++x)
+    if (level)
     {
-      if (x < 0) continue ;
-      for (int y = -1 ; y <= 1 ; ++y)
-      {
-        QPoint position(center);
-        DynamicObject* occupant;
+      QList<QPoint> path;
 
-        if (y < 0) continue ;
-        position.rx() += x;
-        position.ry() += y;
-        occupant = grid->getOccupant(position.x(), position.y());
-        if (!grid->isOccupied(position.x(), position.y()) || (this != player && occupant == player))
-          return position;
+      if (level->getGrid()->findPath(level->getPlayer()->getPosition(), getPosition(), path))
+      {
+        if (path.length() > 1)
+          return path.at(path.length() - 2);
+        return level->getPlayer()->getPosition();
       }
+      qDebug() << "Character::getInteractionPosition: No path to reach character" << getObjectName();
     }
-    qDebug() << "Character::getInteractionPosition: No path to reach character" << getObjectName();
+    else
+      qDebug() << "Character::getInteractionPosition: called outside level";
   }
   return getPosition();
 }

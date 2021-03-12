@@ -114,7 +114,11 @@ bool LevelGrid::findPath(QPoint from, QPoint to, QList<QPoint>& path)
 
   if (fromCase && toCase)
   {
+    bool fromOccupiedBackup = fromCase->occupied;
+    bool toOccupiedBackup = toCase->occupied;
+
     fromCase->occupied = false;
+    toCase->occupied = false;
     path.clear();
     astar.SetStartAndGoalStates(*fromCase, *toCase);
     while ((state = astar.SearchStep()) == Pathfinder::Searching && ++iterationCount < 250);
@@ -123,10 +127,12 @@ bool LevelGrid::findPath(QPoint from, QPoint to, QList<QPoint>& path)
       for (auto& gridCase : astar.GetSolution())
         path << gridCase.position;
       path.pop_front(); // first case is the starting point
-      fromCase->occupied = true;
+      fromCase->occupied = fromOccupiedBackup;
+      toCase->occupied = toOccupiedBackup;
       return true;
     }
-    fromCase->occupied = true;
+    fromCase->occupied = fromOccupiedBackup;
+    toCase->occupied = toOccupiedBackup;
   }
   return false;
 }
