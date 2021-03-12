@@ -72,6 +72,7 @@ int main(int argc, char *argv[])
   qmlRegisterType<Quest>("Game", 1,0, "Quest");
   qmlRegisterType<WorldMap>("Game", 1,0, "WorldMap");
   qmlRegisterType<WorldMapCity>("Game", 1,0, "WorldMapCity");
+  qmlRegisterType<WorldMapZone>("Game", 1,0, "WorldMapZone");
   qmlRegisterType<Inventory>("Game", 1,0, "Inventory");
   qmlRegisterType<TextBubble>("Game", 1,0, "TextBubble");
 

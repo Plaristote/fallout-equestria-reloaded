@@ -10,6 +10,8 @@ Item {
   id: root
   property QtObject gameController
   property QtObject worldMap
+  property QtObject selectedZone
+  property QtObject selectedCity
 
   function updateMapSize() {
     const mapSize  = Qt.size(parseInt(mapSizeWidthInput.text), parseInt(mapSizeHeightInput.text));
@@ -20,18 +22,61 @@ Item {
   }
 
   WorldmapView {
+    id: worldMapView
     controller: worldMap
     anchors {
       top: parent.top; bottom: formControls.top
       left: sidebar.right; right: parent.right
     }
 
+    Loader {
+      sourceComponent: selectedZone ? zoneHintComponent : null
+    }
+
+    Component {
+      id: zoneHintComponent
+
+      Column {
+        Repeater {
+          model: worldMapView.controller.caseCount.height
+          delegate: Row {
+            property int indexY: index
+            Repeater {
+              model: worldMapView.controller.caseCount.width
+              delegate: Rectangle {
+                id: caseRectangle
+                property int indexX: index
+                height: worldMapView.controller.caseSize.height - 2
+                width:  worldMapView.controller.caseSize.width - 2
+                border.width: 1
+                border.color: "green"
+                color: getColor()
+
+                function getColor() {
+                  if (selectedZone.containsCase(indexX, indexY))
+                    return Qt.rgba(0, 0, 255, 0.5);
+                  return "transparent";
+                }
+
+                Connections {
+                  target: selectedZone
+                  function onCasesChanged() {
+                    caseRectangle.color = caseRectangle.getColor();
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
     WorldmapCities {
       model: worldMap.cities
       clickEnabled: true
       onCityClicked: {
-        cityEditor.cityModel = city;
         tabRow.currentTab = "cities";
+        selectedCity = city;
       }
     }
   }
@@ -55,45 +100,54 @@ Item {
         tabs: ["cities", "zones"]
         labels: ["Cities", "Zones"]
         currentTab: tabs[0]
+        onCurrentTabChanged: {
+          selectedZone = null;
+        }
       }
 
-      CityEditor {
-        Layout.fillWidth: true
+      Loader {
         Layout.fillHeight: true
-        id: cityEditor
-        cities: root.worldMap.cities
-        worldMap: root.worldMap
-        visible: tabRow.currentTab === "cities"
+        Layout.fillWidth: true
+        sourceComponent: tabRow.currentTab === "cities" ? cityTab : zoneTab
       }
 
-/*
-      Pane {
-        Layout.fillHeight: true
-        Layout.fillWidth: true
-        id: zoneList
-        background: UiStyle.TerminalPane {}
-        visible: tabRow.currentTab === "zones"
+      Component {
+        id: cityTab
+        CityEditor {
+          id: cityEditor
+          list: root.worldMap.cities
+          worldMap: root.worldMap
 
-        Column {
-          width: parent.width
-          spacing: 5
-
-          TerminalButton {
-            text: "Add zone"
-          }
-
-          Repeater {
-            model: worldMap.zones
-            delegate: TerminalButton {
-              width: parent.width
-              text: worldMap.zones[index].name
+          Connections {
+            target: root
+            function onSelectedCityChanged() {
+              cityEditor.selectedCity = root.selectedCity.name
             }
           }
         }
       }
-*/
+
+      Component {
+        id: zoneTab
+        ZoneEditor {
+          id: zoneEditor
+          list: root.worldMap.zones
+          worldMap: root.worldMap
+
+          onCurrentModelChanged: {
+            selectedZone = currentModel;
+          }
+
+          Connections {
+            target: worldMapView
+            function onMapClicked() {
+              zoneEditor.onMapClicked(worldMapView.mouseX, worldMapView.mouseY);
+            }
+          }
+        }
+      } // END ZoneEditor component
     }
-  }
+  } // END Sidebar
 
   MenuButton {
     id: formControls

@@ -21,6 +21,17 @@ Item {
     cityNames = newArray;
   }
 
+  function onMapClicked(x, y) {
+    if (currentModel) {
+      const position = worldMap.getCaseAt(Qt.point(x, y));
+
+      if (currentModel.containsCase(position.x, position.y))
+        currentModel.removeCase(position.x, position.y);
+      else
+        currentModel.addCase(position.x, position.y);
+    }
+  }
+
   onListChanged: refreshNames()
 
   onSelectedCityChanged: {
@@ -50,12 +61,12 @@ Item {
 
   Component {
     id: cityComponent
-    CityForm {
-      cityModel: root.currentModel
-      onCityNameChanged: root.refreshNames()
+    ZoneForm {
+      zoneModel: root.currentModel
+      onNameChanged: root.refreshNames()
       onPreviousClicked: root.selectedCity = ""
       onDestroyClicked: {
-        worldMap.removeCity(root.currentModel);
+        worldMap.removeZone(root.currentModel);
         root.refreshNames();
       }
     }
@@ -63,7 +74,7 @@ Item {
 
   Dialog {
     id: addCityDialog
-    title: "Add city"
+    title: "Add zone"
     modal: true
     anchors.centerIn: parent.parent.parent.parent
     standardButtons: Dialog.Ok | Dialog.Cancel
@@ -73,7 +84,7 @@ Item {
       TextField { id: newCityNameInput; text: "" }
     }
     onAccepted: {
-      worldMap.createCity(newCityNameInput.text);
+      worldMap.createZone(newCityNameInput.text);
       selectedCity = newCityNameInput.text;
     }
   }

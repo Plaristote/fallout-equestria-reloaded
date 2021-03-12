@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QPoint>
 #include <QMap>
+#include <QJsonObject>
 
 class WorldMapZone : public QObject
 {
@@ -13,6 +14,9 @@ class WorldMapZone : public QObject
   Q_PROPERTY(int movementSpeed MEMBER movementSpeed NOTIFY movementSpeedChanged)
 public:
   explicit WorldMapZone(QObject *parent = nullptr);
+
+  void load(const QJsonObject&);
+  QJsonObject save() const;
 
   Q_INVOKABLE int    caseCount() const { return cases.size(); }
   Q_INVOKABLE QPoint caseAt(int index) const { return index < cases.size() ? cases[index] : QPoint(); }

@@ -21,6 +21,7 @@ QJsonObject WorldMap::save() const
   QJsonObject data;
   QJsonArray discoveredJson;
   QJsonArray citiesJson;
+  QJsonArray zonesJson;
 
   for (auto it = discovered.begin() ; it != discovered.end() ; ++it)
     discoveredJson << *it;
@@ -35,14 +36,17 @@ QJsonObject WorldMap::save() const
     cityJson.insert("size",  (*it)->getSize());
     citiesJson << cityJson;
   }
+  for (auto it = zones.begin() ; it != zones.end() ; ++it)
+    zonesJson << (*it)->save();
   if (!Game::get()->property("isGameEditor").toBool())
     data.insert("discovered", discoveredJson);
-  data.insert("cities",  citiesJson);
-  data.insert("playerX", currentPosition.x());
-  data.insert("playerY", currentPosition.y());
-  data.insert("width", mapSize.width());
-  data.insert("height", mapSize.height());
-  data.insert("caseWidth", caseSize.width());
+  data.insert("cities",     citiesJson);
+  data.insert("zones",      zonesJson);
+  data.insert("playerX",    currentPosition.x());
+  data.insert("playerY",    currentPosition.y());
+  data.insert("width",      mapSize.width());
+  data.insert("height",     mapSize.height());
+  data.insert("caseWidth",  caseSize.width());
   data.insert("caseHeight", caseSize.height());
   qDebug() << "Saving worldmap" << QJsonDocument(data).toJson();
   return data;
@@ -60,6 +64,7 @@ void WorldMap::onMapSizeChanged()
 void WorldMap::load(const QJsonObject& data)
 {
   QJsonArray citiesJson = data["cities"].toArray();
+  QJsonArray zonesJson = data["zones"].toArray();
 
   mapSize  = QSize(data["width"].toInt(),     data["height"].toInt());
   caseSize = QSize(data["caseWidth"].toInt(), data["caseHeight"].toInt());
@@ -96,26 +101,17 @@ void WorldMap::load(const QJsonObject& data)
     cities << city;
   }
 
+  for (auto it = zonesJson.begin() ; it != zonesJson.end() ; ++it)
+  {
+    auto* zone = new WorldMapZone(this);
+
+    zone->load(it->toObject());
+    zones << zone;
+  }
+
   currentPosition.setX(data["playerX"].toInt(300));
   currentPosition.setY(data["playerY"].toInt(184));
   revealCaseAt(currentPosition);
-
-  // Draftin citiez
-  /*{
-    auto* a = new WorldMapCity(this);
-    a->setName("eltest5");
-    a->setPosition(QPoint(300, 184));
-    a->setSize(80);
-    cities << a;
-  }
-
-  {
-    auto* a = new WorldMapCity(this);
-    a->setName("eltest");
-    a->setPosition(QPoint(628, 794));
-    a->setSize(100);
-    cities << a;
-  }*/
 
   emit mapSizeChanged();
   emit citiesChanged();
@@ -257,14 +253,21 @@ void WorldMap::removeZone(WorldMapZone* zone)
   zone->deleteLater();
 }
 
+QPoint WorldMap::getCaseAt(QPoint position) const
+{
+  return QPoint(
+    position.x() / caseSize.width(),
+    position.y() / caseSize.height()
+  );
+}
+
 WorldMapZone* WorldMap::getCurrentZone() const
 {
-  int caseX = currentPosition.x() / caseSize.width();
-  int caseY = currentPosition.y() / caseSize.height();
+  QPoint currentCase = getCaseAt(currentPosition);
 
   for (WorldMapZone* zone : qAsConst(zones))
   {
-    if (zone->containsCase(caseX, caseY))
+    if (zone->containsCase(currentCase.x(), currentCase.y()))
       return zone;
   }
   return nullptr;

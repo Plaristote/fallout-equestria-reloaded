@@ -42,6 +42,7 @@ public:
   Q_INVOKABLE void removeCity(WorldMapCity*);
   Q_INVOKABLE void removeZone(WorldMapZone*);
 
+  Q_INVOKABLE QPoint getCaseAt(QPoint position) const;
   Q_INVOKABLE WorldMapZone* getCurrentZone() const;
 
 signals:

@@ -10,6 +10,7 @@ Pane {
 
   signal cityNameChanged();
   signal previousClicked();
+  signal destroyClicked();
 
   id: cityPanel
   background: UiStyle.TerminalPane {}
@@ -82,6 +83,13 @@ Pane {
         text: cityModel.size
         onTextChanged: cityModel.size = parseInt(text)
       }
+    }
+
+    TerminalButton {
+      text: "Delete city"
+      onClicked: destroyClicked()
+      width: parent.width
+      height: 25
     }
   }
 }

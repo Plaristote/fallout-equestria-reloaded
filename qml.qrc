@@ -201,5 +201,7 @@
         <file>editor/worldmap/MapSizePane.qml</file>
         <file>editor/worldmap/CityEditor.qml</file>
         <file>editor/worldmap/CityForm.qml</file>
+        <file>editor/worldmap/ZoneEditor.qml</file>
+        <file>editor/worldmap/ZoneForm.qml</file>
     </qresource>
 </RCC>
