@@ -140,15 +140,17 @@ Item {
 
       Column {
         Repeater {
-          model: controller.cities
+          model: controller.discoveredCities
           delegate: Row {
+            property QtObject city: controller.getCity(controller.discoveredCities[index]);
+
             UiStyle.TinyButton {
               id: cityButton
-              onClicked: clickedOnCity(controller.cities[index])
+              onClicked: clickedOnCity(city)
             }
             Label {
               height: cityButton.height
-              text: controller.cities[index].name
+              text: city.name
               color: "white"
               padding: 5
               background: UiStyle.Label {}

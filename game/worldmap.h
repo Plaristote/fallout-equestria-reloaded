@@ -22,6 +22,7 @@ class WorldMap : public QObject
   Q_PROPERTY(TimeManager* timeManager MEMBER timeManager NOTIFY timeManagerChanged)
   Q_PROPERTY(QQmlListProperty<WorldMapCity> cities READ getCitiesQml NOTIFY citiesChanged)
   Q_PROPERTY(QQmlListProperty<WorldMapZone> zones READ getZonesQml NOTIFY zonesChanged)
+  Q_PROPERTY(QStringList discoveredCities MEMBER discoveredCities NOTIFY discoveredCitiesChanged)
 public:
   WorldMap(QObject* parent = nullptr);
 
@@ -36,7 +37,11 @@ public:
   Q_INVOKABLE bool isVisible(int x, int y) const;
   Q_INVOKABLE void revealCaseAt(int x, int y) { revealCaseAt(QPoint(x, y)); }
   void             revealCaseAt(const QPoint);
+  Q_INVOKABLE void revealCity(const QString& name);
+  Q_INVOKABLE void revealCity(WorldMapCity*);
 
+  Q_INVOKABLE WorldMapCity* getCity(const QString& name) const;
+  Q_INVOKABLE WorldMapZone* getZone(const QString& zone) const;
   Q_INVOKABLE WorldMapCity* createCity(const QString& name);
   Q_INVOKABLE WorldMapZone* createZone(const QString& name);
   Q_INVOKABLE void removeCity(WorldMapCity*);
@@ -55,6 +60,7 @@ signals:
   void cityEntered(QString);
   void zonesChanged();
   void caseRevealed(int caseX, int caseY);
+  void discoveredCitiesChanged();
 
 private slots:
   void update();
@@ -74,6 +80,7 @@ private:
   QList<WorldMapCity*> cities;
   QList<WorldMapZone*> zones;
   QVector<bool> discovered;
+  QStringList   discoveredCities;
   QSize         mapSize;
   QSize         caseSize, caseCount;
 };

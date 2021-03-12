@@ -48,6 +48,7 @@ QJsonObject WorldMap::save() const
   data.insert("height",     mapSize.height());
   data.insert("caseWidth",  caseSize.width());
   data.insert("caseHeight", caseSize.height());
+  data.insert("visible",    QJsonValue::fromVariant(QVariant::fromValue(discoveredCities)));
   qDebug() << "Saving worldmap" << QJsonDocument(data).toJson();
   return data;
 }
@@ -66,6 +67,7 @@ void WorldMap::load(const QJsonObject& data)
   QJsonArray citiesJson = data["cities"].toArray();
   QJsonArray zonesJson = data["zones"].toArray();
 
+  discoveredCities = data["visible"].toVariant().toStringList();
   mapSize  = QSize(data["width"].toInt(),     data["height"].toInt());
   caseSize = QSize(data["caseWidth"].toInt(), data["caseHeight"].toInt());
   caseCount = QSize(
@@ -116,6 +118,7 @@ void WorldMap::load(const QJsonObject& data)
   emit mapSizeChanged();
   emit citiesChanged();
   emit zonesChanged();
+  emit discoveredCitiesChanged();
 
 }
 
@@ -182,12 +185,36 @@ void WorldMap::onTargetPositionReached()
   updateTimer.stop();
 }
 
+WorldMapCity* WorldMap::getCity(const QString &name) const
+{
+  for (WorldMapCity* city : cities)
+  {
+    if (city->getName() == name)
+      return city;
+  }
+  return nullptr;
+}
+
+WorldMapZone* WorldMap::getZone(const QString &name) const
+{
+  for (WorldMapZone* zone : zones)
+  {
+    if (zone->property("name").toString() == name)
+      return zone;
+  }
+  return nullptr;
+}
+
 void WorldMap::getIntoCity(WorldMapCity* city)
 {
   QString levelSource = city->getLevel();
 
   levelSource.resize(levelSource.length() - 5);
-  qDebug() << "Rekuezted get into city" << city->getLevel() << "->" << levelSource;
+  if (discoveredCities.indexOf(city->getName()) < 0)
+  {
+    discoveredCities << city->getName();
+    emit discoveredCitiesChanged();
+  }
   emit cityEntered(levelSource);
 }
 
@@ -207,6 +234,28 @@ void WorldMap::revealCaseAt(const QPoint position)
     discovered[offset] = true;
     emit caseRevealed(caseX, caseY);
   }
+}
+
+void WorldMap::revealCity(const QString &name)
+{
+  revealCity(getCity(name));
+}
+
+void WorldMap::revealCity(WorldMapCity* city)
+{
+  if (city)
+  {
+    auto index = discoveredCities.indexOf(city->getName());
+
+    if (index < 0)
+    {
+      discoveredCities << city->getName();
+      revealCaseAt(city->getPosition());
+      emit discoveredCitiesChanged();
+    }
+  }
+  else
+    qDebug() << "WorldMap::revealCity: parameter is null";
 }
 
 WorldMapCity* WorldMap::createCity(const QString &name)
