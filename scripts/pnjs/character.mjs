@@ -78,7 +78,7 @@ export class CharacterBehaviour {
   onTurnStart() {
     console.log("on turn start", this.model, this.combatTarget);
     if (!this.combatTarget || !this.combatTarget.isAlive()) {
-      const enemies = this.model.fieldOfView.getCharacters();
+      const enemies = this.model.fieldOfView.getEnemies();
 
       console.log("Detected enemies:", enemies, enemies.length, enemies[0]);
       this.combatTarget = enemies[0];

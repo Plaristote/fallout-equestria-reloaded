@@ -19,6 +19,7 @@ Rectangle {
 
     onAccepted: {
       console.log("Start a new game");
+      statModel.faction = "player";
       gameManager.currentGame.onCityEntered("eltest5");
       application.popView();
     }
