@@ -17,6 +17,7 @@ Game::Game(QObject *parent) : QObject(parent)
   playerParty = new CharacterParty(this);
   worldmap = new WorldMap(this);
   quests = new QuestManager(this);
+  taskManager = new TaskRunner(this);
   scriptEngine.installExtensions(QJSEngine::ConsoleExtension);
   scriptEngine.globalObject().setProperty("game", scriptEngine.newQObject(this));
   scriptEngine.globalObject().setProperty("quests", scriptEngine.newQObject(quests));
@@ -33,6 +34,8 @@ Game::~Game()
   if (instance == this)
     instance = nullptr;
   delete diplomacy;
+  if (script)
+    delete script;
 }
 
 void Game::deleteLater()
@@ -52,12 +55,14 @@ void Game::newPlayerParty(StatModel* statistics)
   playerParty->addCharacter(player);
   connect(player->getInventory(), &Inventory::itemPicked, quests, &QuestManager::onItemPicked);
   connect(player, &Character::died, this, &Game::gameOver);
+  initializeScript();
 }
 
 void Game::loadFromDataEngine()
 {
   QString currentLevelName = dataEngine->getCurrentLevel();
 
+  script = new ScriptController(SCRIPTS_PATH + "main.mjs");
   diplomacy->initialize();
   timeManager->load(dataEngine->getTimeData());
   playerParty->load(dataEngine->getPlayerParty());
@@ -71,6 +76,15 @@ void Game::loadFromDataEngine()
     goToLevel(currentLevelName);
     playerParty->loadIntoLevel(currentLevel);
   }
+  dataStore = dataEngine->getVariables();
+  initializeScript();
+}
+
+void Game::initializeScript()
+{
+  script = new ScriptController(SCRIPTS_PATH + "main.mjs");
+  taskManager->setScriptController(script);
+  script->initialize(this);
 }
 
 void Game::prepareEditor()
@@ -194,6 +208,7 @@ void Game::save()
   dataEngine->setQuests(quests->save());
   dataEngine->setWorldmap(worldmap->save());
   dataEngine->setPlayerParty(partyData);
+  dataEngine->setVariables(dataStore);
 }
 
 QJSValue Game::scriptCall(QJSValue callable, const QJSValueList& args, const QString& scriptName)
@@ -225,7 +240,10 @@ void Game::advanceTime(unsigned int minutes)
     currentLevel->advanceTime(minutes);
   else
   {
+    qint64 delta = minutes * 60 * 1000;
+
     for (Character* character : playerParty->getCharacters())
-      character->getTaskManager()->update(minutes * 60 * 1000);
+      character->getTaskManager()->update(delta);
+    taskManager->update(delta);
   }
 }

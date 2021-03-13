@@ -28,6 +28,7 @@ class LevelTask : public CombatComponent
   Q_PROPERTY(TileMap*   tilemap READ getTileMap NOTIFY tilemapReady)
   Q_PROPERTY(Character* player READ getPlayer NOTIFY playerChanged)
   Q_PROPERTY(SoundManager* sounds READ getSoundManager)
+  Q_PROPERTY(TaskRunner* tasks MEMBER taskRunner)
   Q_PROPERTY(QQmlListProperty<DynamicObject> dynamicObjects READ getQmlObjects NOTIFY objectsChanged)
   Q_PROPERTY(QQmlListProperty<Sprite>        visualEffects READ getQmlVisualEffects NOTIFY visualEffectsChanged)
 public:
@@ -68,6 +69,11 @@ public:
 
   void finalizeRound() override;
 
+  Q_INVOKABLE bool     hasVariable(const QString& name) const { return dataStore.contains(name); }
+  Q_INVOKABLE QVariant getVariable(const QString& name) const { return dataStore[name].toVariant(); }
+  Q_INVOKABLE void     setVariable(const QString& name, const QVariant& value) { dataStore.insert(name, QJsonValue::fromVariant(value)); }
+  Q_INVOKABLE void     unsetVariable(const QString& name) { dataStore.remove(name); }
+
 signals:
   void updated();
   void pausedChanged();
@@ -95,13 +101,16 @@ private:
   QList<DynamicObject*> objects;
   QList<Sprite*> visualEffects;
 
-  QTimer        updateTimer;
-  QElapsedTimer clock;
-  QString       name;
-  TileMap*      tilemap = nullptr;
-  TimeManager*  timeManager = nullptr;
-  SoundManager* soundManager = nullptr;
-  bool          paused = true;
+  QTimer            updateTimer;
+  QElapsedTimer     clock;
+  QString           name;
+  TileMap*          tilemap = nullptr;
+  TimeManager*      timeManager = nullptr;
+  SoundManager*     soundManager = nullptr;
+  ScriptController* script = nullptr;
+  TaskRunner*       taskRunner = nullptr;
+  bool              paused = true;
+  QJsonObject       dataStore;
 };
 
 #endif // LEVELTASK_H

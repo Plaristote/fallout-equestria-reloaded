@@ -23,6 +23,7 @@ class WorldMap : public QObject
   Q_PROPERTY(QQmlListProperty<WorldMapCity> cities READ getCitiesQml NOTIFY citiesChanged)
   Q_PROPERTY(QQmlListProperty<WorldMapZone> zones READ getZonesQml NOTIFY zonesChanged)
   Q_PROPERTY(QStringList discoveredCities MEMBER discoveredCities NOTIFY discoveredCitiesChanged)
+  Q_PROPERTY(bool paused MEMBER paused)
 public:
   WorldMap(QObject* parent = nullptr);
 
@@ -84,6 +85,7 @@ private:
   QStringList   discoveredCities;
   QSize         mapSize;
   QSize         caseSize, caseCount;
+  bool          paused = false;
 };
 
 #endif // WORLDMAP_H

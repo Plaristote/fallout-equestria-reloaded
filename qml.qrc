@@ -207,5 +207,6 @@
         <file>editor/worldmap/WorldmapListEditor.qml</file>
         <file>editor/DoorwayObjectEditor.qml</file>
         <file>editor/DiplomacyEditor.qml</file>
+        <file>game/slideshows/TransitionScreen.qml</file>
     </qresource>
 </RCC>

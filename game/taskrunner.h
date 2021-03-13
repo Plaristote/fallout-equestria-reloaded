@@ -15,7 +15,6 @@ class TaskRunner : public QObject
     QString     name;
     int         iterationCount = 1;
     bool        infinite = false;
-    QJSValue    callback, module;
     qint64      interval;
     qint64      timeLeft;
   };
@@ -37,7 +36,6 @@ private:
   bool runTask(Task&);
 
   QList<Task> tasks;
-  QJSValue    module;
   ScriptController* script = nullptr;
 };
 

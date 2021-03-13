@@ -151,21 +151,23 @@ float WorldMap::getCurrentMovementSpeed() const
 
 void WorldMap::update()
 {
-  qDebug() << "WorldMap::update";
-  float movementSpeed = getCurrentMovementSpeed();
-  float movementSpeedX = movementSpeed;
-  float movementSpeedY = movementSpeed;
-  int   distX = std::max(currentPosition.x(), targetPosition.x()) - std::min(currentPosition.x(), targetPosition.x());
-  int   distY = std::max(currentPosition.y(),  targetPosition.y()) - std::min(currentPosition.y(), targetPosition.y());
+  if (!paused)
+  {
+    float movementSpeed = getCurrentMovementSpeed();
+    float movementSpeedX = movementSpeed;
+    float movementSpeedY = movementSpeed;
+    int   distX = std::max(currentPosition.x(), targetPosition.x()) - std::min(currentPosition.x(), targetPosition.x());
+    int   distY = std::max(currentPosition.y(),  targetPosition.y()) - std::min(currentPosition.y(), targetPosition.y());
 
-  if      (distX > distY) { movementSpeedY = movementSpeed * (static_cast<float>(distY) / static_cast<float>(distX)); }
-  else if (distY > distX) { movementSpeedX = movementSpeed * (static_cast<float>(distX) / static_cast<float>(distY)); }
-  currentPosition.setX(axisMovement(currentPosition.x(), targetPosition.x(), static_cast<int>(movementSpeedX)));
-  currentPosition.setY(axisMovement(currentPosition.y(), targetPosition.y(), static_cast<int>(movementSpeedY)));
-  emit currentPositionChanged();
-  if (currentPosition == targetPosition)
-    emit onTargetPositionReached();
-  Game::get()->advanceTime(14);
+    if      (distX > distY) { movementSpeedY = movementSpeed * (static_cast<float>(distY) / static_cast<float>(distX)); }
+    else if (distY > distX) { movementSpeedX = movementSpeed * (static_cast<float>(distX) / static_cast<float>(distY)); }
+    currentPosition.setX(axisMovement(currentPosition.x(), targetPosition.x(), static_cast<int>(movementSpeedX)));
+    currentPosition.setY(axisMovement(currentPosition.y(), targetPosition.y(), static_cast<int>(movementSpeedY)));
+    emit currentPositionChanged();
+    if (currentPosition == targetPosition)
+      emit onTargetPositionReached();
+    Game::get()->advanceTime(14);
+  }
 }
 
 void WorldMap::onCurrentPositionChanged()

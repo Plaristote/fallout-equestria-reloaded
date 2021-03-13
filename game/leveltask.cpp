@@ -10,6 +10,7 @@ LevelTask::LevelTask(QObject *parent) : CombatComponent(parent)
 {
   tilemap = new TileMap(this);
   soundManager = new SoundManager(this);
+  taskRunner = new TaskRunner(this);
   updateTimer.setInterval(15);
   updateTimer.setSingleShot(false);
   connect(&updateTimer, &QTimer::timeout, this, &LevelTask::update);
@@ -19,6 +20,8 @@ LevelTask::LevelTask(QObject *parent) : CombatComponent(parent)
 LevelTask::~LevelTask()
 {
   qDebug() << "LevelTask::destroyed";
+  if (script)
+    delete script;
 }
 
 void LevelTask::deleteLater()
@@ -48,7 +51,9 @@ void LevelTask::load(const QString& levelName, DataEngine* dataEngine)
   timeManager = Game::get()->getTimeManager();
   tilemap->load(levelName);
   grid->initializeGrid(tilemap);
-
+  script = new ScriptController(SCRIPTS_PATH + "levels/" + levelName + ".mjs");
+  script->initialize(this);
+  taskRunner->setScriptController(script);
   if (dataEngine->isLevelActive(name))
     loadObjectsFromDataEngine(dataEngine);
   for (auto* zone : tilemap->getZones())
@@ -60,6 +65,7 @@ void LevelTask::loadObjectsFromDataEngine(DataEngine* dataEngine)
   QJsonObject levelData = dataEngine->getLevelData(name);
   QJsonValue  lastUpdate = levelData["lastUpdate"];
 
+  dataStore = levelData["vars"].toObject();
   for (QJsonValue objectData : levelData["objects"].toArray())
   {
     QString type = objectData["type"].toString();
@@ -81,6 +87,7 @@ void LevelTask::loadObjectsFromDataEngine(DataEngine* dataEngine)
     object->setRenderPosition(object->getSpritePosition()); // isn't this basically self-assign ?
     registerDynamicObject(object);
   }
+  taskRunner->load(levelData["tasks"].toObject());
   if (!lastUpdate.isUndefined() && !lastUpdate.isNull())
   {
     std::time_t timestamp    = static_cast<std::time_t>(lastUpdate.toInt());
@@ -90,6 +97,7 @@ void LevelTask::loadObjectsFromDataEngine(DataEngine* dataEngine)
     qDebug() << "ADVANCING TIME IN LEVEL" << timestamp << newTimestamp << elapsedTime;
     for (DynamicObject* object : qAsConst(objects))
       object->getTaskManager()->update(elapsedTime * 1000);
+    taskRunner->update(elapsedTime *  1000);
   }
 }
 
@@ -97,6 +105,7 @@ void LevelTask::save(DataEngine* dataEngine)
 {
   Game* game = Game::get();
   QJsonObject levelData = dataEngine->getLevelData(name);
+  QJsonObject taskData;
   QJsonArray  objectArray;
   auto*       playerParty = Game::get()->getPlayerParty();
 
@@ -114,7 +123,12 @@ void LevelTask::save(DataEngine* dataEngine)
   }
   levelData["objects"] = objectArray;
   if (!(game->property("isGameEditor").toBool()))
+  {
     levelData["lastUpdate"] = static_cast<int>(game->getTimeManager()->getDateTime().GetTimestamp());
+    levelData.insert("vars", dataStore);
+    taskRunner->save(taskData);
+    levelData.insert("tasks", taskData);
+  }
   dataEngine->setLevelData(name, levelData);
 }
 
@@ -276,6 +290,7 @@ void LevelTask::advanceTime(unsigned int minutes)
     if (object->isCharacter())
       reinterpret_cast<Character*>(object)->getActionQueue()->update();
   }
+  taskRunner->update(delta);
 }
 
 void LevelTask::update()
@@ -298,6 +313,8 @@ void LevelTask::update()
       if (object->isCharacter() && asCharacter->isAlive())
         asCharacter->getActionQueue()->update();
     }
+    taskRunner->update(delta);
+    Game::get()->getTaskManager()->update(delta);
   }
   else
   {
@@ -326,6 +343,8 @@ void LevelTask::finalizeRound()
 
     if (!object->isCharacter() || (!isInCombat(asCharacter) && asCharacter->isAlive()))
       object->getTaskManager()->update(WORLDTIME_TURN_DURATION);
+    taskRunner->update(WORLDTIME_TURN_DURATION);
+    Game::get()->getTaskManager()->update(WORLDTIME_TURN_DURATION);
   }
   CombatComponent::finalizeRound();
 }

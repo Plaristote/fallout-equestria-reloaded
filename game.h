@@ -22,6 +22,7 @@ class Game : public QObject
   Q_PROPERTY(CharacterParty* playerParty MEMBER playerParty)
   Q_PROPERTY(DataEngine*     dataEngine  MEMBER dataEngine)
   Q_PROPERTY(TimeManager*    timeManager MEMBER timeManager)
+  Q_PROPERTY(TaskRunner*     tasks       MEMBER taskManager)
   Q_PROPERTY(bool isGameEditor MEMBER isGameEditor)
 
   static Game* instance;
@@ -48,6 +49,7 @@ public:
   Q_INVOKABLE QuestManager* getQuestManager() const { return quests; }
   WorldMap* getWorldmap() const { return worldmap; }
   LevelTask* getLevel() const { return currentLevel; }
+  TaskRunner* getTaskManager() const { return taskManager; }
   QJSEngine& getScriptEngine() { return scriptEngine; }
   QJSValue loadScript(const QString& path);
   QJSValue scriptCall(QJSValue callable, const QJSValueList& args, const QString& scriptName);
@@ -60,11 +62,17 @@ public:
   Q_INVOKABLE StatModel* getPlayerStatistics() { return getPlayer()->getStatistics(); }
   Q_INVOKABLE void       advanceTime(unsigned int minutes);
 
+  Q_INVOKABLE bool     hasVariable(const QString& name) const { return dataStore.contains(name); }
+  Q_INVOKABLE QVariant getVariable(const QString& name) const { return dataStore[name].toVariant(); }
+  Q_INVOKABLE void     setVariable(const QString& name, const QVariant& value) { dataStore.insert(name, QJsonValue::fromVariant(value)); }
+  Q_INVOKABLE void     unsetVariable(const QString& name) { dataStore.remove(name); }
+
 signals:
   void levelChanged();
   void levelSwapped();
   void consoleUpdated();
   void gameOver();
+  void transitionRequired(const QString& video, int elapsingTime = 0);
 
 public slots:
   void onCityEntered(QString name);
@@ -72,6 +80,8 @@ public slots:
   void deleteLater();
 
 private:
+  void initializeScript();
+
   bool isGameEditor = false;
   DataEngine* dataEngine = nullptr;
   TimeManager* timeManager;
@@ -83,6 +93,9 @@ private:
   Character* player = nullptr;
   QStringList consoleMessages;
   QJSEngine   scriptEngine;
+  ScriptController* script = nullptr;
+  TaskRunner* taskManager = nullptr;
+  QJsonObject dataStore;
 
   QMap<QString, Trait> cmapTraits;
 };

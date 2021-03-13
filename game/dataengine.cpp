@@ -21,6 +21,13 @@ DataEngine::DataEngine(QObject *parent) : QObject(parent)
   data.insert("worldmap", worldmap);
 }
 
+void DataEngine::setVariables(const QJsonObject& variablesData)
+{
+  variables = variablesData;
+  data.remove("vars");
+  data.insert("vars", variablesData);
+}
+
 QJsonObject DataEngine::getTimeData() const
 {
   return time;
@@ -141,6 +148,7 @@ void DataEngine::loadFromFile(const QString &path)
     diplomacy  = data["diplomacy"].toObject();
     quests     = data["quests"].toObject();
     worldmap   = data["worldmap"].toObject();
+    variables  = data["vars"].toObject();
     qDebug() << "Diplomacy data loadded:" << QJsonDocument(diplomacy).toJson();
     emit diplomacyUpdated();
   }

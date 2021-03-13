@@ -15,6 +15,9 @@ public:
   Q_INVOKABLE void loadFromFile(const QString& path);
   Q_INVOKABLE void saveToFile(const QString &path);
 
+  const QJsonObject& getVariables() { return variables; }
+  void               setVariables(const QJsonObject&);
+
   void         setCurrentLevel(const QString&);
   QString      getCurrentLevel() const;
   void         exitLevel();
@@ -57,7 +60,7 @@ signals:
 
 private:
   QJsonObject data;
-  QJsonObject levels, characters, time, diplomacy, quests, worldmap;
+  QJsonObject levels, characters, time, diplomacy, quests, worldmap, variables;
 };
 
 #endif // DATAENGINE_H

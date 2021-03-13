@@ -60,6 +60,21 @@ Item {
   }
 
   Timer {
+    property string video
+    property int elapsingTime
+    id: deferredTransitionLoading
+    interval: 500
+    onTriggered: {
+      application.pushView("game/slideshows/TransitionScreen.qml", {
+        gameController:  gameManager.currentGame,
+        levelController: gameManager.currentGame.level,
+        source: video,
+        elapsingTime: elapsingTime
+      });
+    }
+  }
+
+  Timer {
     id: deferredWorldmapDisplay
     interval: 500
     onTriggered: application.pushView("game/Worldmap.qml", { controller: root.gameController.worldmap })
@@ -124,6 +139,12 @@ Item {
     function onGameOver() {
       console.log("Game.qml onGameOver has been called");
       deferredGameOverScreen.running = true;
+    }
+
+    function onTransitionRequired(video, elapsingTime) {
+      deferredTransitionLoading.video = video;
+      deferredTransitionLoading.elapsingTime = elapsingTime;
+      deferredTransitionLoading.running = true;
     }
   }
 

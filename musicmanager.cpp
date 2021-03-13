@@ -43,6 +43,14 @@ void MusicManager::loadDataTree()
     qDebug() << "Missing musics.json";
 }
 
+void MusicManager::pause(bool paused)
+{
+  if (paused)
+    audioManager->pause();
+  else
+    audioManager->play();
+}
+
 void MusicManager::play(const QString& category)
 {
   if (currentCategory == category) return ;
