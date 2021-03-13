@@ -59,8 +59,6 @@ signals:
   void currentCombattantChanged();
 
 private slots:
-  void onMovementFinished(Character*);
-  void onCombattantReachedDestination();
   void onActiveItemChanged();
   virtual void onCharacterDied(Character*);
 

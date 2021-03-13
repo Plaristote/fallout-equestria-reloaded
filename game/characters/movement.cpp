@@ -1,4 +1,5 @@
 #include "movement.h"
+#include "game.h"
 #include <QJsonArray>
 #include <QJsonObject>
 
@@ -35,16 +36,22 @@ void CharacterMovement::lookTo(int x, int y)
     orientation = "right";
 }
 
-void CharacterMovement::moveTo(int x, int y, QPoint renderPosition)
+void CharacterMovement::moveTo(int x, int y)
 {
-  QString animationName;
+  auto* level = Game::get()->getLevel();
 
-  lookTo(x, y);
-  animationName = movementMode + '-' + orientation;
-  position = QPoint(x, y);
-  moveToCoordinates(renderPosition);
-  if (getCurrentAnimation() != animationName)
-    setAnimation(movementMode);
+  if (level)
+  {
+    QString animationName;
+    QPoint  renderPosition = level->getRenderPositionForTile(x, y);
+
+    lookTo(x, y);
+    animationName = movementMode + '-' + orientation;
+    moveToCoordinates(renderPosition);
+    if (getCurrentAnimation() != animationName)
+      setAnimation(movementMode);
+    level->getGrid()->moveObject(this, x, y);
+  }
 }
 
 void CharacterMovement::setMovementMode(const QString& mode)

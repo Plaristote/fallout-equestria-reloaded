@@ -48,9 +48,9 @@ public:
   void registerZone(TileZone*);
   void unregisterZone(TileZone*);
   void eachCase(std::function<void (int x, int y, CaseContent&)> callback, QPoint from = QPoint(0,0), QPoint to = QPoint(0,0));
+  CaseContent* getGridCase(int x, int y);
 
 private:
-  CaseContent* getGridCase(int x, int y);
   static void setCaseOccupant(CaseContent&, DynamicObject*);
 
   QSize                size;

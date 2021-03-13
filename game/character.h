@@ -40,6 +40,7 @@ public:
   bool         getIsUnique() const { return isUnique; }
   void         setUnique(bool value) { isUnique = value; }
   Q_INVOKABLE bool isMoving() const { return Sprite::isMoving() || currentPath.size() > 0; }
+  bool         isSpriteMoving() const { return Sprite::isMoving(); }
   int          getZIndex() const override { return isAlive() ? 2 : 1; }
   const QVector<TileZone*>& getCurrentZones() const { return currentZones; }
   int          getCoverValue() const override { return 10; }

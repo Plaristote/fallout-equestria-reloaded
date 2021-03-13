@@ -24,10 +24,7 @@ public:
   void             unregisterDynamicObject(DynamicObject*);
   void             registerZone(TileZone*);
   void             unregisterZone(TileZone*);
-  Q_INVOKABLE bool moveTo(Character* character, int x, int y) { return moveTo(character, QPoint(x, y)); }
-  bool             moveTo(Character*, QPoint);
 
-  bool startCharacterMoveToTile(Character*, int x, int y);
   void setCharacterPosition(Character*, int x, int y);
   Q_INVOKABLE void setObjectPosition(DynamicObject*, int x, int y);
 
@@ -35,7 +32,6 @@ signals:
   void exitZoneEntered(TileZone*);
 
 protected slots:
-  virtual void onMovementFinished(Character*);
   virtual void onCharacterDied(Character*);
   void         onZoneEntered(DynamicObject*, TileZone*);
   void         onZoneExited(DynamicObject*, TileZone*);

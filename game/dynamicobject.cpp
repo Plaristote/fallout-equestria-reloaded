@@ -6,6 +6,7 @@
 
 DynamicObject::DynamicObject(QObject *parent) : Sprite(parent)
 {
+  position = QPoint(-1,-1);
   taskManager = new TaskRunner(this);
   connect(this, &DynamicObject::controlZoneAdded,   this, &DynamicObject::controlZoneChanged);
   connect(this, &DynamicObject::controlZoneRemoved, this, &DynamicObject::controlZoneChanged);

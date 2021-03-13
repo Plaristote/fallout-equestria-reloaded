@@ -16,6 +16,8 @@ public:
   void update() override;
 
 protected:
+  void triggerNextMovement();
+
   QPoint target;
 };
 

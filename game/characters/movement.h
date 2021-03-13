@@ -17,8 +17,9 @@ public:
   virtual void save(QJsonObject&) const;
 
   void             setAnimation(const QString& animationName) override;
-  void             moveTo(int x, int y, QPoint renderPosition);
+  void             moveTo(int x, int y);
   Q_INVOKABLE void lookTo(int x, int y);
+  inline void      lookTo(QPoint target) { lookTo(target.x(), target.y()); }
 
   const QString&       getMovementMode() const { return movementMode; }
   void                 setMovementMode(const QString&);

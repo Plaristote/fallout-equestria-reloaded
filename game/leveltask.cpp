@@ -148,8 +148,10 @@ void LevelTask::tileClicked(int x, int y)
       x = interactionPosition.x();
       y = interactionPosition.y();
     }
-    if (!moveTo(getPlayer(), x, y))
-      emit displayConsoleMessage("No path towards [" + QString::number(x) + ',' + QString::number(y) + ']');
+    getPlayer()->getActionQueue()->reset();
+    getPlayer()->getActionQueue()->pushMovement(QPoint(x, y));
+    if (!(getPlayer()->getActionQueue()->start()))
+      displayConsoleMessage("No path.");
   }
   else
   {

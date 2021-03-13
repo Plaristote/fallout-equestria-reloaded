@@ -62,12 +62,12 @@ bool ActionQueue::start()
       emit queueCompleted();
     }
   }
-  return !queue.empty();
+  return queue.size() > 0;
 }
 
 void ActionQueue::reset()
 {
-  for (auto* entry : queue)
+  for (auto* entry : qAsConst(queue))
     delete entry;
   queue.clear();
 }

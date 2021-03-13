@@ -5,6 +5,7 @@
 
 InventoryItem::InventoryItem(QObject* parent) : DynamicObject(parent), quantity(1)
 {
+  blocksPath = false;
   connect(this, &InventoryItem::quantityChanged, this, &InventoryItem::weightChanged);
   connect(this, &InventoryItem::quantityChanged, this, &InventoryItem::valueChanged);
   connect(this, &InventoryItem::objectNameChanged, this, &InventoryItem::updateScript);

@@ -192,8 +192,16 @@ bool LevelGrid::isOccupied(int x, int y) const
 
 void LevelGrid::setCaseOccupant(CaseContent& _case, DynamicObject* occupant)
 {
-  _case.occupied = occupant != nullptr;
-  _case.occupant = occupant;
+  if (occupant && occupant->isBlockingPath())
+  {
+    _case.occupied = true;
+    _case.occupant = occupant;
+  }
+  else
+  {
+    _case.occupied = false;
+    _case.occupant = nullptr;
+  }
 }
 
 DynamicObject* LevelGrid::getOccupant(int x, int y)
@@ -264,23 +272,20 @@ bool LevelGrid::moveObject(DynamicObject* object, int x, int y)
 {
   auto* gridCase = getGridCase(x, y);
 
-  if (gridCase && !gridCase->occupied)
+  if (object->isBlockingPath() && gridCase)
   {
     QPoint currentPosition = object->getPosition();
     auto*  oldCase = getGridCase(currentPosition.x(), currentPosition.y());
 
-    if (oldCase && oldCase->occupant == object)
+    if (oldCase)
       setCaseOccupant(*oldCase, nullptr);
     setCaseOccupant(*gridCase, object);
+    object->setPosition(QPoint(x, y));
     return true;
   }
-  else if (!gridCase)
-    qDebug() << "LevelRange: Out of range" << x << y;
-  else if (gridCase->occupant == nullptr)
-    qDebug() << "LevelGrid:" << x << y << "haz a wall";
-  else
-    qDebug() << "LevelGrid:" << x << y << "already occupied";
-  return false;
+  else if (gridCase)
+    object->setPosition(QPoint(x, y));
+  return gridCase != nullptr;
 }
 
 void LevelGrid::triggerZone(Character* character, int x, int y)
