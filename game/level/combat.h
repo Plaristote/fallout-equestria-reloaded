@@ -25,21 +25,7 @@ public:
   void registerDynamicObject(DynamicObject*);
   void unregisterDynamicObject(DynamicObject*);
 
-  /*
-   * TODO: find a way for characters to schedule orders.
-   *
-  void update(qint64 delta)
-  {
-    if (combat)
-    {
-    }
-  }
-
-  void updateCombat(qint64 delta)
-  {
-
-  }
-  */
+  void startCombat(Character* character);
   void onNextCombatTurn();
   bool isPlayerTurn() const;
 

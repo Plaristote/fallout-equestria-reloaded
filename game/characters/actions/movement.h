@@ -14,6 +14,7 @@ public:
   int  getApCost() const override;
   bool trigger() override;
   void update() override;
+  void interrupt() override;
 
 protected:
   void triggerNextMovement();

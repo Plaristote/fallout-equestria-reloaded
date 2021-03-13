@@ -20,6 +20,7 @@ public:
   virtual int  getApCost() const = 0;
   virtual void update() {}
   virtual bool trigger() = 0;
+  virtual void interrupt() {}
   State        getState() { return state; }
 
 protected:

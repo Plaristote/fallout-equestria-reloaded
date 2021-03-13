@@ -52,18 +52,21 @@ void CombatComponent::joinCombat(Character* character)
     character->resetActionPoints();
     combattants << character;
     if (combat == false)
-    {
-      combat = true;
-      emit combatChanged();
-      emit currentCombattantChanged();
-      initializeCharacterTurn(character);
-    }
+      startCombat(character);
     else
       sortCombattants();
     emit combattantsChanged();
     for (auto* playerPartyMember : playerParty->getCharacters())
       joinCombat(playerPartyMember);
   }
+}
+
+void CombatComponent::startCombat(Character* character)
+{
+  combat = true;
+  emit combatChanged();
+  emit currentCombattantChanged();
+  initializeCharacterTurn(character);
 }
 
 void CombatComponent::leaveCombat(Character* character)
@@ -175,25 +178,6 @@ void CombatComponent::finalizeRound()
 {
   Game::get()->getTimeManager()->addElapsedMilliseconds(WORLDTIME_TURN_DURATION);
   sortCombattants();
-}
-
-void CombatComponent::onMovementFinished(Character* character)
-{
-  if (combat)
-  {
-    character->useActionPoints(1, "movement");
-    if (character->getActionPoints() == 0)
-    {
-      character->rcurrentPath().clear();
-      character->onIdle();
-    }
-  }
-  GridComponent::onMovementFinished(character);
-}
-
-void CombatComponent::onCombattantReachedDestination()
-{
-
 }
 
 void CombatComponent::passTurn(Character *character)

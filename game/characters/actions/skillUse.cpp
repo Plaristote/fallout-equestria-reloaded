@@ -7,6 +7,7 @@ bool SkillAction::trigger()
 {
   bool instantUseSkill = skillName == "sneak";
 
+  character->lookTo(target->getPosition());
   if (instantUseSkill)
     performAction();
   else

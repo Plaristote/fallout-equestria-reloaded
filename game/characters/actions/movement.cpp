@@ -52,5 +52,10 @@ void MovementAction::triggerNextMovement()
   else
     state = Done;
   if (state != InProgress)
-    character->setAnimation("idle");
+    interrupt();
+}
+
+void MovementAction::interrupt()
+{
+  character->setAnimation("idle");
 }

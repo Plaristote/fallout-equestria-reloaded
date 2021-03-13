@@ -15,6 +15,7 @@ LevelTask::LevelTask(QObject *parent) : CombatComponent(parent)
   updateTimer.setSingleShot(false);
   connect(&updateTimer, &QTimer::timeout, this, &LevelTask::update);
   connect(this, &LevelTask::pausedChanged, this, &LevelTask::onPauseChanged);
+  connect(this, &LevelTask::combatChanged, this, &LevelTask::onCombatChanged);
 }
 
 LevelTask::~LevelTask()
@@ -342,6 +343,22 @@ void LevelTask::update()
   soundManager->update();
   CombatComponent::update(delta);
   emit updated();
+}
+
+void LevelTask::onCombatChanged()
+{
+  for (auto* object : qAsConst(objects))
+  {
+    if (object->isCharacter())
+    {
+      auto* actionQueue = reinterpret_cast<Character*>(object)->getActionQueue();
+
+      if (combat)
+        actionQueue->pause();
+      else
+        actionQueue->unpause();
+    }
+  }
 }
 
 void LevelTask::finalizeRound()

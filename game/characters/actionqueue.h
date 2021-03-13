@@ -14,6 +14,8 @@ public:
   ~ActionQueue();
 
   void update();
+  void pause();
+  void unpause();
   Q_INVOKABLE void reset();
   Q_INVOKABLE inline bool isEmpty() { return queue.empty(); }
 

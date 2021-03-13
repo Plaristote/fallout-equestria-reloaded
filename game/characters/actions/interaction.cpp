@@ -4,6 +4,7 @@
 
 bool InteractionAction::trigger()
 {
+  character->lookTo(target->getPosition());
   if (actionName == "talk-to" || actionName == "look")
     performAction();
   else

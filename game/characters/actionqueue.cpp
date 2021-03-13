@@ -38,6 +38,18 @@ void ActionQueue::update()
   }
 }
 
+void ActionQueue::pause()
+{
+  if (queue.size() > 0)
+    queue.first()->interrupt();
+}
+
+void ActionQueue::unpause()
+{
+  if (queue.size() > 0)
+    queue.first()->trigger();
+}
+
 void ActionQueue::onActionOver()
 {
   queue.pop_front();
@@ -67,6 +79,8 @@ bool ActionQueue::start()
 
 void ActionQueue::reset()
 {
+  if (queue.length() > 0)
+    queue.front()->interrupt();
   for (auto* entry : qAsConst(queue))
     delete entry;
   queue.clear();

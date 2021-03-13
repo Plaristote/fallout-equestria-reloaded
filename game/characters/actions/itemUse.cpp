@@ -10,6 +10,7 @@ bool ItemAction::trigger()
   {
     QJSValue result = item->useOn(target);
 
+    character->lookTo(target->getPosition());
     if (result.isObject())
     {
       QJSValue animationSteps = result.property("steps");

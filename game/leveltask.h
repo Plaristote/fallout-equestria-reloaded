@@ -95,6 +95,7 @@ public slots:
 private slots:
   void update();
   void onPauseChanged();
+  void onCombatChanged();
   void onCharacterKill(Character* victim, Character* killer);
 
   void registerControlZone(TileZone*);
