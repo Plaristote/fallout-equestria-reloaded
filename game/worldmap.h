@@ -39,6 +39,7 @@ public:
   void             revealCaseAt(const QPoint);
   Q_INVOKABLE void revealCity(const QString& name);
   Q_INVOKABLE void revealCity(WorldMapCity*);
+  Q_INVOKABLE void setPosition(int x, int y);
 
   Q_INVOKABLE WorldMapCity* getCity(const QString& name) const;
   Q_INVOKABLE WorldMapZone* getZone(const QString& zone) const;

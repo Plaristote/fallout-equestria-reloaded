@@ -258,6 +258,12 @@ void WorldMap::revealCity(WorldMapCity* city)
     qDebug() << "WorldMap::revealCity: parameter is null";
 }
 
+void WorldMap::setPosition(int x, int y)
+{
+  currentPosition = QPoint(x, y);
+  emit currentPositionChanged();
+}
+
 WorldMapCity* WorldMap::createCity(const QString &name)
 {
   WorldMapCity* city = new WorldMapCity(this);

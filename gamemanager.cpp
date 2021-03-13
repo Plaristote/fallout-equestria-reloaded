@@ -45,6 +45,18 @@ void GameManager::startNewGame()
     qDebug() << "ERROR cannot start new game while another is still running";
 }
 
+void GameManager::launchNewGame()
+{
+  QJSValue   initializeScript, initializeFunction;
+
+  initializeScript   = currentGame->loadScript(SCRIPTS_PATH + "initialize.mjs");
+  initializeFunction = initializeScript.property("initialize");
+  if (initializeFunction.isCallable())
+    currentGame->scriptCall(initializeFunction, QJSValueList(), "initialize.mjs");
+  else
+    qDebug() << "Missing initialize function in scripts/initialize.mjs";
+}
+
 void GameManager::loadGame(const QString& path)
 {
   if (currentGame)
