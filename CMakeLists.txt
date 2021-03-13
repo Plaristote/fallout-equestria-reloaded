@@ -122,6 +122,8 @@ set(PROJECT_SOURCES
         game/level/combat.cpp
         game/level/textbubbles.h
         game/level/textbubbles.cpp
+        game/objects/doorway.h
+        game/objects/doorway.cpp
         game/animationSequence/ianimationpart.h
         game/animationSequence/objectanimationpart.h
         game/animationSequence/objectanimationpart.cpp

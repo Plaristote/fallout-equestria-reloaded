@@ -46,7 +46,9 @@ void Character::takeDamage(int damage, Character* dealer)
   if (hp <= 0)
   {
     setAnimation("death");
+    blocksPath = false;
     emit characterKill(this, dealer);
+    emit blocksPathChanged();
   }
   else if (dealer != nullptr && !isAlly(dealer) && !isEnemy(dealer))
   {
@@ -61,7 +63,7 @@ QPoint Character::getInteractionPosition() const
   {
     auto* level = Game::get()->getLevel();
 
-    if (level)
+    if (level && level->getPlayer())
     {
       QList<QPoint> path;
 
@@ -168,12 +170,12 @@ bool Character::useActionPoints(int amount, const QString& actionType)
     }
     return false;
   }
-  return true;
+  return isAlive();
 }
 
 void Character::resetActionPoints()
 {
-  actionPoints = getStatistics()->get_actionPoints();
+  actionPoints = isAlive() ? getStatistics()->get_actionPoints() : 0;
   emit actionPointsChanged();
 }
 

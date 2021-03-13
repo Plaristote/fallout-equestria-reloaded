@@ -81,7 +81,6 @@ void GridComponent::onZoneExited(DynamicObject* object, TileZone* zone)
 
 void GridComponent::onCharacterDied(Character* character)
 {
-  grid->removeObject(character);
 }
 
 void GridComponent::onMovementFinished(Character* object)

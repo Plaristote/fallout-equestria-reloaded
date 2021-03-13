@@ -4,6 +4,7 @@
 #include <QJsonArray>
 #include "inventoryitem.h"
 #include "characters/actionqueue.h"
+#include "objects/doorway.h"
 
 LevelTask::LevelTask(QObject *parent) : CombatComponent(parent)
 {
@@ -57,31 +58,44 @@ void LevelTask::load(const QString& levelName, DataEngine* dataEngine)
 void LevelTask::loadObjectsFromDataEngine(DataEngine* dataEngine)
 {
   QJsonObject levelData = dataEngine->getLevelData(name);
+  QJsonValue  lastUpdate = levelData["lastUpdate"];
 
   for (QJsonValue objectData : levelData["objects"].toArray())
   {
     QString type = objectData["type"].toString();
     DynamicObject* object;
+    Character* character = nullptr;
 
     if (type == "Character")
-      object = new Character(this);
+    {
+      character = new Character(this);
+      object = character;
+    }
     else if (type == "StorageObject")
       object = new StorageObject(this);
+    else if (type == "Doorway")
+      object = new Doorway(this);
     else
       object = new DynamicObject(this);
     object->load(objectData.toObject());
-    grid->moveObject(object, object->getPosition().x(), object->getPosition().y());
     object->setRenderPosition(object->getSpritePosition()); // isn't this basically self-assign ?
     registerDynamicObject(object);
+  }
+  if (!lastUpdate.isUndefined() && !lastUpdate.isNull())
+  {
+    std::time_t timestamp    = static_cast<std::time_t>(lastUpdate.toInt());
+    std::time_t newTimestamp = Game::get()->getTimeManager()->getDateTime().GetTimestamp();
+    std::time_t elapsedTime  = newTimestamp - timestamp;
 
-    if (type == "Character") {
-      // TODO Execute pending saved actions
-    }
+    qDebug() << "ADVANCING TIME IN LEVEL" << timestamp << newTimestamp << elapsedTime;
+    for (DynamicObject* object : qAsConst(objects))
+      object->getTaskManager()->update(elapsedTime * 1000);
   }
 }
 
 void LevelTask::save(DataEngine* dataEngine)
 {
+  Game* game = Game::get();
   QJsonObject levelData = dataEngine->getLevelData(name);
   QJsonArray  objectArray;
   auto*       playerParty = Game::get()->getPlayerParty();
@@ -99,6 +113,8 @@ void LevelTask::save(DataEngine* dataEngine)
     }
   }
   levelData["objects"] = objectArray;
+  if (!(game->property("isGameEditor").toBool()))
+    levelData["lastUpdate"] = static_cast<int>(game->getTimeManager()->getDateTime().GetTimestamp());
   dataEngine->setLevelData(name, levelData);
 }
 
@@ -265,20 +281,27 @@ void LevelTask::advanceTime(unsigned int minutes)
 void LevelTask::update()
 {
   qint64 delta = clock.restart();
-  if (!combat)
+
+  if (Game::get()->property("isGameEditor").toBool())
+  {
+
+  }
+  else if (!combat)
   {
     timeManager->addElapsedMilliseconds(delta);
-    for (DynamicObject* object : objects)
+    for (DynamicObject* object : qAsConst(objects))
     {
+      Character* asCharacter = reinterpret_cast<Character*>(object);
+
       object->update(delta);
       object->getTaskManager()->update(delta);
-      if (object->isCharacter())
-        reinterpret_cast<Character*>(object)->getActionQueue()->update();
+      if (object->isCharacter() && asCharacter->isAlive())
+        asCharacter->getActionQueue()->update();
     }
   }
   else
   {
-    for (DynamicObject* object : objects)
+    for (DynamicObject* object : qAsConst(objects))
       object->update(delta);
     if (combattants.size() > combatIterator)
     {
@@ -299,7 +322,9 @@ void LevelTask::finalizeRound()
 {
   for (DynamicObject* object : qAsConst(objects))
   {
-    if (!object->isCharacter() || !isInCombat(reinterpret_cast<Character*>(object)))
+    Character* asCharacter = reinterpret_cast<Character*>(object);
+
+    if (!object->isCharacter() || (!isInCombat(asCharacter) && asCharacter->isAlive()))
       object->getTaskManager()->update(WORLDTIME_TURN_DURATION);
   }
   CombatComponent::finalizeRound();
@@ -317,6 +342,15 @@ Character* LevelTask::generateCharacter(const QString &name, const QString &char
 StorageObject* LevelTask::generateStorageObject(const QString &name)
 {
   StorageObject* object = new StorageObject(this);
+
+  object->setObjectName(name);
+  registerDynamicObject(object);
+  return object;
+}
+
+Doorway* LevelTask::generateDoorway(const QString &name)
+{
+  Doorway* object = new Doorway(this);
 
   object->setObjectName(name);
   registerDynamicObject(object);

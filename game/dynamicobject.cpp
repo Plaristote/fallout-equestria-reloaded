@@ -9,6 +9,7 @@ DynamicObject::DynamicObject(QObject *parent) : Sprite(parent)
   taskManager = new TaskRunner(this);
   connect(this, &DynamicObject::controlZoneAdded,   this, &DynamicObject::controlZoneChanged);
   connect(this, &DynamicObject::controlZoneRemoved, this, &DynamicObject::controlZoneChanged);
+  connect(this, &DynamicObject::blocksPathChanged, this, &DynamicObject::onBlocksPathChanged);
 }
 
 DynamicObject::~DynamicObject()
@@ -103,12 +104,28 @@ void DynamicObject::removeControlZone()
   controlZone = nullptr;
 }
 
+void DynamicObject::onBlocksPathChanged()
+{
+  auto* level = Game::get()->getLevel();
+  auto* grid  = level ? level->getGrid() : nullptr;
+
+  if (grid)
+  {
+    if (blocksPath)
+      grid->moveObject(this, position.x(), position.y());
+    else
+      grid->removeObject(this);
+  }
+}
+
 void DynamicObject::load(const QJsonObject& data)
 {
   objectName = data["objectName"].toString();
   position.setX(data["x"].toInt()); position.setY(data["y"].toInt());
   nextPosition.setX(data["nextX"].toInt()); nextPosition.setY(data["nextY"].toInt());
   interactionPosition.setX(data["intX"].toInt()); interactionPosition.setY(data["intY"].toInt());
+  blocksPath = data["blocksPath"].toBool(true);
+  emit blocksPathChanged();
   if (data["zone"].isArray())
   {
     controlZone = controlZone ? controlZone : new TileZone(this);
@@ -134,6 +151,7 @@ void DynamicObject::save(QJsonObject& data) const
   data["x"] = position.x(); data["y"] = position.y();
   data["nextX"] = nextPosition.x(); data["nextY"] = nextPosition.y();
   data["intX"] = interactionPosition.x(); data["intY"] = interactionPosition.y();
+  data["blocksPath"] = blocksPath;
   if (controlZone)
   {
     QJsonArray zoneArray;

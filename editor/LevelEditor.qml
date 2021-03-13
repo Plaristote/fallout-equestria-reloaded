@@ -14,6 +14,7 @@ Item {
   property alias selectedObjectName: objectSelectBox.currentText
   property QtObject selectedObject
   property QtObject selectedCharacter
+  property QtObject selectedDoorway
 
   onCurrentLevelNameChanged: {
     selectedObject = selectedCharacter = null;
@@ -29,10 +30,16 @@ Item {
       if (selectedObject.getObjectType() === "Character") {
         console.log("selected character");
         selectedCharacter = selectedObject
+        selectedDoorway = null;
       }
       else if (selectedObject.getObjectType() === "StorageObject") {
         console.log("selected storage object")
+        selectedDoorway = selectedObject;
         selectedCharacter = null;
+      }
+      else if (selectedObject.getObjectType() === "Doorway") {
+        console.log("doorway object selected");
+        selectedCharacter = selectedDoorway = null;
       }
       else
       {
@@ -192,6 +199,14 @@ Item {
           onRemoveClicked: gameController.level.deleteObject(model)
         }
 
+        DoorwayObjectEditor {
+          id: doorwayEditor
+          visible: model !== null
+          model: selectedObject && selectedObject.getObjectType() === "Doorway" ? selectedObject : null
+          gameController: root.gameController
+          Layout.fillWidth: true
+        }
+
         ControlZoneEditor {
           id: controlZoneEditor
           selectedObject: root.selectedObject
@@ -227,7 +242,7 @@ Item {
     GridLayout {
       columns: 2
       Text { text: "type" }
-      ComboBox { id: objectTypeInput; model: ["character", "storage", "other"] }
+      ComboBox { id: objectTypeInput; model: ["character", "storage", "door", "other"] }
       Text { text: "name" }
       TextField { id: objectNameInput }
       Text { text: "character sheet"; visible: objectTypeInput.currentText === "character" }
@@ -241,6 +256,10 @@ Item {
       else if (objectTypeInput.currentText == "storage") {
         gameController.level.generateStorageObject(objectNameInput.text);
         objectSelectBox.currentIndex = gameController.level.objects.length - 1
+      }
+      else if (objectTypeInput.currentText == "door") {
+        gameController.level.generateDoorway(objectNameInput.text);
+        objectSelectBox.currentIndex = gameController.level.objects.length - 1;
       }
       else
         console.log("unhandled type added");

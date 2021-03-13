@@ -14,6 +14,7 @@
 
 # include "level/combat.h"
 
+class Doorway;
 class CharacterParty;
 class CharacterDialog;
 class DataEngine;
@@ -57,6 +58,7 @@ public:
 
   Q_INVOKABLE Character* generateCharacter(const QString& name, const QString& characterSheet);
   Q_INVOKABLE StorageObject* generateStorageObject(const QString& name);
+  Q_INVOKABLE Doorway* generateDoorway(const QString& name);
   Q_INVOKABLE void deleteObject(DynamicObject* o) { unregisterDynamicObject(o); }
 
   Q_INVOKABLE void advanceTime(unsigned int minutes);

@@ -23,6 +23,7 @@ class DynamicObject : public Sprite
   Q_PROPERTY(QString currentZone READ getCurrentZone)
   Q_PROPERTY(TaskRunner* tasks MEMBER taskManager)
   Q_PROPERTY(TileZone* controlZone MEMBER controlZone NOTIFY controlZoneChanged)
+  Q_PROPERTY(bool blocksPath MEMBER blocksPath NOTIFY blocksPathChanged)
 
 public:
   explicit DynamicObject(QObject *parent = nullptr);
@@ -58,8 +59,8 @@ public:
   Q_INVOKABLE void      removeControlZone();
   TileZone*             getControlZone() { return controlZone; }
 
-  Q_INVOKABLE bool      triggerInteraction(Character*, const QString& interactionType);
-  Q_INVOKABLE bool      triggerSkillUse(Character* user, const QString& skillName);
+  Q_INVOKABLE virtual bool triggerInteraction(Character*, const QString& interactionType);
+  Q_INVOKABLE virtual bool triggerSkillUse(Character* user, const QString& skillName);
   Q_INVOKABLE void      scriptCall(const QString& method, const QString& message = "");
 
   const QString& getCurrentZone() const { return currentZone; }
@@ -67,15 +68,20 @@ public:
 
 signals:
   void objectNameChanged();
+  void blocksPathChanged();
   void controlZoneChanged();
   void controlZoneAdded(TileZone*);
   void controlZoneRemoved(TileZone*);
+
+protected slots:
+  void onBlocksPathChanged();
 
 protected:
   virtual QString getScriptPath() const { return SCRIPTS_PATH + "behaviours"; }
   ScriptController* script = nullptr;
   TaskRunner* taskManager;
   TileZone* controlZone = nullptr;
+  bool blocksPath = true;
 //private:
   QString objectName, scriptName;
   QPoint position, nextPosition;
