@@ -14,8 +14,19 @@ DynamicObjectEditor {
   signal openInventoryClicked()
 
   fields: [
+    TerminalLabel { text: "Character Sheet" },
+    TerminalComboBox {
+      Layout.fillWidth: true
+      model: scriptController.getCharacterSheets()
+      currentIndex: scriptController.getCharacterSheets().indexOf(characterEditor.model.characterSheet + ".json")
+      onCurrentIndexChanged: {
+        characterEditor.model.characterSheet = scriptController.getCharacterSheets()[currentIndex].replace(".json", "");
+      }
+    },
+
     TerminalLabel { text: "Dialog" },
     TerminalComboBox {
+      Layout.fillWidth: true
       model: scriptController.getScripts("dialogs")
       enabled: false
       currentIndex: scriptController.getScript("dialogs").indexOf(characterEditor.model.getDialog())
@@ -23,6 +34,7 @@ DynamicObjectEditor {
 
     TerminalLabel { text: "Faction" },
     TerminalField {
+      Layout.fillWidth: true
       text: model.statistics.faction
       onTextChanged: {
         model.statistics.faction = text

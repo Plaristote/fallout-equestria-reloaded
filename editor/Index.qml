@@ -20,8 +20,8 @@ Pane {
     anchors.top: parent.top
     anchors.left: parent.left
     anchors.right: parent.right
-    tabs: ["worldmap", "levels", "npcs", "objects", "sprites"]
-    labels: ["Worldmap", "Levels", "NPCs", "Items", "Sprites"]
+    tabs: ["worldmap", "levels", "npcs", "dialogs", "diplomacy", "objects", "sprites"]
+    labels: ["Worldmap", "Levels", "NPCs", "Dialogs", "Diplomacy", "Items", "Sprites"]
     currentTab: tabs[0]
   }
 

@@ -19,6 +19,7 @@ class Character : public CharacterMovement
   Q_PROPERTY(int actionPoints MEMBER actionPoints NOTIFY actionPointsChanged)
   // Editor properties
   Q_PROPERTY(bool isUnique MEMBER isUnique NOTIFY uniqueChanged)
+  Q_PROPERTY(QString characterSheet MEMBER characterSheet NOTIFY characterSheetChanged)
 public:
   explicit Character(QObject *parent = nullptr);
 
@@ -38,7 +39,7 @@ public:
   unsigned int getXpValue() const;
   bool         getIsUnique() const { return isUnique; }
   void         setUnique(bool value) { isUnique = value; }
-  bool         isMoving() const { return Sprite::isMoving() || currentPath.size() > 0; }
+  Q_INVOKABLE bool isMoving() const { return Sprite::isMoving() || currentPath.size() > 0; }
   int          getZIndex() const override { return isAlive() ? 2 : 1; }
   const QVector<TileZone*>& getCurrentZones() const { return currentZones; }
 
@@ -71,6 +72,7 @@ signals:
   // EDITOR signals
   void uniqueChanged();
   void statisticsChanged();
+  void characterSheetChanged();
 
 public slots:
   void onZoneEntered(TileZone* value) { currentZones.append(value); }
@@ -81,6 +83,7 @@ private slots:
   void initializeEmptySlots();
   void initializeEmptySlot(const QString& name);
   void onActionQueueCompleted();
+  void onCharacterSheetChanged();
 
 private:
   virtual QString getScriptPath() const override { return SCRIPTS_PATH + "pnjs"; }

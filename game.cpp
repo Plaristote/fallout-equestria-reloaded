@@ -226,6 +226,6 @@ void Game::advanceTime(unsigned int minutes)
   else
   {
     for (Character* character : playerParty->getCharacters())
-      character->getTaskManager()->update(minutes);
+      character->getTaskManager()->update(minutes * 60 * 1000);
   }
 }

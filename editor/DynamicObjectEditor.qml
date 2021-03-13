@@ -72,12 +72,14 @@ Pane {
   Column {
     spacing: 5
 
-    Grid {
+    TerminalLabel { text: "> Object Data"; font.pointSize: 13 }
+    GridLayout {
       columns: 2
-      spacing: 5
+      children: standardFields + fields
 
       TerminalLabel { text: "Positionning"; visible: !objectEditor.readOnlyPositionType }
       TerminalComboBox {
+        Layout.fillWidth: true
         id: positioningInput
         visible: !objectEditor.readOnlyPositionType
         model: ["Tile-based", "Floating"]
@@ -88,26 +90,30 @@ Pane {
       }
       TerminalLabel { text: "Render position"; visible: objectEditor.model.floating }
       Row {
+        Layout.fillWidth: true
         visible: objectEditor.model.floating
-        TerminalField { id: renderXInput; onTextChanged: objectEditor.renderPositionChanged() }
-        TerminalField { id: renderYInput; onTextChanged: objectEditor.renderPositionChanged() }
+        TerminalField { id: renderXInput; onTextChanged: objectEditor.renderPositionChanged(); width: parent.width / 2 }
+        TerminalField { id: renderYInput; onTextChanged: objectEditor.renderPositionChanged(); width: parent.width / 2 }
       }
 
       TerminalLabel { text: "Grid position" }
       Row {
-        TerminalField { id: gridXInput; onTextChanged: objectEditor.positionChanged() }
-        TerminalField { id: gridYInput; onTextChanged: objectEditor.positionChanged() }
+        Layout.fillWidth: true
+        TerminalField { id: gridXInput; onTextChanged: objectEditor.positionChanged(); width: parent.width / 2 }
+        TerminalField { id: gridYInput; onTextChanged: objectEditor.positionChanged(); width: parent.width / 2 }
       }
 
       TerminalLabel { text: "Interaction position"; visible: objectEditor.withInteractionPosition }
       Row {
+        Layout.fillWidth: true
         visible: objectEditor.withInteractionPosition
-        TerminalField { id: interactionXInput; onTextChanged: objectEditor.interactionPositionChanged(); }
-        TerminalField { id: interactionYInput; onTextChanged: objectEditor.interactionPositionChanged(); }
+        TerminalField { id: interactionXInput; onTextChanged: objectEditor.interactionPositionChanged(); width: parent.width / 2 }
+        TerminalField { id: interactionYInput; onTextChanged: objectEditor.interactionPositionChanged(); width: parent.width / 2 }
       }
 
       TerminalLabel { text: "Script" }
       TerminalComboBox {
+        Layout.fillWidth: true
         id: scriptInput
         model: scriptController.getScripts(scriptCategory)
         onCurrentTextChanged: {
@@ -117,6 +123,7 @@ Pane {
 
       TerminalLabel { text: "Sprite" }
       TerminalComboBox {
+        Layout.fillWidth: true
         id: spriteInput
         model: animationLibrary.getGroups();
         currentIndex: model.indexOf(objectEditor.model.getSpriteName())
@@ -131,6 +138,7 @@ Pane {
 
       TerminalLabel { text: "Animation"; visible: !readOnlyAnimation }
       TerminalComboBox {
+        Layout.fillWidth: true
         id: animationInput
         visible: !readOnlyAnimation
         model: animationLibrary.getAnimationList(spriteInput.currentText);
@@ -142,10 +150,10 @@ Pane {
       }
     }
 
-    Grid {
+    TerminalLabel { text: "> Behaviour"; font.pointSize: 13 }
+    GridLayout {
       id: additionalFields
       columns: 2
-      spacing: 5
     }
 
     TerminalButton {

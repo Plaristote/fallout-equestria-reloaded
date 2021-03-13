@@ -14,6 +14,7 @@ Character::Character(QObject *parent) : CharacterMovement(parent)
   connect(actionQueue, &ActionQueue::queueCompleted, this, &Character::onActionQueueCompleted);
   connect(this, &Character::characterKill, this, &Character::died);
   connect(this, &Character::died, [this]() { if (script) { script->call("onDied"); } });
+  connect(this, &Character::characterSheetChanged, this, &Character::onCharacterSheetChanged);
 }
 
 void Character::update(qint64 delta)
@@ -220,9 +221,16 @@ void Character::setScript(const QString& name)
 
 void Character::setCharacterSheet(const QString& name)
 {
-  auto* charSheet = Game::get()->getDataEngine()->makeStatModel(getObjectName(), name);
-
   characterSheet = name;
+  emit characterSheetChanged();
+}
+
+void Character::onCharacterSheetChanged()
+{
+  qDebug() << "Changing character sheet";
+  StatModel* charSheet;
+
+  charSheet = Game::get()->getDataEngine()->makeStatModel(getObjectName(), characterSheet);
   charSheet->setParent(this);
   setStatistics(charSheet);
 }
@@ -230,7 +238,10 @@ void Character::setCharacterSheet(const QString& name)
 void Character::setStatistics(StatModel *value)
 {
   if (statistics)
+  {
     disconnect(statistics, &StatModel::factionChanged, this, &Character::initializeFaction);
+    statistics->deleteLater();
+  }
   statistics = value;
   connect(statistics, &StatModel::factionChanged, this, &Character::initializeFaction);
   qDebug() << "set stat sheet on" << getObjectName() << ':' << statistics->getName() << " with faction " << statistics->property("faction").toString();
@@ -241,26 +252,20 @@ void Character::setStatistics(StatModel *value)
 void Character::load(const QJsonObject& data)
 {
   QString objectName = data["objectName"].toString();
-  StatModel* charSheet;
 
   characterSheet = data["charsheet"].toString(objectName);
   isUnique = data["uniq"].toBool();
   enemyFlag = static_cast<unsigned int>(data["enemyFlag"].toInt(0));
   actionPoints = data["ap"].toInt();
-  if (isUnique)
-  {
-    charSheet = Game::get()->getDataEngine()->makeStatModel(getObjectName(), characterSheet);
-    charSheet->setParent(this);
-  }
+  if (isUnique || data["stats"]["name"].toString().length() == 0)
+    onCharacterSheetChanged();
   else
   {
-    charSheet = new StatModel(this);
-    if (data["stats"]["name"].toString().length() == 0)
-      charSheet = Game::get()->getDataEngine()->makeStatModel(getObjectName(), characterSheet);
-    else
-      charSheet->fromJson(data["stats"].toObject());
+    StatModel* charSheet = new StatModel(this);
+
+    charSheet->fromJson(data["stats"].toObject());
+    setStatistics(charSheet);
   }
-  setStatistics(charSheet);
   CharacterMovement::load(data);
 }
 
