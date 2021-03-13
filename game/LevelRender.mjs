@@ -290,15 +290,37 @@ export class Controller {
     return null;
   }
 
-  getHoveredObject(posX, posY) {
-    for (var i = 0 ; i < this.level.dynamicObjects.length ; ++i) {
-      const sprite = this.level.dynamicObjects[i];
-      const offset = this.getAdjustedOffsetFor(sprite);
-      const clippedRect = sprite.getClippedRect();
+  pointToSpriteCollisionCheck(posX, posY, sprite) {
+    const offset = this.getAdjustedOffsetFor(sprite);
+    const clippedRect = sprite.getClippedRect();
 
-      if (posX >= offset.x && posX <= offset.x + clippedRect.width &&
-          posY >= offset.y && posY <= offset.y + clippedRect.height)
-        return sprite;
+    if (posX >= offset.x && posX <= offset.x + clippedRect.width &&
+        posY >= offset.y && posY <= offset.y + clippedRect.height)
+      return true;
+    return false;
+  }
+
+  getHoveredObject(posX, posY) {
+    const layers = [this.level.visibleCharacters, this.level.dynamicObjects];
+
+    for (var i = 0 ; i < layers.length ; ++i) {
+      const layer = layers[i];
+      const sortedObjects = [];
+      var ii;
+
+      for (ii = 0 ; ii < layer.length ; ++ii)
+        sortedObjects.push(layer[ii]);
+      sortedObjects.sort(function(a, b) {
+        if (a.position.x !== b.position.x)
+          return b.position.x - a.position.x
+        return b.position.y - a.position.y;
+      });
+      for (ii = 0 ; ii < sortedObjects.length ; ++ii) {
+        const sprite = sortedObjects[ii];
+
+        if (this.pointToSpriteCollisionCheck(posX, posY, sprite))
+          return sprite;
+      }
     }
     return null;
   }

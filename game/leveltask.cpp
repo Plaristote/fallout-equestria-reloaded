@@ -58,7 +58,10 @@ void LevelTask::load(const QString& levelName, DataEngine* dataEngine)
     loadObjectsFromDataEngine(dataEngine);
   for (auto* zone : tilemap->getZones())
     registerZone(zone);
-  connect(getPlayer()->getFieldOfView(), &FieldOfView::refreshed, this, &LevelTask::visibleCharactersChanged);
+  if (Game::get()->property("isGameEditor").toBool())
+    connect(this, &LevelTask::objectsChanged, this, &LevelTask::visibleCharactersChanged);
+  else
+    connect(getPlayer()->getFieldOfView(), &FieldOfView::refreshed, this, &LevelTask::visibleCharactersChanged);
 }
 
 void LevelTask::loadObjectsFromDataEngine(DataEngine* dataEngine)
@@ -380,4 +383,23 @@ Doorway* LevelTask::generateDoorway(const QString &name)
   object->setObjectName(name);
   registerDynamicObject(object);
   return object;
+}
+
+QQmlListProperty<Character> LevelTask::getQmlVisibleCharacters()
+{
+  if (Game::get()->property("isGameEditor").toBool())
+  {
+    visibleCharacters.clear();
+    for (auto* object : qAsConst(objects))
+    {
+      if (object->isCharacter())
+        visibleCharacters << reinterpret_cast<Character*>(object);
+    }
+  }
+  else
+  {
+    visibleCharacters = getPlayer()->getFieldOfView()->GetDetectedCharacters();
+    visibleCharacters << getPlayer();
+  }
+  return QQmlListProperty<Character>(this, &visibleCharacters);
 }

@@ -67,12 +67,7 @@ public:
 
   QQmlListProperty<DynamicObject> getQmlObjects() { return QQmlListProperty<DynamicObject>(this, &objects); }
   QQmlListProperty<Sprite> getQmlVisualEffects() { return QQmlListProperty<Sprite>(this, &visualEffects); }
-  QQmlListProperty<Character> getQmlVisibleCharacters()
-  {
-    visibleCharacters = getPlayer()->getFieldOfView()->GetDetectedCharacters();
-    visibleCharacters << getPlayer();
-    return QQmlListProperty<Character>(this, &visibleCharacters);
-  }
+  QQmlListProperty<Character> getQmlVisibleCharacters();
 
   void finalizeRound() override;
 
