@@ -312,7 +312,10 @@ void LevelTask::update()
       object->update(delta);
       object->getTaskManager()->update(delta);
       if (object->isCharacter() && asCharacter->isAlive())
+      {
+        asCharacter->getFieldOfView()->update(delta);
         asCharacter->getActionQueue()->update();
+      }
     }
     taskRunner->update(delta);
     Game::get()->getTaskManager()->update(delta);
@@ -344,6 +347,8 @@ void LevelTask::finalizeRound()
 
     if (!object->isCharacter() || (!isInCombat(asCharacter) && asCharacter->isAlive()))
       object->getTaskManager()->update(WORLDTIME_TURN_DURATION);
+    if (object->isCharacter() && object != getPlayer())
+      asCharacter->getFieldOfView()->update(WORLDTIME_TURN_DURATION);
     taskRunner->update(WORLDTIME_TURN_DURATION);
     Game::get()->getTaskManager()->update(WORLDTIME_TURN_DURATION);
   }

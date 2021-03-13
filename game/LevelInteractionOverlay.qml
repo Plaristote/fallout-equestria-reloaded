@@ -2,21 +2,23 @@ import QtQuick 2.15
 import QtGraphicalEffects 1.15
 
 Repeater {
+  id: root
   property QtObject levelController
   property var controller
+  property var filter: function() { return true; }
 
-  model: levelController.dynamicObjects
   delegate: Image {
     id: dynamicObjectLayer
-    property QtObject dynamicObject: levelController.dynamicObjects[index]
+    property QtObject dynamicObject: root.model[index]
     property point offset: controller.getAdjustedOffsetFor(dynamicObject)
     property bool  isCharacter: dynamicObject.getObjectType() === "Character"
-    property bool  isDetected: isCharacter && level.visibleCharacters.indexOf(dynamicObject) >= 0
     property color overlayColor:    levelController.targetMode === 0 ? Qt.rgba(255, 255, 0, 1)   : Qt.rgba(255, 0, 0, 1)
     property color overlayMaxColor: levelController.targetMode === 0 ? Qt.rgba(255, 255, 0, 0.5) : Qt.rgba(255, 0, 0, 0.5)
     property int   overlayAnimState: 0
     property int   overlayAnimDuration: 500
+
     opacity: 0.3 + (isCharacter ? 0.3 : 0)
+    visible: filter(dynamicObject) && root.visible
 
     ColorOverlay {
       anchors.fill: parent
@@ -42,7 +44,6 @@ Repeater {
     }
 
     enabled: visible
-    visible: isDetected || (!isCharacter && (levelController.mouseMode > 0 && levelController.targetMode === 0))
     source: "file:" + dynamicObject.spriteSource
     sourceClipRect: dynamicObject.clippedRect
     x: offset.x + origin.x

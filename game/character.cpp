@@ -24,7 +24,6 @@ void Character::update(qint64 delta)
   DynamicObject::update(delta);
   if (isAlive())
   {
-    fieldOfView->update(delta);
     if (level->getPlayer() != this && fieldOfView->hasLivingEnemiesInSight())
       level->joinCombat(this);
   }
@@ -167,6 +166,14 @@ bool Character::useActionPoints(int amount, const QString& actionType)
     {
       actionPoints -= amount;
       emit actionPointsChanged();
+      if (level->getPlayer() == this)
+      {
+        auto* stats = getStatistics();
+        auto  maxActionPoints = stats->get_actionPoints();
+        double duration = std::ceil(static_cast<double>(WORLDTIME_TURN_DURATION) / static_cast<double>(maxActionPoints) * static_cast<double>(amount));
+
+        fieldOfView->update(duration);
+      }
       return true;
     }
     return false;

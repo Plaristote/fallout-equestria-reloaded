@@ -68,6 +68,15 @@ Canvas {
   LevelInteractionOverlay {
     levelController: canvas.levelController
     controller:      canvas.controller
+    model:           levelController.dynamicObjects
+    filter:          function(item) { return item.getObjectType() !== "Character" }
+    visible:         levelController.mouseMode > 0 && levelController.targetMode === 0
+  }
+
+  LevelInteractionOverlay {
+    levelController: canvas.levelController
+    controller:      canvas.controller
+    model:           levelController.visibleCharacters
   }
 
   LevelCursor {

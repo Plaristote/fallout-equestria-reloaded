@@ -286,7 +286,7 @@ float FieldOfView::GetRadius() const
 
   if (stat_controller)
     perception = stat_controller->property("perception").toInt();
-  return static_cast<float>(20 + (perception * 5));
+  return static_cast<float>(2 + perception * 3);
 }
 
 FieldOfView::CharacterList FieldOfView::GetCharactersInRange() const
