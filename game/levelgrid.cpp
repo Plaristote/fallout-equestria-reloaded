@@ -4,6 +4,21 @@
 #include "character.h"
 #include "astar.hpp"
 #include <cmath>
+#include <QLineF>
+#include <QRectF>
+
+static bool lineIntersectsRect(QLineF line, QRectF rect)
+{
+  QLineF leftSide(rect.topLeft(), rect.bottomLeft());
+  QLineF topSide(rect.topLeft(), rect.topRight());
+  QLineF rightSide(rect.topRight(), rect.bottomRight());
+  QLineF bottomSide(rect.bottomLeft(), rect.bottomRight());
+
+  return (leftSide.intersects(line, nullptr)   == QLineF::BoundedIntersection) ||
+         (topSide.intersects(line, nullptr)    == QLineF::BoundedIntersection) ||
+         (rightSide.intersects(line, nullptr)  == QLineF::BoundedIntersection) ||
+         (bottomSide.intersects(line, nullptr) == QLineF::BoundedIntersection);
+}
 
 bool LevelGrid::CaseContent::isBlocked() const
 {
@@ -188,6 +203,44 @@ DynamicObject* LevelGrid::getOccupant(int x, int y)
   if (gridCase)
     return gridCase->occupant;
   return nullptr;
+}
+
+int LevelGrid::getVisionQuality(int fromX, int fromY, int toX, int toY)
+{
+  const qreal   caseSize = 10;
+  const int     minX = std::min(fromX, toX), minY = std::min(fromY, toY);
+  const int     maxX = std::max(fromX, toX), maxY = std::max(fromY, toY);
+  const QPointF sightFrom(static_cast<qreal>(fromX - minX) * caseSize, static_cast<qreal>(fromY - minY) * caseSize);
+  const QPointF sightTo  (static_cast<qreal>(toX - minX) * caseSize,   static_cast<qreal>(toY - minY) * caseSize);
+  const QLineF  sightLine(sightFrom, sightTo);
+  int visionScore = 100;
+
+  for (int x = minX ; x <= maxX ; ++x)
+  {
+    for (int y = minY ; y <= maxY ; ++y)
+    {
+      LevelGrid::CaseContent* gridCase;
+      qreal posX, posY;
+
+      if ((x == fromX && y == fromY) || (x == toX && y == toY))
+        continue ;
+      gridCase = getGridCase(x, y);
+      if (!gridCase || !gridCase->occupied)
+        continue ;
+      posX = static_cast<qreal>(x - minX) * 10;
+      posY = static_cast<qreal>(y - minY) * 10;
+      if (lineIntersectsRect(sightLine, QRectF(posX, posY, caseSize, caseSize)))
+      {
+        if (gridCase->occupant)
+          visionScore -= gridCase->occupant->getCoverValue();
+        else
+          visionScore = 0;
+        if (visionScore <= 0)
+          return std::max(0, visionScore);
+      }
+    }
+  }
+  return std::max(0, visionScore);
 }
 
 void LevelGrid::removeObject(DynamicObject* object)

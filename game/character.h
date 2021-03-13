@@ -42,6 +42,7 @@ public:
   Q_INVOKABLE bool isMoving() const { return Sprite::isMoving() || currentPath.size() > 0; }
   int          getZIndex() const override { return isAlive() ? 2 : 1; }
   const QVector<TileZone*>& getCurrentZones() const { return currentZones; }
+  int          getCoverValue() const override { return 10; }
 
   Q_INVOKABLE QPoint getInteractionPosition() const override;
   bool isBlockingPath() const override { return isAlive(); }

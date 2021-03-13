@@ -107,9 +107,19 @@ bool Character::isEnemy(const Character* other) const
   return (enemyFlag & other->getFactionFlag()) != 0;
 }
 
-bool Character::hasLineOfSight(const Character *) const
+bool Character::hasLineOfSight(const Character* other) const
 {
-  return true;
+  auto* level = Game::get()->getLevel();
+
+  if (level)
+  {
+    auto*  grid   = level->getGrid();
+    QPoint target = other->getPosition();
+    int    score  = grid->getVisionQuality(position.x(), position.y(), target.x(), target.y());
+
+    return score > 0;
+  }
+  return false;
 }
 
 void Character::setAsEnemy(Character* other)
