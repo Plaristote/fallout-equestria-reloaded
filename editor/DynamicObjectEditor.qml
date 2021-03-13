@@ -75,7 +75,6 @@ Pane {
     TerminalLabel { text: "> Object Data"; font.pointSize: 13 }
     GridLayout {
       columns: 2
-      children: standardFields + fields
 
       TerminalLabel { text: "Positionning"; visible: !objectEditor.readOnlyPositionType }
       TerminalComboBox {
@@ -151,6 +150,7 @@ Pane {
     }
 
     TerminalLabel { text: "> Behaviour"; font.pointSize: 13 }
+
     GridLayout {
       id: additionalFields
       columns: 2

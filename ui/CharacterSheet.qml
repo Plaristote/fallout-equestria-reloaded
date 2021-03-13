@@ -32,6 +32,7 @@ Pane {
   }
 
   Button {
+    id: faceEditorButton
     background: UiStyle.Label { style: parent.down ? "dark" : "base" }
     FaceDisplay {
       anchors.fill: parent
@@ -40,10 +41,33 @@ Pane {
       color: characterSheet.faceColor
       accessories: characterSheet.faceAccessories
     }
-    onClicked: faceEditor.open()
+    onClicked: if (createMode) { faceEditor.open() }
     anchors { top: characterNameRow.top; left: characterNameRow.right; leftMargin: 10 }
     height: characterNameRow.height
     width: 50
+  }
+
+  Timer {
+    running: true
+    repeat: true
+    interval: 1000
+    onTriggered: {
+      const list = scriptController.getFactions();
+      factionPicker.model = list;
+    }
+  }
+
+  SelectBox {
+    id: factionPicker
+    visible: gameEditorMode
+    anchors { top: characterNameRow.top; left: faceEditorButton.right; leftMargin: 10 }
+    width: 200
+    height: characterNameRow.height
+    currentIndex: model.indexOf(characterSheet.faction)
+    onCurrentIndexChanged: {
+      if (characterSheet.faction !== model[currentIndex])
+        root.characterSheet.faction = model[currentIndex];
+    }
   }
 
   FaceEditor {

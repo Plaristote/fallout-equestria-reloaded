@@ -206,5 +206,6 @@
         <file>editor/worldmap/ZonePreview.qml</file>
         <file>editor/worldmap/WorldmapListEditor.qml</file>
         <file>editor/DoorwayObjectEditor.qml</file>
+        <file>editor/DiplomacyEditor.qml</file>
     </qresource>
 </RCC>

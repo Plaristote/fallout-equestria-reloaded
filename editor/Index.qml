@@ -63,4 +63,10 @@ Pane {
     gameController: game
     worldMap: game.worldmap
   }
+
+  DiplomacyEditor {
+    visible: header.currentTab == "diplomacy"
+    anchors { top: header.bottom; left: parent.left; right: parent.right; bottom: parent.bottom }
+    dataEngine: game.dataEngine
+  }
 }

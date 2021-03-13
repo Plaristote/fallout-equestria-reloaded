@@ -3,6 +3,7 @@
 #include <QFile>
 #include <QDebug>
 #include <QJsonDocument>
+#include "game.h"
 
 ScriptEditorController::ScriptEditorController(QObject *parent) : QObject(parent)
 {
@@ -85,3 +86,13 @@ QStringList ScriptEditorController::getLevels()
 
   return dir.entryList(QStringList() << "*.json", QDir::NoFilter, QDir::Name);
 }
+
+QStringList ScriptEditorController::getFactions()
+{
+  Game* game = Game::get();
+
+  if (game)
+    return QStringList() << "" << game->getDataEngine()->getFactionList();
+  return QStringList();
+}
+

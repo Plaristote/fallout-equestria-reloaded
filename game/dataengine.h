@@ -30,7 +30,13 @@ public:
 
   QJsonObject  getWorldDiplomacy() const;
   void         setWorldDiplomacy(const QJsonObject&);
-  void         registerFaction(const QString&);
+  Q_INVOKABLE void registerFaction(const QString&);
+
+  Q_INVOKABLE QStringList getFactionList() const;
+  Q_INVOKABLE QStringList getEnemyListForFaction(const QString& faction) const;
+  Q_INVOKABLE void setFactionAsEnemy(const QString& faction, const QString& enemyFaction, bool set = true);
+  Q_INVOKABLE void setFactionReputationEnabled(const QString& faction, bool set);
+  Q_INVOKABLE bool hasFactionReputationEnabled(const QString& faction) const;
 
   QJsonObject  getQuests() const;
   void         setQuests(const QJsonObject&);
@@ -45,6 +51,9 @@ public:
   QString toJson() const;
 
   QJsonDocument asDocument() { return QJsonDocument(data); }
+
+signals:
+  void diplomacyUpdated();
 
 private:
   QJsonObject data;

@@ -55,7 +55,51 @@ void DataEngine::registerFaction(const QString& name)
     diplomacy.insert(name, factionData);
     data.remove("diplomacy");
     data.insert("diplomacy", diplomacy);
+    emit diplomacyUpdated();
   }
+}
+
+QStringList DataEngine::getFactionList() const
+{
+  return diplomacy.keys();
+}
+
+QStringList DataEngine::getEnemyListForFaction(const QString &faction) const
+{
+  QStringList results;
+  QJsonObject enemyData = diplomacy[faction]["enemies"].toObject();
+
+  for (const QString& key : enemyData.keys())
+  {
+    if (enemyData[key].toBool())
+      results << key;
+  }
+  return results;
+}
+
+void DataEngine::setFactionAsEnemy(const QString &faction, const QString &enemyFaction, bool set)
+{
+  QJsonObject factionData = diplomacy[faction].toObject();
+  QJsonObject enemyData = factionData["enemies"].toObject();
+
+  enemyData.insert(enemyFaction, set);
+  factionData.insert("enemies", enemyData);
+  diplomacy.insert(faction, factionData);
+  emit diplomacyUpdated();
+}
+
+void DataEngine::setFactionReputationEnabled(const QString &faction, bool set)
+{
+  QJsonObject factionData = diplomacy[faction].toObject();
+
+  factionData.insert("reputation", set);
+  diplomacy.insert(faction, factionData);
+  emit diplomacyUpdated();
+}
+
+bool DataEngine::hasFactionReputationEnabled(const QString &faction) const
+{
+  return diplomacy[faction]["reputation"].toBool(false);
 }
 
 QJsonObject DataEngine::getQuests() const
@@ -97,6 +141,8 @@ void DataEngine::loadFromFile(const QString &path)
     diplomacy  = data["diplomacy"].toObject();
     quests     = data["quests"].toObject();
     worldmap   = data["worldmap"].toObject();
+    qDebug() << "Diplomacy data loadded:" << QJsonDocument(diplomacy).toJson();
+    emit diplomacyUpdated();
   }
   else
     qDebug() << "Could not load save file" << path;

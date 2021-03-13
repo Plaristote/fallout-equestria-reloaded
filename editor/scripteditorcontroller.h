@@ -19,6 +19,7 @@ public:
   Q_INVOKABLE void        loadCharacterSheet(const QString& name, StatModel*);
 
   Q_INVOKABLE QStringList getLevels();
+  Q_INVOKABLE QStringList getFactions();
 
 signals:
 
