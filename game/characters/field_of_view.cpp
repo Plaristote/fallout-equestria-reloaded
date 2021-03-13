@@ -101,6 +101,7 @@ void FieldOfView::runTask()
   LoseTrackOfCharacters(detected_characters);
   DetectCharacters();
   timeLeft = interval;
+  emit refreshed();
 }
 
 void FieldOfView::reset()

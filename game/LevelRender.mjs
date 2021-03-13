@@ -20,6 +20,11 @@ export class Controller {
   }
 
   initializeRenderObjects() {
+    const _detectedCharacters = this.level.visibleCharacters;
+    const detectedCharacters = [];
+
+    for (var i = 0 ; i < _detectedCharacters.length ; ++i)
+      detectedCharacters.push(_detectedCharacters[i]);
     this.renderObjects = [];
     for (var x = 0 ; x < this.mapSize.width ; ++x) {
       this.renderObjects[x] = [];
@@ -30,6 +35,8 @@ export class Controller {
       const object = this.level.dynamicObjects[i];
       const position = object.getPosition();
 
+      if (object.getObjectType() === "Character" && detectedCharacters.indexOf(object) < 0)
+        continue ;
       this.renderObjects[position.x][position.y].push(object);
       this.renderObjects[position.x][position.y].sort(function(a, b) {
         return a.getZIndex() < b.getZIndex();

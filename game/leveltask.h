@@ -31,6 +31,7 @@ class LevelTask : public CombatComponent
   Q_PROPERTY(TaskRunner* tasks MEMBER taskRunner)
   Q_PROPERTY(QQmlListProperty<DynamicObject> dynamicObjects READ getQmlObjects NOTIFY objectsChanged)
   Q_PROPERTY(QQmlListProperty<Sprite>        visualEffects READ getQmlVisualEffects NOTIFY visualEffectsChanged)
+  Q_PROPERTY(QQmlListProperty<Character>     visibleCharacters READ getQmlVisibleCharacters NOTIFY visibleCharactersChanged)
 public:
   explicit LevelTask(QObject *parent = nullptr);
   virtual ~LevelTask();
@@ -66,6 +67,12 @@ public:
 
   QQmlListProperty<DynamicObject> getQmlObjects() { return QQmlListProperty<DynamicObject>(this, &objects); }
   QQmlListProperty<Sprite> getQmlVisualEffects() { return QQmlListProperty<Sprite>(this, &visualEffects); }
+  QQmlListProperty<Character> getQmlVisibleCharacters()
+  {
+    visibleCharacters = getPlayer()->getFieldOfView()->GetDetectedCharacters();
+    visibleCharacters << getPlayer();
+    return QQmlListProperty<Character>(this, &visibleCharacters);
+  }
 
   void finalizeRound() override;
 
@@ -85,6 +92,7 @@ signals:
   void clickedOnCase(int x, int y);
   void clickedOnObject(DynamicObject*);
   void playerChanged();
+  void visibleCharactersChanged();
 
 public slots:
   void deleteLater();
@@ -99,6 +107,7 @@ private slots:
 
 private:
   QList<DynamicObject*> objects;
+  QList<Character*> visibleCharacters;
   QList<Sprite*> visualEffects;
 
   QTimer            updateTimer;

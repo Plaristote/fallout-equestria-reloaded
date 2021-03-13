@@ -59,6 +59,9 @@ public:
   void                 reset();
   void                 removeCharacter(Character*);
 
+signals:
+  void                 refreshed();
+
 protected:
   void                 LoseTrackOfCharacters(std::list<Entry>&);
   void                 DetectCharacters(void);

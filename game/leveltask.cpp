@@ -58,6 +58,7 @@ void LevelTask::load(const QString& levelName, DataEngine* dataEngine)
     loadObjectsFromDataEngine(dataEngine);
   for (auto* zone : tilemap->getZones())
     registerZone(zone);
+  connect(getPlayer()->getFieldOfView(), &FieldOfView::refreshed, this, &LevelTask::visibleCharactersChanged);
 }
 
 void LevelTask::loadObjectsFromDataEngine(DataEngine* dataEngine)

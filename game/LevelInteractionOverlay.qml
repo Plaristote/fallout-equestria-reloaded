@@ -11,6 +11,7 @@ Repeater {
     property QtObject dynamicObject: levelController.dynamicObjects[index]
     property point offset: controller.getAdjustedOffsetFor(dynamicObject)
     property bool  isCharacter: dynamicObject.getObjectType() === "Character"
+    property bool  isDetected: isCharacter && level.visibleCharacters.indexOf(dynamicObject) >= 0
     property color overlayColor:    levelController.targetMode === 0 ? Qt.rgba(255, 255, 0, 1)   : Qt.rgba(255, 0, 0, 1)
     property color overlayMaxColor: levelController.targetMode === 0 ? Qt.rgba(255, 255, 0, 0.5) : Qt.rgba(255, 0, 0, 0.5)
     property int   overlayAnimState: 0
@@ -41,7 +42,7 @@ Repeater {
     }
 
     enabled: visible
-    visible: isCharacter || (levelController.mouseMode > 0 && levelController.targetMode === 0)
+    visible: isDetected || (!isCharacter && (levelController.mouseMode > 0 && levelController.targetMode === 0))
     source: "file:" + dynamicObject.spriteSource
     sourceClipRect: dynamicObject.clippedRect
     x: offset.x + origin.x
