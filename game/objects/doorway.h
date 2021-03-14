@@ -20,7 +20,6 @@ public:
   QStringList getAvailableInteractions() override;
   Q_INVOKABLE QPoint getInteractionPosition() const override;
   bool isBlockingPath() const { return !opened; }
-
   bool triggerInteraction(Character* character, const QString& interactionType) override;
 
   Q_INVOKABLE bool onUse(Character* character);

@@ -27,6 +27,7 @@ void DynamicObject::setScript(const QString& name)
   script     = new ScriptController(getScriptPath() + '/' + name);
   taskManager->setScriptController(script);
   script->initialize(this);
+  emit scriptNameChanged();
 }
 
 QStringList DynamicObject::getAvailableInteractions()
@@ -79,10 +80,11 @@ bool DynamicObject::triggerSkillUse(Character *user, const QString &skillName)
   return false;
 }
 
-void DynamicObject::scriptCall(const QString& method, const QString& message)
+QJSValue DynamicObject::scriptCall(const QString& method, const QString& message)
 {
   if (script)
-    script->call(method, QJSValueList() << message);
+    return script->call(method, QJSValueList() << message);
+  return QJSValue();
 }
 
 TileZone* DynamicObject::addControlZone()

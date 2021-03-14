@@ -9,7 +9,7 @@ import Game 1.0
 Pane {
   property QtObject gameController
   property QtObject model
-  property string scriptCategory: "behaviours"
+  property string scriptCategory: "behaviour"
   property alias fields: additionalFields.children
   property bool readOnlyPositionType: false
   property bool readOnlyAnimation: false
@@ -61,12 +61,13 @@ Pane {
     spriteInput.currentIndex      = spriteInput.model.indexOf(spriteName);
     animationInput.currentIndex   = animationInput.model.indexOf(animationName);
     positioningInput.currentIndex = posMode
-    gridXInput.text        = position.x;
-    gridYInput.text        = position.y;
-    renderXInput.text      = renderPosition.x;
-    renderYInput.text      = renderPosition.y;
-    interactionXInput.text = interactionPosition.x;
-    interactionYInput.text = interactionPosition.y;
+    gridXInput.text          = position.x;
+    gridYInput.text          = position.y;
+    renderXInput.text        = renderPosition.x;
+    renderYInput.text        = renderPosition.y;
+    interactionXInput.text   = interactionPosition.x;
+    interactionYInput.text   = interactionPosition.y;
+    scriptInput.currentIndex = scriptInput.model.indexOf(model.scriptName);
   }
 
   Column {

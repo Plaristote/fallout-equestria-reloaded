@@ -5,6 +5,7 @@
 
 Doorway::Doorway(QObject* parent) : DynamicObject(parent)
 {
+  lockpickLevel = 1;
   connect(this, &Doorway::openedChanged, this, &Doorway::updateAccessPath);
   connect(this, &Doorway::openedChanged, this, &Doorway::updateAnimation);
 }
