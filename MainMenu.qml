@@ -9,33 +9,33 @@ Image {
 
   Action {
     id: continueAction
-    text: qsTr("Continue")
+    text: i18n.t("Continue")
     enabled: gameManager.hasContinueGame()
     onTriggered: application.gameLoading = gameManager.getSavedGames()[0]
   }
 
   Action {
     id: newGameAction
-    text: qsTr("New game")
+    text: i18n.t("New game")
     onTriggered: application.createGame()
   }
 
   Action {
     id: loadGameAction
-    text: qsTr("Load game")
+    text: i18n.t("Load game")
     enabled: gameManager.getSavedGames().length > 0
     onTriggered: application.pushView("LoadGame.qml")
   }
 
   Action {
     id: exitAction
-    text: qsTr("Exit")
+    text: i18n.t("Exit")
     onTriggered: application.close();
   }
 
   Action {
     id: gameEditorAction
-    text: "Game Editor"
+    text: i18n.t("Game Editor")
     onTriggered: application.pushView("editor/Index.qml")
   }
 

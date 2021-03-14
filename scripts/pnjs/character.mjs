@@ -37,8 +37,7 @@ export class CharacterBehaviour {
   onLook() {
     var message = "You see " + this.model.statistics.name + ".";
 
-    message += " " + this.model.statistics.hitPoints + "/" + this.model.statistics.maxHitPoints + " HP";
-    game.appendToConsole(message);
+    game.appendToConsole(i18n.t("inspection.character", {target: this.model.statistics.name}));
     return true;
   }
 
@@ -66,12 +65,16 @@ export class CharacterBehaviour {
       healed = healed * user.statistics.medicine / 100;
       healed = Math.min(healed, maxHeal);
       stats.hitPoints += healed;
-      game.appendToConsole(`${user.statistics.name} used medicine on ${stats.name} and healed it for ${healed} hit points.`);
+      game.appendToConsole(i18n.t("medicine-skill.used-on", {
+        user:   user.statistics.name,
+        target: stats.name,
+        hp:     healed
+      }));
       level.addTextBubble(this.model, "Thank you kindly !", 5000, "lightgreen");
       return true;
     }
     else
-      game.appendToConsole("You can't use medicine during combat.");
+      game.appendToConsole(i18n.t("medicine-skill.in-combat"));
     return false;
   }
 

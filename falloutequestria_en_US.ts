@@ -67,29 +67,6 @@
     </message>
 </context>
 <context>
-    <name>MainMenu</name>
-    <message>
-        <location filename="MainMenu.qml" line="12"/>
-        <source>Continue</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="MainMenu.qml" line="19"/>
-        <source>New game</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="MainMenu.qml" line="25"/>
-        <source>Load game</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="MainMenu.qml" line="32"/>
-        <source>Exit</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>PersonalInfo</name>
     <message>
         <location filename="cmap/PersonalInfo.qml" line="22"/>

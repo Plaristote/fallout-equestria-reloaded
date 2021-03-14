@@ -1,0 +1,9 @@
+{
+  "inspection": {
+    "character": "You see {{target}}"
+  },
+  "medicine-skill": {
+    "used-on": "{{user}} used medicine on {{target}} and healed it for {{hp}} hit points.",
+    "in-combat": "You can't use medicine during combat"
+  }
+}

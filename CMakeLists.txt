@@ -137,6 +137,8 @@ set(PROJECT_SOURCES
         gamemanager.cpp
         musicmanager.h
         musicmanager.cpp
+        i18n.h
+        i18n.cpp
         game.h
         game.cpp
         qml.qrc

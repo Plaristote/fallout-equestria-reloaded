@@ -6,7 +6,7 @@ import "./ui"
 
 SaveGameUi {
   id: root
-  title: "Load"
+  title: i18n.t("Load")
 
   Action {
     id: loadGame
@@ -31,11 +31,11 @@ SaveGameUi {
 
   controls: [
     MenuButton {
-      text: "Load"
+      text: i18n.t("Load")
       action: loadGame
     },
     MenuButton {
-      text: "Cancel"
+      text: i18n.t("Cancel")
       onClicked: application.popView()
     }
   ]

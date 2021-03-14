@@ -1,6 +1,7 @@
 #include "globals.h"
 #include "game.h"
 #include "musicmanager.h"
+#include "i18n.h"
 #include <QFile>
 #include <QDir>
 
@@ -22,6 +23,7 @@ Game::Game(QObject *parent) : QObject(parent)
   scriptEngine.globalObject().setProperty("game", scriptEngine.newQObject(this));
   scriptEngine.globalObject().setProperty("quests", scriptEngine.newQObject(quests));
   scriptEngine.globalObject().setProperty("musicManager", scriptEngine.newQObject(MusicManager::get()));
+  scriptEngine.globalObject().setProperty("i18n", scriptEngine.newQObject(I18n::get()));
   loadCmapTraits();
   scriptEngine.evaluate("level.displayConsoleMessage(\"Coucou Script Engine\")");
 

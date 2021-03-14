@@ -3,6 +3,7 @@
 #include <QQmlContext>
 
 #include "globals.h"
+#include "i18n.h"
 #include "game/animationlibrary.h"
 #include "game/inventoryitemlibrary.h"
 
@@ -57,6 +58,7 @@ int main(int argc, char *argv[])
   QGuiApplication app(argc, argv);
   QQmlApplicationEngine engine;
 
+  qmlRegisterType<I18n>("I18n", 1,0, "I18n");
   qmlRegisterType<Game>("Game", 1,0, "Controller");
   qmlRegisterType<StatModel>("Game", 1,0, "StatModel");
   qmlRegisterType<Sprite>("Game", 1,0, "Sprite");
@@ -85,7 +87,9 @@ int main(int argc, char *argv[])
 
   MusicManager* musicManager = new MusicManager(&app);
   GameManager*  gameManager = new GameManager();
+  I18n*         i18n = new I18n(&app);
 
+  engine.rootContext()->setContextProperty("i18n", i18n);
   engine.rootContext()->setContextProperty("gameManager", gameManager);
   engine.rootContext()->setContextProperty("musicManager", musicManager);
   engine.rootContext()->setContextProperty("animationLibrary", &animationLibrary);

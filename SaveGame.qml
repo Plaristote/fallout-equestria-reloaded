@@ -6,11 +6,11 @@ import "./ui"
 
 SaveGameUi {
   id: root
-  title: "Save"
+  title: i18n.t("Save")
 
   slots: [
     SavedGameListItem {
-      name: "New save game"
+      name: i18n.t("New save game")
       isNewSlot: true
       selected: root.selectedIndex == 0
       onClicked: root.selectedIndex = 0
@@ -31,7 +31,7 @@ SaveGameUi {
 
   controls: [
     MenuButton {
-      text: "Save"
+      text: i18n.t("Save")
       onClicked: {
         if (root.selectedIndex == 0)
           newSaveDialog.open();
@@ -40,20 +40,20 @@ SaveGameUi {
       }
     },
     MenuButton {
-      text: "Cancel"
+      text: i18n.t("Cancel")
       onClicked: application.popView()
     }
   ]
 
   Dialog {
     id: newSaveDialog
-    title: "New save"
+    title: i18n.t("New save")
     modal: true
     anchors.centerIn: parent
     standardButtons: Dialog.Ok | Dialog.Cancel
 
     Row {
-      Text { text: "Name" }
+      Text { text: i18n.t("Name") }
       TextField { id: newSaveNameInput }
     }
 
@@ -65,7 +65,7 @@ SaveGameUi {
 
   Dialog {
     id: overwriteDialog
-    title: "Are you sure ?"
+    title: i18n.t("Are you sure ?")
     anchors.centerIn: parent
     modal: true
     standardButtons: Dialog.Ok | Dialog.Cancel
