@@ -20,6 +20,7 @@ public:
 
   Q_INVOKABLE QStringList getLevels();
   Q_INVOKABLE QStringList getFactions();
+  Q_INVOKABLE QStringList getDialogs();
 
 signals:
 

@@ -2,6 +2,7 @@
 #include "characterdialog.h"
 #include "game.h"
 #include <QFile>
+#include <QJsonArray>
 
 CharacterDialog::CharacterDialog(QObject *parent) : QObject(parent)
 {
@@ -17,53 +18,89 @@ void CharacterDialog::load(const QString& name, Character* player, Character* np
   {
     QJSValue initializer;
 
-    this->player  = player;
-    this->npc     = npc;
-    self          = Game::get()->getScriptEngine().newQObject(this);
-    data          = QJsonDocument::fromJson(file.readAll());
-    script        = Game::get()->loadScript(SCRIPTS_PATH + "dialogs/" + name + ".mjs");
-    initializer   = script.property("initialize");
-    if (initializer.isCallable())
-    {
-      QJSValueList args;
-
-      args << self;
-      stateReference = initializer.call(args).toString();
-    }
-    else
-      stateReference = data["entryPoint"].toString();
-    loadState(stateReference);
+    this->player     = player;
+    this->npc        = npc;
+    translationGroup = "dialogs." + name;
+    data             = QJsonDocument::fromJson(file.readAll()).object();
+    script = new ScriptController(SCRIPTS_PATH + "dialogs/" + name + ".mjs");
+    script->initialize(this);
+    loadState(getEntryPoint());
   }
   else
     qDebug() << "Could not load dialog file " << name;
 }
 
+QString CharacterDialog::getEntryPoint()
+{
+  if (script->hasMethod("getEntryPoint"))
+  {
+    auto entryPoint = script->call("getEntryPoint");
+
+    if (entryPoint.isString())
+      return entryPoint.toString();
+  }
+  return data["entryPoint"].toString();
+}
+
+void CharacterDialog::initializeStateHook(QString& text, QStringList& answers)
+{
+  QJsonObject statesData  = data["states"].toObject();
+  QJsonObject stateData   = statesData[stateReference].toObject();
+  QString triggerCallback = stateData["hook"].toString();
+
+  text = "";
+  if (script->hasMethod(triggerCallback))
+  {
+    QJSValue value = script->call(triggerCallback);
+
+    if (value.isString())
+      text = value.toString();
+    else if (value.isObject())
+    {
+      if (value.hasProperty("text"))
+        text = value.property("text").toString();
+      if (value.hasProperty("answers"))
+        answers = value.property("answers").toVariant().toStringList();
+    }
+  }
+}
+
+void CharacterDialog::loadOption(const QString &answer)
+{
+  QJsonObject answerData = data["answers"].toObject();
+  QJsonObject optionData = answerData[answer].toObject();
+  QJsonValue availableHook = optionData["availableHook"];
+
+  if (availableHook.isUndefined() || !script->hasMethod(availableHook.toString()))
+    options.push_back(answer);
+  else
+  {
+    QJSValue args;
+    QJSValue retval = script->call(availableHook.toString());
+
+    if (retval.toBool())
+      options.push_back(answer);
+  }
+}
+
 void CharacterDialog::loadState(const QString& reference)
 {
-  QJsonObject stateData = data[reference].toObject();
-  QJsonObject optionsData = stateData["options"].toObject();
+  QJsonObject statesData  = data["states"].toObject();
+  QJsonObject answerData  = data["answers"].toObject();
+  QJsonObject stateData   = statesData[reference].toObject();
+  QStringList answers;
 
   options.clear();
   stateReference = reference;
-  text = stateData["text"].toString();
-  for (auto optionKey : optionsData.keys())
-  {
-    QJsonObject optionData = optionsData[optionKey].toObject();
-    QJsonValue availableHook = optionData["availableHook"];
-
-    qDebug() << "Checking dialog option" << optionKey << optionData["availableHook"];
-    if (availableHook.isUndefined() || availableHook.isNull())
-      options.push_back(optionKey);
-    else
-    {
-      QJSValue availableCallback = script.property(availableHook.toString());
-
-      if (availableCallback.isCallable() && availableCallback.call().toBool())
-        options.push_back(optionKey);
-      else
-        qDebug() << "Not available du to hook";
-    }
-  }
+  initializeStateHook(text, answers);
+  if (text.length() == 0)
+    text = t(stateData["text"].toString());
+  if (answers.length() == 0)
+    answers = stateData["answers"].toVariant().toStringList();
+  for (const QString& answer : answers)
+    loadOption(answer);
+  if (answers.length() == 0)
+    loadOption("exit");
   emit stateReferenceChanged();
   emit textChanged();
   emit optionsChanged();
@@ -73,32 +110,59 @@ void CharacterDialog::loadState(const QString& reference)
 
 void CharacterDialog::selectOption(const QString& key)
 {
-  QJsonObject optionData    = data[stateReference]["options"][key].toObject();
-  QJsonValue  defaultAnswer = optionData["defaultAnswer"];
-  QJsonValue  callbackName  = optionData["executeHook"];
+  QString nextState;
 
-  if (!(callbackName.isUndefined() || callbackName.isNull()))
-  {
-    QJSValue callback = script.property(callbackName.toString());
-
-    if (callback.isCallable())
-    {
-      QString answer = callback.call().toString();
-      if (!answer.isEmpty())
-        loadState(answer);
-      else
-        emit dialogEnded();
-    }
-    else
-      qDebug() << "Broken executeHook in dialog for" << stateReference << ":" << key;
-  }
-  else if (!defaultAnswer.isUndefined() && !defaultAnswer.toString().isEmpty())
-    loadState(defaultAnswer.toString());
+  if (key != "exit")
+    nextState = getNextState(key);
+  if (nextState != "")
+    loadState(nextState);
   else
     emit dialogEnded();
 }
 
+QString CharacterDialog::getNextState(const QString& answer)
+{
+  QJsonObject answersData  = data["answers"].toObject();
+  QJsonObject optionData   = answersData[answer].toObject();
+  QString     callbackName = optionData["hook"].toString();
+
+  if (callbackName != "" && script->hasMethod(callbackName))
+  {
+    QJSValue retval = script->call(callbackName);
+
+    if (retval.isString())
+      return retval.toString();
+  }
+  return optionData["state"].toString();
+}
+
+QString CharacterDialog::t(const QString &name)
+{
+  return I18n::get()->t(translationGroup + '.' + name);
+}
+
 QString CharacterDialog::getOptionText(const QString& key)
 {
-  return data[stateReference]["options"][key]["text"].toString();
+  QJsonObject answers    = data["answers"].toObject();
+  QJsonObject answerData = answers[key].toObject();
+  QString     callback("getAnswerText");
+
+  if (script->hasMethod(callback))
+  {
+    QJSValue retval = script->call(callback, QJSValueList() << key);
+
+    if (retval.isString())
+      return retval.toString();
+  }
+  return t(answerData["text"].toString());
+}
+
+QStringList CharacterDialog::getStateList() const
+{
+  return data["states"].toObject().keys();
+}
+
+QStringList CharacterDialog::getAnswerList() const
+{
+  return data["answers"].toObject().keys();
 }

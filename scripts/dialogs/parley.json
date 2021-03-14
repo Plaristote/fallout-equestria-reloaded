@@ -1,40 +1,52 @@
 {
-  "entryPoint": "my-entry-point",
-  "my-entry-point": {
-    "text": "Salutations !",
-    "options": {
-      "rep1": {
-        "text": "Le diable vous emporte !",
-	"executeHook": "unhappy"
-      },
-      "rep2": {
-        "text": "Dieu vous benisse !",
-        "executeHook": "happy"
-      }
+  "entryPoint": "myEntryPoint",
+  "states": {
+    "myEntryPoint": {
+      "hook": "triggerMyEntryPoint",
+      "text": "greetings",
+      "answers": ["rep1", "rep2", "rep3"]
+    },
+    "somethingCool": {
+      "text": "freaking-face",
+      "answers": ["noMane", "pleaseChangeColor"]
+    },
+    "changedColor": {
+      "text": "changed-color",
+      "answers": ["fancy"]
+    },
+    "topHatted": {
+      "hook": "putHatOn",
+      "text": "top-hatted",
+      "answers": ["exit"]
     }
   },
-  "insults": {
-    "text": "Marin d'eau douce ! Bois sans soif ! Hors de ma vue !",
-    "options": {
-      "quit": {
-        "text": "{Partir}"
-      }
-    }
-  },
-  "thanks": {
-    "text": "Comme c'est aimable ! De quoi voulez-vous parler ?",
-    "options": {
-      "repinvis": {
-        "text": "Du mystère en chocolat",
-	"availableHook": "unavailable"
-      },
-      "repvisis": {
-        "text": "Du complot judéo-maçonnique",
-	"availableHook": "available"
-      },
-      "quit": {
-        "text": "De rien, ça ira, tchuss."
-      }
+  "answers": {
+    "rep1": {
+      "text": "rep1",
+      "hook": "unhappy"
+    },
+    "rep2": {
+      "text": "rep2",
+      "hook": "happy"
+    },
+    "rep3": {
+      "text": "rep3",
+      "hook": "showSomethingCool"
+    },
+    "noMane": {
+      "text": "no-mane"
+    },
+    "pleaseChangeColor": {
+      "text": "change-color",
+      "state": "changedColor",
+      "hook": "changeColor"
+    },
+    "fancy": {
+      "text": "oh-fancy",
+      "state": "topHatted"
+    },
+    "exit": {
+      "text": "walk-away"
     }
   }
 }

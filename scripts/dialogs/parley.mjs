@@ -1,31 +1,30 @@
-var controller;
+export class Dialog {
+  constructor(model) {
+    this.model = model;
+  }
 
-export function initialize(param) {
-  controller = param;
-  console.log("SCRIPT DIALOG initialize", param);
-  controller.npc.statistics.faceTheme = "mare-basic";
-  controller.npc.statistics.setFaceColor(255, 255, 0, 150);
-  controller.npc.statistics.faceAccessories = ["eye-scar"];
-  return "my-entry-point";
-}
+  triggerMyEntryPoint() {
+    if (this.model.npc.getVariable("introduced") === true)
+      return i18n.t("dialogs.parley.greetings-alt");
+    this.model.npc.setVariable("introduced", true);
+    return i18n.t("dialogs.parley.greetings");
+  }
 
-export function unhappy() {
-  console.log("Still haz controller?", controller);
-  controller.mood = "angry";
-  controller.npc.statistics.setFaceColor(255, 0, 0, 150);
-  return "insults";
-}
+  showSomethingCool() {
+    this.model.mood = "sad";
+    return "somethingCool";
+  }
 
-export function happy() {
-  controller.mood = "smile";
-  controller.npc.statistics.faceAccessories.push("fancypants");
-  return "thanks";
-}
+  changeColor() {
+    this.model.mood = "smile";
+    this.model.npc.statistics.setFaceColor(225, 225, 0, 175);
+  }
 
-export function unavailable() {
-  return false;
-}
+  putHatOn() {
+    this.model.npc.statistics.faceAccessories.push("fancypants");
+  }
+};
 
-export function available() {
-  return true;
+export function create(model) {
+  return new Dialog(model);
 }

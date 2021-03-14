@@ -96,3 +96,9 @@ QStringList ScriptEditorController::getFactions()
   return QStringList();
 }
 
+QStringList ScriptEditorController::getDialogs()
+{
+  QDir dir("scripts/dialogs");
+
+  return dir.entryList(QStringList() << "*.json", QDir::NoFilter, QDir::Name);
+}
