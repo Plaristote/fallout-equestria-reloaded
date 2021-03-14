@@ -5,16 +5,24 @@
 
 Doorway::Doorway(QObject* parent) : DynamicObject(parent)
 {
-  connect(this, &Doorway::openedChanged, [this]()
+  connect(this, &Doorway::openedChanged, this, &Doorway::updateAccessPath);
+  connect(this, &Doorway::openedChanged, this, &Doorway::updateAnimation);
+}
+
+void Doorway::updateAccessPath()
+{
+  if (controlZone)
+    controlZone->setAccessBlocked(!opened);
+  else
   {
-    if (controlZone)
-      controlZone->setAccessBlocked(!opened);
-    else
-    {
-      blocksPath = !opened;
-      emit blocksPathChanged();
-    }
-  });
+    blocksPath = !opened;
+    emit blocksPathChanged();
+  }
+}
+
+void Doorway::updateAnimation()
+{
+  setAnimation(opened ? "open" : "close");
 }
 
 QStringList Doorway::getAvailableInteractions()
@@ -47,38 +55,39 @@ QPoint Doorway::getInteractionPosition() const
 
 bool Doorway::triggerInteraction(Character *character, const QString &interactionType)
 {
-  qDebug() << "triggerInteraction on doorway" << interactionType;
-  if (interactionType == "use")
-  {
-    auto* level = Game::get()->getLevel();
-    auto* grid  = level->getGrid();
-    QPoint position = getPosition();
-
-    qDebug() << "pas glop";
-    if (locked)
-    {
-      if (character == level->getPlayer())
-        level->displayConsoleMessage("It's locked.");
-      return false;
-    }
-    if (opened)
-    {
-      if (!grid->isOccupied(position.x(), position.y()))
-      {
-        opened = false;
-        emit openedChanged();
-        return true;
-      }
-      else if (character == level->getPlayer())
-        level->displayConsoleMessage("Something's in the way.");
-      return false;
-    }
-    else
-      opened = true;
-    emit openedChanged();
-    return true;
-  }
+  if (interactionType == "use" && !script->hasMethod("onUse"))
+    return onUse(character);
   return DynamicObject::triggerInteraction(character, interactionType);
+}
+
+bool Doorway::onUse(Character* character)
+{
+  auto* level = Game::get()->getLevel();
+  auto* grid  = level->getGrid();
+  QPoint position = getPosition();
+
+  if (locked)
+  {
+    if (character == level->getPlayer())
+      level->displayConsoleMessage("It's locked.");
+    return false;
+  }
+  if (opened)
+  {
+    if (!grid->isOccupied(position.x(), position.y()))
+    {
+      opened = false;
+      emit openedChanged();
+      return true;
+    }
+    else if (character == level->getPlayer())
+      level->displayConsoleMessage("Something's in the way.");
+    return false;
+  }
+  else
+    opened = true;
+  emit openedChanged();
+  return true;
 }
 
 void Doorway::save(QJsonObject& data) const

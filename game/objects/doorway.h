@@ -23,11 +23,17 @@ public:
 
   bool triggerInteraction(Character* character, const QString& interactionType) override;
 
+  Q_INVOKABLE bool onUse(Character* character);
+
 signals:
   void openedChanged();
   void lockedChanged();
   void keyNameChanged();
   void lockpickLevelChanged();
+
+private slots:
+  void updateAccessPath();
+  void updateAnimation();
 
 private:
   bool      opened = false;
