@@ -205,6 +205,7 @@ Item {
           model: selectedObject && selectedObject.getObjectType() === "Doorway" ? selectedObject : null
           gameController: root.gameController
           Layout.fillWidth: true
+          onRemoveClicked: gameController.level.deleteObject(model)
         }
 
         ControlZoneEditor {

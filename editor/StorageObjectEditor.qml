@@ -13,8 +13,8 @@ DynamicObjectEditor {
 
   fields: [
     TerminalButton {
-      Layout.rowSpan: 2
-      Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+      Layout.columnSpan: 2
+      Layout.fillWidth: true
       text: "Inventory"
       onClicked: openStorageClicked();
       padding: 20

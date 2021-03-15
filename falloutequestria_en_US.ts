@@ -25,12 +25,4 @@
         <translation type="unfinished"></translation>
     </message>
 </context>
-<context>
-    <name>main</name>
-    <message>
-        <location filename="main.qml" line="13"/>
-        <source>Fallout Equestria</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
 </TS>

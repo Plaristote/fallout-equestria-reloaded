@@ -72,10 +72,12 @@ Pane {
 
   Column {
     spacing: 5
+    width: parent.width
 
     TerminalLabel { text: "> Object Data"; font.pointSize: 13 }
     GridLayout {
       columns: 2
+      width: parent.width
 
       TerminalLabel { text: "Positionning"; visible: !objectEditor.readOnlyPositionType }
       TerminalComboBox {
@@ -154,16 +156,16 @@ Pane {
 
     GridLayout {
       id: additionalFields
+      width: parent.width
       columns: 2
     }
 
     TerminalButton {
-      Layout.rowSpan: 2
-      Layout.alignment: Qt.AlignCenter
       text: "Remove"
       onClicked: removeClicked()
       padding: 20
       height: 40
+      width: parent.width
     }
   } // END Column
 }

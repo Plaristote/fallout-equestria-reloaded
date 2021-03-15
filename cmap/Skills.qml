@@ -30,18 +30,18 @@ Pane {
 
     Column {
       id: content
-      spacing: 10
       Repeater {
         model: root.list
         delegate: Row {
           property string propertyName: root.list[index]
           property color textColor: propertyName == root.selectedProperty ? "green" : "white"
 
-
           Text {
             text: i18n.t("cmap." + propertyName)
             color: textColor
             width: Math.max(150, root.width - (root.canEdit ? 175 : 100))
+            topPadding: 5
+            bottomPadding: 5
             font.family: application.consoleFontName
             font.pointSize: 8
             MouseArea { anchors.fill: parent; onClicked: root.selectProperty(propertyName) }
@@ -50,6 +50,8 @@ Pane {
             text: characterSheet[root.list[index]] + "%"
             color: textColor
             width: 50
+            topPadding: 5
+            bottomPadding: 5
             font.family: application.consoleFontName
             font.pointSize: 8
             MouseArea { anchors.fill: parent; onClicked: root.selectProperty(propertyName) }
