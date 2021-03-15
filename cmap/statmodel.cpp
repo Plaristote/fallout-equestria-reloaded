@@ -1,7 +1,7 @@
 #include "statmodel.h"
 #include "i18n.h"
 #include <QJsonArray>
-
+#include "cmap/race.h"
 #include "game.h"
 
 StatModel::StatModel(QObject *parent) : QObject(parent)
@@ -12,6 +12,7 @@ StatModel::StatModel(QObject *parent) : QObject(parent)
   experience = 0;
   connect(this, &StatModel::specialChanged, this, &StatModel::updateBaseValues);
   connect(this, &StatModel::traitsChanged,  this, &StatModel::updateBaseValues);
+  connect(this, &StatModel::raceChanged,    this, &StatModel::updateBaseValues);
   connect(this, &StatModel::specialChanged, this, &StatModel::acceptableChanged);
   connect(this, &StatModel::traitsChanged,  this, &StatModel::acceptableChanged);
   connect(this, &StatModel::nameChanged,    this, &StatModel::acceptableChanged);
@@ -119,6 +120,41 @@ void StatModel::setRace(const QString& newRace)
     raceController->toogle(this, true);
   race = newRace;
   emit raceChanged();
+  updateBaseValues();
+}
+
+static void applyCmapPlugin(StatModel* self, CmapPlugin& plugin, StatData& data)
+{
+  data.actionPoints        = plugin.modifyBaseStatistic(self, "actionPoints",        data.actionPoints);
+  data.armorClass          = plugin.modifyBaseStatistic(self, "armorClass",          data.armorClass);
+  data.carryWeight         = plugin.modifyBaseStatistic(self, "carryWeight",         data.carryWeight);
+  data.criticalChance      = plugin.modifyBaseStatistic(self, "criticalChance",      data.criticalChance);
+  data.damageResistance    = plugin.modifyBaseStatistic(self, "damageResistance",    data.damageResistance);
+  data.healingRate         = plugin.modifyBaseStatistic(self, "healingRate",         data.healingRate);
+  data.maxHitPoints        = plugin.modifyBaseStatistic(self, "maxHitPoints",        data.maxHitPoints);
+  data.meleeDamage         = plugin.modifyBaseStatistic(self, "meleeDamage",         data.meleeDamage);
+  data.perkRate            = plugin.modifyBaseStatistic(self, "perkRate",            data.perkRate);
+  data.poisonResistance    = plugin.modifyBaseStatistic(self, "poisonResistance",    data.poisonResistance);
+  data.radiationResistance = plugin.modifyBaseStatistic(self, "radiationResistance", data.radiationResistance);
+  data.skillRate           = plugin.modifyBaseStatistic(self, "skillRate",           data.skillRate);
+
+  data.smallGuns    = plugin.modifyBaseSkill(self, "smallGuns",    data.smallGuns);
+  data.bigGuns      = plugin.modifyBaseSkill(self, "bigGuns",      data.bigGuns);
+  data.energyGuns   = plugin.modifyBaseSkill(self, "energyGuns",   data.energyGuns);
+  data.explosives   = plugin.modifyBaseSkill(self, "explosives",   data.explosives);
+  data.unarmed      = plugin.modifyBaseSkill(self, "unarmed",      data.unarmed);
+  data.meleeWeapons = plugin.modifyBaseSkill(self, "meleeWeapons", data.meleeWeapons);
+  data.lockpick     = plugin.modifyBaseSkill(self, "lockpick",     data.lockpick);
+  data.medicine     = plugin.modifyBaseSkill(self, "medicine",     data.medicine);
+  data.repair       = plugin.modifyBaseSkill(self, "repair",       data.repair);
+  data.science      = plugin.modifyBaseSkill(self, "science",      data.science);
+  data.sneak        = plugin.modifyBaseSkill(self, "sneak",        data.sneak);
+  data.spellcasting = plugin.modifyBaseSkill(self, "spellcasting", data.spellcasting);
+  data.steal        = plugin.modifyBaseSkill(self, "steal",        data.steal);
+  data.barter       = plugin.modifyBaseSkill(self, "barter",       data.barter);
+  data.outdoorsman  = plugin.modifyBaseSkill(self, "outdoorsman",  data.outdoorsman);
+  data.speech       = plugin.modifyBaseSkill(self, "speech",       data.speech);
+  data.gambling     = plugin.modifyBaseSkill(self, "gambling",     data.gambling);
 }
 
 void StatModel::updateBaseValues()
@@ -154,45 +190,21 @@ void StatModel::updateBaseValues()
   data.speech       = 5 * charisma + intelligence;
   data.gambling     = charisma + 4 * luck;
 
-  auto allTraits = Game::get()->getCmapTraits();
+  auto  allTraits      = Game::get()->getCmapTraits();
+  auto* raceController = getRaceController();
 
   for (auto trait : allTraits)
   {
     if  (traits.contains(trait.name))
-    {
-      data.actionPoints        = trait.modifyBaseStatistic(this, "actionPoints",        data.actionPoints);
-      data.armorClass          = trait.modifyBaseStatistic(this, "armorClass",          data.armorClass);
-      data.carryWeight         = trait.modifyBaseStatistic(this, "carryWeight",         data.carryWeight);
-      data.criticalChance      = trait.modifyBaseStatistic(this, "criticalChance",      data.criticalChance);
-      data.damageResistance    = trait.modifyBaseStatistic(this, "damageResistance",    data.damageResistance);
-      data.healingRate         = trait.modifyBaseStatistic(this, "healingRate",         data.healingRate);
-      data.maxHitPoints        = trait.modifyBaseStatistic(this, "maxHitPoints",        data.maxHitPoints);
-      data.meleeDamage         = trait.modifyBaseStatistic(this, "meleeDamage",         data.meleeDamage);
-      data.perkRate            = trait.modifyBaseStatistic(this, "perkRate",            data.perkRate);
-      data.poisonResistance    = trait.modifyBaseStatistic(this, "poisonResistance",    data.poisonResistance);
-      data.radiationResistance = trait.modifyBaseStatistic(this, "radiationResistance", data.radiationResistance);
-      data.skillRate           = trait.modifyBaseStatistic(this, "skillRate",           data.skillRate);
-
-      data.smallGuns    = trait.modifyBaseSkill(this, "smallGuns",    data.smallGuns);
-      data.bigGuns      = trait.modifyBaseSkill(this, "bigGuns",      data.bigGuns);
-      data.energyGuns   = trait.modifyBaseSkill(this, "energyGuns",   data.energyGuns);
-      data.explosives   = trait.modifyBaseSkill(this, "explosives",   data.explosives);
-      data.unarmed      = trait.modifyBaseSkill(this, "unarmed",      data.unarmed);
-      data.meleeWeapons = trait.modifyBaseSkill(this, "meleeWeapons", data.meleeWeapons);
-      data.lockpick     = trait.modifyBaseSkill(this, "lockpick",     data.lockpick);
-      data.medicine     = trait.modifyBaseSkill(this, "medicine",     data.medicine);
-      data.repair       = trait.modifyBaseSkill(this, "repair",       data.repair);
-      data.science      = trait.modifyBaseSkill(this, "science",      data.science);
-      data.sneak        = trait.modifyBaseSkill(this, "sneak",        data.sneak);
-      data.spellcasting = trait.modifyBaseSkill(this, "spellcasting", data.spellcasting);
-      data.steal        = trait.modifyBaseSkill(this, "steal",        data.steal);
-      data.barter       = trait.modifyBaseSkill(this, "barter",       data.barter);
-      data.outdoorsman  = trait.modifyBaseSkill(this, "outdoorsman",  data.outdoorsman);
-      data.speech       = trait.modifyBaseSkill(this, "speech",       data.speech);
-      data.gambling     = trait.modifyBaseSkill(this, "gambling",     data.gambling);
-    }
+      applyCmapPlugin(this, trait, data);
   }
-
+  if (raceController)
+  {
+    qDebug() << "Update base values running race plugin" << race;
+    applyCmapPlugin(this, *raceController, data);
+  }
+  else
+    qDebug() << "No race controller for race" << race << "ma gueule";
   emit statisticsChanged();
 }
 

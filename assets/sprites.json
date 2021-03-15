@@ -249,7 +249,6 @@
         }
     },
     "pony-green": {
-        "defaultSource": "characters/earthpony-green.png",
         "damaged-down": {
             "frameCount": 6,
             "frameInterval": 100,
@@ -291,6 +290,7 @@
             "source": "tombstone.png",
             "width": 46
         },
+        "defaultSource": "characters/earthpony-green.png",
         "idle-down": {
             "frameCount": 1,
             "frameInterval": 100,
@@ -412,6 +412,139 @@
             "offsetY": 144,
             "repeat": true,
             "width": 48
+        }
+    },
+    "rat": {
+        "death": {
+            "frameCount": 1,
+            "frameInterval": 100,
+            "height": 40,
+            "offsetX": 120,
+            "offsetY": 0,
+            "repeat": false,
+            "source": "critters/rats.png",
+            "width": 40
+        },
+        "defaultSource": "critters/rats.png",
+        "idle-down": {
+            "frameCount": 1,
+            "frameInterval": 100,
+            "height": 40,
+            "offsetX": 0,
+            "offsetY": 0,
+            "repeat": false,
+            "source": "critters/rats.png",
+            "width": 40
+        },
+        "idle-left": {
+            "frameCount": 1,
+            "frameInterval": 100,
+            "height": 40,
+            "offsetX": 0,
+            "offsetY": 40,
+            "repeat": false,
+            "source": "critters/rats.png",
+            "width": 40
+        },
+        "idle-right": {
+            "frameCount": 1,
+            "frameInterval": 100,
+            "height": 40,
+            "offsetX": 0,
+            "offsetY": 120,
+            "repeat": false,
+            "source": "critters/rats.png",
+            "width": 40
+        },
+        "idle-up": {
+            "frameCount": 1,
+            "frameInterval": 100,
+            "height": 40,
+            "offsetX": 0,
+            "offsetY": 80,
+            "repeat": false,
+            "source": "critters/rats.png",
+            "width": 40
+        },
+        "walking-down": {
+            "frameCount": 3,
+            "frameInterval": 150,
+            "height": 40,
+            "offsetX": 0,
+            "offsetY": 80,
+            "repeat": true,
+            "source": "critters/rats.png",
+            "width": 40
+        },
+        "walking-left": {
+            "frameCount": 3,
+            "frameInterval": 150,
+            "height": 40,
+            "offsetX": 0,
+            "offsetY": 40,
+            "repeat": true,
+            "source": "critters/rats.png",
+            "width": 40
+        },
+        "walking-right": {
+            "frameCount": 3,
+            "frameInterval": 150,
+            "height": 40,
+            "offsetX": 0,
+            "offsetY": 120,
+            "repeat": true,
+            "source": "critters/rats.png",
+            "width": 40
+        },
+        "walking-up": {
+            "frameCount": 3,
+            "frameInterval": 150,
+            "height": 40,
+            "offsetX": 0,
+            "offsetY": 0,
+            "repeat": true,
+            "source": "critters/rats.png",
+            "width": 40
+        },
+        "use-down": {
+            "frameCount": 3,
+            "frameInterval": 100,
+            "height": 40,
+            "offsetX": 0,
+            "offsetY": 80,
+            "repeat": true,
+            "source": "critters/rats.png",
+            "width": 40
+        },
+        "use-left": {
+            "frameCount": 3,
+            "frameInterval": 100,
+            "height": 40,
+            "offsetX": 0,
+            "offsetY": 40,
+            "repeat": true,
+            "source": "critters/rats.png",
+            "width": 40
+        },
+        "use-right": {
+            "frameCount": 3,
+            "frameInterval": 100,
+            "height": 40,
+            "offsetX": 0,
+            "offsetY": 120,
+            "repeat": true,
+            "source": "critters/rats.png",
+            "width": 40
+        },
+        "use-up": {
+            "frameCount": 3,
+            "frameInterval": 100,
+            "height": 40,
+            "offsetX": 0,
+            "offsetY": 0,
+            "repeat": true,
+            "source": "critters/rats.png",
+            "width": 40
         }
     }
 }

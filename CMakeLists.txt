@@ -47,8 +47,12 @@ set(PROJECT_SOURCES
         tilemap/tilemap.cpp
         cmap/statmodel.h
         cmap/statmodel.cpp
+        cmap/plugin.h
+        cmap/plugin.cpp
         cmap/trait.h
         cmap/trait.cpp
+        cmap/race.h
+        cmap/race.cpp
         game/scriptcontroller.h
         game/scriptcontroller.cpp
         game/dataengine.h
