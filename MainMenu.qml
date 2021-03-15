@@ -28,6 +28,12 @@ Image {
   }
 
   Action {
+    id: optionsAction
+    text: i18n.t("Options")
+    onTriggered: application.pushView("Options.qml")
+  }
+
+  Action {
     id: exitAction
     text: i18n.t("Exit")
     onTriggered: application.close();
@@ -46,7 +52,7 @@ Image {
     spacing: 10
 
     Repeater {
-      model: [continueAction, newGameAction, loadGameAction, gameEditorAction, exitAction]
+      model: [continueAction, newGameAction, loadGameAction, optionsAction, gameEditorAction, exitAction]
       delegate: MenuButton { action: modelData }
     }
   }

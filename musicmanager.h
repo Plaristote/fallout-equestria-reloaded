@@ -13,6 +13,8 @@ class MusicManager : public QObject
 
   Q_OBJECT
 
+  Q_PROPERTY(int defaultVolume READ getDefaultVolume WRITE setDefaultVolume NOTIFY defaultVolumeChanged)
+
 public:
   explicit MusicManager(QObject* parent = nullptr);
   ~MusicManager();
@@ -25,6 +27,11 @@ public:
   void                 playNext(void);
   Q_INVOKABLE void     setVolume(int volume);
   Q_INVOKABLE void     setVolumeToDefault(void);
+  void                 setDefaultVolume(int);
+  int                  getDefaultVolume() const;
+
+signals:
+  void defaultVolumeChanged();
 
 private slots:
   void                 fadeOut();

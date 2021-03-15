@@ -42,6 +42,9 @@ int main(int argc, char *argv[])
   auto scriptPath   = FILE_PROTOCOL + SCRIPTS_PATH;
   auto assetPath    = FILE_PROTOCOL + ASSETS_PATH;
 
+  QCoreApplication::setOrganizationName("Ile Noire Dev");
+  QCoreApplication::setOrganizationDomain("ile-noire.fr");
+  QCoreApplication::setApplicationName("Fallout Equestria RPG");
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
   QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 #endif

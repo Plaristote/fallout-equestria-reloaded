@@ -1,19 +1,37 @@
 import QtQuick 2.15
 import QtQuick.Window 2.15
 import QtQuick.Controls 2.15
+import Qt.labs.settings 1.1
 
 Window {
   id: application
   width: 1024
   height: 800
   visible: true
-  //visibility: Window.Maximized
   color: "black"
-  title: qsTr("Fallout Equestria")
+  title: i18n.t("Fallout Equestria")
 
-  property bool isMaximizeed: visibility === Window.Maximized
+  property bool isFullScreen: false
   property bool hasSavedGame: false // TODO
   property string gameLoading
+
+  Settings {
+    property alias x: application.x
+    property alias y: application.y
+    property alias width: application.width
+    property alias height: application.height
+    property alias fullScreen: application.isFullScreen
+  }
+
+  onIsFullScreenChanged: updateDisplay()
+  Component.onCompleted: updateDisplay()
+
+  function updateDisplay() {
+    if (isFullScreen)
+      application.showFullScreen();
+    else
+      application.showNormal();
+  }
 
   function createGame() {
     pushView("Game.qml", { initialState: "new-game" });

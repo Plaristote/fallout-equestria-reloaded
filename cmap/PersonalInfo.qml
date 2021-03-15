@@ -19,7 +19,7 @@ RowLayout {
     Layout.fillHeight: true
     readOnly: !root.editable
     color: "white"
-    placeholderText: qsTr("Your name")
+    placeholderText: i18n.t("cmap.name-placeholder")
     placeholderTextColor: "lightgray"
     font.family: application.titleFontName
     font.pixelSize: 16

@@ -20,29 +20,15 @@
 <context>
     <name>PersonalInfo</name>
     <message>
-        <location filename="cmap/PersonalInfo.qml" line="22"/>
-        <source>Your name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="cmap/PersonalInfo.qml" line="39"/>
         <source>age</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
-    <name>TraitsPicker</name>
-    <message>
-        <location filename="cmap/TraitsPicker.qml" line="19"/>
-        <source>Available traits</source>
-        <oldsource>Traits</oldsource>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>main</name>
     <message>
-        <location filename="main.qml" line="12"/>
+        <location filename="main.qml" line="13"/>
         <source>Fallout Equestria</source>
         <translation type="unfinished"></translation>
     </message>
