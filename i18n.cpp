@@ -19,9 +19,14 @@ I18n::I18n(QObject *parent) : QObject(parent)
   connect(this, &I18n::currentLocaleChanged, this, &I18n::loadLocale);
 }
 
+QString I18n::getSourceForLocale(const QString &locale)
+{
+  return ASSETS_PATH + "locales/" + locale + ".json";
+}
+
 void I18n::loadLocale()
 {
-  QFile file(ASSETS_PATH + "locales/" + currentLocale + ".json");
+  QFile file(getSourceForLocale(currentLocale));
 
   if (file.open(QIODevice::ReadOnly))
   {

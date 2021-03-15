@@ -208,5 +208,8 @@
         <file>editor/DoorwayObjectEditor.qml</file>
         <file>editor/DiplomacyEditor.qml</file>
         <file>game/slideshows/TransitionScreen.qml</file>
+        <file>editor/DialogEditor.qml</file>
+        <file>ui/dialog/DialogTextDisplay.qml</file>
+        <file>ui/dialog/DialogAnswersDisplay.qml</file>
     </qresource>
 </RCC>

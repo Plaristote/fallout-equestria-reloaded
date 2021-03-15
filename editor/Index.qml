@@ -69,4 +69,9 @@ Pane {
     anchors { top: header.bottom; left: parent.left; right: parent.right; bottom: parent.bottom }
     dataEngine: game.dataEngine
   }
+
+  DialogEditor {
+    visible: header.currentTab == "dialogs"
+    anchors { top: header.bottom; left: parent.left; right: parent.right; bottom: parent.bottom }
+  }
 }

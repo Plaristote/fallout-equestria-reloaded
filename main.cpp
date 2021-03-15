@@ -26,6 +26,7 @@
 #include "cmap/statmodel.h"
 
 #include "editor/scripteditorcontroller.h"
+#include "editor/characterdialogeditor.h"
 
 void registerQmlTilemap() {
   qmlRegisterType<TileMap>  ("Tiles", 1,0, "TileMap");
@@ -83,6 +84,7 @@ int main(int argc, char *argv[])
   registerQmlTilemap();
   // GAME EDITOR
   qmlRegisterType<QmlSpriteAnimation>("Game", 1,0, "SpriteAnimation");
+  qmlRegisterType<CharacterDialogEditor>("Game", 1,0, "CharacterDialogEditor");
   // END GAME EDITOR
 
   MusicManager* musicManager = new MusicManager(&app);

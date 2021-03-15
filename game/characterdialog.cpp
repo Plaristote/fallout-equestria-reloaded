@@ -16,8 +16,6 @@ void CharacterDialog::load(const QString& name, Character* player, Character* np
 
   if (file.open(QIODevice::ReadOnly))
   {
-    QJSValue initializer;
-
     this->player     = player;
     this->npc        = npc;
     translationGroup = "dialogs." + name;
@@ -145,8 +143,11 @@ QString CharacterDialog::getOptionText(const QString& key)
 {
   QJsonObject answers    = data["answers"].toObject();
   QJsonObject answerData = answers[key].toObject();
+  QString     textHook   = answerData["textHook"].toString();
   QString     callback("getAnswerText");
 
+  if (textHook.length() > 0)
+    callback = textHook;
   if (script->hasMethod(callback))
   {
     QJSValue retval = script->call(callback, QJSValueList() << key);

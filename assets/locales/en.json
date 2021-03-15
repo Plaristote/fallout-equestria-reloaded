@@ -1,25 +1,25 @@
 {
-  "inspection": {
-    "character": "You see {{target}}"
-  },
-  "medicine-skill": {
-    "used-on": "{{user}} used medicine on {{target}} and healed it for {{hp}} hit points.",
-    "in-combat": "You can't use medicine during combat"
-  },
-  "dialogs": {
-    "parley": {
-      "greetings": "Hi there ! Gosh, it's been a while ! What's happening ?",
-      "greetings-alt": "Hi again. Is there something else ?",
-      "rep1": "You're damn right, \"it's been a while\" ! It's about time we get to work, isn't it ?",
-      "rep2": "Well, I've been pretty busy... but lately, I had an illumination of sorts, and I decided to see this thing to the end.",
-      "rep3": "Let's cut to the chase. Show me something cool",
-      "freaking-face": "I've got a freaking face and all ! Isn't that cool enough ?",
-      "no-mane": "Looks like I was too lazy to give you a mane...",
-      "change-color": "You're lacking in colors. Perhaps we could change that ?",
-      "changed-color": "Is that colorful enough ?",
-      "top-hatted": "Quite.",
-      "oh-fancy": "Oh. Fancy.",
-      "walk-away": "[Walk away]"
+    "dialogs": {
+        "parley": {
+            "change-color": "You're lacking in colors. Perhaps we could change that ?",
+            "changed-color": "Is that colorful enough ?",
+            "freaking-face": "I've got a freaking face and all ! Isn't that cool enough ?!",
+            "greetings": "Hi there ! Gosh, it's been a while ! What's happening ?",
+            "greetings-alt": "Hi again. Is there something else ?",
+            "no-mane": "Looks like I was too lazy to give you a mane...",
+            "oh-fancy": "Oh. Fancy.",
+            "rep1": "You're damn right, \"it's been a while\" ! It's about time we get to work, isn't it ?",
+            "rep2": "Well, I've been pretty busy... but lately, I had an illumination of sorts, and I decided to see this thing to the end.",
+            "rep3": "Let's cut to the chase. Show me something cool",
+            "top-hatted": "Quite.",
+            "walk-away": "[Walk away]"
+        }
+    },
+    "inspection": {
+        "character": "You see {{target}}"
+    },
+    "medicine-skill": {
+        "in-combat": "You can't use medicine during combat",
+        "used-on": "{{user}} used medicine on {{target}} and healed it for {{hp}} hit points."
     }
-  }
 }

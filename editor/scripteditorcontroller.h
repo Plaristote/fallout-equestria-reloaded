@@ -22,6 +22,10 @@ public:
   Q_INVOKABLE QStringList getFactions();
   Q_INVOKABLE QStringList getDialogs();
 
+  Q_INVOKABLE void newDialog(const QString& name);
+
+  Q_INVOKABLE void setTranslation(const QString& key, const QString& text);
+
 signals:
 
 };

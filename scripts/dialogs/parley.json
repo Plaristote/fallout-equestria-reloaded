@@ -1,52 +1,73 @@
 {
-  "entryPoint": "myEntryPoint",
-  "states": {
-    "myEntryPoint": {
-      "hook": "triggerMyEntryPoint",
-      "text": "greetings",
-      "answers": ["rep1", "rep2", "rep3"]
+    "answers": {
+        "": {
+            "state": "changedColor",
+            "text": ""
+        },
+        "exit": {
+            "text": "walk-away"
+        },
+        "fancy": {
+            "state": "topHatted",
+            "text": "oh-fancy"
+        },
+        "noMane": {
+            "state": "tintin",
+            "text": "no-mane"
+        },
+        "pleaseChangeColor": {
+            "hook": "changeColor",
+            "state": "changedColor",
+            "text": "change-color"
+        },
+        "rep1": {
+            "hook": "unhappy",
+            "text": "rep1"
+        },
+        "rep2": {
+            "hook": "happy",
+            "text": "rep2"
+        },
+        "rep3": {
+            "hook": "showSomethingCool",
+            "text": "rep3"
+        },
+        "spitInFace": {
+            "state": "",
+            "text": "i-spit-in-your-face"
+        }
     },
-    "somethingCool": {
-      "text": "freaking-face",
-      "answers": ["noMane", "pleaseChangeColor"]
-    },
-    "changedColor": {
-      "text": "changed-color",
-      "answers": ["fancy"]
-    },
-    "topHatted": {
-      "hook": "putHatOn",
-      "text": "top-hatted",
-      "answers": ["exit"]
+    "entryPoint": "myEntryPoint",
+    "states": {
+        "changedColor": {
+            "answers": [
+                "fancy"
+            ],
+            "text": "changed-color"
+        },
+        "myEntryPoint": {
+            "answers": [
+                "rep1",
+                "rep2",
+                "rep3"
+            ],
+            "hook": "triggerMyEntryPoint",
+            "text": "greetings"
+        },
+        "somethingCool": {
+            "answers": [
+                "noMane",
+                "pleaseChangeColor"
+            ],
+            "hook": "",
+            "text": "freaking-face"
+        },
+        "topHatted": {
+            "answers": [
+                "exit"
+            ],
+            "hook": "putHatOn",
+            "text": "top-hatted"
+        }
     }
-  },
-  "answers": {
-    "rep1": {
-      "text": "rep1",
-      "hook": "unhappy"
-    },
-    "rep2": {
-      "text": "rep2",
-      "hook": "happy"
-    },
-    "rep3": {
-      "text": "rep3",
-      "hook": "showSomethingCool"
-    },
-    "noMane": {
-      "text": "no-mane"
-    },
-    "pleaseChangeColor": {
-      "text": "change-color",
-      "state": "changedColor",
-      "hook": "changeColor"
-    },
-    "fancy": {
-      "text": "oh-fancy",
-      "state": "topHatted"
-    },
-    "exit": {
-      "text": "walk-away"
-    }
-  }
 }

@@ -4,12 +4,10 @@ import QtQuick.Layouts 1.15
 import "qrc:/assets/ui" as UiStyle
 import "../ui"
 
-Pane {
+Item {
   id: root
   property QtObject dataEngine
   property alias currentFaction: factionSelect.currentName
-
-  background: UiStyle.Pane {}
 
   Connections {
     target: dataEngine

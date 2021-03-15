@@ -1,6 +1,7 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
-import "qrc:/ui"
+import "../ui"
+import "../ui/dialog"
 import "qrc:/assets/ui" as UiStyle
 
 Item {
@@ -38,36 +39,10 @@ Item {
     height: parent.height / 2
   }
 
-  BorderImage {
+  DialogTextDisplay {
     id: textDisplay
-    source: "qrc:/assets/ui/dialog/text.png"
-    border { top: 6; left: 287; right: 215; bottom: 11 }
     anchors { top: faceForeground.bottom; left: faceForeground.left; right: faceForeground.right }
-    horizontalTileMode: BorderImage.Stretch
-    verticalTileMode: BorderImage.Stretch
-    height: 100
-
-    Flickable {
-      clip: true
-      contentHeight: dialogContent.height
-      anchors.fill: parent
-      anchors.leftMargin: 290
-      anchors.rightMargin: 220
-      anchors.topMargin: 8
-      anchors.bottomMargin: 13
-
-      ScrollBar.vertical: UiStyle.TerminalScrollbar { orientation: Qt.Vertical }
-
-      Text {
-        id: dialogContent
-        color: "white"
-        text: controller.text
-        wrapMode: Text.WordWrap
-        horizontalAlignment: Qt.AlignJustify
-        width: parent.width - 15
-        font.family: application.consoleFontName
-      }
-    }
+    text: root.controller.text
   }
 
   Image {
@@ -86,39 +61,22 @@ Item {
     fillMode: Image.Stretch
   }
 
-  BorderImage {
+  DialogAnswersDisplay {
     id: answersPane
-    source: "qrc:/assets/ui/dialog/center.png"
-    border { top: 41; left: 80; right: 58; bottom: 31 }
     anchors { left: leftPane.right; top: textDisplay.bottom; right: rightPane.left; bottom: parent.bottom }
-    horizontalTileMode: BorderImage.Stretch
-    verticalTileMode: BorderImage.Stretch
-
-    Flickable {
-      id: answersFlickable
-      clip: true
-      contentHeight: answersList.height
-      anchors.fill: parent
-      anchors.leftMargin: 80
-      anchors.rightMargin: 68
-      anchors.topMargin: 51
-      anchors.bottomMargin: 41
-
-      ScrollBar.vertical: UiStyle.TerminalScrollbar { orientation: Qt.Vertical }
-
-      Column {
-        id: answersList
-        Repeater {
-          model: controller.options
-          delegate: Button {
-            text: "> " + controller.getOptionText(controller.options[index])
-            font.family: application.consoleFontName
-            hoverEnabled: true
-            contentItem: Text { color: parent.hovered ? "white" : "green"; text: parent.text; font: parent.font; wrapMode: Text.WordWrap }
-            background: Rectangle { color: "transparent" }
-            onClicked: controller.selectOption(controller.options[index])
-            width: answersFlickable.width - 10
-          }
+    sourceComponent: Column {
+      id: answersList
+      width: parent.width
+      Repeater {
+        model: root.controller.options
+        delegate: Button {
+          text: "> " + root.controller.getOptionText(controller.options[index])
+          font.family: application.consoleFontName
+          hoverEnabled: true
+          contentItem: Text { color: parent.hovered ? "white" : "green"; text: parent.text; font: parent.font; wrapMode: Text.WordWrap }
+          background: Rectangle { color: "transparent" }
+          onClicked: root.controller.selectOption(controller.options[index])
+          width: answersList.width - 10
         }
       }
     }

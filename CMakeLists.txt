@@ -133,6 +133,8 @@ set(PROJECT_SOURCES
         game/animationSequence/animationsequence.cpp
         editor/scripteditorcontroller.h
         editor/scripteditorcontroller.cpp
+        editor/characterdialogeditor.h
+        editor/characterdialogeditor.cpp
         gamemanager.h
         gamemanager.cpp
         musicmanager.h

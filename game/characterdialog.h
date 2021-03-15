@@ -23,8 +23,8 @@ class CharacterDialog : public QObject
 public:
   explicit CharacterDialog(QObject *parent = nullptr);
 
-  void load(const QString& name, Character* player, Character* npc);
-  void loadState(const QString& reference);
+  Q_INVOKABLE void load(const QString& name, Character* player, Character* npc);
+  Q_INVOKABLE void loadState(const QString& reference);
   void setAmbiance(const QString& value) { ambiance = value; emit ambianceChanged(); }
 
   Q_INVOKABLE void    selectOption(const QString& key);
@@ -32,7 +32,7 @@ public:
   QStringList         getStateList() const;
   QStringList         getAnswerList() const;
 
-  inline QString      t(const QString& name);
+  QString             t(const QString& name);
 
 signals:
   void stateReferenceChanged();
@@ -44,7 +44,7 @@ signals:
   void stateListChanged();
   void answerListChanged();
 
-private:
+protected:
   void initializeStateHook(QString& text, QStringList& answers);
   void loadOption(const QString& answer);
   QString getNextState(const QString& answer);

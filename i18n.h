@@ -21,12 +21,15 @@ public:
   Q_INVOKABLE QStringList getAvailableLocales() const { return locales; }
   Q_INVOKABLE QString t(const QString& key) const;
   Q_INVOKABLE QString t(const QString& key, const QVariantMap& variables) const;
+  const QString& getCurrentLocale() const { return currentLocale; }
+
+  static QString getSourceForLocale(const QString& locale);
 
 signals:
   void currentLocaleChanged();
   void translationsChanged();
 
-private slots:
+public slots:
   void loadLocale();
 
 private:
