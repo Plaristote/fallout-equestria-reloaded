@@ -27,10 +27,14 @@ Item {
   }
 
   onCurrentDialogChanged: {
+    var entryPointIndex;
     dialogStateEditor.sourceComponent = null;
     controller.load(currentDialog.replace(".json", ""), playerCharacter, npcCharacter);
     currentState = "";
     stateSelect.model = controller.stateList;
+    entryPointIndex = controller.stateList.indexOf(controller.entryPoint);
+    entryPointInput.model = controller.stateList;
+    entryPointInput.currentIndex = entryPointIndex;
   }
 
   onCurrentStateChanged: {
@@ -172,9 +176,32 @@ Item {
       onNewClicked: addDialogDialog.open()
     }
 
-    EditorSelectPanel {
-      id: stateSelect
-      onNewClicked: newStateDialog.open()
+    ColumnLayout {
+      spacing: 5
+      Layout.preferredWidth: 200
+      Layout.fillHeight: true
+
+      Pane {
+        Layout.preferredWidth: 200
+
+        background: UiStyle.TerminalPane {}
+        ColumnLayout {
+          width: parent.width
+          TerminalLabel { text: "Initial state" }
+          TerminalComboBox {
+            Layout.fillWidth: true
+            id: entryPointInput
+            model: controller.stateList
+            onCurrentTextChanged: controller.entryPoint = currentText
+          }
+        }
+      }
+
+      EditorSelectPanel {
+        id: stateSelect
+        onNewClicked: newStateDialog.open()
+        Layout.fillHeight: true
+      }
     }
 
     Pane {
@@ -182,10 +209,17 @@ Item {
       Layout.fillHeight: true
       background: UiStyle.Pane {}
 
-
       Loader {
         id: dialogStateEditor
-        anchors.fill: parent
+        anchors { top: parent.top; left: parent.left; right: parent.right; bottom: formControls.top }
+      }
+
+      MenuButton {
+        id: formControls
+        anchors.bottom: parent.bottom
+        anchors.right: parent.right
+        text: "Save"
+        onClicked: { controller.save(currentDialog.replace(".json", "")); }
       }
     }
   }
@@ -274,7 +308,7 @@ Item {
               TerminalButton {
                 height: optionTextInput.height
                 text: "Translate"
-                onClicked: translateAnsweDialog.open()
+                onClicked: translateAnswerDialog.open()
               }
             }
 
@@ -339,6 +373,8 @@ Item {
           id: answersList
           width: parent.width
           TerminalButton {
+            width: parent.width - 15
+            height: 20
             text: "+ Add answer"
             onClicked: addAnswerDialog.open()
           }
@@ -346,7 +382,11 @@ Item {
           Repeater {
             model: controller.options
             delegate: Button {
-              property color myColor: controller.currentOption === controller.options[index] ? "lightblue" : "green"
+              property color myColor: {
+                controller.currentOption === controller.options[index]
+                    ? "lightblue"
+                    : (controller.isOptionAvailable(controller.options[index]) ? "green" : "black")
+              }
               text: "> " + controller.getOptionText(controller.options[index])
               font.family: application.consoleFontName
               hoverEnabled: true
@@ -358,13 +398,6 @@ Item {
           }
         } // END Column
       } // END DialogAnswersDisplay
-
-      MenuButton {
-        id: formControls
-        Layout.alignment: Qt.AlignRight
-        text: "Save"
-        onClicked: { controller.save(currentDialog.replace(".json", "")); }
-      }
     } // END ColumnLayout
   }
 }

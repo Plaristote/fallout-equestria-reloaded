@@ -3,6 +3,7 @@
 
 CharacterDialogEditor::CharacterDialogEditor(QObject *parent) : CharacterDialog(parent)
 {
+  connect(this, &CharacterDialog::ready, this, &CharacterDialogEditor::entryPointChanged);
   connect(this, &CharacterDialog::stateReferenceChanged, this, &CharacterDialogEditor::stateHookChanged);
   connect(this, &CharacterDialog::stateReferenceChanged, this, &CharacterDialogEditor::stateTextChanged);
   connect(this, &CharacterDialogEditor::currentOptionChanged, this, &CharacterDialogEditor::optionHookChanged);
@@ -20,6 +21,12 @@ void CharacterDialogEditor::save(const QString& name)
     file.write(QJsonDocument(data).toJson());
     file.close();
   }
+}
+
+void CharacterDialogEditor::setEntryPoint(const QString& value)
+{
+  data.insert("entryPoint", value);
+  emit entryPointChanged();
 }
 
 void CharacterDialogEditor::setStateHook(const QString& value)
@@ -183,4 +190,9 @@ void CharacterDialogEditor::removeAnswer()
   currentOption = "";
   emit currentOptionChanged();
   emit optionsChanged();
+}
+
+void CharacterDialogEditor::loadOption(const QString& value)
+{
+  options.push_back(value);
 }

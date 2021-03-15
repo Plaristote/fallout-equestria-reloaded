@@ -8,6 +8,7 @@ class CharacterDialogEditor : public CharacterDialog
 {
   Q_OBJECT
 
+  Q_PROPERTY(QString entryPoint READ getEntryPoint WRITE setEntryPoint NOTIFY entryPointChanged)
   Q_PROPERTY(QString stateHook READ getStateHook WRITE setStateHook NOTIFY stateHookChanged)
   Q_PROPERTY(QString stateText READ getStateText WRITE setStateText NOTIFY stateTextChanged)
   Q_PROPERTY(QString currentOption MEMBER currentOption NOTIFY currentOptionChanged)
@@ -21,6 +22,7 @@ public:
 
   Q_INVOKABLE void save(const QString&);
 
+  QString getEntryPoint()          { return data["entryPoint"].toString(); }
   QString getStateHook()           { return getStateVariable("hook"); }
   QString getStateText()           { return getStateVariable("text"); }
   QString getOptionHook()          { return getOptionVariable("hook"); }
@@ -28,6 +30,7 @@ public:
   QString getOptionAvailableHook() { return getOptionVariable("availableHook"); }
   QString getOptionText()          { return getOptionVariable("text"); }
   QString getOptionTextHook()      { return getOptionVariable("textHook"); }
+  void setEntryPoint(const QString&);
   void setStateHook(const QString&);
   void setStateText(const QString&);
   void setStateTextHook(const QString&);
@@ -43,6 +46,7 @@ public:
   Q_INVOKABLE void removeAnswer();
 
 signals:
+  void entryPointChanged();
   void stateHookChanged();
   void stateTextChanged();
   void currentOptionChanged();
@@ -53,6 +57,8 @@ signals:
   void optionTextHookChanged();
 
 private:
+  void loadOption(const QString&) override;
+
   QString getStateVariable(const QString&);
   void    setStateVariable(const QString&, const QString&);
   QString getOptionVariable(const QString&);

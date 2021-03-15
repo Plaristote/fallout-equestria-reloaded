@@ -29,6 +29,7 @@ public:
 
   Q_INVOKABLE void    selectOption(const QString& key);
   Q_INVOKABLE QString getOptionText(const QString& key);
+  Q_INVOKABLE bool    isOptionAvailable(const QString& answer);
   QStringList         getStateList() const;
   QStringList         getAnswerList() const;
 
@@ -43,10 +44,11 @@ signals:
   void dialogEnded();
   void stateListChanged();
   void answerListChanged();
+  void ready();
 
 protected:
   void initializeStateHook(QString& text, QStringList& answers);
-  void loadOption(const QString& answer);
+  virtual void loadOption(const QString& answer);
   QString getNextState(const QString& answer);
   QString getEntryPoint();
 

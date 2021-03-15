@@ -23,9 +23,10 @@ void CharacterDialog::load(const QString& name, Character* player, Character* np
     script = new ScriptController(SCRIPTS_PATH + "dialogs/" + name + ".mjs");
     script->initialize(this);
     loadState(getEntryPoint());
+    emit ready();
   }
   else
-    qDebug() << "Could not load dialog file " << name;
+    qDebug() << "Could not load dialog file " << (SCRIPTS_PATH + "/dialogs/" + name + ".json");
 }
 
 QString CharacterDialog::getEntryPoint()
@@ -63,22 +64,23 @@ void CharacterDialog::initializeStateHook(QString& text, QStringList& answers)
   }
 }
 
-void CharacterDialog::loadOption(const QString &answer)
+bool CharacterDialog::isOptionAvailable(const QString &answer)
 {
   QJsonObject answerData = data["answers"].toObject();
   QJsonObject optionData = answerData[answer].toObject();
-  QJsonValue availableHook = optionData["availableHook"];
+  QJsonValue  availableHook = optionData["availableHook"];
+  QJSValue    retval;
 
   if (availableHook.isUndefined() || !script->hasMethod(availableHook.toString()))
-    options.push_back(answer);
-  else
-  {
-    QJSValue args;
-    QJSValue retval = script->call(availableHook.toString());
+    return true;
+  retval = script->call(availableHook.toString());
+  return retval.toBool();
+}
 
-    if (retval.toBool())
-      options.push_back(answer);
-  }
+void CharacterDialog::loadOption(const QString &answer)
+{
+  if (isOptionAvailable(answer))
+    options.push_back(answer);
 }
 
 void CharacterDialog::loadState(const QString& reference)

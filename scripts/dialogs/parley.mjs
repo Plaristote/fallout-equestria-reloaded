@@ -23,6 +23,10 @@ export class Dialog {
   putHatOn() {
     this.model.npc.statistics.faceAccessories.push("fancypants");
   }
+
+  notAvailable() {
+    return false;
+  }
 };
 
 export function create(model) {
