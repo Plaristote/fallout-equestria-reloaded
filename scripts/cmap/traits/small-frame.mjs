@@ -10,8 +10,4 @@ export function onToggled(characterSheet, toggled) {
   const value = toggled ? 1 : -1;
 
   characterSheet.agility += value;
-  if (toggled)
-    characterSheet.traits.push(name);
-  else
-    characterSheet.traits.splice(characterSheet.traits.indexOf(name), 1);
 }

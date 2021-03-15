@@ -25,6 +25,7 @@ Game::Game(QObject *parent) : QObject(parent)
   scriptEngine.globalObject().setProperty("musicManager", scriptEngine.newQObject(MusicManager::get()));
   scriptEngine.globalObject().setProperty("i18n", scriptEngine.newQObject(I18n::get()));
   loadCmapTraits();
+  loadCmapRaces();
   scriptEngine.evaluate("level.displayConsoleMessage(\"Coucou Script Engine\")");
 
   connect(worldmap, &WorldMap::cityEntered, this, &Game::onCityEntered);
@@ -110,21 +111,42 @@ QJSValue Game::loadScript(const QString& path)
 
 void Game::loadCmapTraits()
 {
-  QDir traitsDir(SCRIPTS_PATH + "traits");
+  QDir traitsDir(SCRIPTS_PATH + "cmap/traits");
   auto files = traitsDir.entryList(QStringList() << "*.mjs" << "*.js", QDir::Files);
   qDebug() << traitsDir.entryList();
   for (auto scriptPath : files)
   {
     qDebug() << "Loading trait:" << scriptPath;
-    auto script = loadScript(SCRIPTS_PATH + "traits/" + scriptPath);
+    auto script = loadScript(SCRIPTS_PATH + "cmap/traits/" + scriptPath);
 
     if (!script.isBool())
     {
       Trait trait;
 
-      trait.name = script.property("name").toString();
+      trait.name = scriptPath.split('/').last().replace(".mjs", "").replace(".js", "");
       trait.script = script;
       cmapTraits.insert(trait.name, trait);
+    }
+  }
+}
+
+void Game::loadCmapRaces()
+{
+  QDir racesDir(SCRIPTS_PATH + "cmap/races");
+  auto files = racesDir.entryList(QStringList() << "*.mjs" << "*.js", QDir::Files);
+  qDebug() << racesDir.entryList();
+  for (auto scriptPath : files)
+  {
+    qDebug() << "Loading race:" << scriptPath;
+    auto script = loadScript(SCRIPTS_PATH + "cmap/races/" + scriptPath);
+
+    if (!script.isBool())
+    {
+      Race race;
+
+      race.name = scriptPath.split('/').last().replace(".mjs", "").replace(".js", "");
+      race.script = script;
+      cmapRaces.insert(race.name, race);
     }
   }
 }

@@ -6,7 +6,7 @@ import "../assets/ui" as UiStyle
 RowLayout {
   Label {
     Layout.fillWidth: true
-    text: qsTr("Available points")
+    text: i18n.t("cmap.available-points")
     font.family: application.titleFontName
     font.pointSize: 14
     color: "yellow"

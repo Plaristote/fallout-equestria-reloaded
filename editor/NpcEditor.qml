@@ -10,14 +10,8 @@ Item {
   property alias currentCharacter: characterSheetSelect.currentName
 
   onCurrentCharacterChanged: {
-    scriptController.loadCharacterSheet(currentCharacter, statController);
-  }
-
-  StatModel {
-    id: statController
-    onStatisticsChanged: {
-      hitPoints = maxHitPoints;
-    }
+    characterSheetView.sourceComponent = null;
+    characterSheetView.sourceComponent = characterSheetEditor;
   }
 
   Dialog {
@@ -46,12 +40,31 @@ Item {
       onNewClicked: newCharacterDialog.open()
     }
 
+    Loader {
+      Layout.fillWidth: true
+      Layout.fillHeight: true
+      id: characterSheetView
+    }
+
+  }
+
+  Component {
+    id: characterSheetEditor
     CharacterSheet {
       mode: "gameEditor"
       characterSheet: statController
-      Layout.fillWidth: true
-      Layout.fillHeight: true
       onAccepted: scriptController.saveCharacterSheet(currentCharacter, statController)
+
+      StatModel {
+        id: statController
+        onStatisticsChanged: {
+          hitPoints = maxHitPoints;
+        }
+      }
+
+      Component.onCompleted: {
+        scriptController.loadCharacterSheet(currentCharacter, statController);
+      }
     }
   }
 }

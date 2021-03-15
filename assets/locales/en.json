@@ -21,5 +21,30 @@
     "medicine-skill": {
         "in-combat": "You can't use medicine during combat",
         "used-on": "{{user}} used medicine on {{target}} and healed it for {{hp}} hit points."
+    },
+    "cmap": {
+      "traits": "Traits",
+      "perks": "Perks",
+      "invalid": "Invalid",
+      "heroic": "Heroic",
+      "very-good": "Very good",
+      "average": "Average",
+      "poor": "Poor",
+      "abysmal": "Abysmal",
+      "available-traits": "Available traits",
+      "available-points": "Available points",
+      "available-skill-points": "Available skill points",
+      "level": "Level",
+      "experience": "Experience",
+      "next-level": "Next level"
+    },
+    "races": {
+      "earth-pony": "Earth pony",
+      "pegasus": "Pegasus",
+      "unicorn": "Unicorn"
+    },
+    "genders": {
+      "male": "Male",
+      "female": "Female"
     }
 }

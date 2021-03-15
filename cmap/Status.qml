@@ -20,7 +20,7 @@ Pane {
       property color textColor: selectedProperty == propertyName ? "green" : "white"
 
       Label {
-        text: qsTr(parent.propertyName)
+        text: i18n.t("cmap." + parent.propertyName)
         Layout.alignment: Qt.AlignLeft
         color: parent.textColor
         font.family: application.consoleFontName
@@ -43,7 +43,7 @@ Pane {
         property string propertyName: injuries[index]
         property color textColor: selectedProperty == propertyName ? "green" : "white"
 
-        text: qsTr(injuries[index])
+        text: i18n.t("cmap." + injuries[index])
         color: false ? textColor : "gray"
         font.family: application.consoleFontName
         font.pointSize: 8

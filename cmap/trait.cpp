@@ -3,22 +3,23 @@
 #include "game.h"
 #include <QDebug>
 
-Trait::Trait()
+CmapPlugin::CmapPlugin()
 {
 
 }
 
-void Trait::toogle(StatModel* model, bool value)
+void CmapPlugin::toogle(StatModel* model, bool value)
 {
   Game* game = Game::get();
   QJSValueList args;
   QJSValue callback = script.property("onToggled");
 
   args << game->getScriptEngine().newQObject(model) << value;
-  game->scriptCall(callback, args, "Trait::onToggled");
+  if (callback.isCallable())
+    game->scriptCall(callback, args, "CmapPlugin::onToggled");
 }
 
-int Trait::modifyBaseStatistic(StatModel* model, const QString &attribute, int baseValue)
+int CmapPlugin::modifyBaseStatistic(StatModel* model, const QString &attribute, int baseValue)
 {
   Game* game = Game::get();
   QJSValueList args;
@@ -27,12 +28,12 @@ int Trait::modifyBaseStatistic(StatModel* model, const QString &attribute, int b
   if (callback.isCallable())
   {
     args << game->getScriptEngine().newQObject(model) << attribute << baseValue;
-    return game->scriptCall(callback, args, "Trait::modifyBaseValueFor").toInt();
+    return game->scriptCall(callback, args, "CmapPlugin::modifyBaseValueFor").toInt();
   }
   return baseValue;
 }
 
-int Trait::modifyBaseSkill(StatModel *model, const QString &attribute, int baseValue)
+int CmapPlugin::modifyBaseSkill(StatModel *model, const QString &attribute, int baseValue)
 {
   Game* game = Game::get();
   QJSValueList args;
@@ -41,7 +42,14 @@ int Trait::modifyBaseSkill(StatModel *model, const QString &attribute, int baseV
   if (callback.isCallable())
   {
     args << game->getScriptEngine().newQObject(model) << attribute << baseValue;
-    return game->scriptCall(callback, args, "Trait::modifyBaseValueFor").toInt();
+    return game->scriptCall(callback, args, "CmapPlugin::modifyBaseValueFor").toInt();
   }
   return baseValue;
+}
+
+bool Race::isPlayable() const
+{
+  if (script.hasProperty("isPlayable"))
+    return script.property("isPlayable").toBool();
+  return false;
 }

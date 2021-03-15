@@ -16,7 +16,7 @@ Pane {
 
     Text {
       Layout.alignment: Qt.AlignCenter
-      text: qsTr("Level") + ": " + characterSheet.level
+      text: i18n.t("cmap.level") + ": " + characterSheet.level
       color: "white"
       font.family: application.consoleFontName
       font.pointSize: 8
@@ -39,14 +39,14 @@ Pane {
     }
     Text {
       Layout.alignment: Qt.AlignCenter
-      text: qsTr("Experience") + ": " + characterSheet.experience
+      text: i18n.t("cmap.experience") + ": " + characterSheet.experience
       color: "white"
       font.family: application.consoleFontName
       font.pointSize: 8
     }
     Text {
       Layout.alignment: Qt.AlignCenter
-      text: qsTr("Next level") + ": " + characterSheet.xpNextLevel
+      text: i18n.t("cmap.next-level") + ": " + characterSheet.xpNextLevel
       color: "white"
       font.family: application.consoleFontName
       font.pointSize: 8

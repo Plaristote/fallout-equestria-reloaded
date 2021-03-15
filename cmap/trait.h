@@ -5,10 +5,10 @@
 
 class StatModel;
 
-class Trait
+class CmapPlugin
 {
 public:
-  Trait();
+  CmapPlugin();
 
   void toogle(StatModel*, bool);
   int modifyBaseStatistic(StatModel*, const QString& attribute, int baseValue);
@@ -16,6 +16,14 @@ public:
 
   QString  name;
   QJSValue script;
+};
+
+typedef CmapPlugin Trait;
+
+class Race : public CmapPlugin
+{
+public:
+  bool isPlayable() const;
 };
 
 #endif // TRAIT_H

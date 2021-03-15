@@ -54,8 +54,10 @@ public:
   QJSValue loadScript(const QString& path);
   QJSValue scriptCall(QJSValue callable, const QJSValueList& args, const QString& scriptName);
   void loadCmapTraits();
+  void loadCmapRaces();
 
   QMap<QString, Trait>& getCmapTraits() { return cmapTraits; }
+  QMap<QString, Race>&  getCmapRaces()  { return cmapRaces;  }
 
   Q_INVOKABLE CharacterParty* getPlayerParty() { return playerParty; }
   Q_INVOKABLE Character* getPlayer() { return player; }
@@ -98,6 +100,7 @@ private:
   QJsonObject dataStore;
 
   QMap<QString, Trait> cmapTraits;
+  QMap<QString, Race>  cmapRaces;
 };
 
 #endif // GAME_H

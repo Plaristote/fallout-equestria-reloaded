@@ -11,12 +11,12 @@ Pane {
   signal selectProperty(string selectedName)
 
   Column {
-    Text { text: "Traits"; color: "lightgreen" }
+    Text { text: i18n.t("cmap.traits"); color: "lightgreen" }
     Rectangle { height: 1; width: perksPane.width - 25; color: "lightgreen" }
     Repeater {
       model: characterSheet.traits
       delegate: Text {
-        text: root.characterSheet.traits[index]; color: "lightgreen"
+        text: i18n.t("cmap." + root.characterSheet.traits[index]); color: "lightgreen"
         font.family: application.consoleFontName
         font.pointSize: 8
         MouseArea { anchors.fill: parent; onClicked: selectProperty(characterSheet.traits[index]) }
@@ -25,12 +25,12 @@ Pane {
 
     Rectangle { height: 5; width: perksPane.width; color: "transparent" }
 
-    Text { text: "Perks"; color: "lightgreen" }
+    Text { text: i18n.t("cmap.perks"); color: "lightgreen" }
     Rectangle { height: 1; width: perksPane.width - 25; color: "lightgreen" }
     Repeater {
       model: characterSheet.perks
       delegate: Text {
-        text: root.characterSheet.traits[index]; color: "lightgreen"
+        text: i18n.t("cmap." + root.characterSheet.traits[index]); color: "lightgreen"
         font.family: application.consoleFontName
         font.pointSize: 8
         MouseArea { anchors.fill: parent; onClicked: selectProperty(root.characterSheet.perks[index]) }

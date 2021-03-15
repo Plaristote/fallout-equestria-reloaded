@@ -20,8 +20,4 @@ export function onToggled(characterSheet, toggled) {
   characterSheet.intelligence += value;
   characterSheet.agility += value;
   characterSheet.luck += value;
-  if (toggled)
-    characterSheet.traits.push(name);
-  else
-    characterSheet.traits.splice(characterSheet.traits.indexOf(name), 1);
 }

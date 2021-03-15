@@ -2,55 +2,6 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="falloutequestria_en_US">
 <context>
-    <name>CharacterSheet</name>
-    <message>
-        <location filename="ui/CharacterSheet.qml" line="147"/>
-        <source>Available skill points</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="ui/CharacterSheet.qml" line="228"/>
-        <source>Confirm</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="ui/CharacterSheet.qml" line="234"/>
-        <source>Cancel</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="ui/CharacterSheet.qml" line="234"/>
-        <source>Close</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>DescriptionPane</name>
-    <message>
-        <location filename="cmap/DescriptionPane.qml" line="13"/>
-        <source>Cutie Mark Acquisition Program</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>Experience</name>
-    <message>
-        <location filename="cmap/Experience.qml" line="19"/>
-        <source>Level</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="cmap/Experience.qml" line="42"/>
-        <source>Experience</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="cmap/Experience.qml" line="49"/>
-        <source>Next level</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>GameOverScreen</name>
     <message>
         <location filename="game/slideshows/GameOverScreen.qml" line="29"/>
@@ -80,17 +31,9 @@
     </message>
 </context>
 <context>
-    <name>SpecialCounter</name>
-    <message>
-        <location filename="cmap/SpecialCounter.qml" line="9"/>
-        <source>Available points</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>TraitsPicker</name>
     <message>
-        <location filename="cmap/TraitsPicker.qml" line="18"/>
+        <location filename="cmap/TraitsPicker.qml" line="19"/>
         <source>Available traits</source>
         <oldsource>Traits</oldsource>
         <translation type="unfinished"></translation>

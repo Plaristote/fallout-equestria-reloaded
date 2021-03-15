@@ -144,7 +144,7 @@ Pane {
     RowLayout {
       visible: editMode || createMode
       Label {
-        text: qsTr("Available skill points")
+        text: i18n.t("cmap.available-skill-points")
         font.family: application.titleFontName
         font.pointSize: 14
         color: "white"
@@ -186,6 +186,7 @@ Pane {
     TabRow {
       id: tabList
       tabs: ["perks", "reputation", "kills"]
+      labels: [i18n.t("cmap.perks"), i18n.t("cmap.reputation"), i18n.t("cmap.kills")]
       currentTab: "perks"
     }
 
@@ -225,13 +226,13 @@ Pane {
     anchors { bottom: parent.bottom; right: parent.right }
     MenuButton {
       visible: createMode || editMode
-      text: qsTr("Confirm")
+      text: i18n.t("confirm")
       enabled: characterSheet.acceptable
       onClicked: root.accepted()
     }
     MenuButton {
       visible: !gameEditorMode
-      text: viewMode ? qsTr("Close") : qsTr("Cancel")
+      text: viewMode ? i18n.t("close") : i18n.t("cancel")
       onClicked: root.canceled()
     }
   }

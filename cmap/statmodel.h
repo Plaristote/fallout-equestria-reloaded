@@ -6,6 +6,8 @@
 # include <QJsonDocument>
 # include <QJsonObject>
 
+class Race;
+
 struct SkillData
 {
   int smallGuns = 0;
@@ -51,7 +53,7 @@ class StatModel : public QObject
   Q_PROPERTY(QString name    MEMBER name    NOTIFY nameChanged)
   Q_PROPERTY(int     age     MEMBER age     NOTIFY ageChanged)
   Q_PROPERTY(QString faction MEMBER faction NOTIFY factionChanged)
-  Q_PROPERTY(QString race    MEMBER race    NOTIFY raceChanged)
+  Q_PROPERTY(QString race    READ getRace WRITE setRace NOTIFY raceChanged)
   Q_PROPERTY(QString gender  MEMBER gender  NOTIFY genderChanged)
 
   Q_PROPERTY(int  hitPoints      MEMBER hitPoints    NOTIFY hitPointsChanged)
@@ -126,6 +128,8 @@ public:
   int getXpNextLevel() const;
   void levelUp();
 
+  const QString& getRace() const { return race; }
+  void setRace(const QString& newRace);
   const QString& getName() const { return name; }
   int getExperience() const { return experience; }
   int getHitPoints() const { return hitPoints; }
@@ -135,12 +139,15 @@ public:
   Q_INVOKABLE bool isAcceptable() const;
   Q_INVOKABLE int getMaxTraits() const { return 2; }
   Q_INVOKABLE QStringList getAvailableTraits();
+  Q_INVOKABLE QStringList getAvailableTraitsLabels();
   Q_INVOKABLE void toggleTrait(const QString& name, bool);
   Q_INVOKABLE void setFaceColor(int r, int g, int b, int a) { faceColor = QColor(r, g, b, a); emit faceColorChanged(); }
   Q_INVOKABLE void toggleFaceAccessory(const QString&);
 
   Q_INVOKABLE void confirmChanges();
   Q_INVOKABLE void cancelChanges();
+
+  Race* getRaceController() const;
 
 #define STAT_METHODS(statName) \
   int get_##statName() const { return data.statName + modifiers.statName; } \
@@ -191,7 +198,9 @@ public:
 
   // EDITOR
   Q_INVOKABLE QStringList getAvailableRaces() const;
+  Q_INVOKABLE QStringList getAvailableRacesLabels() const;
   Q_INVOKABLE QStringList getGenders() const;
+  Q_INVOKABLE QStringList getGendersLabels() const;
 
 signals:
   void damageReceived(int damage, QString type);

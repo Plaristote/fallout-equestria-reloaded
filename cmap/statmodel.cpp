@@ -1,4 +1,5 @@
 #include "statmodel.h"
+#include "i18n.h"
 #include <QJsonArray>
 
 #include "game.h"
@@ -18,12 +19,42 @@ StatModel::StatModel(QObject *parent) : QObject(parent)
 
 QStringList StatModel::getAvailableRaces() const
 {
-  return QStringList() << "Earth pony" << "Unicorn" << "Pegasus";
+  Game* game = Game::get();
+
+  if (!game->property("isGameEditor").toBool())
+  {
+    QStringList races;
+    const auto& allRaces = game->getCmapRaces();
+
+    for (const QString& race : allRaces.keys())
+    {
+      if (allRaces[race].isPlayable())
+        races << race;
+    }
+    return races;
+  }
+  return game->getCmapRaces().keys();
+}
+
+QStringList StatModel::getAvailableRacesLabels() const
+{
+  QStringList retval;
+  I18n* i18n = I18n::get();
+
+  for (const auto& race : getAvailableRaces())
+    retval << i18n->t("races." + race);
+  return retval;
 }
 
 QStringList StatModel::getGenders() const
 {
-  return QStringList() << "Stallion" << "Mare";
+  return QStringList() << "male" << "female";
+}
+
+QStringList StatModel::getGendersLabels() const
+{
+  I18n* i18n = I18n::get();
+  return QStringList() << i18n->t("genders.male") << i18n->t("genders.female");
 }
 
 int StatModel::getXpNextLevel() const
@@ -65,6 +96,29 @@ void StatModel::levelUp()
   emit levelChanged();
   emit skillPointsChanged();
   emit hitPointsChanged();
+}
+
+Race* StatModel::getRaceController() const
+{
+  auto& races = Game::get()->getCmapRaces();
+
+  if (races.contains(race))
+    return &(races[race]);
+  return nullptr;
+}
+
+void StatModel::setRace(const QString& newRace)
+{
+  Race* raceController = getRaceController();
+
+  if (raceController)
+    raceController->toogle(this, false);
+  race = newRace;
+  raceController = getRaceController();
+  if (raceController)
+    raceController->toogle(this, true);
+  race = newRace;
+  emit raceChanged();
 }
 
 void StatModel::updateBaseValues()
@@ -157,15 +211,33 @@ QStringList StatModel::getAvailableTraits()
   return results;
 }
 
+QStringList StatModel::getAvailableTraitsLabels()
+{
+  QStringList retval;
+  I18n* i18n = I18n::get();
+
+  for (const auto& trait : getAvailableTraits())
+    retval << i18n->t("cmap." + trait);
+  return retval;
+}
+
 void StatModel::toggleTrait(const QString& name, bool value)
 {
   auto traits = Game::get()->getCmapTraits();
 
+  if ((value  && this->traits.contains(name)) ||
+      (!value && !this->traits.contains(name)))
+    return ;
   for (auto trait : traits)
   {
     if  (trait.name == name)
     {
       trait.toogle(this, value);
+      if  (value)
+        this->traits << trait.name;
+      else
+        this->traits.removeAll(trait.name);
+      emit traitsChanged();
       break ;
     }
   }

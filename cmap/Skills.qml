@@ -39,7 +39,7 @@ Pane {
 
 
           Text {
-            text: qsTr(propertyName)
+            text: i18n.t("cmap." + propertyName)
             color: textColor
             width: Math.max(150, root.width - (root.canEdit ? 175 : 100))
             font.family: application.consoleFontName

@@ -47,24 +47,17 @@ RowLayout {
     onTextChanged: characterSheet.age = parseInt(text)
   }
 
-  Connections {
-    target: characterSheet
-    function onGenderChanged() {
-      characterGender.currentIndex = characterGender.model.indexOf(characterSheet.gender);
-    }
-    function onRaceChanged() {
-      characterRace.currentIndex = characterRace.model.indexOf(characterSheet.race);
-    }
-  }
-
   SelectBox {
     id: characterGender
     Layout.minimumWidth: 200
     Layout.fillHeight: true
     enabled: root.editable
-    model: characterSheet.getGenders()
-    currentIndex: characterSheet.getGenders().indexOf(characterSheet.gender)
-    onCurrentIndexChanged: characterSheet.gender = characterSheet.getGenders()[currentIndex];
+    model: characterSheet.getGendersLabels()
+    Component.onCompleted: currentIndex = characterSheet.getGenders().indexOf(characterSheet.gender)
+    onCurrentIndexChanged: {
+      console.log("genders", characterSheet.getGenders(), currentIndex);
+      characterSheet.gender = characterSheet.getGenders()[currentIndex];
+    }
   }
 
   SelectBox {
@@ -72,8 +65,11 @@ RowLayout {
     Layout.minimumWidth: 200
     Layout.fillHeight: true
     enabled: root.editable
-    model: characterSheet.getAvailableRaces()
-    currentIndex: characterSheet.getAvailableRaces().indexOf(characterSheet.race)
-    onCurrentIndexChanged: characterSheet.race = characterSheet.getAvailableRaces()[currentIndex];
+    model: characterSheet.getAvailableRacesLabels()
+    Component.onCompleted: currentIndex = characterSheet.getAvailableRaces().indexOf(characterSheet.race)
+    onCurrentIndexChanged: {
+      console.log("races", characterSheet.getAvailableRaces(), currentIndex);
+      characterSheet.race = characterSheet.getAvailableRaces()[currentIndex];
+    }
   }
 }

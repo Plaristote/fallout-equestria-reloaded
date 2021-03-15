@@ -16,17 +16,17 @@ Repeater {
   signal selectProperty(string selectedName);
 
   function getQualifierLabel(value) {
-    if (value < 0 || value > 10)
-      return "Invalid";
+    if (value <= 0 || value > 10)
+      return i18n.t("cmap.invalid");
     if (value > 8)
-      return "Heroic";
+      return i18n.t("cmap.heroic");
     if (value > 6)
-      return "Very good";
+      return i18n.t("cmap.very-good");
     if (value > 4)
-      return "Average";
+      return i18n.t("cmap.average");
     if (value > 2)
-      return "Poor";
-    return "Abysmal";
+      return i18n.t("cmap.poor");
+    return i18n.t("cmap.abysmal");
   }
 
   model: list

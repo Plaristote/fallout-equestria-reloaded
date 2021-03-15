@@ -31,7 +31,7 @@ Pane {
         property string propertyName: list[index]
         property color textColor: selectedProperty == propertyName ? "green" : "white"
         Text {
-          text: qsTr(propertyName)
+          text: i18n.t("cmap." + propertyName)
           font.family: application.consoleFontName
           font.pointSize: 8
           color: textColor
