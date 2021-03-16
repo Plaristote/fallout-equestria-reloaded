@@ -51,8 +51,6 @@ void Game::newPlayerParty(StatModel* statistics)
 {
   player = new Character;
   player->setObjectName("player");
-  player->setSpriteName("pony");
-  player->setAnimation("idle");
   player->setStatistics(statistics);
   player->setScript("player.mjs");
   playerParty->addCharacter(player);

@@ -1,5 +1,6 @@
+export const spriteSheet = "rat";
+
 export function onToggled(statistics, toggled) {
-  console.log("ON TOGGLED MUTATED RAT", toggled);
   if (toggled) {
     statistics.traits.push("rat");
     statistics.traits.push("rat");

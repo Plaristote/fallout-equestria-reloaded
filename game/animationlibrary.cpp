@@ -68,10 +68,17 @@ SpriteAnimation AnimationLibrary::getAnimation(const QString &group, const QStri
   SpriteAnimation object;
   auto groupData = data[group];
   auto animationData = groupData[animation];
+  auto defaultSource = groupData["defaultSource"].toString();
 
+  if (!groupData["cloneOf"].isUndefined())
+  {
+    defaultSource = groupData["defaultSource"].toString();
+    groupData     = data[groupData["cloneOf"].toString()].toObject();
+    animationData = groupData[animation];
+  }
   object.name          = animation;
   object.source        = ASSETS_PATH + "sprites/";
-  object.source       += animationData["source"].toString(groupData["defaultSource"].toString());
+  object.source       += animationData["source"].toString(defaultSource);
   object.repeat        = animationData["repeat"].toBool(false);
   object.frameCount    = animationData["frameCount"].toInt(1);
   object.frameInterval = animationData["frameInterval"].toInt(100);

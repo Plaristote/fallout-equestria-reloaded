@@ -251,12 +251,12 @@ Item {
     }
     onAccepted: {
       if (objectTypeInput.currentText === "character") {
-        gameController.level.generateCharacter(objectNameInput.text, sheetInput.currentText.replace(".json", ""))
-        objectSelectBox.currentIndex = gameController.level.objects.length - 1
+        gameController.level.generateCharacter(objectNameInput.text, sheetInput.currentText.replace(".json", ""));
+        objectSelectBox.currentIndex = gameController.level.objects.length - 1;
       }
       else if (objectTypeInput.currentText == "storage") {
         gameController.level.generateStorageObject(objectNameInput.text);
-        objectSelectBox.currentIndex = gameController.level.objects.length - 1
+        objectSelectBox.currentIndex = gameController.level.objects.length - 1;
       }
       else if (objectTypeInput.currentText == "door") {
         gameController.level.generateDoorway(objectNameInput.text);

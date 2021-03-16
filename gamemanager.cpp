@@ -49,6 +49,16 @@ void GameManager::launchNewGame()
 {
   QJSValue   initializeScript, initializeFunction;
 
+  // INIT SPRITE
+  auto* statistics = currentGame->getPlayer()->getStatistics();
+  auto* raceController = statistics->getRaceController();
+  if (raceController)
+  {
+    currentGame->getPlayer()->setSpriteName(raceController->getSpriteSheet(statistics));
+    currentGame->getPlayer()->setAnimation("idle");
+  }
+  // INIT SPRITE
+
   initializeScript   = currentGame->loadScript(SCRIPTS_PATH + "initialize.mjs");
   initializeFunction = initializeScript.property("initialize");
   if (initializeFunction.isCallable())

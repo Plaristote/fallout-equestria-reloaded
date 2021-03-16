@@ -2,6 +2,7 @@
 #include "game.h"
 #include "leveltask.h"
 #include "characters/actionqueue.h"
+#include "cmap/race.h"
 #include <cmath>
 
 Character::Character(QObject *parent) : CharacterMovement(parent)
@@ -246,10 +247,18 @@ void Character::onCharacterSheetChanged()
 {
   qDebug() << "Changing character sheet";
   StatModel* charSheet;
+  Race*      raceController;
 
   charSheet = Game::get()->getDataEngine()->makeStatModel(getObjectName(), characterSheet);
   charSheet->setParent(this);
   setStatistics(charSheet);
+  raceController = charSheet->getRaceController();
+  if (raceController)
+  {
+    setSpriteName(raceController->getSpriteSheet(charSheet));
+    moveTo(position.x(), position.y());
+    setAnimation("idle");
+  }
 }
 
 void Character::setStatistics(StatModel *value)

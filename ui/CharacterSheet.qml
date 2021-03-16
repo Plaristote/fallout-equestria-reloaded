@@ -50,10 +50,13 @@ Pane {
   Timer {
     running: true
     repeat: true
-    interval: 1000
+    interval: 100
     onTriggered: {
       const list = scriptController.getFactions();
+      const index = list.indexOf(characterSheet.faction);
+
       factionPicker.model = list;
+      factionPicker.currentIndex = index;
     }
   }
 
@@ -63,7 +66,6 @@ Pane {
     anchors { top: characterNameRow.top; left: faceEditorButton.right; leftMargin: 10 }
     width: 200
     height: characterNameRow.height
-    currentIndex: model.indexOf(characterSheet.faction)
     onCurrentIndexChanged: {
       if (characterSheet.faction !== model[currentIndex])
         root.characterSheet.faction = model[currentIndex];

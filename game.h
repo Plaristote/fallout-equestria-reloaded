@@ -11,6 +11,7 @@
 # include "game/diplomacy.hpp"
 # include <QJSEngine>
 # include "cmap/trait.h"
+# include "cmap/race.h"
 
 class Game : public QObject
 {

@@ -34,8 +34,10 @@ export class Controller {
     for (var i = 0 ; i < this.level.dynamicObjects.length ; ++i) {
       const object = this.level.dynamicObjects[i];
       const position = object.getPosition();
+      const isUndetected = object.getObjectType() === "Character" && detectedCharacters.indexOf(object) < 0;
+      const isValid = position.x >= 0 && position.y >= 0;
 
-      if (object.getObjectType() === "Character" && detectedCharacters.indexOf(object) < 0)
+      if (isUndetected || !isValid)
         continue ;
       this.renderObjects[position.x][position.y].push(object);
       this.renderObjects[position.x][position.y].sort(function(a, b) {

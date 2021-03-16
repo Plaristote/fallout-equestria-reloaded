@@ -30,7 +30,7 @@ void TileLayer::loadTiles(const QJsonArray& tileArray, const QVector<Tileset*>& 
 {
   QPoint currentPosition(0, 0);
 
-  for (QJsonValue value : tileArray)
+  for (const QJsonValue& value : qAsConst(tileArray))
   {
     int tid = value.toInt();
 
@@ -67,7 +67,7 @@ Tile* TileLayer::getTile(int x, int y)
 {
   int position = y * size.width() + x;
 
-  if (position >= tiles.count())
+  if (position >= tiles.count() || x < 0 || y < 0)
     return nullptr;
   return tiles.at(position);
 }
