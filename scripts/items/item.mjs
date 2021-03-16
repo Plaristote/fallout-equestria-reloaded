@@ -43,8 +43,7 @@ export class Item {
           return {
             steps:    this.getAnimationSteps(target),
             callback: this.useOn.bind(this, target)
-	  };
-          return this.useOn(target);
+          };
 	}
         else
           this.logFailure("Not enough action points.");

@@ -27,6 +27,7 @@ public:
   Q_INVOKABLE QString getAnimation() const { return animation.name; }
   void moveToCoordinates(QPoint coordinates);
   Q_INVOKABLE void setRenderPosition(QPoint coordinates);
+  inline bool isAnimated() const;
   virtual bool isMoving() const { return spritePosition != spriteMovementTarget; }
   inline bool isFloating() const { return floating; }
   void setMovementSpeed(float value) { movementSpeed = value; }

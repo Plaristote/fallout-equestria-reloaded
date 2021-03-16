@@ -31,7 +31,11 @@ void ObjectAnimationPart::initialize(DynamicObject* target, const QString& anima
 void ObjectAnimationPart::start()
 {
   if (target)
+  {
     target->setAnimation(animationName);
+    if (!target->isAnimated())
+      onAnimationFinished();
+  }
   else
     qDebug() << "/!\\ Invalid object set for ObjectAnimationPart";
 }

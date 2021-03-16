@@ -76,18 +76,21 @@ SpriteAnimation AnimationLibrary::getAnimation(const QString &group, const QStri
     groupData     = data[groupData["cloneOf"].toString()].toObject();
     animationData = groupData[animation];
   }
-  object.name          = animation;
-  object.source        = ASSETS_PATH + "sprites/";
-  object.source       += animationData["source"].toString(defaultSource);
-  object.repeat        = animationData["repeat"].toBool(false);
-  object.frameCount    = animationData["frameCount"].toInt(1);
-  object.frameInterval = animationData["frameInterval"].toInt(100);
-  object.firstFramePosition.setX(animationData["offsetX"].toInt(0));
-  object.firstFramePosition.setY(animationData["offsetY"].toInt(0));
-  object.clippedRect.setX(object.firstFramePosition.x());
-  object.clippedRect.setY(object.firstFramePosition.y());
-  object.clippedRect.setWidth(animationData["width"].toInt());
-  object.clippedRect.setHeight(animationData["height"].toInt());
+  if (animationData.isObject())
+  {
+    object.name          = animation;
+    object.source        = ASSETS_PATH + "sprites/";
+    object.source       += animationData["source"].toString(defaultSource);
+    object.repeat        = animationData["repeat"].toBool(false);
+    object.frameCount    = animationData["frameCount"].toInt(1);
+    object.frameInterval = animationData["frameInterval"].toInt(100);
+    object.firstFramePosition.setX(animationData["offsetX"].toInt(0));
+    object.firstFramePosition.setY(animationData["offsetY"].toInt(0));
+    object.clippedRect.setX(object.firstFramePosition.x());
+    object.clippedRect.setY(object.firstFramePosition.y());
+    object.clippedRect.setWidth(animationData["width"].toInt());
+    object.clippedRect.setHeight(animationData["height"].toInt());
+  }
   return object;
 }
 

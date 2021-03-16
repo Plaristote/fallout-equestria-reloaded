@@ -7,9 +7,14 @@ Sprite::Sprite(QObject *parent) : QObject(parent)
   movementSpeed = 100;
 }
 
+bool Sprite::isAnimated() const
+{
+  return animation.currentFrame + 1 <= animation.frameCount;
+}
+
 void Sprite::update(qint64 delta)
 {
-  if (animation.repeat || animation.currentFrame + 1 <= animation.frameCount)
+  if (animation.repeat || isAnimated())
   {
     animationElapsedTime += delta;
     if (animationElapsedTime > animation.frameInterval)

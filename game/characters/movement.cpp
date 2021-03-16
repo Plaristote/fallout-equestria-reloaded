@@ -18,6 +18,9 @@ void CharacterMovement::setAnimation(const QString &animationName)
   Sprite::setAnimation(orientedAnimation
                        ? animationName + '-' + orientation
                        : animationName);
+  // Fallback to idle for unexisting character animations
+  if (getAnimation() != animationName && animationName != "idle")
+    setAnimation("idle");
 }
 
 void CharacterMovement::lookTo(int x, int y)

@@ -33,8 +33,6 @@ void MovementAction::triggerNextMovement()
     auto*  grid         = level->getGrid();
     auto*  nextCase     = grid->getGridCase(nextPosition.x(), nextPosition.y());
 
-    qDebug() << "Next position: " << nextPosition;
-    qDebug() << "Noow position: " << character->getPosition();
     if (nextCase && (!nextCase->occupied || nextCase->occupant == character))
     {
       if (!level->isInCombat(character) || character->useActionPoints(1, "movement"))
