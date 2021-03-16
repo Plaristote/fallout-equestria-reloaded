@@ -51,6 +51,7 @@ void CharacterMovement::moveTo(int x, int y)
     if (getCurrentAnimation() != animationName)
       setAnimation(movementMode);
     level->getGrid()->moveObject(this, x, y);
+    level->getGrid()->triggerZone(this, x, y);
   }
 }
 

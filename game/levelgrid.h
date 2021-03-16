@@ -8,7 +8,7 @@
 class TileMap;
 class TileZone;
 class DynamicObject;
-class Character;
+class CharacterMovement;
 
 class LevelGrid : public QObject
 {
@@ -44,7 +44,7 @@ public:
   bool findPath(QPoint from, QPoint to, QList<QPoint>& path);
   bool moveObject(DynamicObject*, int x, int y);
   void removeObject(DynamicObject*);
-  void triggerZone(Character*, int x, int y);
+  void triggerZone(CharacterMovement*, int x, int y);
   void registerZone(TileZone*);
   void unregisterZone(TileZone*);
   void eachCase(std::function<void (int x, int y, CaseContent&)> callback, QPoint from = QPoint(0,0), QPoint to = QPoint(0,0));

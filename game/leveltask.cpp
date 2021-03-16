@@ -55,10 +55,10 @@ void LevelTask::load(const QString& levelName, DataEngine* dataEngine)
   script = new ScriptController(SCRIPTS_PATH + "levels/" + levelName + ".mjs");
   script->initialize(this);
   taskRunner->setScriptController(script);
-  if (dataEngine->isLevelActive(name))
-    loadObjectsFromDataEngine(dataEngine);
   for (auto* zone : tilemap->getZones())
     registerZone(zone);
+  if (dataEngine->isLevelActive(name))
+    loadObjectsFromDataEngine(dataEngine);
   if (Game::get()->property("isGameEditor").toBool())
     connect(this, &LevelTask::objectsChanged, this, &LevelTask::visibleCharactersChanged);
   else

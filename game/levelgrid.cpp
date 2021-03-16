@@ -288,12 +288,14 @@ bool LevelGrid::moveObject(DynamicObject* object, int x, int y)
   return gridCase != nullptr;
 }
 
-void LevelGrid::triggerZone(Character* character, int x, int y)
+void LevelGrid::triggerZone(CharacterMovement* character, int x, int y)
 {
+  static const QVector<TileZone*> emptyZoneList;
   auto* gridCase = getGridCase(x, y);
-  const QVector<TileZone*> lastZones = character->getCurrentZones();
+  const QVector<TileZone*>  lastZones = character->getCurrentZones();
+  const QVector<TileZone*>& newZones  = gridCase ? gridCase->zones : emptyZoneList;
 
-  for (auto* zone : qAsConst(gridCase->zones))
+  for (auto* zone : newZones)
   {
     if (!(character->isInZone(zone)))
       emit zone->enteredZone(character, zone);
