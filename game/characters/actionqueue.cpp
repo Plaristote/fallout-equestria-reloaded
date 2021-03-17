@@ -31,6 +31,8 @@ void ActionQueue::update()
       break ;
     case ActionBase::Interrupted:
       reset();
+      emit queueCompleted();
+      break ;
     case ActionBase::Pending:
     case ActionBase::InProgress:
       break ;
