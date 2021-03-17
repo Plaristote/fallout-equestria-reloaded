@@ -10,7 +10,7 @@ export class Weapon extends Item {
   }
 
   isValidTarget(object) {
-    return object.getObjectType() === "Character" && object !== this.user;
+    return object.getObjectType() === "Character" && object !== this.user && object.isAlive();
   }
 
   isRangedWeapon() {
@@ -39,19 +39,46 @@ export class Weapon extends Item {
     return 1.6;
   }
 
+  triggerUseOn(target) {
+    const successRate = this.getUseSuccessRate(target);
+    const roll        = getValueFromRange(0, 100);
+
+    console.log("ROLL", roll, '/', successRate);
+    if (roll > successRate)
+      return this.triggerDodgeUse(target);
+    return super.triggerUseOn(target);
+  }
+
+  triggerDodgeUse(target) {
+    return {
+      steps: [{ type: "Animation", animation: "use", object: this.user }],
+      callback: this.onDodged.bind(this, target)
+    }
+  }
+
+  onDodged(target) {
+    game.appendToConsole(
+      i18n.t("messages.weapons.dodge", {
+        user: this.user.statistics.name,
+        target: target.statistics.name
+      })
+    );
+    level.sounds.play("dodge");
+    return true;
+  }
+
   useOn(target) {
     var damage = getValueFromRange(...this.getDamageRange());
 
     damage -= target.statistics.damageResistance;
     damage = Math.max(0, damage);
     game.appendToConsole(
-      this.user.statistics.name +
-      " used " +
-      this.model.objectName +
-      " on " +
-      target.statistics.name +
-      " for " +
-      damage + " damage."
+      i18n.t("messages.weapons.use", {
+        user: this.user.statistics.name,
+        item: this.model.objectName,
+        target: target.statistics.name,
+        damage: damage
+      })
     );
     target.takeDamage(damage, this.user);
     level.sounds.play(this.hitSound);

@@ -39,12 +39,8 @@ export class Item {
     console.log("Attempt to uze on", this, this.isValidTarget, this.model, this.triggersCombat, this.getActionPointCost);
     if (this.isValidTarget(target)) {
       if (this.isInRange(target)) {
-        if (this.user.useActionPoints(this.getActionPointCost())) {
-          return {
-            steps:    this.getAnimationSteps(target),
-            callback: this.useOn.bind(this, target)
-          };
-	}
+        if (this.user.useActionPoints(this.getActionPointCost()))
+          return this.triggerUseOn(target);
         else
           this.logFailure("Not enough action points.");
       }
@@ -56,12 +52,19 @@ export class Item {
     return false;
   }
 
+  triggerUseOn(target) {
+    return {
+      steps:    this.getAnimationSteps(target),
+      callback: this.useOn.bind(this, target)
+    };
+  }
+
   useOn(target) {
     this.logFailure("That does nothing.");
   }
 
   logFailure(message) {
-    //if (this.user == level.player)
+    if (this.user == level.player)
       game.appendToConsole(message);
   }
 }

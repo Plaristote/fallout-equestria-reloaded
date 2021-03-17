@@ -7,5 +7,6 @@
   "hoof2hoof/whack":   "weapons/melee-whack.wav",
   "critters/bite":     "weapons/rat-bite.wav",
   "out-of-ammo":       "out-of-ammo.wav",
-  "use/sparkle-cola":  "items/sparkle-cola.wav"
+  "use/sparkle-cola":  "items/sparkle-cola.wav",
+  "dodge":             "weapons/dodge.wav"
 }

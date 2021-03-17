@@ -1,4 +1,10 @@
 {
+  "messages": {
+    "weapons": {
+      "use":   "{{user}} used {{item}} on {{target}} for {{damage}} damage",
+      "dodge": "{{target}} dodged an attack from {{user}}"
+    }
+  },
     "dialogs": {
         "parley": {
             "change-color": "You're lacking in colors. Perhaps we could change that ?",
