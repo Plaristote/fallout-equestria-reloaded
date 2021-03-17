@@ -5,6 +5,7 @@
   "pipbuck/barter+":   "pipbuck/barter-success.wav",
   "hoof2hoof/punch":   "weapons/melee-punch.wav",
   "hoof2hoof/whack":   "weapons/melee-whack.wav",
+  "critters/bite":     "weapons/rat-bite.wav",
   "out-of-ammo":       "out-of-ammo.wav",
   "use/sparkle-cola":  "items/sparkle-cola.wav"
 }
