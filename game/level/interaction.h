@@ -43,6 +43,9 @@ public:
   Q_INVOKABLE void useSkillOn(Character* user, DynamicObject* object, const QString& skill);
   int              getTargetMode() const;
 
+  Q_INVOKABLE DynamicObject*   getObjectAt(int posX, int posY) const;
+  DynamicObject*               getObjectAt(QPoint point) const { return getObjectAt(point.x(), point.y()); }
+
   void useItemOn(DynamicObject* object);
   void initializeDialog(Character* npc);
   void initializeLooting(StorageObject*);

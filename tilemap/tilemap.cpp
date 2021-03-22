@@ -82,7 +82,6 @@ bool TileMap::load(const QString& name)
             QJsonObject zoneData = value.toObject();
             auto* zone = new TileZone(this);
 
-
             zone->load(zoneData, mapSize);
             zones.push_back(zone);
           }
@@ -98,15 +97,6 @@ bool TileMap::load(const QString& name)
             roofs.push_back(roofLayer);
           }
         }
-        else if (layerName == "objects")
-        {
-          for (QJsonValue value : layerData["layers"].toArray())
-          {
-            QJsonObject objectData = value.toObject();
-
-            objects.push_back(objectData);
-          }
-        }
       }
     }
     return true;
@@ -119,6 +109,16 @@ bool TileMap::load(const QString& name)
 TileLayer* TileMap::getLayer(const QString &name)
 {
   for (TileLayer* layer : layers)
+  {
+    if (layer->getName() == name)
+      return layer;
+  }
+  return nullptr;
+}
+
+TileLayer* TileMap::getRoofLayer(const QString &name)
+{
+  for (TileLayer* layer : roofs)
   {
     if (layer->getName() == name)
       return layer;

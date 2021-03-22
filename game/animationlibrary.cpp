@@ -57,10 +57,29 @@ void AnimationLibrary::initialize()
           textures << source;
       }
     }
+    for (const auto& texture : textures)
+      images.insert(ASSETS_PATH + "sprites/" + texture, QImage(ASSETS_PATH + "sprites/" + texture));
     emit initialized();
   }
   else
     qDebug() << "!! Could not load sprites.json";
+}
+
+const QImage& AnimationLibrary::getImage(const QString& group, const QString& animation) const
+{
+  return getImage(getAnimation(group, animation).source);
+}
+
+const QImage& AnimationLibrary::getImage(const QString& source) const
+{
+  const auto iterator = images.constFind(source);
+
+  if (iterator == images.end())
+  {
+    qDebug() << "Could not find Image for picture" << source << "in" << images.keys();
+    throw std::out_of_range("no source for animation");
+  }
+  return *iterator;
 }
 
 SpriteAnimation AnimationLibrary::getAnimation(const QString &group, const QString &animation) const

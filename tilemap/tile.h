@@ -19,13 +19,17 @@ public:
   void setPosition(const QPoint& value) { position = value; }
   void setRenderPosition(const QPoint& value) { renderPosition = value; }
   void setImage(const QString* value) { image = value; }
+  void setTexture(const QImage* value) { texture = value; }
+  inline const QImage& getTexture() const { return *texture; }
   inline const QString& getImage() const { return *image; }
   inline const QRect& getRect() const { return rect; }
   inline const QPoint& getPosition() const { return position; }
   inline const QPoint& getRenderPosition() const { return renderPosition; }
+  QRect getRenderRect() const { return QRect(position, rect.size()); }
 
 private:
-  const QString* image;
+  const QString* image = nullptr;
+  const QImage*  texture;
   QRect          rect;
   QPoint         position;
   QPoint         renderPosition;

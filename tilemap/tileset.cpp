@@ -20,6 +20,7 @@ bool Tileset::load(const QString& filepath, int firstGid)
 
     this->name = document["name"].toString();
     source = tilesetsPath + document["image"].toString();
+    image = QImage(source);
     spacing = document["spacing"].toInt();
     columns = document["columns"].toInt();
     tileSize.setWidth(document["tilewidth"].toInt());

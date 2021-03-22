@@ -102,14 +102,9 @@ private slots:
   void unregisterControlZone(TileZone*);
 
 private:
-  QList<DynamicObject*> objects;
-  QList<Character*> visibleCharacters;
-  QList<Sprite*> visualEffects;
-
   QTimer            updateTimer;
   QElapsedTimer     clock;
   QString           name;
-  TileMap*          tilemap = nullptr;
   TimeManager*      timeManager = nullptr;
   SoundManager*     soundManager = nullptr;
   ScriptController* script = nullptr;

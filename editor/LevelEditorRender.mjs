@@ -12,7 +12,7 @@ export class EditorController extends Controller {
   }
 
   onObjectClick(mouseX, mouseY) {
-    const object = this.getHoveredObject(mouseX, mouseY);
+    const object = this.level.getObjectAt(mouseX, mouseY);
 
     if (object)
       this.canvas.pickedObject(object);

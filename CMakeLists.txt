@@ -24,8 +24,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 #    endif()
 #endif()
 
-find_package(QT NAMES Qt6 Qt5 COMPONENTS Core Quick LinguistTools MREQUIRED)
-find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Quick LinguistTools REQUIRED)
+find_package(QT NAMES Qt6 Qt5 COMPONENTS Core Quick LinguistTools Gui REQUIRED)
+find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Quick LinguistTools Gui REQUIRED)
 find_package(Qt5Multimedia REQUIRED)
 
 set(TS_FILES falloutequestria_en_US.ts)
@@ -57,6 +57,8 @@ set(PROJECT_SOURCES
         game/scriptcontroller.cpp
         game/dataengine.h
         game/dataengine.cpp
+        game/level/levelbase.cpp
+        game/level/levelbase.h
         game/leveltask.h
         game/leveltask.cpp
         game/levelgrid.h
@@ -118,6 +120,8 @@ set(PROJECT_SOURCES
         game/questmanager.cpp
         game/quest.h
         game/quest.cpp
+        game/tilemapimageprovider.h
+        game/tilemapimageprovider.cpp
         game/level/grid.h
         game/level/grid.cpp
         game/level/interaction.h
@@ -176,5 +180,6 @@ target_compile_definitions(falloutequestria
 target_link_libraries(falloutequestria
   PRIVATE Qt${QT_VERSION_MAJOR}::Core
           Qt${QT_VERSION_MAJOR}::Quick
+          Qt${QT_VERSION_MAJOR}::Gui
           Qt${QT_VERSION_MAJOR}::Multimedia
 )

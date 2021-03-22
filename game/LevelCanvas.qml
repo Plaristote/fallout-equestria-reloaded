@@ -59,7 +59,7 @@ Canvas {
     function onMouseMoved() {
       hoverTile = controller.getHoveredCase(mouseX - canvas.origin.x, mouseY - canvas.origin.y);
       if (hoveredObjectEnabled)
-        hoveredObject = controller.getHoveredObject(mouseX - canvas.origin.x, mouseY - canvas.origin.y);
+        hoveredObject = levelController.getObjectAt(mouseX - canvas.origin.x, mouseY - canvas.origin.y);
       else
         hoveredObject = null;
     }

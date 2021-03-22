@@ -2,10 +2,10 @@
 # define GRIDCOMPONENT_H
 
 # include <QObject>
+# include "levelbase.h"
 # include "../levelgrid.h"
-# include "../character.h"
 
-class GridComponent : public QObject
+class GridComponent : public LevelBase
 {
   Q_OBJECT
 
@@ -27,6 +27,7 @@ public:
 
   void setCharacterPosition(Character*, int x, int y);
   Q_INVOKABLE void setObjectPosition(DynamicObject*, int x, int y);
+  Q_INVOKABLE QPoint getAdjustedOffsetFor(DynamicObject*) const;
 
 signals:
   void exitZoneEntered(TileZone*);

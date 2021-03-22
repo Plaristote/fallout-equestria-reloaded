@@ -42,6 +42,7 @@ void TileLayer::loadTiles(const QJsonArray& tileArray, const QVector<Tileset*>& 
         {
           Tile* tile = new Tile(this);
 
+          tile->setTexture(&(tileset->getImage()));
           tile->setImage(&tileset->getSource());
           tile->setPosition(currentPosition);
           tile->setRect(tileset->getClipRectFor(tid));

@@ -25,6 +25,7 @@ public:
 
   void load(const QJsonObject&, const QVector<Tileset*>& tilesets);
   const QString& getName() const { return name; }
+  const QSize& getSize() const { return size; }
   void setVisible(bool value) { visible = value; }
   bool isVisible() const { return visible; }
 

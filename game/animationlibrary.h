@@ -4,6 +4,7 @@
 # include <QObject>
 # include <QJsonObject>
 # include <QRect>
+# include <QImage>
 
 struct SpriteAnimation
 {
@@ -55,11 +56,13 @@ class AnimationLibrary : public QObject
   static AnimationLibrary* self;
 public:
   explicit AnimationLibrary(QObject *parent = nullptr);
-  virtual ~AnimationLibrary();
+  virtual ~AnimationLibrary() override;
 
   static AnimationLibrary* get() { return self; }
   void initialize();
   SpriteAnimation getAnimation(const QString& group, const QString& animation) const;
+  const QImage& getImage(const QString& group, const QString& animation) const;
+  const QImage& getImage(const QString& source) const;
 
   Q_INVOKABLE QStringList getSources() const { return textures; }
   Q_INVOKABLE QStringList getGroups() const;
@@ -74,8 +77,9 @@ signals:
   void initialized();
 
 private:
-  QStringList textures;
-  QJsonObject data;
+  QStringList           textures;
+  QMap<QString, QImage> images;
+  QJsonObject           data;
 };
 
 #endif // ANIMATIONLIBRARY_H

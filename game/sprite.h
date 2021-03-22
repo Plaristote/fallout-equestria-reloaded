@@ -25,9 +25,10 @@ public:
   Q_INVOKABLE QString getSpriteName() const { return name; }
   Q_INVOKABLE virtual void setAnimation(const QString& animationName);
   Q_INVOKABLE QString getAnimation() const { return animation.name; }
+  const QImage& getImage() const;
   void moveToCoordinates(QPoint coordinates);
   Q_INVOKABLE void setRenderPosition(QPoint coordinates);
-  inline bool isAnimated() const;
+  bool isAnimated() const;
   virtual bool isMoving() const { return spritePosition != spriteMovementTarget; }
   inline bool isFloating() const { return floating; }
   void setMovementSpeed(float value) { movementSpeed = value; }

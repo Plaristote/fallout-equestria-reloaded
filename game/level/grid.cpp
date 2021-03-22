@@ -1,8 +1,9 @@
 #include "grid.h"
 #include "game/characters/actionqueue.h"
 #include "tilemap/tilezone.h"
+#include "tilemap/tilemap.h"
 
-GridComponent::GridComponent(QObject *parent) : QObject(parent)
+GridComponent::GridComponent(QObject *parent) : LevelBase(parent)
 {
   grid = new LevelGrid(this);
 }
@@ -99,4 +100,22 @@ void GridComponent::setObjectPosition(DynamicObject* object, int x, int y)
 
     object->setRenderPosition(renderPosition);
   }
+}
+
+QPoint GridComponent::getAdjustedOffsetFor(DynamicObject* object) const
+{
+  QSize  tileSize = tilemap->getTileSize();
+  QPoint offset   = object->getSpritePosition();
+  QRect  rect     = object->getClippedRect();
+
+  if (!object->isFloating())
+  {
+    const auto extraHeight = rect.height() - tileSize.height();
+
+    return QPoint(
+      offset.x() + (tileSize.width() / 2 - rect.width() / 2),
+      offset.y() - extraHeight
+    );
+  }
+  return offset;
 }

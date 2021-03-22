@@ -163,3 +163,28 @@ void InteractionComponent::initializeLooting(StorageObject* target)
   controller->initialize(player, target);
   emit startLooting(controller);
 }
+
+DynamicObject* InteractionComponent::getObjectAt(int posX, int posY) const
+{
+  for (DynamicObject* object : objects)
+  {
+    if (!object->isCharacter() || visibleCharacters.indexOf(reinterpret_cast<Character*>(object)) >= 0)
+    {
+      QPoint coordinates = getAdjustedOffsetFor(object);
+      QRect  clip = object->getClippedRect();
+      QRect  boundingBox(coordinates, clip.size());
+
+      if (posX >= boundingBox.x() && posX <= boundingBox.x() + boundingBox.width() &&
+          posY >= boundingBox.y() && posY <= boundingBox.y() + boundingBox.height())
+      {
+        QPoint collisionAt(posX - coordinates.x(), posY - coordinates.y());
+        QPoint sheetPosition(clip.x() + collisionAt.x(), clip.y() + collisionAt.y());
+        const QImage& image = object->getImage();
+
+        if (image.pixelColor(sheetPosition) != Qt::transparent)
+           return object;
+      }
+    }
+  }
+  return nullptr;
+}

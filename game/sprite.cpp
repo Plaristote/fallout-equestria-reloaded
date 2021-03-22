@@ -56,6 +56,14 @@ void Sprite::runAnimation()
   emit clippedRectChanged();
 }
 
+const QImage& Sprite::getImage() const
+{
+  const QImage& image = AnimationLibrary::get()->getImage(animation.source);
+
+  return image;
+}
+
+
 void Sprite::setRenderPosition(QPoint coordinates)
 {
   spritePosition = coordinates;

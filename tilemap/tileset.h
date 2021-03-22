@@ -3,6 +3,7 @@
 
 # include <QObject>
 # include <QRect>
+# include <QImage>
 
 class Tileset : public QObject
 {
@@ -15,9 +16,11 @@ public:
   inline const QString& getSource() const { return source; }
   QRect getClipRectFor(int tileId) const;
   QSize getTileSize() const { return tileSize; }
+  const QImage& getImage() const { return image; }
   bool isInRange(int tileId) { return tileId >= firstGid && tileId < firstGid + tileCount; }
 
 private:
+  QImage  image;
   QString name;
   QString source;
   int     columns;

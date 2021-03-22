@@ -11,7 +11,6 @@
 # include <QJsonObject>
 # include <QStringList>
 
-
 class TileMap : public QObject
 {
   Q_OBJECT
@@ -36,6 +35,7 @@ public:
   QSize   getObjectSize(int gid) const;
 
   Q_INVOKABLE TileLayer* getLayer(const QString& name);
+  Q_INVOKABLE TileLayer* getRoofLayer(const QString& name);
   Q_INVOKABLE TileZone*  getZone(const QString& name);
 
   void addTileZone(TileZone* zone)    { zones << zone; }
