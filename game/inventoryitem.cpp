@@ -125,7 +125,7 @@ bool InventoryItem::isCombatItem()
 
 bool InventoryItem::isInRange(DynamicObject *target)
 {
-  if (script)
+  if (script && script->hasMethod("isInRange"))
   {
     QJSValueList args;
 
@@ -135,9 +135,21 @@ bool InventoryItem::isInRange(DynamicObject *target)
   return true;
 }
 
+bool InventoryItem::isValidTarget(DynamicObject* target)
+{
+  if (script && script->hasMethod("isValidTarget"))
+  {
+    QJSValueList args;
+
+    args << Game::get()->getScriptEngine().newQObject(target);
+    return script->call("isValidTarget", args).toBool();
+  }
+  return false;
+}
+
 QJSValue InventoryItem::useOn(DynamicObject* target)
 {
-  if (script)
+  if (script && isValidTarget(target))
   {
     QJSValueList args;
 
@@ -149,15 +161,18 @@ QJSValue InventoryItem::useOn(DynamicObject* target)
 
 int InventoryItem::getUseSuccessRate(DynamicObject* target)
 {
-  if (script && script->hasMethod("getUseSuccessRate"))
+  if (isValidTarget(target))
   {
-    QJSValueList args;
+    if (script && script->hasMethod("getUseSuccessRate"))
+    {
+      QJSValueList args;
 
-    args << Game::get()->getScriptEngine().newQObject(target);
-    return script->call("getUseSuccessRate", args).toInt();
+      args << Game::get()->getScriptEngine().newQObject(target);
+      return script->call("getUseSuccessRate", args).toInt();
+    }
+    else if (isInRange(target))
+      return 95;
   }
-  else if (isInRange(target))
-    return 95;
   return 0;
 }
 

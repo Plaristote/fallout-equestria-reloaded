@@ -4,7 +4,6 @@ export class Item {
   constructor(model) {
     this.model = model;
     this.triggersCombat = false;
-    this.isValidTarget = function() { return true; };
   }
 
   onEquipped(character, on) {
