@@ -4,10 +4,10 @@
 # include <QObject>
 # include <QSize>
 # include <QQmlListProperty>
+# include "limits.h"
 # include "tileset.h"
 # include "tilelayer.h"
 # include "tilezone.h"
-# include "objecttileset.h"
 # include <QJsonObject>
 # include <QStringList>
 
@@ -17,6 +17,7 @@ class TileMap : public QObject
 
   Q_PROPERTY(QSize tileSize MEMBER tileSize)
   Q_PROPERTY(QSize mapSize MEMBER mapSize)
+  Q_PROPERTY(Limits* limits MEMBER limits)
   Q_PROPERTY(QStringList textureList MEMBER textureList NOTIFY onTextureListChanged)
   Q_PROPERTY(QQmlListProperty<TileZone> zones READ getZonesQml)
   Q_PROPERTY(QQmlListProperty<TileLayer> roofs READ getRoofsQml)
@@ -28,11 +29,8 @@ public:
   inline const QSize& getSize() const { return mapSize; }
   inline int getPixelWidth() const { return (mapSize.width() - 1) * tileSize.width();}
   inline const QSize& getTileSize() const { return tileSize; }
+  inline const Limits& getLimits() const { return *limits; }
   QList<TileZone*>& getZones() { return zones; }
-  const QList<QJsonObject>& getObjects() const { return objects; }
-
-  QString getObjectSource(int gid) const;
-  QSize   getObjectSize(int gid) const;
 
   Q_INVOKABLE TileLayer* getLayer(const QString& name);
   Q_INVOKABLE TileLayer* getRoofLayer(const QString& name);
@@ -50,12 +48,11 @@ signals:
 private:
   QSize                   tileSize;
   QSize                   mapSize;
+  Limits*                 limits;
   QVector<Tileset*>       tilesets;
   QVector<TileLayer*>     layers;
-  QVector<ObjectTileset*> objectTilesets;
   QList<TileZone*>        zones;
   QList<TileLayer*>       roofs;
-  QList<QJsonObject>      objects;
   QStringList             textureList;
 };
 

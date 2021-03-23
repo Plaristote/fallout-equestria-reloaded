@@ -9,6 +9,7 @@ static const QString tilemapsPath = "./assets/tilemaps/";
 
 TileMap::TileMap(QObject *parent) : QObject(parent)
 {
+  limits = new Limits(this);
 }
 
 bool TileMap::load(const QString& name)
@@ -23,6 +24,7 @@ bool TileMap::load(const QString& name)
     tileSize.setHeight(document["tileheight"].toInt(0));
     mapSize.setWidth(document["width"].toInt(0));
     mapSize.setHeight(document["height"].toInt(0));
+    limits->initialize(mapSize, tileSize);
 
     qDebug() << "Loading tilemap" << name << '(' << mapSize.width() << ',' << mapSize.height() << ')';
 
@@ -33,31 +35,13 @@ bool TileMap::load(const QString& name)
       auto sourcePath = tilesetData["source"].toString();
       auto firstGid = tilesetData["firstgid"].toInt(1);
       auto source   = tilemapsPath + sourcePath;
+      auto* tileset  = new Tileset(this);
 
-      // OBJECT TILEsET
-      if (sourcePath.indexOf("/objects-") >= 0)
-      {
-        auto* tileset = new ObjectTileset(this);
-
-        qDebug() << "Le object tileset ma gueule" << sourcePath;
-        objectTilesets.push_back(tileset);
-        if (tileset->load(source, firstGid))
-          textureList.append(tileset->getAllSources());
-        else
-          return false;
-      }
-      // REGULAR TILEsET
+      tilesets.push_back(tileset);
+      if (tileset->load(source, firstGid))
+        textureList << tileset->getSource();
       else
-      {
-        auto* tileset  = new Tileset(this);
-
-        qDebug() << "Registering new tileset" << sourcePath;
-        tilesets.push_back(tileset);
-        if (tileset->load(source, firstGid))
-          textureList << tileset->getSource();
-        else
-          return false;
-      }
+        return false;
     }
 
     for (QJsonValue value : document["layers"].toArray())
@@ -134,24 +118,4 @@ TileZone* TileMap::getZone(const QString& name)
       return zone;
   }
   return nullptr;
-}
-
-QString TileMap::getObjectSource(int gid) const
-{
-  for (auto* tileset : objectTilesets)
-  {
-    if (tileset->getFirstGid() <= gid && tileset->getLastGid() > gid)
-      return tileset->getSource(gid);
-  }
-  return QString();
-}
-
-QSize TileMap::getObjectSize(int gid) const
-{
-  for (auto* tileset : objectTilesets)
-  {
-      if (tileset->getFirstGid() <= gid && tileset->getLastGid() > gid)
-        return tileset->getTileSize(gid);
-  }
-  return QSize();
 }

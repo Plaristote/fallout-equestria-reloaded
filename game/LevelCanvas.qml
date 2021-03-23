@@ -96,7 +96,8 @@ Canvas {
     controller = new LevelRender.Controller(canvas, {
       level: levelController,
       tilemap: levelController.tilemap,
-      pathPrefix: fileProtocol
+      pathPrefix: fileProtocol,
+      rootPath: rootPath
     });
   }
 
@@ -112,6 +113,9 @@ Canvas {
       }
       loadImage("../assets/ui/cursors/move-tile.png");
     }
+    unloadImage(rootPath + "_tilemap.png");
+    loadImage(rootPath + "_tilemap.png");
+    //loadImage("image://tilemap/layers/ground/0/0/800/600");
 
     animationLibrary.getSources().forEach(function(texture) {
       console.log("LevelCanvas: Preloading texture", texture, "from animation library");

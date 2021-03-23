@@ -1,5 +1,8 @@
 #include "tilelayer.h"
 #include "tileset.h"
+#include "tilemap.h"
+#include <QImage>
+#include <QPainter>
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QDebug>
@@ -64,11 +67,96 @@ void TileLayer::loadTiles(const QJsonArray& tileArray, const QVector<Tileset*>& 
   }
 }
 
-Tile* TileLayer::getTile(int x, int y)
+Tile* TileLayer::getTile(int x, int y) const
 {
   int position = y * size.width() + x;
 
   if (position >= tiles.count() || x < 0 || y < 0)
     return nullptr;
   return tiles.at(position);
+}
+
+QRect TileLayer::getRenderedRect() const
+{
+  if (tiles.begin() != tiles.end())
+  {
+    QPoint min, max;
+
+    for (int x = 0 ; x < size.width() ; ++x)
+    {
+      for (int y = 0 ; y < size.height() ; ++y)
+      {
+        Tile* tile = getTile(x, y);
+        QRect renderRect = tile->getRenderRect();
+
+        if (min.x() > renderRect.topLeft().x())
+          min.setX(renderRect.topLeft().x());
+        if (min.y() > renderRect.topLeft().y())
+          min.setY(renderRect.topLeft().y());
+        if (max.x() < renderRect.bottomRight().x())
+          max.setX(renderRect.bottomRight().x());
+        if (max.y() < renderRect.bottomRight().y())
+          max.setY(renderRect.bottomRight().y());
+      }
+    }
+    return QRect(QPoint(min), QSize(max.x() - min.x(), max.y() - min.y()));
+  }
+ return QRect();
+}
+
+QSize TileLayer::getRenderedSize() const
+{
+  if (tiles.begin() != tiles.end())
+  {
+    QPoint min, max;
+
+    for (int x = 0 ; x < size.width() ; ++x)
+    {
+      for (int y = 0 ; y < size.height() ; ++y)
+      {
+        Tile* tile = getTile(x, y);
+        QRect renderRect = tile->getRenderRect();
+
+        if (min.x() > renderRect.topLeft().x())
+          min.setX(renderRect.topLeft().x());
+        if (min.y() > renderRect.topLeft().y())
+          min.setY(renderRect.topLeft().y());
+        if (max.x() < renderRect.bottomRight().x())
+          max.setX(renderRect.bottomRight().x());
+        if (max.y() < renderRect.bottomRight().y())
+          max.setY(renderRect.bottomRight().y());
+      }
+    }
+    return QSize(max.x() - min.x(), max.y() - min.y());
+  }
+  return QSize();
+}
+
+void TileLayer::renderToFile(const QString& fileName, const Limits& limits) const
+{
+  if (tiles.begin() != tiles.end())
+  {
+    QRect    renderedRect(getRenderedRect());
+    QSize    tileSize = tiles.front()->getRect().size();
+    QSize    imageSize = renderedRect.size();
+    QPoint   offset(renderedRect.x(), 0);
+    QImage   image(imageSize, QImage::Format_ARGB32);
+    QPainter painter;
+
+    image.fill(Qt::transparent);
+    painter.begin(&image);
+    for (int x = 0 ; x < size.width() ; ++x)
+    {
+      for (int y = 0 ; y < size.height() ; ++y)
+      {
+        Tile* tile = getTile(x, y);
+        QRect renderRect = tile->getRenderRect();
+        QRect relativeRect(renderRect.topLeft() - offset, renderRect.size());
+
+        painter.drawImage(relativeRect, tile->getTexture(), tile->getRect());
+      }
+    }
+    painter.end();
+    image.save(fileName);
+  }
 }

@@ -11,6 +11,7 @@
 class QJsonObject;
 class QJsonArray;
 class Tileset;
+class Limits;
 
 class TileLayer : public QObject
 {
@@ -28,8 +29,11 @@ public:
   const QSize& getSize() const { return size; }
   void setVisible(bool value) { visible = value; }
   bool isVisible() const { return visible; }
+  void renderToFile(const QString& file, const Limits&) const;
 
-  Q_INVOKABLE Tile* getTile(int x, int y);
+  Q_INVOKABLE Tile* getTile(int x, int y) const;
+  Q_INVOKABLE QSize getRenderedSize() const;
+  Q_INVOKABLE QRect getRenderedRect() const;
 
 private:
   void loadTiles(const QJsonArray&, const QVector<Tileset*>& tilesets);

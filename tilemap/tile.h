@@ -25,7 +25,7 @@ public:
   inline const QRect& getRect() const { return rect; }
   inline const QPoint& getPosition() const { return position; }
   inline const QPoint& getRenderPosition() const { return renderPosition; }
-  QRect getRenderRect() const { return QRect(position, rect.size()); }
+  inline QRect getRenderRect() const { return QRect(renderPosition, rect.size()); }
 
 private:
   const QString* image = nullptr;

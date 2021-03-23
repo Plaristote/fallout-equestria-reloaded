@@ -41,10 +41,10 @@ set(PROJECT_SOURCES
         tilemap/tilelayer.cpp
         tilemap/tilezone.h
         tilemap/tilezone.cpp
-        tilemap/objecttileset.h
-        tilemap/objecttileset.cpp
         tilemap/tilemap.h
         tilemap/tilemap.cpp
+        tilemap/limits.h
+        tilemap/limits.cpp
         cmap/statmodel.h
         cmap/statmodel.cpp
         cmap/plugin.h
@@ -120,8 +120,6 @@ set(PROJECT_SOURCES
         game/questmanager.cpp
         game/quest.h
         game/quest.cpp
-        game/tilemapimageprovider.h
-        game/tilemapimageprovider.cpp
         game/level/grid.h
         game/level/grid.cpp
         game/level/interaction.h

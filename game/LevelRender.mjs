@@ -5,6 +5,7 @@ export class Controller {
     this.context  = canvas.getContext("2d");
     this.tilemap  = params.tilemap;
     this.level    = params.level;
+    this.rootPath = params.rootPath;
     this.mapSize  = this.tilemap.mapSize
     this.tileSize = this.tilemap.tileSize
     this.wallSize = { width: this.tileSize.width, height: this.tileSize.height * 3 };
@@ -50,7 +51,7 @@ export class Controller {
     this.initializeRenderObjects();
     this.playerPosition = this.level.player ? this.level.player.position : Qt.point(-1, -1);
     this.clear();
-    this.eachCase(this.renderTile.bind(this));
+    this.renderTilemap();
     this.renderZones();
     this.eachCase(this.renderCoordinates.bind(this));
     this.renderVisualEffects();
@@ -65,12 +66,6 @@ export class Controller {
 
     for (var i = 0 ; i < visualEffects.length ; ++i)
       this.renderSprite(visualEffects[i]);
-  }
-
-  renderRoofs() {
-    this.startClipAroundPlayer();
-    this.eachCase(this.renderRoof.bind(this));
-    this.stopClipAroundPlayer();
   }
 
   eachCase(callback) {
@@ -108,11 +103,33 @@ export class Controller {
     }
   }
 
-  renderTile(x, y) {
-    const tile = this.layers.ground.getTile(x, y);
+  renderTilemap() {
+    const renderRect = this.layers.ground.getRenderedRect();
+    const size       = { width: renderRect.width, height: renderRect.height };
+    const position   = {x: -this.origin.x, y: -this.origin.y};
+    const offset     = {x: -renderRect.x - this.origin.x, y: renderRect.y -this.origin.y};
+    var   width      = offset.x + this.canvas.width > size.width   ? size.width  - offset.x : this.canvas.width;
+    var   height     = offset.y + this.canvas.height > size.height ? size.height - offset.y : this.canvas.height;
 
-    if (tile)
-      this.renderImage(this.pathPrefix + tile.image, tile.renderPosition, this.tileSize.width, this.tileSize.height, tile.clippedRect);
+    if (offset.x < 0)
+    {
+      width      += offset.x;
+      position.x -= offset.x;
+      offset.x    = 0;
+    }
+    if (offset.y < 0)
+    {
+      height     += offset.y;
+      position.y -= offset.y;
+      offset.y    = 0;
+    }
+    //console.log("Drawing tilemap at", JSON.stringify(position), "rect", this.origin.x, this.origin.y, width, height);
+    //console.log("-> offset", offset.x, '/', offset.y);
+    this.context.drawImage(
+      this.rootPath + "_tilemap.png",
+      offset.x,   offset.y,   width, height,
+      position.x, position.y, width, height
+    );
   }
 
   renderMoveCursor() {
@@ -142,9 +159,10 @@ export class Controller {
     this.renderObjects[x][y].forEach(this.renderSprite.bind(this));
   }
 
-  renderRoof(x, y) {
+  renderRoofs() {
     const player = this.level.player;
 
+    this.startClipAroundPlayer();
     for (var i = 0 ; i < this.tilemap.roofs.length ; ++i) {
       const layer = this.tilemap.roofs[i];
 
@@ -164,6 +182,7 @@ export class Controller {
         });
       }
     }
+    this.stopClipAroundPlayer();
   }
 
   renderWall(tile, x, y) {
@@ -175,7 +194,7 @@ export class Controller {
   }
 
   startClipAroundPlayer() {
-    const sprite      = this.level.player;
+    const sprite = this.level.player;
 
     if (sprite)
     {

@@ -102,6 +102,8 @@ private slots:
   void unregisterControlZone(TileZone*);
 
 private:
+  void loadTilemap(const QString& levelName);
+
   QTimer            updateTimer;
   QElapsedTimer     clock;
   QString           name;

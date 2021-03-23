@@ -50,7 +50,7 @@ void LevelTask::load(const QString& levelName, DataEngine* dataEngine)
 {
   name = levelName;
   timeManager = Game::get()->getTimeManager();
-  tilemap->load(levelName);
+  loadTilemap(levelName);
   grid->initializeGrid(tilemap);
   script = new ScriptController(SCRIPTS_PATH + "levels/" + levelName + ".mjs");
   script->initialize(this);
@@ -63,6 +63,13 @@ void LevelTask::load(const QString& levelName, DataEngine* dataEngine)
     connect(this, &LevelTask::objectsChanged, this, &LevelTask::visibleCharactersChanged);
   else
     connect(getPlayer()->getFieldOfView(), &FieldOfView::refreshed, this, &LevelTask::visibleCharactersChanged);
+}
+
+void LevelTask::loadTilemap(const QString& levelName)
+{
+  tilemap->load(levelName);
+  tilemap->getLayer("ground")->renderToFile("_tilemap.png", tilemap->getLimits());
+  emit tilemapReady();
 }
 
 void LevelTask::loadObjectsFromDataEngine(DataEngine* dataEngine)
