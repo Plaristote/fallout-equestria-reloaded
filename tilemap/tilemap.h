@@ -21,6 +21,10 @@ class TileMap : public QObject
   Q_PROPERTY(QStringList textureList MEMBER textureList NOTIFY onTextureListChanged)
   Q_PROPERTY(QQmlListProperty<TileZone> zones READ getZonesQml)
   Q_PROPERTY(QQmlListProperty<TileLayer> roofs READ getRoofsQml)
+  Q_PROPERTY(QQmlListProperty<TileLayer> lights READ getLightsQml)
+
+  typedef void (TileMap::*LayerFolderLoader)(const QJsonObject&);
+  static const QMap<QString, LayerFolderLoader> loaders;
 public:
   explicit TileMap(QObject *parent = nullptr);
 
@@ -32,21 +36,30 @@ public:
   inline const Limits& getLimits() const { return *limits; }
   QList<TileZone*>& getZones() { return zones; }
   const QList<TileLayer*>& getRoofs() const { return roofs; }
+  const QList<TileLayer*>& getLights() const { return lights; }
 
   Q_INVOKABLE TileLayer* getLayer(const QString& name);
   Q_INVOKABLE TileLayer* getRoofLayer(const QString& name);
+  Q_INVOKABLE TileLayer* getLightLayer(const QString& name);
   Q_INVOKABLE TileZone*  getZone(const QString& name);
 
   void addTileZone(TileZone* zone)    { zones << zone; }
   void removeTileZone(TileZone* zone) { zones.removeAll(zone); }
 
-  QQmlListProperty<TileZone> getZonesQml() { return   QQmlListProperty<TileZone>(this, &zones); }
-  QQmlListProperty<TileLayer> getRoofsQml() { return   QQmlListProperty<TileLayer>(this, &roofs); }
+  QQmlListProperty<TileZone> getZonesQml() { return QQmlListProperty<TileZone>(this, &zones); }
+  QQmlListProperty<TileLayer> getRoofsQml() { return QQmlListProperty<TileLayer>(this, &roofs); }
+  QQmlListProperty<TileLayer> getLightsQml() { return QQmlListProperty<TileLayer>(this, &lights); }
 
 signals:
   void onTextureListChanged();
 
 private:
+  void loadTilesets(const QJsonArray&);
+  void loadLayers(const QJsonArray&);
+  void loadRoofFolder(const QJsonObject&);
+  void loadLightFolder(const QJsonObject&);
+  void loadZoneFolder(const QJsonObject&);
+
   QSize                   tileSize;
   QSize                   mapSize;
   Limits*                 limits;
@@ -54,6 +67,7 @@ private:
   QVector<TileLayer*>     layers;
   QList<TileZone*>        zones;
   QList<TileLayer*>       roofs;
+  QList<TileLayer*>       lights;
   QStringList             textureList;
 };
 

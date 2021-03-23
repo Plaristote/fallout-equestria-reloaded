@@ -127,6 +127,12 @@ Canvas {
       unloadImage(src);
       loadImage(src);
     }
+    for (i = 0 ; i < levelController.tilemap.lights.length ; ++i) {
+      const lights = levelController.tilemap.lights[i];
+      const src = rootPath + "_lights_" + lights.name + ".png";
+      unloadImage(src);
+      loadImage(src);
+    }
 
     animationLibrary.getSources().forEach(function(texture) {
       console.log("LevelCanvas: Preloading texture", texture, "from animation library");

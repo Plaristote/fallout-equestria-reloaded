@@ -1,0 +1,14 @@
+{ "columns":5,
+ "image":"..\/tilesets\/lights.png",
+ "imageheight":722,
+ "imagewidth":369,
+ "margin":0,
+ "name":"lights",
+ "spacing":2,
+ "tilecount":95,
+ "tiledversion":"1.4.3",
+ "tileheight":36,
+ "tilewidth":72,
+ "type":"tileset",
+ "version":1.4
+}

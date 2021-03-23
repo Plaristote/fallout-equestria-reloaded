@@ -52,6 +52,7 @@ export class Controller {
     this.playerPosition = this.level.player ? this.level.player.position : Qt.point(-1, -1);
     this.clear();
     this.renderTilemap();
+    this.renderLights();
     this.renderZones();
     this.eachCase(this.renderCoordinates.bind(this));
     this.renderVisualEffects();
@@ -180,14 +181,30 @@ export class Controller {
     this.stopClipAroundPlayer();
   }
 
+  renderLights() {
+    for (var i = 0 ; i < this.tilemap.lights.length ; ++i) {
+      const layer = this.tilemap.lights[i];
+
+      if (layer.visible)
+        this.renderLightLayer(layer);
+    }
+  }
+
   renderRoofLayer(layer) {
-    console.log("renderRoof", layer, layer.name);
+    this.renderLayer(layer, "_roof_" + layer.name + ".png");
+  }
+
+  renderLightLayer(layer) {
+    this.renderLayer(layer, "_lights_" + layer.name + ".png");
+  }
+
+  renderLayer(layer, path) {
     const renderRect = layer.getRenderedRect();
 
     if (this.shouldRender(renderRect.x, renderRect.y, renderRect.width, renderRect.height)) {
 
       this.context.drawImage(
-        this.rootPath + "_roof_" + layer.name + ".png",
+        this.rootPath + path,
         renderRect.x, renderRect.y, renderRect.width, renderRect.height
       );
     }
