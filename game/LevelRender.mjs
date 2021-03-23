@@ -25,7 +25,7 @@ export class Controller {
     const detectedCharacters = [];
 
     for (var i = 0 ; i < _detectedCharacters.length ; ++i)
-      detectedCharacters.push(_detectedCharacters[i]);
+      detectedCharacters.push(_detectedCharacters[i].objectName);
     this.renderObjects = [];
     for (var x = 0 ; x < this.mapSize.width ; ++x) {
       this.renderObjects[x] = [];
@@ -35,7 +35,7 @@ export class Controller {
     for (var i = 0 ; i < this.level.dynamicObjects.length ; ++i) {
       const object = this.level.dynamicObjects[i];
       const position = object.getPosition();
-      const isUndetected = object.getObjectType() === "Character" && detectedCharacters.indexOf(object) < 0;
+      const isUndetected = object.getObjectType() === "Character" && detectedCharacters.indexOf(object.objectName) < 0;
       const isValid = position.x >= 0 && position.y >= 0;
 
       if (isUndetected || !isValid)
