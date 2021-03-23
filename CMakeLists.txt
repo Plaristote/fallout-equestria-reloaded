@@ -43,8 +43,6 @@ set(PROJECT_SOURCES
         tilemap/tilezone.cpp
         tilemap/tilemap.h
         tilemap/tilemap.cpp
-        tilemap/limits.h
-        tilemap/limits.cpp
         cmap/statmodel.h
         cmap/statmodel.cpp
         cmap/plugin.h

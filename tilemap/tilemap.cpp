@@ -15,7 +15,6 @@ const QMap<QString, TileMap::LayerFolderLoader> TileMap::loaders = {
 
 TileMap::TileMap(QObject *parent) : QObject(parent)
 {
-  limits = new Limits(this);
 }
 
 bool TileMap::load(const QString& name)
@@ -30,7 +29,6 @@ bool TileMap::load(const QString& name)
     tileSize.setHeight(document["tileheight"].toInt(0));
     mapSize.setWidth(document["width"].toInt(0));
     mapSize.setHeight(document["height"].toInt(0));
-    limits->initialize(mapSize, tileSize);
     loadTilesets(document["tilesets"].toArray());
     loadLayers(document["layers"].toArray());
     return true;

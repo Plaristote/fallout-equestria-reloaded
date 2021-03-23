@@ -17,7 +17,6 @@ class TileMap : public QObject
 
   Q_PROPERTY(QSize tileSize MEMBER tileSize)
   Q_PROPERTY(QSize mapSize MEMBER mapSize)
-  Q_PROPERTY(Limits* limits MEMBER limits)
   Q_PROPERTY(QStringList textureList MEMBER textureList NOTIFY onTextureListChanged)
   Q_PROPERTY(QQmlListProperty<TileZone> zones READ getZonesQml)
   Q_PROPERTY(QQmlListProperty<TileLayer> roofs READ getRoofsQml)
@@ -33,7 +32,6 @@ public:
   inline const QSize& getSize() const { return mapSize; }
   inline int getPixelWidth() const { return (mapSize.width() - 1) * tileSize.width();}
   inline const QSize& getTileSize() const { return tileSize; }
-  inline const Limits& getLimits() const { return *limits; }
   QList<TileZone*>& getZones() { return zones; }
   const QList<TileLayer*>& getRoofs() const { return roofs; }
   const QList<TileLayer*>& getLights() const { return lights; }
@@ -62,7 +60,6 @@ private:
 
   QSize                   tileSize;
   QSize                   mapSize;
-  Limits*                 limits;
   QVector<Tileset*>       tilesets;
   QVector<TileLayer*>     layers;
   QList<TileZone*>        zones;
