@@ -275,11 +275,13 @@ export class Controller {
   }
 
   getLimits() {
+    const rect = this.layers.ground.getRenderedRect();
+
     return {
       minX: -(this.mapSize.width * this.tileSize.width / 2) + this.canvas.width / 2,
       maxY: this.canvas.height / 2,
       maxX: (this.mapSize.height * this.tileSize.width / 2) + this.canvas.width / 2,
-      minY: -(this.mapSize.width * this.tileSize.height / 2) - this.canvas.height / 2
+      minY: -rect.height + this.canvas.height / 2
     };
   }
 

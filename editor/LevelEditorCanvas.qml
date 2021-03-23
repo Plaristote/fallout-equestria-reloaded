@@ -14,11 +14,16 @@ GameComponents.LevelCanvas {
   signal toggleZoneTile(int tileX, int tileY)
 
   function initializeRenderer() {
-    controller = new LevelRender.EditorController(canvas, {
-      level: levelController,
-      tilemap: levelController.tilemap,
-      pathPrefix: fileProtocol
-    });
+    if (levelController) {
+      controller = new LevelRender.EditorController(canvas, {
+        level: levelController,
+        tilemap: levelController.tilemap,
+        pathPrefix: fileProtocol,
+        rootPath: rootPath
+      });
+    }
+    else
+      console.log("LevelEditorCanvas: called initializeRenderer with unset levelController");
   }
 
   Text {

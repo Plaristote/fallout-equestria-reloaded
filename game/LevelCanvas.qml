@@ -31,6 +31,10 @@ Canvas {
 
   Connections {
     target: levelController
+    function onTilemapReady() {
+      preloadImages();
+      initializeRenderer();
+    }
     function onUpdated() { canvas.requestPaint(); }
     function onCameraFocusRequired(object) { moveToObject(object); }
   }
@@ -104,8 +108,9 @@ Canvas {
 
   function preloadImages() {
     const images = [];
+    var i;
 
-    for (var i = 0 ; i < levelController.tilemap.textureList.length ; ++i) {
+    for (i = 0 ; i < levelController.tilemap.textureList.length ; ++i) {
       const texturePath = levelController.tilemap.textureList[i];
       if (images.indexOf(texturePath) === -1) {
         console.log("LevelCanvas: Preloading image", texturePath, "from Tiled resources");
@@ -116,7 +121,7 @@ Canvas {
     }
     unloadImage(rootPath + "_tilemap.png");
     loadImage(rootPath + "_tilemap.png");
-    for (var i = 0 ; levelController.tilemap.roofs.length ; ++i) {
+    for (i = 0 ; i < levelController.tilemap.roofs.length ; ++i) {
       const roof = levelController.tilemap.roofs[i];
       const src  = rootPath + "_roof_" + roof.name + ".png";
       unloadImage(src);
