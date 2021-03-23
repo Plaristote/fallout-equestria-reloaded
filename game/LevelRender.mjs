@@ -174,15 +174,23 @@ export class Controller {
         else
           layer.visible = true;
       }
-      if (layer.visible) {
-        this.eachCase((x, y) => {
-          const tile = this.tilemap.roofs[i].getTile(x, y);
-          if (tile)
-            this.renderImage(this.pathPrefix + tile.image, tile.renderPosition, this.tileSize.width, this.tileSize.height, tile.clippedRect);
-        });
-      }
+      if (layer.visible)
+        this.renderRoofLayer(layer);
     }
     this.stopClipAroundPlayer();
+  }
+
+  renderRoofLayer(layer) {
+    console.log("renderRoof", layer, layer.name);
+    const renderRect = layer.getRenderedRect();
+
+    if (this.shouldRender(renderRect.x, renderRect.y, renderRect.width, renderRect.height)) {
+
+      this.context.drawImage(
+        this.rootPath + "_roof_" + layer.name + ".png",
+        renderRect.x, renderRect.y, renderRect.width, renderRect.height
+      );
+    }
   }
 
   renderWall(tile, x, y) {

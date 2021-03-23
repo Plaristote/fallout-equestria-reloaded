@@ -116,7 +116,12 @@ Canvas {
     }
     unloadImage(rootPath + "_tilemap.png");
     loadImage(rootPath + "_tilemap.png");
-    //loadImage("image://tilemap/layers/ground/0/0/800/600");
+    for (var i = 0 ; levelController.tilemap.roofs.length ; ++i) {
+      const roof = levelController.tilemap.roofs[i];
+      const src  = rootPath + "_roof_" + roof.name + ".png";
+      unloadImage(src);
+      loadImage(src);
+    }
 
     animationLibrary.getSources().forEach(function(texture) {
       console.log("LevelCanvas: Preloading texture", texture, "from animation library");

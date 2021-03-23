@@ -29,7 +29,7 @@ public:
   const QSize& getSize() const { return size; }
   void setVisible(bool value) { visible = value; }
   bool isVisible() const { return visible; }
-  void renderToFile(const QString& file, const Limits&) const;
+  void renderToFile(const QString& file) const;
 
   Q_INVOKABLE Tile* getTile(int x, int y) const;
   Q_INVOKABLE QSize getRenderedSize() const;

@@ -68,7 +68,14 @@ void LevelTask::load(const QString& levelName, DataEngine* dataEngine)
 void LevelTask::loadTilemap(const QString& levelName)
 {
   tilemap->load(levelName);
-  tilemap->getLayer("ground")->renderToFile("_tilemap.png", tilemap->getLimits());
+  tilemap->getLayer("ground")->renderToFile("_tilemap.png");
+  for (TileLayer* roofLayer : tilemap->getRoofs())
+  {
+    qDebug() << "Render roof" << roofLayer->getName();
+    QString fileName = "_roof_" + roofLayer->getName() + ".png";
+
+    roofLayer->renderToFile(fileName);
+  }
   emit tilemapReady();
 }
 

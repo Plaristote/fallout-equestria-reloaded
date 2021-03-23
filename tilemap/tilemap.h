@@ -31,6 +31,7 @@ public:
   inline const QSize& getTileSize() const { return tileSize; }
   inline const Limits& getLimits() const { return *limits; }
   QList<TileZone*>& getZones() { return zones; }
+  const QList<TileLayer*>& getRoofs() const { return roofs; }
 
   Q_INVOKABLE TileLayer* getLayer(const QString& name);
   Q_INVOKABLE TileLayer* getRoofLayer(const QString& name);

@@ -87,16 +87,20 @@ QRect TileLayer::getRenderedRect() const
       for (int y = 0 ; y < size.height() ; ++y)
       {
         Tile* tile = getTile(x, y);
-        QRect renderRect = tile->getRenderRect();
 
-        if (min.x() > renderRect.topLeft().x())
-          min.setX(renderRect.topLeft().x());
-        if (min.y() > renderRect.topLeft().y())
-          min.setY(renderRect.topLeft().y());
-        if (max.x() < renderRect.bottomRight().x())
-          max.setX(renderRect.bottomRight().x());
-        if (max.y() < renderRect.bottomRight().y())
-          max.setY(renderRect.bottomRight().y());
+        if (tile)
+        {
+          QRect renderRect = tile->getRenderRect();
+
+          if (min.x() > renderRect.topLeft().x())
+            min.setX(renderRect.topLeft().x());
+          if (min.y() > renderRect.topLeft().y())
+            min.setY(renderRect.topLeft().y());
+          if (max.x() < renderRect.bottomRight().x())
+            max.setX(renderRect.bottomRight().x());
+          if (max.y() < renderRect.bottomRight().y())
+            max.setY(renderRect.bottomRight().y());
+        }
       }
     }
     return QRect(QPoint(min), QSize(max.x() - min.x(), max.y() - min.y()));
@@ -115,16 +119,20 @@ QSize TileLayer::getRenderedSize() const
       for (int y = 0 ; y < size.height() ; ++y)
       {
         Tile* tile = getTile(x, y);
-        QRect renderRect = tile->getRenderRect();
 
-        if (min.x() > renderRect.topLeft().x())
-          min.setX(renderRect.topLeft().x());
-        if (min.y() > renderRect.topLeft().y())
-          min.setY(renderRect.topLeft().y());
-        if (max.x() < renderRect.bottomRight().x())
-          max.setX(renderRect.bottomRight().x());
-        if (max.y() < renderRect.bottomRight().y())
-          max.setY(renderRect.bottomRight().y());
+        if (tile)
+        {
+          QRect renderRect = tile->getRenderRect();
+
+          if (min.x() > renderRect.topLeft().x())
+            min.setX(renderRect.topLeft().x());
+          if (min.y() > renderRect.topLeft().y())
+            min.setY(renderRect.topLeft().y());
+          if (max.x() < renderRect.bottomRight().x())
+            max.setX(renderRect.bottomRight().x());
+          if (max.y() < renderRect.bottomRight().y())
+            max.setY(renderRect.bottomRight().y());
+        }
       }
     }
     return QSize(max.x() - min.x(), max.y() - min.y());
@@ -132,31 +140,31 @@ QSize TileLayer::getRenderedSize() const
   return QSize();
 }
 
-void TileLayer::renderToFile(const QString& fileName, const Limits& limits) const
+void TileLayer::renderToFile(const QString& fileName) const
 {
-  if (tiles.begin() != tiles.end())
-  {
-    QRect    renderedRect(getRenderedRect());
-    QSize    tileSize = tiles.front()->getRect().size();
-    QSize    imageSize = renderedRect.size();
-    QPoint   offset(renderedRect.x(), 0);
-    QImage   image(imageSize, QImage::Format_ARGB32);
-    QPainter painter;
+  QRect    renderedRect(getRenderedRect());
+  QSize    imageSize = renderedRect.size();
+  QPoint   offset(renderedRect.x(), 0);
+  QImage   image(imageSize, QImage::Format_ARGB32);
+  QPainter painter;
 
-    image.fill(Qt::transparent);
-    painter.begin(&image);
-    for (int x = 0 ; x < size.width() ; ++x)
+  image.fill(Qt::transparent);
+  painter.begin(&image);
+  for (int x = 0 ; x < size.width() ; ++x)
+  {
+    for (int y = 0 ; y < size.height() ; ++y)
     {
-      for (int y = 0 ; y < size.height() ; ++y)
+      Tile* tile = getTile(x, y);
+
+      if (tile)
       {
-        Tile* tile = getTile(x, y);
         QRect renderRect = tile->getRenderRect();
         QRect relativeRect(renderRect.topLeft() - offset, renderRect.size());
 
         painter.drawImage(relativeRect, tile->getTexture(), tile->getRect());
       }
     }
-    painter.end();
-    image.save(fileName);
   }
+  painter.end();
+  image.save(fileName);
 }
