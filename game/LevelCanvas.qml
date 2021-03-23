@@ -69,6 +69,12 @@ Canvas {
     }
   }
 
+  LevelLightOverlay {
+    levelController: canvas.levelController
+    controller:      canvas.controller
+    model:           canvas.levelController.dynamicObjects
+  }
+
   LevelInteractionOverlay {
     levelController: canvas.levelController
     controller:      canvas.controller

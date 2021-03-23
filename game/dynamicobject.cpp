@@ -146,6 +146,7 @@ void DynamicObject::load(const QJsonObject& data)
   Sprite::load(data);
   setScript(scriptName);
   taskManager->load(data);
+  emit positionChanged();
 }
 
 void DynamicObject::save(QJsonObject& data) const

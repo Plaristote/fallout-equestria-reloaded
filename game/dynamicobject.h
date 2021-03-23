@@ -20,7 +20,7 @@ class DynamicObject : public Sprite
 
   Q_PROPERTY(QString objectName MEMBER objectName NOTIFY objectNameChanged)
   Q_PROPERTY(QString scriptName READ getScriptName NOTIFY scriptNameChanged)
-  Q_PROPERTY(QPoint  position    READ getPosition)
+  Q_PROPERTY(QPoint  position    READ getPosition NOTIFY positionChanged)
   Q_PROPERTY(QString currentZone READ getCurrentZone)
   Q_PROPERTY(TaskRunner* tasks MEMBER taskManager)
   Q_PROPERTY(TileZone* controlZone MEMBER controlZone NOTIFY controlZoneChanged)
@@ -53,7 +53,7 @@ public:
   Q_INVOKABLE virtual int getZIndex() const { return 1; }
   Q_INVOKABLE virtual QPoint getInteractionPosition() const { return interactionPosition; }
   virtual QStringList getAvailableInteractions();
-  void setPosition(QPoint value) { position = value; }
+  void setPosition(QPoint value) { position = value; emit positionChanged(); }
   Q_INVOKABLE void setInteractionPosition(int x, int y) { setInteractionPosition(QPoint(x, y)); }
   void setInteractionPosition(QPoint value) { interactionPosition = value; }
   virtual int getCoverValue() const { return 100; }
@@ -73,6 +73,7 @@ signals:
   void objectNameChanged();
   void scriptNameChanged();
   void blocksPathChanged();
+  void positionChanged();
   void controlZoneChanged();
   void controlZoneAdded(TileZone*);
   void controlZoneRemoved(TileZone*);

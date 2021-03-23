@@ -76,6 +76,11 @@ Tile* TileLayer::getTile(int x, int y) const
   return tiles.at(position);
 }
 
+bool TileLayer::isInside(int x, int y) const
+{
+  return getTile(x, y) != nullptr;
+}
+
 QRect TileLayer::getRenderedRect() const
 {
   if (tiles.begin() != tiles.end())

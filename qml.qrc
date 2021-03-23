@@ -212,5 +212,6 @@
         <file>ui/dialog/DialogTextDisplay.qml</file>
         <file>ui/dialog/DialogAnswersDisplay.qml</file>
         <file>Options.qml</file>
+        <file>game/LevelLightOverlay.qml</file>
     </qresource>
 </RCC>
