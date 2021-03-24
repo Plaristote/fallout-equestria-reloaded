@@ -1,6 +1,7 @@
 #include "doorway.h"
 #include "tilemap/tilezone.h"
 #include "game.h"
+#include "i18n.h"
 #include <QJsonArray>
 
 Doorway::Doorway(QObject* parent) : DynamicObject(parent)
@@ -63,14 +64,15 @@ bool Doorway::triggerInteraction(Character *character, const QString &interactio
 
 bool Doorway::onUse(Character* character)
 {
-  auto* level = Game::get()->getLevel();
+  auto* game  = Game::get();
+  auto* level = game->getLevel();
   auto* grid  = level->getGrid();
   QPoint position = getPosition();
 
   if (locked)
   {
     if (character == level->getPlayer())
-      level->displayConsoleMessage("It's locked.");
+      game->appendToConsole(I18n::get()->t("messages.door-is-locked"));
     return false;
   }
   if (opened)
@@ -82,7 +84,7 @@ bool Doorway::onUse(Character* character)
       return true;
     }
     else if (character == level->getPlayer())
-      level->displayConsoleMessage("Something's in the way.");
+      game->appendToConsole(I18n::get()->t("messages.door-is-blocked"));
     return false;
   }
   else

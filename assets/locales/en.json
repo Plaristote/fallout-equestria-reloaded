@@ -3,7 +3,18 @@
     "weapons": {
       "use":   "{{user}} used {{item}} on {{target}} for {{damage}} damage",
       "dodge": "{{target}} dodged an attack from {{user}}"
-    }
+    },
+    "door-locked": "You successfully locked the door",
+    "door-unlocked": "You successfully unlocked the door",
+    "door-locked-failed": "You failed to lock the door",
+    "door-unlocked-failed": "You failed to unlock the door",
+    "door-locked-failed": "You failed to lock the door",
+    "door-broken": "You critically failed and broke the lock",
+    "lock-is-broken": "The lock is broken",
+    "door-is-locked": "It's locked",
+    "door-is-blocked": "Something's in the way.",
+    "xp-gain": "You gained {{xp}} experience points.",
+    "nothing-happens": "That does nothing."
   },
     "dialogs": {
         "parley": {

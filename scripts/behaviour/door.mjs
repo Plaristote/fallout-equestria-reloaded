@@ -13,6 +13,8 @@ function getEquippedLockpickToolsFor(character) {
 export class Door {
   constructor(model) {
     this.model = model;
+    if (!this.model.hasVariable("xp"))
+      this.model.setVariable("xp", 25);
   }
 
   isBroken() {
@@ -28,22 +30,37 @@ export class Door {
       const success         = lockpick - difficultyMalus >= roll;
 
       if (success) {
+        const xp = this.model.getVariable("xp");
+
         this.model.locked = !this.model.locked;
-        if (user === level.player)
-          game.appendToConsole(this.model.locked ? "You successfully locked the door" : "You successfully unlocked the door");
+        if (user === level.player) {
+          game.appendToConsole(this.model.locked
+            ? i18n.t("messages.door-locked")
+            : i18n.t("messages.door-unlocked")
+	  );
+          if (xp > 0)
+            game.appendToConsole(i18n.t("messages.xp-gain", {xp: xp}));
+	}
+        if (xp > 0) {
+          this.model.setVariable("xp", 0);
+          user.statistics.addExperience(xp);
+	}
       }
       else if (user === level.player) {
         if (roll >= 95 && getValueFromRange(0, 10) > user.statistics.luck) {
           this.model.setVariable("broken", true);
-          game.appendToConsole("You critically failed and broke the lock");
+          game.appendToConsole(i18n.t("messages.door-broken"));
         }
         else
-          game.appendToConsole(this.model.locked ? "You failed to unlock the door" : "You failed to lock the door");
+          game.appendToConsole(this.model.locked 
+            ? i18n.t("messages.door-unlocked-failed")
+            : i18n.t("messages.door-locked-failed")
+          );
       }
       return success;
     }
     else if (user === level.player)
-      game.appendToConsole("The lock is broken");
+      game.appendToConsole(i18n.t("messages.lock-is-broken"));
     return false;
   }
 
@@ -53,13 +70,16 @@ export class Door {
       {
         this.model.locked = !this.model.locked;
         if (user === level.player)
-          game.appendToConsole(this.model.locked ? "You successfully locked the door" : "You successfully unlocked the door");
+          game.appendToConsole(this.model.locked
+            ? i18n.t("messages.door-locked")
+            : i18n.t("messages.door-unlocked")
+          );
       }
       else if (user === level.player)
-        game.appendToConsole("That does nothing.");
+        game.appendToConsole(i18n.t("messages.nothing-happens"));
     }
     else if (user === level.player)
-      game.appendToConsole("The lock is broken");
+      game.appendToConsole(i18n.t("messages.door-broken"));
   }
 }
 
