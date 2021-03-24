@@ -162,19 +162,13 @@ export class Controller {
 
   renderRoofs() {
     const player = this.level.player;
+    const playerRoof = player ? this.level.getRoofFor(this.level.player) : null;
 
     this.startClipAroundPlayer();
     for (var i = 0 ; i < this.tilemap.roofs.length ; ++i) {
       const layer = this.tilemap.roofs[i];
 
-      if (player) {
-        const tile = layer.getTile(player.position.x, player.position.y);
-
-        if (tile)
-          layer.visible = false;
-        else
-          layer.visible = true;
-      }
+      layer.visible = playerRoof !== layer;
       if (layer.visible)
         this.renderRoofLayer(layer);
     }

@@ -1,4 +1,5 @@
 #include "levelgrid.h"
+#include "level/grid.h"
 #include "tilemap/tilemap.h"
 #include "dynamicobject.h"
 #include "character.h"
@@ -280,12 +281,21 @@ bool LevelGrid::moveObject(DynamicObject* object, int x, int y)
     if (oldCase)
       setCaseOccupant(*oldCase, nullptr);
     setCaseOccupant(*gridCase, object);
+  }
+  if (gridCase)
+  {
     object->setPosition(QPoint(x, y));
+    updateObjectVisibility(object);
     return true;
   }
-  else if (gridCase)
-    object->setPosition(QPoint(x, y));
-  return gridCase != nullptr;
+  return false;
+}
+
+void LevelGrid::updateObjectVisibility(DynamicObject* object)
+{
+  TileLayer* roof = reinterpret_cast<GridComponent*>(parent())->getRoofFor(object);
+
+  object->setVisible(!roof || !roof->isVisible());
 }
 
 void LevelGrid::triggerZone(CharacterMovement* character, int x, int y)

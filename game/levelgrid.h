@@ -52,6 +52,7 @@ public:
 
 private:
   static void setCaseOccupant(CaseContent&, DynamicObject*);
+  void updateObjectVisibility(DynamicObject* object);
 
   QSize                size;
   QVector<CaseContent> grid;

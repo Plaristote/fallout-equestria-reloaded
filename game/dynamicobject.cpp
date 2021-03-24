@@ -107,6 +107,15 @@ void DynamicObject::removeControlZone()
   controlZone = nullptr;
 }
 
+void DynamicObject::setVisible(bool value)
+{
+  if (visible != value)
+  {
+    visible = value;
+    emit visibilityChanged();
+  }
+}
+
 void DynamicObject::onBlocksPathChanged()
 {
   auto* level = Game::get()->getLevel();

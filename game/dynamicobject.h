@@ -25,6 +25,7 @@ class DynamicObject : public Sprite
   Q_PROPERTY(TaskRunner* tasks MEMBER taskManager)
   Q_PROPERTY(TileZone* controlZone MEMBER controlZone NOTIFY controlZoneChanged)
   Q_PROPERTY(bool blocksPath MEMBER blocksPath NOTIFY blocksPathChanged)
+  Q_PROPERTY(bool isVisible MEMBER visible NOTIFY visibilityChanged)
 
 public:
   explicit DynamicObject(QObject *parent = nullptr);
@@ -37,6 +38,8 @@ public:
 
   inline bool isCharacter() const { return getObjectType() == "Character"; }
   virtual bool isBlockingPath() const { return true; }
+  inline bool isVisible() const { return visible; }
+  void setVisible(bool value);
 
   void setObjectName(const QString& value) { objectName = value; emit objectNameChanged(); }
   const QString& getObjectName() const { return objectName; }
@@ -77,6 +80,7 @@ signals:
   void controlZoneChanged();
   void controlZoneAdded(TileZone*);
   void controlZoneRemoved(TileZone*);
+  void visibilityChanged();
 
 protected slots:
   void onBlocksPathChanged();
@@ -89,6 +93,7 @@ protected:
   bool blocksPath = true;
 //private:
   QString objectName, scriptName;
+  bool visible = true;
   QPoint position, nextPosition;
   QString currentZone;
   QPoint interactionPosition;

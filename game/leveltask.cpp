@@ -81,6 +81,7 @@ void LevelTask::loadTilemap(const QString& levelName)
 
     lightLayer->renderToFile(fileName);
   }
+  GridComponent::load();
   emit tilemapReady();
 }
 

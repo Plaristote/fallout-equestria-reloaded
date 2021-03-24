@@ -17,11 +17,8 @@ Repeater {
     y: offset.y + origin.y
     visible: lightLayer !== null && lightLayer.visible
 
-    onLightLayerChanged: {
-      visible = lightLayer && lightLayer.visible;
-    }
-
-    Component.onCompleted: lightObjectOverlay.updateLightLayer();
+    onLightLayerChanged: updateVisibility()
+    Component.onCompleted: lightObjectOverlay.updateLightLayer()
 
     function updateLightLayer() {
       for (var i = 0 ; i < levelController.tilemap.lights.length ; ++i) {
@@ -35,10 +32,15 @@ Repeater {
       lightLayer = null;
     }
 
+    function updateVisibility() {
+      console.log("Visibility for", dynamicObject.objectName, ":", lightLayer && lightLayer.visible, dynamicObject.isVisible);
+      visible = lightLayer && lightLayer.visible && dynamicObject.isVisible;
+    }
+
     Connections {
       target: lightLayer
       function onVisibleChanged() {
-        lightObjectOverlay.visible = lightLayer.visible;
+        lightObjectOverlay.updateVisibility();
       }
     }
 
@@ -51,6 +53,10 @@ Repeater {
 
       function onPositionChanged() {
         lightObjectOverlay.updateLightLayer();
+      }
+
+      function onVisibilityChanged() {
+        lightObjectOverlay.updateVisibility();
       }
     }
 

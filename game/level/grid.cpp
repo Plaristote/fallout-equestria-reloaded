@@ -8,6 +8,23 @@ GridComponent::GridComponent(QObject *parent) : LevelBase(parent)
   grid = new LevelGrid(this);
 }
 
+void GridComponent::load()
+{
+  for (TileLayer* layer : tilemap->getRoofs())
+    connect(layer, &TileLayer::visibleChanged, [this, layer]() { onRoofVisibilityChanged(layer); });
+}
+
+void GridComponent::onRoofVisibilityChanged(TileLayer* layer)
+{
+  for (DynamicObject* object : qAsConst(objects))
+  {
+    QPoint position = object->getPosition();
+
+    if (layer->isInside(position.x(), position.y()))
+      object->setVisible(!layer->isVisible());
+  }
+}
+
 void GridComponent::registerZone(TileZone* zone)
 {
   grid->registerZone(zone);
@@ -118,4 +135,18 @@ QPoint GridComponent::getAdjustedOffsetFor(DynamicObject* object) const
     );
   }
   return offset;
+}
+
+TileLayer* GridComponent::getRoofFor(DynamicObject* object) const
+{
+  QPoint position = object->getPosition();
+
+  for (TileLayer* layer : tilemap->getRoofs())
+  {
+    Tile* tile = layer->getTile(position.x(), position.y());
+
+    if (tile)
+      return layer;
+  }
+  return nullptr;
 }
