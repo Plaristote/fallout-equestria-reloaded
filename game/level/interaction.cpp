@@ -166,7 +166,18 @@ void InteractionComponent::initializeLooting(StorageObject* target)
 
 DynamicObject* InteractionComponent::getObjectAt(int posX, int posY) const
 {
-  for (DynamicObject* object : objects)
+  QVector<DynamicObject*> list(objects.begin(), objects.end());
+
+  std::sort(list.begin(), list.end(), [](DynamicObject* a, DynamicObject* b)
+  {
+    QPoint posA = a->getPosition();
+    QPoint posB = b->getPosition();
+
+    if (posA.x() == posB.x())
+      return posA.y() > posB.y();
+    return posA.x() > posB.x();
+  });
+  for (DynamicObject* object : qAsConst(list))
   {
     if (!object->isCharacter() || visibleCharacters.indexOf(reinterpret_cast<Character*>(object)) >= 0)
     {
