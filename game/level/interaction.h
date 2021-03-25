@@ -47,8 +47,8 @@ public:
   DynamicObject*               getObjectAt(QPoint point) const { return getObjectAt(point.x(), point.y()); }
 
   void useItemOn(DynamicObject* object);
-  void initializeDialog(Character* npc);
-  void initializeLooting(StorageObject*);
+  Q_INVOKABLE void initializeDialog(Character* npc);
+  Q_INVOKABLE void initializeLooting(StorageObject*);
 
 signals:
   void mouseModeChanged();

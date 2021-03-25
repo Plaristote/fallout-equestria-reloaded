@@ -113,4 +113,5 @@ void Doorway::load(const QJsonObject& data)
   emit lockedChanged();
   emit keyNameChanged();
   emit lockpickLevelChanged();
+  setAnimation(opened ? "idle-open" : "idle");
 }

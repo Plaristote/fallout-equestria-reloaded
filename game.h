@@ -79,6 +79,7 @@ signals:
 
 public slots:
   void onCityEntered(QString name);
+  void onCityEnteredAt(const QString& city, const QString& zone);
   void changeZone(TileZone*);
   void deleteLater();
 

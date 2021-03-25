@@ -155,6 +155,12 @@ void Game::onCityEntered(QString name)
   currentLevel->insertPartyIntoZone(playerParty);
 }
 
+void Game::onCityEnteredAt(const QString& name, const QString& zone)
+{
+  goToLevel(name);
+  currentLevel->insertPartyIntoZone(playerParty, zone);
+}
+
 void Game::goToLevel(const QString& name)
 {
   auto scriptObject = scriptEngine.globalObject();

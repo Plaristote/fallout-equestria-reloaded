@@ -21,6 +21,66 @@
             "width": 25
         }
     },
+    "cavern-door-right": {
+        "close": {
+            "frameCount": 6,
+            "frameInterval": 100,
+            "height": 108,
+            "offsetX": 0,
+            "offsetY": 109,
+            "repeat": false,
+            "width": 72
+        },
+        "defaultSource": "cavern/door.png",
+        "idle": {
+            "frameCount": 1,
+            "frameInterval": 10,
+            "height": 108,
+            "offsetX": 0,
+            "offsetY": 0,
+            "repeat": false,
+            "width": 72
+        },
+        "idle-open": {
+            "frameCount": 1,
+            "frameInterval": 10,
+            "height": 108,
+            "offsetX": 0,
+            "offsetY": 109,
+            "repeat": false,
+            "source": "cavern/door.png",
+            "width": 72
+        },
+        "open": {
+            "frameCount": 6,
+            "frameInterval": 100,
+            "height": 108,
+            "offsetX": 0,
+            "offsetY": 0,
+            "repeat": false,
+            "width": 72
+        }
+    },
+    "earthpony-black": {
+        "cloneOf": "pony",
+        "defaultSource": "characters/earthpony-black.png"
+    },
+    "earthpony-gray": {
+        "cloneOf": "pony",
+        "defaultSource": "characters/earthpony-gray.png"
+    },
+    "earthpony-green": {
+        "cloneOf": "pony",
+        "defaultSource": "characters/earthpony-green.png"
+    },
+    "earthpony-orange": {
+        "cloneOf": "pony",
+        "defaultSource": "characters/earthpony-orange.png"
+    },
+    "earthpony-purple": {
+        "cloneOf": "pony",
+        "defaultSource": "characters/earthpony-purple.png"
+    },
     "items": {
         "gun": {
             "frameCount": 1,
@@ -81,6 +141,26 @@
             "source": "locker-animation.png",
             "width": 68
         }
+    },
+    "pegasus-black": {
+        "cloneOf": "pony",
+        "defaultSource": "characters/earthpony-black.png"
+    },
+    "pegasus-gray": {
+        "cloneOf": "pony",
+        "defaultSource": "characters/earthpony-gray.png"
+    },
+    "pegasus-green": {
+        "cloneOf": "pony",
+        "defaultSource": "characters/earthpony-green.png"
+    },
+    "pegasus-orange": {
+        "cloneOf": "pony",
+        "defaultSource": "characters/earthpony-orange.png"
+    },
+    "pegasus-purple": {
+        "cloneOf": "pony",
+        "defaultSource": "characters/earthpony-purple.png"
     },
     "pony": {
         "damaged-down": {
@@ -159,6 +239,42 @@
             "offsetX": 46,
             "offsetY": 144,
             "repeat": false,
+            "width": 48
+        },
+        "running-down": {
+            "frameCount": 3,
+            "frameInterval": 100,
+            "height": 46,
+            "offsetX": 0,
+            "offsetY": 0,
+            "repeat": true,
+            "width": 48
+        },
+        "running-left": {
+            "frameCount": 3,
+            "frameInterval": 100,
+            "height": 46,
+            "offsetX": 0,
+            "offsetY": 48,
+            "repeat": true,
+            "width": 46
+        },
+        "running-right": {
+            "frameCount": 3,
+            "frameInterval": 100,
+            "height": 46,
+            "offsetX": 0,
+            "offsetY": 96,
+            "repeat": true,
+            "width": 48
+        },
+        "running-up": {
+            "frameCount": 3,
+            "frameInterval": 100,
+            "height": 46,
+            "offsetX": 0,
+            "offsetY": 144,
+            "repeat": true,
             "width": 48
         },
         "shadow": {
@@ -248,21 +364,6 @@
             "width": 48
         }
     },
-    "earthpony-purple": { "cloneOf": "pony", "defaultSource": "characters/earthpony-purple.png" },
-    "earthpony-black":  { "cloneOf": "pony", "defaultSource": "characters/earthpony-black.png" },
-    "earthpony-gray":   { "cloneOf": "pony", "defaultSource": "characters/earthpony-gray.png" },
-    "earthpony-green":  { "cloneOf": "pony", "defaultSource": "characters/earthpony-green.png" },
-    "earthpony-orange": { "cloneOf": "pony", "defaultSource": "characters/earthpony-orange.png" },
-    "pegasus-purple":   { "cloneOf": "pony", "defaultSource": "characters/earthpony-purple.png" },
-    "pegasus-black":    { "cloneOf": "pony", "defaultSource": "characters/earthpony-black.png" },
-    "pegasus-gray":     { "cloneOf": "pony", "defaultSource": "characters/earthpony-gray.png" },
-    "pegasus-green":    { "cloneOf": "pony", "defaultSource": "characters/earthpony-green.png" },
-    "pegasus-orange":   { "cloneOf": "pony", "defaultSource": "characters/earthpony-orange.png" },
-    "unicorn-purple":   { "cloneOf": "pony", "defaultSource": "characters/earthpony-purple.png" },
-    "unicorn-black":    { "cloneOf": "pony", "defaultSource": "characters/earthpony-black.png" },
-    "unicorn-gray":     { "cloneOf": "pony", "defaultSource": "characters/earthpony-gray.png" },
-    "unicorn-green":    { "cloneOf": "pony", "defaultSource": "characters/earthpony-green.png" },
-    "unicorn-orange":   { "cloneOf": "pony", "defaultSource": "characters/earthpony-orange.png" },
     "rat": {
         "death": {
             "frameCount": 1,
@@ -315,6 +416,42 @@
             "source": "critters/rats.png",
             "width": 40
         },
+        "use-down": {
+            "frameCount": 3,
+            "frameInterval": 100,
+            "height": 40,
+            "offsetX": 0,
+            "offsetY": 80,
+            "source": "critters/rats.png",
+            "width": 40
+        },
+        "use-left": {
+            "frameCount": 3,
+            "frameInterval": 100,
+            "height": 40,
+            "offsetX": 0,
+            "offsetY": 40,
+            "source": "critters/rats.png",
+            "width": 40
+        },
+        "use-right": {
+            "frameCount": 3,
+            "frameInterval": 100,
+            "height": 40,
+            "offsetX": 0,
+            "offsetY": 120,
+            "source": "critters/rats.png",
+            "width": 40
+        },
+        "use-up": {
+            "frameCount": 3,
+            "frameInterval": 100,
+            "height": 40,
+            "offsetX": 0,
+            "offsetY": 0,
+            "source": "critters/rats.png",
+            "width": 40
+        },
         "walking-down": {
             "frameCount": 3,
             "frameInterval": 150,
@@ -354,42 +491,26 @@
             "repeat": true,
             "source": "critters/rats.png",
             "width": 40
-        },
-        "use-down": {
-            "frameCount": 3,
-            "frameInterval": 100,
-            "height": 40,
-            "offsetX": 0,
-            "offsetY": 80,
-            "source": "critters/rats.png",
-            "width": 40
-        },
-        "use-left": {
-            "frameCount": 3,
-            "frameInterval": 100,
-            "height": 40,
-            "offsetX": 0,
-            "offsetY": 40,
-            "source": "critters/rats.png",
-            "width": 40
-        },
-        "use-right": {
-            "frameCount": 3,
-            "frameInterval": 100,
-            "height": 40,
-            "offsetX": 0,
-            "offsetY": 120,
-            "source": "critters/rats.png",
-            "width": 40
-        },
-        "use-up": {
-            "frameCount": 3,
-            "frameInterval": 100,
-            "height": 40,
-            "offsetX": 0,
-            "offsetY": 0,
-            "source": "critters/rats.png",
-            "width": 40
         }
+    },
+    "unicorn-black": {
+        "cloneOf": "pony",
+        "defaultSource": "characters/earthpony-black.png"
+    },
+    "unicorn-gray": {
+        "cloneOf": "pony",
+        "defaultSource": "characters/earthpony-gray.png"
+    },
+    "unicorn-green": {
+        "cloneOf": "pony",
+        "defaultSource": "characters/earthpony-green.png"
+    },
+    "unicorn-orange": {
+        "cloneOf": "pony",
+        "defaultSource": "characters/earthpony-orange.png"
+    },
+    "unicorn-purple": {
+        "cloneOf": "pony",
+        "defaultSource": "characters/earthpony-purple.png"
     }
 }

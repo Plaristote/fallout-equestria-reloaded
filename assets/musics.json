@@ -4,5 +4,6 @@
   },
   "eltest": { "desert-wind": "desert-wind.ogg" },
   "eltest5": { "desert-wind": "desert-wind.ogg" },
+  "stable-cavern": { "moribound-world": "moribund-world.ogg" },
   "worldmap": { "highwayman": "worldmap.ogg" }
 }

@@ -1,0 +1,152 @@
+{
+    "answers": {
+        "": {
+            "hook": "",
+            "state": "explainSituation",
+            "text": ""
+        },
+        "Wath your mouth. I'm not in the mood.": {
+            "state": ""
+        },
+        "ask-help": {
+            "state": "",
+            "text": ""
+        },
+        "askHelp": {
+            "hook": "",
+            "state": "helpAsked",
+            "text": "ask-help"
+        },
+        "askSituation": {
+            "state": "explainSituation",
+            "text": "ask-situation"
+        },
+        "askSituationAggressive": {
+            "hook": "onNeutral",
+            "state": "explainSituation",
+            "text": "aggressively-ask-situation"
+        },
+        "detailsLeave": {
+            "state": "",
+            "text": "enough-details"
+        },
+        "enough-details": {
+            "text": ""
+        },
+        "exit": {
+            "state": ""
+        },
+        "provoke-attack": {
+            "hook": "onHostileExit",
+            "state": "",
+            "text": "provoke-further-attack"
+        },
+        "provoke-details": {
+            "state": ""
+        },
+        "provoke-further": {
+            "state": "hostilePart2",
+            "text": "provoke-further"
+        },
+        "provoke-leave": {
+            "hook": "",
+            "state": "",
+            "text": "provoke-leave"
+        },
+        "provokeAtDetails": {
+            "state": "hostilePart1",
+            "text": "provoke-details"
+        },
+        "scram": {
+            "state": "hostilePart1",
+            "text": "scram"
+        },
+        "scram-excuses": {
+            "state": "hostileExcuses",
+            "text": "scram-excuses"
+        },
+        "scram-leave": {
+            "state": "hostilePart1",
+            "text": "scram-leave"
+        },
+        "what-happened": {
+            "state": "whatHappened",
+            "text": "what-happened"
+        },
+        "whatHappened": {
+            "state": "",
+            "text": ""
+        },
+        "whoAreYou": {
+            "state": "whoAmI",
+            "text": "who-are-you"
+        }
+    },
+    "entryPoint": "start",
+    "states": {
+        "explainSituation": {
+            "answers": [
+                "detailsLeave",
+                "askHelp",
+                "provokeAtDetails"
+            ],
+            "hook": "",
+            "text": "explain-situation"
+        },
+        "helpAsked": {
+            "answers": [
+            ],
+            "hook": "onHelpAsked",
+            "text": ""
+        },
+        "hostileExcuses": {
+            "answers": [
+            ],
+            "hook": "onNeutral",
+            "text": "scram-excuses-response"
+        },
+        "hostilePart1": {
+            "answers": [
+                "scram-leave",
+                "scram-excuses",
+                "provoke-further"
+            ],
+            "hook": "onHostile",
+            "text": "scram-response"
+        },
+        "hostilePart2": {
+            "answers": [
+                "provoke-attack",
+                "provoke-leave"
+            ],
+            "hook": "",
+            "text": "provoke-further-response"
+        },
+        "start": {
+            "answers": [
+                "scram",
+                "what-happened",
+                "whoAreYou"
+            ],
+            "text": "start"
+        },
+        "whatHappened": {
+            "answers": [
+                "askSituation",
+                "askSituationAggressive",
+                "whoAreYou"
+            ],
+            "hook": "",
+            "text": "what-happened-response"
+        },
+        "whoAmI": {
+            "answers": [
+                "askSituation",
+                "askSituationAggressive",
+                "what-happened"
+            ],
+            "hook": "",
+            "text": "who-are-you-response"
+        }
+    }
+}

@@ -16,7 +16,31 @@
     "xp-gain": "You gained {{xp}} experience points.",
     "nothing-happens": "That does nothing."
   },
-    "dialogs": {
+  "dialogs": {
+    "tutoCharIntro": {
+      "start": "Wow ! You've arrived ! At long last ! We need to find a way out of this hole !",
+      "what-happened": "Wait a moment, what's going on ?",
+      "who-are-you": "Do we know each other ?",
+      "scram": "Can't you see I'm busy ? Leave me alone",
+      "what-happened-response": "I don't know dude ! I woke up in this place, it was dark, moist, and riddled with friggin rats !<br/>I have a strong intuition that we must leave this place though... it's just as if some kind of omniscient puppeteer sent us here, but didn't bother to write us a backstory...",
+      "who-are-you-response": "Come to think of it... I don't really remember. My name is Helpful Copain, but I conveniently forgot everything else, so I won't bother you with a poorly written backstory.",
+      "scram-response": "Ooh, sorry big guy, seems like we have a tough one over here !",
+      "provoke-further": "You better watch your mouth, or else...",
+      "provoke-further-response": "Or else what ? You gonna kick my ass, is that it ? Hah ! I'd like to see you try !",
+      "provoke-further-attack": "Prepare to meet your maker. [Fight]",
+      "provoke-leave": "You're not worth it. [Leave]",
+      "scram-excuses": "Sorry, I didn't mean to be rude. I'd just rather do this on my own.",
+      "scram-excuses-response": "Alright, I get it... sorry I got carried away myself. Well, if you don't want my help, it can't be helped. Carry on then.",
+      "scram-leave": "Look, I don't have time for this... see you around, I guess. [Leave]",
+      "ask-situation": "So, what am I supposed to do ?",
+      "aggressively-ask-situation": "I don't actually care. Just tell me how to get out of this place.",
+      "explain-situation": "We need to leave this place. There are two potential ways I know of: on the eastern side, you have the regular entrance for the stable. It's locked though. There are other tunnels on the western side, but they're full of mutated rats. It might lead outside, but I wouldn't know... it's too dangerous to go alone.",
+      "enough-details": "I think I've got a good enough grasp of the situation. I'll be on my way then. [Leave]",
+      "ask-help": "You know, I might need some help leaving this cave. Do you mind coming with me ?",
+      "provoke-details": "So you didn't even try to explore any further ? You're so damn useless, I could slap you.",
+      "accept-to-help": "Sure, we'll be stronger if we stick together.",
+      "decline-to-help": "I don't know... you don't look like you can survive out there... I guess I'll just stay here and wait for someone stronger to show up."
+    },
         "parley": {
             "change-color": "You're lacking in colors. Perhaps we could change that ?",
             "changed-color": "Is that colorful enough ?",

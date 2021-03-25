@@ -11,7 +11,8 @@ export class Controller {
     this.wallSize = { width: this.tileSize.width, height: this.tileSize.height * 3 };
     this.layers   = {
       ground: this.tilemap.getLayer("ground"),
-      walls:  this.tilemap.getLayer("walls")
+      walls:  this.tilemap.getLayer("walls"),
+      misc:   this.tilemap.getLayer("misc")
     };
     this.frameCount = 0;
   }
@@ -156,8 +157,20 @@ export class Controller {
     const wall = this.layers.walls.getTile(x, y);
 
     if (wall)
-      return this.renderWall(wall, x, y);
-    this.renderObjects[x][y].forEach(this.renderSprite.bind(this));
+      this.renderWall(wall, x, y);
+    else {
+      this.renderMisc(x, y);
+      this.renderObjects[x][y].forEach(this.renderSprite.bind(this));
+    }
+  }
+
+  renderMisc(x, y) {
+    if (this.layers.misc) {
+      const misc = this.layers.misc.getTile(x, y);
+
+      if (misc)
+        this.renderWall(misc, x, y);
+    }
   }
 
   renderRoofs() {
@@ -205,11 +218,15 @@ export class Controller {
   }
 
   renderWall(tile, x, y) {
-    if (this.renderAfterPlayer)
-      this.startClipAroundPlayer();
-    this.renderImage(this.pathPrefix + tile.image, this.getPointFor(x, y), this.wallSize.width, this.wallSize.height, tile.clippedRect);
-    if (this.renderAfterPlayer)
-      this.stopClipAroundPlayer();
+    const offset = this.getPointFor(x, y);
+
+    if (this.shouldRender(offset.x, offset.y, this.wallSize.width, this.wallSize.height)) {
+      if (this.renderAfterPlayer)
+        this.startClipAroundPlayer();
+      this.renderImage(this.pathPrefix + tile.image, offset, this.wallSize.width, this.wallSize.height, tile.clippedRect);
+      if (this.renderAfterPlayer)
+        this.stopClipAroundPlayer();
+    }
   }
 
   startClipAroundPlayer() {

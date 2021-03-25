@@ -4,18 +4,13 @@ export class CharacterBehaviour extends CombatComponent {
   constructor(model) {
     super(model);
     this.xpValue = 25;
-    this.textBubbles = [
-      { content: "Lorem ipsum dolor sit amet, et toute ces sortes de choses.", duration: 5000, color: "yellow" }
-    ];
   }
-
 
   getAvailableInteractions() {
     const interactions = ["look", "use-skill"];
 
     if (this.dialog || this.textBubbles)
       interactions.unshift("talk-to");
-  
     return interactions;
   }
 
@@ -34,10 +29,12 @@ export class CharacterBehaviour extends CombatComponent {
   }
 
   displayRandomTextBubble() {
-    const it = Math.floor(Math.random() * this.textBubbles.length);
-    const textBubble = this.textBubbles[it];
+    if (this.textBubbles && this.textBubbles.length > 0) {
+      const it = Math.floor(Math.random() * this.textBubbles.length);
+      const textBubble = this.textBubbles[it];
 
-    level.addTextBubble(this.model, textBubble.content, textBubble.duration, textBubble.color || "white");
+      level.addTextBubble(this.model, textBubble.content, textBubble.duration, textBubble.color || "white");
+    }
   }
 
   onMovementEnded() {
