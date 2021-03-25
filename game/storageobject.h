@@ -21,6 +21,7 @@ public:
 
 signals:
   void inventoryChanged();
+  void itemDropped(InventoryItem*);
 
 protected:
   Inventory* inventory;

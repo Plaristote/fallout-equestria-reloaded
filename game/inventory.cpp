@@ -1,4 +1,5 @@
 #include "inventory.h"
+#include "game.h"
 #include <QJsonArray>
 
 Inventory::Inventory(QObject *parent) : QObject(parent)
@@ -36,6 +37,34 @@ void Inventory::removeItem(InventoryItem *item)
   emit totalWeightChanged();
   emit totalValueChanged();
   emit itemsChanged();
+}
+
+void Inventory::dropItem(InventoryItem *item, int quantity)
+{
+  int amount = item->getQuantity();
+  auto* level = Game::get()->getLevel();
+  InventoryItem* droppedItem = item;
+
+  if (amount >= quantity)
+  {
+    removeItem(item);
+    if (level && user)
+      emit user->itemDropped(item);
+    else
+      item->deleteLater();
+  }
+  else
+  {
+    if (level)
+    {
+      droppedItem = new InventoryItem();
+      droppedItem->setObjectName(item->getObjectName());
+      if (quantity > 1)
+        droppedItem->add(quantity - 1);
+      emit user->itemDropped(item);
+    }
+    item->remove(quantity);
+  }
 }
 
 void Inventory::addItemOfType(const QString &name, int quantity)

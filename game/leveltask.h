@@ -97,6 +97,7 @@ private slots:
   void onPauseChanged();
   void onCombatChanged();
   void onCharacterKill(Character* victim, Character* killer);
+  void onItemDropped(InventoryItem* item, QPoint position);
 
   void registerControlZone(TileZone*);
   void unregisterControlZone(TileZone*);

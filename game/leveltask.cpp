@@ -193,6 +193,7 @@ void LevelTask::registerDynamicObject(DynamicObject* object)
   {
     Character* character = reinterpret_cast<Character*>(object);
 
+    addCharacterObserver(character, connect(character, &Character::itemDropped, [this, character](InventoryItem* item) { onItemDropped(item, character->getPosition()); }));
     addCharacterObserver(character, connect(character, &Character::characterKill, this, &LevelTask::onCharacterKill));
   }
   emit objectsChanged();
@@ -238,6 +239,14 @@ void LevelTask::registerControlZone(TileZone* zone)
 void LevelTask::unregisterControlZone(TileZone* zone)
 {
   unregisterZone(zone);
+}
+
+void LevelTask::onItemDropped(InventoryItem* item, QPoint position)
+{
+  item->setParent(this);
+  item->setPosition(position);
+  registerDynamicObject(item);
+  setObjectPosition(item, position.x(), position.y());
 }
 
 QList<Character*> LevelTask::findCharacters(std::function<bool (Character &)> compare)

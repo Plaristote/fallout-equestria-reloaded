@@ -27,6 +27,7 @@ public:
 
   Q_INVOKABLE void addItem(InventoryItem* item);
   Q_INVOKABLE void removeItem(InventoryItem* item);
+  Q_INVOKABLE void dropItem(InventoryItem* item, int quantity = 1);
 
   Q_INVOKABLE void addItemOfType(const QString& name, int quantity = 1);
   Q_INVOKABLE bool removeItemOfType(const QString& name, int quantity = 1);
