@@ -106,6 +106,8 @@ void LevelTask::loadObjectsFromDataEngine(DataEngine* dataEngine)
       object = new StorageObject(this);
     else if (type == "Doorway")
       object = new Doorway(this);
+    else if (type == "InventoryItem")
+      object = new InventoryItem(this);
     else
       object = new DynamicObject(this);
     object->load(objectData.toObject());
@@ -420,6 +422,18 @@ StorageObject* LevelTask::generateStorageObject(const QString &name)
   StorageObject* object = new StorageObject(this);
 
   object->setObjectName(name);
+  registerDynamicObject(object);
+  return object;
+}
+
+InventoryItem* LevelTask::generateInventoryItem(const QString& name, const QString& type, int quantity)
+{
+  InventoryItem* object = new InventoryItem(this);
+
+  object->setObjectName(name);
+  object->setItemType(type);
+  if (quantity > 1)
+    object->add(quantity - 1);
   registerDynamicObject(object);
   return object;
 }

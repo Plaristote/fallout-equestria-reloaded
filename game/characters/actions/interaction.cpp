@@ -43,6 +43,8 @@ void InteractionAction::performAction()
       level->initializeLooting(reinterpret_cast<StorageObject*>(target));
     else if (actionName == "use" && typeName == "Character" && !(reinterpret_cast<Character*>(target)->isAlive()))
       level->initializeLooting(reinterpret_cast<StorageObject*>(target));
+    else if (actionName == "use" && typeName == "InventoryItem")
+      level->pickUpItem(character, reinterpret_cast<InventoryItem*>(target));
     state = Interrupted;
   }
   else

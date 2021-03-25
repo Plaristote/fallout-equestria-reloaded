@@ -13,7 +13,7 @@ void Inventory::addItem(InventoryItem* item)
 {
   for (auto* inventoryItem : qAsConst(items))
   {
-    if (inventoryItem->getObjectName() == item->getObjectName() && inventoryItem->isGroupable(item))
+    if (inventoryItem->getItemType() == item->getItemType() && inventoryItem->isGroupable(item))
     {
       inventoryItem->add(item->getQuantity());
       item->deleteLater();
@@ -59,6 +59,7 @@ void Inventory::dropItem(InventoryItem *item, int quantity)
     {
       droppedItem = new InventoryItem();
       droppedItem->setObjectName(item->getObjectName());
+      droppedItem->setItemType(item->getItemType());
       if (quantity > 1)
         droppedItem->add(quantity - 1);
       emit user->itemDropped(item);
@@ -73,7 +74,7 @@ void Inventory::addItemOfType(const QString &name, int quantity)
 
   for (auto* inventoryItem : qAsConst(items))
   {
-    if (inventoryItem->getObjectName() == name && inventoryItem->isGroupable())
+    if (inventoryItem->getItemType() == name && inventoryItem->isGroupable())
     {
       inventoryItem->add(quantity);
       return ;
@@ -81,6 +82,7 @@ void Inventory::addItemOfType(const QString &name, int quantity)
   }
   item = new InventoryItem(this);
   item->setObjectName(name);
+  item->setItemType(name);
   if (quantity > 1)
     item->add(quantity - 1);
   addItem(item);
@@ -92,7 +94,7 @@ bool Inventory::removeItemOfType(const QString &name, int quantity)
   {
     for (auto* inventoryItem : items)
     {
-      if (inventoryItem->getObjectName() == name)
+      if (inventoryItem->getItemType() == name)
       {
         int itemQuantity = inventoryItem->getQuantity();
 
@@ -123,7 +125,7 @@ int Inventory::count(const QString& name) const
 
   for (auto* inventoryItem : items)
   {
-    if (inventoryItem->getObjectName() == name)
+    if (inventoryItem->getItemType() == name)
       total += inventoryItem->getQuantity();
   }
   return total;
@@ -169,6 +171,7 @@ bool Inventory::equipItem(InventoryItem *item, const QString& slotName)
       item->remove(1);
       item = new InventoryItem(this);
       item->setObjectName(item->getObjectName());
+      item->setItemType(item->getItemType());
     }
     else
       removeItem(item);

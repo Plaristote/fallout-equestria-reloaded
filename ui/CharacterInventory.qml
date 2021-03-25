@@ -42,6 +42,26 @@ Pane {
     anchors.bottom: parent.bottom
     anchors.right: parent.right
 
+    MenuButton {
+      id: useButton
+      text: "Use"
+      visible: selectedObject != null
+      onClicked: {
+        selectedObject.useOn(character);
+      }
+    }
+
+    MenuButton {
+      id: dropButton
+      text: "Drop"
+      visible: selectedObject != null
+      onClicked: {
+        character.inventory.dropItem(selectedObject);
+        selectedObject = null;
+      }
+    }
+
+
     Repeater {
       model: additionalControls
       delegate: MenuButton {

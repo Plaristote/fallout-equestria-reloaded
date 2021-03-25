@@ -12,7 +12,9 @@ Pane {
   property string scriptCategory: "behaviour"
   property alias fields: additionalFields.children
   property bool readOnlyPositionType: false
+  property bool readOnlySprite: false
   property bool readOnlyAnimation: false
+  property bool readOnlyScript: false
   property bool withInteractionPosition: true
   id: objectEditor
   background: UiStyle.TerminalPane {}
@@ -113,20 +115,22 @@ Pane {
         TerminalField { id: interactionYInput; onTextChanged: objectEditor.interactionPositionChanged(); width: parent.width / 2 }
       }
 
-      TerminalLabel { text: "Script" }
+      TerminalLabel { text: "Script"; visible: !readOnlyScript }
       TerminalComboBox {
         Layout.fillWidth: true
         id: scriptInput
+        visible: !readOnlyScript
         model: scriptController.getScripts(scriptCategory)
         onCurrentTextChanged: {
           objectEditor.model.setScript(currentText);
         }
       }
 
-      TerminalLabel { text: "Sprite" }
+      TerminalLabel { text: "Sprite"; visible: !readOnlySprite }
       TerminalComboBox {
         Layout.fillWidth: true
         id: spriteInput
+        visible: !readOnlySprite
         model: animationLibrary.getGroups();
         currentIndex: model.indexOf(objectEditor.model.getSpriteName())
         onCurrentTextChanged: {

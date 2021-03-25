@@ -32,19 +32,15 @@ Item {
         selectedCharacter = selectedObject
         selectedDoorway = null;
       }
-      else if (selectedObject.getObjectType() === "StorageObject") {
-        console.log("selected storage object")
-        selectedDoorway = selectedObject;
-        selectedCharacter = null;
-      }
       else if (selectedObject.getObjectType() === "Doorway") {
         console.log("doorway object selected");
-        selectedCharacter = selectedDoorway = null;
+        selectedDoorway = selectedObject;
+        selectedCharacter = null;
       }
       else
       {
         console.log("selected object type", selectedObject.getObjectType());
-        selectedCharacter = null;
+        selectedCharacter = selectedDoorway = null;
       }
     }
     else
@@ -208,6 +204,15 @@ Item {
           onRemoveClicked: gameController.level.deleteObject(model)
         }
 
+        ItemObjectEditor {
+          id: itemEditor
+          visible: model !== null
+          model: selectedObject && selectedObject.getObjectType() === "InventoryItem" ? selectedObject : null
+          gameController: root.gameController
+          Layout.fillWidth: true
+          onRemoveClicked: gameController.level.deleteObject(model)
+        }
+
         ControlZoneEditor {
           id: controlZoneEditor
           selectedObject: root.selectedObject
@@ -243,27 +248,30 @@ Item {
     GridLayout {
       columns: 2
       Text { text: "type" }
-      ComboBox { id: objectTypeInput; model: ["character", "storage", "door", "other"] }
+      ComboBox { id: objectTypeInput; model: ["character", "storage", "door", "item", "other"] }
       Text { text: "name" }
       TextField { id: objectNameInput }
+      // Character inputs
       Text { text: "character sheet"; visible: objectTypeInput.currentText === "character" }
       ComboBox { id: sheetInput; model: scriptController.getCharacterSheets(); visible: objectTypeInput.currentText === "character" }
+      // InventoryItem inputs
+      Text { text: "type"; visible: objectTypeInput.currentText === "item" }
+      ComboBox { id: itemTypeInput; model: itemLibrary.getObjectList(); visible: objectTypeInput.currentText === "item" }
     }
     onAccepted: {
-      if (objectTypeInput.currentText === "character") {
+      if (objectTypeInput.currentText === "character")
         gameController.level.generateCharacter(objectNameInput.text, sheetInput.currentText.replace(".json", ""));
-        objectSelectBox.currentIndex = gameController.level.objects.length - 1;
-      }
-      else if (objectTypeInput.currentText == "storage") {
+      else if (objectTypeInput.currentText == "storage")
         gameController.level.generateStorageObject(objectNameInput.text);
-        objectSelectBox.currentIndex = gameController.level.objects.length - 1;
-      }
-      else if (objectTypeInput.currentText == "door") {
+      else if (objectTypeInput.currentText == "door")
         gameController.level.generateDoorway(objectNameInput.text);
-        objectSelectBox.currentIndex = gameController.level.objects.length - 1;
-      }
-      else
+      else if (objectTypeInput.currentText == "item")
+        gameController.level.generateInventoryItem(objectNameInput.text, itemTypeInput.currentText);
+      else {
         console.log("unhandled type added");
+        return ;
+      }
+      objectSelectBox.currentIndex = gameController.level.objects.length - 1;
     }
   }
 

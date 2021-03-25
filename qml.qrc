@@ -128,6 +128,7 @@
         <file>editor/EditorSelectPanel.qml</file>
         <file>editor/LevelEditor.qml</file>
         <file>editor/CharacterObjectEditor.qml</file>
+        <file>editor/ItemObjectEditor.qml</file>
         <file>assets/fonts/fallout.ttf</file>
         <file>assets/fonts/JH_FALLOUT.TTF</file>
         <file>ui/CharacterInventory.qml</file>

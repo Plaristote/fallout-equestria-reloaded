@@ -11,6 +11,10 @@ export class Item {
     this.user = on ? character : null;
   }
 
+  getAvailableInteractions() {
+    return ["use", "look"];
+  }
+
   getActionPointCost() {
     return 2;
   }

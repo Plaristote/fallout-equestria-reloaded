@@ -8,14 +8,14 @@ InventoryItem::InventoryItem(QObject* parent) : DynamicObject(parent), quantity(
   blocksPath = false;
   connect(this, &InventoryItem::quantityChanged, this, &InventoryItem::weightChanged);
   connect(this, &InventoryItem::quantityChanged, this, &InventoryItem::valueChanged);
-  connect(this, &InventoryItem::objectNameChanged, this, &InventoryItem::updateScript);
-  connect(this, &InventoryItem::objectNameChanged, this, &InventoryItem::updateSprite);
+  connect(this, &InventoryItem::itemTypeChanged, this, &InventoryItem::updateScript);
+  connect(this, &InventoryItem::itemTypeChanged, this, &InventoryItem::updateSprite);
   setSpriteName("items");
 }
 
-QString InventoryItem::getItemType() const
+QString InventoryItem::getCategory() const
 {
-  auto itemData = InventoryItemLibrary::get()->getObject(getObjectName());
+  auto itemData = InventoryItemLibrary::get()->getObject(itemType);
 
   if (itemData.isObject())
     return itemData["type"].toString("misc");
@@ -33,7 +33,7 @@ QStringList InventoryItem::getAvailableInteractions()
 
 int InventoryItem::getWeight() const
 {
-  auto itemData = InventoryItemLibrary::get()->getObject(getObjectName());
+  auto itemData = InventoryItemLibrary::get()->getObject(itemType);
 
   if (itemData.isObject())
     return itemData["weight"].toInt(1) * getQuantity();
@@ -42,7 +42,7 @@ int InventoryItem::getWeight() const
 
 int InventoryItem::getValue() const
 {
-  auto itemData = InventoryItemLibrary::get()->getObject(getObjectName());
+  auto itemData = InventoryItemLibrary::get()->getObject(itemType);
 
   if (itemData.isObject())
     return itemData["value"].toInt(1);
@@ -51,7 +51,7 @@ int InventoryItem::getValue() const
 
 bool InventoryItem::isGroupable(InventoryItem* other)
 {
-  auto itemData = InventoryItemLibrary::get()->getObject(getObjectName());
+  auto itemData = InventoryItemLibrary::get()->getObject(itemType);
   bool result   = true;
 
   if (itemData.isObject())
@@ -178,8 +178,8 @@ int InventoryItem::getUseSuccessRate(DynamicObject* target)
 
 void InventoryItem::updateScript()
 {
-  auto itemData = InventoryItemLibrary::get()->getObject(getObjectName());
-  QString scriptName = getObjectName() + ".mjs";
+  auto itemData = InventoryItemLibrary::get()->getObject(itemType);
+  QString scriptName = itemType + ".mjs";
 
   if (itemData.isObject())
     scriptName = itemData["script"].toString(scriptName);
@@ -189,7 +189,7 @@ void InventoryItem::updateScript()
 void InventoryItem::updateSprite()
 {
   QString animationName = "any";
-  auto itemData = InventoryItemLibrary::get()->getObject(getObjectName());
+  auto itemData = InventoryItemLibrary::get()->getObject(itemType);
 
   if (itemData.isObject())
     animationName = itemData["sprite"].toString(animationName);
@@ -198,6 +198,7 @@ void InventoryItem::updateSprite()
 
 void InventoryItem::save(QJsonObject& data) const
 {
+  data["itemType"] = itemType;
   data["quantity"] = quantity;
   if (virtualItem)
     data["virtual"] = virtualItem;
@@ -206,6 +207,7 @@ void InventoryItem::save(QJsonObject& data) const
 
 void InventoryItem::load(const QJsonObject& data)
 {
+  itemType = data["itemType"].toString();
   quantity = data["quantity"].toInt(1);
   virtualItem = data["virtual"].toBool();
   DynamicObject::load(data);

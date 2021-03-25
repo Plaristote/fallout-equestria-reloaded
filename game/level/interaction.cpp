@@ -164,6 +164,20 @@ void InteractionComponent::initializeLooting(StorageObject* target)
   emit startLooting(controller);
 }
 
+void InteractionComponent::pickUpItem(Character* character, InventoryItem* item)
+{
+  Inventory* inventory = character->getInventory();
+  StatModel* statistics = character->getStatistics();
+
+  if (inventory->getTotalWeight() + item->getWeight() <= statistics->get_carryWeight())
+  {
+    Game::get()->getLevel()->unregisterDynamicObject(item);
+    inventory->addItem(item);
+  }
+  else
+    Game::get()->appendToConsole(I18n::get()->t("message.cannot-carry-more"));
+}
+
 DynamicObject* InteractionComponent::getObjectAt(int posX, int posY) const
 {
   QVector<DynamicObject*> list(objects.begin(), objects.end());
