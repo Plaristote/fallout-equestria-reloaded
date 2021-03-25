@@ -248,8 +248,8 @@ void Inventory::save(QJsonObject& data) const
     InventoryItem* item = getEquippedItem(it.key());
 
     slotData.insert("slotType", it.value());
-    slotData.insert("hasItem", item != nullptr);
-    if (item)
+    slotData.insert("hasItem", item && !item->isVirtual());
+    if (item && !item->isVirtual())
       item->save(slotData);
     slotsData.insert(it.key(), slotData);
   }
