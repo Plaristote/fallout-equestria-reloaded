@@ -30,7 +30,6 @@ class LevelTask : public CombatComponent
   Q_PROPERTY(SoundManager* sounds READ getSoundManager)
   Q_PROPERTY(TaskRunner* tasks MEMBER taskRunner)
   Q_PROPERTY(QQmlListProperty<DynamicObject> dynamicObjects READ getQmlObjects NOTIFY objectsChanged)
-  Q_PROPERTY(QQmlListProperty<Sprite>        visualEffects READ getQmlVisualEffects NOTIFY visualEffectsChanged)
   Q_PROPERTY(QQmlListProperty<Character>     visibleCharacters READ getQmlVisibleCharacters NOTIFY visibleCharactersChanged)
 public:
   explicit LevelTask(QObject *parent = nullptr);
@@ -52,8 +51,6 @@ public:
 
   void registerDynamicObject(DynamicObject*);
   void unregisterDynamicObject(DynamicObject*);
-  void registerVisualEffect(Sprite*);
-  void unregisterVisualEffect(Sprite*);
 
   Q_INVOKABLE QPoint getRenderPositionForTile(int x, int y);
   Q_INVOKABLE DynamicObject* getObjectByName(const QString&);
@@ -67,7 +64,6 @@ public:
   Q_INVOKABLE void advanceTime(unsigned int minutes);
 
   QQmlListProperty<DynamicObject> getQmlObjects() { return QQmlListProperty<DynamicObject>(this, &objects); }
-  QQmlListProperty<Sprite> getQmlVisualEffects() { return QQmlListProperty<Sprite>(this, &visualEffects); }
   QQmlListProperty<Character> getQmlVisibleCharacters();
 
   void finalizeRound() override;
@@ -81,7 +77,6 @@ signals:
   void updated();
   void pausedChanged();
   void objectsChanged();
-  void visualEffectsChanged();
   void tilemapReady();
   void displayConsoleMessage(const QString&);
   void cameraFocusRequired(DynamicObject*);

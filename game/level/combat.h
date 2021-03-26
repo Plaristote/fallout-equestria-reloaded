@@ -4,12 +4,12 @@
 # include <QObject>
 # include <QQmlListProperty>
 # include "../character.h"
-# include "textbubbles.h"
+# include "visualEffects.h"
 
 # define WORLDTIME_TURN_DURATION_IN_SECONDS 10
 # define WORLDTIME_TURN_DURATION WORLDTIME_TURN_DURATION_IN_SECONDS * 1000
 
-class CombatComponent : public TextBubblesComponent
+class CombatComponent : public VisualEffectsComponent
 {
   Q_OBJECT
 

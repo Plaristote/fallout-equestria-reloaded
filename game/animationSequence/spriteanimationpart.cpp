@@ -16,21 +16,33 @@ void SpriteAnimationPart::initialize(QJSValue &value)
   sprite->setProperty("floating", true);
   sprite->setSpriteName(value.property("name").toString());
   sprite->setAnimation(value.property("animation").toString());
-  from = QPoint(
-    value.property("fromX").toInt(),
-    value.property("fromY").toInt()
-  );
-  to = QPoint(
-    value.property("toX").toInt(),
-    value.property("toY").toInt()
-  );
+  if (value.hasProperty("fromX") && value.hasProperty("fromY")) {
+    from = QPoint(
+      value.property("fromX").toInt(),
+      value.property("fromY").toInt()
+    );
+  }
+  else
+    qDebug() << "SpriteAnimationPart: missing fromX and/or fromY properties";
+  if (value.hasProperty("toX") && value.hasProperty("toY")) {
+    to = QPoint(
+      value.property("toX").toInt(),
+      value.property("toY").toInt()
+    );
+  }
+  else
+    to = from;
   sprite->setMovementSpeed(static_cast<float>(value.property("speed").toNumber()));
-  connect(sprite, &Sprite::movementFinished, this, &SpriteAnimationPart::onAnimationFinished);
+  if (from != to)
+    connect(sprite, &Sprite::movementFinished, this, &SpriteAnimationPart::onAnimationFinished);
+  connect(sprite, &Sprite::animationFinished, this, &SpriteAnimationPart::onAnimationFinished);
 }
 
 void SpriteAnimationPart::start()
 {
   level->registerVisualEffect(sprite);
   sprite->setRenderPosition(from);
-  sprite->moveToCoordinates(to);
+  qDebug() << "SpriteAnimationPart::start at" << from;
+  if (from != to)
+    sprite->moveToCoordinates(to);
 }

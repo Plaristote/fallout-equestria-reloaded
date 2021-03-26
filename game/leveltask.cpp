@@ -221,18 +221,6 @@ void LevelTask::unregisterDynamicObject(DynamicObject* object)
   emit objectsChanged();
 }
 
-void LevelTask::registerVisualEffect(Sprite* sprite)
-{
-  visualEffects << sprite;
-  emit visualEffectsChanged();
-}
-
-void LevelTask::unregisterVisualEffect(Sprite* sprite)
-{
-  visualEffects.removeAll(sprite);
-  emit visualEffectsChanged();
-}
-
 void LevelTask::registerControlZone(TileZone* zone)
 {
   registerZone(zone);
@@ -370,7 +358,10 @@ void LevelTask::update()
       else
         onNextCombatTurn();
     }
+    else
+      throw std::runtime_error("combattants.size() > combatIterator");
   }
+  updateVisualEffects(delta);
   soundManager->update();
   CombatComponent::update(delta);
   emit updated();

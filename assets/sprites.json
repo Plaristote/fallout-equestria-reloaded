@@ -81,6 +81,18 @@
         "cloneOf": "pony",
         "defaultSource": "characters/earthpony-purple.png"
     },
+    "effects": {
+        "explosion": {
+            "frameCount": 44,
+            "frameInterval": 5,
+            "height": 89,
+            "offsetX": 0,
+            "offsetY": 0,
+            "repeat": false,
+            "source": "explosion.png",
+            "width": 93
+        }
+    },
     "items": {
         "dynamite": {
             "frameCount": 1,

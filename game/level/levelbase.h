@@ -17,7 +17,6 @@ public:
 protected:
   QList<DynamicObject*> objects;
   QList<Character*> visibleCharacters;
-  QList<Sprite*> visualEffects;
   TileMap* tilemap = nullptr;
 };
 

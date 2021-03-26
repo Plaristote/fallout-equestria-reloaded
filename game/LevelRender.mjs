@@ -160,7 +160,7 @@ export class Controller {
       this.renderWall(wall, x, y);
     else {
       this.renderMisc(x, y);
-      this.renderObjects[x][y].forEach(this.renderSprite.bind(this));
+      this.renderObjects[x][y].forEach(this.renderDynamicObject.bind(this));
     }
   }
 
@@ -256,7 +256,7 @@ export class Controller {
     return this.level.getAdjustedOffsetFor(sprite);
   }
 
-  renderSprite(sprite) {
+  renderDynamicObject(sprite) {
     const offset      = this.getAdjustedOffsetFor(sprite);
     const clippedRect = sprite.getClippedRect();
 
@@ -271,6 +271,20 @@ export class Controller {
       }
       this.context.drawImage(
         this.pathPrefix + sprite.getSpriteSource(),
+        clippedRect.x, clippedRect.y, clippedRect.width, clippedRect.height,
+        offset.x, offset.y, clippedRect.width, clippedRect.height
+      );
+      return true;
+    }
+  }
+
+  renderSprite(sprite) {
+    const offset      = sprite.spritePosition;
+    const clippedRect = sprite.clippedRect;
+
+    if (this.shouldRender(offset.x, offset.y, clippedRect.width, clippedRect.height)) {
+      this.context.drawImage(
+        this.pathPrefix + sprite.spriteSource,
         clippedRect.x, clippedRect.y, clippedRect.width, clippedRect.height,
         offset.x, offset.y, clippedRect.width, clippedRect.height
       );

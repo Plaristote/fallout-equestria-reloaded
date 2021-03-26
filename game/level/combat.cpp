@@ -2,7 +2,7 @@
 #include "game.h"
 #include "game/characters/actionqueue.h"
 
-CombatComponent::CombatComponent(QObject *parent) : TextBubblesComponent(parent)
+CombatComponent::CombatComponent(QObject *parent) : VisualEffectsComponent(parent)
 {
   connect(this, &InteractionComponent::activeItemChanged, this, &CombatComponent::onActiveItemChanged);
 }
