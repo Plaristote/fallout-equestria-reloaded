@@ -6,6 +6,7 @@ import "qrc:/assets/ui" as UiStyle
 Pane {
   id: root
   property QtObject character
+  property QtObject target
   property var skills: ["sneak", "steal", "medicine", "lockpick", "repair", "science"]
 
   signal pickedSkill(string skillName)

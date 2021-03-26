@@ -97,7 +97,10 @@ void InteractionComponent::objectClicked(DynamicObject* object)
     if (activeItem)
       useItemOn(object);
     else if (activeSkill.length() > 0)
+    {
       useSkillOn(Game::get()->getPlayer(), object, activeSkill);
+      activeSkill = "";
+    }
     else
       qDebug() << "TODO missing behaviour for target cursor";
     break ;
@@ -124,10 +127,9 @@ void InteractionComponent::useSkillOn(Character* user, DynamicObject* target, co
 
   actions->reset();
   actions->pushMovement(target->getInteractionPosition());
-  actions->pushSkillUse(target, activeSkill);
+  actions->pushSkillUse(target, skill);
   if (actions->start())
     swapMouseMode();
-  activeSkill = "";
 }
 
 void InteractionComponent::useItemOn(DynamicObject* target)

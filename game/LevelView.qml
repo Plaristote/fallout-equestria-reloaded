@@ -50,7 +50,9 @@ Item {
       sequence: "s"
       onActivated: openSkilldexAction.trigger()
     }
-    onTriggered: skilldex.visible = !skilldex.visible
+    onTriggered: {
+      skilldex.visible = !skilldex.visible;
+    }
   }
 
   LevelCanvas {
@@ -117,22 +119,28 @@ Item {
       Repeater {
         model: interactionMenu.interactionTypes
         delegate: Button {
+          property string interactionType: interactionMenu.interactionTypes[index]
           id: button
           hoverEnabled: true
 
           background: Image {
             property string bgType: parent.down ? 'pressed' : (parent.hovered ? 'active' : 'normal')
-            source: "qrc:/assets/ui/interactions/" + interactionMenu.interactionTypes[index] + '-' + bgType + '.png'
+            source: "qrc:/assets/ui/interactions/" + interactionType + '-' + bgType + '.png'
           }
 
           onClicked:{
-            levelController.interactOrderReceived(interactionMenu.interactionTarget, interactionMenu.interactionTypes[index]);
+            if (interactionType === "use-skill") {
+              openSkilldexAction.trigger();
+              skilldex.target = interactionMenu.interactionTarget;
+            }
+            else
+              levelController.interactOrderReceived(interactionMenu.interactionTarget, interactionMenu.interactionTypes[index]);
             interactionMenu.interactionTarget = null;
           }
-        }
+        } // END BUTTON
       }
     }
-  }
+  } // END INTERACTION MENU
 
   // INTERACTION
   Connections {
@@ -172,7 +180,10 @@ Item {
 
     onOpenMenu: openMenuAction.trigger()
     onOpenInventory: openInventoryAction.trigger()
-    onOpenSkilldex: openSkilldexAction.trigger()
+    onOpenSkilldex: {
+      skilldex.target = null;
+      openSkilldexAction.trigger();
+    }
   }
 
   Skilldex {
@@ -184,7 +195,10 @@ Item {
     character: levelController.player
     onPickedSkill: {
       openSkilldexAction.trigger();
-      levelController.useSkill(skillName);
+      if (skilldex.target)
+        levelController.useSkillOn(levelController.player, skilldex.target, skillName);
+      else
+        levelController.useSkill(skillName);
     }
   }
 
