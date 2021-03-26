@@ -9,8 +9,10 @@ class Doorway : public DynamicObject
 
   Q_PROPERTY(bool    opened        MEMBER opened NOTIFY openedChanged)
   Q_PROPERTY(bool    locked        MEMBER locked NOTIFY lockedChanged)
+  Q_PROPERTY(bool    destroyed     MEMBER destroyed NOTIFY destroyedChanged)
   Q_PROPERTY(QString keyName       MEMBER keyName NOTIFY keyNameChanged)
   Q_PROPERTY(int     lockpickLevel MEMBER lockpickLevel NOTIFY lockpickLevelChanged)
+  Q_PROPERTY(bool    destructible  READ isDestructible)
 public:
   Doorway(QObject* parent = nullptr);
 
@@ -19,12 +21,15 @@ public:
 
   QStringList getAvailableInteractions() override;
   Q_INVOKABLE QPoint getInteractionPosition() const override;
+  Q_INVOKABLE bool bustOpen(int damage);
   bool isBlockingPath() const { return !opened; }
   bool triggerInteraction(Character* character, const QString& interactionType) override;
+  bool isDestructible() const;
 
   Q_INVOKABLE bool onUse(Character* character);
 
 signals:
+  void destroyedChanged();
   void openedChanged();
   void lockedChanged();
   void keyNameChanged();
@@ -35,6 +40,7 @@ private slots:
   void updateAnimation();
 
 private:
+  bool      destroyed = false;
   bool      opened = false;
   bool      locked = false;
   QString   keyName;

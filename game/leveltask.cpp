@@ -347,7 +347,7 @@ void LevelTask::update()
       Character* asCharacter = reinterpret_cast<Character*>(object);
 
       object->update(delta);
-      object->getTaskManager()->update(delta);
+      object->updateTasks(delta);
       if (object->isCharacter() && asCharacter->isAlive())
       {
         asCharacter->getFieldOfView()->update(delta);

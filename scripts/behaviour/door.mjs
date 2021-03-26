@@ -13,6 +13,7 @@ function getEquippedLockpickToolsFor(character) {
 export class Door {
   constructor(model) {
     this.model = model;
+    this.destructible = true;
     if (!this.model.hasVariable("xp"))
       this.model.setVariable("xp", 25);
   }

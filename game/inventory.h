@@ -21,12 +21,14 @@ public:
   void load(const QJsonObject&);
   void save(QJsonObject&) const;
   void setUser(Character* value) { user = value; }
+  Character* getUser() const { return user; }
 
   QQmlListProperty<InventoryItem> getQmlItems() { return QQmlListProperty<InventoryItem>(this, &items); }
   const QList<InventoryItem*>& getItems() const { return items; }
 
   Q_INVOKABLE void addItem(InventoryItem* item);
   Q_INVOKABLE void removeItem(InventoryItem* item);
+  Q_INVOKABLE void destroyItem(InventoryItem* item, int quantity = 1);
   Q_INVOKABLE void dropItem(InventoryItem* item, int quantity = 1);
 
   Q_INVOKABLE void addItemOfType(const QString& name, int quantity = 1);
@@ -36,6 +38,7 @@ public:
   Q_INVOKABLE bool canEquipItem(InventoryItem* item, const QString& slotName) const;
   Q_INVOKABLE void unequipItem(const QString& slotName, bool dropped = false);
   Q_INVOKABLE InventoryItem* getEquippedItem(const QString& slotName) const;
+  QVector<InventoryItem*> getEquippedItems() const;
 
   Q_INVOKABLE int count(const QString& name) const;
 

@@ -176,6 +176,17 @@ int InventoryItem::getUseSuccessRate(DynamicObject* target)
   return 0;
 }
 
+DynamicObject* InventoryItem::getOwner() const
+{
+  if (parent()->metaObject()->className() == QString("Inventory"))
+  {
+    Inventory* inventory = reinterpret_cast<Inventory*>(parent());
+
+    return inventory->getUser();
+  }
+  return nullptr;
+}
+
 void InventoryItem::updateScript()
 {
   auto itemData = InventoryItemLibrary::get()->getObject(itemType);

@@ -24,7 +24,33 @@ void Doorway::updateAccessPath()
 
 void Doorway::updateAnimation()
 {
-  setAnimation(opened ? "open" : "close");
+  if (!destroyed)
+    setAnimation(opened ? "open" : "close");
+  else
+    setAnimation("destroyed");
+}
+
+bool Doorway::isDestructible() const
+{
+  if (script)
+    return script->property("destructible").toBool();
+  return false;
+}
+
+bool Doorway::bustOpen(int damage)
+{
+  bool success = true;
+
+  if (script && script->hasMethod("onBustOpen"))
+    success = script->call("onBustOpen", QJSValueList() << damage).toBool();
+  if (success)
+  {
+    destroyed = true;
+    opened = true;
+    emit destroyedChanged();
+    emit openedChanged();
+  }
+  return success;
 }
 
 QStringList Doorway::getAvailableInteractions()
@@ -95,15 +121,17 @@ bool Doorway::onUse(Character* character)
 
 void Doorway::save(QJsonObject& data) const
 {
-  data["opened"]  = opened;
-  data["locked"]  = locked;
-  data["key"]     = keyName;
-  data["picklvl"] = lockpickLevel;
+  data["destroyed"] = destroyed;
+  data["opened"]    = opened;
+  data["locked"]    = locked;
+  data["key"]       = keyName;
+  data["picklvl"]   = lockpickLevel;
   DynamicObject::save(data);
 }
 
 void Doorway::load(const QJsonObject& data)
 {
+  destroyed     = data["destroyed"].toBool();
   opened        = data["opened"].toBool();
   locked        = data["locked"].toBool();
   keyName       = data["key"].toString();

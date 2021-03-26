@@ -20,6 +20,15 @@ void StorageObject::save(QJsonObject& data) const
   DynamicObject::save(data);
 }
 
+void StorageObject::updateTasks(qint64 delta)
+{
+  DynamicObject::updateTasks(delta);
+  for (InventoryItem* item : inventory->getItems())
+    item->updateTasks(delta);
+  for (InventoryItem* item : inventory->getEquippedItems())
+    item->updateTasks(delta);
+}
+
 QStringList StorageObject::getAvailableInteractions()
 {
   QStringList results = DynamicObject::getAvailableInteractions();

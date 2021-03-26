@@ -32,6 +32,7 @@ public:
   Q_INVOKABLE void setObjectPosition(DynamicObject*, int x, int y);
   Q_INVOKABLE QPoint getAdjustedOffsetFor(DynamicObject*) const;
   Q_INVOKABLE TileLayer* getRoofFor(DynamicObject*) const;
+  Q_INVOKABLE QJSValue getDynamicObjectsAt(int x, int y) const;
 
 signals:
   void exitZoneEntered(TileZone*);

@@ -39,6 +39,19 @@ void Inventory::removeItem(InventoryItem *item)
   emit itemsChanged();
 }
 
+void Inventory::destroyItem(InventoryItem *item, int quantity)
+{
+  int amount = item->getQuantity();
+
+  if (amount >= quantity)
+  {
+    removeItem(item);
+    item->deleteLater();
+  }
+  else
+    item->remove(quantity);
+}
+
 void Inventory::dropItem(InventoryItem *item, int quantity)
 {
   int amount = item->getQuantity();
@@ -208,6 +221,19 @@ InventoryItem* Inventory::getEquippedItem(const QString &slotName) const
   if (itemSlots.contains(slotName))
     return itemSlots[slotName];
   return nullptr;
+}
+
+QVector<InventoryItem*> Inventory::getEquippedItems() const
+{
+  QVector<InventoryItem*> results;
+  const auto values = itemSlots.values();
+
+  results.reserve(values.length());
+  for (auto* value : values) {
+    if (value)
+      results << value;
+  }
+  return results;
 }
 
 void Inventory::setSlots(const QMap<QString, QString>& slotTypes)

@@ -32,6 +32,7 @@ public:
   virtual ~DynamicObject();
 
   virtual void update(qint64 v) { Sprite::update(v); }
+  virtual void updateTasks(qint64 v);
   virtual void load(const QJsonObject&);
   virtual void save(QJsonObject&) const;
   Q_INVOKABLE virtual void setScript(const QString& name);

@@ -62,7 +62,7 @@ public:
   Q_INVOKABLE StorageObject* generateStorageObject(const QString& name);
   Q_INVOKABLE Doorway* generateDoorway(const QString& name);
   Q_INVOKABLE InventoryItem* generateInventoryItem(const QString& name, const QString& type, int quantity = 1);
-  Q_INVOKABLE void deleteObject(DynamicObject* o) { unregisterDynamicObject(o); }
+  Q_INVOKABLE void deleteObject(DynamicObject* o) { unregisterDynamicObject(o); o->deleteLater(); }
 
   Q_INVOKABLE void advanceTime(unsigned int minutes);
 

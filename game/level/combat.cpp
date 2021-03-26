@@ -171,7 +171,7 @@ void CombatComponent::finalizeCharacterTurn(Character* character)
 {
   character->getActionQueue()->reset();
   character->resetActionPoints();
-  character->getTaskManager()->update(WORLDTIME_TURN_DURATION);
+  character->updateTasks(WORLDTIME_TURN_DURATION);
 }
 
 void CombatComponent::finalizeRound()

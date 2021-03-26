@@ -2,6 +2,7 @@
 #include "game/characters/actionqueue.h"
 #include "tilemap/tilezone.h"
 #include "tilemap/tilemap.h"
+#include "game.h"
 
 GridComponent::GridComponent(QObject *parent) : LevelBase(parent)
 {
@@ -153,4 +154,19 @@ TileLayer* GridComponent::getRoofFor(DynamicObject* object) const
       return layer;
   }
   return nullptr;
+}
+
+QJSValue GridComponent::getDynamicObjectsAt(int x, int y) const
+{
+  auto& scriptEngine = Game::get()->getScriptEngine();
+  QJSValue result = scriptEngine.newArray();
+  QJSValue push = result.property("push");
+  QPoint position(x, y);
+
+  for (auto* object : objects)
+  {
+    if (object->getPosition() == position)
+      push.callWithInstance(result, QJSValueList() << scriptEngine.newQObject(object));
+  }
+  return result;
 }

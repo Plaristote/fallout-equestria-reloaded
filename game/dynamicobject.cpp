@@ -19,6 +19,11 @@ DynamicObject::~DynamicObject()
     delete script;
 }
 
+void DynamicObject::updateTasks(qint64 v)
+{
+  taskManager->update(v);
+}
+
 void DynamicObject::setScript(const QString& name)
 {
   if (script)

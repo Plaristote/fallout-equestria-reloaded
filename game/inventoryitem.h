@@ -44,6 +44,7 @@ public:
   Q_INVOKABLE bool     isValidTarget(DynamicObject*);
   Q_INVOKABLE QJSValue useOn(DynamicObject* target);
   Q_INVOKABLE int      getUseSuccessRate(DynamicObject* target);
+  Q_INVOKABLE DynamicObject* getOwner() const;
 
 signals:
   void itemTypeChanged();

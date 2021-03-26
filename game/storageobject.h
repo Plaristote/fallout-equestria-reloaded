@@ -16,6 +16,7 @@ public:
   virtual void load(const QJsonObject&);
   virtual void save(QJsonObject&) const;
 
+  virtual void updateTasks(qint64 delta);
   Inventory* getInventory() { return inventory; }
   virtual QStringList getAvailableInteractions();
 
