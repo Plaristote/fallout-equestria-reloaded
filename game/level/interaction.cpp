@@ -151,8 +151,10 @@ void InteractionComponent::initializeDialog(Character* npc)
   Character*       player = Game::get()->getPlayer();
   CharacterDialog* dialog = new CharacterDialog(this);
 
-  dialog->load(npc->getDialogName(), player, npc);
-  emit startDialog(dialog);
+  if (dialog->load(npc->getDialogName(), player, npc))
+    emit startDialog(dialog);
+  else
+    delete dialog;
 }
 
 void InteractionComponent::initializeLooting(StorageObject* target)

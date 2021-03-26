@@ -23,7 +23,7 @@ class CharacterDialog : public QObject
 public:
   explicit CharacterDialog(QObject *parent = nullptr);
 
-  Q_INVOKABLE void load(const QString& name, Character* player, Character* npc);
+  Q_INVOKABLE bool load(const QString& name, Character* player, Character* npc);
   Q_INVOKABLE void loadState(const QString& reference);
   void setAmbiance(const QString& value) { ambiance = value; emit ambianceChanged(); }
 

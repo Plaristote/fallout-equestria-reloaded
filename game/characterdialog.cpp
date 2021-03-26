@@ -10,7 +10,7 @@ CharacterDialog::CharacterDialog(QObject *parent) : QObject(parent)
   ambiance = "wasteland";
 }
 
-void CharacterDialog::load(const QString& name, Character* player, Character* npc)
+bool CharacterDialog::load(const QString& name, Character* player, Character* npc)
 {
   QFile file(SCRIPTS_PATH + "/dialogs/" + name + ".json");
 
@@ -24,9 +24,11 @@ void CharacterDialog::load(const QString& name, Character* player, Character* np
     script->initialize(this);
     loadState(getEntryPoint());
     emit ready();
+    return true;
   }
   else
     qDebug() << "Could not load dialog file " << (SCRIPTS_PATH + "/dialogs/" + name + ".json");
+  return false;
 }
 
 QString CharacterDialog::getEntryPoint()
