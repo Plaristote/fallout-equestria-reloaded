@@ -1,4 +1,5 @@
 #include "storageobject.h"
+#include "game.h"
 
 StorageObject::StorageObject(QObject* parent) : DynamicObject(parent)
 {
@@ -36,4 +37,22 @@ QStringList StorageObject::getAvailableInteractions()
   if (metaObject()->className() == QString("StorageObject"))
     results.prepend("use");
   return results;
+}
+
+bool StorageObject::onTakeItem(Character* user, InventoryItem* item, int quantity)
+{
+  auto& scriptEngine = Game::get()->getScriptEngine();
+
+  if (script && script->hasMethod("onTakeItem"))
+    return script->call("onTakeItem", QJSValueList() << scriptEngine.newQObject(user) << scriptEngine.newQObject(item) << quantity).toBool();
+  return true;
+}
+
+bool StorageObject::onPutItem(Character* user, InventoryItem* item, int quantity)
+{
+  auto& scriptEngine = Game::get()->getScriptEngine();
+
+  if (script && script->hasMethod("onPutItem"))
+    return script->call("onPutItem", QJSValueList() << scriptEngine.newQObject(user) << scriptEngine.newQObject(item) << quantity).toBool();
+  return true;
 }

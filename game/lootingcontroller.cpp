@@ -18,35 +18,45 @@ bool LootingController::take(InventoryItem* item, int quantity)
 {
   if (item->getWeight() / item->getQuantity() * quantity <= getCapacityLeft())
   {
-    if (quantity == item->getQuantity())
+    if (target->onTakeItem(character, item, quantity))
     {
-      target->getInventory()->removeItem(item);
-      character->getInventory()->addItem(item);
-      return true;
+      if (quantity == item->getQuantity())
+      {
+        target->getInventory()->removeItem(item);
+        character->getInventory()->addItem(item);
+        return true;
+      }
+      else if (quantity < item->getQuantity())
+      {
+        item->remove(quantity);
+        character->getInventory()->addItemOfType(item->getObjectName(), quantity);
+        return true;
+      }
     }
-    else if (quantity < item->getQuantity())
-    {
-      item->remove(quantity);
-      character->getInventory()->addItemOfType(item->getObjectName(), quantity);
-      return true;
-    }
+    else
+      emit finished();
   }
   return false;
 }
 
 bool LootingController::drop(InventoryItem* item, int quantity)
 {
-  if (item->getQuantity() == quantity)
+  if (target->onPutItem(character, item, quantity))
   {
-    character->getInventory()->removeItem(item);
-    target->getInventory()->addItem(item);
-    return true;
+    if (item->getQuantity() == quantity)
+    {
+      character->getInventory()->removeItem(item);
+      target->getInventory()->addItem(item);
+      return true;
+    }
+    else if (item->getQuantity() > quantity)
+    {
+      item->remove(quantity);
+      target->getInventory()->addItemOfType(item->getObjectName());
+      return true;
+    }
   }
-  else if (item->getQuantity() > quantity)
-  {
-    item->remove(quantity);
-    target->getInventory()->addItemOfType(item->getObjectName());
-    return true;
-  }
+  else
+    emit finished();
   return false;
 }

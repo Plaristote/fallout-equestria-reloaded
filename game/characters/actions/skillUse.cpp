@@ -36,11 +36,35 @@ void SkillAction::performAction()
   bool  isInCombat = level && level->isInCombat(character);
   bool  success = false;
 
-  if (!isInCombat || getApCost() <= character->getActionPoints())
+  if (skillName == "steal")
+    success = performSteal();
+  else if (!isInCombat || getApCost() <= character->getActionPoints())
     success = target->triggerSkillUse(character, skillName);
   else if (character == level->getPlayer())
     emit level->displayConsoleMessage("Not enough action points.");
   state = success ? Done : Interrupted;
+}
+
+bool SkillAction::performSteal()
+{
+  auto* level = Game::get()->getLevel();
+  bool  isInCombat = level && level->isInCombat(character);
+
+  if (!isInCombat)
+  {
+    QString type = target->getObjectType();
+
+    if (type == "StorageObject" || type == "Character")
+    {
+      level->initializeLooting(reinterpret_cast<StorageObject*>(target));
+      return true;
+    }
+    else
+      emit level->displayConsoleMessage("Invalid target.");
+  }
+  else
+    emit level->displayConsoleMessage("Not available in combat.");
+  return false;
 }
 
 int SkillAction::getApCost() const

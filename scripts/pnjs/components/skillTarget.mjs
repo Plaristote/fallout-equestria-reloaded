@@ -29,6 +29,14 @@ export class SkillTargetComponent extends MetabolismComponent {
     return false;
   }
 
-  onUseSteal(user) {
+  onTakeItem(user, item, quantity) {
+    console.log("on take item", user, item, quantity);
+    level.addTextBubble(this.model, "Hey ! Don't touch that", 3000, "red");
+    return false;
+  }
+
+  onPutItem(user, item, quantity) {
+    console.log("on put item", user, item, quantity);
+    return true;
   }
 }

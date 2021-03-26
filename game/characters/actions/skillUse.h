@@ -17,6 +17,7 @@ public:
 
 protected:
   void performAction();
+  bool performSteal();
 
   DynamicObject*    target;
   QString           skillName;
