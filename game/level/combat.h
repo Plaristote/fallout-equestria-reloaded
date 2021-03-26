@@ -4,7 +4,7 @@
 # include <QObject>
 # include <QQmlListProperty>
 # include "../character.h"
-# include "visualEffects.h"
+# include "visualeffects.h"
 
 # define WORLDTIME_TURN_DURATION_IN_SECONDS 10
 # define WORLDTIME_TURN_DURATION WORLDTIME_TURN_DURATION_IN_SECONDS * 1000
