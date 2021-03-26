@@ -7,11 +7,14 @@ export class CharacterBehaviour extends CombatComponent {
   }
 
   getAvailableInteractions() {
-    const interactions = ["look", "use-skill"];
+    if (this.model.isAlive()) {
+      const interactions = ["look", "use-skill"];
 
-    if (this.dialog || this.textBubbles)
-      interactions.unshift("talk-to");
-    return interactions;
+      if (this.dialog || this.textBubbles)
+        interactions.unshift("talk-to");
+      return interactions;
+    }
+    return ["use", "look"];
   }
 
   onLook() {
