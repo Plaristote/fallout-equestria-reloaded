@@ -67,6 +67,25 @@ bool InventoryItem::isGroupable(InventoryItem* other)
   return result;
 }
 
+QStringList InventoryItem::getUseModes() const
+{
+  if (script)
+  {
+    QJSValue useModes = script->property("useModes");
+
+    if (useModes.isArray())
+      return script->property("useModes").toVariant().toStringList();
+  }
+  return QStringList() << "use";
+}
+
+bool InventoryItem::requiresTarget() const
+{
+  if (script)
+    return script->property("requiresTarget").toBool();
+  return true;
+}
+
 void InventoryItem::add(int amount)
 {
   quantity += amount;
@@ -159,6 +178,12 @@ QJSValue InventoryItem::useOn(DynamicObject* target)
   return false;
 }
 
+void InventoryItem::setCountdown(int value)
+{
+  if (script && script->hasMethod("onCountdownReceived"))
+    script->call("onCountdownReceived", QJSValueList() << value);
+}
+
 int InventoryItem::getUseSuccessRate(DynamicObject* target)
 {
   if (isValidTarget(target))
@@ -195,6 +220,7 @@ void InventoryItem::updateScript()
   if (itemData.isObject())
     scriptName = itemData["script"].toString(scriptName);
   setScript(scriptName);
+  emit useModesChanged();
 }
 
 void InventoryItem::updateSprite()
@@ -213,6 +239,7 @@ void InventoryItem::save(QJsonObject& data) const
   data["quantity"] = quantity;
   if (virtualItem)
     data["virtual"] = virtualItem;
+  data["useMode"] = useMode;
   DynamicObject::save(data);
 }
 
@@ -221,7 +248,10 @@ void InventoryItem::load(const QJsonObject& data)
   itemType = data["itemType"].toString();
   quantity = data["quantity"].toInt(1);
   virtualItem = data["virtual"].toBool();
+  useMode = data["useMode"].toString();
   DynamicObject::load(data);
   emit quantityChanged();
   emit objectNameChanged();
+  emit useModesChanged();
+  emit useModeChanged();
 }

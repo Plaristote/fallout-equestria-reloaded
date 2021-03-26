@@ -34,6 +34,7 @@ public:
   void unregisterDynamicObject(DynamicObject*);
 
   bool             openInteractionMenu(DynamicObject* target);
+  Q_INVOKABLE void openCountdownDialog(InventoryItem* item);
   Q_INVOKABLE void interactOrderReceived(DynamicObject* target, const QString& interactionType);
   Q_INVOKABLE void swapMouseMode();
   Q_INVOKABLE void setActiveItem(const QString&);
@@ -54,9 +55,13 @@ public:
 signals:
   void mouseModeChanged();
   void interactionRequired(DynamicObject* target, QStringList options);
+  void countdownRequired(InventoryItem* item);
   void startDialog(CharacterDialog*);
   void startLooting(LootingController*);
   void activeItemChanged();
+
+private slots:
+  void onActiveItemChanged();
 
 protected:
   QString        activeItemSlot, activeSkill;

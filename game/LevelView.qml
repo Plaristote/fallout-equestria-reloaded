@@ -2,6 +2,7 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 import "qrc:/assets/ui" as UiStyle
 import "../ui"
+import "./hud" as Hud
 
 Item {
   id: root
@@ -169,6 +170,11 @@ Item {
       application.pushView("game/Looting.qml", {controller: lootingController});
       levelController.paused = true;
     }
+
+    function onCountdownRequired(item) {
+      countdownDialog.item = item;
+      countdownDialog.visible = true;
+    }
   }
 
   LevelHud {
@@ -213,6 +219,15 @@ Item {
     visible: false
     onVisibleChanged: levelController.paused = visible
     onClosed: visible = false
+  }
+
+  Hud.CountdownDialog {
+    id: countdownDialog
+    visible: false
+    onVisibleChanged: {
+      if (!inventoryView.visible)
+        levelController.paused = visible;
+    }
   }
 
   LevelMenu {

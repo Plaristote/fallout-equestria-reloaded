@@ -1,4 +1,6 @@
 {
+  "Ok": "Ok",
+  "Cancel": "Cancel",
   "messages": {
     "weapons": {
       "use":   "{{user}} used {{item}} on {{target}} for {{damage}} damage",

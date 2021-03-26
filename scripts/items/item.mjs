@@ -4,6 +4,7 @@ export class Item {
   constructor(model) {
     this.model = model;
     this.triggersCombat = false;
+    this.useModes = ["use"];
   }
 
   onEquipped(character, on) {
@@ -17,6 +18,10 @@ export class Item {
 
   getActionPointCost() {
     return 2;
+  }
+
+  get requiresTarget() {
+    return true;
   }
 
   isValidTarget(object) {

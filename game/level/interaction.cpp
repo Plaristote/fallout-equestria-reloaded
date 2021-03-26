@@ -36,6 +36,11 @@ bool InteractionComponent::openInteractionMenu(DynamicObject* object)
   return false;
 }
 
+void InteractionComponent::openCountdownDialog(InventoryItem *item)
+{
+  emit countdownRequired(item);
+}
+
 void InteractionComponent::interactOrderReceived(DynamicObject* target, const QString& interactionType)
 {
   auto  position = target->getInteractionPosition();
@@ -77,6 +82,15 @@ void InteractionComponent::setActiveItem(const QString& slotName)
   activeSkill = "";
   emit activeItemChanged();
   emit mouseModeChanged();
+  onActiveItemChanged();
+}
+
+void InteractionComponent::onActiveItemChanged()
+{
+  if (activeItem)
+    qDebug() << "InteractionComponent::onActiveItemChanged" << activeItem->getItemType() << ": " << activeItem->requiresTarget();
+  if (activeItem && !activeItem->requiresTarget())
+    useItemOn(getPlayer());
 }
 
 int InteractionComponent::getTargetMode() const

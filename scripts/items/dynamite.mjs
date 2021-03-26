@@ -26,13 +26,16 @@ class Dynamite extends Item {
     return 5;
   }
 
-  useOn(target) {
-    this.trigger(10000);
-    game.appendToConsole("ca va peter");
+  get requiresTarget() {
+    return false;
   }
 
-  trigger(timeout) {
-    this.model.tasks.addTask("explode", timeout, 1);
+  useOn() {
+    level.openCountdownDialog(this.model);
+  }
+
+  onCountdownReceived(timeout) {
+    this.model.tasks.addTask("explode", timeout * 1000, 1);
   }
 
   explode() {
