@@ -137,7 +137,7 @@ bool LevelGrid::findPath(QPoint from, QPoint to, QList<QPoint>& path)
     toCase->occupied = false;
     path.clear();
     astar.SetStartAndGoalStates(*fromCase, *toCase);
-    while ((state = astar.SearchStep()) == Pathfinder::Searching && ++iterationCount < 250);
+    while ((state = astar.SearchStep()) == Pathfinder::Searching && ++iterationCount < 1250);
     if (state == Pathfinder::Succeeded)
     {
       for (auto& gridCase : astar.GetSolution())
@@ -150,6 +150,8 @@ bool LevelGrid::findPath(QPoint from, QPoint to, QList<QPoint>& path)
     fromCase->occupied = fromOccupiedBackup;
     toCase->occupied = toOccupiedBackup;
   }
+  else
+    qDebug() << "Pathfinding: invalid coordinates";
   return false;
 }
 
