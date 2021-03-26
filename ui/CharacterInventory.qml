@@ -46,9 +46,7 @@ Pane {
       id: useButton
       text: "Use"
       visible: selectedObject != null
-      onClicked: {
-        selectedObject.useOn(character);
-      }
+      onClicked: selectedObject.useFromInventory()
     }
 
     MenuButton {
@@ -60,7 +58,6 @@ Pane {
         selectedObject = null;
       }
     }
-
 
     Repeater {
       model: additionalControls

@@ -7,9 +7,12 @@ export class Item {
     this.useModes = ["use"];
   }
 
+  get user() {
+    return this.model.getOwner();
+  }
+
   onEquipped(character, on) {
     console.log("ON EQUIPED ITEM MAGGLE", character, on);
-    this.user = on ? character : null;
   }
 
   getAvailableInteractions() {
@@ -44,19 +47,19 @@ export class Item {
   }
 
   attemptToUseOn(target) {
-    console.log("Attempt to uze on", this, this.isValidTarget, this.model, this.triggersCombat, this.getActionPointCost);
     if (this.isValidTarget(target)) {
       if (this.isInRange(target)) {
         if (this.user.useActionPoints(this.getActionPointCost()))
           return this.triggerUseOn(target);
         else
-          this.logFailure("Not enough action points.");
+          this.logFailure(i18n.t("messages.not-enough-ap"));
       }
       else
-        this.logFailure("Out of range.");
+        this.logFailure(i18n.t("messages.out-of-range"));
     }
     else
-      this.logFailure("Invalid target");
+      this.logFailure(i18n.t("messages.invalid-target"));
+    console.log("Wait wtf?", this.user, level.player);
     return false;
   }
 

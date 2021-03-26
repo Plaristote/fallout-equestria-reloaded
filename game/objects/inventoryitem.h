@@ -43,12 +43,13 @@ public:
   Q_INVOKABLE bool canEquipInSlot(const QString&);
   void onEquippedBy(Character*, bool on);
 
-  Q_INVOKABLE int      getActionPointCost();
-  Q_INVOKABLE bool     isCombatItem();
-  Q_INVOKABLE bool     isInRange(DynamicObject* target);
-  Q_INVOKABLE bool     isValidTarget(DynamicObject*);
-  Q_INVOKABLE QJSValue useOn(DynamicObject* target);
-  Q_INVOKABLE int      getUseSuccessRate(DynamicObject* target);
+  Q_INVOKABLE int            getActionPointCost();
+  Q_INVOKABLE bool           isCombatItem();
+  Q_INVOKABLE bool           isInRange(DynamicObject* target);
+  Q_INVOKABLE bool           isValidTarget(DynamicObject*);
+  Q_INVOKABLE QJSValue       useOn(DynamicObject* target);
+  Q_INVOKABLE void           useFromInventory();
+  Q_INVOKABLE int            getUseSuccessRate(DynamicObject* target);
   Q_INVOKABLE DynamicObject* getOwner() const;
   Q_INVOKABLE void           setCountdown(int value);
   Q_INVOKABLE void           swapUseMode();

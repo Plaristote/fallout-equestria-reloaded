@@ -179,6 +179,19 @@ QJSValue InventoryItem::useOn(DynamicObject* target)
   return false;
 }
 
+void InventoryItem::useFromInventory()
+{
+  QJSValue result = useOn(getOwner());
+
+  if (result.isObject())
+  {
+    QJSValue callback = result.property("callback");
+
+    if (callback.isCallable())
+      callback.call();
+  }
+}
+
 void InventoryItem::setCountdown(int value)
 {
   if (script && script->hasMethod("onCountdownReceived"))

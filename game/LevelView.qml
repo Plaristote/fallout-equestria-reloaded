@@ -6,8 +6,9 @@ import "./hud" as Hud
 
 Item {
   id: root
-  property QtObject gameController;
-  property QtObject levelController;
+  property QtObject gameController
+  property QtObject levelController
+  property bool hasOverlay: interactionMenu.visible || inventoryViewContainer.visible || skilldex.visible || countdownDialog.visible || mainMenu.visible
   anchors.fill: parent
 
   function openMenu() {
@@ -17,13 +18,19 @@ Item {
     mainMenu.visible = !mainMenu.visible;
   }
 
+  onHasOverlayChanged: levelController.paused = hasOverlay
+
   Shortcut {
     sequence: "Esc"
     onActivated: {
       if (interactionMenu.visible)
         interactionMenu.interactionTarget = null;
-      else if (inventoryView.visible)
-        inventoryView.visible = false;
+      else if (countdownDialog.visible)
+        countdownDialog.visible = false;
+      else if (inventoryViewContainer.visible)
+        inventoryViewContainer.visible = false;
+      else if (skilldex.visible)
+        skilldex.visible = false;
       else
         openMenuAction.trigger()
     }
@@ -41,7 +48,7 @@ Item {
       onActivated: openInventoryAction.trigger()
     }
     onTriggered: {
-      inventoryView.visible = true;
+      inventoryViewContainer.visible = true;
     }
   }
 
@@ -111,10 +118,6 @@ Item {
 
     x: interactionPosition.x + canvas.origin.x
     y: interactionPosition.y + canvas.origin.y
-
-    onVisibleChanged: {
-      levelController.paused = visible;
-    }
 
     Column {
       Repeater {
@@ -208,32 +211,37 @@ Item {
     }
   }
 
-  CharacterInventory {
-    id: inventoryView
-    character: levelController.player
-    anchors { top: parent.top; left: parent.left; bottom: levelHud.top; right: parent.right }
-    anchors.leftMargin:  parent.width > 1200 ? parent.width / 4 : parent.width / 8
-    anchors.rightMargin: parent.width > 1200 ? parent.width / 4 : parent.width / 8
-    anchors.bottomMargin: 50
-    anchors.topMargin: 50
+  Rectangle {
+    id: inventoryViewContainer
+    color: Qt.rgba(0, 0, 0, 0.5)
+    anchors.fill: parent
     visible: false
-    onVisibleChanged: levelController.paused = visible
-    onClosed: visible = false
+
+    MouseArea {
+      anchors.fill: parent
+    }
+
+    CharacterInventory {
+      id: inventoryView
+      character: levelController.player
+      anchors { top: parent.top; left: parent.left; right: parent.right }
+      anchors.leftMargin:  parent.width > 1200 ? parent.width / 4 : parent.width / 8
+      anchors.rightMargin: parent.width > 1200 ? parent.width / 4 : parent.width / 8
+      anchors.bottomMargin: 50
+      anchors.topMargin: 50
+      height: parent.height - levelHud.height
+      onClosed: inventoryViewContainer.visible = false
+    }
   }
 
   Hud.CountdownDialog {
     id: countdownDialog
     visible: false
-    onVisibleChanged: {
-      if (!inventoryView.visible)
-        levelController.paused = visible;
-    }
   }
 
   LevelMenu {
     id: mainMenu
     anchors.centerIn: parent
     visible: false
-    onVisibleChanged: levelController.paused = visible
   }
 }
