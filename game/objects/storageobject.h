@@ -1,8 +1,8 @@
 #ifndef STORAGEOBJECT_H
 #define STORAGEOBJECT_H
 
-#include "dynamicobject.h"
-#include "inventory.h"
+#include "../dynamicobject.h"
+#include "../inventory.h"
 #include <QObject>
 
 class StorageObject : public DynamicObject

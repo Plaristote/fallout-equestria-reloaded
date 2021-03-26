@@ -15,7 +15,7 @@
 #include "game.h"
 #include "game/dices.hpp"
 #include "game/dynamicobject.h"
-#include "game/inventoryitem.h"
+#include "game/objects/inventoryitem.h"
 #include "game/objects/doorway.h"
 #include "game/leveltask.h"
 #include "game/characterdialog.h"

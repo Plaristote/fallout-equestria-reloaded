@@ -1,6 +1,6 @@
 #include "globals.h"
 #include "inventoryitem.h"
-#include "inventoryitemlibrary.h"
+#include "../inventoryitemlibrary.h"
 #include "game.h"
 
 InventoryItem::InventoryItem(QObject* parent) : DynamicObject(parent), quantity(1)

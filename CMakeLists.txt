@@ -63,8 +63,6 @@ set(PROJECT_SOURCES
         game/levelgrid.cpp
         game/dynamicobject.h
         game/dynamicobject.cpp
-        game/storageobject.h
-        game/storageobject.cpp
         game/character.h
         game/character.cpp
         game/characterparty.h
@@ -106,8 +104,6 @@ set(PROJECT_SOURCES
         game/taskrunner.cpp
         game/inventory.h
         game/inventory.cpp
-        game/inventoryitem.h
-        game/inventoryitem.cpp
         game/inventoryitemlibrary.h
         game/inventoryitemlibrary.cpp
         game/diplomacy.hpp
@@ -128,6 +124,10 @@ set(PROJECT_SOURCES
         game/level/textbubbles.cpp
         game/objects/doorway.h
         game/objects/doorway.cpp
+        game/objects/storageobject.h
+        game/objects/storageobject.cpp
+        game/objects/inventoryitem.h
+        game/objects/inventoryitem.cpp
         game/animationSequence/ianimationpart.h
         game/animationSequence/objectanimationpart.h
         game/animationSequence/objectanimationpart.cpp

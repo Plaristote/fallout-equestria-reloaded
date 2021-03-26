@@ -1,7 +1,7 @@
 #ifndef CHARACTERMOVEMENT_H
 #define CHARACTERMOVEMENT_H
 
-#include "../storageobject.h"
+#include "../objects/storageobject.h"
 #define CHARACTER_BASE_OBJECT StorageObject
 
 class CharacterMovement : public CHARACTER_BASE_OBJECT

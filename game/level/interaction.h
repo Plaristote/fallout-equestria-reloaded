@@ -4,7 +4,7 @@
 # include <QObject>
 # include "grid.h"
 # include "../dynamicobject.h"
-# include "../inventoryitem.h"
+# include "../objects/inventoryitem.h"
 
 class CharacterDialog;
 class LootingController;

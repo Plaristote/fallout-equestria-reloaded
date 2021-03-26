@@ -2,8 +2,8 @@
 #include "game.h"
 #include "characterdialog.h"
 #include <QJsonArray>
-#include "inventoryitem.h"
 #include "characters/actionqueue.h"
+#include "objects/inventoryitem.h"
 #include "objects/doorway.h"
 
 LevelTask::LevelTask(QObject *parent) : CombatComponent(parent)

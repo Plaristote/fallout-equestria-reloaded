@@ -2,7 +2,7 @@
 #define LOOTINGCONTROLLER_H
 
 #include <QObject>
-#include "storageobject.h"
+#include "objects/storageobject.h"
 #include "character.h"
 
 class LootingController : public QObject

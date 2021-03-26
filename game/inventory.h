@@ -3,7 +3,7 @@
 
 # include <QObject>
 # include <QQmlListProperty>
-# include "inventoryitem.h"
+# include "objects/inventoryitem.h"
 
 class Character;
 

@@ -1,7 +1,7 @@
 #ifndef INVENTORYITEM_H
 #define INVENTORYITEM_H
 
-#include "dynamicobject.h"
+#include "../dynamicobject.h"
 #include <QJSValue>
 #include <QObject>
 
