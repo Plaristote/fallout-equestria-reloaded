@@ -121,20 +121,24 @@ void GridComponent::setObjectPosition(DynamicObject* object, int x, int y)
 
 QPoint GridComponent::getAdjustedOffsetFor(DynamicObject* object) const
 {
-  QSize  tileSize = tilemap->getTileSize();
-  QPoint offset   = object->getSpritePosition();
-  QRect  rect     = object->getClippedRect();
-
-  if (!object->isFloating())
+  if (object)
   {
-    const auto extraHeight = rect.height() - tileSize.height();
+    QSize  tileSize = tilemap->getTileSize();
+    QPoint offset   = object->getSpritePosition();
+    QRect  rect     = object->getClippedRect();
 
-    return QPoint(
-      offset.x() + (tileSize.width() / 2 - rect.width() / 2),
-      offset.y() - extraHeight
-    );
+    if (!object->isFloating())
+    {
+      const auto extraHeight = rect.height() - tileSize.height();
+
+      return QPoint(
+        offset.x() + (tileSize.width() / 2 - rect.width() / 2),
+        offset.y() - extraHeight
+      );
+    }
+    return offset;
   }
-  return offset;
+  return QPoint(0, 0);
 }
 
 TileLayer* GridComponent::getRoofFor(DynamicObject* object) const

@@ -218,6 +218,7 @@ void Character::initializeEmptySlot(const QString& slotName)
     InventoryItem* item = new InventoryItem(this);
 
     item->setObjectName(getDefaultItemForSlot(slotName));
+    item->setItemType(item->getObjectName());
     item->setVirtual(true);
     inventory->equipItem(item, slotName);
   }
