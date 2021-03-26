@@ -7,7 +7,11 @@ export class SkillTargetComponent extends MetabolismComponent {
   }
 
   onUseMedicine(user) {
-    if (!level.isInCombat(user))
+    if (!this.model.isAlive())
+      game.appendToConsole(i18n.t("messages.invalid-target"));
+    else if (level.isInCombat(user))
+      game.appendToConsole(i18n.t("medicine-skill.in-combat"));
+    else
     {
       const stats   = this.model.statistics;
       const maxHeal = stats.maxHitPoints - stats.hitPoints;
@@ -24,8 +28,6 @@ export class SkillTargetComponent extends MetabolismComponent {
       level.addTextBubble(this.model, "Thank you kindly !", 5000, "lightgreen");
       return true;
     }
-    else
-      game.appendToConsole(i18n.t("medicine-skill.in-combat"));
     return false;
   }
 

@@ -11,17 +11,22 @@ class Medikit extends Item {
   }
 
   useOn(target) {
-    const stats   = target.statistics;
-    const maxHeal = stats.maxHitPoints - stats.hitPoints;
-    var   healed  = getValueFromRange(15, 30);
+    if (target.isAlive()) {
+      const stats   = target.statistics;
+      const maxHeal = stats.maxHitPoints - stats.hitPoints;
+      var   healed  = getValueFromRange(15, 30);
 
-    healed = healed * this.user.statistics.medicine / 100;
-    healed = Math.min(healed, maxHeal);
-    healed = Math.floor(healed);
-    stats.hitPoints += healed;
-    game.appendToConsole(this.user.statistics.name + " used " + this.model.objectName);
-    game.appendToConsole(target.statistics.name + " was healed for " + healed + " hit points");
-    return true;
+      healed = healed * this.user.statistics.medicine / 100;
+      healed = Math.min(healed, maxHeal);
+      healed = Math.floor(healed);
+      stats.hitPoints += healed;
+      game.appendToConsole(this.user.statistics.name + " used " + this.model.objectName);
+      game.appendToConsole(target.statistics.name + " was healed for " + healed + " hit points");
+      return true;
+    }
+    else
+      game.appendToConsole(i18n.t("messages.invalid-target"));
+    return false;
   }
 };
 
