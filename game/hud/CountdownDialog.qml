@@ -57,18 +57,31 @@ Rectangle {
   Pane {
     background: UiStyle.Pane {}
     anchors.centerIn: parent
-    width: 500
-    height: 200
+    width: 550
+    height: 150
+
+    Text {
+      id: title
+      text: i18n.t("Countdown")
+      font.family: application.titleFontName
+      font.pixelSize: 16
+      leftPadding: 20
+      color: "white"
+      anchors.left: parent.left
+      anchors.top: parent.top
+    }
 
     Pane {
       background: UiStyle.TerminalPane {}
       anchors {
-        top: parent.top
+        top: title.bottom
         bottom: countdownControls.top
         horizontalCenter: parent.horizontalCenter
       }
 
       Row {
+        spacing: 5
+
         TerminalField {
           text: minutes.toString()
           readOnly: true

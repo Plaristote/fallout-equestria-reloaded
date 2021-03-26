@@ -1,6 +1,7 @@
 {
   "Ok": "Ok",
   "Cancel": "Cancel",
+  "AP": "AP",
   "messages": {
     "weapons": {
       "use":   "{{user}} used {{item}} on {{target}} for {{damage}} damage",
@@ -16,7 +17,18 @@
     "door-is-locked": "It's locked",
     "door-is-blocked": "Something's in the way.",
     "xp-gain": "You gained {{xp}} experience points.",
-    "nothing-happens": "That does nothing."
+    "nothing-happens": "That does nothing.",
+    "invalid-target": "Invalid target."
+  },
+  "use-modes": {
+    "use": "Use",
+    "shoot": "Shoot",
+    "reload": "Reload"
+  },
+  "items": {
+    "dynamite": "Dynamite",
+    "melee-bucking": "Buck",
+    "melee-hoofercut": "Hoofercut"
   },
   "dialogs": {
     "tutoCharIntro": {

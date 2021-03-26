@@ -51,6 +51,8 @@ public:
   Q_INVOKABLE int      getUseSuccessRate(DynamicObject* target);
   Q_INVOKABLE DynamicObject* getOwner() const;
   Q_INVOKABLE void           setCountdown(int value);
+  Q_INVOKABLE void           swapUseMode();
+  void                       resetUseMode();
 
 signals:
   void itemTypeChanged();

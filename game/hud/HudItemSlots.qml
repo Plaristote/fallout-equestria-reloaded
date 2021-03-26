@@ -40,30 +40,52 @@ Item {
     Repeater {
       id: itemSlotsRepeater
       model: itemSlotsPane.inventory.slotNames
-      delegate: Button {
+      delegate: BorderImage {
         property string slotName: itemSlotsRepeater.model[index]
         property QtObject slotItem: itemSlotsPane.inventory.getEquippedItem(slotName)
         property bool activated: activeItem === slotItem
 
         anchors { top: parent.top; bottom: parent.bottom }
         width: 200
-        hoverEnabled: true
-        background: BorderImage {
-          source: "qrc:/assets/ui/itemSlot.png"
-          border { left: 4; bottom: 4; right: 4; top: 4 }
+        source: "qrc:/assets/ui/itemSlot.png"
+        border { left: 4; bottom: 4; right: 4; top: 4 }
+
+        MouseArea {
+          id: mouseArea
+          anchors.fill: parent
+          hoverEnabled: true
+          acceptedButtons: Qt.LeftButton | Qt.RightButton
+          cursorShape: Qt.PointingHandCursor
+          onClicked: {
+            switch (mouse.button) {
+            case Qt.LeftButton:
+              itemActivated(slotName);
+              break;
+            case Qt.RightButton:
+              slotItem.swapUseMode();
+              break ;
+            }
+          }
         }
         ColorOverlay {
           anchors.fill: parent
-          source: background
-          visible: parent.hovered
+          source: parent
+          visible: mouseArea.containsMouse && !parent.activated
+          color: Qt.rgba(155, 155, 155, 0.1)
+        }
+        ColorOverlay {
+          anchors.fill: parent
+          source: parent
+          visible: parent.activated && !mouseArea.containsMouse
+          color: Qt.rgba(155, 155, 155, 0.2)
+        }
+        ColorOverlay {
+          anchors.fill: parent
+          source: parent
+          visible: parent.activated && mouseArea.containsMouse
           color: Qt.rgba(155, 155, 155, 0.3)
         }
-        ColorOverlay {
-          anchors.fill: parent
-          source: background
-          visible: parent.activated
-          color: Qt.rgba(200, 200, 0, 0.5)
-        }
+
         Text {
           anchors.top: parent.top
           anchors.left: parent.left
@@ -71,7 +93,7 @@ Item {
           font.family: application.titleFontName
           font.pixelSize: 14
           color: "yellow"
-          text: slotItem ? slotItem.objectName : ""
+          text: slotItem ? i18n.t("items." + slotItem.itemType) : ""
         }
         Text {
           anchors.bottom: parent.bottom
@@ -80,8 +102,18 @@ Item {
           font.family: application.titleFontName
           font.pixelSize: 14
           color: "yellow"
-          text: slotItem ? slotItem.getActionPointCost() + " AP" : ""
+          text: slotItem ? slotItem.getActionPointCost() + " " + i18n.t("AP") : ""
         }
+        Text {
+          anchors.bottom: parent.bottom
+          anchors.left: parent.left
+          anchors.margins: 5
+          font.family: application.titleFontName
+          font.pixelSize: 14
+          color: "yellow"
+          text: slotItem ? i18n.t("use-modes." + slotItem.useMode) : ""
+        }
+
         ItemIcon {
           anchors.centerIn: parent
           model: slotItem
@@ -90,7 +122,6 @@ Item {
           sequence: (index + 1).toString()
           onActivated: itemActivated(slotName)
         }
-        onClicked: itemActivated(slotName)
       } // END Button
     } // END Repeater
   } // END Row

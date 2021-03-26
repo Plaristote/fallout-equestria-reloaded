@@ -105,6 +105,7 @@ bool InventoryItem::remove(int amount)
 
 void InventoryItem::onEquippedBy(Character* user, bool on)
 {
+  resetUseMode();
   if (script)
   {
     QJSValueList args;
@@ -182,6 +183,37 @@ void InventoryItem::setCountdown(int value)
 {
   if (script && script->hasMethod("onCountdownReceived"))
     script->call("onCountdownReceived", QJSValueList() << value);
+}
+
+void InventoryItem::swapUseMode()
+{
+  QStringList useModes = getUseModes();
+  int currentIndex = useModes.indexOf(useMode);
+
+  switch (useModes.length())
+  {
+  case 0:
+    useMode = "use";
+    break ;
+  case 1:
+    useMode = useModes.first();
+    break;
+  default:
+    if (currentIndex + 1 >= useModes.length() || currentIndex == -1)
+      useMode = useModes.first();
+    else
+      useMode = useModes[currentIndex + 1];
+    break ;
+  }
+  emit useModeChanged();
+}
+
+void InventoryItem::resetUseMode()
+{
+  QStringList useModes = getUseModes();
+
+  useMode = useModes.length() > 0 ? useModes.first() : "use";
+  emit useModeChanged();
 }
 
 int InventoryItem::getUseSuccessRate(DynamicObject* target)
