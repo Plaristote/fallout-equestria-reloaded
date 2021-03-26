@@ -35,6 +35,10 @@ Thumbs.db
 /.qmake.cache
 /.qmake.stash
 
+# foe files
+saves/
+.prerender/
+
 # qtcreator generated files
 *.pro.user*
 CMakeLists.txt.user

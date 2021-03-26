@@ -114,6 +114,7 @@ Canvas {
 
   function preloadImages() {
     const images = [];
+    const preRenderPath = "file://" + levelController.preRenderPath;
     var i;
 
     for (i = 0 ; i < levelController.tilemap.textureList.length ; ++i) {
@@ -125,17 +126,18 @@ Canvas {
       }
       loadImage("../assets/ui/cursors/move-tile.png");
     }
-    unloadImage(rootPath + "_tilemap.png");
-    loadImage(rootPath + "_tilemap.png");
+    console.log("LevelCanvas: Preloading tilemap", (preRenderPath + "tilemap.png"));
+    unloadImage(preRenderPath + "tilemap.png");
+    loadImage(preRenderPath + "tilemap.png");
     for (i = 0 ; i < levelController.tilemap.roofs.length ; ++i) {
       const roof = levelController.tilemap.roofs[i];
-      const src  = rootPath + "_roof_" + roof.name + ".png";
+      const src  = preRenderPath + "roof_" + roof.name + ".png";
       unloadImage(src);
       loadImage(src);
     }
     for (i = 0 ; i < levelController.tilemap.lights.length ; ++i) {
       const lights = levelController.tilemap.lights[i];
-      const src = rootPath + "_lights_" + lights.name + ".png";
+      const src = preRenderPath + "lights_" + lights.name + ".png";
       unloadImage(src);
       loadImage(src);
     }

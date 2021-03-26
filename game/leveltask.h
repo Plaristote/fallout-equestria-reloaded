@@ -24,6 +24,7 @@ class LevelTask : public CombatComponent
   Q_OBJECT
 
   Q_PROPERTY(QString    name MEMBER name)
+  Q_PROPERTY(QString    preRenderPath READ getPreRenderPath)
   Q_PROPERTY(bool       paused  MEMBER paused NOTIFY pausedChanged)
   Q_PROPERTY(TileMap*   tilemap READ getTileMap NOTIFY tilemapReady)
   Q_PROPERTY(Character* player READ getPlayer NOTIFY playerChanged)
@@ -99,7 +100,9 @@ private slots:
   void unregisterControlZone(TileZone*);
 
 private:
-  void loadTilemap(const QString& levelName);
+  void loadTilemap();
+  void preRenderTilemap();
+  QString getPreRenderPath() const;
 
   QTimer            updateTimer;
   QElapsedTimer     clock;

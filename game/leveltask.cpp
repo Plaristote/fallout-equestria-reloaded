@@ -50,7 +50,7 @@ void LevelTask::load(const QString& levelName, DataEngine* dataEngine)
 {
   name = levelName;
   timeManager = Game::get()->getTimeManager();
-  loadTilemap(levelName);
+  loadTilemap();
   grid->initializeGrid(tilemap);
   script = new ScriptController(SCRIPTS_PATH + "levels/" + levelName + ".mjs");
   script->initialize(this);
@@ -65,24 +65,41 @@ void LevelTask::load(const QString& levelName, DataEngine* dataEngine)
     connect(getPlayer()->getFieldOfView(), &FieldOfView::refreshed, this, &LevelTask::visibleCharactersChanged);
 }
 
-void LevelTask::loadTilemap(const QString& levelName)
+QString LevelTask::getPreRenderPath() const
 {
-  tilemap->load(levelName);
-  tilemap->getLayer("ground")->renderToFile("_tilemap.png");
+  return QDir::currentPath() + "/.prerender/" + name + '/';
+}
+
+void LevelTask::loadTilemap()
+{
+  QDir dir;
+
+  tilemap->load(name);
+  if (!dir.exists(getPreRenderPath()))
+    preRenderTilemap();
+  GridComponent::load();
+  emit tilemapReady();
+}
+
+void LevelTask::preRenderTilemap()
+{
+  QDir dir;
+  QString prerenderFolder = getPreRenderPath();
+
+  dir.mkpath(prerenderFolder);
+  tilemap->getLayer("ground")->renderToFile(prerenderFolder + "tilemap.png");
   for (TileLayer* roofLayer : tilemap->getRoofs())
   {
-    QString fileName = "_roof_" + roofLayer->getName() + ".png";
+    QString fileName = "roof_" + roofLayer->getName() + ".png";
 
-    roofLayer->renderToFile(fileName);
+    roofLayer->renderToFile(prerenderFolder + fileName);
   }
   for (TileLayer* lightLayer : tilemap->getLights())
   {
-    QString fileName = "_lights_" + lightLayer->getName() + ".png";
+    QString fileName = "lights_" + lightLayer->getName() + ".png";
 
-    lightLayer->renderToFile(fileName);
+    lightLayer->renderToFile(prerenderFolder + fileName);
   }
-  GridComponent::load();
-  emit tilemapReady();
 }
 
 void LevelTask::loadObjectsFromDataEngine(DataEngine* dataEngine)

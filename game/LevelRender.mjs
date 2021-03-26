@@ -6,6 +6,7 @@ export class Controller {
     this.tilemap  = params.tilemap;
     this.level    = params.level;
     this.rootPath = params.rootPath;
+    this.preRenderPath = "file://" + this.level.preRenderPath;
     this.mapSize  = this.tilemap.mapSize
     this.tileSize = this.tilemap.tileSize
     this.wallSize = { width: this.tileSize.width, height: this.tileSize.height * 3 };
@@ -128,7 +129,7 @@ export class Controller {
     //console.log("Drawing tilemap at", JSON.stringify(position), "rect", this.origin.x, this.origin.y, width, height);
     //console.log("-> offset", offset.x, '/', offset.y);
     this.context.drawImage(
-      this.rootPath + "_tilemap.png",
+      this.preRenderPath + "tilemap.png",
       offset.x,   offset.y,   width, height,
       position.x, position.y, width, height
     );
@@ -198,11 +199,11 @@ export class Controller {
   }
 
   renderRoofLayer(layer) {
-    this.renderLayer(layer, "_roof_" + layer.name + ".png");
+    this.renderLayer(layer, "roof_" + layer.name + ".png");
   }
 
   renderLightLayer(layer) {
-    this.renderLayer(layer, "_lights_" + layer.name + ".png");
+    this.renderLayer(layer, "lights_" + layer.name + ".png");
   }
 
   renderLayer(layer, path) {
@@ -211,7 +212,7 @@ export class Controller {
     if (this.shouldRender(renderRect.x, renderRect.y, renderRect.width, renderRect.height)) {
 
       this.context.drawImage(
-        this.rootPath + path,
+        this.preRenderPath + path,
         renderRect.x, renderRect.y, renderRect.width, renderRect.height
       );
     }
