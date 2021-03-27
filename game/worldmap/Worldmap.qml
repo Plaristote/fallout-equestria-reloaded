@@ -1,7 +1,7 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Shapes 1.15
-import "../assets/ui" as UiStyle
+import "../../assets/ui" as UiStyle
 import Game 1.0 as MyGame
 
 Item {

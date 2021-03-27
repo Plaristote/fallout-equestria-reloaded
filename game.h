@@ -7,7 +7,7 @@
 # include "game/characterparty.h"
 # include "game/timermanager.h"
 # include "game/questmanager.h"
-# include "game/worldmap.h"
+# include "game/worldmap/worldmap.h"
 # include "game/diplomacy.hpp"
 # include <QJSEngine>
 # include "cmap/trait.h"

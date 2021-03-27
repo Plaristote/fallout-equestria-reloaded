@@ -1,6 +1,6 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
-import "../assets/ui" as UiStyle
+import "../../assets/ui" as UiStyle
 
 Flickable {
   property QtObject controller;

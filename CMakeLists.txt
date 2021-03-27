@@ -94,12 +94,12 @@ set(PROJECT_SOURCES
         game/datetime.cpp
         game/timermanager.h
         game/timermanager.cpp
-        game/worldmap.h
-        game/worldmap.cpp
-        game/worldmapcity.h
-        game/worldmapcity.cpp
-        game/worldmapzone.h
-        game/worldmapzone.cpp
+        game/worldmap/worldmap.h
+        game/worldmap/worldmap.cpp
+        game/worldmap/worldmapcity.h
+        game/worldmap/worldmapcity.cpp
+        game/worldmap/worldmapzone.h
+        game/worldmap/worldmapzone.cpp
         game/taskrunner.h
         game/taskrunner.cpp
         game/inventory.h

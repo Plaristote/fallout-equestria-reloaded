@@ -6,7 +6,7 @@
 # include <QSize>
 # include <QTimer>
 # include <QQmlListProperty>
-# include "timermanager.h"
+# include "../timermanager.h"
 # include "worldmapcity.h"
 # include "worldmapzone.h"
 

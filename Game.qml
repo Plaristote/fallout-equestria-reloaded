@@ -77,7 +77,7 @@ Item {
   Timer {
     id: deferredWorldmapDisplay
     interval: 500
-    onTriggered: application.pushView("game/Worldmap.qml", { controller: root.gameController.worldmap })
+    onTriggered: application.pushView("game/worldmap/Worldmap.qml", { controller: root.gameController.worldmap })
   }
 
   Timer {

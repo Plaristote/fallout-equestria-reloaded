@@ -105,7 +105,9 @@
         <file>ui/SavedGameListItem.qml</file>
         <file>LoadGame.qml</file>
         <file>ui/SaveGameUi.qml</file>
-        <file>game/Worldmap.qml</file>
+        <file>game/worldmap/Worldmap.qml</file>
+        <file>game/worldmap/WorldmapView.qml</file>
+        <file>game/worldmap/WorldmapCities.qml</file>
         <file>assets/worldmap.png</file>
         <file>assets/ui/HudScrollbar.qml</file>
         <file>assets/ui/scrollbars/background.png</file>
@@ -197,8 +199,6 @@
         <file>game/pipboy/TimeApplication.qml</file>
         <file>game/pipboy/QuestsApplication.qml</file>
         <file>editor/WorldMapEditor.qml</file>
-        <file>game/WorldmapView.qml</file>
-        <file>game/WorldmapCities.qml</file>
         <file>editor/worldmap/MapSizePane.qml</file>
         <file>editor/worldmap/CityEditor.qml</file>
         <file>editor/worldmap/CityForm.qml</file>
