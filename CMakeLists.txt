@@ -33,6 +33,10 @@ set(QT_USE_QTMULTIMEDIA TRUE)
 
 set(PROJECT_SOURCES
         main.cpp
+        utils/storableobject.h
+        utils/storableobject.cpp
+        utils/datetime.hpp
+        utils/datetime.cpp
         tilemap/tileset.h
         tilemap/tileset.cpp
         tilemap/tile.h
@@ -90,8 +94,6 @@ set(PROJECT_SOURCES
         game/sprite.cpp
         game/animationlibrary.h
         game/animationlibrary.cpp
-        game/datetime.hpp
-        game/datetime.cpp
         game/timermanager.h
         game/timermanager.cpp
         game/worldmap/worldmap.h
@@ -114,6 +116,8 @@ set(PROJECT_SOURCES
         game/questmanager.cpp
         game/quest.h
         game/quest.cpp
+        game/textbubble.h
+        game/textbubble.cpp
         game/level/grid.h
         game/level/grid.cpp
         game/level/interaction.h
@@ -124,6 +128,12 @@ set(PROJECT_SOURCES
         game/level/textbubbles.cpp
         game/level/visualeffects.h
         game/level/visualeffects.cpp
+        game/level/playervisibility.h
+        game/level/playervisibility.cpp
+        game/level/prerender.h
+        game/level/prerender.cpp
+        game/level/zone.h
+        game/level/zone.cpp
         game/objects/doorway.h
         game/objects/doorway.cpp
         game/objects/storageobject.h
@@ -141,6 +151,8 @@ set(PROJECT_SOURCES
         editor/scripteditorcontroller.cpp
         editor/characterdialogeditor.h
         editor/characterdialogeditor.cpp
+        editor/leveleditorcontroller.h
+        editor/leveleditorcontroller.cpp
         gamemanager.h
         gamemanager.cpp
         musicmanager.h

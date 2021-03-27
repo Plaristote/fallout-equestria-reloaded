@@ -1,6 +1,6 @@
  #include "visualeffects.h"
 
-VisualEffectsComponent::VisualEffectsComponent(QObject* parent) : TextBubblesComponent(parent)
+VisualEffectsComponent::VisualEffectsComponent(QObject* parent) : ParentType(parent)
 {
 
 }

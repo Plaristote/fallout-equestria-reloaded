@@ -3,6 +3,14 @@
 
 # include "cmap/plugin.h"
 
-typedef CmapPlugin Trait;
+class Trait : public CmapPlugin
+{
+public:
+  static void initialize();
+  static const QMap<QString, Trait>& getTraits() { return traits; }
+
+private:
+  static QMap<QString, Trait> traits;
+};
 
 #endif // TRAIT_H

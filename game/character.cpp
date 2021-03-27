@@ -254,7 +254,7 @@ void Character::onCharacterSheetChanged()
 {
   qDebug() << "Changing character sheet";
   StatModel* charSheet;
-  Race*      raceController;
+  const Race* raceController;
 
   charSheet = Game::get()->getDataEngine()->makeStatModel(getObjectName(), characterSheet);
   charSheet->setParent(this);

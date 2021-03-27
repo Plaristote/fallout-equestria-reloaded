@@ -7,7 +7,7 @@ CmapPlugin::CmapPlugin()
 
 }
 
-void CmapPlugin::toogle(StatModel* model, bool value)
+void CmapPlugin::toogle(StatModel* model, bool value) const
 {
   Game* game = Game::get();
   QJSValueList args;
@@ -18,7 +18,7 @@ void CmapPlugin::toogle(StatModel* model, bool value)
     game->scriptCall(callback, args, "CmapPlugin::onToggled");
 }
 
-int CmapPlugin::modifyBaseStatistic(StatModel* model, const QString &attribute, int baseValue)
+int CmapPlugin::modifyBaseStatistic(StatModel* model, const QString &attribute, int baseValue) const
 {
   Game* game = Game::get();
   QJSValueList args;
@@ -32,7 +32,7 @@ int CmapPlugin::modifyBaseStatistic(StatModel* model, const QString &attribute, 
   return baseValue;
 }
 
-int CmapPlugin::modifyBaseSkill(StatModel *model, const QString &attribute, int baseValue)
+int CmapPlugin::modifyBaseSkill(StatModel *model, const QString &attribute, int baseValue) const
 {
   Game* game = Game::get();
   QJSValueList args;

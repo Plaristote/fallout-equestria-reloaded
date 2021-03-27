@@ -1,10 +1,9 @@
 #include "grid.h"
 #include "game/characters/actionqueue.h"
-#include "tilemap/tilezone.h"
 #include "tilemap/tilemap.h"
 #include "game.h"
 
-GridComponent::GridComponent(QObject *parent) : LevelBase(parent)
+GridComponent::GridComponent(QObject *parent) : ParentType(parent)
 {
   grid = new LevelGrid(this);
 }
@@ -13,6 +12,7 @@ void GridComponent::load()
 {
   for (TileLayer* layer : tilemap->getRoofs())
     connect(layer, &TileLayer::visibleChanged, [this, layer]() { onRoofVisibilityChanged(layer); });
+  emit tilemapReady();
 }
 
 void GridComponent::onRoofVisibilityChanged(TileLayer* layer)
@@ -26,20 +26,6 @@ void GridComponent::onRoofVisibilityChanged(TileLayer* layer)
   }
 }
 
-void GridComponent::registerZone(TileZone* zone)
-{
-  grid->registerZone(zone);
-  connect(zone, &TileZone::enteredZone, this, &GridComponent::onZoneEntered, Qt::QueuedConnection);
-  connect(zone, &TileZone::exitedZone,  this, &GridComponent::onZoneExited,  Qt::QueuedConnection);
-}
-
-void GridComponent::unregisterZone(TileZone* zone)
-{
-  disconnect(zone, &TileZone::enteredZone, this, &GridComponent::onZoneEntered);
-  disconnect(zone, &TileZone::exitedZone,  this, &GridComponent::onZoneExited);
-  grid->unregisterZone(zone);
-}
-
 void GridComponent::registerDynamicObject(DynamicObject* object)
 {
   if (object->isCharacter())
@@ -50,6 +36,7 @@ void GridComponent::registerDynamicObject(DynamicObject* object)
       connect(character, &Character::died, this, [this, character]() { onCharacterDied(character); })
     });
   }
+  ParentType::registerDynamicObject(object);
 }
 
 void GridComponent::unregisterDynamicObject(DynamicObject* object)
@@ -64,6 +51,7 @@ void GridComponent::unregisterDynamicObject(DynamicObject* object)
       disconnect(observer);
     characterObservers.remove(character);
   }
+  ParentType::unregisterDynamicObject(object);
 }
 
 void GridComponent::addCharacterObserver(Character* character, QMetaObject::Connection observer)
@@ -74,27 +62,6 @@ void GridComponent::addCharacterObserver(Character* character, QMetaObject::Conn
 DynamicObject* GridComponent::getOccupantAt(QPoint position)
 {
   return grid->getOccupant(position.x(), position.y());
-}
-
-void GridComponent::onZoneEntered(DynamicObject* object, TileZone* zone)
-{
-  if (object->isCharacter())
-  {
-    Character* character = reinterpret_cast<Character*>(object);
-
-    if (!character->isInZone(zone))
-    {
-      character->onZoneEntered(zone);
-      if (zone->getType() == "exit" && object == getPlayer())
-        emit exitZoneEntered(zone);
-    }
-  }
-}
-
-void GridComponent::onZoneExited(DynamicObject* object, TileZone* zone)
-{
-  if (object->isCharacter())
-    reinterpret_cast<Character*>(object)->onZoneExited(zone);
 }
 
 void GridComponent::onCharacterDied(Character*)
@@ -169,4 +136,12 @@ QJSValue GridComponent::getDynamicObjectsAt(int x, int y) const
       push.callWithInstance(result, QJSValueList() << object->asJSValue());
   }
   return result;
+}
+
+QPoint GridComponent::getRenderPositionForTile(int x, int y)
+{
+  auto* layer = tilemap->getLayer("ground");
+  auto* tile  = layer ? layer->getTile(x, y) : nullptr;
+
+  return tile ? tile->getRenderPosition() : QPoint();
 }

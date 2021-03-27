@@ -7,6 +7,7 @@
 class VisualEffectsComponent : public TextBubblesComponent
 {
   Q_OBJECT
+  typedef TextBubblesComponent ParentType;
 
   Q_PROPERTY(QQmlListProperty<Sprite> visualEffects READ getQmlVisualEffects NOTIFY visualEffectsChanged)
 public:

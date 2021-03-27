@@ -4,21 +4,21 @@
 #include "../lootingcontroller.h"
 #include "game/characters/actionqueue.h"
 
-InteractionComponent::InteractionComponent(QObject *parent) : GridComponent(parent)
+InteractionComponent::InteractionComponent(QObject *parent) : ParentType(parent)
 {
 
 }
 
 void InteractionComponent::registerDynamicObject(DynamicObject* object)
 {
-  GridComponent::registerDynamicObject(object);
+  ParentType::registerDynamicObject(object);
 }
 
 void InteractionComponent::unregisterDynamicObject(DynamicObject* object)
 {
   if (object->isCharacter())
     reinterpret_cast<Character*>(object)->getActionQueue()->reset();
-  GridComponent::unregisterDynamicObject(object);
+  ParentType::unregisterDynamicObject(object);
 }
 
 bool InteractionComponent::openInteractionMenu(DynamicObject* object)

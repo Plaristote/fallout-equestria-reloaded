@@ -1,5 +1,8 @@
 #include "race.h"
 #include "game.h"
+#include "pluginloader.h"
+
+QMap<QString, Race> Race::races;
 
 bool Race::isPlayable() const
 {
@@ -19,4 +22,10 @@ QString Race::getSpriteSheet(StatModel* model) const
     value = value.call(QJSValueList() << scriptEngine.newQObject(model));
   }
   return value.toString();
+}
+
+void Race::initialize()
+{
+  races.clear();
+  races = CmapPlugins::load<Race>(SCRIPTS_PATH + "cmap/races");
 }

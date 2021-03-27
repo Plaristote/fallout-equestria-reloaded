@@ -46,11 +46,6 @@ public:
   const QString& getObjectName() const { return objectName; }
   TaskRunner* getTaskManager() { return taskManager; }
 
-  Q_INVOKABLE bool     hasVariable(const QString& name) const { return dataStore.contains(name); }
-  Q_INVOKABLE QVariant getVariable(const QString& name) const { return dataStore[name].toVariant(); }
-  Q_INVOKABLE void     setVariable(const QString& name, const QVariant& value) { dataStore.insert(name, QJsonValue::fromVariant(value)); }
-  Q_INVOKABLE void     unsetVariable(const QString& name) { dataStore.remove(name); }
-
   Q_INVOKABLE QString getObjectType() const { return metaObject()->className(); }
   QString getScriptName() const { return scriptName; }
   Q_INVOKABLE QPoint getPosition() const { return position; }
@@ -100,8 +95,6 @@ protected:
   QPoint position, nextPosition;
   QString currentZone;
   QPoint interactionPosition;
-  QJsonObject dataStore;
-
   QString orientation;
 };
 

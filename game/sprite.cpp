@@ -2,7 +2,7 @@
 #include <cmath>
 #include <QDebug>
 
-Sprite::Sprite(QObject *parent) : QObject(parent)
+Sprite::Sprite(QObject *parent) : StorableObject(parent)
 {
   movementSpeed = 100;
 }
@@ -109,6 +109,7 @@ void Sprite::load(const QJsonObject& data)
   spriteMovementTarget.setX(data["mtx"].toInt()); spriteMovementTarget.setY(data["mty"].toInt());
   floating = data["float"].toBool();
   Sprite::setAnimation(data["animation"].toString());
+  StorableObject::load(data);
 }
 
 void Sprite::save(QJsonObject& data) const
@@ -118,18 +119,5 @@ void Sprite::save(QJsonObject& data) const
   data["mtx"] = spriteMovementTarget.x(); data["mty"] = spriteMovementTarget.y();
   data["animation"] = animation.name;
   data["float"] = floating;
-  if (animation.name == "tiled-object")
-  {
-    data["animation-src"] = animation.source;
-    data["animation-fx"]  = animation.firstFramePosition.x();
-    data["animation-fy"]  = animation.firstFramePosition.y();
-    data["animation-x"]   = animation.clippedRect.x();
-    data["animation-y"]   = animation.clippedRect.y();
-    data["animation-w"]   = animation.clippedRect.width();
-    data["animation-h"]   = animation.clippedRect.height();
-    data["animation-fc"]  = animation.frameCount;
-    data["animation-fi"]  = animation.frameInterval;
-    data["animation-rp"]  = animation.repeat;
-    data["animation-cf"]  = animation.currentFrame;
-  }
+  StorableObject::save(data);
 }

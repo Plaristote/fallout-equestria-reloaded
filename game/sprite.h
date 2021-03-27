@@ -7,8 +7,9 @@
 # include <QRect>
 # include <QJsonObject>
 # include "animationlibrary.h"
+# include "utils/storableobject.h"
 
-class Sprite : public QObject
+class Sprite : public StorableObject
 {
   Q_OBJECT
 

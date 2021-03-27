@@ -6,7 +6,7 @@
 #include "objects/inventoryitem.h"
 #include "objects/doorway.h"
 
-LevelTask::LevelTask(QObject *parent) : CombatComponent(parent)
+LevelTask::LevelTask(QObject *parent) : ParentType(parent)
 {
   tilemap = new TileMap(this);
   soundManager = new SoundManager(this);
@@ -28,12 +28,7 @@ LevelTask::~LevelTask()
 void LevelTask::deleteLater()
 {
   updateTimer.stop();
-  CombatComponent::deleteLater();
-}
-
-Character* LevelTask::getPlayer()
-{
-  return Game::get()->getPlayer();
+  ParentType::deleteLater();
 }
 
 bool LevelTask::insertPartyIntoZone(CharacterParty* party, const QString& zoneName)
@@ -50,7 +45,7 @@ void LevelTask::load(const QString& levelName, DataEngine* dataEngine)
 {
   name = levelName;
   timeManager = Game::get()->getTimeManager();
-  loadTilemap();
+  ParentType::load();
   grid->initializeGrid(tilemap);
   script = new ScriptController(SCRIPTS_PATH + "levels/" + levelName + ".mjs");
   script->initialize(this);
@@ -59,47 +54,6 @@ void LevelTask::load(const QString& levelName, DataEngine* dataEngine)
     registerZone(zone);
   if (dataEngine->isLevelActive(name))
     loadObjectsFromDataEngine(dataEngine);
-  if (Game::get()->property("isGameEditor").toBool())
-    connect(this, &LevelTask::objectsChanged, this, &LevelTask::visibleCharactersChanged);
-  else
-    connect(getPlayer()->getFieldOfView(), &FieldOfView::refreshed, this, &LevelTask::visibleCharactersChanged);
-}
-
-QString LevelTask::getPreRenderPath() const
-{
-  return QDir::currentPath() + "/.prerender/" + name + '/';
-}
-
-void LevelTask::loadTilemap()
-{
-  QDir dir;
-
-  tilemap->load(name);
-  if (!dir.exists(getPreRenderPath()))
-    preRenderTilemap();
-  GridComponent::load();
-  emit tilemapReady();
-}
-
-void LevelTask::preRenderTilemap()
-{
-  QDir dir;
-  QString prerenderFolder = getPreRenderPath();
-
-  dir.mkpath(prerenderFolder);
-  tilemap->getLayer("ground")->renderToFile(prerenderFolder + "tilemap.png");
-  for (TileLayer* roofLayer : tilemap->getRoofs())
-  {
-    QString fileName = "roof_" + roofLayer->getName() + ".png";
-
-    roofLayer->renderToFile(prerenderFolder + fileName);
-  }
-  for (TileLayer* lightLayer : tilemap->getLights())
-  {
-    QString fileName = "lights_" + lightLayer->getName() + ".png";
-
-    lightLayer->renderToFile(prerenderFolder + fileName);
-  }
 }
 
 void LevelTask::loadObjectsFromDataEngine(DataEngine* dataEngine)
@@ -107,7 +61,7 @@ void LevelTask::loadObjectsFromDataEngine(DataEngine* dataEngine)
   QJsonObject levelData = dataEngine->getLevelData(name);
   QJsonValue  lastUpdate = levelData["lastUpdate"];
 
-  dataStore = levelData["vars"].toObject();
+  StorableObject::load(levelData);
   for (QJsonValue objectData : levelData["objects"].toArray())
   {
     QString type = objectData["type"].toString();
@@ -153,7 +107,7 @@ void LevelTask::save(DataEngine* dataEngine)
   QJsonArray  objectArray;
   auto*       playerParty = Game::get()->getPlayerParty();
 
-  for (DynamicObject* object : objects)
+  for (DynamicObject* object : qAsConst(objects))
   {
     QJsonObject objectData;
     QString     type(object->metaObject()->className());
@@ -166,10 +120,10 @@ void LevelTask::save(DataEngine* dataEngine)
     }
   }
   levelData["objects"] = objectArray;
-  if (!(game->property("isGameEditor").toBool()))
+  if (!isGameEditor())
   {
     levelData["lastUpdate"] = static_cast<int>(game->getTimeManager()->getDateTime().GetTimestamp());
-    levelData.insert("vars", dataStore);
+    StorableObject::save(levelData);
     taskRunner->save(taskData);
     levelData.insert("tasks", taskData);
   }
@@ -202,12 +156,6 @@ void LevelTask::tileClicked(int x, int y)
 
 void LevelTask::registerDynamicObject(DynamicObject* object)
 {
-  objects.push_back(object);
-  CombatComponent::registerDynamicObject(object);
-  connect(object, &DynamicObject::controlZoneAdded,   this, &LevelTask::registerControlZone);
-  connect(object, &DynamicObject::controlZoneRemoved, this, &LevelTask::unregisterControlZone);
-  if (object->getControlZone())
-    registerControlZone(object->getControlZone());
   if (object->isCharacter())
   {
     Character* character = reinterpret_cast<Character*>(object);
@@ -215,7 +163,7 @@ void LevelTask::registerDynamicObject(DynamicObject* object)
     addCharacterObserver(character, connect(character, &Character::itemDropped, [this, character](InventoryItem* item) { onItemDropped(item, character->getPosition()); }));
     addCharacterObserver(character, connect(character, &Character::characterKill, this, &LevelTask::onCharacterKill));
   }
-  emit objectsChanged();
+  ParentType::registerDynamicObject(object);
 }
 
 void LevelTask::unregisterDynamicObject(DynamicObject* object)
@@ -229,23 +177,7 @@ void LevelTask::unregisterDynamicObject(DynamicObject* object)
         reinterpret_cast<Character*>(entry)->getFieldOfView()->removeCharacter(character);
     }
   }
-  objects.removeAll(object);
-  CombatComponent::unregisterDynamicObject(object);
-  disconnect(object, &DynamicObject::controlZoneAdded,   this, &LevelTask::registerControlZone);
-  disconnect(object, &DynamicObject::controlZoneRemoved, this, &LevelTask::unregisterControlZone);
-  if (object->getControlZone())
-    unregisterControlZone(object->getControlZone());
-  emit objectsChanged();
-}
-
-void LevelTask::registerControlZone(TileZone* zone)
-{
-  registerZone(zone);
-}
-
-void LevelTask::unregisterControlZone(TileZone* zone)
-{
-  unregisterZone(zone);
+  ParentType::unregisterDynamicObject(object);
 }
 
 void LevelTask::onItemDropped(InventoryItem* item, QPoint position)
@@ -254,41 +186,6 @@ void LevelTask::onItemDropped(InventoryItem* item, QPoint position)
   item->setPosition(position);
   registerDynamicObject(item);
   setObjectPosition(item, position.x(), position.y());
-}
-
-QList<Character*> LevelTask::findCharacters(std::function<bool (Character &)> compare)
-{
-  QList<Character*> characters;
-
-  for (DynamicObject* object : objects)
-  {
-    if (object->isCharacter())
-    {
-      Character* character = reinterpret_cast<Character*>(object);
-
-      if (compare(*character))
-        characters << character;
-    }
-  }
-  return characters;
-}
-
-DynamicObject* LevelTask::getObjectByName(const QString& name)
-{
-  for (DynamicObject* object : objects)
-  {
-    if (object->getObjectName() == name)
-      return object;
-  }
-  return nullptr;
-}
-
-QPoint LevelTask::getRenderPositionForTile(int x, int y)
-{
-  auto* layer = tilemap->getLayer("ground");
-  auto* tile  = layer ? layer->getTile(x, y) : nullptr;
-
-  return tile ? tile->getRenderPosition() : QPoint();
 }
 
 void LevelTask::onCharacterKill(Character* victim, Character* killer)
@@ -340,11 +237,7 @@ void LevelTask::update()
 {
   qint64 delta = clock.restart();
 
-  if (Game::get()->property("isGameEditor").toBool())
-  {
-
-  }
-  else if (!combat)
+  if (!combat)
   {
     timeManager->addElapsedMilliseconds(delta);
     for (DynamicObject* object : qAsConst(objects))
@@ -380,7 +273,7 @@ void LevelTask::update()
   }
   updateVisualEffects(delta);
   soundManager->update();
-  CombatComponent::update(delta);
+  ParentType::update(delta);
   emit updated();
 }
 
@@ -409,11 +302,15 @@ void LevelTask::finalizeRound()
     if (!object->isCharacter() || (!isInCombat(asCharacter) && asCharacter->isAlive()))
       object->getTaskManager()->update(WORLDTIME_TURN_DURATION);
     if (object->isCharacter() && object != getPlayer())
+    {
+      qDebug() << "Update field of view for " << asCharacter->getStatistics()->getName();
       asCharacter->getFieldOfView()->update(WORLDTIME_TURN_DURATION);
+      qDebug() << "-> Enemy count" << asCharacter->getFieldOfView()->GetDetectedEnemies().length();
+    }
     taskRunner->update(WORLDTIME_TURN_DURATION);
     Game::get()->getTaskManager()->update(WORLDTIME_TURN_DURATION);
   }
-  CombatComponent::finalizeRound();
+  ParentType::finalizeRound();
 }
 
 Character* LevelTask::generateCharacter(const QString &name, const QString &characterSheet)
@@ -453,23 +350,4 @@ Doorway* LevelTask::generateDoorway(const QString &name)
   object->setObjectName(name);
   registerDynamicObject(object);
   return object;
-}
-
-QQmlListProperty<Character> LevelTask::getQmlVisibleCharacters()
-{
-  if (Game::get()->property("isGameEditor").toBool())
-  {
-    visibleCharacters.clear();
-    for (auto* object : qAsConst(objects))
-    {
-      if (object->isCharacter())
-        visibleCharacters << reinterpret_cast<Character*>(object);
-    }
-  }
-  else
-  {
-    visibleCharacters = getPlayer()->getFieldOfView()->GetDetectedCharacters();
-    visibleCharacters << getPlayer();
-  }
-  return QQmlListProperty<Character>(this, &visibleCharacters);
 }

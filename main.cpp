@@ -27,6 +27,7 @@
 
 #include "editor/scripteditorcontroller.h"
 #include "editor/characterdialogeditor.h"
+#include "editor/leveleditorcontroller.h"
 
 void registerQmlTilemap() {
   qmlRegisterType<TileMap>  ("Tiles", 1,0, "TileMap");
@@ -88,6 +89,7 @@ int main(int argc, char *argv[])
   // GAME EDITOR
   qmlRegisterType<QmlSpriteAnimation>("Game", 1,0, "SpriteAnimation");
   qmlRegisterType<CharacterDialogEditor>("Game", 1,0, "CharacterDialogEditor");
+  qmlRegisterType<LevelEditorController>("Game", 1,0, "LevelEditorController");
   // END GAME EDITOR
 
   MusicManager* musicManager = new MusicManager(&app);

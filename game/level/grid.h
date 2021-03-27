@@ -10,13 +10,11 @@ class TileLayer;
 class GridComponent : public LevelBase
 {
   Q_OBJECT
+  typedef LevelBase ParentType;
 
   Q_PROPERTY(LevelGrid* grid MEMBER grid)
 public:
   explicit GridComponent(QObject *parent = nullptr);
-
-  virtual Character* getPlayer() = 0;
-  virtual QPoint getRenderPositionForTile(int x, int y) = 0;
 
   LevelGrid*                 getGrid() const { return grid; }
   Q_INVOKABLE DynamicObject* getOccupantAt(int x, int y) { return getOccupantAt(QPoint(x, y)); }
@@ -25,22 +23,16 @@ public:
   void             load();
   void             registerDynamicObject(DynamicObject*);
   void             unregisterDynamicObject(DynamicObject*);
-  void             registerZone(TileZone*);
-  void             unregisterZone(TileZone*);
 
   void setCharacterPosition(Character*, int x, int y);
   Q_INVOKABLE void setObjectPosition(DynamicObject*, int x, int y);
   Q_INVOKABLE QPoint getAdjustedOffsetFor(DynamicObject*) const;
   Q_INVOKABLE TileLayer* getRoofFor(DynamicObject*) const;
   Q_INVOKABLE QJSValue getDynamicObjectsAt(int x, int y) const;
-
-signals:
-  void exitZoneEntered(TileZone*);
+  Q_INVOKABLE QPoint getRenderPositionForTile(int x, int y);
 
 protected slots:
   virtual void onCharacterDied(Character*);
-  void         onZoneEntered(DynamicObject*, TileZone*);
-  void         onZoneExited(DynamicObject*, TileZone*);
   void         onRoofVisibilityChanged(TileLayer*);
 
 protected:

@@ -161,12 +161,12 @@ void DynamicObject::load(const QJsonObject& data)
       QJsonArray posArray(posValue.toArray());
 
       controlZone->addPosition(QPoint(posArray[0].toInt(), posArray[1].toInt()));
+      controlZone->setAccessBlocked(true);
     }
     emit controlZoneChanged();
   }
   currentZone = data["currentZone"].toString();
   scriptName  = data["script"].toString();
-  dataStore   = data["dataStore"].toObject();
   Sprite::load(data);
   setScript(scriptName);
   taskManager->load(data);
@@ -195,7 +195,6 @@ void DynamicObject::save(QJsonObject& data) const
   }
   data["currentZone"] = currentZone;
   data["script"]      = scriptName;
-  data["dataStore"]   = dataStore;
   Sprite::save(data);
   taskManager->save(data);
 }

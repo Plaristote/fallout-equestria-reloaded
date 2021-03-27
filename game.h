@@ -2,6 +2,7 @@
 # define GAME_H
 
 # include <QObject>
+# include "utils/storableobject.h"
 # include "game/dataengine.h"
 # include "game/leveltask.h"
 # include "game/characterparty.h"
@@ -13,7 +14,7 @@
 # include "cmap/trait.h"
 # include "cmap/race.h"
 
-class Game : public QObject
+class Game : public StorableObject
 {
   Q_OBJECT
 
@@ -57,18 +58,10 @@ public:
   void loadCmapTraits();
   void loadCmapRaces();
 
-  QMap<QString, Trait>& getCmapTraits() { return cmapTraits; }
-  QMap<QString, Race>&  getCmapRaces()  { return cmapRaces;  }
-
   Q_INVOKABLE CharacterParty* getPlayerParty() { return playerParty; }
   Q_INVOKABLE Character* getPlayer() { return player; }
   Q_INVOKABLE StatModel* getPlayerStatistics() { return getPlayer()->getStatistics(); }
   Q_INVOKABLE void       advanceTime(unsigned int minutes);
-
-  Q_INVOKABLE bool     hasVariable(const QString& name) const { return dataStore.contains(name); }
-  Q_INVOKABLE QVariant getVariable(const QString& name) const { return dataStore[name].toVariant(); }
-  Q_INVOKABLE void     setVariable(const QString& name, const QVariant& value) { dataStore.insert(name, QJsonValue::fromVariant(value)); }
-  Q_INVOKABLE void     unsetVariable(const QString& name) { dataStore.remove(name); }
 
 signals:
   void levelChanged();
@@ -85,6 +78,7 @@ public slots:
 
 private:
   void initializeScript();
+  LevelTask* newLevelTask();
 
   bool isGameEditor = false;
   DataEngine* dataEngine = nullptr;
@@ -99,7 +93,6 @@ private:
   QJSEngine   scriptEngine;
   ScriptController* script = nullptr;
   TaskRunner* taskManager = nullptr;
-  QJsonObject dataStore;
 
   QMap<QString, Trait> cmapTraits;
   QMap<QString, Race>  cmapRaces;

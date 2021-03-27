@@ -4,10 +4,11 @@
 #include "i18n.h"
 #include <QFile>
 #include <QDir>
+#include "editor/leveleditorcontroller.h"
 
 Game* Game::instance = nullptr;
 
-Game::Game(QObject *parent) : QObject(parent)
+Game::Game(QObject *parent) : StorableObject(parent)
 {
   if (instance != nullptr)
     throw std::runtime_error("can't have two Game instances at once");
@@ -24,8 +25,8 @@ Game::Game(QObject *parent) : QObject(parent)
   scriptEngine.globalObject().setProperty("quests", scriptEngine.newQObject(quests));
   scriptEngine.globalObject().setProperty("musicManager", scriptEngine.newQObject(MusicManager::get()));
   scriptEngine.globalObject().setProperty("i18n", scriptEngine.newQObject(I18n::get()));
-  loadCmapTraits();
-  loadCmapRaces();
+  Race::initialize();
+  Trait::initialize();
   scriptEngine.evaluate("level.displayConsoleMessage(\"Coucou Script Engine\")");
 
   connect(worldmap, &WorldMap::cityEntered, this, &Game::onCityEntered);
@@ -107,48 +108,6 @@ QJSValue Game::loadScript(const QString& path)
   return module;
 }
 
-void Game::loadCmapTraits()
-{
-  QDir traitsDir(SCRIPTS_PATH + "cmap/traits");
-  auto files = traitsDir.entryList(QStringList() << "*.mjs" << "*.js", QDir::Files);
-  qDebug() << traitsDir.entryList();
-  for (auto scriptPath : files)
-  {
-    qDebug() << "Loading trait:" << scriptPath;
-    auto script = loadScript(SCRIPTS_PATH + "cmap/traits/" + scriptPath);
-
-    if (!script.isBool())
-    {
-      Trait trait;
-
-      trait.name = scriptPath.split('/').last().replace(".mjs", "").replace(".js", "");
-      trait.script = script;
-      cmapTraits.insert(trait.name, trait);
-    }
-  }
-}
-
-void Game::loadCmapRaces()
-{
-  QDir racesDir(SCRIPTS_PATH + "cmap/races");
-  auto files = racesDir.entryList(QStringList() << "*.mjs" << "*.js", QDir::Files);
-  qDebug() << racesDir.entryList();
-  for (auto scriptPath : files)
-  {
-    qDebug() << "Loading race:" << scriptPath;
-    auto script = loadScript(SCRIPTS_PATH + "cmap/races/" + scriptPath);
-
-    if (!script.isBool())
-    {
-      Race race;
-
-      race.name = scriptPath.split('/').last().replace(".mjs", "").replace(".js", "");
-      race.script = script;
-      cmapRaces.insert(race.name, race);
-    }
-  }
-}
-
 void Game::onCityEntered(QString name)
 {
   goToLevel(name);
@@ -161,6 +120,13 @@ void Game::onCityEnteredAt(const QString& name, const QString& zone)
   currentLevel->insertPartyIntoZone(playerParty, zone);
 }
 
+LevelTask* Game::newLevelTask()
+{
+  if (isGameEditor)
+    return new LevelEditorController(this);
+  return new LevelTask(this);
+}
+
 void Game::goToLevel(const QString& name)
 {
   auto scriptObject = scriptEngine.globalObject();
@@ -168,7 +134,7 @@ void Game::goToLevel(const QString& name)
   appendToConsole("You reached " + name);
   MusicManager::get()->play(name);
   dataEngine->setCurrentLevel(name);
-  currentLevel = new LevelTask(this);
+  currentLevel = newLevelTask();
   scriptObject.setProperty("level", scriptEngine.newQObject(currentLevel));
   connect(currentLevel, &LevelTask::displayConsoleMessage, this, &Game::appendToConsole);
   connect(currentLevel, &LevelTask::exitZoneEntered, this, &Game::changeZone);
@@ -185,7 +151,7 @@ void Game::switchToLevel(const QString& name, const QString& targetZone)
     exitLevel(true);
   MusicManager::get()->play(name);
   dataEngine->setCurrentLevel(name);
-  currentLevel = new LevelTask(this);
+  currentLevel = newLevelTask();
   scriptObject.setProperty("level", scriptEngine.newQObject(currentLevel));
   connect(currentLevel, &LevelTask::displayConsoleMessage, this, &Game::appendToConsole);
   connect(currentLevel, &LevelTask::exitZoneEntered, this, &Game::changeZone);

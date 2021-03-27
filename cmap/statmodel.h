@@ -147,7 +147,7 @@ public:
   Q_INVOKABLE void confirmChanges();
   Q_INVOKABLE void cancelChanges();
 
-  Race* getRaceController() const;
+  const Race* getRaceController() const;
 
 #define STAT_METHODS(statName) \
   int get_##statName() const { return data.statName + modifiers.statName; } \

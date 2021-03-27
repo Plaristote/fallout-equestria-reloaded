@@ -25,7 +25,7 @@ QStringList StatModel::getAvailableRaces() const
   if (!game->property("isGameEditor").toBool())
   {
     QStringList races;
-    const auto& allRaces = game->getCmapRaces();
+    const auto& allRaces = Race::getRaces();
 
     for (const QString& race : allRaces.keys())
     {
@@ -34,7 +34,7 @@ QStringList StatModel::getAvailableRaces() const
     }
     return races;
   }
-  return game->getCmapRaces().keys();
+  return Race::getRaces().keys();
 }
 
 QStringList StatModel::getAvailableRacesLabels() const
@@ -99,18 +99,19 @@ void StatModel::levelUp()
   emit hitPointsChanged();
 }
 
-Race* StatModel::getRaceController() const
+const Race* StatModel::getRaceController() const
 {
-  auto& races = Game::get()->getCmapRaces();
+  const auto& races = Race::getRaces();
+  auto it = races.find(race);
 
-  if (races.contains(race))
-    return &(races[race]);
+  if (it != races.end())
+    return &(*it);
   return nullptr;
 }
 
 void StatModel::setRace(const QString& newRace)
 {
-  Race* raceController = getRaceController();
+  const Race* raceController = getRaceController();
 
   if (raceController)
     raceController->toogle(this, false);
@@ -123,7 +124,7 @@ void StatModel::setRace(const QString& newRace)
   updateBaseValues();
 }
 
-static void applyCmapPlugin(StatModel* self, CmapPlugin& plugin, StatData& data)
+static void applyCmapPlugin(StatModel* self, const CmapPlugin& plugin, StatData& data)
 {
   data.actionPoints        = plugin.modifyBaseStatistic(self, "actionPoints",        data.actionPoints);
   data.armorClass          = plugin.modifyBaseStatistic(self, "armorClass",          data.armorClass);
@@ -190,8 +191,8 @@ void StatModel::updateBaseValues()
   data.speech       = 5 * charisma + intelligence;
   data.gambling     = charisma + 4 * luck;
 
-  auto  allTraits      = Game::get()->getCmapTraits();
-  auto* raceController = getRaceController();
+  const auto& allTraits      = Trait::getTraits();
+  auto*       raceController = getRaceController();
 
   for (auto trait : allTraits)
   {
@@ -216,7 +217,7 @@ bool StatModel::isAcceptable() const
 QStringList StatModel::getAvailableTraits()
 {
   QStringList results;
-  auto traits = Game::get()->getCmapTraits();
+  const auto& traits = Trait::getTraits();
 
   for (auto trait : traits)
     results << trait.name;
@@ -235,7 +236,7 @@ QStringList StatModel::getAvailableTraitsLabels()
 
 void StatModel::toggleTrait(const QString& name, bool value)
 {
-  auto traits = Game::get()->getCmapTraits();
+  const auto& traits = Trait::getTraits();
 
   if ((value  && this->traits.contains(name)) ||
       (!value && !this->traits.contains(name)))

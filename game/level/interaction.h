@@ -2,16 +2,17 @@
 # define INTERACTIONCOMPONENT_H
 
 # include <QObject>
-# include "grid.h"
+# include "playervisibility.h"
 # include "../dynamicobject.h"
 # include "../objects/inventoryitem.h"
 
 class CharacterDialog;
 class LootingController;
 
-class InteractionComponent : public GridComponent
+class InteractionComponent : public PlayerVisibilityComponent
 {
   Q_OBJECT
+  typedef PlayerVisibilityComponent ParentType;
 
   Q_PROPERTY(int mouseMode MEMBER mouseMode NOTIFY mouseModeChanged)
   Q_PROPERTY(int targetMode READ getTargetMode NOTIFY mouseModeChanged)

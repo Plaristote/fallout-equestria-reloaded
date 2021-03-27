@@ -10,9 +10,9 @@ class CmapPlugin
 public:
   CmapPlugin();
 
-  void toogle(StatModel*, bool);
-  int modifyBaseStatistic(StatModel*, const QString& attribute, int baseValue);
-  int modifyBaseSkill(StatModel*, const QString& attribute, int baseValue);
+  void toogle(StatModel*, bool) const;
+  int modifyBaseStatistic(StatModel*, const QString& attribute, int baseValue) const;
+  int modifyBaseSkill(StatModel*, const QString& attribute, int baseValue) const;
 
   QString  name;
   QJSValue script;
