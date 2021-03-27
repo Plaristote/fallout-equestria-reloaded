@@ -43,8 +43,10 @@ bool StorageObject::onTakeItem(Character* user, InventoryItem* item, int quantit
 {
   auto& scriptEngine = Game::get()->getScriptEngine();
 
+  if (!user || !item)
+    return false;
   if (script && script->hasMethod("onTakeItem"))
-    return script->call("onTakeItem", QJSValueList() << scriptEngine.newQObject(user) << scriptEngine.newQObject(item) << quantity).toBool();
+    return script->call("onTakeItem", QJSValueList() << user->asJSValue() << item->asJSValue() << quantity).toBool();
   return true;
 }
 
@@ -52,7 +54,9 @@ bool StorageObject::onPutItem(Character* user, InventoryItem* item, int quantity
 {
   auto& scriptEngine = Game::get()->getScriptEngine();
 
+  if (!user || !item)
+    return false;
   if (script && script->hasMethod("onPutItem"))
-    return script->call("onPutItem", QJSValueList() << scriptEngine.newQObject(user) << scriptEngine.newQObject(item) << quantity).toBool();
+    return script->call("onPutItem", QJSValueList() << user->asJSValue() << item->asJSValue() << quantity).toBool();
   return true;
 }

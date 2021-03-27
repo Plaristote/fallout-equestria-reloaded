@@ -14,10 +14,13 @@ public:
   QJSValue call(const QString& method, const QJSValueList& = QJSValueList());
   QJSValue property(const QString& name);
 
+  QJSValue getObject() const { return instance; }
+  QJSValue getModel() const { return model; }
+
 private:
   QJSEngine& engine;
   QString    path;
-  QJSValue   module, instance;
+  QJSValue   module, instance, model;
 };
 
 #endif // SCRIPTCONTROLLER_H

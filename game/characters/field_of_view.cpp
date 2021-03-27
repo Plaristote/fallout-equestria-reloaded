@@ -23,7 +23,7 @@ QJSValue FieldOfView::getEnemies() const
   QJSValue push = retval.property("push");
 
   for (Character* character : GetDetectedEnemies())
-    push.callWithInstance(retval, QJSValueList() << engine.newQObject(character));
+    push.callWithInstance(retval, QJSValueList() << character->asJSValue());
   return retval;
 }
 
@@ -34,7 +34,7 @@ QJSValue FieldOfView::getCharactersInRange() const
   QJSValue push = retval.property("push");
 
   for (Character* character : GetCharactersInRange())
-    push.callWithInstance(retval, QJSValueList() << engine.newQObject(character));
+    push.callWithInstance(retval, QJSValueList() << character->asJSValue());
   return retval;
 }
 
@@ -45,7 +45,7 @@ QJSValue FieldOfView::getAllies() const
   QJSValue push = retval.property("push");
 
   for (Character* character : GetDetectedAllies())
-    push.callWithInstance(retval, QJSValueList() << engine.newQObject(character));
+    push.callWithInstance(retval, QJSValueList() << character->asJSValue());
   return retval;
 }
 
@@ -56,7 +56,7 @@ QJSValue FieldOfView::getNonHostiles() const
   QJSValue push = retval.property("push");
 
   for (Character* character : GetDetectedNonHostile())
-    push.callWithInstance(retval, QJSValueList() << engine.newQObject(character));
+    push.callWithInstance(retval, QJSValueList() << character->asJSValue());
   return retval;
 }
 
@@ -67,7 +67,7 @@ QJSValue FieldOfView::getCharacters() const
   QJSValue push = retval.property("push");
 
   for (Character* character : GetDetectedCharacters())
-    push.callWithInstance(retval, QJSValueList() << engine.newQObject(character));
+    push.callWithInstance(retval, QJSValueList() << character->asJSValue());
   return retval;
 }
 

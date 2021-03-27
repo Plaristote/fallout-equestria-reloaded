@@ -163,10 +163,10 @@ QJSValue GridComponent::getDynamicObjectsAt(int x, int y) const
   QJSValue push = result.property("push");
   QPoint position(x, y);
 
-  for (auto* object : objects)
+  for (DynamicObject* object : objects)
   {
     if (object->getPosition() == position)
-      push.callWithInstance(result, QJSValueList() << scriptEngine.newQObject(object));
+      push.callWithInstance(result, QJSValueList() << object->asJSValue());
   }
   return result;
 }

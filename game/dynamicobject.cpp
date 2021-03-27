@@ -57,12 +57,12 @@ bool DynamicObject::triggerInteraction(Character* character, const QString &inte
     {"look",      "onLook"}
   };
 
-  if (script)
+  qDebug() << "DynamicObject::triggerInteraction";
+  if (character && script)
   {
-    QJSValueList args;
+    const QString callback = callbackMap[interactionType];
 
-    args << Game::get()->getScriptEngine().newQObject(character);
-    return script->call(callbackMap[interactionType], args).toBool();
+    return script->call(callback, QJSValueList() << character->asJSValue()).toBool();
   }
   return false;
 }
@@ -73,13 +73,9 @@ bool DynamicObject::triggerSkillUse(Character *user, const QString &skillName)
 
   methodName[0] = methodName[0].toUpper();
   methodName = "onUse" + methodName;
-  if (script && script->hasMethod(methodName))
-  {
-    QJSValueList args;
-
-    args << Game::get()->getScriptEngine().newQObject(user);
-    return script->call(methodName, args).toBool();
-  }
+  qDebug() << "Trying to call" << methodName;
+  if (user && script && script->hasMethod(methodName))
+    return script->call(methodName, QJSValueList() << user->asJSValue()).toBool();
   else if (user == Game::get()->getPlayer())
     Game::get()->appendToConsole("You use " + skillName + " on " + getObjectName() + ". It does nothing.");
   return false;
@@ -90,6 +86,20 @@ QJSValue DynamicObject::scriptCall(const QString& method, const QString& message
   if (script)
     return script->call(method, QJSValueList() << message);
   return QJSValue();
+}
+
+QJSValue DynamicObject::getScriptObject() const
+{
+  if (script)
+    return script->getObject();
+  return QJSValue();
+}
+
+QJSValue DynamicObject::asJSValue()
+{
+  if (script)
+    return script->getModel();
+  return Game::get()->getScriptEngine().newQObject(this);
 }
 
 TileZone* DynamicObject::addControlZone()

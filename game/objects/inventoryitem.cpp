@@ -60,7 +60,7 @@ bool InventoryItem::isGroupable(InventoryItem* other)
   {
     QJSValueList args;
 
-    args << Game::get()->getScriptEngine().newQObject(other)
+    args << other->asJSValue()
          << result;
     result = script->call("isGroupable", args).toBool();
   }
@@ -106,11 +106,11 @@ bool InventoryItem::remove(int amount)
 void InventoryItem::onEquippedBy(Character* user, bool on)
 {
   resetUseMode();
-  if (script)
+  if (script && user)
   {
     QJSValueList args;
 
-    args << Game::get()->getScriptEngine().newQObject(user) << on;
+    args << user->asJSValue() << on;
     script->call("onEquipped", args);
   }
 }
@@ -145,37 +145,22 @@ bool InventoryItem::isCombatItem()
 
 bool InventoryItem::isInRange(DynamicObject *target)
 {
-  if (script && script->hasMethod("isInRange"))
-  {
-    QJSValueList args;
-
-    args << Game::get()->getScriptEngine().newQObject(target);
-    return script->call("isInRange", args).toBool();
-  }
+  if (target && script && script->hasMethod("isInRange"))
+    return script->call("isInRange", QJSValueList() << target->asJSValue()).toBool();
   return true;
 }
 
 bool InventoryItem::isValidTarget(DynamicObject* target)
 {
-  if (script && script->hasMethod("isValidTarget"))
-  {
-    QJSValueList args;
-
-    args << Game::get()->getScriptEngine().newQObject(target);
-    return script->call("isValidTarget", args).toBool();
-  }
+  if (target && script && script->hasMethod("isValidTarget"))
+    return script->call("isValidTarget", QJSValueList() << target->asJSValue()).toBool();
   return false;
 }
 
 QJSValue InventoryItem::useOn(DynamicObject* target)
 {
-  if (script && isValidTarget(target))
-  {
-    QJSValueList args;
-
-    args << Game::get()->getScriptEngine().newQObject(target);
-    return script->call("attemptToUseOn", args);
-  }
+  if (target && script && isValidTarget(target))
+    return script->call("attemptToUseOn", QJSValueList() << target->asJSValue());
   return false;
 }
 
@@ -234,12 +219,7 @@ int InventoryItem::getUseSuccessRate(DynamicObject* target)
   if (isValidTarget(target))
   {
     if (script && script->hasMethod("getUseSuccessRate"))
-    {
-      QJSValueList args;
-
-      args << Game::get()->getScriptEngine().newQObject(target);
-      return script->call("getUseSuccessRate", args).toInt();
-    }
+      return script->call("getUseSuccessRate", QJSValueList() << target->asJSValue()).toInt();
     else if (isInRange(target))
       return 95;
   }

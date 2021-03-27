@@ -62,22 +62,17 @@ void Quest::onCharacterKilled(Character* character, Character* killer)
     QJSValueList args;
     auto& scriptEngine = Game::get()->getScriptEngine();
 
-    args << scriptEngine.newQObject(character);
+    args << character->asJSValue();
     if (killer)
-      args << scriptEngine.newQObject(killer);
+      args << killer->asJSValue();
     script->call("onCharacterKilled", args);
   }
 }
 
 void Quest::onItemPicked(InventoryItem* item)
 {
-  if (!completed && script->hasMethod("onItemPicked"))
-  {
-    QJSValueList args;
-
-    args << Game::get()->getScriptEngine().newQObject(item);
-    script->call("onItemPicked", args);
-  }
+  if (!completed && item && script->hasMethod("onItemPicked"))
+    script->call("onItemPicked", QJSValueList() << item->asJSValue());
 }
 
 QVariantList Quest::getObjectives() const

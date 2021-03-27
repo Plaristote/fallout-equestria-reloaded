@@ -14,9 +14,11 @@ void ScriptController::initialize(QObject* object)
   Game*     game = Game::get();
   QJSValue createCallback;
 
+  qDebug() << "ScriptController::initialize" << object;
   createCallback = module.property("create");
+  model = engine.newQObject(object);
   if (createCallback.isCallable())
-    instance = game->scriptCall(createCallback, QJSValueList() << engine.newQObject(object), path);
+    instance = game->scriptCall(createCallback, QJSValueList() << model, path);
   else
     qDebug() << "ScriptController: Missing `create` export in " << path;
 }

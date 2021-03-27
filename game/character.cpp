@@ -43,7 +43,13 @@ void Character::takeDamage(int damage, Character* dealer)
   setAnimation("damaged");
   getStatistics()->setHitPoints(hp);
   if (script && hp > 0)
-    script->call("onDamageTaken", QJSValueList() << damage << Game::get()->getScriptEngine().newQObject(dealer));
+  {
+    QJSValueList args = QJSValueList() << damage;
+
+    if (dealer)
+      args << dealer->asJSValue();
+    script->call("onDamageTaken", args);
+  }
   if (hp <= 0)
   {
     setAnimation("death");
@@ -319,5 +325,7 @@ void Character::save(QJsonObject& data) const
 
 QJSValue Character::getActions()
 {
-  return Game::get()->getScriptEngine().newQObject(getActionQueue());
+  if (jsActionQueue.isUndefined())
+    jsActionQueue = Game::get()->getScriptEngine().newQObject(getActionQueue());
+  return jsActionQueue;
 }

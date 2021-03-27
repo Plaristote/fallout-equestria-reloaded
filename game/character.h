@@ -94,6 +94,7 @@ private:
   bool sneakEnabled = false;
   unsigned int enemyFlag = 0;
   int actionPoints = 0;
+  QJSValue jsActionQueue;
 };
 
 #endif // CHARACTER_H
