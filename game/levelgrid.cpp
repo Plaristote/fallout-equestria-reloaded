@@ -100,22 +100,34 @@ void LevelGrid::initializePathfinding()
     bool hasUp    = gridCase.position.y() - 1 >= 0;
     bool hasDown  = gridCase.position.y() + 1 < size.height();
 
+    auto* upLeft    = hasLeft && hasUp    ? getGridCase(gridCase.position.x() - 1, gridCase.position.y() - 1) : nullptr;
+    auto* up        = hasUp               ? getGridCase(gridCase.position.x(),     gridCase.position.y() - 1) : nullptr;
+    auto* upRight   = hasRight && hasUp   ? getGridCase(gridCase.position.x() + 1, gridCase.position.y() - 1) : nullptr;
+    auto* left      = hasLeft             ? getGridCase(gridCase.position.x() - 1, gridCase.position.y())     : nullptr;
+    auto* right     = hasRight            ? getGridCase(gridCase.position.x() + 1, gridCase.position.y())     : nullptr;
+    auto* downLeft  = hasDown && hasLeft  ? getGridCase(gridCase.position.x() - 1, gridCase.position.y() + 1) : nullptr;
+    auto* down      = hasDown             ? getGridCase(gridCase.position.x(),     gridCase.position.y() + 1) : nullptr;
+    auto* downRight = hasDown && hasRight ? getGridCase(gridCase.position.x() + 1, gridCase.position.y() + 1) : nullptr;
+
+    std::function<bool (LevelGrid::CaseContent*)> isAvailable = [](LevelGrid::CaseContent* entry) { return entry && !entry->occupied; };
+
     gridCase.successors.clear();
-    gridCase.successors.push_back(hasLeft && hasUp    ? getGridCase(gridCase.position.x() - 1, gridCase.position.y() - 1) : nullptr);
-    gridCase.successors.push_back(hasUp               ? getGridCase(gridCase.position.x(),     gridCase.position.y() - 1) : nullptr);
-    gridCase.successors.push_back(hasRight && hasUp   ? getGridCase(gridCase.position.x() + 1, gridCase.position.y() - 1) : nullptr);
-    gridCase.successors.push_back(hasLeft             ? getGridCase(gridCase.position.x() - 1, gridCase.position.y())     : nullptr);
-    gridCase.successors.push_back(hasRight            ? getGridCase(gridCase.position.x() + 1, gridCase.position.y())     : nullptr);
-    gridCase.successors.push_back(hasDown && hasLeft  ? getGridCase(gridCase.position.x() - 1, gridCase.position.y() + 1) : nullptr);
-    gridCase.successors.push_back(hasDown             ? getGridCase(gridCase.position.x(),     gridCase.position.y() + 1) : nullptr);
-    gridCase.successors.push_back(hasDown && hasRight ? getGridCase(gridCase.position.x() + 1, gridCase.position.y() + 1) : nullptr);
-    for (auto it = gridCase.successors.begin() ; it != gridCase.successors.end() ;)
-    {
-      if ((*it) == nullptr || (*it)->occupied)
-        it = gridCase.successors.erase(it);
-      else
-        it++;
-    }
+    if (isAvailable(upLeft) && !(!isAvailable(left) && !isAvailable(up)))
+      gridCase.successors.push_back(upLeft);
+    if (isAvailable(up))
+      gridCase.successors.push_back(up);
+    if (isAvailable(upRight) && !(!isAvailable(up) && !isAvailable(right)))
+      gridCase.successors.push_back(upRight);
+    if (isAvailable(left))
+      gridCase.successors.push_back(left);
+    if (isAvailable(right))
+      gridCase.successors.push_back(right);
+    if (isAvailable(downLeft) && !(!isAvailable(left) && !isAvailable(down)))
+      gridCase.successors.push_back(downLeft);
+    if (isAvailable(down))
+      gridCase.successors.push_back(down);
+    if (isAvailable(downRight) && !(!isAvailable(down) && !isAvailable(right)))
+      gridCase.successors.push_back(downRight);
   }
 }
 
