@@ -248,12 +248,18 @@ int InventoryItem::getUseSuccessRate(DynamicObject* target)
 
 DynamicObject* InventoryItem::getOwner() const
 {
-  if (parent()->metaObject()->className() == QString("Inventory"))
+  const char* parentType = parent()->metaObject()->className();
+
+  if (parentType == QString("Inventory"))
   {
     Inventory* inventory = reinterpret_cast<Inventory*>(parent());
 
     return inventory->getUser();
   }
+  else if (parentType == QString("Character"))
+    return reinterpret_cast<DynamicObject*>(parent());
+  else
+    qDebug() << "WARNING InventoryItem has no owner" << parent()->metaObject()->className();
   return nullptr;
 }
 
