@@ -10,6 +10,6 @@ class Bucking extends MeleeAttack {
   }
 };
 
-export function create() {
-  return new Bucking();
+export function create(model) {
+  return new Bucking(model);
 }

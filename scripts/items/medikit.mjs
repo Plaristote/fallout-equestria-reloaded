@@ -1,9 +1,11 @@
 import {Item} from "./item.mjs";
 import {getValueFromRange} from "../behaviour/random.mjs";
 
-class Medikit extends Item {
+export class Medikit extends Item {
   constructor(model) {
     super(model);
+    this.minHeal = 15;
+    this.maxHeal = 30;
   }
 
   getActionPointCost() {
@@ -14,14 +16,18 @@ class Medikit extends Item {
     if (target.isAlive()) {
       const stats   = target.statistics;
       const maxHeal = stats.maxHitPoints - stats.hitPoints;
-      var   healed  = getValueFromRange(15, 30);
+      var   healed  = getValueFromRange(this.minHeal, this.maxHeal);
 
       healed = healed * this.user.statistics.medicine / 100;
       healed = Math.min(healed, maxHeal);
       healed = Math.floor(healed);
       stats.hitPoints += healed;
-      game.appendToConsole(this.user.statistics.name + " used " + this.model.objectName);
-      game.appendToConsole(target.statistics.name + " was healed for " + healed + " hit points");
+      game.appendToConsole(i18n.t("messages.use", {
+        user: this.user.statistics.name, item: i18n.t("items." + this.model.itemType)
+      }));
+      game.appendToConsole(i18n.t("messages.healed", {
+        target: target.statistics.name, hp: healed
+      });
       return true;
     }
     else

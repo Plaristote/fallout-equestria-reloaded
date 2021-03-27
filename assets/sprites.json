@@ -61,6 +61,38 @@
             "width": 72
         }
     },
+    "cavern-metal-door": {
+        "destroyed": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 107,
+            "offsetX": 0,
+            "offsetY": 217,
+            "repeat": false,
+            "source": "cavern/metal-door.png",
+            "width": 73
+        },
+        "idle": {
+            "frameCount": 1,
+            "frameInterval": 19,
+            "height": 107,
+            "offsetX": 0,
+            "offsetY": 0,
+            "repeat": false,
+            "source": "cavern/metal-door.png",
+            "width": 73
+        },
+        "open": {
+            "frameCount": 8,
+            "frameInterval": 100,
+            "height": 107,
+            "offsetX": 0,
+            "offsetY": 0,
+            "repeat": false,
+            "source": "cavern/metal-door.png",
+            "width": 73
+        }
+    },
     "earthpony-black": {
         "cloneOf": "pony",
         "defaultSource": "characters/earthpony-black.png"
@@ -113,6 +145,16 @@
             "repeat": false,
             "source": "gun.png",
             "width": 112
+        },
+        "health-potion": {
+            "frameCount": 1,
+            "frameInterval": 10,
+            "height": 36,
+            "offsetX": 0,
+            "offsetY": 0,
+            "repeat": false,
+            "source": "items/health-potion.png",
+            "width": 72
         },
         "medikit": {
             "height": 36,

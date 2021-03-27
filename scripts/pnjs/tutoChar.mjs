@@ -1,6 +1,6 @@
 import {CharacterBehaviour} from "./character.mjs";
 
-const textBubbles = {
+const dialogLines = {
   yell: "Hey ! You got here, at last !",
   step1: [
     { content: "There's a door over there. It's locked, but it's the safest way to go.", duration: 5000 },
@@ -20,8 +20,8 @@ class TutoChar extends CharacterBehaviour {
   }
 
   get textBubbles() {
-    if (this.model.getVariable("startRoutine") === 2)
-      return textBubbles.step1;
+    if (this.model.getVariable("startRoutine") == 2)
+      return dialogLines.step1;
     return [];
   }
 
