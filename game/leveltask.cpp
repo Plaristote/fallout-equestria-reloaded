@@ -136,16 +136,15 @@ void LevelTask::tileClicked(int x, int y)
 
   if (getPlayer())
   {
+    auto* actions = getPlayer()->getActionQueue();
+
+    actions->reset();
     if (occupant)
-    {
-      QPoint interactionPosition = occupant->getInteractionPosition();
-      x = interactionPosition.x();
-      y = interactionPosition.y();
-    }
-    getPlayer()->getActionQueue()->reset();
-    getPlayer()->getActionQueue()->pushMovement(QPoint(x, y));
-    if (!(getPlayer()->getActionQueue()->start()))
-      displayConsoleMessage("No path.");
+      actions->pushReach(occupant, 1);
+    else
+      actions->pushMovement(QPoint(x, y));
+    if (!(actions->start()))
+      emit displayConsoleMessage("No path.");
   }
   else
   {

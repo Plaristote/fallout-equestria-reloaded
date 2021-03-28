@@ -12,12 +12,12 @@ public:
   }
 
   int  getApCost() const override;
-  bool trigger() override;
+  virtual bool trigger() override;
   void update() override;
-  void interrupt() override;
+  virtual void interrupt() override;
 
 protected:
-  void triggerNextMovement();
+  virtual void triggerNextMovement();
 
   QPoint target;
 };

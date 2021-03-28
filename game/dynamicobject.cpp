@@ -98,7 +98,6 @@ void DynamicObject::load(const QJsonObject& data)
   objectName = data["objectName"].toString();
   position.setX(data["x"].toInt()); position.setY(data["y"].toInt());
   nextPosition.setX(data["nextX"].toInt()); nextPosition.setY(data["nextY"].toInt());
-  interactionPosition.setX(data["intX"].toInt()); interactionPosition.setY(data["intY"].toInt());
   blocksPath = data["blocksPath"].toBool(true);
   emit blocksPathChanged();
   currentZone = data["currentZone"].toString();
@@ -112,7 +111,6 @@ void DynamicObject::save(QJsonObject& data) const
   data["objectName"] = objectName;
   data["x"] = position.x(); data["y"] = position.y();
   data["nextX"] = nextPosition.x(); data["nextY"] = nextPosition.y();
-  data["intX"] = interactionPosition.x(); data["intY"] = interactionPosition.y();
   data["blocksPath"] = blocksPath;
   data["currentZone"] = currentZone;
   ParentType::save(data);

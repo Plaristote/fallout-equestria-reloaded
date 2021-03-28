@@ -47,11 +47,9 @@ public:
   Q_INVOKABLE QString getObjectType() const { return metaObject()->className(); }
   Q_INVOKABLE QPoint getPosition() const { return position; }
   Q_INVOKABLE virtual int getZIndex() const { return 1; }
-  Q_INVOKABLE virtual QPoint getInteractionPosition() const { return interactionPosition; }
+  virtual int getInteractionDistance() const { return 1; }
   virtual QStringList getAvailableInteractions();
   void setPosition(QPoint value) { position = value; emit positionChanged(); }
-  Q_INVOKABLE void setInteractionPosition(int x, int y) { setInteractionPosition(QPoint(x, y)); }
-  void setInteractionPosition(QPoint value) { interactionPosition = value; }
   virtual int getCoverValue() const { return 100; }
 
   Q_INVOKABLE virtual bool triggerInteraction(Character*, const QString& interactionType);
@@ -77,7 +75,6 @@ protected:
   bool visible = true;
   QPoint position, nextPosition;
   QString currentZone;
-  QPoint interactionPosition;
   QString orientation;
 };
 

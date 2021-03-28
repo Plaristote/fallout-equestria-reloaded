@@ -28,7 +28,7 @@ public:
   const QString& getItemType() const { return itemType; }
   Q_INVOKABLE void add(int quantity = 1);
   Q_INVOKABLE bool remove(int quantity = 1);
-  Q_INVOKABLE QPoint getInteractionPosition() const { return getPosition(); }
+  int getInteractionDistance() const override { return 0; }
   QStringList getAvailableInteractions();
   int         getWeight() const;
   int         getValue() const;
@@ -46,6 +46,7 @@ public:
   Q_INVOKABLE int            getActionPointCost();
   Q_INVOKABLE bool           isCombatItem();
   Q_INVOKABLE bool           isInRange(DynamicObject* target);
+  Q_INVOKABLE float          getRange() const;
   Q_INVOKABLE bool           isValidTarget(DynamicObject*);
   Q_INVOKABLE QJSValue       useOn(DynamicObject* target);
   Q_INVOKABLE void           useFromInventory();

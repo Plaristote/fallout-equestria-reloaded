@@ -163,7 +163,7 @@ bool LevelGrid::findPath(QPoint from, QPoint to, QList<QPoint>& path)
     toCase->occupied = toOccupiedBackup;
   }
   else
-    qDebug() << "Pathfinding: invalid coordinates";
+    qDebug() << "Pathfinding: invalid coordinates" << from << to;
   return false;
 }
 

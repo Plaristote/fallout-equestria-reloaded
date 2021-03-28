@@ -13,7 +13,6 @@ DynamicObjectEditor {
   readOnlyAnimation: true
   readOnlyPositionType: true
   readOnlyScript: true
-  withInteractionPosition: false
 
   fields: [
     TerminalLabel { text: "Type" },

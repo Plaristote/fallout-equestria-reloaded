@@ -64,6 +64,9 @@ signals:
 private slots:
   void onActiveItemChanged();
 
+private:
+  int getInteractionDistance(DynamicObject* target, const QString& interactionType);
+
 protected:
   QString        activeItemSlot, activeSkill;
   InventoryItem* activeItem = nullptr;

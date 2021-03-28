@@ -150,6 +150,13 @@ bool InventoryItem::isInRange(DynamicObject *target)
   return true;
 }
 
+float InventoryItem::getRange() const
+{
+  if (script && script->hasMethod("getRange"))
+    return static_cast<float>(script->call("getRange").toNumber());
+  return 1.f;
+}
+
 bool InventoryItem::isValidTarget(DynamicObject* target)
 {
   if (target && script && script->hasMethod("isValidTarget"))

@@ -14,10 +14,12 @@ public:
   explicit CharacterSight(QObject *parent = nullptr);
   virtual ~CharacterSight();
 
-  Q_INVOKABLE bool  hasLineOfSight(const Character*) const;
+  Q_INVOKABLE bool  hasLineOfSight(const DynamicObject*) const;
+  static bool       hasSightFrom(const DynamicObject*, QPoint position);
   Q_INVOKABLE bool  isSneaking() const { return sneakEnabled; }
   float             getDistance(const DynamicObject*) const;
   Q_INVOKABLE float getDistance(DynamicObject* v) const;
+  float             getDistance(QPoint) const;
   FieldOfView*      getFieldOfView() const { return fieldOfView; }
 
 protected:

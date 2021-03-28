@@ -20,7 +20,6 @@ public:
   void load(const QJsonObject&);
 
   QStringList getAvailableInteractions() override;
-  Q_INVOKABLE QPoint getInteractionPosition() const override;
   Q_INVOKABLE bool bustOpen(int damage);
   bool isBlockingPath() const { return !opened; }
   bool triggerInteraction(Character* character, const QString& interactionType) override;

@@ -12,7 +12,12 @@ CharacterSight::~CharacterSight()
   delete fieldOfView;
 }
 
-bool CharacterSight::hasLineOfSight(const Character* other) const
+bool CharacterSight::hasLineOfSight(const DynamicObject* other) const
+{
+  return hasSightFrom(other, position);
+}
+
+bool CharacterSight::hasSightFrom(const DynamicObject* other, QPoint pos)
 {
   auto* level = Game::get()->getLevel();
 
@@ -20,7 +25,7 @@ bool CharacterSight::hasLineOfSight(const Character* other) const
   {
     auto*  grid   = level->getGrid();
     QPoint target = other->getPosition();
-    int    score  = grid->getVisionQuality(position.x(), position.y(), target.x(), target.y());
+    int    score  = grid->getVisionQuality(pos.x(), pos.y(), target.x(), target.y());
 
     return score > 0;
   }
@@ -29,18 +34,17 @@ bool CharacterSight::hasLineOfSight(const Character* other) const
 
 float CharacterSight::getDistance(const DynamicObject* target) const
 {
-  auto self  = getPosition();
-  auto other = target->getPosition();
-  auto a = self.x() - other.x();
-  auto b = self.y() - other.y();
-
-  return std::sqrt(static_cast<float>(a * a + b * b));
+  return getDistance(target->getPosition());
 }
 
 float CharacterSight::getDistance(DynamicObject* target) const
 {
+  return getDistance(target->getPosition());
+}
+
+float CharacterSight::getDistance(QPoint other) const
+{
   auto self  = getPosition();
-  auto other = target->getPosition();
   auto a = self.x() - other.x();
   auto b = self.y() - other.y();
 

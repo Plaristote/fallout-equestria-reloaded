@@ -31,7 +31,7 @@ public:
   int          getZIndex() const override { return isAlive() ? 2 : 1; }
   int          getCoverValue() const override { return 10; }
 
-  Q_INVOKABLE QPoint getInteractionPosition() const override;
+  int getInteractionDistance() const override;
   bool isBlockingPath() const override { return isAlive(); }
 
   Q_INVOKABLE QJSValue getActions();

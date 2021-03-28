@@ -57,28 +57,7 @@ QStringList Doorway::getAvailableInteractions()
 {
   if (script && script->hasMethod("getAvailableInteractions"))
     return script->call("getAvailableInteractions").toVariant().toStringList();
-  return QStringList() << "use" << "use-skill";
-}
-
-QPoint Doorway::getInteractionPosition() const
-{
-  auto* level = Game::get()->getLevel();
-
-  if (level && level->getPlayer())
-  {
-    QList<QPoint> path;
-
-    if (level->getGrid()->findPath(level->getPlayer()->getPosition(), getPosition(), path))
-    {
-      if (path.length() > 1)
-        return path.at(path.length() - 2);
-      return level->getPlayer()->getPosition();
-    }
-    qDebug() << "Character::getInteractionPosition: No path to reach character" << getObjectName();
-  }
-  else
-    qDebug() << "Character::getInteractionPosition: called outside level";
-  return getPosition();
+  return QStringList() << "use" << "look" << "use-object" << "use-skill";
 }
 
 bool Doorway::triggerInteraction(Character *character, const QString &interactionType)

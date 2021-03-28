@@ -8,7 +8,6 @@ import Game 1.0
 
 DynamicObjectEditor {
   id: doorwayEditor
-  withInteractionPosition: false
 
   fields: [
     TerminalLabel { text: "Opened" },

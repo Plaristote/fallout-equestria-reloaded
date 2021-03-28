@@ -15,7 +15,6 @@ Pane {
   property bool readOnlySprite: false
   property bool readOnlyAnimation: false
   property bool readOnlyScript: false
-  property bool withInteractionPosition: true
   id: objectEditor
   background: UiStyle.TerminalPane {}
 
@@ -41,13 +40,6 @@ Pane {
     model.setRenderPosition(Qt.point(renderX, renderY));
   }
 
-  function interactionPositionChanged() {
-    model.setInteractionPosition(
-      parseInt(interactionXInput.text),
-      parseInt(interactionYInput.text)
-    );
-  }
-
   signal removeClicked()
 
   onModelChanged: {
@@ -67,8 +59,6 @@ Pane {
     gridYInput.text          = position.y;
     renderXInput.text        = renderPosition.x;
     renderYInput.text        = renderPosition.y;
-    interactionXInput.text   = interactionPosition.x;
-    interactionYInput.text   = interactionPosition.y;
     scriptInput.currentIndex = scriptInput.model.indexOf(model.scriptName);
   }
 
@@ -105,14 +95,6 @@ Pane {
         Layout.fillWidth: true
         TerminalField { id: gridXInput; onTextChanged: objectEditor.positionChanged(); width: parent.width / 2 }
         TerminalField { id: gridYInput; onTextChanged: objectEditor.positionChanged(); width: parent.width / 2 }
-      }
-
-      TerminalLabel { text: "Interaction position"; visible: objectEditor.withInteractionPosition }
-      Row {
-        Layout.fillWidth: true
-        visible: objectEditor.withInteractionPosition
-        TerminalField { id: interactionXInput; onTextChanged: objectEditor.interactionPositionChanged(); width: parent.width / 2 }
-        TerminalField { id: interactionYInput; onTextChanged: objectEditor.interactionPositionChanged(); width: parent.width / 2 }
       }
 
       TerminalLabel { text: "Script"; visible: !readOnlyScript }

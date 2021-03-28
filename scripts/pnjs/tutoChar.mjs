@@ -54,7 +54,7 @@ class TutoChar extends CharacterBehaviour {
 
       this.model.movementMode = "running";
       actions.reset();
-      actions.pushMovement(target.x, target.y);
+      actions.pushReach(target, 3);
       actions.start();
     }
   }
@@ -62,8 +62,12 @@ class TutoChar extends CharacterBehaviour {
   onActionQueueCompleted() {
     if (!level.combat && this.model.getVariable("startRoutine") === 1) {
       this.model.setVariable("startRoutine", 2);
-      level.initializeDialog(this.model);
-      delete this.dialog;
+      if (level.player.getDistance(this.model) > 3)
+        this.followPlayer();
+      else {
+        level.initializeDialog(this.model);
+        delete this.dialog;
+      }
     }
     else
       super.onActionQueueCompleted();

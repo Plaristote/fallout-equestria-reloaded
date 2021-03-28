@@ -41,14 +41,31 @@ void InteractionComponent::openCountdownDialog(InventoryItem *item)
   emit countdownRequired(item);
 }
 
+int InteractionComponent::getInteractionDistance(DynamicObject* target, const QString& interactionType)
+{
+  int distance;
+
+  if (interactionType == "look")
+  {
+    int perception = getPlayer()->getStatistics()->property("perception").toInt();
+
+    distance = perception;
+  }
+  else if (interactionType == "push" || interactionType == "talk-to")
+    distance = 3;
+  else
+    distance = target->getInteractionDistance();
+  return distance;
+}
+
 void InteractionComponent::interactOrderReceived(DynamicObject* target, const QString& interactionType)
 {
-  auto  position = target->getInteractionPosition();
+  int   distance = getInteractionDistance(target, interactionType);
   auto* player = Game::get()->getPlayer();
   auto* actions = player->getActionQueue();
 
   actions->reset();
-  actions->pushMovement(position);
+  actions->pushReach(target, static_cast<float>(distance));
   actions->pushInteraction(target, interactionType);
   actions->start();
 }
@@ -137,10 +154,12 @@ void InteractionComponent::useSkill(const QString &skill)
 
 void InteractionComponent::useSkillOn(Character* user, DynamicObject* target, const QString &skill)
 {
+  int distance = target->getInteractionDistance();
   auto* actions = user->getActionQueue();
 
+  qDebug() << "Useskillon distance =" << distance;
   actions->reset();
-  actions->pushMovement(target->getInteractionPosition());
+  actions->pushReach(target, static_cast<float>(distance));
   actions->pushSkillUse(target, skill);
   if (actions->start())
     swapMouseMode();
@@ -152,11 +171,7 @@ void InteractionComponent::useItemOn(DynamicObject* target)
 
   actions->reset();
   if (!activeItem->isInRange(target))
-  {
-    auto  position = target->getInteractionPosition();
-
-    actions->pushMovement(position);
-  }
+    actions->pushReach(target, activeItem->getRange());
   actions->pushItemUse(target, activeItemSlot);
   if (actions->start())
     swapMouseMode();

@@ -4,6 +4,7 @@
 #include "actions/skillUse.h"
 #include "actions/interaction.h"
 #include "actions/movement.h"
+#include "actions/reach.h"
 
 ActionQueue::ActionQueue(QObject *parent) : QObject(parent), character(reinterpret_cast<Character*>(parent))
 {
@@ -104,6 +105,20 @@ int ActionQueue::getMovementApCost(QPoint target) const
   grid = Game::get()->getLevel()->getGrid();
   if (grid->findPath(from, target, path))
     return path.size();
+  return -1;
+}
+
+void ActionQueue::pushReach(DynamicObject *target, float range)
+{
+  queue << (new ReachAction(character, target, range));
+}
+
+int ActionQueue::getReachApCost(DynamicObject *target, float range) const
+{
+  auto action = ReachAction(character, target, range);
+
+  if (action.trigger())
+    return action.getApCost();
   return -1;
 }
 
