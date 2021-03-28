@@ -5,6 +5,7 @@
 # include <QVector>
 
 class ActionBase;
+class InventoryItem;
 
 class ActionQueue : public QObject
 {
@@ -27,6 +28,7 @@ public:
   Q_INVOKABLE int getReachApCost(DynamicObject* target, float range) const;
   Q_INVOKABLE void pushInteraction(DynamicObject* target, const QString& interactionName);
   Q_INVOKABLE void pushItemUse(DynamicObject* target, const QString& itemSlot);
+  Q_INVOKABLE void pushItemUse(DynamicObject* target, InventoryItem* item);
   Q_INVOKABLE void pushSkillUse(DynamicObject* target, const QString& name);
   void             pushMovement(QPoint target);
   Q_INVOKABLE void pushMovement(int x, int y) { pushMovement(QPoint(x, y)); }

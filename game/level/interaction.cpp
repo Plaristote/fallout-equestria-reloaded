@@ -167,12 +167,20 @@ void InteractionComponent::useSkillOn(Character* user, DynamicObject* target, co
 
 void InteractionComponent::useItemOn(DynamicObject* target)
 {
+  if (activeItem)
+    useItemOn(activeItem, target);
+  else
+    qDebug() << "InteractionComponent::useItemOn: activeItem is null";
+}
+
+void InteractionComponent::useItemOn(InventoryItem *item, DynamicObject *target)
+{
   auto* actions = Game::get()->getPlayer()->getActionQueue();
 
   actions->reset();
-  if (!activeItem->isInRange(target))
-    actions->pushReach(target, activeItem->getRange());
-  actions->pushItemUse(target, activeItemSlot);
+  if (!item->isInRange(target))
+    actions->pushReach(target, item->getRange());
+  actions->pushItemUse(target, item);
   if (actions->start())
     swapMouseMode();
 }

@@ -8,7 +8,7 @@ Item {
   id: root
   property QtObject gameController
   property QtObject levelController
-  property bool hasOverlay: interactionMenu.visible || inventoryViewContainer.visible || skilldex.visible || countdownDialog.visible || mainMenu.visible
+  property bool hasOverlay: interactionMenu.visible || inventoryViewContainer.visible || itemPickerContainer.visible || skilldex.visible || countdownDialog.visible || mainMenu.visible
   anchors.fill: parent
 
   function openMenu() {
@@ -137,6 +137,10 @@ Item {
               openSkilldexAction.trigger();
               skilldex.target = interactionMenu.interactionTarget;
             }
+            else if (interactionType === "use-object") {
+              itemPickerContainer.visible = true;
+              itemPicker.target = interactionMenu.interactionTarget;
+            }
             else
               levelController.interactOrderReceived(interactionMenu.interactionTarget, interactionMenu.interactionTypes[index]);
             interactionMenu.interactionTarget = null;
@@ -208,6 +212,37 @@ Item {
         levelController.useSkillOn(levelController.player, skilldex.target, skillName);
       else
         levelController.useSkill(skillName);
+    }
+  }
+
+  Rectangle {
+    id: itemPickerContainer
+    color: Qt.rgba(0, 0, 0, 0.5)
+    anchors.fill: parent
+    visible: false
+
+    MouseArea {
+      anchors.fill: parent
+    }
+
+    Hud.ItemPicker {
+      id: itemPicker
+      anchors { top: parent.top; left: parent.left; right: parent.right }
+      anchors.leftMargin:  parent.width > 1200 ? parent.width / 4 : parent.width / 8
+      anchors.rightMargin: parent.width > 1200 ? parent.width / 4 : parent.width / 8
+      anchors.bottomMargin: 50
+      anchors.topMargin: 50
+      height: parent.height - levelHud.height
+      inventory: levelController.player.inventory
+      onClosed: {
+        itemPickerContainer.visible = false;
+        target = selectedObject = null;
+      }
+      onAccepted: {
+        itemPickerContainer.visible = false;
+        levelController.useItemOn(itemPicker.selectedObject, itemPicker.target);
+        target = selectedObject = null;
+      }
     }
   }
 

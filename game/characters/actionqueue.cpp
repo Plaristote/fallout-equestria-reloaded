@@ -137,6 +137,11 @@ void ActionQueue::pushItemUse(DynamicObject *target, const QString &itemSlot)
   queue << (new ItemAction(character, target, itemSlot));
 }
 
+void ActionQueue::pushItemUse(DynamicObject *target, InventoryItem* item)
+{
+  queue << (new ItemAction(character, target, item));
+}
+
 int ActionQueue::getItemUseApCost(DynamicObject *target, const QString &itemSlot) const
 {
   return ItemAction(character, target, itemSlot).getApCost();

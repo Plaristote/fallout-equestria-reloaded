@@ -7,7 +7,12 @@
 class ItemAction : public ActionBase
 {
 public:
-  ItemAction(Character* character, DynamicObject* target, QString itemSlot) : ActionBase(character), target(target), itemSlot(itemSlot)
+  ItemAction(Character* character, DynamicObject* target, QString itemSlot) : ActionBase(character), target(target)
+  {
+    item = character->getInventory()->getEquippedItem(itemSlot);
+  }
+
+  ItemAction(Character* character, DynamicObject* target, InventoryItem* item) : ActionBase(character), target(target), item(item)
   {
   }
 
@@ -19,7 +24,7 @@ protected:
   void performAction();
 
   DynamicObject*    target;
-  QString           itemSlot;
+  InventoryItem*    item;
   QJSValue          callback;
   AnimationSequence animation;
 };

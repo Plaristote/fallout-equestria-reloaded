@@ -4,8 +4,6 @@
 
 bool ItemAction::trigger()
 {
-  InventoryItem* item = character->getInventory()->getEquippedItem(itemSlot);
-
   if (item)
   {
     QJSValue result = item->useOn(target);
@@ -65,8 +63,6 @@ void ItemAction::performAction()
 
 int ItemAction::getApCost() const
 {
-  InventoryItem* item = character->getInventory()->getEquippedItem(itemSlot);
-
   if (item)
     return item->getActionPointCost();
   return 2;

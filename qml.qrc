@@ -217,5 +217,6 @@
         <file>Options.qml</file>
         <file>game/LevelLightOverlay.qml</file>
         <file>game/hud/CountdownDialog.qml</file>
+        <file>game/hud/ItemPicker.qml</file>
     </qresource>
 </RCC>

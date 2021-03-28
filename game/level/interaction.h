@@ -49,6 +49,7 @@ public:
   DynamicObject*               getObjectAt(QPoint point) const { return getObjectAt(point.x(), point.y()); }
 
   void useItemOn(DynamicObject* object);
+  Q_INVOKABLE void useItemOn(InventoryItem* item, DynamicObject* object);
   void pickUpItem(Character*, InventoryItem*);
   Q_INVOKABLE void initializeDialog(Character* npc);
   Q_INVOKABLE void initializeLooting(StorageObject*);

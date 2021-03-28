@@ -31,7 +31,7 @@ Pane {
     anchors.top: parent.top
     anchors.left: parent.left
     anchors.leftMargin: 10
-    text: "Inventory"
+    text: i18n.t("Inventory")
     font.family: application.titleFontName
     font.pointSize: 18
     color: "white"
@@ -44,7 +44,7 @@ Pane {
 
     MenuButton {
       id: useButton
-      text: "Use"
+      text: i18n.t("Use")
       visible: selectedObject != null
       onClicked: selectedObject.useFromInventory()
     }

@@ -1,7 +1,11 @@
 {
   "Ok": "Ok",
   "Cancel": "Cancel",
+  "Close": "Close",
   "AP": "AP",
+  "Use": "Use",
+  "Inventory": "Inventory",
+  "Pick an item": "Pick an item",
   "messages": {
     "weapons": {
       "use":   "{{user}} used {{item}} on {{target}} for {{damage}} damage",
