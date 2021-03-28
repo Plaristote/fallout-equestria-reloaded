@@ -89,6 +89,7 @@ Item {
         renderRoofs: displayRoofCheckbox.checked
         renderWalls: displayWallsCheckbox.checked
         showHoverCoordinates: true
+        editorObject: selectedObject
 
         // Zone edition
         editingZone: controlZoneEditor.editingZone

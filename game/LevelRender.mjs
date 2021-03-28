@@ -83,7 +83,7 @@ export class Controller {
   }
 
   getTextureForZone(zone) {
-    if (zone.type === "exit" || (this.canvas.editorObject && this.canvas.editorObject.controlZone === zone))
+    if (zone.type === "exit")
       return "../assets/tilesets/zones.png";
     return null;
   }

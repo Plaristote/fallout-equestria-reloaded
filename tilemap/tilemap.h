@@ -41,7 +41,7 @@ public:
   Q_INVOKABLE TileLayer* getLightLayer(const QString& name);
   Q_INVOKABLE TileZone*  getZone(const QString& name);
 
-  void addTileZone(TileZone* zone)    { zones << zone; }
+  void addTileZone(TileZone* zone)    { if (zones.indexOf(zone) < 0) { zones << zone; } }
   void removeTileZone(TileZone* zone) { zones.removeAll(zone); }
 
   QQmlListProperty<TileZone> getZonesQml() { return QQmlListProperty<TileZone>(this, &zones); }

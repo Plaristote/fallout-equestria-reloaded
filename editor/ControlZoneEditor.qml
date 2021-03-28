@@ -34,7 +34,7 @@ Pane {
     property bool backupShowWalls
     onTriggered: {
       if (editingZone) {
-        displayRoofs.checked  = backupShowRoof;
+        displayRoofs.checked = backupShowRoof;
         displayWalls.checked = backupShowWalls;
       } else {
         backupShowRoof  = displayRoofs.checked;

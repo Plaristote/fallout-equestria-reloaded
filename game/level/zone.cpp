@@ -1,5 +1,6 @@
 #include "zone.h"
 #include "tilemap/tilezone.h"
+#include "tilemap/tilemap.h"
 
 ZoneComponent::ZoneComponent(QObject* parent) : GridComponent(parent)
 {
@@ -26,6 +27,7 @@ void ZoneComponent::unregisterDynamicObject(DynamicObject* object)
 
 void ZoneComponent::registerZone(TileZone* zone)
 {
+  tilemap->addTileZone(zone);
   grid->registerZone(zone);
   connect(zone, &TileZone::enteredZone, this, &ZoneComponent::onZoneEntered, Qt::QueuedConnection);
   connect(zone, &TileZone::exitedZone,  this, &ZoneComponent::onZoneExited,  Qt::QueuedConnection);
@@ -36,6 +38,7 @@ void ZoneComponent::unregisterZone(TileZone* zone)
   disconnect(zone, &TileZone::enteredZone, this, &ZoneComponent::onZoneEntered);
   disconnect(zone, &TileZone::exitedZone,  this, &ZoneComponent::onZoneExited);
   grid->unregisterZone(zone);
+  tilemap->removeTileZone(zone);
 }
 
 void ZoneComponent::onZoneEntered(DynamicObject* object, TileZone* zone)

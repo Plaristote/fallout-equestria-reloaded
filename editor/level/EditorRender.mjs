@@ -1,6 +1,16 @@
 import {Controller} from "../../game/LevelRender.mjs";
 
 export class EditorController extends Controller {
+  getTextureForZone(zone) {
+    const texture = super.getTextureForZone(zone);
+
+    if (texture === null && this.canvas.editorObject && this.canvas.editorObject.controlZone === zone) {
+      console.log("Dizplaying control zone");
+      return "../assets/tilesets/zones.png";
+    }
+    return null;
+  }
+
   renderRoofs() {
     if (this.canvas.renderRoofs)
       super.renderRoofs();

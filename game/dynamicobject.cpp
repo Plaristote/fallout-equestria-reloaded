@@ -116,8 +116,8 @@ void DynamicObject::removeControlZone()
 {
   if (controlZone != nullptr)
   {
-    delete controlZone;
     emit controlZoneRemoved(controlZone);
+    delete controlZone;
   }
   controlZone = nullptr;
 }
