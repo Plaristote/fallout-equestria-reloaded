@@ -8,10 +8,8 @@
 Character::Character(QObject *parent) : ParentType(parent)
 {
   setProperty("float", true);
-  fieldOfView = new FieldOfView(*this);
   actionQueue = new ActionQueue(this);
   inventory->setUser(this);
-  connect(inventory, &Inventory::unequippedItem, this, &Character::initializeEmptySlot);
   connect(actionQueue, &ActionQueue::queueCompleted, this, &Character::onActionQueueCompleted);
   connect(this, &Character::characterKill, this, &Character::died);
   connect(this, &Character::died, [this]() { if (script) { script->call("onDied"); } });
@@ -19,12 +17,12 @@ Character::Character(QObject *parent) : ParentType(parent)
 
 void Character::update(qint64 delta)
 {
-  auto* level = Game::get()->getLevel();
-
-  DynamicObject::update(delta);
+  ParentType::update(delta);
   if (isAlive())
   {
-    if (level->getPlayer() != this && fieldOfView->hasLivingEnemiesInSight())
+    auto* level = Game::get()->getLevel();
+
+    if (level->getPlayer() != this && hasLivingEnemiesInSight())
       level->joinCombat(this);
   }
 }
@@ -97,41 +95,6 @@ unsigned int Character::getXpValue() const
   return script ? script->property("xpValue").toUInt() : 25;
 }
 
-bool Character::hasLineOfSight(const Character* other) const
-{
-  auto* level = Game::get()->getLevel();
-
-  if (level)
-  {
-    auto*  grid   = level->getGrid();
-    QPoint target = other->getPosition();
-    int    score  = grid->getVisionQuality(position.x(), position.y(), target.x(), target.y());
-
-    return score > 0;
-  }
-  return false;
-}
-
-float Character::getDistance(const DynamicObject* target) const
-{
-  auto self  = getPosition();
-  auto other = target->getPosition();
-  auto a = self.x() - other.x();
-  auto b = self.y() - other.y();
-
-  return std::sqrt(static_cast<float>(a * a + b * b));
-}
-
-float Character::getDistance(DynamicObject* target) const
-{
-  auto self  = getPosition();
-  auto other = target->getPosition();
-  auto a = self.x() - other.x();
-  auto b = self.y() - other.y();
-
-  return std::sqrt(static_cast<float>(a * a + b * b));
-}
-
 bool Character::useActionPoints(int amount, const QString& actionType)
 {
   auto* level = Game::get()->getLevel();
@@ -148,7 +111,7 @@ bool Character::useActionPoints(int amount, const QString& actionType)
         auto  maxActionPoints = stats->get_actionPoints();
         double duration = std::ceil(static_cast<double>(WORLDTIME_TURN_DURATION) / static_cast<double>(maxActionPoints) * static_cast<double>(amount));
 
-        fieldOfView->update(duration);
+        updateFieldOfView(duration);
       }
       return true;
     }
@@ -161,46 +124,6 @@ void Character::resetActionPoints()
 {
   actionPoints = isAlive() ? getStatistics()->get_actionPoints() : 0;
   emit actionPointsChanged();
-}
-
-void Character::updateInventorySlots()
-{
-  QMap<QString, QString> slotTypes({{"armor", "armor"},{"saddle","saddle"},{"use-1","any"},{"use-2","any"}});
-
-  inventory->setSlots(slotTypes);
-}
-
-void Character::initializeEmptySlots()
-{
-  initializeEmptySlot("use-1");
-  initializeEmptySlot("use-2");
-}
-
-void Character::initializeEmptySlot(const QString& slotName)
-{
-  if (inventory->getEquippedItem(slotName) == nullptr)
-  {
-    InventoryItem* item = new InventoryItem(this);
-
-    item->setObjectName(getDefaultItemForSlot(slotName));
-    item->setItemType(item->getObjectName());
-    item->setVirtual(true);
-    inventory->equipItem(item, slotName);
-  }
-}
-
-QString Character::getDefaultItemForSlot(const QString& name)
-{
-  if (script && script->hasMethod("getDefaultItem"))
-    return script->call("getDefaultItem", QJSValueList() << name).toString();
-  return "melee";
-}
-
-void Character::setScript(const QString& name)
-{
-  DynamicObject::setScript(name);
-  updateInventorySlots();
-  initializeEmptySlots();
 }
 
 void Character::load(const QJsonObject& data)
