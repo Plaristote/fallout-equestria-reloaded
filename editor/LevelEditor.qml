@@ -83,7 +83,7 @@ Item {
       Layout.fillHeight: true
       Layout.fillWidth: true
 
-      LevelEditorCanvas {
+      LevelEditorUi.EditorCanvas {
         id: canvas
         levelController: gameController.level
         renderRoofs: displayRoofCheckbox.checked
@@ -187,7 +187,7 @@ Item {
     }
   }
 
-  CharacterInventoryEditor {
+  LevelEditorUi.CharacterInventoryEditor {
     id: characterInventory
     anchors.fill: parent
     anchors.margins: 50
@@ -195,7 +195,7 @@ Item {
     visible: false
   }
 
-  LootEditor {
+  LevelEditorUi.LootEditor {
     id: lootEditor
     anchors.fill: parent
     anchors.margins: 50

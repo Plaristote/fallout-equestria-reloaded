@@ -1,9 +1,9 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
-import "../assets/ui" as UiStyle
-import "../ui"
-import "../game" as GameComponents
+import "../../assets/ui" as UiStyle
+import "../../ui"
+import "../../game" as GameComponents
 
 Pane {
   id: root

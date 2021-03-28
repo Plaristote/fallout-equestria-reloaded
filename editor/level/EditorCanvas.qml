@@ -1,6 +1,6 @@
 import QtQuick 2.15
-import "../game" as GameComponents
-import "LevelEditorRender.mjs" as LevelRender
+import "../../game" as GameComponents
+import "EditorRender.mjs" as LevelRender
 
 GameComponents.LevelCanvas {
   property QtObject editorObject
