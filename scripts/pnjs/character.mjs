@@ -4,14 +4,19 @@ export class CharacterBehaviour extends CombatComponent {
   constructor(model) {
     super(model);
     this.xpValue = 25;
+    this.canPush = true;
   }
 
   getAvailableInteractions() {
     if (this.model.isAlive()) {
-      const interactions = ["look", "use-skill"];
+      const interactions = ["look", "use-object", "use-skill"];
 
-      if (this.dialog || this.textBubbles)
-        interactions.unshift("talk-to");
+      if (!level.combat) {
+        if (this.canPush)
+          interactions.unshift("push");
+        if (this.dialog || this.textBubbles)
+          interactions.unshift("talk-to");
+      }
       return interactions;
     }
     return ["use", "look"];
@@ -22,6 +27,10 @@ export class CharacterBehaviour extends CombatComponent {
 
     game.appendToConsole(i18n.t("inspection.character", {target: this.model.statistics.name}));
     return true;
+  }
+
+  onPush() {
+    this.model.moveAway();
   }
 
   onTalkTo() {

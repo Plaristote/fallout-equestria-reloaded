@@ -66,6 +66,28 @@ int Character::getInteractionDistance() const
   return isAlive() ? 1 : 0;
 }
 
+void Character::moveAway()
+{
+  auto* grid = Game::get()->getLevel()->getGrid();
+
+  if (!actionQueue->isEmpty())
+    return ;
+  for (int x = position.x() - 1 ; x <= position.x() + 1 ; ++x)
+  {
+    for (int y = position.y() - 1 ; y <= position.y() + 1 ; ++y)
+    {
+      auto* caseContent = grid->getGridCase(x, y);
+
+      if (caseContent && !caseContent->isBlocked())
+      {
+        actionQueue->pushMovement(x, y);
+        actionQueue->start();
+        return ;
+      }
+    }
+  }
+}
+
 QString Character::getDialogName()
 {
   return script ? script->property("dialog").toString() : "";

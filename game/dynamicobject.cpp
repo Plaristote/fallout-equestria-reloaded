@@ -40,9 +40,8 @@ bool DynamicObject::triggerInteraction(Character* character, const QString &inte
 {
   static const QMap<QString, QString> callbackMap = {
     {"talk-to",   "onTalkTo"},
+    {"push",      "onPush"},
     {"use",       "onUse"},
-    {"use-skill", "onUseSkill"},
-    {"use-magic", "onUseMagic"},
     {"look",      "onLook"}
   };
 
