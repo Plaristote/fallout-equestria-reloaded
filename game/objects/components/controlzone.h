@@ -4,6 +4,7 @@
 # include "scriptable.h"
 
 class TileZone;
+class DynamicObject;
 
 class ControlZoneComponent : public ScriptableComponent
 {
@@ -11,6 +12,7 @@ class ControlZoneComponent : public ScriptableComponent
   typedef ScriptableComponent ParentType;
 
   Q_PROPERTY(TileZone* controlZone MEMBER controlZone NOTIFY controlZoneChanged)
+  Q_PROPERTY(bool zoneBlocked MEMBER zoneBlocked NOTIFY zoneBlockedChanged)
 public:
   explicit ControlZoneComponent(QObject *parent = nullptr);
 
@@ -20,14 +22,25 @@ public:
   Q_INVOKABLE TileZone* addControlZone();
   Q_INVOKABLE void      removeControlZone();
   TileZone*             getControlZone() { return controlZone; }
+  void                  toggleZoneBlocked(bool value);
+  inline bool           hasControlZone() const { return controlZone != nullptr; }
 
 signals:
   void controlZoneChanged();
   void controlZoneAdded(TileZone*);
   void controlZoneRemoved(TileZone*);
+  void zoneBlockedChanged();
 
-protected:
+private slots:
+  void listenControlZone(TileZone*);
+  void stopListeningControlZone(TileZone*);
+  void onZoneEntered(DynamicObject*, TileZone*);
+  void onZoneExited(DynamicObject*, TileZone*);
+  void updateZoneBlock();
+
+private:
   TileZone* controlZone = nullptr;
+  bool zoneBlocked = true;
 };
 
 #endif // CONTROLZONECOMPONENT_H

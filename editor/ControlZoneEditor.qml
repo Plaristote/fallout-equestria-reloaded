@@ -64,6 +64,12 @@ Pane {
       action: toggleZoneEditAction
     }
 
+    TerminalCheckBox {
+      text: "Path blocked"
+      visible: selectedObject !== null && selectedObject.controlZone !== null
+      checked: selectedObject.zoneBlocked
+    }
+
     TerminalButton {
       text: "Remove control zone"
       visible: selectedObject !== null && selectedObject.controlZone !== null

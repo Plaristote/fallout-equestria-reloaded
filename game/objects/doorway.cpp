@@ -13,8 +13,8 @@ Doorway::Doorway(QObject* parent) : DynamicObject(parent)
 
 void Doorway::updateAccessPath()
 {
-  if (controlZone)
-    controlZone->setAccessBlocked(!opened);
+  if (hasControlZone())
+    toggleZoneBlocked(!opened);
   else
   {
     blocksPath = !opened;
