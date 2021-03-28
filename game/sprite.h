@@ -1,13 +1,11 @@
 #ifndef  SPRITE_H
 # define SPRITE_H
 
-# include <QObject>
-# include <QTimer>
-# include <QSize>
 # include <QRect>
-# include <QJsonObject>
 # include "animationlibrary.h"
 # include "utils/storableobject.h"
+
+class QJsonObject;
 
 class Sprite : public StorableObject
 {

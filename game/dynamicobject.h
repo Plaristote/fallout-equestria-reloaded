@@ -7,23 +7,21 @@
 # include <QJSValue>
 # include <QTimer>
 # include <QJsonObject>
-# include "sprite.h"
+# include "objects/components/controlzone.h"
 # include "taskrunner.h"
-# include "scriptcontroller.h"
 
 class TileZone;
 class Character;
 
-class DynamicObject : public Sprite
+class DynamicObject : public ControlZoneComponent
 {
   Q_OBJECT
+  typedef ControlZoneComponent ParentType;
 
   Q_PROPERTY(QString objectName MEMBER objectName NOTIFY objectNameChanged)
-  Q_PROPERTY(QString scriptName READ getScriptName NOTIFY scriptNameChanged)
   Q_PROPERTY(QPoint  position    READ getPosition NOTIFY positionChanged)
   Q_PROPERTY(QString currentZone READ getCurrentZone)
   Q_PROPERTY(TaskRunner* tasks MEMBER taskManager)
-  Q_PROPERTY(TileZone* controlZone MEMBER controlZone NOTIFY controlZoneChanged)
   Q_PROPERTY(bool blocksPath MEMBER blocksPath NOTIFY blocksPathChanged)
   Q_PROPERTY(bool isVisible MEMBER visible NOTIFY visibilityChanged)
 
@@ -31,11 +29,11 @@ public:
   explicit DynamicObject(QObject *parent = nullptr);
   virtual ~DynamicObject();
 
-  virtual void update(qint64 v) { Sprite::update(v); }
+  virtual void update(qint64 v) { ParentType::update(v); }
   virtual void updateTasks(qint64 v);
   virtual void load(const QJsonObject&);
   virtual void save(QJsonObject&) const;
-  Q_INVOKABLE virtual void setScript(const QString& name);
+  virtual void setScript(const QString& name);
 
   inline bool isCharacter() const { return getObjectType() == "Character"; }
   virtual bool isBlockingPath() const { return true; }
@@ -47,7 +45,6 @@ public:
   TaskRunner* getTaskManager() { return taskManager; }
 
   Q_INVOKABLE QString getObjectType() const { return metaObject()->className(); }
-  QString getScriptName() const { return scriptName; }
   Q_INVOKABLE QPoint getPosition() const { return position; }
   Q_INVOKABLE virtual int getZIndex() const { return 1; }
   Q_INVOKABLE virtual QPoint getInteractionPosition() const { return interactionPosition; }
@@ -57,40 +54,26 @@ public:
   void setInteractionPosition(QPoint value) { interactionPosition = value; }
   virtual int getCoverValue() const { return 100; }
 
-  Q_INVOKABLE TileZone* addControlZone();
-  Q_INVOKABLE void      removeControlZone();
-  TileZone*             getControlZone() { return controlZone; }
-
   Q_INVOKABLE virtual bool triggerInteraction(Character*, const QString& interactionType);
   Q_INVOKABLE virtual bool triggerSkillUse(Character* user, const QString& skillName);
-  Q_INVOKABLE QJSValue  scriptCall(const QString& method, const QString& message = "");
-  Q_INVOKABLE QJSValue  getScriptObject() const;
-  QJSValue asJSValue();
 
   const QString& getCurrentZone() const { return currentZone; }
   void setCurrentZone(const QString& value) { currentZone = value; }
 
 signals:
   void objectNameChanged();
-  void scriptNameChanged();
   void blocksPathChanged();
   void positionChanged();
-  void controlZoneChanged();
-  void controlZoneAdded(TileZone*);
-  void controlZoneRemoved(TileZone*);
   void visibilityChanged();
 
 protected slots:
   void onBlocksPathChanged();
 
 protected:
-  virtual QString getScriptPath() const { return SCRIPTS_PATH + "behaviour"; }
-  ScriptController* script = nullptr;
   TaskRunner* taskManager;
-  TileZone* controlZone = nullptr;
   bool blocksPath = true;
 //private:
-  QString objectName, scriptName;
+  QString objectName;
   bool visible = true;
   QPoint position, nextPosition;
   QString currentZone;

@@ -148,6 +148,10 @@ set(PROJECT_SOURCES
         game/objects/storageobject.cpp
         game/objects/inventoryitem.h
         game/objects/inventoryitem.cpp
+        game/objects/components/scriptable.h
+        game/objects/components/scriptable.cpp
+        game/objects/components/controlzone.h
+        game/objects/components/controlzone.cpp
         game/animationSequence/ianimationpart.h
         game/animationSequence/objectanimationpart.h
         game/animationSequence/objectanimationpart.cpp

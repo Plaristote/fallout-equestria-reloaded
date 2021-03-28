@@ -1,38 +1,27 @@
 #include "dynamicobject.h"
 #include "character.h"
 #include "game.h"
-#include "tilemap/tilezone.h"
-#include <QJsonArray>
 
-DynamicObject::DynamicObject(QObject *parent) : Sprite(parent)
+DynamicObject::DynamicObject(QObject *parent) : ParentType(parent)
 {
   position = QPoint(-1,-1);
   taskManager = new TaskRunner(this);
-  connect(this, &DynamicObject::controlZoneAdded,   this, &DynamicObject::controlZoneChanged);
-  connect(this, &DynamicObject::controlZoneRemoved, this, &DynamicObject::controlZoneChanged);
   connect(this, &DynamicObject::blocksPathChanged, this, &DynamicObject::onBlocksPathChanged);
 }
 
 DynamicObject::~DynamicObject()
 {
-  if (script)
-    delete script;
+}
+
+void DynamicObject::setScript(const QString& name)
+{
+  ParentType::setScript(name);
+  taskManager->setScriptController(script);
 }
 
 void DynamicObject::updateTasks(qint64 v)
 {
   taskManager->update(v);
-}
-
-void DynamicObject::setScript(const QString& name)
-{
-  if (script)
-    delete script;
-  scriptName = name;
-  script     = new ScriptController(getScriptPath() + '/' + name);
-  taskManager->setScriptController(script);
-  script->initialize(this);
-  emit scriptNameChanged();
 }
 
 QStringList DynamicObject::getAvailableInteractions()
@@ -81,47 +70,6 @@ bool DynamicObject::triggerSkillUse(Character *user, const QString &skillName)
   return false;
 }
 
-QJSValue DynamicObject::scriptCall(const QString& method, const QString& message)
-{
-  if (script)
-    return script->call(method, QJSValueList() << message);
-  return QJSValue();
-}
-
-QJSValue DynamicObject::getScriptObject() const
-{
-  if (script)
-    return script->getObject();
-  return QJSValue();
-}
-
-QJSValue DynamicObject::asJSValue()
-{
-  if (script)
-    return script->getModel();
-  return Game::get()->getScriptEngine().newQObject(this);
-}
-
-TileZone* DynamicObject::addControlZone()
-{
-  if (controlZone == nullptr)
-  {
-    controlZone = new TileZone(this);
-    emit controlZoneAdded(controlZone);
-  }
-  return controlZone;
-}
-
-void DynamicObject::removeControlZone()
-{
-  if (controlZone != nullptr)
-  {
-    emit controlZoneRemoved(controlZone);
-    delete controlZone;
-  }
-  controlZone = nullptr;
-}
-
 void DynamicObject::setVisible(bool value)
 {
   if (visible != value)
@@ -153,22 +101,8 @@ void DynamicObject::load(const QJsonObject& data)
   interactionPosition.setX(data["intX"].toInt()); interactionPosition.setY(data["intY"].toInt());
   blocksPath = data["blocksPath"].toBool(true);
   emit blocksPathChanged();
-  if (data["zone"].isArray())
-  {
-    controlZone = controlZone ? controlZone : new TileZone(this);
-    for (QJsonValue posValue : data["zone"].toArray())
-    {
-      QJsonArray posArray(posValue.toArray());
-
-      controlZone->addPosition(QPoint(posArray[0].toInt(), posArray[1].toInt()));
-      controlZone->setAccessBlocked(true);
-    }
-    emit controlZoneChanged();
-  }
   currentZone = data["currentZone"].toString();
-  scriptName  = data["script"].toString();
-  Sprite::load(data);
-  setScript(scriptName);
+  ParentType::load(data);
   taskManager->load(data);
   emit positionChanged();
 }
@@ -180,21 +114,7 @@ void DynamicObject::save(QJsonObject& data) const
   data["nextX"] = nextPosition.x(); data["nextY"] = nextPosition.y();
   data["intX"] = interactionPosition.x(); data["intY"] = interactionPosition.y();
   data["blocksPath"] = blocksPath;
-  if (controlZone)
-  {
-    QJsonArray zoneArray;
-
-    for (QPoint position : controlZone->getPositions())
-    {
-      QJsonArray posArray;
-
-      posArray << position.x() << position.y();
-      zoneArray << posArray;
-    }
-    data["zone"] = zoneArray;
-  }
   data["currentZone"] = currentZone;
-  data["script"]      = scriptName;
-  Sprite::save(data);
+  ParentType::save(data);
   taskManager->save(data);
 }
