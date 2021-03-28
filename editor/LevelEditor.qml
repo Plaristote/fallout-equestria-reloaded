@@ -4,6 +4,7 @@ import QtQuick.Layouts 1.15
 import "qrc:/assets/ui" as UiStyle
 import "../ui"
 import "../game" as GameComponents
+import "./level" as LevelEditorUi
 import Game 1.0
 
 Item {
@@ -169,48 +170,10 @@ Item {
           }
         }
 
-        CharacterObjectEditor {
-          id: characterEditor
-          visible: model !== null
-          model: selectedObject && selectedObject.getObjectType() === "Character" ? selectedObject : null
-          gameController: root.gameController
+        LevelEditorUi.ObjectEditorLoader {
+          id: objectEditorComponent
           Layout.fillWidth: true
-          onOpenInventoryClicked: {
-            characterInventory.character = characterEditor.model;
-            characterInventory.open();
-          }
-          onRemoveClicked: gameController.level.deleteObject(model)
-        }
-
-        StorageObjectEditor {
-          id: storageEditor
-          visible: model !== null
-          model: selectedObject && selectedObject.getObjectType() === "StorageObject" ? selectedObject : null
-          gameController: root.gameController
-          Layout.fillWidth: true
-          onOpenStorageClicked: {
-            lootEditor.inventory = selectedObject.inventory;
-            lootEditor.open();
-          }
-          onRemoveClicked: gameController.level.deleteObject(model)
-        }
-
-        DoorwayObjectEditor {
-          id: doorwayEditor
-          visible: model !== null
-          model: selectedObject && selectedObject.getObjectType() === "Doorway" ? selectedObject : null
-          gameController: root.gameController
-          Layout.fillWidth: true
-          onRemoveClicked: gameController.level.deleteObject(model)
-        }
-
-        ItemObjectEditor {
-          id: itemEditor
-          visible: model !== null
-          model: selectedObject && selectedObject.getObjectType() === "InventoryItem" ? selectedObject : null
-          gameController: root.gameController
-          Layout.fillWidth: true
-          onRemoveClicked: gameController.level.deleteObject(model)
+          levelEditor: root
         }
 
         ControlZoneEditor {
@@ -239,39 +202,12 @@ Item {
     visible: false
   }
 
-  Dialog {
+  LevelEditorUi.AddObjectDialog {
     id: dialogAddObject
-    title: "New object"
-    modal: true
-    anchors.centerIn: parent
-    standardButtons: Dialog.Ok | Dialog.Cancel
-    GridLayout {
-      columns: 2
-      Text { text: "type" }
-      ComboBox { id: objectTypeInput; model: ["character", "storage", "door", "item", "other"] }
-      Text { text: "name" }
-      TextField { id: objectNameInput }
-      // Character inputs
-      Text { text: "character sheet"; visible: objectTypeInput.currentText === "character" }
-      ComboBox { id: sheetInput; model: scriptController.getCharacterSheets(); visible: objectTypeInput.currentText === "character" }
-      // InventoryItem inputs
-      Text { text: "type"; visible: objectTypeInput.currentText === "item" }
-      ComboBox { id: itemTypeInput; model: itemLibrary.getObjectList(); visible: objectTypeInput.currentText === "item" }
-    }
-    onAccepted: {
-      if (objectTypeInput.currentText === "character")
-        gameController.level.generateCharacter(objectNameInput.text, sheetInput.currentText.replace(".json", ""));
-      else if (objectTypeInput.currentText == "storage")
-        gameController.level.generateStorageObject(objectNameInput.text);
-      else if (objectTypeInput.currentText == "door")
-        gameController.level.generateDoorway(objectNameInput.text);
-      else if (objectTypeInput.currentText == "item")
-        gameController.level.generateInventoryItem(objectNameInput.text, itemTypeInput.currentText);
-      else {
-        console.log("unhandled type added");
-        return ;
-      }
-      objectSelectBox.currentIndex = gameController.level.objects.length - 1;
+    gameController: root.gameController
+    onObjectAdded: {
+      console.log("Added object", newObject);
+      objectSelectBox.currentIndex = gameController.level.objects.indexOf(newObject);
     }
   }
 

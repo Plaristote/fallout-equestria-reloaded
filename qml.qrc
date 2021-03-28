@@ -129,16 +129,19 @@
         <file>editor/NpcEditor.qml</file>
         <file>editor/EditorSelectPanel.qml</file>
         <file>editor/LevelEditor.qml</file>
-        <file>editor/CharacterObjectEditor.qml</file>
-        <file>editor/ItemObjectEditor.qml</file>
+        <file>editor/level/AddObjectDialog.qml</file>
+        <file>editor/level/ObjectEditorLoader.qml</file>
+        <file>editor/level/CharacterObjectEditor.qml</file>
+        <file>editor/level/ItemObjectEditor.qml</file>
+        <file>editor/level/StorageObjectEditor.qml</file>
+        <file>editor/level/DoorwayObjectEditor.qml</file>
+        <file>editor/level/DynamicObjectEditor.qml</file>
         <file>assets/fonts/fallout.ttf</file>
         <file>assets/fonts/JH_FALLOUT.TTF</file>
         <file>ui/CharacterInventory.qml</file>
         <file>ui/InventoryItemPreview.qml</file>
         <file>editor/CharacterInventoryEditor.qml</file>
-        <file>editor/StorageObjectEditor.qml</file>
         <file>ui/TerminalLabel.qml</file>
-        <file>editor/DynamicObjectEditor.qml</file>
         <file>editor/ControlZoneEditor.qml</file>
         <file>ui/TerminalCheckBox.qml</file>
         <file>editor/LevelEditorCanvas.qml</file>
@@ -206,7 +209,6 @@
         <file>editor/worldmap/ZoneForm.qml</file>
         <file>editor/worldmap/ZonePreview.qml</file>
         <file>editor/worldmap/WorldmapListEditor.qml</file>
-        <file>editor/DoorwayObjectEditor.qml</file>
         <file>editor/DiplomacyEditor.qml</file>
         <file>game/slideshows/TransitionScreen.qml</file>
         <file>editor/DialogEditor.qml</file>

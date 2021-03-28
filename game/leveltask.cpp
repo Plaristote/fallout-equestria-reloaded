@@ -351,3 +351,12 @@ Doorway* LevelTask::generateDoorway(const QString &name)
   registerDynamicObject(object);
   return object;
 }
+
+DynamicObject* LevelTask::generateDynamicObject(const QString &name)
+{
+  DynamicObject* object = new DynamicObject(this);
+
+  object->setObjectName(name);
+  registerDynamicObject(object);
+  return object;
+}
