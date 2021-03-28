@@ -5,7 +5,7 @@
 #include "cmap/race.h"
 #include <cmath>
 
-Character::Character(QObject *parent) : CharacterMovement(parent)
+Character::Character(QObject *parent) : ParentType(parent)
 {
   setProperty("float", true);
   fieldOfView = new FieldOfView(*this);
@@ -15,7 +15,6 @@ Character::Character(QObject *parent) : CharacterMovement(parent)
   connect(actionQueue, &ActionQueue::queueCompleted, this, &Character::onActionQueueCompleted);
   connect(this, &Character::characterKill, this, &Character::died);
   connect(this, &Character::died, [this]() { if (script) { script->call("onDied"); } });
-  connect(this, &Character::characterSheetChanged, this, &Character::onCharacterSheetChanged);
 }
 
 void Character::update(qint64 delta)
@@ -98,22 +97,6 @@ unsigned int Character::getXpValue() const
   return script ? script->property("xpValue").toUInt() : 25;
 }
 
-bool Character::isAlly(const Character* other) const
-{
-  return faction && faction->flag == other->getFactionFlag();
-}
-
-bool Character::isEnemy(const Character* other) const
-{
-  if (faction)
-  {
-    auto otherFlag = other->getFactionFlag();
-
-    return otherFlag == 0 ? other->isEnemy(this) : (faction->enemyMask & otherFlag) != 0;
-  }
-  return (enemyFlag & other->getFactionFlag()) != 0;
-}
-
 bool Character::hasLineOfSight(const Character* other) const
 {
   auto* level = Game::get()->getLevel();
@@ -127,21 +110,6 @@ bool Character::hasLineOfSight(const Character* other) const
     return score > 0;
   }
   return false;
-}
-
-void Character::setAsEnemy(Character* other)
-{
-  auto* diplomacy = Game::get()->getDiplomacy();
-  auto* faction   = diplomacy->getFaction(other->getFactionFlag());
-
-  if (other->getFactionName() != "") {
-    if (getFactionFlag() > 0)
-      diplomacy->setAsEnemy(true, getFactionFlag(), other->getFactionFlag());
-    else
-      enemyFlag += other->getFactionFlag();
-  }
-  else if (faction)
-    other->setAsEnemy(this);
 }
 
 float Character::getDistance(const DynamicObject* target) const
@@ -162,15 +130,6 @@ float Character::getDistance(DynamicObject* target) const
   auto b = self.y() - other.y();
 
   return std::sqrt(static_cast<float>(a * a + b * b));
-}
-
-void Character::initializeFaction()
-{
-  auto* characterSheet = getStatistics();
-  auto* diplomacy = Game::get()->getDiplomacy();
-
-  if (characterSheet && diplomacy)
-    faction = diplomacy->getFaction(characterSheet->getFaction());
 }
 
 bool Character::useActionPoints(int amount, const QString& actionType)
@@ -244,83 +203,16 @@ void Character::setScript(const QString& name)
   initializeEmptySlots();
 }
 
-void Character::setCharacterSheet(const QString& name)
-{
-  characterSheet = name;
-  emit characterSheetChanged();
-}
-
-void Character::onCharacterSheetChanged()
-{
-  qDebug() << "Changing character sheet";
-  StatModel* charSheet;
-  const Race* raceController;
-
-  charSheet = Game::get()->getDataEngine()->makeStatModel(getObjectName(), characterSheet);
-  charSheet->setParent(this);
-  setStatistics(charSheet);
-  raceController = charSheet->getRaceController();
-  if (raceController)
-  {
-    setSpriteName(raceController->getSpriteSheet(charSheet));
-    moveTo(position.x(), position.y());
-    setAnimation("idle");
-  }
-}
-
-void Character::setStatistics(StatModel *value)
-{
-  if (statistics)
-  {
-    disconnect(statistics, &StatModel::factionChanged, this, &Character::initializeFaction);
-    statistics->deleteLater();
-  }
-  statistics = value;
-  connect(statistics, &StatModel::factionChanged, this, &Character::initializeFaction);
-  qDebug() << "set stat sheet on" << getObjectName() << ':' << statistics->getName() << " with faction " << statistics->property("faction").toString();
-  initializeFaction();
-  emit statisticsChanged();
-}
-
 void Character::load(const QJsonObject& data)
 {
-  QString objectName = data["objectName"].toString();
-
-  characterSheet = data["charsheet"].toString(objectName);
-  isUnique = data["uniq"].toBool();
-  enemyFlag = static_cast<unsigned int>(data["enemyFlag"].toInt(0));
   actionPoints = data["ap"].toInt();
-  if (isUnique || data["stats"]["name"].toString().length() == 0)
-    onCharacterSheetChanged();
-  else
-  {
-    StatModel* charSheet = new StatModel(this);
-
-    charSheet->fromJson(data["stats"].toObject());
-    setStatistics(charSheet);
-  }
-  CharacterMovement::load(data);
+  ParentType::load(data);
 }
 
 void Character::save(QJsonObject& data) const
 {
-  data["charsheet"] = characterSheet;
-  data["uniq"] = isUnique;
-  data["enemyFlag"] = static_cast<int>(enemyFlag);
   data["ap"] = actionPoints;
-  if (!(Game::get()->property("isGameEditor").toBool()))
-  {
-    if (isUnique)
-      Game::get()->getDataEngine()->saveStatModel(getObjectName(), statistics);
-    else
-    {
-      QJsonObject statData;
-
-      statistics->toJson(statData);
-      data.insert("stats", statData);
-    }
-  }
-  CharacterMovement::save(data);
+  ParentType::save(data);
 }
 
 QJSValue Character::getActions()

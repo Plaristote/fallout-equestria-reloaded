@@ -73,6 +73,10 @@ set(PROJECT_SOURCES
         game/characterparty.cpp
         game/characterdialog.h
         game/characterdialog.cpp
+        game/characters/statistics.h
+        game/characters/statistics.cpp
+        game/characters/diplomacy.h
+        game/characters/diplomacy.cpp
         game/characters/field_of_view.hpp
         game/characters/field_of_view.cpp
         game/characters/movement.h

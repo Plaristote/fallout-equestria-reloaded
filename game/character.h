@@ -4,22 +4,19 @@
 # include "globals.h"
 # include "cmap/statmodel.h"
 # include "diplomacy.hpp"
-# include "characters/movement.h"
+# include "characters/diplomacy.h"
 # include "characters/field_of_view.hpp"
 
 class ActionQueue;
 
-class Character : public CharacterMovement
+class Character : public CharacterDiplomacy
 {
   Q_OBJECT
+  typedef CharacterDiplomacy ParentType;
 
-  Q_PROPERTY(StatModel*   statistics  MEMBER statistics NOTIFY statisticsChanged)
   Q_PROPERTY(FieldOfView* fieldOfView MEMBER fieldOfView)
   Q_PROPERTY(ActionQueue* actionQueue MEMBER actionQueue)
   Q_PROPERTY(int actionPoints MEMBER actionPoints NOTIFY actionPointsChanged)
-  // Editor properties
-  Q_PROPERTY(bool isUnique MEMBER isUnique NOTIFY uniqueChanged)
-  Q_PROPERTY(QString characterSheet MEMBER characterSheet NOTIFY characterSheetChanged)
 public:
   explicit Character(QObject *parent = nullptr);
 
@@ -27,18 +24,11 @@ public:
   void load(const QJsonObject&) override;
   void save(QJsonObject&) const override;
   void setScript(const QString&) override;
-  void setCharacterSheet(const QString&);
 
-  void         setStatistics(StatModel* value);
-  StatModel*   getStatistics() const { return statistics; }
   FieldOfView* getFieldOfView() const { return fieldOfView; }
   ActionQueue* getActionQueue() const { return actionQueue; }
-  QString      getFactionName() const { return faction ? faction->name : QString(); }
-  unsigned int getFactionFlag() const { return faction ? faction->flag : 0; }
   QString      getDialogName();
   unsigned int getXpValue() const;
-  bool         getIsUnique() const { return isUnique; }
-  void         setUnique(bool value) { isUnique = value; }
   Q_INVOKABLE bool isMoving() const { return Sprite::isMoving() || currentPath.size() > 0; }
   bool         isSpriteMoving() const { return Sprite::isMoving(); }
   int          getZIndex() const override { return isAlive() ? 2 : 1; }
@@ -49,9 +39,6 @@ public:
 
   Q_INVOKABLE QJSValue getActions();
   Q_INVOKABLE bool isAlive() const { return getStatistics()->getHitPoints() > 0; }
-  Q_INVOKABLE bool isAlly(const Character*) const;
-  Q_INVOKABLE bool isEnemy(const Character*) const;
-  Q_INVOKABLE void setAsEnemy(Character*);
   Q_INVOKABLE bool hasLineOfSight(const Character*) const;
   Q_INVOKABLE bool isSneaking() const { return sneakEnabled; }
   float             getDistance(const DynamicObject*) const;
@@ -69,30 +56,19 @@ signals:
   void requireJoinCombat();
   void died();
   void characterKill(Character* victim, Character* killer);
-  // EDITOR signals
-  void uniqueChanged();
-  void statisticsChanged();
-  void characterSheetChanged();
 
 private slots:
-  void initializeFaction();
   void initializeEmptySlots();
   void initializeEmptySlot(const QString& name);
   void onActionQueueCompleted();
-  void onCharacterSheetChanged();
 
 private:
   virtual QString getScriptPath() const override { return SCRIPTS_PATH + "pnjs"; }
   QString getDefaultItemForSlot(const QString& name);
 
-  QString characterSheet;
-  StatModel* statistics = nullptr;
   FieldOfView* fieldOfView;
   ActionQueue* actionQueue;
-  WorldDiplomacy::Faction* faction = nullptr;
-  bool isUnique = false;
   bool sneakEnabled = false;
-  unsigned int enemyFlag = 0;
   int actionPoints = 0;
   QJSValue jsActionQueue;
 };
