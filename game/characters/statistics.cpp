@@ -40,6 +40,7 @@ void CharacterStatistics::save(QJsonObject& data) const
       data.insert("stats", statData);
     }
   }
+  ParentType::save(data);
 }
 
 void CharacterStatistics::setStatistics(StatModel* value)
