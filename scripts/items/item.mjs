@@ -11,6 +11,10 @@ export class Item {
     return this.model.getOwner();
   }
 
+  get trName() {
+    return i18n.t(`items.${this.model.itemType}`);
+  }
+
   onLook() {
     game.appendToConsole(i18n.t("inspection.item", {item: i18n.t("items." + this.model.itemType)}));
     return true;
@@ -47,20 +51,26 @@ export class Item {
     return [{ type: "Animation", animation: "use", object: this.user }];
   }
 
+  attemptToUseActionPointsOn(target) {
+    if (this.user.useActionPoints(this.getActionPointCost()))
+      return this.triggerUseOn(target);
+    else
+      this.logFailure(i18n.t("messages.not-enough-ap"));
+    return false;
+  }
+
   attemptToUseOn(target) {
-    if (this.isValidTarget(target)) {
-      if (this.isInRange(target)) {
-        if (this.user.useActionPoints(this.getActionPointCost()))
-          return this.triggerUseOn(target);
-        else
-          this.logFailure(i18n.t("messages.not-enough-ap"));
-      }
+    console.log("attemptToUseOn", target);
+    if (!target && !this.requiresTarget)
+      return this.attemptToUseActionPointsOn(target);
+    else if (target && this.isValidTarget(target)) {
+      if (this.isInRange(target))
+        return this.attemptToUseActionPointsOn(target);
       else
         this.logFailure(i18n.t("messages.out-of-range"));
     }
     else
       this.logFailure(i18n.t("messages.invalid-target"));
-    console.log("Wait wtf?", this.user, level.player);
     return false;
   }
 

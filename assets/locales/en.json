@@ -26,7 +26,13 @@
     "nothing-happens": "That does nothing.",
     "invalid-target": "Invalid target.",
     "out-of-range": "Out of range.",
-    "not-enough-ap": "Not enough action points."
+    "not-enough-ap": "Not enough action points.",
+    "explosive-critical-failure": "You failed miserably and triggered the device !",
+    "explosive-triggered-prematurely": "{{item}} exploded prematurely !",
+    "explosive-triggered": "{{item}} exploded.",
+    "trap-critical-failure": "You critically failed and triggered the trap.",
+    "trap-disarm-failed": "You didn't manage to disarm the trap.",
+    "trap-disarmed": "You successfully disarmed the trap."
   },
   "use-modes": {
     "use": "Use",

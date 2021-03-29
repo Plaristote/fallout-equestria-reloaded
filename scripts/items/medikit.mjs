@@ -27,7 +27,7 @@ export class Medikit extends Item {
       }));
       game.appendToConsole(i18n.t("messages.healed", {
         target: target.statistics.name, hp: healed
-      });
+      }));
       return true;
     }
     else

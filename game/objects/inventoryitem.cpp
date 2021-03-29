@@ -166,14 +166,20 @@ bool InventoryItem::isValidTarget(DynamicObject* target)
 
 QJSValue InventoryItem::useOn(DynamicObject* target)
 {
-  if (target && script && isValidTarget(target))
-    return script->call("attemptToUseOn", QJSValueList() << target->asJSValue());
+  if (script) {
+    if (this->requiresTarget() || target) {
+      if (target && isValidTarget(target))
+        return script->call("attemptToUseOn", QJSValueList() << target->asJSValue());
+    }
+    else
+      return script->call("attemptToUseOn");
+  }
   return false;
 }
 
 void InventoryItem::useFromInventory()
 {
-  QJSValue result = useOn(getOwner());
+  QJSValue result = useOn(nullptr);
 
   if (result.isObject())
   {

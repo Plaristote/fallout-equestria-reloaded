@@ -18,16 +18,40 @@ class Dynamite extends Item {
 
   onLook() {
     const armedMessage = !this.model.tasks.hasTask("triggered") ? "inspection.disarmed" : "inspection.armed";
-	  
-    game.appendToConsole(i18n.t("inspection.item", {item: i18n.t("items." + this.model.itemType)}) + ' ' + i18n.t(armedMessage));
+
+    game.appendToConsole(i18n.t("inspection.item", {item: this.trName}) + ' ' + i18n.t(armedMessage));
     return true;
   }
 
-  useOn() {
-    level.openCountdownDialog(this.model);
+  useOn(target) {
+    console.log("Using dynamite on", target);
+    if (target == null) {
+      level.openCountdownDialog(this.model);
+      return true;
+    }
+    else
+      game.appendToConsole(i18n.t("messages.nothing-happens"));
+    return false;
   }
 
   onCountdownReceived(timeout) {
+    const skill = this.user.statistics.explosives;
+    const roll  = getValueFromRange(0, 100);
+
+    if (roll >= 99) {
+      game.appendToConsole(i18n.t("messages.explosive-critical-failure"));
+      this.triggered();
+      return ;
+    }
+    else if (roll >= 95 || roll >= skill) {
+      var difference = getValueFromRange(0, timeout / 2);
+      var direction = getValueFromRange(0, 100);
+
+      timeout += direction <= 50 ? -difference : difference;
+      this.model.setVariable("trigger-failed", true);
+    }
+    else
+      this.model.setVariable("trigger-failed", false);
     this.model.tasks.addTask("triggered", timeout * 1000, 1);
   }
 
@@ -53,6 +77,10 @@ class Dynamite extends Item {
     const position = wearer ? wearer.position : this.model.position;
     const damage   = getValueFromRange(20, 50);
 
+    if (this.model.getVariable("trigger-failed") == true)
+      game.appendToConsole(i18n.t("messages.explosive-triggered-prematurely", { item: this.trName }));
+    else
+      game.appendToConsole(i18n.t("messages.explosive-triggered", { item: this.trName }));
     console.log("Exploding for", damage, "damage.");
     explode(position, radius, damage, wearer);
     if (wearer)

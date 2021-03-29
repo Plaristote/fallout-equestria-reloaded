@@ -15,6 +15,8 @@ Canvas {
   property bool hoverTileHintVisible: false
   property QtObject hoveredObject
   property bool hoveredObjectEnabled: levelController.mouseMode === 2
+  property alias mouseX: mouseArea.mouseX
+  property alias mouseY: mouseArea.mouseY
 
   Component.onCompleted: {
     preloadImages();
@@ -47,13 +49,12 @@ Canvas {
   MouseArea {
     id: mouseArea
     anchors.fill: parent
-    enabled: !levelController.paused
     acceptedButtons: Qt.LeftButton | Qt.RightButton
     hoverEnabled: true
     onClicked: {
       if (mouse.button === Qt.RightButton)
         levelController.swapMouseMode();
-      else
+      else if (!levelController.paused)
         controller.onMouseClick(mouse, mouseX, mouseY);
     }
     onMouseXChanged: onMouseMoved()

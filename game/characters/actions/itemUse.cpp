@@ -8,7 +8,8 @@ bool ItemAction::trigger()
   {
     QJSValue result = item->useOn(target);
 
-    character->lookTo(target->getPosition());
+    if (target)
+      character->lookTo(target->getPosition());
     if (result.isObject())
     {
       QJSValue animationSteps = result.property("steps");
@@ -32,7 +33,7 @@ bool ItemAction::trigger()
   }
   else
   {
-    qDebug() << "no item to uqe";
+    qDebug() << "no item to use";
     state = Interrupted;
   }
   return state != Interrupted;

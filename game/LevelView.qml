@@ -23,7 +23,9 @@ Item {
   Shortcut {
     sequence: "Esc"
     onActivated: {
-      if (interactionMenu.visible)
+      if  (mainMenu.visible)
+        mainMenu.visible = false;
+      else if (interactionMenu.visible)
         interactionMenu.interactionTarget = null;
       else if (countdownDialog.visible)
         countdownDialog.visible = false;
@@ -108,62 +110,15 @@ Item {
     }
   }
 
-  // INTERACTION MENU
-  Item {
-    property QtObject interactionTarget
-    property var interactionTypes: []
-    property point interactionPosition
+  Hud.InteractionMenu {
     id: interactionMenu
-    visible: interactionTarget && interactionTypes.length > 0
+    levelController: root.levelController
+    levelCanvas: canvas
+    bottomLimit: root.height - levelHud.height
+  }
 
-    x: interactionPosition.x + canvas.origin.x
-    y: interactionPosition.y + canvas.origin.y
-
-    Column {
-      Repeater {
-        model: interactionMenu.interactionTypes
-        delegate: Button {
-          property string interactionType: interactionMenu.interactionTypes[index]
-          id: button
-          hoverEnabled: true
-
-          background: Image {
-            property string bgType: parent.down ? 'pressed' : (parent.hovered ? 'active' : 'normal')
-            source: "qrc:/assets/ui/interactions/" + interactionType + '-' + bgType + '.png'
-          }
-
-          onClicked:{
-            if (interactionType === "use-skill") {
-              openSkilldexAction.trigger();
-              skilldex.target = interactionMenu.interactionTarget;
-            }
-            else if (interactionType === "use-object") {
-              itemPickerContainer.visible = true;
-              itemPicker.target = interactionMenu.interactionTarget;
-            }
-            else
-              levelController.interactOrderReceived(interactionMenu.interactionTarget, interactionMenu.interactionTypes[index]);
-            interactionMenu.interactionTarget = null;
-          }
-        } // END BUTTON
-      }
-    }
-  } // END INTERACTION MENU
-
-  // INTERACTION
   Connections {
     target: levelController
-
-    function onInteractionRequired(interactionTarget, interactionList) {
-      if (interactionTarget)
-      {
-        interactionMenu.interactionTarget = interactionTarget;
-        interactionMenu.interactionTypes  = interactionList;
-        interactionMenu.interactionPosition = interactionTarget.getSpritePosition();
-      }
-      else
-        interactionMenu.interactionTarget = null;
-    }
 
     function onStartDialog(dialogController) {
       console.log("ztarting dialog controller", dialogController);

@@ -27,7 +27,7 @@ bool InteractionComponent::openInteractionMenu(DynamicObject* object)
 
   if (entries.length() > 0)
   {
-    swapMouseMode();
+    //swapMouseMode();
     emit interactionRequired(object, entries);
     return true;
   }
@@ -107,7 +107,7 @@ void InteractionComponent::onActiveItemChanged()
   if (activeItem)
     qDebug() << "InteractionComponent::onActiveItemChanged" << activeItem->getItemType() << ": " << activeItem->requiresTarget();
   if (activeItem && !activeItem->requiresTarget())
-    useItemOn(getPlayer());
+    useItemOn(nullptr);
 }
 
 int InteractionComponent::getTargetMode() const
@@ -178,7 +178,7 @@ void InteractionComponent::useItemOn(InventoryItem *item, DynamicObject *target)
   auto* actions = Game::get()->getPlayer()->getActionQueue();
 
   actions->reset();
-  if (!item->isInRange(target))
+  if (target && !item->isInRange(target))
     actions->pushReach(target, item->getRange());
   actions->pushItemUse(target, item);
   if (actions->start())
