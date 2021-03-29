@@ -27,7 +27,7 @@ QStringList InventoryItem::getAvailableInteractions()
   auto list = DynamicObject::getAvailableInteractions();
 
   if (list.empty())
-    list << "use";
+    list << "use" << "look" << "use-skill";
   return list;
 }
 

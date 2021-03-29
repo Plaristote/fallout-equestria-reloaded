@@ -11,12 +11,13 @@ export class Item {
     return this.model.getOwner();
   }
 
-  onEquipped(character, on) {
-    console.log("ON EQUIPED ITEM MAGGLE", character, on);
+  onLook() {
+    game.appendToConsole(i18n.t("inspection.item", {item: i18n.t("items." + this.model.itemType)}));
+    return true;
   }
 
-  getAvailableInteractions() {
-    return ["use", "look"];
+  onEquipped(character, on) {
+    console.log("ON EQUIPED ITEM MAGGLE", this.model, character, on);
   }
 
   getActionPointCost() {

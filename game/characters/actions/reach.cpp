@@ -20,7 +20,6 @@ QVector<QPoint> ReachAction::getCandidates(int caseDistance)
   {
     return character->getDistance(a) < character->getDistance(b);
   });
-  qDebug() << "CANDIDATE COUNT: " << candidates.length() << " - distance" << caseDistance;
   return candidates;
 }
 

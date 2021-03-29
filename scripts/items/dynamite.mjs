@@ -1,21 +1,7 @@
 import {Item} from "./item.mjs";
 import {getValueFromRange} from "../behaviour/random.mjs";
-
-function makeExplosionAnimationAt(x, y) {
-  const ground = level.tilemap.getLayer("ground");
-  const tile   = ground ? ground.getTile(x, y) : null;
-
-  if (tile) {
-    return {
-      "type": "Sprite",
-      "name": "effects",
-      "animation": "explosion",
-      "fromX": tile.renderPosition.x,
-      "fromY": tile.renderPosition.y
-    };
-  }
-  return {};
-}
+import {explode} from "../behaviour/explosion.mjs";
+import {disarmAttempt} from "../behaviour/trap.mjs";
 
 class Dynamite extends Item {
   constructor(model) {
@@ -30,48 +16,53 @@ class Dynamite extends Item {
     return false;
   }
 
+  onLook() {
+    const armedMessage = !this.model.hasVariable("disarmed") || this.model.getVariable("disarmed") == true ? "inspection.disarmed" : "inspection.armed";
+	  
+    game.appendToConsole(i18n.t("inspection.item", {item: i18n.t("items." + this.model.itemType)}) + ' ' + i18n.t(armedMessage));
+    return true;
+  }
+
   useOn() {
     level.openCountdownDialog(this.model);
   }
 
   onCountdownReceived(timeout) {
-    this.model.tasks.addTask("explode", timeout * 1000, 1);
+    this.model.setVariable("disarmed", false);
+    this.model.tasks.addTask("triggered", timeout * 1000, 1);
   }
 
-  explode() {
-    const wearer   = this.model.getOwner();
-    const radius   = 2;
-    const position = wearer ? wearer.position : this.model.position;
-    const fromPos  = [position.x - radius, position.y - radius];
-    const toPos    = [position.x + radius, position.y + radius];
-    const damage   = getValueFromRange(20, 50);
+  onUseExplosives(user) {
+    const result = disarmAttempt(user, 2);
 
-    console.log("Exploding for", damage, "damage.");
-    for (var x = fromPos[0] ; x <= toPos[0] ; ++x) {
-      for (var y = fromPos[1] ; y <= toPos[1] ; ++y) {
-        const objects = level.getDynamicObjectsAt(x, y);
-
-        level.addAnimationSequence({ steps: [makeExplosionAnimationAt(x, y)] });
-        objects.forEach(object => {
-          console.log("-> object in explode zone", object.objectName, object.getObjectType());
-          switch (object.getObjectType()) {
-            case "Character":
-              object.takeDamage(object == wearer ? damage * 2 : damage, null);
-              break ;
-            case "Doorway":
-              console.log("Doorway", object.destructible);
-              if (object.destructible)
-                object.bustOpen(damage);
-              break ;
-          }
-        });
-      }
+    if (result == -1) {
+      game.appendToConsole(i18n.t("messages.trap-critical-failure"));
+      this.model.setVariable("disarmed", false);
+      this.triggered();
     }
-    level.sounds.play("explosion");
-    if (wearer)
-      wearer.inventory.destroyItem(this.model, 1);
-    else
-      level.deleteObject(this.model);
+    else if (result == 0)
+      game.appendToConsole(i18n.t("messages.trap-disarm-failed"));
+    else {
+      game.appendToConsole(i18n.t("messages.trap-disarmed"));
+      this.model.setVariable("disarmed", true);
+    }
+    return true;
+  }
+
+  triggered() {
+    if (this.model.getVariable("disarmed") != true) {
+      const wearer   = this.model.getOwner();
+      const radius   = 2;
+      const position = wearer ? wearer.position : this.model.position;
+      const damage   = getValueFromRange(20, 50);
+
+      console.log("Exploding for", damage, "damage.");
+      explode(position, radius, damage, wearer);
+      if (wearer)
+        wearer.inventory.destroyItem(this.model, 1);
+      else
+        level.deleteObject(this.model);
+    }
   }
 }
 

@@ -79,7 +79,10 @@
         }
     },
     "inspection": {
-        "character": "You see {{target}}"
+        "character": "You see {{target}}.",
+	"item": "You see {{item}}.",
+	"disarmed": "It's disarmed.",
+	"armed": "It's armed !"
     },
     "medicine-skill": {
         "in-combat": "You can't use medicine during combat",

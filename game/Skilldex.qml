@@ -7,7 +7,7 @@ Pane {
   id: root
   property QtObject character
   property QtObject target
-  property var skills: ["sneak", "steal", "medicine", "lockpick", "repair", "science"]
+  property var skills: ["sneak", "steal", "explosives", "medicine", "lockpick", "repair", "science"]
 
   signal pickedSkill(string skillName)
 
