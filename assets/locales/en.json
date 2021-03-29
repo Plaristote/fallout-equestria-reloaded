@@ -87,6 +87,7 @@
     "inspection": {
         "character": "You see {{target}}.",
 	"item": "You see {{item}}.",
+        "trap": "You see a trap.",
 	"disarmed": "It's disarmed.",
 	"armed": "It's armed !"
     },
