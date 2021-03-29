@@ -101,7 +101,7 @@ QJSValue Game::loadScript(const QString& path)
   if (module.isError())
   {
     qDebug() << "Couldn't load module" << path << ": uncaught exception at line "
-             << module.property("lineNumber").toInt() << ":" << module.toString();
+             << module.property("lineNumber").toInt() << ":" << module.property("fileName").toString() << ":" << module.property("message").toString();
     return false;
   }
   return module;

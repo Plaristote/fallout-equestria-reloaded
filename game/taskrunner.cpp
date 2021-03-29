@@ -11,14 +11,10 @@ TaskRunner::TaskRunner(QObject *parent) : QObject(parent)
 
 void TaskRunner::update(qint64 delta)
 {
-  if (delta > 1000)
-    qDebug() << "TaskRunner::update starting";
   for (auto it = tasks.begin() ; it != tasks.end() ;)
   {
     auto elapsedTime = delta;
 
-    if (elapsedTime > 1000)
-      qDebug() << "TaskRunner::update: time left =" << elapsedTime;
     if (it->timeLeft <= elapsedTime)
     {
       int totalIterations = 1;
