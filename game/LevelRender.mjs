@@ -22,6 +22,12 @@ export class Controller {
     return this.canvas.origin;
   }
 
+  isObjectVisible(object, detectedCharacters) {
+    if (object.getObjectType() === "Character")
+      return detectedCharacters.indexOf(object.objectName) >= 0;
+    return !object.hidden;
+  }
+
   initializeRenderObjects() {
     const _detectedCharacters = this.level.visibleCharacters;
     const detectedCharacters = [];
@@ -37,10 +43,10 @@ export class Controller {
     for (var i = 0 ; i < this.level.dynamicObjects.length ; ++i) {
       const object = this.level.dynamicObjects[i];
       const position = object.getPosition();
-      const isUndetected = object.getObjectType() === "Character" && detectedCharacters.indexOf(object.objectName) < 0;
       const isValid = position.x >= 0 && position.y >= 0;
+      const isVisible = isValid && this.isObjectVisible(object, detectedCharacters);
 
-      if (isUndetected || !isValid)
+      if (!isVisible)
         continue ;
       this.renderObjects[position.x][position.y].push(object);
       this.renderObjects[position.x][position.y].sort(function(a, b) {

@@ -32,7 +32,8 @@
     "explosive-triggered": "{{item}} exploded.",
     "trap-critical-failure": "You critically failed and triggered the trap.",
     "trap-disarm-failed": "You didn't manage to disarm the trap.",
-    "trap-disarmed": "You successfully disarmed the trap."
+    "trap-disarmed": "You successfully disarmed the trap.",
+    "trap-detected": "You've found a trap !"
   },
   "use-modes": {
     "use": "Use",

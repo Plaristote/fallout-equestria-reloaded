@@ -1,15 +1,15 @@
 #ifndef  CONTROLZONECOMPONENT_H
 # define CONTROLZONECOMPONENT_H
 
-# include "scriptable.h"
+# include "detectable.h"
 
 class TileZone;
 class DynamicObject;
 
-class ControlZoneComponent : public ScriptableComponent
+class ControlZoneComponent : public DetectableComponent
 {
   Q_OBJECT
-  typedef ScriptableComponent ParentType;
+  typedef DetectableComponent ParentType;
 
   Q_PROPERTY(TileZone* controlZone MEMBER controlZone NOTIFY controlZoneChanged)
   Q_PROPERTY(bool zoneBlocked MEMBER zoneBlocked NOTIFY zoneBlockedChanged)

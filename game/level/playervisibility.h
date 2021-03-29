@@ -17,6 +17,9 @@ public:
 signals:
   void visibleCharactersChanged();
 
+private slots:
+  void refreshHiddenObjectsDetection();
+
 private:
   virtual QQmlListProperty<Character> getQmlVisibleCharacters();
 

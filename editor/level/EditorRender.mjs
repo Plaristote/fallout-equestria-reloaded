@@ -1,6 +1,10 @@
 import {Controller} from "../../game/LevelRender.mjs";
 
 export class EditorController extends Controller {
+  isObjectVisible() {
+    return true;
+  }
+
   getTextureForZone(zone) {
     const texture = super.getTextureForZone(zone);
 

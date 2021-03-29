@@ -16,6 +16,11 @@ export function disarmAttempt(character, difficulty) {
 export class Trap {
   constructor(model) {
     this.model = model;
+    if (!this.model.hasVariable("initialized")) {
+      this.model.setVariable("initialized", true);
+      this.model.hidden = true;
+      this.model.interruptOnDetection = true;
+    }
     if (this.model.blocksPath)
       this.model.blocksPath = false;
     this.difficulty = 1;
@@ -23,6 +28,10 @@ export class Trap {
 
   getAvailableInteractions() {
     return ["look", "use-object", "use-skill"];
+  }
+
+  onDetected() {
+    game.appendToConsole(i18n.t("messages.trap-detected"));
   }
 
   onLook() {

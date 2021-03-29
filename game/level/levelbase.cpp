@@ -30,6 +30,7 @@ QList<Character*> LevelBase::findCharacters(std::function<bool (Character &)> co
 {
   QList<Character*> characters;
 
+  characters.reserve(objects.length());
   for (DynamicObject* object : objects)
   {
     if (object->isCharacter())
@@ -41,6 +42,19 @@ QList<Character*> LevelBase::findCharacters(std::function<bool (Character &)> co
     }
   }
   return characters;
+}
+
+QVector<DynamicObject*> LevelBase::findDynamicObjects(std::function<bool (DynamicObject &)> compare) const
+{
+  QVector<DynamicObject*> results;
+
+  results.reserve(objects.size());
+  for (DynamicObject* object : objects)
+  {
+    if (compare(*object))
+      results << object;
+  }
+  return results;
 }
 
 void LevelBase::registerDynamicObject(DynamicObject* object)
