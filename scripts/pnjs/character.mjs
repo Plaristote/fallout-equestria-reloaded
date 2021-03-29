@@ -23,8 +23,6 @@ export class CharacterBehaviour extends CombatComponent {
   }
 
   onLook() {
-    var message = "You see " + this.model.statistics.name + ".";
-
     game.appendToConsole(i18n.t("inspection.character", {target: this.model.statistics.name}));
     return true;
   }

@@ -66,6 +66,16 @@ bool TaskRunner::runTask(Task& task, int iterations)
   return false;
 }
 
+bool TaskRunner::hasTask(const QString &name)
+{
+  for (auto it = tasks.begin() ; it != tasks.end() ; ++it)
+  {
+    if (it->name == name)
+      return true;
+  }
+  return false;
+}
+
 void TaskRunner::addTask(const QString &name, qint64 interval, int iterationCount)
 {
   Task task;
@@ -81,6 +91,47 @@ void TaskRunner::addTask(const QString &name, qint64 interval, int iterationCoun
   else
     task.iterationCount = iterationCount;
   tasks << task;
+}
+
+bool TaskRunner::removeTask(const QString &name)
+{
+  for (auto it = tasks.begin() ; it != tasks.end() ; ++it)
+  {
+    if (it->name == name)
+    {
+      tasks.erase(it);
+      return true;
+    }
+  }
+  return false;
+}
+
+void TaskRunner::decreaseIterationsFor(const QString &name, int iterationCount)
+{
+  for (auto it = tasks.begin() ; it != tasks.end() ;)
+  {
+    if (it->name == name)
+    {
+      if (it->iterationCount > iterationCount)
+      {
+        it->iterationCount -= iterationCount;
+        it->timeLeft = it->interval;
+        break ;
+      }
+      else if (it->iterationCount == iterationCount)
+      {
+        tasks.erase(it);
+        break ;
+      }
+      else
+      {
+        iterationCount -= it->iterationCount;
+        it = tasks.erase(it);
+      }
+    }
+    else
+      ++it;
+  }
 }
 
 void TaskRunner::load(const QJsonObject& data)
