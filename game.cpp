@@ -64,7 +64,6 @@ void Game::loadFromDataEngine()
 {
   QString currentLevelName = dataEngine->getCurrentLevel();
 
-  script = new ScriptController(SCRIPTS_PATH + "main.mjs");
   diplomacy->initialize();
   timeManager->load(dataEngine->getTimeData());
   playerParty->load(dataEngine->getPlayerParty());
