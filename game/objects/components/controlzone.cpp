@@ -5,7 +5,9 @@
 
 ControlZoneComponent::ControlZoneComponent(QObject *parent) : ParentType(parent)
 {
+  connect(this, &ControlZoneComponent::controlZoneAdded,   this, &ControlZoneComponent::listenControlZone);
   connect(this, &ControlZoneComponent::controlZoneAdded,   this, &ControlZoneComponent::controlZoneChanged);
+  connect(this, &ControlZoneComponent::controlZoneRemoved, this, &ControlZoneComponent::stopListeningControlZone);
   connect(this, &ControlZoneComponent::controlZoneRemoved, this, &ControlZoneComponent::controlZoneChanged);
   connect(this, &ControlZoneComponent::zoneBlockedChanged, this, &ControlZoneComponent::updateZoneBlock);
 }
