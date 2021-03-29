@@ -53,6 +53,7 @@ private slots:
   void onActionQueueCompleted();
 
 private:
+  QVector<QPoint> getAvailableSurroundingCases() const;
   virtual QString getScriptPath() const override { return SCRIPTS_PATH + "pnjs"; }
 
   ActionQueue* actionQueue;

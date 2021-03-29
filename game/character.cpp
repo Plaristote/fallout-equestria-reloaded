@@ -66,12 +66,11 @@ int Character::getInteractionDistance() const
   return isAlive() ? 1 : 0;
 }
 
-void Character::moveAway()
+QVector<QPoint> Character::getAvailableSurroundingCases() const
 {
+  QVector<QPoint> candidates;
   auto* grid = Game::get()->getLevel()->getGrid();
 
-  if (!actionQueue->isEmpty())
-    return ;
   for (int x = position.x() - 1 ; x <= position.x() + 1 ; ++x)
   {
     for (int y = position.y() - 1 ; y <= position.y() + 1 ; ++y)
@@ -79,12 +78,30 @@ void Character::moveAway()
       auto* caseContent = grid->getGridCase(x, y);
 
       if (caseContent && !caseContent->isBlocked())
-      {
-        actionQueue->pushMovement(x, y);
-        actionQueue->start();
-        return ;
-      }
+        candidates << QPoint(x, y);
     }
+  }
+  return candidates;
+}
+
+void Character::moveAway()
+{
+  auto* player = Game::get()->getPlayer();
+  QVector<QPoint> candidates = getAvailableSurroundingCases();
+
+  if (!actionQueue->isEmpty())
+    return ;
+  std::sort(candidates.begin(), candidates.end(), [player](QPoint a, QPoint b)
+  {
+    return player->getDistance(a) > player->getDistance(b);
+  });
+  if (candidates.length() > 0)
+  {
+    QPoint destination = candidates.first();
+
+    actionQueue->pushMovement(destination.x(), destination.y());
+    actionQueue->start();
+    return ;
   }
 }
 
