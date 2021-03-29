@@ -10,8 +10,10 @@ Pane {
   property QtObject selectedObject: null
   property var displayRoofs: null
   property var displayWalls: null
+  property bool hasControlZone: false
 
   background: UiStyle.TerminalPane {}
+  onSelectedObjectChanged: refresh()
 
   function toggleTile(tileX, tileY) {
     const zone = selectedObject.controlZone;
@@ -26,6 +28,17 @@ Pane {
       console.log("Adding tile", tileX, ",", tileY, "to", selectedObject, "control zone");
       zone.addPosition(Qt.point(tileX, tileY));
     }
+  }
+
+  function refresh() {
+    hasControlZone = selectedObject !== null && selectedObject.controlZone !== null;
+    if (hasControlZone)
+      pathBlockedInput.checked = selectedObject.zoneBlocked;
+  }
+
+  Connections {
+    target: selectedObject
+    function onControlZoneChanged() { refresh(); }
   }
 
   Action {
@@ -50,7 +63,7 @@ Pane {
 
     TerminalButton {
       text: "Add a control zone"
-      visible: selectedObject !== null && selectedObject.controlZone === null
+      visible: !hasControlZone
       width: parent.width
       height: 20
       onClicked: selectedObject.addControlZone()
@@ -58,21 +71,23 @@ Pane {
 
     TerminalButton {
       text: !canvas.editingZone ? "Edit control zone" : "End control zone edit"
-      visible: selectedObject !== null && selectedObject.controlZone !== null
+      visible: hasControlZone
       width: parent.width
       height: 20
       action: toggleZoneEditAction
     }
 
     TerminalCheckBox {
+      id: pathBlockedInput
       text: "Path blocked"
-      visible: selectedObject !== null && selectedObject.controlZone !== null
+      visible: hasControlZone
       checked: selectedObject.zoneBlocked
+      onCheckedChanged: { selectedObject.zoneBlocked = checked; }
     }
 
     TerminalButton {
       text: "Remove control zone"
-      visible: selectedObject !== null && selectedObject.controlZone !== null
+      visible: hasControlZone
       width: parent.width
       height: 20
       onClicked: {

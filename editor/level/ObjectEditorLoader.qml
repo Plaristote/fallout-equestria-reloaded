@@ -31,6 +31,11 @@ Loader {
       }
       objectEditorComponent.sourceComponent = component;
     }
+
+    function onPickedTile(tileX, tileY) {
+      console.log("Picked pozition for object");
+      root.item.setTilePosition(tileX, tileY);
+    }
   }
 
   Component {

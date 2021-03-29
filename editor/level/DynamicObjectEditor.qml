@@ -48,7 +48,6 @@ Pane {
     const animationName       = model.getAnimation();
     const position            = model.getPosition();
     const renderPosition      = model.getSpritePosition();
-    const interactionPosition = model.getInteractionPosition();
 
     readOnlyPositionType = model.getObjectType() === "Character";
     readOnlyAnimation    = model.getObjectType() === "Character";

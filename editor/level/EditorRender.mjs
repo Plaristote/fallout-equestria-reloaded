@@ -5,7 +5,6 @@ export class EditorController extends Controller {
     const texture = super.getTextureForZone(zone);
 
     if (texture === null && this.canvas.editorObject && this.canvas.editorObject.controlZone === zone) {
-      console.log("Dizplaying control zone");
       return "../assets/tilesets/zones.png";
     }
     return null;

@@ -17,6 +17,8 @@ Item {
   property QtObject selectedCharacter
   property QtObject selectedDoorway
 
+  signal pickedTile(int tileX, int tileY)
+
   onCurrentLevelNameChanged: {
     selectedObject = selectedCharacter = null;
     gameController.goToLevel(currentLevelName.replace(".json", ""));
@@ -91,18 +93,10 @@ Item {
         showHoverCoordinates: true
         editorObject: selectedObject
 
-        // Zone edition
         editingZone: controlZoneEditor.editingZone
         onToggleZoneTile: controlZoneEditor.toggleTile(tileX, tileY)
-        onPickedObject: {
-          objectSelectBox.currentIndex = objectList.indexOf(dynamicObject.objectName);
-        }
-        onPickedTile: {
-          [characterEditor, storageEditor].forEach(function(dynamicObjectEditor) {
-            if (dynamicObjectEditor.visible)
-              dynamicObjectEditor.setTilePosition(tileX, tileY);
-          });
-        }
+        onPickedTile: root.pickedTile(tileX, tileY)
+        onPickedObject: objectSelectBox.currentIndex = objectList.indexOf(dynamicObject.objectName);
       }
 
       GameComponents.ScreenEdges {

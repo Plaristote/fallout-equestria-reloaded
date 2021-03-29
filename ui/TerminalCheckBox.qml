@@ -6,8 +6,10 @@ CheckBox {
   id: root
   height: size
   width:  size
+  font.family: application.consoleFontName
 
   indicator: Rectangle {
+    id: indicatorComponent
     width: root.size
     height: root.size
     color: "transparent"
@@ -29,6 +31,8 @@ CheckBox {
     }
   }
   contentItem: Text {
+    anchors.left: indicatorComponent.right
+    anchors.leftMargin: 10
     text: root.text
     font: root.font
     color: "green"

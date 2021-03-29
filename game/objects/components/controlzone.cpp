@@ -24,10 +24,12 @@ void ControlZoneComponent::removeControlZone()
 {
   if (controlZone != nullptr)
   {
-    emit controlZoneRemoved(controlZone);
-    delete controlZone;
+    auto* backup = controlZone;
+
+    controlZone = nullptr;
+    emit controlZoneRemoved(backup);
+    backup->deleteLater();
   }
-  controlZone = nullptr;
 }
 
 void ControlZoneComponent::listenControlZone(TileZone* zone)
