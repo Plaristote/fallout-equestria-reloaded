@@ -2,6 +2,7 @@
 #include "taskrunner.h"
 #include "game.h"
 #include <QJsonArray>
+#include <cmath>
 
 TaskRunner::TaskRunner(QObject *parent) : QObject(parent)
 {
@@ -10,29 +11,38 @@ TaskRunner::TaskRunner(QObject *parent) : QObject(parent)
 
 void TaskRunner::update(qint64 delta)
 {
+  if (delta > 1000)
+    qDebug() << "TaskRunner::update starting";
   for (auto it = tasks.begin() ; it != tasks.end() ;)
   {
     auto elapsedTime = delta;
 
-    do {
-      if (it->timeLeft <= elapsedTime)
+    if (elapsedTime > 1000)
+      qDebug() << "TaskRunner::update: time left =" << elapsedTime;
+    if (it->timeLeft <= elapsedTime)
+    {
+      int totalIterations = 1;
+
+      elapsedTime -= it->timeLeft;
+      if (elapsedTime >= it->interval)
       {
-        it->timeLeft = it->interval;
-        elapsedTime -= it->timeLeft;
-        if (!it->infinite)
-          it->iterationCount -= 1;
-        if (!runTask(*it))
-        {
-          it->iterationCount = 0;
-          break ;
-        }
+        totalIterations += static_cast<int>(elapsedTime / it->interval);
+        it->timeLeft = elapsedTime % it->interval;
       }
       else
+        it->timeLeft = it->interval - elapsedTime;
+      if (!it->infinite && totalIterations >= it->iterationCount)
       {
-        it->timeLeft -= elapsedTime;
-        break ;
+        totalIterations = it->iterationCount;
+        it->iterationCount = 0;
       }
-    } while ((it->iterationCount > 0 || it->infinite) && elapsedTime >= it->timeLeft);
+      else if (!it->infinite)
+        it->iterationCount -= totalIterations;
+      if (!runTask(*it, totalIterations))
+        it->iterationCount = 0;
+    }
+    else
+      it->timeLeft -= elapsedTime;
     if (it->iterationCount == 0)
       it = tasks.erase(it);
     else
@@ -40,13 +50,15 @@ void TaskRunner::update(qint64 delta)
   }
 }
 
-bool TaskRunner::runTask(Task& task)
+bool TaskRunner::runTask(Task& task, int iterations)
 {
   if (script)
   {
     QJSValue retval;
+    QJSValueList args;
 
-    script->call(task.name);
+    args << iterations;
+    script->call(task.name, args);
     return retval.isBool() ? retval.toBool() : true;
   }
   else

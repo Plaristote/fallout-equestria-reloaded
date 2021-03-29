@@ -33,7 +33,7 @@ public:
 signals:
 
 private:
-  bool runTask(Task&);
+  bool runTask(Task&, int iterations);
 
   QList<Task> tasks;
   ScriptController* script = nullptr;

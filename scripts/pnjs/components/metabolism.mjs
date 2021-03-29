@@ -8,13 +8,16 @@ export class MetabolismComponent {
     }
   }
 
-  updateMetabolism() {
+  updateMetabolism(count) {
+    console.log("Update metabolism", count);
     if (this.model.isAlive()) {
       const maxHitPoints = this.model.statistics.maxHitPoints;
       const healingRate  = this.model.statistics.healingRate;
       const currentHp    = this.model.statistics.hitPoints;
       
-      this.model.statistics.hitPoints = Math.min(currentHp + healingRate, maxHitPoints);
+      this.model.statistics.hitPoints = Math.min(currentHp + (healingRate * count), maxHitPoints);
+      return true;
     }
+    return false;
   }
 }
