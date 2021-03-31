@@ -3,13 +3,23 @@
 
 ScriptableComponent::ScriptableComponent(QObject *parent) : ParentType(parent)
 {
-
+  if (!Game::get()->property("isGameEditor").toBool())
+    connect(this, &ScriptableComponent::scriptNameChanged, this, &ScriptableComponent::initializeIfNeeded);
 }
 
 ScriptableComponent::~ScriptableComponent()
 {
   if (script)
     delete script;
+}
+
+void ScriptableComponent::initializeIfNeeded()
+{
+  if (script && script->hasMethod("initialize"))
+  {
+    script->call("initialize");
+    scriptInitialized = true;
+  }
 }
 
 void ScriptableComponent::setScript(const QString& name)
@@ -45,6 +55,7 @@ QJSValue ScriptableComponent::asJSValue()
 
 void ScriptableComponent::load(const QJsonObject& data)
 {
+  scriptInitialized = data["init"].toBool(false);
   scriptName = data["script"].toString();
   ParentType::load(data);
   setScript(scriptName);
@@ -52,6 +63,8 @@ void ScriptableComponent::load(const QJsonObject& data)
 
 void ScriptableComponent::save(QJsonObject& data) const
 {
+  if (scriptInitialized)
+    data["init"] = scriptInitialized;
   data["script"] = scriptName;
   ParentType::save(data);
 

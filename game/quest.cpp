@@ -60,7 +60,6 @@ void Quest::onCharacterKilled(Character* character, Character* killer)
   if (!completed && script->hasMethod("onCharacterKilled"))
   {
     QJSValueList args;
-    auto& scriptEngine = Game::get()->getScriptEngine();
 
     args << character->asJSValue();
     if (killer)

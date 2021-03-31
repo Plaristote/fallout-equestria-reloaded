@@ -17,6 +17,11 @@ bool CharacterSight::hasLineOfSight(const DynamicObject* other) const
   return hasSightFrom(other, position);
 }
 
+bool CharacterSight::hasLineOfSight(DynamicObject *other) const
+{
+  return hasSightFrom(other, position);
+}
+
 bool CharacterSight::hasSightFrom(const DynamicObject* other, QPoint pos)
 {
   auto* level = Game::get()->getLevel();

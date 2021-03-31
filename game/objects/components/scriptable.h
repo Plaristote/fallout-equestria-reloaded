@@ -28,10 +28,14 @@ public:
 signals:
   void scriptNameChanged();
 
+private slots:
+  void initializeIfNeeded();
+
 protected:
   virtual QString getScriptPath() const { return SCRIPTS_PATH + "behaviour"; }
   ScriptController* script = nullptr;
   QString scriptName;
+  bool scriptInitialized = false;
 };
 
 #endif // SCRIPTABLECOMPONENT_H

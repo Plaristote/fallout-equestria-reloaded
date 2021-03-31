@@ -71,7 +71,11 @@ bool ActionQueue::start()
 {
   if (queue.size() >= 1)
   {
-    if (!(queue.first()->trigger()))
+    auto* action = queue.first();
+
+    if (action->getState() != ActionBase::Pending)
+      return true;
+    if (!(action->trigger()))
     {
       reset();
       emit queueCompleted();

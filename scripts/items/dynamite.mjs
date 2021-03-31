@@ -52,6 +52,7 @@ class Dynamite extends Item {
     }
     else
       this.model.setVariable("trigger-failed", false);
+    this.model.tasks.addTask("beforeTriggered", (timeout - 3) * 1000, 1);
     this.model.tasks.addTask("triggered", timeout * 1000, 1);
   }
 
@@ -66,9 +67,17 @@ class Dynamite extends Item {
       game.appendToConsole(i18n.t("messages.trap-disarm-failed"));
     else {
       game.appendToConsole(i18n.t("messages.trap-disarmed"));
+      this.model.tasks.removeTask("beforeTriggered");
       this.model.tasks.removeTask("triggered");
     }
     return true;
+  }
+
+  beforeTriggered() {
+    const wearer = this.model.getOwner();
+
+    if (wearer)
+      level.addTextBubble(wearer, "Where's that ticking sound coming from ?", 3000, "white");
   }
 
   triggered() {

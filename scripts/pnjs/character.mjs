@@ -28,7 +28,7 @@ export class CharacterBehaviour extends CombatComponent {
   }
 
   onPush() {
-    this.model.moveAway();
+    this.model.moveAway(game.player);
   }
 
   onTalkTo() {

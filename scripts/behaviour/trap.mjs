@@ -43,6 +43,7 @@ export class Trap {
 
   onUseExplosives(user) {
     const result = disarmAttempt(user, this.difficulty);
+    const disarmed = this.model.getVariable("disarmed") == true;
 
     if (result == -1) {
       game.appendToConsole(i18n.t("messages.trap-critical-failure"));
@@ -50,10 +51,11 @@ export class Trap {
       this.triggered();
     }
     else if (result == 0)
-      game.appendToConsole(i18n.t("messages.trap-disarm-failed"));
+      game.appendToConsole(!disarmed ? i18n.t("messages.trap-disarm-failed") : i18n.t("messages.trap-enable-failed"));
     else {
-      game.appendToConsole(i18n.t("messages.trap-disarmed"));
-      this.model.setVariable("disarmed", true);
+      game.appendToConsole(!disarmed ? i18n.t("messages.trap-disarmed") : i18n.t("messages.trap-armed"));
+      this.model.setVariable("disarmed", !disarmed);
+      this.model.setAnimation(disarmed ? "on" : "off");
     }
     return true;
   }

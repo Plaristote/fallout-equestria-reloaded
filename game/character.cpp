@@ -84,16 +84,16 @@ QVector<QPoint> Character::getAvailableSurroundingCases() const
   return candidates;
 }
 
-void Character::moveAway()
+void Character::moveAway(Character* target)
 {
   auto* player = Game::get()->getPlayer();
   QVector<QPoint> candidates = getAvailableSurroundingCases();
 
   if (!actionQueue->isEmpty())
     return ;
-  std::sort(candidates.begin(), candidates.end(), [player](QPoint a, QPoint b)
+  std::sort(candidates.begin(), candidates.end(), [target](QPoint a, QPoint b)
   {
-    return player->getDistance(a) > player->getDistance(b);
+    return target->getDistance(a) > target->getDistance(b);
   });
   if (candidates.length() > 0)
   {

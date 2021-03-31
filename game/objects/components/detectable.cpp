@@ -21,6 +21,7 @@ void DetectableComponent::save(QJsonObject& data) const
 {
   if (hidden)   { data["hidden"]   = hidden; }
   if (sneaking) { data["sneaking"] = sneaking; }
+  if (interruptOnDetection) { data["interruptOnDetection"] = interruptOnDetection; }
   ParentType::save(data);
 }
 
