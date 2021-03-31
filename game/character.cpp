@@ -86,10 +86,10 @@ QVector<QPoint> Character::getAvailableSurroundingCases() const
 
 void Character::moveAway(Character* target)
 {
-  auto* player = Game::get()->getPlayer();
+  auto* level = Game::get()->getLevel();
   QVector<QPoint> candidates = getAvailableSurroundingCases();
 
-  if (!actionQueue->isEmpty())
+  if (!actionQueue->isEmpty() || (level->isInCombat(this) && getActionPoints() == 0))
     return ;
   std::sort(candidates.begin(), candidates.end(), [target](QPoint a, QPoint b)
   {
