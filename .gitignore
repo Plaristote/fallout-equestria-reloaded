@@ -38,6 +38,7 @@ Thumbs.db
 # foe files
 saves/
 .prerender/
+assets/
 
 # qtcreator generated files
 *.pro.user*
