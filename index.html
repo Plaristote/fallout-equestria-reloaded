@@ -931,6 +931,67 @@ export function create(model) {
             <div class="end-chapter"></div>
             
             <h4 class="card-title" id="c3-4">3.4 Scripting dialogs</h4>
+            
+            <p class="card-text">
+              This is all well and fine, but un-scripted dialogs can only lead us so far. We will now learn how to implement more complex behaviour using the dialog's script.<br/>
+              The dialog script file has been created back when we created the dialog in section 3.1. Open the file at <span class="mono-span">scripts/dialogs/myDialog.mjs</span>:
+            </p>
+            
+            <div class="code-header">scripts/dialogs/myDialog.mjs</div>
+<pre class="code javacsript"><code>class Dialog {
+  constructor(dialog) {
+    this.dialog = dialog;
+  }
+}
+
+export function create(dialog) {
+  return new Dialog(dialog);
+}</code></pre>
+
+            <p class="card-text">
+              The first thing to know is that you have access to the NPC character object through <span class="mono-span">this.dialog.npc</span>. Dialogs are not persistent, so any information you wish to store about a dialog should be stored within the NPC character object.
+            </p>
+            
+            <p class="card-text">
+              Scripting dialogs mostly amounts to creating callbacks that you then configure for each state and answers in the Dialog Editor. Here's a list of callbacks and what you can do with those:
+              
+              <table>
+                <tr>
+                  <th>Hook</th>
+                  <th>Return value</th>
+                  <th>Description</th>
+                </tr>
+                <tr>
+                  <td>getEntryPoint</td>
+                  <td>state name</td>
+                  <td>Implement this method to programmaticaly define the first state of a dialog. If the method isn't implemented, or doesn't return a state name, the initial state set in the dialog editor will be used instead.</td>
+                </tr>
+                <tr>
+                  <td>Available callbacks</td>
+                  <td>boolean</td>
+                  <td>Available callbacks are methods you may define on answers, allowing you to programmaticaly define whether the answer will be visible to the player or not.<br/>
+                  Available hooks are called when a state loads.
+                </tr>
+                <tr>
+                  <td>State trigger callbacks</td>
+                  <td>text or object</td>
+                  <td>Use these callbacks if you want to programmatically define the text for a state. Optionally, you may also return a JavaScript object, allowing you to set both the text and the answers for the state.
+                </tr>
+                <tr>
+                  <td>Answer trigger callbacks</td>
+                  <td>state name</td>
+                  <td>These callbacks are called when a player picks an answer. They allow you to programmatically override the default target state for the answer.</td>
+                </tr>
+                <tr>
+                  <td>Answer text callback</td>
+                  <td>text</td>
+                  <td>Use these callbacks to programmatically define the text for an answer</td>
+                </tr>
+              </table>
+            </p>
+
+            
+            <h4 class="card-title" id="c3-6">3.5 Setting the mood</h4>
           </div>
         </div>
       </div>
@@ -969,7 +1030,6 @@ export function create(model) {
               <a href="#c2-5">2.5 Statistics checks and Inspection</a>
               <a href="#c2-6">2.6 Movement and actions</a>
               <a href="#c2-7">2.7 Combat and Diplomacy</a>
-              <a href="#c2-8">2.8 Inventory and items</a> 
             </div>
             <a href="#c3">3. Dialogs</a>
             <div class="chapter">
@@ -977,6 +1037,21 @@ export function create(model) {
               <a href="#c3-2">3.2 Lines and answers</a>
               <a href="#c3-3">3.3 Binding a dialog on a NPC</a>
               <a href="#c3-4">3.4 Scripting dialogs</a>
+              <a href="#c3-6">3.6 Setting the mood</a>
+            </div>
+            <a href="#c4">4. Items</a>
+            <div class="chapter">
+            </div>
+            <a href="#c5">5. Quests</a>
+            <div class="chapter">
+            </div>
+            <a href="#c6">6. Cutie Mark Acquisition Program</a>
+            <div class="chapter">
+              <a href="#c6-1">6.1 Introduction to CMAP</a>
+              <a href="#c6-2">6.2 Experience and levels</a>
+              <a href="#c6-3">6.3 Scripting traits</a>
+              <a href="#c6-4">6.4 Scripting perks</a>
+              <a href="#c6-5">6.5 Scripting races</a>
             </div>
           </div>
         </div>
