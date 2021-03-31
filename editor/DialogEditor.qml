@@ -24,6 +24,10 @@ Item {
 
   CharacterDialogEditor {
     id: controller
+
+    onStateListChanged: {
+      entryPointInput.model = stateSelect.model = stateList;
+    }
   }
 
   onCurrentDialogChanged: {
@@ -92,7 +96,7 @@ Item {
     }
     onAccepted: {
       controller.newState(newStateNameInput.text);
-      stateSelect.model = controller.stateList
+      currentState = newStateNameInput.text;
       newStateNameInput.text = "";
     }
   }

@@ -166,6 +166,7 @@ void CharacterDialogEditor::removeState()
 
   states.remove(stateReference);
   data.insert("states", states);
+  emit stateListChanged();
 }
 
 void CharacterDialogEditor::removeAnswer()

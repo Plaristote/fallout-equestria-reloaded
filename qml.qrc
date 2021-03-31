@@ -99,8 +99,6 @@
         <file>assets/ui/dialog/right.png</file>
         <file>assets/ui/dialog/top.png</file>
         <file>assets/ui/dialog/text.png</file>
-        <file>scripts/dialogs/parley.json</file>
-        <file>scripts/dialogs/parley.mjs</file>
         <file>SaveGame.qml</file>
         <file>ui/SavedGameListItem.qml</file>
         <file>LoadGame.qml</file>
