@@ -167,25 +167,45 @@ void AnimationLibrary::setAnimation(const QString& group, const QString& name, Q
   if (name.length() > 0)
   {
     auto groupData = data[group].toObject();
-    QJsonObject animationData;
-    QString     defaultSource = groupData["defaultSource"].toString();
-    QString     source = animation->getRelativeSource();
+    QString defaultSource = groupData["defaultSource"].toString();
 
-    if (source == defaultSource || source.length() == 0)
-      animationData.remove("source");
+    if (!groupData["cloneOf"].isString())
+      setAnimationWithDefaultSource(group, name, animation, defaultSource);
     else
-      animationData["source"] = source;
-    animationData["repeat"] = animation->repeat;
-    animationData["frameCount"] = animation->frameCount;
-    animationData["frameInterval"] = animation->frameInterval;
-    animationData["offsetX"] = animation->firstFramePosition.x();
-    animationData["offsetY"] = animation->firstFramePosition.y();
-    animationData["width"] = animation->clippedRect.width();
-    animationData["height"] = animation->clippedRect.height();
-    groupData.remove(name);
-    groupData.insert(animation->name, animationData);
-    data[group] = groupData;
+      setAnimationWithDefaultSource(groupData["cloneOf"].toString(), name, animation, defaultSource);
   }
+}
+
+void AnimationLibrary::setAnimationWithDefaultSource(const QString &group, const QString &name, QmlSpriteAnimation* animation, const QString &defaultSource)
+{
+  if (name.length() > 0)
+  {
+    auto groupData = data[group].toObject();
+
+    if (!groupData["cloneOf"].isString()) {
+      QJsonObject animationData;
+      QString     source = animation->getRelativeSource();
+
+      if (source == defaultSource || source.length() == 0)
+        animationData.remove("source");
+      else
+        animationData["source"] = source;
+      animationData["repeat"] = animation->repeat;
+      animationData["frameCount"] = animation->frameCount;
+      animationData["frameInterval"] = animation->frameInterval;
+      animationData["offsetX"] = animation->firstFramePosition.x();
+      animationData["offsetY"] = animation->firstFramePosition.y();
+      animationData["width"] = animation->clippedRect.width();
+      animationData["height"] = animation->clippedRect.height();
+      groupData.remove(name);
+      groupData.insert(animation->name, animationData);
+      groupData.remove("cloneOf");
+      data[group] = groupData;
+    }
+    else
+      setAnimationWithDefaultSource(groupData["cloneOf"].toString(), name, animation, defaultSource);
+  }
+
 }
 
 void AnimationLibrary::save()
@@ -220,8 +240,11 @@ QStringList AnimationLibrary::getGroups() const
 
 QStringList AnimationLibrary::getAnimationList(const QString& group) const
 {
-  auto list = data[group].toObject().keys();
+  auto groupData = data[group].toObject();
+  auto list = groupData.keys();
 
   list.removeAll("defaultSource");
+  if (list.contains("cloneOf"))
+    return getAnimationList(groupData["cloneOf"].toString());
   return list;
 }

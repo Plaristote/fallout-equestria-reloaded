@@ -74,9 +74,10 @@ public:
   // Editor
   Q_INVOKABLE QString getDefaultSource(const QString& animationGroup) const;
   Q_INVOKABLE void    setDefaultSource(const QString& animationGroup, const QString& value);
-  Q_INVOKABLE void setAnimation(const QString& group, const QString& name, QmlSpriteAnimation*);
-  Q_INVOKABLE void save();
-  Q_INVOKABLE void remove(const QString& group, const QString& name);
+  Q_INVOKABLE void    setAnimation(const QString& group, const QString& name, QmlSpriteAnimation*);
+  void                setAnimationWithDefaultSource(const QString& group, const QString& name, QmlSpriteAnimation*, const QString& defaultSource);
+  Q_INVOKABLE void    save();
+  Q_INVOKABLE void    remove(const QString& group, const QString& name);
   // END Editor
 
 signals:
