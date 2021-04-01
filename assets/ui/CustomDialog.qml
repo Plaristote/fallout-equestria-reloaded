@@ -29,14 +29,14 @@ QuickControls.Dialog {
       anchors.centerIn: parent
       Ui.MenuButton {
         id: okButton
-        visible: (standardButtons & Dialog.Ok) > 0
+        visible: (standardButtons & QuickControls.Dialog.Ok) > 0
         text: i18n.t("Ok")
         onClicked: if (validate()) { root.accept(); }
         width: 150
       }
       Ui.MenuButton {
         id: cancelButton
-        visible: (standardButtons & Dialog.Cancel) > 0
+        visible: (standardButtons & QuickControls.Dialog.Cancel) > 0
         text: i18n.t("Cancel")
         onClicked: root.reject()
         width: 150

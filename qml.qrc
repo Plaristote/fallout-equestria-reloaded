@@ -220,5 +220,7 @@
         <file>ui/TextPromptDialog.qml</file>
         <file>assets/ui/CustomDialog.qml</file>
         <file>ui/ConfirmDialog.qml</file>
+        <file>editor/SpriteForm.qml</file>
+        <file>editor/SpriteGroup.qml</file>
     </qresource>
 </RCC>
