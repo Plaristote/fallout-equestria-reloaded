@@ -75,7 +75,6 @@ protected:
   bool visible = true;
   QPoint position, nextPosition;
   QString currentZone;
-  QString orientation;
 };
 
 #endif // DYNAMICOBJECT_H
