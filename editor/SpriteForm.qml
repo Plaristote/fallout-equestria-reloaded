@@ -108,6 +108,14 @@ Pane {
           id: heightInput; text: spriteAnimation.clippedRect.height; width: 100
           onTextChanged: spriteAnimation.clippedRect = Qt.rect(xInput.text, yInput.text, spriteAnimation.clippedRect.width, heightInput.text)
         }
+        TerminalLabel {
+          color: "gray"
+          text: "Source size:"
+        }
+        TerminalLabel {
+          color: "lightgray"
+          text: `${imageData.sourceSize.width} / ${imageData.sourceSize.height}`
+        }
       }
 
       TerminalLabel {
@@ -143,6 +151,12 @@ Pane {
       }
     }
   } // END form flickable
+
+  Image {
+    id: imageData
+    source: assetPath + "sprites/" + sourceInput.text
+    visible: false
+  }
 
   Rectangle {
     property int previewFrame: 0
