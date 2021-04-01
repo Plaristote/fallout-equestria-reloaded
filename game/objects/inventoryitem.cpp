@@ -13,6 +13,15 @@ InventoryItem::InventoryItem(QObject* parent) : DynamicObject(parent), quantity(
   setSpriteName("items");
 }
 
+QString InventoryItem::getIcon() const
+{
+  auto itemData = InventoryItemLibrary::get()->getObject(itemType);
+
+  if (itemData.isObject())
+    return itemData["icon"].toString("any.png");
+  return "any.png";
+}
+
 QString InventoryItem::getCategory() const
 {
   auto itemData = InventoryItemLibrary::get()->getObject(itemType);

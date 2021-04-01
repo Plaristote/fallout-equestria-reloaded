@@ -6,7 +6,7 @@ import "qrc:/assets/ui" as UiStyle
 
 Pane {
   property int itemIconWidth: 72
-  property int itemIconHeight: 36
+  property int itemIconHeight: 72
   property QtObject inventory
   property QtObject selectedObject
   id: root
@@ -20,10 +20,11 @@ Pane {
     anchors.fill: parent
     anchors.bottomMargin: 15
 
-    GridLayout {
+    Grid {
       id: characterInventoryItemsView
       width: parent.width
       columns: parent.width / root.itemIconWidth
+      spacing: 5
 
       Repeater {
         model: inventory.items.length

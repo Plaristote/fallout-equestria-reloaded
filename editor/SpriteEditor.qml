@@ -68,7 +68,7 @@ Item {
     id: filePicker
     title: "Please chose a file"
     folder: rootPath + "assets/sprites"
-    nameFilters: ["Image files (*.jpg, *.png)"]
+    nameFilters: ["Image files (*.jpg, *.png, *.webp)"]
 
     onAccepted: {
       const path = filePicker.fileUrl.toString().replace(/.*\/assets\/sprites\//, "")

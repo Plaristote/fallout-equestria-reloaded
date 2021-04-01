@@ -9,6 +9,7 @@ class InventoryItem : public DynamicObject
 {
   Q_OBJECT
 
+  Q_PROPERTY(QString     icon      READ getIcon NOTIFY itemTypeChanged)
   Q_PROPERTY(QString     category  READ getCategory NOTIFY itemTypeChanged)
   Q_PROPERTY(QString     itemType  READ getItemType WRITE setItemType NOTIFY itemTypeChanged)
   Q_PROPERTY(int         weight    READ getWeight  NOTIFY weightChanged)
@@ -34,6 +35,7 @@ public:
   int         getValue() const;
   int         getQuantity() const { return quantity; }
   QString     getCategory() const;
+  QString     getIcon() const;
   bool        isGroupable(InventoryItem* = nullptr);
   bool        isVirtual() const { return virtualItem; }
   void        setVirtual(bool value) { virtualItem = value; emit virtualChanged(); }

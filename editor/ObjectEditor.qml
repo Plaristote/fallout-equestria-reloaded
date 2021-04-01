@@ -1,6 +1,7 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
+import QtQuick.Dialogs 1.2 as BiDialog
 import "qrc:/assets/ui" as UiStyle
 import "../ui"
 import Game 1.0
@@ -25,6 +26,7 @@ Item {
       weight: parseInt(weightInput.text),
       value: parseInt(valueInput.text),
       sprite: spriteInput.currentText,
+      icon: iconInput.text,
       script: scriptInput.currentText,
       isGroupable: groupableInput.checked
     };
@@ -35,6 +37,7 @@ Item {
 
   onCurrentNameChanged: {
     currentObject = itemLibrary.getObject(currentName);
+    iconInput.text = currentObject.icon || "";
   }
 
   onVisibleChanged: objectNames = itemLibrary.getObjectList()
@@ -55,6 +58,20 @@ Item {
       objectNames.push(value);
       currentName = value;
       objectNamesChanged();
+    }
+  }
+
+  BiDialog.FileDialog {
+    property var target: iconInput
+    id: iconPicker
+    title: "Please chose a file"
+    folder: rootPath + "assets/icons"
+    nameFilters: ["Image files (*.jpg, *.png, *.webp)"]
+
+    onAccepted: {
+      const path = iconPicker.fileUrl.toString().replace(/.*\/assets\/icons\//, "")
+      console.log("File selected", path);
+      target.text = path;
     }
   }
 
@@ -87,6 +104,7 @@ Item {
         }
 
         TerminalComboBox {
+          Layout.fillWidth: true
           id: typeInput
           model: ["weapon","armor","ammo","consommables","misc"]
           currentIndex: model.indexOf(currentObject.type)
@@ -97,6 +115,7 @@ Item {
         }
 
         TerminalField {
+          Layout.fillWidth: true
           id: weightInput
           text: currentObject.weight
         }
@@ -106,6 +125,7 @@ Item {
         }
 
         TerminalField {
+          Layout.fillWidth: true
           id: valueInput
           text: currentObject.value
         }
@@ -123,8 +143,10 @@ Item {
           text: "sprite"
         }
 
-        Row {
+        RowLayout {
+          Layout.fillWidth: true
           TerminalComboBox {
+            Layout.fillWidth: true
             id: spriteInput
             model: animationLibrary.getAnimationList("items")
             currentIndex: animationLibrary.getAnimationList("items").indexOf(currentObject.sprite)
@@ -146,15 +168,40 @@ Item {
         }
 
         TerminalLabel {
+          text: "icon"
+        }
+
+        RowLayout {
+          Layout.fillWidth: true
+          TerminalField {
+            id: iconInput
+            Layout.fillWidth: true
+            text: currentObject.icon
+            readOnly: true
+          }
+          TerminalButton {
+            text: "Pick"
+            onClicked: iconPicker.open()
+          }
+          Image {
+            source: assetPath + "/icons/" + iconInput.text
+            height: 40
+            width: 40
+          }
+        }
+
+        TerminalLabel {
           id: labelScript
           text: "script"
         }
 
-        Row {
+        RowLayout {
+          Layout.fillWidth: true
           id: scriptHeader
           spacing: 5
 
           TerminalComboBox {
+            Layout.fillWidth: true
             id: scriptInput
             model: scriptList
             currentIndex: scriptList.indexOf(currentObject.script)
