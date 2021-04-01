@@ -223,5 +223,6 @@
         <file>editor/SpriteForm.qml</file>
         <file>editor/SpriteGroup.qml</file>
         <file>editor/ObjectForm.qml</file>
+        <file>editor/FactionEditor.qml</file>
     </qresource>
 </RCC>
