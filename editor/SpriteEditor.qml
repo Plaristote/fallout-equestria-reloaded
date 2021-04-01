@@ -22,6 +22,7 @@ Item {
 
   onAnimationNameChanged: {
     spriteAnimation.initialize(animationGroup, animationName)
+    nameInput.text = animationName;
   }
 
   SpriteAnimation {
@@ -30,43 +31,35 @@ Item {
     frameInterval: 10
   }
 
-  Dialog {
+  TextPromptDialog {
     id: newGroupDialog
     title: "New sprite group"
-    modal: true
     anchors.centerIn: parent
-    standardButtons: Dialog.Ok | Dialog.Cancel
-    Row {
-      Label {
-        text: "name"
-      }
-      TextField {
-        id: newGroupName
-      }
-    }
+
     onAccepted: {
-      animationGroups.push(newGroupName.text)
+      animationGroups.push(value)
       animationGroupsChanged();
     }
   }
 
-  Dialog {
+  TextPromptDialog {
     id: newSpriteDialog
     title: "New Sprite"
-    modal: true
     anchors.centerIn: parent
-    standardButtons: Dialog.Ok | Dialog.Cancel
-    Row {
-      Label {
-        text: "name"
-      }
-      TextField {
-        id: newSpriteName
-      }
+
+    function validate() {
+      if (value.length === 0 || value === "defaultSource")
+        validationError = "Invalid or reserved name.";
+      else
+        validationError = "";
+      return validationError === "";
     }
+
     onAccepted: {
-      animationNames.push(newSpriteName.text);
+      animationNames.push(value);
       animationNamesChanged();
+      animationName = value;
+      value = "";
     }
   }
 
@@ -170,7 +163,6 @@ Item {
 
           TerminalField {
             id: nameInput
-            text: spriteAnimation.name
             Layout.fillWidth: true
             onTextChanged: spriteAnimation.name = text;
           }
@@ -321,15 +313,28 @@ Item {
     }
   } // END RowLayout
 
-  MenuButton {
+  Row {
     id: formControls
     anchors.bottom: parent.bottom
     anchors.right: parent.right
-    text: "Save"
-    enabled: animationName && spriteAnimation.hasChanged
-    onClicked: {
-      console.log("save clicked");
-      animationEditor.save();
+
+    MenuButton {
+      text: "Remove"
+      enabled: animationName
+      onClicked: {
+        animationLibrary.remove(animationGroup, animationName);
+        animationNames = animationLibrary.getAnimationList(animationGroup);
+        animationName = "";
+      }
+    }
+
+    MenuButton {
+      text: "Save"
+      enabled: animationName && spriteAnimation.hasChanged
+      onClicked: {
+        console.log("save clicked");
+        animationEditor.save();
+      }
     }
   }
 }

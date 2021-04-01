@@ -164,25 +164,28 @@ void AnimationLibrary::setDefaultSource(const QString& group, const QString& def
 
 void AnimationLibrary::setAnimation(const QString& group, const QString& name, QmlSpriteAnimation* animation)
 {
-  auto groupData = data[group].toObject();
-  QJsonObject animationData;
-  QString     defaultSource = groupData["defaultSource"].toString();
-  QString     source = animation->getRelativeSource();
+  if (name.length() > 0)
+  {
+    auto groupData = data[group].toObject();
+    QJsonObject animationData;
+    QString     defaultSource = groupData["defaultSource"].toString();
+    QString     source = animation->getRelativeSource();
 
-  if (source == defaultSource || source.length() == 0)
-    animationData.remove("source");
-  else
-    animationData["source"] = source;
-  animationData["repeat"] = animation->repeat;
-  animationData["frameCount"] = animation->frameCount;
-  animationData["frameInterval"] = animation->frameInterval;
-  animationData["offsetX"] = animation->firstFramePosition.x();
-  animationData["offsetY"] = animation->firstFramePosition.y();
-  animationData["width"] = animation->clippedRect.width();
-  animationData["height"] = animation->clippedRect.height();
-  groupData.remove(name);
-  groupData.insert(animation->name, animationData);
-  data[group] = groupData;
+    if (source == defaultSource || source.length() == 0)
+      animationData.remove("source");
+    else
+      animationData["source"] = source;
+    animationData["repeat"] = animation->repeat;
+    animationData["frameCount"] = animation->frameCount;
+    animationData["frameInterval"] = animation->frameInterval;
+    animationData["offsetX"] = animation->firstFramePosition.x();
+    animationData["offsetY"] = animation->firstFramePosition.y();
+    animationData["width"] = animation->clippedRect.width();
+    animationData["height"] = animation->clippedRect.height();
+    groupData.remove(name);
+    groupData.insert(animation->name, animationData);
+    data[group] = groupData;
+  }
 }
 
 void AnimationLibrary::save()
@@ -195,6 +198,19 @@ void AnimationLibrary::save()
     sourceFile.write(document.toJson());
     sourceFile.close();
   }
+}
+
+void AnimationLibrary::remove(const QString &group, const QString &name)
+{
+  auto groupData = data[group].toObject();
+  int minKeys = groupData.contains("defaultSource") ? 1 : 0;
+
+  groupData.remove(name);
+  if (groupData.keys().length() > minKeys)
+    data[group] = groupData;
+  else
+    data.remove(group);
+  save();
 }
 
 QStringList AnimationLibrary::getGroups() const

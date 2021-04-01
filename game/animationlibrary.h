@@ -76,6 +76,7 @@ public:
   Q_INVOKABLE void    setDefaultSource(const QString& animationGroup, const QString& value);
   Q_INVOKABLE void setAnimation(const QString& group, const QString& name, QmlSpriteAnimation*);
   Q_INVOKABLE void save();
+  Q_INVOKABLE void remove(const QString& group, const QString& name);
   // END Editor
 
 signals:

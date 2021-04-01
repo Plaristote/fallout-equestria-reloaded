@@ -217,5 +217,7 @@
         <file>game/hud/CountdownDialog.qml</file>
         <file>game/hud/ItemPicker.qml</file>
         <file>game/hud/InteractionMenu.qml</file>
+        <file>ui/TextPromptDialog.qml</file>
+        <file>assets/ui/CustomDialog.qml</file>
     </qresource>
 </RCC>
