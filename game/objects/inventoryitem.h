@@ -9,15 +9,16 @@ class InventoryItem : public DynamicObject
 {
   Q_OBJECT
 
-  Q_PROPERTY(QString     icon      READ getIcon NOTIFY itemTypeChanged)
-  Q_PROPERTY(QString     category  READ getCategory NOTIFY itemTypeChanged)
-  Q_PROPERTY(QString     itemType  READ getItemType WRITE setItemType NOTIFY itemTypeChanged)
-  Q_PROPERTY(int         weight    READ getWeight  NOTIFY weightChanged)
-  Q_PROPERTY(int         quantity  MEMBER quantity NOTIFY quantityChanged)
-  Q_PROPERTY(int         value     READ getValue NOTIFY valueChanged)
-  Q_PROPERTY(bool        isVirtual READ isVirtual NOTIFY virtualChanged)
-  Q_PROPERTY(QStringList useModes  READ getUseModes NOTIFY useModesChanged)
-  Q_PROPERTY(QString     useMode   MEMBER useMode NOTIFY useModeChanged)
+  Q_PROPERTY(QString     icon        READ getIcon NOTIFY itemTypeChanged)
+  Q_PROPERTY(QString     category    READ getCategory NOTIFY itemTypeChanged)
+  Q_PROPERTY(QString     itemType    READ getItemType WRITE setItemType NOTIFY itemTypeChanged)
+  Q_PROPERTY(QString     description READ getDescription)
+  Q_PROPERTY(int         weight      READ getWeight  NOTIFY weightChanged)
+  Q_PROPERTY(int         quantity    MEMBER quantity NOTIFY quantityChanged)
+  Q_PROPERTY(int         value       READ getValue NOTIFY valueChanged)
+  Q_PROPERTY(bool        isVirtual   READ isVirtual NOTIFY virtualChanged)
+  Q_PROPERTY(QStringList useModes    READ getUseModes NOTIFY useModesChanged)
+  Q_PROPERTY(QString     useMode     MEMBER useMode NOTIFY useModeChanged)
   Q_PROPERTY(bool        requiresTarget READ requiresTarget NOTIFY useModeChanged)
 public:
   explicit InventoryItem(QObject* parent = nullptr);
@@ -36,6 +37,7 @@ public:
   int         getQuantity() const { return quantity; }
   QString     getCategory() const;
   QString     getIcon() const;
+  QString     getDescription() const;
   bool        isGroupable(InventoryItem* = nullptr);
   bool        isVirtual() const { return virtualItem; }
   void        setVirtual(bool value) { virtualItem = value; emit virtualChanged(); }

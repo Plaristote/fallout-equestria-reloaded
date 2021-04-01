@@ -2,6 +2,7 @@
 #include "inventoryitem.h"
 #include "../inventoryitemlibrary.h"
 #include "game.h"
+#include "i18n.h"
 
 InventoryItem::InventoryItem(QObject* parent) : DynamicObject(parent), quantity(1)
 {
@@ -29,6 +30,13 @@ QString InventoryItem::getCategory() const
   if (itemData.isObject())
     return itemData["type"].toString("misc");
   return "weapon";
+}
+
+QString InventoryItem::getDescription() const
+{
+  if (script && script->hasMethod("getDescription"))
+    return script->call("getDescription").toString();
+  return I18n::get()->t("item-descriptions." + itemType);
 }
 
 QStringList InventoryItem::getAvailableInteractions()

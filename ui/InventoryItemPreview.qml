@@ -29,7 +29,7 @@ Pane {
     Text {
       font.family: application.consoleFontName
       font.pointSize: 12
-      text: objectPreview.model.objectName
+      text: i18n.t(`items.${objectPreview.model.objectName}`)
       color: "white"
     }
 
@@ -42,7 +42,8 @@ Pane {
     Text {
       font.family: application.consoleFontName
       font.pointSize: 8
-      text: "Lorem ipsum dolor sit amet, consetitur subis pacem para bellum alea jacta est perseverare in vine diabolicum."
+      textFormat: Text.RichText
+      text: model.description
       width: parent.width
       wrapMode: Text.WordWrap
       horizontalAlignment: Text.AlignJustify
@@ -58,7 +59,7 @@ Pane {
     Text {
       font.family: application.consoleFontName
       font.pointSize: 8
-      text: "Weight: " + objectPreview.model.weight
+      text: i18n.t("Weight") + ": " + objectPreview.model.weight
       color: "white"
     }
   }
