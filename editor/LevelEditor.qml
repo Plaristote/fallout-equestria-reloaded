@@ -12,42 +12,16 @@ Item {
   property var gameController
   property alias currentLevelName: levelSelect.currentName
   property var objectList: []
-  property alias selectedObjectName: objectSelectBox.currentText
   property QtObject selectedObject
-  property QtObject selectedCharacter
-  property QtObject selectedDoorway
 
   signal pickedTile(int tileX, int tileY)
 
   onCurrentLevelNameChanged: {
-    selectedObject = selectedCharacter = null;
+    selectedObject = null;
+    levelEditorUiLoader.sourceComponent = null;
     gameController.goToLevel(currentLevelName.replace(".json", ""));
-    updateObjectList();
-    canvas.translate(-canvas.origin.x, -canvas.origin.y);
-    //gameController.level.paused = true;
-  }
-
-  onSelectedObjectNameChanged: {
-    if (selectedObjectName !== "") {
-      selectedObject = gameController.level.getObjectByName(selectedObjectName);
-      if (selectedObject.getObjectType() === "Character") {
-        console.log("selected character");
-        selectedCharacter = selectedObject
-        selectedDoorway = null;
-      }
-      else if (selectedObject.getObjectType() === "Doorway") {
-        console.log("doorway object selected");
-        selectedDoorway = selectedObject;
-        selectedCharacter = null;
-      }
-      else
-      {
-        console.log("selected object type", selectedObject.getObjectType());
-        selectedCharacter = selectedDoorway = null;
-      }
-    }
-    else
-      selectedObject = selectedCharacter = null;
+    if (currentLevelName.length > 0)
+      levelEditorUiLoader.sourceComponent = levelEditorUi;
   }
 
   onSelectedObjectChanged: {
@@ -80,103 +54,120 @@ Item {
       readOnly: true
     }
 
-    Pane {
-      background: UiStyle.TerminalPane {}
+    Loader {
+      id: levelEditorUiLoader
       Layout.fillHeight: true
       Layout.fillWidth: true
-
-      LevelEditorUi.EditorCanvas {
-        id: canvas
-        levelController: gameController.level
-        renderRoofs: displayRoofCheckbox.checked
-        renderWalls: displayWallsCheckbox.checked
-        showHoverCoordinates: true
-        editorObject: selectedObject
-
-        editingZone: controlZoneEditor.editingZone
-        onToggleZoneTile: controlZoneEditor.toggleTile(tileX, tileY)
-        onPickedTile: root.pickedTile(tileX, tileY)
-        onPickedObject: objectSelectBox.currentIndex = objectList.indexOf(dynamicObject.objectName);
-      }
-
-      GameComponents.ScreenEdges {
-        enabled: characterInventory.visible == false
-        onMoveTop:    { canvas.translate(0, scrollSpeed); }
-        onMoveLeft:   { canvas.translate(scrollSpeed, 0); }
-        onMoveRight:  { canvas.translate(-scrollSpeed, 0); }
-        onMoveBottom: { canvas.translate(0, -scrollSpeed); }
-      }
     }
+  }
 
-    Pane {
-      background: UiStyle.Pane {}
-      Layout.preferredWidth: 400
-      Layout.fillHeight: true
+  Component {
+    id: levelEditorUi
+    RowLayout {
+      Component.onCompleted: {
+        updateObjectList();
+        canvas.translate(-canvas.origin.x, -canvas.origin.y);
+      }
 
-      ColumnLayout {
-        width: parent.width
+      Pane {
+        background: UiStyle.TerminalPane {}
+        Layout.fillHeight: true
+        Layout.fillWidth: true
 
-        Row {
-          CheckBox {
-            id: displayRoofCheckbox
-            text: "Display roofs"
-            contentItem: Text {
-              leftPadding: 45
-              text: parent.text
-              color: "white"
+        LevelEditorUi.EditorCanvas {
+          id: canvas
+          levelController: gameController.level
+          renderRoofs: displayRoofCheckbox.checked
+          renderWalls: displayWallsCheckbox.checked
+          showHoverCoordinates: true
+          editorObject: selectedObject
+
+          editingZone: controlZoneEditor.editingZone
+          onToggleZoneTile: controlZoneEditor.toggleTile(tileX, tileY)
+          onPickedTile: root.pickedTile(tileX, tileY)
+          onPickedObject: objectSelectBox.currentIndex = objectList.indexOf(dynamicObject.objectName);
+        }
+
+        GameComponents.ScreenEdges {
+          enabled: characterInventory.visible == false
+          onMoveTop:    { canvas.translate(0, scrollSpeed); }
+          onMoveLeft:   { canvas.translate(scrollSpeed, 0); }
+          onMoveRight:  { canvas.translate(-scrollSpeed, 0); }
+          onMoveBottom: { canvas.translate(0, -scrollSpeed); }
+        }
+      }
+
+      Pane {
+        background: UiStyle.Pane {}
+        Layout.preferredWidth: 400
+        Layout.fillHeight: true
+
+        ColumnLayout {
+          width: parent.width
+
+          Row {
+            CheckBox {
+              id: displayRoofCheckbox
+              text: "Display roofs"
+              contentItem: Text {
+                leftPadding: 45
+                text: parent.text
+                color: "white"
+              }
+            }
+
+            CheckBox {
+              id: displayWallsCheckbox
+              checked: true
+              text: "Display walls"
+              contentItem: Text {
+                leftPadding: 45
+                text: parent.text
+                color: "white"
+              }
             }
           }
 
-          CheckBox {
-            id: displayWallsCheckbox
-            checked: true
-            text: "Display walls"
-            contentItem: Text {
-              leftPadding: 45
-              text: parent.text
-              color: "white"
+          Row {
+            Layout.fillWidth: true
+            spacing: 5
+            SelectBox {
+              id: objectSelectBox
+              model: objectList
+              height: 40
+              width: parent.width - 100
+              onCurrentIndexChanged: root.selectedObject = gameController.level.dynamicObjects[currentIndex];
+            }
+            Button {
+              text: "Add object"
+              onClicked: dialogAddObject.open()
+              contentItem: Text {
+                text: parent.text
+                color: "white"
+                font.family: application.titleFontName
+                font.pixelSize: 16
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignHCenter
+              }
+              background: UiStyle.Label { style: parent.down ? "dark" : "base" }
+              width: 100
+              height: 40
             }
           }
-        }
 
-        Row {
-          Layout.fillWidth: true
-          spacing: 5
-          SelectBox {
-            id: objectSelectBox
-            model: objectList
-            height: 40
-            width: parent.width - 100
+          LevelEditorUi.ObjectEditorLoader {
+            id: objectEditorComponent
+            Layout.fillWidth: true
+            levelEditor: root
           }
-          Button {
-            text: "Add object"
-            onClicked: dialogAddObject.open()
-            contentItem: Text {
-              text: parent.text
-              color: "white"
-              font.family: application.titleFontName
-              font.pixelSize: 16
-              verticalAlignment: Text.AlignVCenter
-              horizontalAlignment: Text.AlignHCenter
-            }
-            background: UiStyle.Label { style: parent.down ? "dark" : "base" }
-            width: 100
-            height: 40
+
+          ControlZoneEditor {
+            id: controlZoneEditor
+            selectedObject: root.selectedObject
+            displayRoofs: displayRoofCheckbox
+            displayWalls: displayWallsCheckbox
+            Layout.fillWidth: true
           }
-        }
-
-        LevelEditorUi.ObjectEditorLoader {
-          id: objectEditorComponent
-          Layout.fillWidth: true
-          levelEditor: root
-        }
-
-        ControlZoneEditor {
-          id: controlZoneEditor
-          selectedObject: root.selectedObject
-          displayRoofs: displayRoofCheckbox
-          displayWalls: displayWallsCheckbox
-          Layout.fillWidth: true
         }
       }
     }
@@ -186,7 +177,6 @@ Item {
     id: characterInventory
     anchors.fill: parent
     anchors.margins: 50
-    character: selectedCharacter
     visible: false
   }
 
@@ -202,7 +192,7 @@ Item {
     gameController: root.gameController
     onObjectAdded: {
       console.log("Added object", newObject);
-      objectSelectBox.currentIndex = gameController.level.objects.indexOf(newObject);
+      objectSelectBox.currentIndex = gameController.level.dynamicObjects.indexOf(newObject);
     }
   }
 

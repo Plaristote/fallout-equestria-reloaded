@@ -54,7 +54,6 @@ Item {
       id: objectFormLoader
       Layout.fillHeight: true
       Layout.fillWidth: true
-      Layout.bottomMargin: saveButton.height
     }
   }
 
