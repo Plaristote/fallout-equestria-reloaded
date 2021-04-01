@@ -39,19 +39,21 @@ Item {
 
   onVisibleChanged: objectNames = itemLibrary.getObjectList()
 
-  Dialog {
+  TextPromptDialog {
     id: newObjectDialog
     title: "New item"
-    modal: true
     anchors.centerIn: parent
-    standardButtons: Dialog.Ok | Dialog.Cancel
-    Row {
-      Label { text: "name" }
-      TextField { id: newObjectName }
+    function validate() {
+      if (objectNames.indexOf(value) >= 0)
+        validationError = value + " already exists.";
+      else
+        validationError = "";
+      return validationError === "";
     }
+
     onAccepted: {
-      objectNames.push(newObjectName.text);
-      currentName = newObjectName.text;
+      objectNames.push(value);
+      currentName = value;
       objectNamesChanged();
     }
   }
@@ -201,18 +203,13 @@ Item {
     onClicked: root.save()
   }
 
-  Dialog {
+  TextPromptDialog {
     id: newScriptDialog
-    standardButtons: Dialog.Ok | Dialog.Cancel
-    modal: true
+    title: "Adding an item script"
     anchors.centerIn: parent
-    Row {
-      Label { text: "filename" }
-      TextField { id: filenameInput }
-    }
     onAccepted: {
-      scriptList.push(filenameInput.text);
-      currentObject.script = filenameInput.text;
+      scriptList.push(value);
+      currentObject.script = value;
       scriptListChanged();
       currentObjectChanged();
     }

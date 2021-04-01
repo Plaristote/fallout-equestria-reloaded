@@ -16,6 +16,8 @@ UiStyle.CustomDialog {
   }
 
   onOpened: {
+    value = "";
+    validationError = "";
     inputField.forceActiveFocus();
   }
 

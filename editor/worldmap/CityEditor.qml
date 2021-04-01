@@ -21,19 +21,12 @@ WorldmapListEditor {
     }
   }
 
-  addDialog: Dialog {
+  addDialog: TextPromptDialog {
     title: "Add city"
-    modal: true
     anchors.centerIn: parent.parent.parent.parent
-    standardButtons: Dialog.Ok | Dialog.Cancel
-    GridLayout {
-      columns: 2
-      Label { text: "Name" }
-      TextField { id: newCityNameInput; text: "" }
-    }
     onAccepted: {
-      worldMap.createCity(newCityNameInput.text);
-      selectedName = newCityNameInput.text;
+      worldMap.createCity(value);
+      selectedName = value;
     }
   }
 }

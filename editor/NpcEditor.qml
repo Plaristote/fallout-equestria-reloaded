@@ -14,20 +14,18 @@ Item {
     characterSheetView.sourceComponent = characterSheetEditor;
   }
 
-  Dialog {
+  TextPromptDialog {
     id: newCharacterDialog
     title: "New character"
-    modal: true
     anchors.centerIn: parent
-    standardButtons: Dialog.Ok | Dialog.Cancel
-    Row {
-      Label { text: "name" }
-      TextField { id: newCharacterName }
+    function validate() {
+      validationError = list.indexOf(value + ".json") >= 0 ? `${value} already exists.` : "";
+      return validationError === "";
     }
     onAccepted: {
-      list.push(newCharacterName.text + ".json");
+      list.push(value + ".json");
       listChanged();
-      currentCharacter = newCharacterName.text + ".json";
+      currentCharacter = value + ".json";
     }
   }
 

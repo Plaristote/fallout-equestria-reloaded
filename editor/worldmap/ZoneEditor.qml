@@ -33,19 +33,12 @@ WorldmapListEditor {
     }
   }
 
-  addDialog:  Dialog {
+  addDialog:  TextPromptDialog {
     title: "Add zone"
-    modal: true
     anchors.centerIn: parent.parent.parent.parent
-    standardButtons: Dialog.Ok | Dialog.Cancel
-    GridLayout {
-      columns: 2
-      Label { text: "Name" }
-      TextField { id: newCityNameInput; text: "" }
-    }
     onAccepted: {
-      worldMap.createZone(newCityNameInput.text);
-      selectedName = newCityNameInput.text;
+      worldMap.createZone(value);
+      selectedName = value;
     }
   }
 }

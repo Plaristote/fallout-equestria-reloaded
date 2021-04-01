@@ -219,5 +219,6 @@
         <file>game/hud/InteractionMenu.qml</file>
         <file>ui/TextPromptDialog.qml</file>
         <file>assets/ui/CustomDialog.qml</file>
+        <file>ui/ConfirmDialog.qml</file>
     </qresource>
 </RCC>

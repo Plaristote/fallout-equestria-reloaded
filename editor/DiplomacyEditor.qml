@@ -31,32 +31,28 @@ Item {
     }
   }
 
-  Dialog {
+  TextPromptDialog {
     id: newFactionDialog
     title: "New faction"
-    modal: true
     anchors.centerIn: parent
-    standardButtons: Dialog.Ok | Dialog.Cancel
-    Row {
-      Label { text: "name" }
-      TextField { id: newFactionNameInput }
-    }
     onAccepted: {
       dataEngine.registerFaction(newFactionNameInput.text);
     }
   }
 
-  Dialog {
+  UiStyle.CustomDialog {
     id: newEnemyDialog
     title: "Add enemy"
     modal: true
     anchors.centerIn: parent
     standardButtons: Dialog.Ok | Dialog.Cancel
-    Row {
-      Label { text: "name" }
-      ComboBox {
+    RowLayout {
+      anchors.fill: parent
+      Label { text: "Name"; color: "white"; font.family: application.titleFontName }
+      SelectBox {
         id: newEnemySelect
         model: factionSelect.model
+        Layout.fillWidth: true
       }
     }
     onAccepted: {

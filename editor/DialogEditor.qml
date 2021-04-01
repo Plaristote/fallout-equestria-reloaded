@@ -51,65 +51,37 @@ Item {
       dialogStateEditor.sourceComponent = null
   }
 
-  Dialog {
+  TextPromptDialog {
     id: addDialogDialog
     title: "New dialog"
-    modal: true
     anchors.centerIn: parent
-    standardButtons: Dialog.Ok | Dialog.Cancel
-    Row {
-      Label { text: "name" }
-      TextField { id: newDialogNameInput }
-    }
     onAccepted: {
-      scriptController.newDialog(newDialogNameInput.text);
+      scriptController.newDialog(value);
       dialogSelect.model = scriptController.getDialogs();
-      newDialogNameInput.text = "";
     }
   }
 
-  Dialog {
+  TextPromptDialog {
     id: addAnswerDialog
     title: "New answer"
-    modal: true
     anchors.centerIn: parent
-    standardButtons: Dialog.Ok | Dialog.Cancel
-    Row {
-      Label { text: "name" }
-      TextField { id: newAnswerNameInput }
-    }
-    onAccepted: {
-      controller.newAnswer(newAnswerNameInput.text);
-      newAnswerNameInput.text = "";
-    }
+    onAccepted: controller.newAnswer(value);
   }
 
-  Dialog {
+  TextPromptDialog {
     id: newStateDialog
     title: "New dialog State"
-    modal: true
     anchors.centerIn: parent
-    standardButtons: Dialog.Ok | Dialog.Cancel
-    Row {
-      Label { text: "name" }
-      TextField { id: newStateNameInput }
-    }
     onAccepted: {
-      controller.newState(newStateNameInput.text);
-      currentState = newStateNameInput.text;
-      newStateNameInput.text = "";
+      controller.newState(value);
+      currentState = value;
     }
   }
 
-  Dialog {
+  ConfirmDialog {
     id: removeStateDialog
-    title: "Remove dialog State"
-    modal: true
+    text: "Remove dialog State"
     anchors.centerIn: parent
-    standardButtons: Dialog.Ok | Dialog.Cancel
-    Row {
-      Label { text: i18n.t("are-you-sure") }
-    }
     onAccepted: {
       controller.removeState();
       currentState = "";
@@ -117,21 +89,14 @@ Item {
     }
   }
 
-  Dialog {
+  ConfirmDialog {
     id: removeAnswerDialog
     title: "Remove answer"
-    modal: true
     anchors.centerIn: parent
-    standardButtons: Dialog.Ok | Dialog.Cancel
-    Row {
-      Label { text: i18n.t("are-you-sure") }
-    }
-    onAccepted: {
-      controller.removeAnswer();
-    }
+    onAccepted: controller.removeAnswer()
   }
 
-  Dialog {
+  UiStyle.CustomDialog {
     id: translateStateDialog
     title: "Translate State"
     modal: true
@@ -151,7 +116,7 @@ Item {
     }
   }
 
-  Dialog {
+  UiStyle.CustomDialog {
     id: translateAnswerDialog
     title: "Translate answer"
     modal: true
