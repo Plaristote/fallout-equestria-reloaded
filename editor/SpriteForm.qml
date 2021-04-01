@@ -156,6 +156,14 @@ Pane {
     id: imageData
     source: assetPath + "sprites/" + sourceInput.text
     visible: false
+    onSourceSizeChanged: {
+      if (sourceSize.width === 0 || sourceSize.height === 0)
+        return ;
+      if (spriteAnimation.clippedRect.height === 0 && spriteAnimation.clippedRect.width === 0) {
+        widthInput.text  = sourceSize.width;
+        heightInput.text = sourceSize.height;
+      }
+    }
   }
 
   Rectangle {

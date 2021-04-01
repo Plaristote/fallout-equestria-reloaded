@@ -114,6 +114,21 @@ const QImage& AnimationLibrary::getImage(const QString& source) const
   return *iterator;
 }
 
+static SpriteAnimation makeDefaultSpriteAnimation(const QString& animation, const QString& defaultSource)
+{
+  SpriteAnimation object;
+
+  object.name = animation;
+  if (defaultSource.length() > 0)
+    object.source = ASSETS_PATH + "sprites/" + defaultSource;
+  object.repeat = false;
+  object.frameCount = 1;
+  object.frameInterval = 0;
+  object.firstFramePosition = QPoint(0, 0);
+  object.clippedRect = QRect(0, 0, 0, 0);
+  return object;
+}
+
 SpriteAnimation AnimationLibrary::getAnimation(const QString &group, const QString &animation) const
 {
   SpriteAnimation object;
@@ -144,6 +159,8 @@ SpriteAnimation AnimationLibrary::getAnimation(const QString &group, const QStri
     object.clippedRect.setWidth(animationData["width"].toInt());
     object.clippedRect.setHeight(animationData["height"].toInt());
   }
+  else
+    return makeDefaultSpriteAnimation(animation, defaultSource);
   return object;
 }
 
