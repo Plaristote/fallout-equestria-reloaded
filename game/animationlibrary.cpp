@@ -4,8 +4,21 @@
 #include <QJsonDocument>
 #include <QDebug>
 
-void QmlSpriteAnimation::initialize(const QString &group, const QString &name)
+QmlSpriteAnimation::QmlSpriteAnimation(QObject* parent) : QObject(parent)
 {
+  connect(this, &QmlSpriteAnimation::frameCountChanged, this, &QmlSpriteAnimation::animationChanged);
+  connect(this, &QmlSpriteAnimation::frameIntervalChanged, this, &QmlSpriteAnimation::animationChanged);
+  connect(this, &QmlSpriteAnimation::firstFramePositionChanged, this, &QmlSpriteAnimation::animationChanged);
+  connect(this, &QmlSpriteAnimation::sourceChanged, this, &QmlSpriteAnimation::animationChanged);
+  connect(this, &QmlSpriteAnimation::nameChanged, this, &QmlSpriteAnimation::animationChanged);
+  connect(this, &QmlSpriteAnimation::repeatChanged, this, &QmlSpriteAnimation::animationChanged);
+  connect(this, &QmlSpriteAnimation::clippedRectChanged, this, &QmlSpriteAnimation::animationChanged);
+}
+
+void QmlSpriteAnimation::initialize(const QString& group, const QString& name)
+{
+  this->group = group;
+  this->oldName = name;
   SpriteAnimation::operator=(AnimationLibrary::get()->getAnimation(group, name));
   emit frameIntervalChanged();
   emit frameCountChanged();
@@ -16,7 +29,26 @@ void QmlSpriteAnimation::initialize(const QString &group, const QString &name)
   emit clippedRectChanged();
 }
 
+bool QmlSpriteAnimation::hasChanged() const
+{
+  const SpriteAnimation& self = static_cast<const SpriteAnimation&>(*this);
+  const SpriteAnimation other = AnimationLibrary::get()->getAnimation(group, oldName);
+
+  return self.name                     != other.name ||
+         self.repeat                   != other.repeat ||
+         toRelativeSource(self.source) != toRelativeSource(other.source) ||
+         self.frameInterval            != other.frameInterval ||
+         self.frameCount               != other.frameCount ||
+         self.firstFramePosition       != other.firstFramePosition ||
+         self.clippedRect.size()       != other.clippedRect.size();
+}
+
 QString QmlSpriteAnimation::getRelativeSource() const
+{
+  return toRelativeSource(source);
+}
+
+QString QmlSpriteAnimation::toRelativeSource(const QString& source)
 {
   return QString(source).replace(ASSETS_PATH + "sprites/", "");
 }
@@ -97,9 +129,11 @@ SpriteAnimation AnimationLibrary::getAnimation(const QString &group, const QStri
   }
   if (animationData.isObject())
   {
+    QString relativeSource = animationData["source"].toString();
+
     object.name          = animation;
     object.source        = ASSETS_PATH + "sprites/";
-    object.source       += animationData["source"].toString(defaultSource);
+    object.source       += relativeSource.length() > 0 ? relativeSource : defaultSource;
     object.repeat        = animationData["repeat"].toBool(false);
     object.frameCount    = animationData["frameCount"].toInt(1);
     object.frameInterval = animationData["frameInterval"].toInt(100);
@@ -113,12 +147,32 @@ SpriteAnimation AnimationLibrary::getAnimation(const QString &group, const QStri
   return object;
 }
 
+QString AnimationLibrary::getDefaultSource(const QString& group) const
+{
+  auto groupData = data[group].toObject();
+
+  return groupData["defaultSource"].toString();
+}
+
+void AnimationLibrary::setDefaultSource(const QString& group, const QString& defaultSource)
+{
+  auto groupData = data[group].toObject();
+
+  groupData.insert("defaultSource", defaultSource);
+  data[group] = groupData;
+}
+
 void AnimationLibrary::setAnimation(const QString& group, const QString& name, QmlSpriteAnimation* animation)
 {
   auto groupData = data[group].toObject();
   QJsonObject animationData;
+  QString     defaultSource = groupData["defaultSource"].toString();
+  QString     source = animation->getRelativeSource();
 
-  animationData["source"] = animation->getRelativeSource();
+  if (source == defaultSource || source.length() == 0)
+    animationData.remove("source");
+  else
+    animationData["source"] = source;
   animationData["repeat"] = animation->repeat;
   animationData["frameCount"] = animation->frameCount;
   animationData["frameInterval"] = animation->frameInterval;

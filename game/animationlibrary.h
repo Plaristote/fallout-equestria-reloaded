@@ -30,13 +30,14 @@ class QmlSpriteAnimation : public QObject, public SpriteAnimation
   Q_PROPERTY(int frameCount MEMBER frameCount NOTIFY frameCountChanged)
   Q_PROPERTY(int frameInterval MEMBER frameInterval NOTIFY frameIntervalChanged)
   Q_PROPERTY(bool repeat MEMBER repeat NOTIFY repeatChanged)
+  Q_PROPERTY(bool hasChanged READ hasChanged NOTIFY animationChanged)
 public:
-  QmlSpriteAnimation(QObject* parent = nullptr) : QObject(parent)
-  {
-  }
+  QmlSpriteAnimation(QObject* parent = nullptr);
 
   Q_INVOKABLE void initialize(const QString& group, const QString& name);
   QString getRelativeSource() const;
+  static QString toRelativeSource(const QString&);
+  bool hasChanged() const;
 
 signals:
   void frameIntervalChanged();
@@ -46,8 +47,10 @@ signals:
   void nameChanged();
   void repeatChanged();
   void clippedRectChanged();
+  void animationChanged();
 
 private:
+  QString group, oldName;
 };
 
 class AnimationLibrary : public QObject
@@ -69,6 +72,8 @@ public:
   Q_INVOKABLE QStringList getAnimationList(const QString& group) const;
 
   // Editor
+  Q_INVOKABLE QString getDefaultSource(const QString& animationGroup) const;
+  Q_INVOKABLE void    setDefaultSource(const QString& animationGroup, const QString& value);
   Q_INVOKABLE void setAnimation(const QString& group, const QString& name, QmlSpriteAnimation*);
   Q_INVOKABLE void save();
   // END Editor

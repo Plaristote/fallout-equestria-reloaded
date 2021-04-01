@@ -1,6 +1,7 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
+import QtQuick.Dialogs 1.2 as BiDialog
 import "qrc:/assets/ui" as UiStyle
 import "../ui"
 import Game 1.0
@@ -13,7 +14,9 @@ Item {
   property alias animationName: animationSelect.currentName
 
   onAnimationGroupChanged: {
-    animationNames = animationLibrary.getAnimationList(animationGroup)
+    animationNames = animationLibrary.getAnimationList(animationGroup);
+    defaultSourceInput.text = animationLibrary.getDefaultSource(animationGroup);
+    animationName = "";
     console.log("animation names:", animationNames)
   }
 
@@ -67,6 +70,20 @@ Item {
     }
   }
 
+  BiDialog.FileDialog {
+    property var target
+    id: filePicker
+    title: "Please chose a file"
+    folder: rootPath + "assets/sprites"
+    nameFilters: ["Image files (*.jpg, *.png)"]
+
+    onAccepted: {
+      const path = filePicker.fileUrl.toString().replace(/.*\/assets\/sprites\//, "")
+      console.log("File selected", path);
+      target.text = path;
+    }
+  }
+
   RowLayout {
     anchors.fill: parent
 
@@ -76,12 +93,46 @@ Item {
       model: animationGroups
       onNewClicked: newGroupDialog.open()
     }
-    // Animation select
-    EditorSelectPanel {
-      id: animationSelect
-      model: animationNames
-      onNewClicked: newSpriteDialog.open()
+
+    ColumnLayout {
+      spacing: 5
+      Layout.preferredWidth: 200
+      Layout.fillHeight: true
+
+      Pane {
+        Layout.preferredWidth: 200
+        background: UiStyle.TerminalPane {}
+        ColumnLayout {
+          width: parent.width
+          TerminalLabel {
+            text: "Default source"
+          }
+          RowLayout {
+            TerminalField {
+              id: defaultSourceInput
+              onTextChanged: animationLibrary.setDefaultSource(animationGroup, text)
+              readOnly: true
+              Layout.fillWidth: true
+            }
+            TerminalButton {
+              text: "Pick"
+              onClicked: {
+                filePicker.target = defaultSourceInput
+                filePicker.open()
+              }
+            }
+          }
+        }
+      }
+
+      // Animation select
+      EditorSelectPanel {
+        id: animationSelect
+        model: animationNames
+        onNewClicked: newSpriteDialog.open()
+      }
     }
+
     // Animation Editor
     Pane {
       id: animationEditor
@@ -92,16 +143,11 @@ Item {
       Layout.bottomMargin: formControls.height
 
       function save() {
-        spriteAnimation.name = nameInput.text;
-        spriteAnimation.source = sourceInput.text;
-        spriteAnimation.offset = Qt.point(parseInt(xInput.text), parseInt(yInput.text));
-        spriteAnimation.clippedRect = Qt.rect(spriteAnimation.offset.x, spriteAnimation.offset.y, parseInt(widthInput.text), parseInt(heightInput.text));
-        spriteAnimation.frameCount = parseInt(frameCountInput.text);
-        spriteAnimation.frameInterval = parseInt(intervalInput.text);
-        spriteAnimation.repeat = repeatInput.checked;
+        const newName = spriteAnimation.name;
         animationLibrary.setAnimation(animationGroup, animationName, spriteAnimation);
         animationLibrary.save();
         root.animationGroupChanged();
+        animationName = newName;
       }
 
       Flickable {
@@ -112,11 +158,10 @@ Item {
           bottom: animationPreviewBis.top;
         }
 
-        Grid {
+        GridLayout {
           property int col1Width: 120
           id: animationForm
           columns: 2
-          spacing: 5
           width: parent.width
 
           TerminalLabel {
@@ -126,15 +171,31 @@ Item {
           TerminalField {
             id: nameInput
             text: spriteAnimation.name
+            Layout.fillWidth: true
+            onTextChanged: spriteAnimation.name = text;
           }
 
           TerminalLabel {
             text: "source"
           }
 
-          TerminalField {
-            id: sourceInput
-            text: spriteAnimation.relativeSource
+          RowLayout {
+            Layout.fillWidth: true
+
+            TerminalField {
+              id: sourceInput
+              text: spriteAnimation.relativeSource
+              Layout.fillWidth: true
+              onTextChanged: spriteAnimation.source = text;
+            }
+
+            TerminalButton {
+              text: "Pick"
+              onClicked: {
+                filePicker.target = sourceInput;
+                filePicker.open();
+              }
+            }
           }
 
           TerminalLabel {
@@ -143,8 +204,14 @@ Item {
 
           Row {
             spacing: 5
-            TerminalField { id: xInput; text: spriteAnimation.offset.x }
-            TerminalField { id: yInput; text: spriteAnimation.offset.y }
+            TerminalField {
+              id: xInput; text: spriteAnimation.offset.x; width: 100
+              onTextChanged: spriteAnimation.offset = Qt.point(xInput.text, spriteAnimation.offset.y)
+            }
+            TerminalField {
+              id: yInput; text: spriteAnimation.offset.y; width: 100
+              onTextChanged: spriteAnimation.offset = Qt.point(spriteAnimation.offset.x, yInput.text)
+            }
           }
 
           TerminalLabel {
@@ -153,8 +220,15 @@ Item {
 
           Row {
             spacing: 5
-            TerminalField { id: widthInput; text: spriteAnimation.clippedRect.width }
-            TerminalField { id: heightInput; text: spriteAnimation.clippedRect.height }
+            TerminalField {
+              id: widthInput;  text: spriteAnimation.clippedRect.width;  width: 100
+              onTextChanged: spriteAnimation.clippedRect = Qt.rect(xInput.text, yInput.text, widthInput.text, spriteAnimation.clippedRect.height)
+
+            }
+            TerminalField {
+              id: heightInput; text: spriteAnimation.clippedRect.height; width: 100
+              onTextChanged: spriteAnimation.clippedRect = Qt.rect(xInput.text, yInput.text, spriteAnimation.clippedRect.width, heightInput.text)
+            }
           }
 
           TerminalLabel {
@@ -164,6 +238,8 @@ Item {
           TerminalField {
             id: frameCountInput
             text: spriteAnimation.frameCount
+            Layout.preferredWidth: 205
+            onTextChanged: spriteAnimation.frameCount = parseInt(text)
           }
 
           TerminalLabel {
@@ -173,6 +249,8 @@ Item {
           TerminalField {
             id: intervalInput
             text: spriteAnimation.frameInterval
+            onTextChanged: spriteAnimation.frameInterval = parseInt(text)
+            Layout.preferredWidth: 205
           }
 
           TerminalLabel {
@@ -182,6 +260,7 @@ Item {
           TerminalCheckBox {
             id: repeatInput
             checked: spriteAnimation.repeat
+            onCheckedChanged: spriteAnimation.repeat = checked
           }
         }
       } // END form flickable
@@ -247,6 +326,7 @@ Item {
     anchors.bottom: parent.bottom
     anchors.right: parent.right
     text: "Save"
+    enabled: animationName && spriteAnimation.hasChanged
     onClicked: {
       console.log("save clicked");
       animationEditor.save();
