@@ -222,5 +222,6 @@
         <file>ui/ConfirmDialog.qml</file>
         <file>editor/SpriteForm.qml</file>
         <file>editor/SpriteGroup.qml</file>
+        <file>editor/ObjectForm.qml</file>
     </qresource>
 </RCC>
