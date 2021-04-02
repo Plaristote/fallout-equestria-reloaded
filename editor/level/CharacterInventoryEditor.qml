@@ -41,5 +41,4 @@ CharacterInventory {
     inventory: characterInventory.character.inventory
     selectedObject: characterInventory.selectedObject
   }
-
 }

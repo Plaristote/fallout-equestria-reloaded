@@ -13,12 +13,14 @@ UiStyle.CustomDialog {
   anchors.centerIn: parent
   standardButtons: Dialog.Ok | Dialog.Cancel
   GridLayout {
+    width: parent.width
     columns: 2
     CustomLabel { text: "How much" }
     CustomTextField {
       id: removeItemQuantityInput
       text: "1"
-      Layout.fillWidth: true }
+      Layout.fillWidth: true
+    }
   }
   onAccepted: {
     const itemType = selectedObject.objectName;

@@ -26,7 +26,7 @@ bool CharacterSight::hasSightFrom(const DynamicObject* other, QPoint pos)
 {
   auto* level = Game::get()->getLevel();
 
-  if (level)
+  if (level && other)
   {
     auto*  grid   = level->getGrid();
     QPoint target = other->getPosition();
