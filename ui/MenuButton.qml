@@ -3,6 +3,8 @@ import QtQuick.Controls 2.15
 import "qrc:/assets/ui" as UiStyle
 
 Button {
+  implicitWidth: 248
+  implicitHeight: 48
   font.bold: true
   font.family: application.titleFontName
   font.pointSize: 19

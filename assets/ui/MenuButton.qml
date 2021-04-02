@@ -1,11 +1,21 @@
 import QtQuick 2.15
 import QtGraphicalEffects 1.15
 
-Image {
+BorderImage {
   property bool pressed: parent.down
-  source: "qrc:/assets/ui/menu-button.png"
-  sourceClipRect: !pressed ? Qt.rect(0, 0, 248, 48) : Qt.rect(0, 49, 248, 48)
-  fillMode: Image.Stretch
+  property bool active: parent.activeFocus
+  property string mode: pressed ? "pressed" : (active ? "active" : "normal")
+  source: `qrc:/assets/ui/menuButton/${mode}.png`
+
+  border {
+    top: 8
+    bottom: 8
+    left: 51
+    right: 22
+  }
+
+  horizontalTileMode: BorderImage.Repeat
+  verticalTileMode: BorderImage.Repeat
 
   ColorOverlay {
     anchors.fill: parent

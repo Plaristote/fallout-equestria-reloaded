@@ -3,7 +3,9 @@
         <file>main.qml</file>
         <file>assets/backgrounds/default.jpg</file>
         <file>MainMenu.qml</file>
-        <file>assets/ui/menu-button.png</file>
+        <file>assets/ui/menuButton/active.png</file>
+        <file>assets/ui/menuButton/normal.png</file>
+        <file>assets/ui/menuButton/pressed.png</file>
         <file>assets/ui/MenuButton.qml</file>
         <file>NewGame.qml</file>
         <file>ui/CharacterSheet.qml</file>
