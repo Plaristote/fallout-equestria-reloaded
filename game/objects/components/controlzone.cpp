@@ -34,6 +34,25 @@ void ControlZoneComponent::removeControlZone()
   }
 }
 
+QJSValue ControlZoneComponent::getControlZoneOccupants()
+{
+  auto*    game = Game::get();
+  auto&    scriptEngine = game->getScriptEngine();
+  QJSValue result = scriptEngine.newArray();
+
+  if (controlZone)
+  {
+    for (const QPoint& position : controlZone->getPositions())
+    {
+      QJSValue concat = result.property("concat");
+      QJSValue objectArray = game->getLevel()->getDynamicObjectsAt(position.x(), position.y());
+
+      result = concat.callWithInstance(result, QJSValueList() << objectArray);
+    }
+  }
+  return result;
+}
+
 void ControlZoneComponent::listenControlZone(TileZone* zone)
 {
   connect(zone, &TileZone::enteredZone, this, &ControlZoneComponent::onZoneEntered);

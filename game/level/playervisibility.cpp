@@ -31,7 +31,7 @@ void PlayerVisibilityComponent::refreshHiddenObjectsDetection()
   float      radius = player->getFieldOfView()->GetRadius();
   const auto hiddenObjects = findDynamicObjects([player, radius](DynamicObject& candidate) -> bool
   {
-    return candidate.isHidden() && !candidate.isCharacter() && player->getDistance(&candidate) <= radius;
+    return candidate.isHidden() && candidate.isSneaking() && !candidate.isCharacter() && player->getDistance(&candidate) <= radius;
   });
   for (auto* hiddenObject : hiddenObjects)
     hiddenObject->tryDetection(player);
