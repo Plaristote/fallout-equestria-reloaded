@@ -10,6 +10,20 @@
   <link href="css/blog-home.css" rel="stylesheet">
   
   <style>
+    .folder-list-table {
+      width: 100%;
+    }
+    .folder-list-table tr {
+      border: 1px lightgray solid;
+    }
+    .folder-list-table td {
+      padding: 2px;
+    }
+    .folder-list-table td:first-of-type {
+      font-family: monospace;
+      padding-right: 10px;
+    }  
+  
     .end-chapter { height: 50px; }
     .mono-span { font-family: monospace; display: inline-block; background-color: lightgray; padding: 1px; }
     .code {
@@ -130,22 +144,6 @@ You will need:
             <p class="card-text">
               Before writing any scripts, let's have a look at the folder structure you'll be working with. There are quite a lot of places for various types of files, so just remember this is here and use it as a reference.
               
-              <style>
-              .folder-list-table {
-                width: 100%;
-              }
-              .folder-list-table tr {
-                border: 1px lightgray solid;
-              }
-              .folder-list-table td {
-                padding: 2px;
-              }
-              .folder-list-table td:first-of-type {
-                font-family: monospace;
-                padding-right: 10px;
-              }
-              </style>
-
               <table class="folder-list-table">
                 <tr>
                   <th>Path</th>
@@ -504,6 +502,7 @@ export function create(model) {
   
   onTalkTo() {
     level.addTextBubble(this.model, "Hello world !", 3000, "lightgreen");
+    return true;
   }
 }</code></pre>
 
@@ -515,6 +514,10 @@ export function create(model) {
                 <li>The third parameter is the duration the bubble will remain visible, expressed in milliseconds</li>
                 <li>The last parameter is optional, and defines the text color. If none is provided, the text color will be white.</li>
               </ul>
+            </p>
+
+            <p class="card-text">
+              Our method also returns <span class="mono-span">true</span>: this is optional, but ensures that the game engine's default behaviour for the targeted interaction won't run.
             </p>
             
             <h4 class="card-title" id="c2-5">2.5 Statistics checks and Inspection</h4>
@@ -619,7 +622,7 @@ export function create(model) {
             </p>
             
             <p class="card-text">
-            Finally, we call <span class="mono-span">actions.start()</span> to trigger the action queue: it will then execute each actions consecutively, until one of them fails, or until the queue is empty. In both cases, your may implement a <span class="mono-span">onActionQueueCompleted</span> method will be called, which will get called whenever the action queue is interruped or completed.
+            Finally, we call <span class="mono-span">actions.start()</span> to trigger the action queue: it will then execute each actions consecutively, until one of them fails, or until the queue is empty. In both cases, your ma implement a <span class="mono-span">onActionQueueCompleted</span> method, and it will get called whenever the action queue is interruped or completed.
             </p>
             
             <div class="end-chapter"></div>
@@ -801,7 +804,61 @@ export function create(model) {
             <video class="card-img-top" src="videos/06-npc-fleeing.webm" autoplay loop controls muted>
             </video>
             
-            <h4 class="card-title" id="c2-8">2.8 Inventory and Items</h4>
+            <div class="end-chapter"></div>
+            
+            <h4 class="card-title" id="c2-8">2.8 Data storage</h4>
+            
+            <p class="card-text">
+              Often, you will need to save data that will remain accessible as the player exits a level, save and load a game, and so on...<br/>
+              And the thing is, while properties on game objects<i>*</i> are always saved by the game engine, the properties that you set on your scripts aren't saved between multiple loads of your script.
+            </p>
+            
+            <p class="card-text card-hint">
+              <i>Game objects</i> are the native objects provided by the game engine itself. The parameter received by in the <span class="mono-span">export function create(model)</span> function is an example of game object.
+            </p>
+            
+            <p class="card-text">
+              To answer all your data saving needs, all game objects come with a data store, meaning that you can save data globally, using the <span class="mono-span">game</span> global property. You can also save data on a specific level, using the <span class="mono-span">level</span> global property. And you can also save data on specific characters, items, objects of all kinds.
+            </p>
+            
+            <p class="card-text">
+              Using the data storage features is pretty easy: there are only three method names you need to memorize. We will present the three of those in the following snippet:
+            </p>
+ 
+<div class="code-header">scripts/pnjs/myNpc.mjs</div>
+<pre class="code"><code>import {CharacterBehaviour} from "./character.mjs";
+
+const textBubbles = [
+  "first message",
+  "second message",
+  "third message"
+];
+
+class Npc extends CharacterBehaviour {
+  onTalkTo() {
+    var value = 0;
+  
+    if (this.model.hasVariable("myVariable"))
+      value = this.model.getVariable("myVariable");
+    if (value < textBubbles.length) {
+      level.addTextBubble(this.model, textBubbles[value], 5000);
+      return true;
+    }
+    return false;
+  }
+}
+
+export function create(model) {
+  return new Npc(model);
+}</code></pre>
+
+            <p class="card-text">
+              With that new <span class="mono-śpan">onTalkTo</span> method, we ensure that our character will consistantly react to talk-to interactions by successively speaking each line in the <span class="mono-span">textBubbles</span> array.
+            </p>
+            
+            <p class="card-text">
+              You could achieve the same behaviour with JavaScript properties... but it wouldn't work anymore as a player leaves and rejoin the level your NPC is in, or if the player saves and loads the game. Thanks to the <span class="mono-span">hasVariable</span>, <span class="mono-span">getVariable</span> and <span class="mono-span">setVariable</span> methods, the state of our NPC will be preserved.
+            </p>
 
           </div>
         </div>
@@ -955,9 +1012,25 @@ export function create(dialog) {
             <p class="card-text">
               Scripting dialogs mostly amounts to creating callbacks that you then configure for each state and answers in the Dialog Editor. Here's a list of callbacks and what you can do with those:
               
-              <table>
+              <style>
+              .dialog-hook-table {
+                width: 100%;
+              }
+              
+              .dialog-hook-table tr {
+                border: 1px solid gray;
+              }
+              
+              .dialog-hook-table td {
+                padding: 5px;
+                vertical-align: top;
+                border: 1px solid gray;
+              }
+              </style>
+              
+              <table class="dialog-hook-table">
                 <tr>
-                  <th>Hook</th>
+                  <th>Callback</th>
                   <th>Return value</th>
                   <th>Description</th>
                 </tr>
@@ -990,8 +1063,263 @@ export function create(dialog) {
               </table>
             </p>
 
+            <div class="end-chapter"></div>
             
-            <h4 class="card-title" id="c3-6">3.5 Setting the mood</h4>
+            <h4 class="card-title" id="c3-5">3.5 Setting the mood</h4>
+            
+            <p class="card-text">
+              Dialogs can also have an ambiance and a specific mood. The ambiance is the background displayed behind the character's face, while the mood determines how the face is rendered.
+            </p>
+            
+            <p class="card-text">
+              Available ambiances are stored in <span class="mono-span">assets/faces/backgrounds</span>, and you may also add your own, using the PNG format.
+            </p>
+            
+            <p class="card-text">
+              The following snippet customizes our dialog to use the <i>wasteland</i> ambiance:
+            </p>
+
+            <div class="code-header">scripts/dialogs/myDialog.mjs</div>
+<pre class="code javacsript"><code>class Dialog {
+  constructor(dialog) {
+    this.dialog = dialog;
+    this.dialog.ambiance = "wasteland";
+  }
+}
+
+export function create(dialog) {
+  return new Dialog(dialog);
+}</code></pre>
+
+            <p class="card-text">
+              Moods will typically change in your <i>state trigger callbacks</i>, but for the purpose of the exemple, we'll also set a mood for our NPC on dialog creation in the following code:
+            </p>
+            
+            <div class="code-header">scripts/dialogs/myDialog.mjs</div>
+<pre class="code javacsript"><code>class Dialog {
+  constructor(dialog) {
+    this.dialog = dialog;
+    this.dialog.ambiance = "wasteland";
+    this.dialog.mood = "smile";
+  }
+}
+
+export function create(dialog) {
+  return new Dialog(dialog);
+}</code></pre>
+
+            <p class="card-text">
+              Available moods are: <i>angry, cocky, neutral, sad, smile</i>.
+            </p>
+            
+          </div>
+        </div>
+        
+        <h2 class="my-4" id="c4">
+          4. Game Objects
+        </h2>
+        <div class="card mb-4">
+          <div class="card-body">
+            <h4 class="card-title" id="c4-1">4.1 Introduction</h4>
+          
+            <p class="card-text">
+              Game Objects are the objects populating the world: characters, doors, items, and anything that the player can interact with. All of them can be controlled by a script, and they all share a set of tools to help you program their behaviour:
+            </p>
+            
+            <table class="dialog-hook-table">
+              <tr>
+                <td>Sprite</td>
+                <td>The visual representation of a game object on the tilemap.</td>
+              </tr>
+              <tr>
+                <td>Script</td>
+                <td>Scripts are attached to their game objects, and can be interacted with by other scripts.</td>
+              </tr>
+              <tr>
+                <td>Detectability</td>
+                <td>By default, objects are visible. But they can be hidden, and revealed through script or detection.</td>
+              </tr>
+              <tr>
+                <td>DataStore</td>
+                <td>Persistent data are written in DataStore, as seen in <a href="#c2-8">section 2.8</a>.</td>
+              </tr>
+              <tr>
+                <td>ControlZone</td>
+                <td>Objects can optionally feature a control zone, defined in the Game Editor. Control zones can signal the script when characters enter the zone. They can also block or release access to the zone.</td>
+              </tr>
+              <tr>
+                <td>TaskManager</td>
+                <td>Allows you to schedule calls to your scripts. It is based on game-time, rather than real-time.<br/>The <span class="mono-span">game</span> and </span class="mono-span">level</span> global objects also feature a TaskManager, and we've experimented with it in section <a href="#c1-4">1.4</a> and <a href="#c2-6">2.6</a>.</td>
+              </tr>
+            </table>
+            
+            <div class="end-chapter"></div>
+            
+            <h4 class="card-title" id="c4-2">4.2 Generic object</h4>
+            
+            <p class="card-text">
+              In our journey to discover game objects, we will start with the simplest of them all: we call it the DynamicObject, and it serves as a basis for all interactive objects.
+            </p>
+            
+            <h5 class="card-title" id="c4-2-1">4.2.1 Sprite and positionning</h5>
+
+            <p class="card-text">
+              Our first DynamicObject will be a pond of magical waste. We will use this example to learn how control zones work. Our first step will be to create a Sprite for our object. We will use the following picture to represent our puddle:
+            </p>
+            
+            <img src="pictures/acid.png" />
+            
+            <p class="card-text">
+              Download this file to your <span class="mono-span">assets/sprites</span> folder. Then, open up the Game Editor, go to the Sprite tab, and create our new sprite as following:
+            </p>
+            
+            <video class="card-img-top" src="videos/13-create-sprite.webm" autoplay loop controls muted></video>
+            
+            <p class="card-text">
+              Sprites are organized in groups. Objects usually use sprites from a single group. Here, we created a sprite group named <i>acid-puddle</i>, and added the <i>normal</i> animation to it.
+            </p>
+            
+            <p class="card-text">
+              Now that our sprite has been created, let's create a generic object in the level editor. When creating an object, we will select the "Other" category, to tell the level editor we're creating a custom DynamicObject.
+            </p>
+            
+            <p class="card-text">
+              Then, we will set a position on the map, and select the sprite we created. See the following video for reference:
+            </p>
+            
+            <video class="card-img-top" src="videos/14-create-acid-puddle-01.webm" autoplay loop controls muted></video>
+            
+            <p class="card-text">
+              Our acid puddle is now rendered in the level. But it's not exactly properly positionned. Characters are going to walk on that puddle, and we want it to be properly rendered below the characters, and not above.
+            </p>
+            
+            <p class="card-text">
+              For these kind of situations, we will use the Floating positionning mode, as opposed to the Tile-based one. A tile position will still be required, as it is necessary to determine render order. But we will set the position manually, as following:
+            </p>
+            
+            <video class="card-img-top" src="videos/15-create-acid-puddle-02.webm" autoplay loop controls muted></video>
+            
+            <p class="card-text card-hint">
+              Since the rendering order starts with objects from the top and right positions, you should ensure the tile position of your floating objects is set to the upper right tile overlapped by your object.
+            </p>
+            
+            <h5 class="card-title" id="c4-2-2">4.2.2 Control zones</h5>
+            
+            <p class="card-text">
+              Now that our puddle is rendered on screen, we will need a way for it to know when characters are moving around in it. Luckily, that is one of the feature of the control zones. We will now set our sights on creating a control zone, and interacting with it using a script.
+            </p>
+            
+            <p class="card-text">
+              Let's configure our control zone first. Create a control zone for the puddle, like this:
+            </p>
+            
+            <video class="card-img-top" src="videos/16-create-acid-puddle-03.webm" autoplay loop controls muted></video>
+            
+            <p class="card-text">
+              The first thing we did here was unchecking the <i>Blocks path</i> checkbox: by default, control zones block access to the zone cases. But we want characters to walk on our puddle, so our zone must be accessible.
+            </p>
+            
+            <p class="card-text">
+              Then, we toggled the zone edit mode: when the zone edit mode is enabled, clicking on tiles will add them to the control zone.
+            </p>
+            
+            <p class="card-text">
+              The next step is to create script that will put this control zone to use. Create the following script:
+            </p>
+            
+            <div class="code-header">scripts/behaviour/acidPuddle.mjs</div>
+            <pre class="code javascript"><code>class AcidPuddle {
+  constructor(model) {
+    this.model = model;
+  }
+  
+  initialize() {
+    this.model.blocksPath = false;
+  }
+}
+
+export function create(model) {
+  return new AcidPuddle(model);
+}</code></pre>
+
+            <p>
+              In the <span class="mono-span">initialize</span> method, we set <span class="mono-span">this.model.blocksPath</span> to false: by default, objects block access to the tile they are occupying. You can toggle that behaviour by setting this property.
+            </p>
+            
+            <p>
+              Now, let's say we want our acid puddle to inflict damage on characters as they enter or exit the zone: to achieve that, we can overload the methods <span class="mono-span">onZoneEntered</span> and <span class="mono-span">onZoneExited</span>:
+            </p>
+            
+            <pre class="code javascript"><code>class AcidPuddle {
+  constructor(model) {
+    this.model = model;
+  }
+  
+  initialize() {
+    this.model.blocksPath = false;
+  }
+ 
+  onZoneEntered(character) {
+    this.inflictBurn(character);
+  }
+   
+  onZoneExited(character) {
+    this.inflictBurn(character);
+  }
+   
+  inflictBurn(character) {
+    if (character == game.player)
+      game.appendToConsole("The acid is slowly disolving you !");
+    character.takeDamage(10);
+  }
+}
+
+export function create(model) {
+  return new AcidPuddle(model);
+}</pre></code>
+
+            <p class="card-text">
+              With that example, we know how to make our object react to characters entering or leaving its control zone. But what if we want to inflict damage over time to the characters that are already within the zone ?
+            </p>
+            
+            <p class="card-text">
+              We will update our acid puddle script to inflict damage to the residents of its control zone over time. For that, we will use the <span class="mono-span">getControlZoneOccupants</span> method from our game object, conjointly with its Task Manager:
+            </p>
+            
+            <pre class="code javascript"><code>class AcidPuddle {
+  constructor(model) {
+    this.model = model;
+  }
+  
+  initialize() {
+    this.model.blocksPath = false;
+    this.model.tasks.addTask("inflictBurn", 3500, 0);
+  }
+ 
+  inflictBurn() {
+    const characters = this.model.getControlZoneOccupants();
+
+    characters.forEach(character => character.takeDamage(10));
+  }
+}
+
+export function create(model) {
+  return new AcidPuddle(model);
+}</pre></code>
+
+            <p class="card-text">
+              Set the script for our object, as we previously did in <a href="#c2-3">section 2.3</a>: if you start a new game and walk on our puddle, you should take 10 points of damage every 3.5 seconds.
+            </p>
+            
+            <div class="end-chapter"></div>
+            
+            <h4 class="card-title" id="c4-3">4.3 Storage</h4>
+            
+            <p class="card-text">
+              Storage objects are 
+            </p>
+            
+            <div class="end-chapter"></div>
           </div>
         </div>
       </div>
@@ -1030,6 +1358,7 @@ export function create(dialog) {
               <a href="#c2-5">2.5 Statistics checks and Inspection</a>
               <a href="#c2-6">2.6 Movement and actions</a>
               <a href="#c2-7">2.7 Combat and Diplomacy</a>
+              <a href="#c2-8">2.8 Data storage</a>
             </div>
             <a href="#c3">3. Dialogs</a>
             <div class="chapter">
@@ -1039,10 +1368,15 @@ export function create(dialog) {
               <a href="#c3-4">3.4 Scripting dialogs</a>
               <a href="#c3-6">3.6 Setting the mood</a>
             </div>
-            <a href="#c4">4. Items</a>
+            <a href="#c4">4. Game Objects</a>
             <div class="chapter">
+              <a href="#c4-1">4.1 Introduction</a>
+              <a href="#c4-2">4.2 Generic object</a>
+              <a href="#c4-3">4.3 Storage</a>
+              <a href="#c4-4">4.4 Door</a>
+              <a href="#c4-5">4.5 Item</a>
             </div>
-            <a href="#c5">5. Quests</a>
+            <a href="#c4">4. Inventory, items and equipment</a>
             <div class="chapter">
             </div>
             <a href="#c6">6. Cutie Mark Acquisition Program</a>
@@ -1052,6 +1386,9 @@ export function create(dialog) {
               <a href="#c6-3">6.3 Scripting traits</a>
               <a href="#c6-4">6.4 Scripting perks</a>
               <a href="#c6-5">6.5 Scripting races</a>
+            </div>
+            <a href="#c5">7. Quests</a>
+            <div class="chapter">
             </div>
           </div>
         </div>
