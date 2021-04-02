@@ -1297,9 +1297,10 @@ export function create(model) {
   }
  
   inflictBurn() {
-    const characters = this.model.getControlZoneOccupants();
+    const occupants = this.model.getControlZoneOccupants();
+    const characters = occupants.filter(object => object.getObjectType() == "Character");
 
-    characters.forEach(character => character.takeDamage(10));
+    characters.forEach(character => character.takeDamage(10, null));
   }
 }
 
@@ -1308,8 +1309,67 @@ export function create(model) {
 }</pre></code>
 
             <p class="card-text">
+              The <span class="mono-span">getControlZoneOccupants</span> method returns a list of all the objects in a zone: but we only care about characters, which is why we filtered out the non-character objects using <span class="mono-span">getObjectType</span>.<br />
+              Then, we iterate over each character and inflict damage to them by calling <span class="mono-span">takeDamage</span>.
+            </p>
+            
+            <p class="card-text hint">
+              <span class="mono-span">takeDamage</span> takes two parameters: the first one for the amount of damage inflicted, while the second one is meant to indicate which other character inflicted the damage. When damage hasn't been inflicted by any character in particular, you can just pass <span class="mono-span">null</span> instead.
+            </p>
+
+            <p class="card-text">
               Set the script for our object, as we previously did in <a href="#c2-3">section 2.3</a>: if you start a new game and walk on our puddle, you should take 10 points of damage every 3.5 seconds.
             </p>
+            
+            <h5 class="card-title" id="c4-2-3">4.2.3 Detectability</h5>
+            
+            <p class="card-text">
+              Sometimes, objects should be concealed to the player. Concealed objects can be revealed through script, or through detection by the player. Detection is based on the player's Perception and the distance between the player and the object.
+            </p>
+            
+            <p class="card-text">
+              If we edit the <span class="mono-span">initialize</span> method of our script as below, we will make our object invisible to the player until we manually reveal it later. We do this by setting the <span class="mono-span">this.model.hidden</span> property:
+            </p>
+            
+<pre class="code"><code>
+  initialize() {
+    this.model.hidden = true;
+    this.model.blocksPath = false;
+    this.model.tasks.addTask("inflictBurn", 3500, 0);
+  }
+</code></pre>
+
+            <p class="card-text">
+              What if we want to enable detectability for the player ? To do that, we'll use <i>sneaking</i>, as following:
+            </p>
+
+<pre class="code"><code>
+  initialize() {
+    this.model.toggleSneaking(true);
+    this.model.interruptOnDetection = true;
+    this.model.blocksPath = false;
+    this.model.tasks.addTask("inflictBurn", 3500, 0);
+  }
+  
+  onDetected() {
+    game.appendToConsole("You detected a puddle of acid");
+  }
+</code></pre>
+
+            <p class="card-text">
+              Note that we also set <span class="mono-span">interruptOnDetection</span> to <span class="mono-span">true</span>: this will cause the detection to interrupt whatever the player is currently doing. It is useful to prevent the player from trigerring a trap that he just detected.
+            </p>
+            
+            <p class="card-text">
+              We also added the <span class="mono-span">onDetected</span> method, which is called whenever concealed objects are detected.
+            </p>
+            
+            <p class="card-text">
+              Well then ! We've worked hard on that puddle of acid. Let's see it in action:
+            </p>
+            
+            <video class="card-img-top" src="videos/17-acid-puddle-demo.webm" autoplay loop controls muted>
+            </video>
             
             <div class="end-chapter"></div>
             
@@ -1335,6 +1395,10 @@ export function create(model) {
       .card-body.card-index .chapter {
         padding-left: 10px;
         padding-bottom: 5px;
+      }
+      
+      .card-body.card-index .section {
+        padding-left: 20px;
       }
       </style>
 
@@ -1372,6 +1436,11 @@ export function create(model) {
             <div class="chapter">
               <a href="#c4-1">4.1 Introduction</a>
               <a href="#c4-2">4.2 Generic object</a>
+              <div class="section">
+                <a href="#c4-2-1">4.2.1 Sprites and positionning</a>
+                <a href="#c4-2-2">4.2.2 Control zones</a>
+                <a href="#c4-2-3">4.2.3 Detectability</a>
+              </div>
               <a href="#c4-3">4.3 Storage</a>
               <a href="#c4-4">4.4 Door</a>
               <a href="#c4-5">4.5 Item</a>
