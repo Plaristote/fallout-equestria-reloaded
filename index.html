@@ -1152,19 +1152,17 @@ export function create(dialog) {
                 <td>Allows you to schedule calls to your scripts. It is based on game-time, rather than real-time.<br/>The <span class="mono-span">game</span> and </span class="mono-span">level</span> global objects also feature a TaskManager, and we've experimented with it in section <a href="#c1-4">1.4</a> and <a href="#c2-6">2.6</a>.</td>
               </tr>
             </table>
-            
-            <div class="end-chapter"></div>
-            
-            <h4 class="card-title" id="c4-2">4.2 Generic object</h4>
-            
-            <p class="card-text">
+
+            <p class="card-text" style="margin-top:20px">
               In our journey to discover game objects, we will start with the simplest of them all: we call it the DynamicObject, and it serves as a basis for all interactive objects.
             </p>
             
-            <h5 class="card-title" id="c4-2-1">4.2.1 Sprite and positionning</h5>
+            <div class="end-chapter"></div>
+            
+            <h4 class="card-title" id="c4-2">4.2 Sprite and positionning</h4>
 
             <p class="card-text">
-              Our first DynamicObject will be a pond of magical waste. We will use this example to learn how control zones work. Our first step will be to create a Sprite for our object. We will use the following picture to represent our puddle:
+              Our first DynamicObject will be a puddle of acid. We will use this example to learn how control zones work. Our first step will be to create a Sprite for our object. We will use the following picture to represent our puddle:
             </p>
             
             <img src="pictures/acid.png" />
@@ -1203,7 +1201,9 @@ export function create(dialog) {
               Since the rendering order starts with objects from the top and right positions, you should ensure the tile position of your floating objects is set to the upper right tile overlapped by your object.
             </p>
             
-            <h5 class="card-title" id="c4-2-2">4.2.2 Control zones</h5>
+            <div class="end-chapter"></div>
+            
+            <h4 class="card-title" id="c4-3">4.3 Control zones</h4>
             
             <p class="card-text">
               Now that our puddle is rendered on screen, we will need a way for it to know when characters are moving around in it. Luckily, that is one of the feature of the control zones. We will now set our sights on creating a control zone, and interacting with it using a script.
@@ -1321,7 +1321,9 @@ export function create(model) {
               Set the script for our object, as we previously did in <a href="#c2-3">section 2.3</a>: if you start a new game and walk on our puddle, you should take 10 points of damage every 3.5 seconds.
             </p>
             
-            <h5 class="card-title" id="c4-2-3">4.2.3 Detectability</h5>
+            <div class="end-chapter"></div>
+            
+            <h4 class="card-title" id="c4-4">4.4 Detectability</h3>
             
             <p class="card-text">
               Sometimes, objects should be concealed to the player. Concealed objects can be revealed through script, or through detection by the player. Detection is based on the player's Perception and the distance between the player and the object.
@@ -1372,14 +1374,150 @@ export function create(model) {
             </video>
             
             <div class="end-chapter"></div>
-            
-            <h4 class="card-title" id="c4-3">4.3 Storage</h4>
+          </div>
+        </div>
+        
+        <h2 class="my-4" id="c4">
+          5. Inventory, items and equipment
+        </h2>
+        <div class="card mb-4">
+          <div class="card-body">
+            <h4 class="card-title" id="c5-1">5.1 Introduction</h4>
+          
+            <p class="card-text">
+              We will now direct our attention towards the item management system. Items are game objects as well, but unlike other game objects, they can be extracted from the tilemap and stored in an inventory. Moreover, they can be equiped in inventory slots (armor, primary item, secondary item).
+            </p>
             
             <p class="card-text">
-              Storage objects are 
+              An item's behaviour is determined by his <span class="mono-span">itemType</span> property. Item types can be defined in the Game Editor, in the Items tab. Let's have a look at the interface:
+            </p>
+            
+            <a href="pictures/itemEditor.png" target="_blank">
+              <img class="card-img-top" src="pictures/itemEditor.png" />
+            </a>
+            
+            <p class="card-text">
+              <table class="dialog-hook-table">
+                <tr>
+                  <td>Type</td>
+                  <td>A property meant as a way to filter items by category in inventories.</td>
+                </tr>
+                <tr>
+                  <td>Weight</td>
+                  <td>The item weight, used for carry weight checks.</td>
+                </tr>
+                <tr>
+                  <td>Value</td>
+                  <td>A value of reference to use for barter. The actual barter value will be calculated using this value and the barter skill value of the player's character and the NPC.</td>
+                </tr>
+                <tr>
+                  <td>Groupable</td>
+                  <td>Groupable items can merge together, and have an <span class="mono-span">amount</span> property. It is useful anytime the item's behaviour doesn't require the game object to have a persistent state, as a mean of avoiding cluttered inventories. Note that the groupable property can be overriden by the item's script, and relative to each instance of a given item type.</td>
+                </tr>
+                <tr>
+                  <td>Sprite</td>
+                  <td>The sprite is used to represent the object when it is on a tilemap. Item sprites are defined in the Sprite Editor, using the <i>items</i> sprite group. The sprite's size should be 72x36.</td>
+                </tr>
+                <tr>
+                  <td>Icon</td>
+                  <td>The icon is used to represent the object when it is in an inventory. Item icons should be stored in <span class="mono-span">assets/icons</span>.</td>
+                </tr>
+                <tr>
+                  <td>Script</td>
+                  <td>The scripts for items are located at <span class="mono-span">scripts/items</span>. They're game object scripts, as we've already seen many times so far, but can implement a few more properties and methods related to inventory, equipment and targeting.</td>
+                </tr>
+              </table>
             </p>
             
             <div class="end-chapter"></div>
+            
+            <h4 class="card-title" id="c5-2">5.2 Storage Objects</h4>
+            
+            <p class="card-text">
+              Storage objects are game objects featuring an Inventory. Characters, for instance, are a sub-class of Storage objects. In this section, we will create a Storage object to demonstrate how inventories are managed in the game editor.
+            </p>
+            
+            <p class="card-text">
+              Open the LevelEditor and create a Storage object, using the <i>locker</i> sprite:
+            </p>
+            
+            <video class="card-img-top" src="videos/18-create-storage.webm" autoplay loop controls muted>
+            </video>
+            
+            <p class="card-text">
+              As you can see, and just like for character objects, storage objects have an <i>Inventory</i> button. It's pretty straightforward to use:
+            </p>
+
+            <video class="card-img-top" src="videos/19-looting-editor.webm" autoplay loop controls muted>
+            </video>
+            
+            <p class="card-text">
+              Plain storage objects don't need a script: our locker is ready to use with just these few steps.<br />
+              But what if we want to implement more complex behaviours ? For instance, let's say our NPC owns the locker, and doesn't want us to touch his precious wares ?
+            </p>
+            
+            <p class="card-text">
+              Let us write a script that will allow us to do that. We will use <span class="mono-span">onTakeItem</span> and <span class="mono-span">onPutItem</span> to prevent the user to take or put items in our locker, if our NPC sees him do it:
+            </p>
+            
+<div class="code-header">scripts/behaviour/myLocker.mjs</div>
+<pre class="code"><code>class MyLocker {
+  constructor(model) {
+    this.model = model;
+  }
+  
+  onTakeItem(character, item, quantity) {
+    return this.preventStealing(character);
+  }
+  
+  onPutItem(character, item, quantity) {
+    return this.preventStealing(character);
+  }
+  
+  preventStealing(character) {
+    const npc = level.getObjectByName("MyNPC");
+
+    if (npc && npc.isAlive() && npc.hasLineOfSight(character)) {
+      level.addTextBubble(npc, "Hey ! Don't touch that !", 4000, "red");
+      return false;
+    }
+    return true;
+  }
+}
+
+export function create(model) {
+  return new MyLocker(model);
+}</code></pre>
+
+            <p class="card-text">
+              In this code, we overladed both methods and implemented our own method to interrupt the player's attempt to loot on certain condition.<br />
+              If the NPC exists and can see the player looting, then we return <span class="mono-span">false</span>, which will prevent the player from taking/putting an item in the inventory, and close the looting interface.
+            </p>
+            
+            <p class="card-text card-hint">
+              As characters extend on storage objects, they also feature a <span class="mono-span">onTakeItem</span> and <span class="mono-span">onPutItem</span> methods, which you can use to implement <i>stealing</i> behaviours.
+            </p>
+            
+            <p class="card-text">
+              In the Game Editor, configure our storage object to use the <i>myLocker.mjs</i> script we just created. Here's what the result should look like:
+            </p>
+            
+            <video class="card-img-top" src="videos/20-looting-example.webm" autoplay loop controls muted>
+            </video>
+            
+            <div class="end-chapter"></div>
+            
+            <h4 class="card-title" id="c5-3">5.3 Creating usable items</h4>
+            
+            <p class="card-text">
+            </p>
+            
+            <div class="end-chapter"></div>
+            
+            <h4 class="card-title" id="c5-4">5.4 Creating weapons</h4>
+            
+            <div class="end-chapter"></div>
+            
           </div>
         </div>
       </div>
@@ -1435,18 +1573,16 @@ export function create(model) {
             <a href="#c4">4. Game Objects</a>
             <div class="chapter">
               <a href="#c4-1">4.1 Introduction</a>
-              <a href="#c4-2">4.2 Generic object</a>
-              <div class="section">
-                <a href="#c4-2-1">4.2.1 Sprites and positionning</a>
-                <a href="#c4-2-2">4.2.2 Control zones</a>
-                <a href="#c4-2-3">4.2.3 Detectability</a>
-              </div>
-              <a href="#c4-3">4.3 Storage</a>
-              <a href="#c4-4">4.4 Door</a>
-              <a href="#c4-5">4.5 Item</a>
+              <a href="#c4-2">4.2 Sprites and positionning</a>
+              <a href="#c4-3">4.3 Control zones</a>
+              <a href="#c4-4">4.4 Detectability</a>
             </div>
-            <a href="#c4">4. Inventory, items and equipment</a>
+            <a href="#c5">5. Inventory, items and equipment</a>
             <div class="chapter">
+              <a href="#c5-1">5.1 Introduction</a>
+              <a href="#c5-2">5.2 Storage Objects</a>
+              <a href="#c5-3">5.3 Creating usable items</a>
+              <a href="#c5-4">5.4 Creating weapons</a>
             </div>
             <a href="#c6">6. Cutie Mark Acquisition Program</a>
             <div class="chapter">
