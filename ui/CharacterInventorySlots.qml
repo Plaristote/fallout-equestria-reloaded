@@ -38,6 +38,7 @@ Repeater {
         model:  equippedItem
         height: 50
         width:  75
+        visible: equippedItem.icon !== "any.png"
       }
 
       Row {

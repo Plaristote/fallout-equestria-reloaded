@@ -1,8 +1,10 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
+import "../../assets/ui" as UiStyle
+import "../../ui"
 
-Dialog {
+UiStyle.CustomDialog {
   property QtObject inventory
   property QtObject selectedObject
 
@@ -12,8 +14,11 @@ Dialog {
   standardButtons: Dialog.Ok | Dialog.Cancel
   GridLayout {
     columns: 2
-    Label { text: "How much" }
-    TextField { id: removeItemQuantityInput; text: "1" }
+    CustomLabel { text: "How much" }
+    CustomTextField {
+      id: removeItemQuantityInput
+      text: "1"
+      Layout.fillWidth: true }
   }
   onAccepted: {
     const itemType = selectedObject.objectName;

@@ -29,27 +29,19 @@ UiStyle.CustomDialog {
     columns: 2
     anchors.fill: parent
 
-    Text {
+    CustomLabel {
       text: fieldName
-      color: "white"
-      font.family: application.titleFontName
-      font.pixelSize: 16
     }
 
-    TextField {
+    CustomTextField {
       id: inputField
       Layout.fillWidth: true
-      color: "white"
-      background: UiStyle.Label {
-        style: parent.focus ? "dark" : "base"
-      }
       onAccepted: if (validate()) { root.accept(); }
     }
 
-    Text {
+    CustomLabel {
       Layout.columnSpan: 2
       color: "red"
-      font.family: application.titleFontName
       font.pixelSize: 17
       text: validationError
       visible: validationError && validationError.length > 0

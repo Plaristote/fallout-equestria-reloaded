@@ -117,6 +117,7 @@ Item {
         ItemIcon {
           anchors.centerIn: parent
           model: slotItem
+          visible: slotItem.icon !== "any.png"
         }
         Shortcut {
           sequence: (index + 1).toString()

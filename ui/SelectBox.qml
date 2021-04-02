@@ -4,6 +4,7 @@ import "qrc:/assets/ui" as UiStyle
 
 ComboBox {
   id: control
+  implicitHeight: 40
   contentItem: Text {
     verticalAlignment: Text.AlignVCenter
     horizontalAlignment: Text.AlignHCenter

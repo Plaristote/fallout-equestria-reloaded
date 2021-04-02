@@ -25,33 +25,38 @@ UiStyle.CustomDialog {
   onOpened: resetInputs();
   GridLayout {
     columns: 2
-    Text { text: "Type"; color: "white"; font.family: application.titleFontName }
-    ComboBox {
+    width: parent.width
+    CustomLabel { text: "Type" }
+    SelectBox {
       id: objectTypeInput
       model: ["character", "storage", "door", "item", "other"]
       Layout.fillWidth: true
+      Layout.preferredHeight: 40
     }
 
-    Text { text: "Name"; color: "white"; font.family: application.titleFontName }
-    TextField {
+    CustomLabel { text: "Name" }
+    CustomTextField {
       id: objectNameInput
       Layout.fillWidth: true
+      Layout.preferredHeight: 40
     }
 
     // Character inputs
-    Text { text: "Character sheet"; color: "white"; font.family: application.titleFontName; visible: objectTypeInput.currentText === "character" }
-    ComboBox {
+    CustomLabel { text: "Character sheet"; visible: objectTypeInput.currentText === "character" }
+    SelectBox {
       id: sheetInput;
       visible: objectTypeInput.currentText === "character"
       Layout.fillWidth: true
+      Layout.preferredWidth: 40
     }
 
     // InventoryItem inputs
-    Text { text: "Item"; color: "white"; font.family: application.titleFontName; visible: objectTypeInput.currentText === "item" }
-    ComboBox {
+    CustomLabel { text: "Item"; visible: objectTypeInput.currentText === "item" }
+    SelectBox {
       id: itemTypeInput
       visible: objectTypeInput.currentText === "item"
       Layout.fillWidth: true
+      Layout.preferredHeight: 40
     }
   }
 

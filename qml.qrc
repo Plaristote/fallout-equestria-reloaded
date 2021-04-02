@@ -226,5 +226,7 @@
         <file>editor/SpriteGroup.qml</file>
         <file>editor/ObjectForm.qml</file>
         <file>editor/FactionEditor.qml</file>
+        <file>ui/CustomTextField.qml</file>
+        <file>ui/CustomLabel.qml</file>
     </qresource>
 </RCC>
