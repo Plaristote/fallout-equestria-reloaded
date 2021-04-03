@@ -1,8 +1,8 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
-import "qrc:/ui"
-import "qrc:/assets/ui" as UiStyle
+import "../ui"
+import "../assets/ui" as UiStyle
 
 Pane {
   id: root
@@ -62,7 +62,7 @@ Pane {
     }
   }
 
-  Dialog {
+  UiStyle.CustomDialog {
     id: quantityInputDialog
     title: "How much ?"
     modal: true
@@ -73,8 +73,15 @@ Pane {
       SpinBox {
         id: quantityInputField
         editable: true
+        height: 40
+        from: 1
+        to: selectedObject.quantity
+        contentItem: CustomTextField {
+          text: quantityInputField.value
+          onTextChanged: quantityInputField.value = parseInt(text)
+        }
       }
-      Text {
+      CustomLabel {
         text: "/" + selectedObject.quantity
       }
     }

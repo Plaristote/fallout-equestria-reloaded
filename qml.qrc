@@ -194,7 +194,6 @@
         <file>assets/faces/stallion-basic/mouthes/sad.png</file>
         <file>assets/faces/stallion-basic/mouthes/smile.png</file>
         <file>assets/faces/stallion-basic/base.png</file>
-        <file>game/LevelInteractionOverlay.qml</file>
         <file>game/UsageSuccessHint.qml</file>
         <file>cmap/KillsPane.qml</file>
         <file>game/PipBoy.qml</file>
@@ -219,6 +218,7 @@
         <file>game/hud/CountdownDialog.qml</file>
         <file>game/hud/ItemPicker.qml</file>
         <file>game/hud/InteractionMenu.qml</file>
+        <file>game/hud/InteractionOverlay.qml</file>
         <file>ui/TextPromptDialog.qml</file>
         <file>assets/ui/CustomDialog.qml</file>
         <file>ui/ConfirmDialog.qml</file>
@@ -228,5 +228,8 @@
         <file>editor/FactionEditor.qml</file>
         <file>ui/CustomTextField.qml</file>
         <file>ui/CustomLabel.qml</file>
+        <file>game/hud/InteractionColorOverlay.qml</file>
+        <file>game/hud/InteractionOverlay.qml</file>
+        <file>game/hud/InteractionOverlays.qml</file>
     </qresource>
 </RCC>

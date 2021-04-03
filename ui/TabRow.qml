@@ -21,6 +21,8 @@ Row {
         verticalAlignment: Text.AlignVCenter
         text: parent.text
         font: parent.font
+        leftPadding: 10
+        rightPadding: 10
         color: "white"
       }
       onClicked: currentTab = tabs[index]

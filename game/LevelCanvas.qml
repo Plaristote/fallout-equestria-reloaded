@@ -1,5 +1,6 @@
 import QtQuick 2.15
 import "LevelRender.mjs" as LevelRender
+import "./hud" as Hud
 
 Canvas {
   id: canvas
@@ -76,19 +77,9 @@ Canvas {
     model:           canvas.levelController.dynamicObjects
   }
 
-  LevelInteractionOverlay {
-    levelController: canvas.levelController
-    controller:      canvas.controller
-    model:           levelController.dynamicObjects
-    filter:          function(item) { return item.getObjectType() !== "Character" || !item.isAlive(); }
-    visible:         levelController.mouseMode > 0 && levelController.targetMode === 0
-  }
-
-  LevelInteractionOverlay {
-    levelController: canvas.levelController
-    controller:      canvas.controller
-    filter:          function(item) { return item.isAlive(); }
-    model:           levelController.visibleCharacters
+  Hud.InteractionOverlays {
+    canvas: parent
+    levelController: parent.levelController
   }
 
   LevelCursor {
