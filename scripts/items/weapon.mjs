@@ -1,12 +1,15 @@
-import {Item} from "./item.mjs";
+import {ItemBehaviour} from "./item.mjs";
 import {getValueFromRange} from "../behaviour/random.mjs";
 
-export class Weapon extends Item {
+export class WeaponBehaviour extends ItemBehaviour {
   constructor(model) {
     super(model);
-    this.triggersCombat = true;
-    this.skill = "unarmed";
-    this.hitSound = "hoof2hoof/punch";
+    if (this.triggersCombat == undefined)
+      this.triggersCombat = true;
+    if (this.skill == undefined)
+      this.skill = "unarmed";
+    if (this.hitSound == undefined)
+      this.hitSound = "hoof2hoof/punch";
   }
 
   isValidTarget(object) {
@@ -46,6 +49,8 @@ export class Weapon extends Item {
     console.log("ROLL", roll, '/', successRate);
     if (roll > successRate)
       return this.triggerDodgeUse(target);
+    if (roll < 5)
+      return this.triggerCriticalFailure(target);
     return super.triggerUseOn(target);
   }
 
@@ -54,6 +59,10 @@ export class Weapon extends Item {
       steps: [{ type: "Animation", animation: "use", object: this.user }],
       callback: this.onDodged.bind(this, target)
     }
+  }
+
+  triggerCriticalFailure(target) {
+    return this.triggerDodgeUse(target);
   }
 
   onDodged(target) {
@@ -102,3 +111,5 @@ export class Weapon extends Item {
     return Math.max(0, Math.min(baseToHit, 95));
   }
 }
+
+export const Weapon = WeaponBehaviour;

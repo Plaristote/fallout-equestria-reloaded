@@ -23,6 +23,7 @@ bool ItemAction::trigger()
     {
       auto* animationPart = new ObjectAnimationPart;
 
+      callback = item->getScriptObject().property("useOn");
       animationPart->initialize(character, "use", "idle");
       animation.addAnimationPart(animationPart);
       animation.start();
@@ -49,17 +50,20 @@ void ItemAction::update()
 
 void ItemAction::performAction()
 {
-  if (callback.isCallable())
-  {
-    bool success = Game::get()->scriptCall(callback, QJSValueList(), "ItemAction::performAction").toBool();
+  bool success;
 
-    state = success ? Done : Interrupted;
-  }
+  if (callback.isCallable())
+    success = Game::get()->scriptCall(callback, QJSValueList(), "ItemAction::performAction").toBool();
   else
   {
-    qDebug() << "ItemAction::performAction: missing callback.";
-    state = Interrupted;
+    QJSValueList args;
+
+    if (target)
+      args << target->asJSValue();
+    callback = item->getScriptObject().property("useOn");
+    success = Game::get()->scriptCall(callback, args, "ItemAction::performAction").toBool();
   }
+  state = success ? Done : Interrupted;
 }
 
 int ItemAction::getApCost() const

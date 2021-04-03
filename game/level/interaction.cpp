@@ -112,7 +112,7 @@ void InteractionComponent::onActiveItemChanged()
 
 int InteractionComponent::getTargetMode() const
 {
-  if (activeItem && activeItem->getItemType() == "weapon")
+  if (activeItem && activeItem->getCategory() == "weapon")
     return CharacterTarget;
   return AnyTarget;
 }

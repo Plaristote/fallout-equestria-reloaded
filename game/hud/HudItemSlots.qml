@@ -49,6 +49,7 @@ Item {
         width: 200
         source: "qrc:/assets/ui/itemSlot.png"
         border { left: 4; bottom: 4; right: 4; top: 4 }
+        clip: true
 
         MouseArea {
           id: mouseArea
@@ -86,6 +87,12 @@ Item {
           color: Qt.rgba(155, 155, 155, 0.3)
         }
 
+        ItemIcon {
+          anchors.centerIn: parent
+          model: slotItem
+          visible: slotItem.icon !== "any.png"
+        }
+
         Text {
           anchors.top: parent.top
           anchors.left: parent.left
@@ -95,6 +102,7 @@ Item {
           color: "yellow"
           text: slotItem ? i18n.t("items." + slotItem.itemType) : ""
         }
+
         Text {
           anchors.bottom: parent.bottom
           anchors.right: parent.right
@@ -102,8 +110,9 @@ Item {
           font.family: application.titleFontName
           font.pixelSize: 14
           color: "yellow"
-          text: slotItem ? slotItem.getActionPointCost() + " " + i18n.t("AP") : ""
+          text: slotItem && slotItem.useMode ? slotItem.getActionPointCost() + " " + i18n.t("AP") : ""
         }
+
         Text {
           anchors.bottom: parent.bottom
           anchors.left: parent.left
@@ -114,11 +123,6 @@ Item {
           text: slotItem ? i18n.t("use-modes." + slotItem.useMode) : ""
         }
 
-        ItemIcon {
-          anchors.centerIn: parent
-          model: slotItem
-          visible: slotItem.icon !== "any.png"
-        }
         Shortcut {
           sequence: (index + 1).toString()
           onActivated: itemActivated(slotName)

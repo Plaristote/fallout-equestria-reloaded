@@ -22,6 +22,7 @@ Repeater {
     background: UiStyle.TerminalPane {}
     Layout.preferredHeight: 125
     Layout.preferredWidth: 125
+    clip: true
 
     ColumnLayout {
       anchors.fill: parent
@@ -37,6 +38,7 @@ Repeater {
         Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
         model:  equippedItem
         Layout.maximumHeight: 50
+        Layout.maximumWidth: 125
         visible: equippedItem.icon !== "any.png"
       }
 

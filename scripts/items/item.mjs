@@ -3,9 +3,12 @@ import {areInContact} from "../behaviour/pathfinding.mjs";
 export class ItemBehaviour {
   constructor(model) {
     this.model = model;
-    this.requiresTarget = true;
-    this.triggersCombat = false;
-    this.useModes = ["use"];
+    if (this.requiresTarget == undefined)
+      this.requiresTarget = true;
+    if (this.triggersCombat == undefined)
+      this.triggersCombat = false;
+    if (this.useModes == undefined)
+      this.useModes = ["use"];
   }
 
   get user() {
