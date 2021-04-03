@@ -159,6 +159,16 @@ Item {
             id: objectEditorComponent
             Layout.fillWidth: true
             levelEditor: root
+            onOpenInventory: {
+              if (model.getObjectType() === "Character") {
+                characterInventory.character = model;
+                characterInventory.open();
+              }
+              else {
+                lootEditor.inventory = model.inventory;
+                lootEditor.open();
+              }
+            }
           }
 
           ControlZoneEditor {

@@ -141,7 +141,7 @@ bool InventoryItem::canEquipInSlot(const QString& slotType)
     args << slotType;
     return script->call("canEquipInSlotType", args).toBool();
   }
-  return  slotType == "any";
+  return slotType == "any";
 }
 
 int InventoryItem::getActionPointCost()

@@ -24,11 +24,19 @@ Repeater {
       onTriggered: dynamicObjectLayer.visible = root.filter(dynamicObject)
     }
 
-    InteractionColorOverlay {
-      from:    overlayColor
-      to:      overlayMaxColor
-      source:  parent
-      visible: withColorOverlay
+    Loader {
+      anchors.fill: parent
+      sourceComponent: root.withColorOverlay ? colorOverlay : null
+    }
+
+    Component {
+      id: colorOverlay
+      InteractionColorOverlay {
+        from:    root.overlayColor
+        to:      root.overlayMaxColor
+        source:  dynamicObjectLayer
+        visible: root.withColorOverlay
+      }
     }
 
     enabled: visible

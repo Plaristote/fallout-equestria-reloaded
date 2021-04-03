@@ -5,6 +5,8 @@ Loader {
   property QtObject levelEditor
   property QtObject gameController: levelEditor.gameController
 
+  signal openInventory(QtObject model)
+
   Connections {
     target: levelEditor
     function onSelectedObjectChanged() {
@@ -44,10 +46,7 @@ Loader {
       width: parent.width
       model: selectedObject && selectedObject.getObjectType() === "Character" ? selectedObject : null
       gameController: root.gameController
-      onOpenInventoryClicked: {
-        characterInventory.character = characterEditor.model;
-        characterInventory.open();
-      }
+      onOpenInventoryClicked: root.openInventory(selectedObject)
       onRemoveClicked: gameController.level.deleteObject(model)
     }
   }
@@ -58,10 +57,7 @@ Loader {
       width: parent.width
       model: selectedObject
       gameController: root.gameController
-      onOpenStorageClicked: {
-        lootEditor.inventory = selectedObject.inventory;
-        lootEditor.open();
-      }
+      onOpenStorageClicked: root.openInventory(selectedObject)
       onRemoveClicked: gameController.level.deleteObject(model)
     }
   }

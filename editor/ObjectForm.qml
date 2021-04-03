@@ -188,10 +188,9 @@ Pane {
     title: "Adding an item script"
     anchors.centerIn: parent
     onAccepted: {
-      scriptList.push(value);
-      currentObject.script = value;
+      scriptList.push(newScriptDialog.value);
       scriptListChanged();
-      currentObjectChanged();
+      scriptInput.currentIndex = scriptList.length - 1;
     }
   }
 

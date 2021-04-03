@@ -210,7 +210,7 @@ void Inventory::unequipItem(const QString &slotName, bool dropped)
       if (!dropped)
         addItem(oldItem);
       else
-        delete oldItem;
+        oldItem->deleteLater();
       emit unequippedItem(slotName);
     }
   }

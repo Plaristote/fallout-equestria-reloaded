@@ -45,14 +45,14 @@ Pane {
     MenuButton {
       id: useButton
       text: i18n.t("Use")
-      visible: selectedObject != null
+      visible: selectedObject != null && !gameEditorMode
       onClicked: selectedObject.useFromInventory()
     }
 
     MenuButton {
       id: dropButton
       text: "Drop"
-      visible: selectedObject != null
+      visible: selectedObject != null && !gameEditorMode
       onClicked: {
         character.inventory.dropItem(selectedObject);
         selectedObject = null;
@@ -114,7 +114,7 @@ Pane {
 
           Pane {
             background: UiStyle.TerminalPane {}
-            Layout.preferredWidth: parent.width / 2
+            Layout.preferredWidth: parent.width / 2 - 10
             Layout.fillHeight: true
             anchors.margins: 10
             height: characterPreviewColumn.height + 20

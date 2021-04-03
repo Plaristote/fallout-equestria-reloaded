@@ -1,8 +1,9 @@
 import {areInContact} from "../behaviour/pathfinding.mjs";
 
-export class Item {
+export class ItemBehaviour {
   constructor(model) {
     this.model = model;
+    this.requiresTarget = true;
     this.triggersCombat = false;
     this.useModes = ["use"];
   }
@@ -26,10 +27,6 @@ export class Item {
 
   getActionPointCost() {
     return 2;
-  }
-
-  get requiresTarget() {
-    return true;
   }
 
   isValidTarget(object) {
@@ -90,3 +87,5 @@ export class Item {
       game.appendToConsole(message);
   }
 }
+
+export const Item = ItemBehaviour;

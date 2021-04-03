@@ -19,7 +19,7 @@ Repeater {
   delegate: Pane {
     property string slotName: inventory.slotNames[index]
     property QtObject equippedItem: inventory.getEquippedItem(slotName)
-    background: UiStyle.Label {}
+    background: UiStyle.TerminalPane {}
     Layout.preferredHeight: 125
     Layout.preferredWidth: 125
 
@@ -36,15 +36,14 @@ Repeater {
       ItemIcon {
         Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
         model:  equippedItem
-        height: 50
-        width:  75
+        Layout.maximumHeight: 50
         visible: equippedItem.icon !== "any.png"
       }
 
       Row {
         Layout.alignment: Qt.AlignBottom | Qt.AlignHCenter
 
-        Button {
+        TerminalButton {
           visible: equippedItem !== null && equippedItem.isVirtual !== true
           text: "-"
           height: 20
@@ -52,7 +51,7 @@ Repeater {
           onClicked: inventory.unequipItem(slotName)
         }
 
-        Button {
+        TerminalButton {
           visible: root.selectedObject !== null && inventory.canEquipItem(root.selectedObject, slotName)
           text: "+"
           height: 20
