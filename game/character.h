@@ -39,6 +39,7 @@ public:
   Q_INVOKABLE bool isAlive() const { return getStatistics()->getHitPoints() > 0; }
 
   Q_INVOKABLE void takeDamage(int damage, Character* dealer);
+  Q_INVOKABLE void attackedBy(Character* dealer);
   Q_INVOKABLE bool useActionPoints(int amount = 1, const QString& motive = "");
   inline int       getActionPoints() const { return actionPoints; }
   void             resetActionPoints();

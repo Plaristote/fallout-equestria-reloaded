@@ -93,6 +93,25 @@ Item {
           visible: slotItem.icon !== "any.png"
         }
 
+        Loader {
+          anchors { top: parent.top; right: parent.right; bottom: parent.bottom }
+          anchors.margins: 5
+          sourceComponent: slotItem && slotItem.maxAmmo > 0 ? ammoDisplay : null
+          width: 10
+        }
+
+        Component {
+          id: ammoDisplay
+          Rectangle {
+            color: "black"
+            Rectangle {
+              color: "white"
+              anchors { left: parent.left; right: parent.right; bottom: parent.bottom }
+              height: parent.height * (slotItem.ammo / slotItem.maxAmmo);
+            }
+          }
+        }
+
         Text {
           anchors.top: parent.top
           anchors.left: parent.left
@@ -100,6 +119,8 @@ Item {
           font.family: application.titleFontName
           font.pixelSize: 14
           color: "yellow"
+          style: Text.Outline
+          styleColor: "black"
           text: slotItem ? i18n.t("items." + slotItem.itemType) : ""
         }
 
@@ -110,6 +131,8 @@ Item {
           font.family: application.titleFontName
           font.pixelSize: 14
           color: "yellow"
+          style: Text.Outline
+          styleColor: "black"
           text: slotItem && slotItem.useMode ? slotItem.getActionPointCost() + " " + i18n.t("AP") : ""
         }
 
@@ -120,6 +143,8 @@ Item {
           font.family: application.titleFontName
           font.pixelSize: 14
           color: "yellow"
+          style: Text.Outline
+          styleColor: "black"
           text: slotItem ? i18n.t("use-modes." + slotItem.useMode) : ""
         }
 

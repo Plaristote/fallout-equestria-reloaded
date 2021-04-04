@@ -33,6 +33,7 @@ Item {
       model:            levelController.visibleCharacters
       overlayColor:     levelController.targetMode === 0 ? Qt.rgba(255, 255, 0, 1)   : Qt.rgba(255, 0, 0, 1)
       overlayMaxColor:  levelController.targetMode === 0 ? Qt.rgba(255, 255, 0, 0.5) : Qt.rgba(255, 0, 0, 0.5)
+      layerOpacity: 0.6
     }
   }
 
@@ -44,6 +45,7 @@ Item {
       filter:           function(item) { return item.isAlive(); }
       model:            levelController.visibleCharacters
       withColorOverlay: false
+      layerOpacity: 0.6
     }
   }
 }

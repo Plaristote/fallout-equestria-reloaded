@@ -301,6 +301,10 @@ void InventoryItem::save(QJsonObject& data) const
   if (virtualItem)
     data["virtual"] = virtualItem;
   data["useMode"] = useMode;
+  if (ammo > 0)
+    data["ammo"] = ammo;
+  if (maxAmmo > 0)
+    data["maxAmmo"] = maxAmmo;
   DynamicObject::save(data);
 }
 
@@ -310,6 +314,8 @@ void InventoryItem::load(const QJsonObject& data)
   quantity = data["quantity"].toInt(1);
   virtualItem = data["virtual"].toBool();
   useMode = data["useMode"].toString();
+  ammo = data["ammo"].toInt(0);
+  maxAmmo = data["maxAmmo"].toInt(0);
   DynamicObject::load(data);
   emit quantityChanged();
   emit objectNameChanged();

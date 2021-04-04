@@ -181,10 +181,12 @@ bool Inventory::equipItem(InventoryItem *item, const QString& slotName)
 
     if (item->getQuantity() > 1)
     {
+      InventoryItem* newItem = new InventoryItem(this);
+
+      newItem->setObjectName(item->getObjectName());
+      newItem->setItemType(item->getItemType());
       item->remove(1);
-      item = new InventoryItem(this);
-      item->setObjectName(item->getObjectName());
-      item->setItemType(item->getItemType());
+      item = newItem;
     }
     else
       removeItem(item);

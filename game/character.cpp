@@ -54,7 +54,13 @@ void Character::takeDamage(int damage, Character* dealer)
     emit characterKill(this, dealer);
     emit blocksPathChanged();
   }
-  else if (dealer != nullptr && !isAlly(dealer) && !isEnemy(dealer))
+  else
+    attackedBy(dealer);
+}
+
+void Character::attackedBy(Character* dealer)
+{
+  if (dealer != nullptr && !isAlly(dealer) && !isEnemy(dealer))
   {
     setAsEnemy(dealer);
     emit requireJoinCombat();

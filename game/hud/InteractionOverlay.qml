@@ -9,19 +9,25 @@ Repeater {
   property bool     withColorOverlay: true
   property color    overlayColor:    Qt.rgba(255, 255, 0, 1)
   property color    overlayMaxColor: Qt.rgba(255, 255, 0, 0.5)
+  property real     layerOpacity: 0.3
 
   delegate: Image {
     id: dynamicObjectLayer
     property QtObject dynamicObject: root.model[index]
     property point offset: controller.getAdjustedOffsetFor(dynamicObject)
-    property bool  isCharacter: dynamicObject.getObjectType() === "Character"
 
-    opacity: 0.3 + (isCharacter ? 0.3 : 0)
+    function updateVisibility() {
+      dynamicObjectLayer.visible = root.filter(dynamicObject);
+    }
+
+    opacity: root.layerOpacity
+
+    Component.onCompleted: updateVisibility()
 
     Timer {
       running: root.visible
       interval: 500
-      onTriggered: dynamicObjectLayer.visible = root.filter(dynamicObject)
+      onTriggered: dynamicObjectLayer.updateVisibility();
     }
 
     Loader {

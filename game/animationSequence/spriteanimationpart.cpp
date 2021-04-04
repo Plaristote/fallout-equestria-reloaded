@@ -32,10 +32,15 @@ void SpriteAnimationPart::initialize(QJSValue &value)
   }
   else
     to = from;
-  sprite->setMovementSpeed(static_cast<float>(value.property("speed").toNumber()));
   if (from != to)
+  {
+    if (value.hasProperty("speed"))
+      sprite->setMovementSpeed(static_cast<float>(value.property("speed").toNumber()));
+    sprite->moveToCoordinates(to);
     connect(sprite, &Sprite::movementFinished, this, &SpriteAnimationPart::onAnimationFinished);
-  connect(sprite, &Sprite::animationFinished, this, &SpriteAnimationPart::onAnimationFinished);
+  }
+  else
+    connect(sprite, &Sprite::animationFinished, this, &SpriteAnimationPart::onAnimationFinished);
 }
 
 void SpriteAnimationPart::start()

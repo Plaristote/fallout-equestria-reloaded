@@ -47,6 +47,8 @@ export class WeaponBehaviour extends ItemBehaviour {
     const roll        = getValueFromRange(0, 100);
 
     console.log("ROLL", roll, '/', successRate);
+    if (this.fireSound)
+      level.sounds.play(this.fireSound);
     if (roll > successRate)
       return this.triggerDodgeUse(target);
     if (roll < 5)
@@ -66,6 +68,7 @@ export class WeaponBehaviour extends ItemBehaviour {
   }
 
   onDodged(target) {
+    target.attackedBy(this.user);
     game.appendToConsole(
       i18n.t("messages.weapons.dodge", {
         user: this.user.statistics.name,
