@@ -1773,7 +1773,7 @@ export function create(model) {
             </p>
             
             <p class="card-text">
-              Different use modes means different behaviours, which is why we created a getter for the <span class="mono-span">requiresTarget</span> property.
+              Different use modes means different behaviours, which is why we created getters for the <span class="mono-span">requiresTarget</span> and <span class="mono-span">triggersCombat</span> properties, as shooting requires a target and triggers combat, but reloading does not.
             </p>
             
             <p class="card-text">
@@ -1871,6 +1871,7 @@ export function create(model) {
   return {
     steps: [
       { type: "Animation", animation: "use", object: this.user },
+      { type: "Sprite", name: "effects", animation: "explosion", fromX: this.user.spritePosition.x, fromY: this.user.spritePosition.y, toX: target.spritePosition.x, toY: target.spritePosition.y },
       { type: "Animation", animation: "dodge", object: target }
     ],
     callback: this.onDodged.bind(this, target)
@@ -1882,8 +1883,172 @@ export function create(model) {
             <h4 class="card-title" id="c6-4">6.4 Reloding weapons</h4>
             
             <p class="card-text">
+              We will now see how to implement alternative use modes, by implementing reloading into our weapon. The first thing to do is to create an ammuniton item. We will use the following icon and script:
             </p>
             
+            <img src="pictures/9mm-bullets.png" />
+            
+<div class="code-header">scripts/items/ammo.mjs</div>
+<pre class="code"><code>export {ItemBehaviour} from "./item.mjs";
+
+class Ammo extends ItemBehaviour {
+}
+
+export function create(model) {
+  return new Ammo(model);
+}</code></pre>
+
+            <p class="card-text">
+              Create the <i>9mm-ammo</i> item in the Item Editor. Make sure the <i>groupable</i> checkbox is checked.
+            </p>
+            
+            <p class="card-text">
+              Let's now go back to our <i>mouthgun</i> item. First thing is to set the charger capacity in the item constructor:
+            </p>
+
+<div class="code-header">scripts/items/mouthgun.mjs</div>
+<pre class="code"><code>constructor(model) {
+  super(model);
+  this.model.maxAmmo = 6; // &lt;-- here we go
+  this.useModes = ["shoot", "reload"];
+  this.skill = "smallGuns";
+}</code></pre>
+            </p>
+
+            <p class="card-text">
+              Now, let's add a method that will look for available ammunitions in the inventory, and use it to load the weapon:
+            </p>
+
+<div class="code-header">scripts/items/mouthgun.mjs</div>
+<pre class="code"><code>onReloaded() {
+  const availableAmmo = this.user.inventory.count("9mm-ammo");
+
+  if (availableAmmo > 0) {
+    const requiredAmmo = this.model.maxAmmo - this.model.ammo;
+    const amount = Math.min(requiredAmmo, availableAmmo);
+      
+    this.user.inventory.removeItemOfType("9mm-ammo", amount);
+    this.model.ammo += amount;
+    this.model.useMode = "shoot";
+    return true;
+  }
+  else {
+    game.appendToConsole("Out of ammo !");
+    this.user.actionPoints += this.getActionPointCost();
+  }
+  return false;
+}</code></pre>
+
+            <p class="card-text">
+              We're already familiar with everything used here, except for the <span class="mono-span">this.model.ammo</span> property. It represents the amount of ammunition currently loaded in the weapon.
+            </p>
+            
+            <p class="card-text">
+              Note that we restore the user's action point if there was no ammo to load. If ammo has been loaded, we also manually set the item's use mode back to the <span class="mono-span">shoot</span> mode.
+            </p>
+            
+            <p class="card-text">
+              We will now implement our new use mode, by overloading the <span class="mono-span">triggerUseOn</span> method: it is called by <span class="mono-span">ItemBehaviour</span>, when preparing the use of an item, and allows us to change the default animation and behaviour. Let's see how to make this work:
+            </p>
+
+<div class="code-header">scripts/items/mouthgun.mjs</div>
+<pre class="code"><code>triggerUseOn(target) {
+  if (this.model.useMode == "reload")
+    return { steps: [], callback: this.onReloaded.bind(this) };
+  return super.triggerUseOn(target);
+}</code></pre>
+
+            <p class="card-text">
+              Our <span class="mono-span">triggerUseOn</span> overload can now handle several use modes: for the <span class="mono-span">reload</span> use mode, we make our own <i>AnimationSequence</i> descriptor, and define a custom callback. The <i>AnimationSequence</i> here is empty, which will result in the action being executed immediately. By setting the <span class="mono-span">callback</span> attribute, we're hinting the game engine not to call the default <span class="mono-span">useOn</span> method, after the animation is completed, but our own <span class="mono-span">onReloaded</span> method we implemented earlier.
+            </p>
+            
+            <p class="card-text">
+              Now, the last step before we've fully implemented ammo management for our weapon. We need ammo to get used when the weapon is used to shoot. Let's edit <span class="mono-span">triggerUseOn</span> one last time:
+            </p>
+            
+<div class="code-header">scripts/items/mouthgun.mjs</div>
+<pre class="code"><code>triggerUseOn(target) {
+  if (this.model.useMode == "reload")
+    return { steps: [], callback: this.onReloaded.bind(this) };
+  if (this.modal.ammo > 0) {
+    this.model.ammo -= 1;
+    return super.triggerUseOn(target);
+  }
+  else {
+    game.appendToConsole("Out of ammo !");
+    this.user.actionPoints += this.getActionPointCost();
+  }
+  return false;
+}</code></pre> 
+
+            <p class="card-text">
+              Note that we also check that our charger already has ammo, before using it. If it doesn't, we return <span class="mono-span">false</span>, which will interrupt the item use attempt. We also restore the user action points: indeed, by default, a failed action still consumes action point. If we want the action point to remain, we must restore them.
+            </p>
+            
+            <p class="card-text">
+              We've also made sure that using the weapon while it still has ammo will consume 1 ammunition.
+            </p>
+            
+            <div class="end-chapter"></div>
+            
+            <h4 class="card-title" id="c6-5">6.5 Playing sounds</h4>
+            
+            <p class="card-text">
+              Now, our weapon is functional, but it doesn't make any noises. We will learn here how to punctually play sounds. Let's start by adding a reloading sound to our <span class="mono-span">onReloaded</span> method:
+            </p>
+            
+<div class="code-header">scripts/items/mouthgun.mjs</div>
+<pre class="code"><code>onReloaded() {
+  const availableAmmo = this.user.inventory.count("9mm-ammo");
+
+  if (availableAmmo > 0) {
+    const requiredAmmo = this.model.maxAmmo - this.model.ammo;
+    const amount = Math.min(requiredAmmo, availableAmmo);
+      
+    this.user.inventory.removeItemOfType("9mm-ammo", amount);
+    this.model.ammo += amount;
+    this.model.useMode = "shoot";
+    level.sounds.play("reload");
+    return true;
+  }
+  else {
+    game.appendToConsole("Out of ammo !");
+    this.user.actionPoints += this.getActionPointCost();
+    level.sounds.play("out-of-ammo");
+  }
+  return false;
+}</code></pre> 
+
+            <p class="card-text">
+              Here, we call <span class="mono-span">level.sounds.play</span> to play a sound when the weapon reloads, and a different sound when it fails to reload. The parameter should be a key registered in the file <span class="mono-span">assets/audio.json</span>, and refers to a file in the <span class="mono-span">assets/audio</span> folder.
+            </p>
+            
+            <p class="card-text">
+              <span class="mono-span">WeaponBehaviour</span> also implement handlers for two sounds, used when a weapon triggers, and when a wepaon hits. Usually, these sounds shound be initialized in the weapon's constructor, such as:
+            </p>
+
+<div class="code-header">scripts/items/mouthgun.mjs</div>
+<pre class="code"><code>constructor(model) {
+  super(model);
+  this.model.maxAmmo = 6;
+  this.useModes = ["shoot", "reload"];
+  this.skill = "smallGuns";
+  // Initializing weapon sounds below
+  this.fireSound = "weapons/gunshot";
+  this.hitSound = null;
+}</code></pre>
+
+            <p class="card-text">
+              The <span class="mono-span">fireSound</span> and <span class="mono-span">hitSound</span> are respectively used when a weapon fires, and when it hits its target.
+            </p>
+            
+            <p class="card-text">
+              Our weapon is now ready. Edit <span class="mono-span">scripts/initialize.mjs</span> to add a <i>mouthgun</i> and several <i>9mm-ammo</i> to the player's inventory, and take it for a test run. Here's what it should look like:
+            </p>
+            
+            <video class="card-img-top" src="videos/23-weapon-test.webm" autoplay loop controls muted>
+            </video>
+
             <div class="end-chapter"></div>
             
           </div>
@@ -1959,6 +2124,7 @@ export function create(model) {
               <a href="#c6-2">6.2 Custom animations</a>
               <a href="#c6-3">6.3 Dodging and critical failures</a>
               <a href="#c6-4">6.4 Reloading weapons</a>
+              <a href="#c6-5">6.5 Playing sounds</a>
             </div>
             <a href="#c7">7. Cutie Mark Acquisition Program</a>
             <div class="chapter">
