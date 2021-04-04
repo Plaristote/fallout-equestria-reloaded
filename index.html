@@ -123,24 +123,191 @@ You will need:
   <li>Knowledge of modular JavaScript.</li>
 </ul>
             </p>
+          </div>
+        </div>
+
+        <h2 class="my-4" id="c1">1. Level design</h2>
+
+        <div class="card mb-4">
+          <div class="card-body">
+            <div class="chapter">
             
-            <h4 class="card-title">What do you need to build FoE engine ?</h4>
-            <p class="card-text">
-              We've made great efforts to stay minimalist in our requirements. As such, FoE engine fully relies on the Qt framework.
-            </p>
-            <p class="card-text">
-              In order to build FoE engine, you will need CMake and Qt 5.15 (note that Qt 6 isn't supported yet).
-            </p>
+              <p class="card-text">
+                Designing level starts with Tiled, building tilemaps, and ends in the Game editor, adding interactive objects and NPCs. In this chapter, we will go over how to build tilemaps suitable for our game engine.<br/>
+                Download and install <a href="https://thorbjorn.itch.io/tiled">Tiled</a>, if you haven't already done so, and let's get started:
+              </p>
+            
+              <h4 class="card-title" id="c2-1">1.1 Creating a new tilemap</h4>
+
+              <p class="card-text">
+                Go to <span class="mono-span">File -> New -> New map</span> to open the new tilemap dialog:
+              </p>
+              
+              <p class="card-text">
+                <img src="pictures/tiled-new-map.png" />
+              </p>
+              
+              <p class="card-text">
+                The tile size must be 72x36, orientation must be isometric, and tile order should be left-down.<br/>
+                Click the "Save as", and save your tilemap in <span class="mono-span">assets/tilemaps</span> as <span class="mono-span">stable-cavern.json</span>.
+              </p>
+              
+              <p class="card-text">
+                We will now import a tileset to paint our tilemap. Click the "Open" button:
+              </p>
+
+              <p class="card-text">
+                <img src="pictures/tiled-open-tileset.png" />
+              </p>
+              
+              <p class="card-text">
+                Go to the <span class="mono-span">assets/tilesets</span> folder and open the three following files:
+                
+                <ul>
+                  <li><span class="mono-span">tileset-1.json</span>, a tileset for ground and roof tiles.</li>
+                  <li><span class="mono-span">walls-1.json</span>, a tileset for walls.</li>
+                  <li><span class="mono-span">zones.json</span>, a tileset of semi-transparent tiles for tile zones.</li>
+                </ul>
+              </p>
+              
+              <p class="card-text">
+                One last thing before you can start painting your tilemap: rename the tile layer to <i>ground</i>.
+              </p>
+              
+              <p class="card-text">
+                <img src="pictures/tiled-ground-layer.png" />
+              </p>
+              
+              <p class="card-text">
+                Everything's ready to go, you can start painting the ground layer of your tilemap. The result might end up a bit like this:
+              </p>
+              
+              <p class="card-text">
+                <img class="card-img-top" src="pictures/tiled-ground-painted.png" />
+              </p>
+
+              <p class="card-text warning">
+                One important thing to know is that the ground and roof layers from your tilemaps get pre-rendered and cached in the <span class="mono-span">.prerender</span> folder. If you want to update those layers, don't forget to remove that folder, which will force the game engine to render your tilemap again, with your changes included.
+              </p>
+
+              <div class="end-chapter"></div>
+
+              <h4 class="card-title" id="c1-2">1.2 Walls</h4>
+              
+              <p class="card-text">
+                Now that we know how to paint the ground, let's move on to the walls. We will need to create a new layer of tiles, called <i>walls</i>:
+              </p>
+              
+              <p class="card-text">
+                <img src="pictures/tiled-wall-layer.png" />
+              </p>
+              
+              <p class="card-text">
+                You can pick walls from the <i>walls-1</i> tileset we opened earlier, and start painting your walls now.
+              </p>
+              
+              <p class="card-text">
+                It is important to note that walls will be used by the game engine to figure out which tiles the characters can move on, and which should be blocked.
+              </p>
+              
+              <p class="card-text">
+                If you wish to put on wall-like structures, but which do not block the path (doorways for instance), you may create another layer, called <i>misc</i>. Tiles in the <i>misc</i> layer are rendered in the same process as walls. The <i>walls-1</i> tileset includes such doorways that should be inserted in the <i>misc</i> layer. Do not worry about the render order as it is shown by Tiled: for the game engine, tiles from the <i>walls</i> and <i>misc</i> layers act as if they were from the same layer.
+              </p>
+
+              <div class="end-chapter"></div>
+
+              <h4 class="card-title" id="c1-3">1.3 Roofs</h4>
+              
+              <p class="card-text">
+                We'll now put roofs over those walls. Unlike the ground and the walls, roofs are stored in multiple layers: that is because when the player character is under a roof tile, the whole layer disappears, while the other roof layers remain visible.
+              </p>
+              
+              <p class="card-text">
+                The first step is to create a layer group named <i>roofs</i>. In this folder, you can then add any number of tile layer, named however you want:
+              </p>
+              
+              <p class="card-text">
+                <img src="pictures/tiled-roof-layer.png" />
+              </p>
+              
+              <p class="card-text">
+                Roof layers also have another particularity: they are rendered at a diffrent offset than other layers. For each of your roof layer, you must set the property "Vertical offset" to -72:
+              </p>
+              
+              <p class="card-text">
+                <img src="pictures/tiled-roof-properties.png" />
+              </p>
+              
+              <p class="card-text">
+                You may now start painting your roof layers. <i>tileset-1</i> includes some roof tiles you can use at your leisure.
+              </p>
+
+              <div class="end-chapter"></div>
+
+              <h4 class="card-title" id="c1-4">1.4 Zones</h4>
+              
+              <p class="card-text">
+                The last thing you will have to do in Tiled will be drawing tile zone. Tile zones can serve the following purposes:
+                
+                <ul>
+                  <li>Entry zones can be used to insert a party of characters. It is mostly used when the map is entered by the player, to insert him along with his party.</li>
+                  <li>Exit zones can be used by the player character to exit a map. These zones can redirect either to another map or to the worldmap.</li>
+                  <li>Other zones can be used by scripts, to get a list of the objects in a zone (characters included), or to monitor what enters or exits the zone.</li>
+                </ul>
+              </p>
+              
+              <p class="card-text">
+                Note that exit zones are the only ones visible to the player. The tiles used when rendering the exit zones depend on whether the exit zone will send the player to another tilemap, or to the worldmap: it does not matter which kind of tile you use in Tiled to define your zone.
+              </p>
+              
+              <p class="card-text">
+                Let us create an exit and an entry zone for our tilemap. Like roofs, zones are grouped in a layer group: create the <i>zones</i> layer group, and add two new tile layers, called <i>exit-zone</i> and <i>demo-begin</i>:
+              </p>
+              
+              <p class="card-text">
+                <img src="pictures/tiled-zone-layer.png" />
+              </p>
+              
+              <p class="card-text">
+                We will start by creating the entry zone. We will have to set some custom property on our zone's tile layer, before drawing the zone, as shown in the following video:
+              </p>
+              
+              <video class="card-img-top" src="videos/24-create-entry-zone.webm" autoplay loop controls muted>
+              </video>
+              
+              <p class="card-text">
+                We first created the <span class="mono-span">type</span> property, which will indicate the game engine our zone type. Authorized values are <i>entry</i>, <i>exit</i>, or an empty string. 
+              </p>
+              
+              <p class="card-text">
+                As we are creating an entry-zone, we can also set the <span class="mono-span">default</span> property: when no entry zone name is explicitely found, or none match the zone name provided, characters will be inserted in this zone instead. As such, it is also the zone in which the player arrives when coming from the worldmap.
+              </p>
+              
+              <p class="card-text">
+                Creating our exit zone is very similar, but we may provide other custom properties:
+                <ul>
+                  <li><span class="mono-span">target</span> can be set to the name of the tilemap you wish to redirect to.</li>
+                  <li><span class="mono-span">toZone</span> should be set to the name of the entry zone you wish the player to be redirected to.</li>
+                </ul>
+              </p>
+
+              <p class="card-text card-hint">
+                If both <span class="mono-span">target</span> and <span class="mono-span">toZone</span> are left empty, the exit zone will send the player to the worldmap.<br/>
+                If only <span class="mono-span">target</span> is empty, the exit zone will look for an entry zone corresponding to <span class="mono-span">toZone</span> in the current tilemap.
+              </p>
+
+              <div class="end-chapter"></div>
+            </div>
           </div>
         </div>
         
-        <h2 class="my-4" id="c1">
-          1. Scripting introduction
+<h2 class="my-4" id="c2">
+          2. Scripting introduction
         </h2>
         
         <div class="card mb-4">
           <div class="card-body">
-            <h4 class="card-title" id="c1-1">1.1 Folder structure</h4>
+            <h4 class="card-title" id="c2-1">2.1 Folder structure</h4>
             <p class="card-text">
               Before writing any scripts, let's have a look at the folder structure you'll be working with. There are quite a lot of places for various types of files, so just remember this is here and use it as a reference.
               
@@ -249,7 +416,7 @@ You will need:
               </table>
             </p>
             <div class="end-chapter"></div>
-            <h4 class="card-title" id="c1-2">1.2 Initializing a new game</h4>
+            <h4 class="card-title" id="c2-2">2.2 Initializing a new game</h4>
             <p class="card-text">
 The first thing you want to do is to take control of the entry point of the game. You want the player to start at a specific place in the WorldMap, and possibly to start directly inside a Level.
             </p>
@@ -282,7 +449,7 @@ This scripts does three things:
             
             <div class="end-chapter"></div>
             
-            <h4 class="card-title" id="c1-3">1.3 Customizing the Game script</h4>
+            <h4 class="card-title" id="c2-3">2.3 Customizing the Game script</h4>
             <p class="card-text">
 The Game script is located at <span class="mono-span">scripts/main.mjs</span>. It is bounded to the Game context, and as such, gets loaded whenever a game starts, and keeps running until the game is exited or over.
             </p>
@@ -307,7 +474,7 @@ export function create(model) {
             
             <div class="end-chapter"></div>
             
-            <h4 class="card-title" id="c1-4">1.4 Scheduling a task</h4>
+            <h4 class="card-title" id="c2-4">2.4 Scheduling a task</h4>
 
             <p class="card-text">
               Let us add some action in that Game script: we will use the TaskManager to create a task that gets called every 5 seconds:
@@ -341,8 +508,8 @@ In the <span class="mono-span">myTask</span> method, we then call <span class="m
           </div>
         </div>
 
-        <h2 class="my-4"  id="c2">
-          2. Creating an NPC
+        <h2 class="my-4"  id="c3">
+          3. Creating an NPC
         </h2>
         <div class="card mb-4">
           <div class="card-body">
@@ -350,7 +517,7 @@ In the <span class="mono-span">myTask</span> method, we then call <span class="m
               We will now live a wonderful adventure through NPC creation. After going through the steps of this chapter, you will know how to customize interactions, skill usages, combat behaviour, and how to implement your own custom behaviours.
             </p>
             
-            <h4 class="card-title" id="c2-1">2.1 Creating a new Character script</h4>
+            <h4 class="card-title" id="c3-1">3.1 Creating a new Character script</h4>
             
             <p class="card-text">
               Before doing anything else, let's first scaffold our first character script:
@@ -373,7 +540,7 @@ export function create(model) {
 
             <div class="end-chapter"></div>
             
-            <h4 class="card-title" id="c2-2">2.2 Creating a character sheet</h4>
+            <h4 class="card-title" id="c3-2">3.2 Creating a character sheet</h4>
             
             <p class="card-text">
               As in any RPG, making up character starts with a character sheet. That part of the magic happens in the Game Editor. Start the game editor, go to the NPC tab, and create a new character sheet as such:
@@ -406,7 +573,7 @@ export function create(model) {
             
             <div class="end-chapter"></div>
             
-            <h4 class="card-title" id="c2-3">2.3 Adding an NPC in a level</h4>
+            <h4 class="card-title" id="c3-3">3.3 Adding an NPC in a level</h4>
             
             <p class="card-text">
               Now that we have a script and a character sheet, we can finally instantiate an NPC in a Level. In the Game Editor, move to the Level tab, and add a character:
@@ -439,7 +606,7 @@ export function create(model) {
             
             <div class="end-chapter"></div>
             
-            <h4 class="card-title" id="c2-4">2.4 Interactions and Text bubbles</h4>
+            <h4 class="card-title" id="c3-4">3.4 Interactions and Text bubbles</h4>
             
             <p class="card-text">
               Your NPCs can talk directly to the player, using the dialog system, but they can also speak outside of the dialog interface, using text bubbles. Text bubbles are displayed on top of a character's sprite for a given amount of time. Text color is used to express the emotion of the character.
@@ -520,7 +687,7 @@ export function create(model) {
               Our method also returns <span class="mono-span">true</span>: this is optional, but ensures that the game engine's default behaviour for the targeted interaction won't run.
             </p>
             
-            <h4 class="card-title" id="c2-5">2.5 Statistics checks and Inspection</h4>
+            <h4 class="card-title" id="c3-5">3.5 Statistics checks and Inspection</h4>
             
             <p class="card-text">
               Sometimes, you will want the outcome of a given action to be determined by the player's character statistics. We'll showcase how to access a character statistics by implementing a custom behaviour for the <span class="mono-span">look</span> interaction, that will show additional details to the player if his character has enough perception:
@@ -566,7 +733,7 @@ export function create(model) {
             
             <div class="end-chapter"></div>
             
-            <h4 class="card-title" id="c2-6">2.6 Movement and actions</h4>
+            <h4 class="card-title" id="c3-6">3.6 Movement and actions</h4>
             
             <p class="card-text">
               To move a character or perform action, you need to use the character's action queue. The action queue allows you to define series of actions to perform. It supports the following actions:
@@ -627,9 +794,9 @@ export function create(model) {
             
             <div class="end-chapter"></div>
             
-            <h4 class="card-title" id="c2-7">2.7 Combat and Diplomacy</h4>
+            <h4 class="card-title" id="c3-7">3.7 Combat and Diplomacy</h4>
             
-            <h5 class="card-title" id="c2-7-1">2.7.1 Combat basics</h5>
+            <h5 class="card-title" id="c3-7-1">3.7.1 Combat basics</h5>
 
             <p class="card-text">
             We will now start our first combat, and write a simple strategy for our NPC that will consist in running for dear life, away from the player. Then, we will see how to make our own NPC start the combat, by using the Diplomacy features.
@@ -720,7 +887,7 @@ export function create(model) {
               To prevent that from happening, we check that the action queue is active by calling <span class="mono-span">this.model.getActions().isEmpty()</span>. If the action queue is empty, we pass our NPC turn by calling <span class="mono-span">level.passTurn(this.model)</span>.
             </p>
             
-            <h5 class="card-title" id="c2-7-2">2.7.2 Diplomacy</h5>
+            <h5 class="card-title" id="c3-7-2">3.7.2 Diplomacy</h5>
             
             <p class="card-text">
               Now that we know how to make our NPC behave in combat, let's have a little talk about how NPCs detect friendly or unfriendly characters, and start fights on their own.
@@ -806,7 +973,7 @@ export function create(model) {
             
             <div class="end-chapter"></div>
             
-            <h4 class="card-title" id="c2-8">2.8 Data storage</h4>
+            <h4 class="card-title" id="c3-8">3.8 Data storage</h4>
             
             <p class="card-text">
               Often, you will need to save data that will remain accessible as the player exits a level, save and load a game, and so on...<br/>
@@ -863,12 +1030,12 @@ export function create(model) {
           </div>
         </div>
         
-        <h2 class="my-4" id="c3">
-          3. Dialogs
+        <h2 class="my-4" id="c4">
+          4. Dialogs
         </h2>
         <div class="card mb-4">
           <div class="card-body">
-            <h4 class="card-title" id="c3-1">3.1 Creating a new dialog</h4>
+            <h4 class="card-title" id="c4-1">4.1 Creating a new dialog</h4>
             
             <p class="card-text">
               We will now create a minimalist dialog, teaching you the basics of dialogs. Start by opening the dialog editor in the game editor, and create a new dialog, as following:
@@ -879,13 +1046,13 @@ export function create(model) {
             
             <div class="end-chapter"></div>
 
-            <h4 class="card-title" id="c3-2">3.2 Lines and answers</h4>
+            <h4 class="card-title" id="c4-2">4.2 Lines and answers</h4>
             
             <p class="card-text">
               A dialog is basically a set of <i>states</i> and <i>answers</i>. The dialog starts in a given state, and the player then move through states by selecting answers.
             </p>
             
-            <h5 class="card-title" id="3-2-1">3.2.1 States</h5>
+            <h5 class="card-title" id="c4-2-1">4.2.1 States</h5>
 
             <p class="card-text">
               We must then create a first state, which will serve as the entry point for our dialog, and will be the first state to load when the player initiates a dialog:
@@ -920,7 +1087,7 @@ export function create(model) {
               Before moving on to the next step, please create a second state for your dialog: we will see in the next sub-section how to move from one state to the other.
             </p>
             
-            <h5 class="card-title" id="c3-2-2">3.2.2 Answers</h5>
+            <h5 class="card-title" id="c4-2-2">4.2.2 Answers</h5>
             
             <p class="card-text">
               We will now see how to create and configure answers. There are several important facts about answers you need to know:
@@ -949,7 +1116,7 @@ export function create(model) {
             
             <div class="end-chapter"></div>
             
-            <h4 class="card-title" id="c3-3">3.3 Binding a dialog on a NPC</h4>
+            <h4 class="card-title" id="c4-3">4.3 Binding a dialog on a NPC</h4>
             
             <p class="card-text">
               Our minimalist dialog is ready to be used in game. We first need to bind it to a NPC: let's use the NPC we created in Chapter 2. Update the code as following:
@@ -987,7 +1154,7 @@ export function create(model) {
             
             <div class="end-chapter"></div>
             
-            <h4 class="card-title" id="c3-4">3.4 Scripting dialogs</h4>
+            <h4 class="card-title" id="c4-4">4.4 Scripting dialogs</h4>
             
             <p class="card-text">
               This is all well and fine, but un-scripted dialogs can only lead us so far. We will now learn how to implement more complex behaviour using the dialog's script.<br/>
@@ -1065,7 +1232,7 @@ export function create(dialog) {
 
             <div class="end-chapter"></div>
             
-            <h4 class="card-title" id="c3-5">3.5 Setting the mood</h4>
+            <h4 class="card-title" id="c4-5">4.5 Setting the mood</h4>
             
             <p class="card-text">
               Dialogs can also have an ambiance and a specific mood. The ambiance is the background displayed behind the character's face, while the mood determines how the face is rendered.
@@ -1115,12 +1282,12 @@ export function create(dialog) {
           </div>
         </div>
         
-        <h2 class="my-4" id="c4">
-          4. Game Objects
+        <h2 class="my-4" id="c5">
+          5. Game Objects
         </h2>
         <div class="card mb-4">
           <div class="card-body">
-            <h4 class="card-title" id="c4-1">4.1 Introduction</h4>
+            <h4 class="card-title" id="c5-1">5.1 Introduction</h4>
           
             <p class="card-text">
               Game Objects are the objects populating the world: characters, doors, items, and anything that the player can interact with. All of them can be controlled by a script, and they all share a set of tools to help you program their behaviour:
@@ -1141,7 +1308,7 @@ export function create(dialog) {
               </tr>
               <tr>
                 <td>DataStore</td>
-                <td>Persistent data are written in DataStore, as seen in <a href="#c2-8">section 2.8</a>.</td>
+                <td>Persistent data are written in DataStore, as seen in <a href="#c3-8">section 2.8</a>.</td>
               </tr>
               <tr>
                 <td>ControlZone</td>
@@ -1149,7 +1316,7 @@ export function create(dialog) {
               </tr>
               <tr>
                 <td>TaskManager</td>
-                <td>Allows you to schedule calls to your scripts. It is based on game-time, rather than real-time.<br/>The <span class="mono-span">game</span> and </span class="mono-span">level</span> global objects also feature a TaskManager, and we've experimented with it in section <a href="#c1-4">1.4</a> and <a href="#c2-6">2.6</a>.</td>
+                <td>Allows you to schedule calls to your scripts. It is based on game-time, rather than real-time.<br/>The <span class="mono-span">game</span> and </span class="mono-span">level</span> global objects also feature a TaskManager, and we've experimented with it in section <a href="#c1-4">1.4</a> and <a href="#c3-6">2.6</a>.</td>
               </tr>
             </table>
 
@@ -1159,7 +1326,7 @@ export function create(dialog) {
             
             <div class="end-chapter"></div>
             
-            <h4 class="card-title" id="c4-2">4.2 Sprite and positionning</h4>
+            <h4 class="card-title" id="c5-2">5.2 Sprite and positionning</h4>
 
             <p class="card-text">
               Our first DynamicObject will be a puddle of acid. We will use this example to learn how control zones work. Our first step will be to create a Sprite for our object. We will use the following picture to represent our puddle:
@@ -1203,7 +1370,7 @@ export function create(dialog) {
             
             <div class="end-chapter"></div>
             
-            <h4 class="card-title" id="c4-3">4.3 Control zones</h4>
+            <h4 class="card-title" id="c5-3">5.3 Control zones</h4>
             
             <p class="card-text">
               Now that our puddle is rendered on screen, we will need a way for it to know when characters are moving around in it. Luckily, that is one of the feature of the control zones. We will now set our sights on creating a control zone, and interacting with it using a script.
@@ -1318,12 +1485,12 @@ export function create(model) {
             </p>
 
             <p class="card-text">
-              Set the script for our object, as we previously did in <a href="#c2-3">section 2.3</a>: if you start a new game and walk on our puddle, you should take 10 points of damage every 3.5 seconds.
+              Set the script for our object, as we previously did in <a href="#c3-3">section 2.3</a>: if you start a new game and walk on our puddle, you should take 10 points of damage every 3.5 seconds.
             </p>
             
             <div class="end-chapter"></div>
             
-            <h4 class="card-title" id="c4-4">4.4 Detectability</h3>
+            <h4 class="card-title" id="c5-4">5.4 Detectability</h4>
             
             <p class="card-text">
               Sometimes, objects should be concealed to the player. Concealed objects can be revealed through script, or through detection by the player. Detection is based on the player's Perception and the distance between the player and the object.
@@ -1377,12 +1544,12 @@ export function create(model) {
           </div>
         </div>
         
-        <h2 class="my-4" id="c4">
-          5. Inventory, items and equipment
+        <h2 class="my-4" id="c6">
+          6. Inventory, items and equipment
         </h2>
         <div class="card mb-4">
           <div class="card-body">
-            <h4 class="card-title" id="c5-1">5.1 Introduction</h4>
+            <h4 class="card-title" id="c6-1">6.1 Introduction</h4>
           
             <p class="card-text">
               We will now direct our attention towards the item management system. Items are game objects as well, but unlike other game objects, they can be extracted from the tilemap and stored in an inventory. Moreover, they can be equiped in inventory slots (armor, primary item, secondary item).
@@ -1431,7 +1598,7 @@ export function create(model) {
             
             <div class="end-chapter"></div>
             
-            <h4 class="card-title" id="c5-2">5.2 Storage Objects</h4>
+            <h4 class="card-title" id="c6-2">6.2 Storage Objects</h4>
             
             <p class="card-text">
               Storage objects are game objects featuring an Inventory. Characters, for instance, are a sub-class of Storage objects. In this section, we will create a Storage object to demonstrate how inventories are managed in the game editor.
@@ -1507,7 +1674,7 @@ export function create(model) {
             
             <div class="end-chapter"></div>
             
-            <h4 class="card-title" id="c5-3">5.3 Creating usable items</h4>
+            <h4 class="card-title" id="c6-3">6.3 Creating usable items</h4>
             
             <p class="card-text">
               We will now deep further in the item and inventory scripting tools by creating a consommable item that will temporarily increase a character's Agility.<br/>
@@ -1581,10 +1748,10 @@ export function create(model) {
             
             <div class="end-chapter"></div>
             
-            <h4 class="card-title" id="c5-4">5.4 Inventory</h4>
+            <h4 class="card-title" id="c6-4">6.4 Inventory</h4>
             
             <p class="card-text">
-              We will now give the player our new item as a starting item. We've seen how to manage inventories from the game editor in <a href="#c5-2">5.2 Storage objects</a>. We will now learn how to use inventories from our scripts. Here's the new version of our initialize.mjs file:
+              We will now give the player our new item as a starting item. We've seen how to manage inventories from the game editor in <a href="#c6-2">5.2 Storage objects</a>. We will now learn how to use inventories from our scripts. Here's the new version of our initialize.mjs file:
             </p>
             
             <div class="code-header">scripts/initialize.mjs</div>
@@ -1653,7 +1820,7 @@ export function initialize() {
             
             <div class="end-chapter"></div>
             
-            <h4 class="card-title" id="c5-5">5.5 Equipment</h4>
+            <h4 class="card-title" id="c6-5">6.5 Equipment</h4>
 
             <p class="card-text">
               Inventories for characters also include <i>item slots</i>. Items can be moved to an inventory to its item slots, and are then considered equiped.<br />
@@ -1713,13 +1880,13 @@ export function create(model) {
           </div>
         </div>
         
-        <h2 class="my-5" id="c5">
-          6. Weapons
+        <h2 class="my-5" id="c7">
+          7. Weapons
         </h2>
         
         <div class="card mb-4">
           <div class="card-body">
-            <h4 class="card-title" id="c6-1">6.1 Creating a weapon</h4>
+            <h4 class="card-title" id="c7-1">7.1 Creating a weapon</h4>
             
             <p class="card-text">
               Now that we have been initiated to item and equipment, we will explore more complex behaviour for items, by developing our first weapon. Create the <i>mouthgun</i> item in the Item Editor, with the following icon and script:
@@ -1790,7 +1957,7 @@ export function create(model) {
             
             <div class="end-chapter"></div>
             
-            <h4 class="card-title" id="c6-2">6.2 Custom use animations</h4>
+            <h4 class="card-title" id="c7-2">7.2 Custom use animations</h4>
             
             <p class="card-text">
               Thanks to the default behaviours implemented by <span class="mono-span">WeaponBehaviour</span>, our mouthgun is already usable. But the animation it triggers is the default animation for all interactions, and it doesn't really look like much. We will now see how to implement custom animations for item uses.
@@ -1804,7 +1971,7 @@ export function create(model) {
               There are two types of animations, and we will use both for our shooting animation:
             </p>
             
-            <h5 class="card-title" id="c6-2-1">6.2.1 Object animation</h5>
+            <h5 class="card-title" id="c7-2-1">7.2.1 Object animation</h5>
             
             <p class="card-text">
               Object animations are animations applied on objects, usually on characters. The default animation for all interactions is an Object animation, described as following:
@@ -1823,7 +1990,7 @@ export function create(model) {
             
             <div class="end-chapter"></div>
             
-            <h5 class="card-title" id="c6-2-2">6.2.2 Sprite animation</h5>
+            <h5 class="card-title" id="c7-2-2">7.2.2 Sprite animation</h5>
             
             <p class="card-text">
               The second type of animation are Sprite animations. These will pop a new sprite, which will travel from a beginning to a target position. Here's an example of sprite animation:
@@ -1841,7 +2008,7 @@ export function create(model) {
 
             <div class="end-chapter"></div>
 
-            <h5 class="card-title" id="c6-2-3">6.2.3 Setting up an AnimationSequence</h5>
+            <h5 class="card-title" id="c7-2-3">7.2.3 Setting up an AnimationSequence</h5>
 
             <p class="card-text">
               Let's now define our own animation sequence, by implementing our own <span class="mono-span">getAnimationSteps</span> for our item:
@@ -1860,7 +2027,7 @@ export function create(model) {
 
             <div class="end-chapter"></div>
 
-            <h4 class="card-title" id="c6-3">6.3 Dodge and critical failures</h4>
+            <h4 class="card-title" id="c7-3">6.3 Dodge and critical failures</h4>
             
             <p class="card-text">
               Dodging and critical failures are handled by <span class="mono-span">WeaponBehaviour</span>, but you can overload these behaviours by implementing the <span class="mono-span">triggerDodgeUse</span> or <span class="mono-span">triggerCriticalFailure</span> methods. Here's an example of dodge implementation:
@@ -1880,7 +2047,7 @@ export function create(model) {
 
             <div class="end-chapter"></div>
             
-            <h4 class="card-title" id="c6-4">6.4 Reloding weapons</h4>
+            <h4 class="card-title" id="c7-4">7.4 Reloding weapons</h4>
             
             <p class="card-text">
               We will now see how to implement alternative use modes, by implementing reloading into our weapon. The first thing to do is to create an ammuniton item. We will use the following icon and script:
@@ -1991,7 +2158,7 @@ export function create(model) {
             
             <div class="end-chapter"></div>
             
-            <h4 class="card-title" id="c6-5">6.5 Playing sounds</h4>
+            <h4 class="card-title" id="c7-5">7.5 Playing sounds</h4>
             
             <p class="card-text">
               Now, our weapon is functional, but it doesn't make any noises. We will learn here how to punctually play sounds. Let's start by adding a reloading sound to our <span class="mono-span">onReloaded</span> method:
@@ -2077,67 +2244,74 @@ export function create(model) {
         <div class="card my-4">
           <h5 class="card-header">Index</h5>
           <div class="card-body card-index">
-            <a href="#c1">1. Scripting introduction</a>
+            <a href="#c1">1. Level design</a>
             <div class="chapter">
-              <a href="#c1-1">1.1 Folder structure</a>
-              <a href="#c1-2">1.2 Initializing a new game</a>
-              <a href="#c1-3">1.3 Customizing the Game script</a>
-              <a href="#c1-4">1.4 Scheduling a task</a>
+              <a href="#c1-1">1.1 Creating a new tilemap</a>
+              <a href="#c1-2">1.2 Walls</a>
+              <a href="#c1-3">1.3 Roofs</a>
+              <a href="#c1-4">1.4 Zones</a>
             </div>
-            <a href="#c2">2. Creating an NPC</a>
+            <a href="#c2">2. Scripting introduction</a>
             <div class="chapter">
-              <a href="#c2-1">2.1 Creating a new character script</a>
-              <a href="#c2-2">2.2 Creating a character sheet</a>
-              <a href="#c2-3">2.3 Adding an NPC in a level</a>
-              <a href="#c2-4">2.4 Interactions and Text bubbles</a>
-              <a href="#c2-5">2.5 Statistics checks and Inspection</a>
-              <a href="#c2-6">2.6 Movement and actions</a>
-              <a href="#c2-7">2.7 Combat and Diplomacy</a>
-              <a href="#c2-8">2.8 Data storage</a>
+              <a href="#c2-1">2.1 Folder structure</a>
+              <a href="#c2-2">2.2 Initializing a new game</a>
+              <a href="#c2-3">2.3 Customizing the Game script</a>
+              <a href="#c2-4">2.4 Scheduling a task</a>
             </div>
-            <a href="#c3">3. Dialogs</a>
+            <a href="#c3">3. Creating an NPC</a>
             <div class="chapter">
-              <a href="#c3-1">3.1 Creating a new dialog</a>
-              <a href="#c3-2">3.2 Lines and answers</a>
-              <a href="#c3-3">3.3 Binding a dialog on a NPC</a>
-              <a href="#c3-4">3.4 Scripting dialogs</a>
-              <a href="#c3-6">3.6 Setting the mood</a>
+              <a href="#c3-1">3.1 Creating a new character script</a>
+              <a href="#c3-2">3.2 Creating a character sheet</a>
+              <a href="#c3-3">3.3 Adding an NPC in a level</a>
+              <a href="#c3-4">3.4 Interactions and Text bubbles</a>
+              <a href="#c3-5">3.5 Statistics checks and Inspection</a>
+              <a href="#c3-6">3.6 Movement and actions</a>
+              <a href="#c3-7">3.7 Combat and Diplomacy</a>
+              <a href="#c3-8">3.8 Data storage</a>
             </div>
-            <a href="#c4">4. Game Objects</a>
+            <a href="#c4">4. Dialogs</a>
             <div class="chapter">
-              <a href="#c4-1">4.1 Introduction</a>
-              <a href="#c4-2">4.2 Sprites and positionning</a>
-              <a href="#c4-3">4.3 Control zones</a>
-              <a href="#c4-4">4.4 Detectability</a>
+              <a href="#c4-1">4.1 Creating a new dialog</a>
+              <a href="#c4-2">4.2 Lines and answers</a>
+              <a href="#c4-3">4.3 Binding a dialog on a NPC</a>
+              <a href="#c4-4">4.4 Scripting dialogs</a>
+              <a href="#c4-6">4.6 Setting the mood</a>
             </div>
-            <a href="#c5">5. Inventory, items and equipment</a>
+            <a href="#c5">5. Game Objects</a>
             <div class="chapter">
               <a href="#c5-1">5.1 Introduction</a>
-              <a href="#c5-2">5.2 Storage Objects</a>
-              <a href="#c5-3">5.3 Creating usable items</a>
-              <a href="#c5-4">5.4 Inventory</a>
-              <a href="#c5-5">5.5 Equipment</a>
+              <a href="#c5-2">5.2 Sprites and positionning</a>
+              <a href="#c5-3">5.3 Control zones</a>
+              <a href="#c5-4">5.4 Detectability</a>
             </div>
-            <a href="#c6">6. Weapons</a>
+            <a href="#c6">6. Inventory, items and equipment</a>
             <div class="chapter">
-              <a href="#c6-1">6.1 Creating a weapon</a>
-              <a href="#c6-2">6.2 Custom animations</a>
-              <a href="#c6-3">6.3 Dodging and critical failures</a>
-              <a href="#c6-4">6.4 Reloading weapons</a>
-              <a href="#c6-5">6.5 Playing sounds</a>
+              <a href="#c6-1">6.1 Introduction</a>
+              <a href="#c6-2">6.2 Storage Objects</a>
+              <a href="#c6-3">6.3 Creating usable items</a>
+              <a href="#c6-4">6.4 Inventory</a>
+              <a href="#c6-5">6.5 Equipment</a>
             </div>
-            <a href="#c7">7. Cutie Mark Acquisition Program</a>
+            <a href="#c7">7. Weapons</a>
             <div class="chapter">
-              <a href="#c6-1">7.1 Introduction to CMAP</a>
-              <a href="#c6-2">7.2 Experience and levels</a>
-              <a href="#c6-3">7.3 Scripting traits</a>
-              <a href="#c6-4">7.4 Scripting perks</a>
-              <a href="#c6-5">7.5 Scripting races</a>
+              <a href="#c7-1">7.1 Creating a weapon</a>
+              <a href="#c7-2">7.2 Custom animations</a>
+              <a href="#c7-3">7.3 Dodging and critical failures</a>
+              <a href="#c7-4">7.4 Reloading weapons</a>
+              <a href="#c7-5">7.5 Playing sounds</a>
             </div>
-            <a href="#c8">8. Quests</a>
+            <a href="#c8">8. Cutie Mark Acquisition Program</a>
+            <div class="chapter">
+              <a href="#c8-1">8.1 Introduction to CMAP</a>
+              <a href="#c8-2">8.2 Experience and levels</a>
+              <a href="#c8-3">8.3 Scripting traits</a>
+              <a href="#c8-4">8.4 Scripting perks</a>
+              <a href="#c8-5">8.5 Scripting races</a>
+            </div>
+            <a href="#c9">9. Quests</a>
             <div class="chapter">
             </div>
-            <a href="#c9">9. Buffs</a>
+            <a href="#c10">10. Buffs</a>
             <div class="chapter">
             </div>
           </div>
