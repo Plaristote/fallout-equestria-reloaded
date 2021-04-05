@@ -216,12 +216,26 @@ export class Controller {
     const renderRect = layer.getRenderedRect();
 
     if (this.shouldRender(renderRect.x, renderRect.y, renderRect.width, renderRect.height)) {
-
-      this.context.drawImage(
-        this.preRenderPath + path,
-        renderRect.x, renderRect.y, renderRect.width, renderRect.height
-      );
+      if (layer.prerendered)
+        this.renderAsPrerenderedLayer(layer, path);
+      else
+        this.renderAsDynamicLayer(layer);
     }
+  }
+
+  renderAsPrerenderedLayer(layer, path) {
+    this.context.drawImage(
+      this.preRenderPath + path,
+      renderRect.x, renderRect.y, renderRect.width, renderRect.height
+    );
+  }
+
+  renderAsDynamicLayer(layer) {
+    this.eachCase((x, y) => {
+      const tile = layer.getTile(x, y);
+
+      this.renderImage(this.pathPrefix + tile.image, tile.renderPosition, this.tileSize.width, this.tileSize.height, tile.clippedRect)
+    });
   }
 
   renderWall(tile, x, y) {

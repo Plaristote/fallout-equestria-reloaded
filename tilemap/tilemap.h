@@ -35,14 +35,17 @@ public:
   QList<TileZone*>& getZones() { return zones; }
   const QList<TileLayer*>& getRoofs() const { return roofs; }
   const QList<TileLayer*>& getLights() const { return lights; }
+  Tileset* getTileset(const QString& name) const;
 
   Q_INVOKABLE TileLayer* getLayer(const QString& name);
   Q_INVOKABLE TileLayer* getRoofLayer(const QString& name);
   Q_INVOKABLE TileLayer* getLightLayer(const QString& name);
   Q_INVOKABLE TileZone*  getZone(const QString& name);
 
-  void addTileZone(TileZone* zone)    { if (zones.indexOf(zone) < 0) { zones << zone; } }
-  void removeTileZone(TileZone* zone) { zones.removeAll(zone); }
+  void addTileZone(TileZone* zone)     { if (zones.indexOf(zone) < 0) { zones << zone; } }
+  void removeTileZone(TileZone* zone)  { zones.removeAll(zone); }
+  void addLightLayer(TileLayer* zone)    { if (lights.indexOf(zone) < 0) { lights << zone; } }
+  void removeLightLayer(TileLayer* zone) { lights.removeAll(zone); }
 
   QQmlListProperty<TileZone> getZonesQml() { return QQmlListProperty<TileZone>(this, &zones); }
   QQmlListProperty<TileLayer> getRoofsQml() { return QQmlListProperty<TileLayer>(this, &roofs); }
@@ -57,6 +60,7 @@ private:
   void loadRoofFolder(const QJsonObject&);
   void loadLightFolder(const QJsonObject&);
   void loadZoneFolder(const QJsonObject&);
+  void loadLightTileset();
 
   QSize                   tileSize;
   QSize                   mapSize;

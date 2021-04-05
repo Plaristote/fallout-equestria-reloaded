@@ -29,10 +29,97 @@ static QPoint getRenderPosition(QPoint offset, QPoint currentPosition, QSize til
   );
 }
 
+void TileLayer::initialize(QSize size)
+{
+  tiles.fill(nullptr, size.width() * size.height());
+}
+
+void TileLayer::clear()
+{
+  for (auto it = tiles.begin() ; it != tiles.end() ; ++it)
+  {
+    Tile* tile = *it;
+
+    if (tile != nullptr)
+    {
+      tile->deleteLater();
+      *it = nullptr;
+    }
+  }
+}
+
+void TileLayer::fill(Tileset* tileset, int tileId)
+{
+  if (tileset && tileId > 0)
+  {
+    for (auto it = tiles.begin() ; it != tiles.end() ; ++it)
+    {
+      Tile* tile = *it;
+
+      if (!tile)
+      {
+        tile = new Tile(this);
+        *it = tile;
+      }
+      prepareTile(tile, tileset, tileId, tile->getPosition());
+    }
+  }
+  else
+    clear();
+}
+
+void TileLayer::fill(QRect rect, Tileset *tileset, int tileId)
+
+{
+  for (int x = rect.x() ; x < rect.right() ; ++x)
+  {
+    for (int y = rect.y() ; y < rect.bottom() ; ++y)
+      setTileIdAt(x, y, tileset, tileId);
+  }
+}
+
+void TileLayer::setTileIdAt(int x, int y, Tileset *tileset, int tileId)
+{
+  int position = y * size.width() + x;
+
+  if (position < tiles.count() && x >= 0 && y >= 0)
+  {
+    Tile* tile = tiles.at(position);
+
+    if (tile && (tileset == nullptr || tileId <= 0))
+    {
+      tile->deleteLater();
+      tiles[position] = nullptr;
+    }
+    else if (tileId > 0 && tileset)
+    {
+      QPoint coordinates(x, y);
+
+      if (!tile)
+      {
+        tile = new Tile(this);
+        tile->setPosition(coordinates);
+        tiles[position] = tile;
+      }
+      prepareTile(tile, tileset, tileId, coordinates);
+    }
+  }
+}
+
+void TileLayer::prepareTile(Tile* tile, const Tileset* tileset, int tid, QPoint position)
+{
+  tile->setTexture(&(tileset->getImage()));
+  tile->setImage(&tileset->getSource());
+  tile->setPosition(position);
+  tile->setRect(tileset->getClipRectFor(tid));
+  tile->setRenderPosition(getRenderPosition(offset, position, tileset->getTileSize()));
+}
+
 void TileLayer::loadTiles(const QJsonArray& tileArray, const QVector<Tileset*>& tilesets)
 {
   QPoint currentPosition(0, 0);
 
+  tiles.reserve(tileArray.size());
   for (const QJsonValue& value : qAsConst(tileArray))
   {
     int tid = value.toInt();
@@ -45,11 +132,7 @@ void TileLayer::loadTiles(const QJsonArray& tileArray, const QVector<Tileset*>& 
         {
           Tile* tile = new Tile(this);
 
-          tile->setTexture(&(tileset->getImage()));
-          tile->setImage(&tileset->getSource());
-          tile->setPosition(currentPosition);
-          tile->setRect(tileset->getClipRectFor(tid));
-          tile->setRenderPosition(getRenderPosition(offset, currentPosition, tileset->getTileSize()));
+          prepareTile(tile, tileset, tid, currentPosition);
           tiles.push_back(tile);
           break ;
         }

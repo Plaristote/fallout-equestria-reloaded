@@ -25,6 +25,8 @@ void TileZone::load(const QJsonObject& object, const QSize mapSize)
       isDefault = value.toBool();
     else if (propertyName == "target")
       target = value.toString();
+    else if (propertyName == "toZone")
+      targetZone = value.toString();
   }
   for (QJsonValue value : object["data"].toArray())
   {

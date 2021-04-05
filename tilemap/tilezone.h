@@ -24,6 +24,7 @@ public:
   const QString& getName() const { return name; }
   const QString& getType() const { return type; }
   const QString& getTarget() const { return target; }
+  const QString& getTargetZone() const { return targetZone; }
   bool getIsDefault() const { return isDefault; }
 
   inline bool getAccessBlocked() const { return accessBlocked; }
@@ -44,7 +45,7 @@ signals:
 private:
   QString       name;
   QString       type;
-  QString       target;
+  QString       target, targetZone;
   bool          isDefault = false;
   bool          accessBlocked = false;
   QRect         clippedRect;

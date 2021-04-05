@@ -13,11 +13,16 @@ public:
 
   bool load(const QString& filepath, int firstGid = 1);
 
+  inline const QString& getName() const { return name; }
   inline const QString& getSource() const { return source; }
   QRect getClipRectFor(int tileId) const;
   QSize getTileSize() const { return tileSize; }
+  int getFirstGid() const { return firstGid; }
+  int getLastGid() const { return firstGid + tileCount - 1; }
+  int getTileCount() const { return tileCount; }
   const QImage& getImage() const { return image; }
   bool isInRange(int tileId) { return tileId >= firstGid && tileId < firstGid + tileCount; }
+  inline int getGidAt(int i) const { return firstGid + i; }
 
 private:
   QImage  image;

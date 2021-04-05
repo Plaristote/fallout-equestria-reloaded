@@ -21,6 +21,7 @@ class TileLayer : public QObject
   Q_PROPERTY(QSize   size    MEMBER size)
   Q_PROPERTY(QPoint  offset  MEMBER offset)
   Q_PROPERTY(bool    visible MEMBER visible NOTIFY visibleChanged)
+  Q_PROPERTY(bool    prerendered MEMBER prerendered)
 public:
   explicit TileLayer(QObject *parent = nullptr);
 
@@ -36,17 +37,25 @@ public:
   Q_INVOKABLE QRect getRenderedRect() const;
   Q_INVOKABLE bool isInside(int x, int y) const;
 
+  void initialize(QSize);
+  void fill(Tileset* tileset, int tileId);
+  void fill(QRect rect, Tileset* tileset, int tileId);
+  void setTileIdAt(int x, int y, Tileset* tileset, int tileId);
+  void clear();
+
 signals:
   void visibleChanged();
 
 private:
   void loadTiles(const QJsonArray&, const QVector<Tileset*>& tilesets);
+  void prepareTile(Tile*, const Tileset*, int tid, QPoint position);
 
   QString        name;
   QSize          size;
   QPoint         offset;
   QVector<Tile*> tiles;
   bool           visible = true;
+  bool           prerendered = false;
 };
 
 #endif // TILELAYER_H

@@ -40,6 +40,8 @@ bool TileMap::load(const QString& name)
 
 void TileMap::loadTilesets(const QJsonArray& tilesetsData)
 {
+  bool hasLightLayer = false;
+
   for (const QJsonValue& value : tilesetsData)
   {
     QJsonObject tilesetData = value.toObject();
@@ -51,7 +53,22 @@ void TileMap::loadTilesets(const QJsonArray& tilesetsData)
     tilesets.push_back(tileset);
     if (tileset->load(source, firstGid))
       textureList << tileset->getSource();
+    if (tileset->getName() == "lights")
+      hasLightLayer = true;
   }
+  if (!hasLightLayer)
+    loadLightTileset();
+}
+
+void TileMap::loadLightTileset()
+{
+  auto firstGid = tilesets.last()->getLastGid() + 1;
+  auto source = tilemapsPath + "../tilesets/lights.json";
+  auto* tileset = new Tileset(this);
+
+  tilesets.push_back(tileset);
+  if (tileset->load(source, firstGid))
+    textureList << tileset->getSource();
 }
 
 void TileMap::loadLayers(const QJsonArray& layersData)
@@ -120,6 +137,16 @@ void TileMap::loadZoneFolder(const QJsonObject& layerData)
     zone->load(zoneData, mapSize);
     zones.push_back(zone);
   }
+}
+
+Tileset* TileMap::getTileset(const QString &name) const
+{
+  for (Tileset* tileset : tilesets)
+  {
+    if (tileset->getName() == name)
+      return tileset;
+  }
+  return nullptr;
 }
 
 
