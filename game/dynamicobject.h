@@ -61,7 +61,7 @@ public:
 signals:
   void objectNameChanged();
   void blocksPathChanged();
-  void positionChanged();
+  //void positionChanged();
   void visibilityChanged();
 
 protected slots:

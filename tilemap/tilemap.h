@@ -42,14 +42,15 @@ public:
   Q_INVOKABLE TileLayer* getLightLayer(const QString& name);
   Q_INVOKABLE TileZone*  getZone(const QString& name);
 
+  QQmlListProperty<TileZone> getZonesQml() { return QQmlListProperty<TileZone>(this, &zones); }
+  QQmlListProperty<TileLayer> getRoofsQml() { return QQmlListProperty<TileLayer>(this, &roofs); }
+  QQmlListProperty<TileLayer> getLightsQml() { return QQmlListProperty<TileLayer>(this, &lights); }
+
+public slots:
   void addTileZone(TileZone* zone)     { if (zones.indexOf(zone) < 0) { zones << zone; } }
   void removeTileZone(TileZone* zone)  { zones.removeAll(zone); }
   void addLightLayer(TileLayer* zone)    { if (lights.indexOf(zone) < 0) { lights << zone; } }
   void removeLightLayer(TileLayer* zone) { lights.removeAll(zone); }
-
-  QQmlListProperty<TileZone> getZonesQml() { return QQmlListProperty<TileZone>(this, &zones); }
-  QQmlListProperty<TileLayer> getRoofsQml() { return QQmlListProperty<TileLayer>(this, &roofs); }
-  QQmlListProperty<TileLayer> getLightsQml() { return QQmlListProperty<TileLayer>(this, &lights); }
 
 signals:
   void onTextureListChanged();

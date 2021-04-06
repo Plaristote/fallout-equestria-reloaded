@@ -31,6 +31,7 @@ static QPoint getRenderPosition(QPoint offset, QPoint currentPosition, QSize til
 
 void TileLayer::initialize(QSize size)
 {
+  this->size = size;
   tiles.fill(nullptr, size.width() * size.height());
 }
 
@@ -69,11 +70,10 @@ void TileLayer::fill(Tileset* tileset, int tileId)
 }
 
 void TileLayer::fill(QRect rect, Tileset *tileset, int tileId)
-
 {
-  for (int x = rect.x() ; x < rect.right() ; ++x)
+  for (int x = rect.x() ; x <= rect.right() ; ++x)
   {
-    for (int y = rect.y() ; y < rect.bottom() ; ++y)
+    for (int y = rect.y() ; y <= rect.bottom() ; ++y)
       setTileIdAt(x, y, tileset, tileId);
   }
 }

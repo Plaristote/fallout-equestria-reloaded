@@ -162,6 +162,11 @@ void LevelTask::registerDynamicObject(DynamicObject* object)
     addCharacterObserver(character, connect(character, &Character::itemDropped, [this, character](InventoryItem* item) { onItemDropped(item, character->getPosition()); }));
     addCharacterObserver(character, connect(character, &Character::characterKill, this, &LevelTask::onCharacterKill));
   }
+
+  connect(object, &DynamicObject::lightZoneAdded, tilemap, &TileMap::addLightLayer);
+  connect(object, &DynamicObject::lightZoneRemoved, tilemap, &TileMap::removeLightLayer);
+  object->reloadLightzone();
+
   ParentType::registerDynamicObject(object);
 }
 
@@ -176,6 +181,10 @@ void LevelTask::unregisterDynamicObject(DynamicObject* object)
         reinterpret_cast<Character*>(entry)->getFieldOfView()->removeCharacter(character);
     }
   }
+
+  disconnect(object, &DynamicObject::lightZoneAdded, tilemap, &TileMap::addLightLayer);
+  disconnect(object, &DynamicObject::lightZoneRemoved, tilemap, &TileMap::removeLightLayer);
+
   ParentType::unregisterDynamicObject(object);
 }
 

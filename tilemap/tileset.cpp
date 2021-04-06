@@ -40,7 +40,7 @@ QRect Tileset::getClipRectFor(int tileId) const
   QRect result;
 
   tileId -= firstGid;
-  if (tileId < tileCount)
+  if (tileId < tileCount || tileId <= 0)
   {
     int row = tileId / columns;
     int col = tileId % columns;

@@ -177,13 +177,18 @@ void Game::exitLevel(bool silent)
 
 void Game::changeZone(TileZone* tileZone)
 {
+  QString targetZone = tileZone->getTargetZone();
+
   if (tileZone->getTarget() != "")
   {
-    QString targetZone;
-
-    if (currentLevel)
+    if (targetZone.length() == 0 && currentLevel)
       targetZone = currentLevel->getName();
     switchToLevel(tileZone->getTarget(), targetZone);
+  }
+  else if (targetZone.length() > 0 && currentLevel)
+  {
+    playerParty->extractFromLevel(currentLevel);
+    currentLevel->insertPartyIntoZone(playerParty, targetZone);
   }
   else
     exitLevel();

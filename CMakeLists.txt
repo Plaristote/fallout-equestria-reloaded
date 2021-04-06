@@ -156,6 +156,8 @@ set(PROJECT_SOURCES
         game/objects/components/controlzone.cpp
         game/objects/components/detectable.h
         game/objects/components/detectable.cpp
+        game/objects/components/lightsource.h
+        game/objects/components/lightsource.cpp
         game/animationSequence/ianimationpart.h
         game/animationSequence/objectanimationpart.h
         game/animationSequence/objectanimationpart.cpp

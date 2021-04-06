@@ -60,6 +60,13 @@ Repeater {
       }
     }
 
+    Timer {
+      interval: 500
+      running: true
+      repeat: true
+      onTriggered: lightObjectOverlay.updateLightLayer()
+    }
+
     Image {
       id: lightObjectBase
       visible: false
