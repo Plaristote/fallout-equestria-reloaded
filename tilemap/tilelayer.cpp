@@ -33,6 +33,7 @@ void TileLayer::initialize(QSize size)
 {
   this->size = size;
   tiles.fill(nullptr, size.width() * size.height());
+  dirtyRenderRect = dirtyRenderSize = true;
 }
 
 void TileLayer::clear()
@@ -47,6 +48,7 @@ void TileLayer::clear()
       *it = nullptr;
     }
   }
+  dirtyRenderRect = dirtyRenderSize = true;
 }
 
 void TileLayer::fill(Tileset* tileset, int tileId)
@@ -64,6 +66,7 @@ void TileLayer::fill(Tileset* tileset, int tileId)
       }
       prepareTile(tile, tileset, tileId, tile->getPosition());
     }
+    dirtyRenderRect = dirtyRenderSize = true;
   }
   else
     clear();
@@ -104,6 +107,7 @@ void TileLayer::setTileIdAt(int x, int y, Tileset *tileset, int tileId)
       prepareTile(tile, tileset, tileId, coordinates);
     }
   }
+  dirtyRenderRect = dirtyRenderSize = true;
 }
 
 void TileLayer::prepareTile(Tile* tile, const Tileset* tileset, int tid, QPoint position)
@@ -164,7 +168,21 @@ bool TileLayer::isInside(int x, int y) const
   return getTile(x, y) != nullptr;
 }
 
-QRect TileLayer::getRenderedRect() const
+QRect TileLayer::getRenderedRect()
+{
+  if (dirtyRenderRect)
+    prepareRenderRect();
+  return renderRect;
+}
+
+QSize TileLayer::getRenderedSize()
+{
+  if (dirtyRenderSize)
+    prepareRenderSize();
+  return renderSize;
+}
+
+void TileLayer::prepareRenderRect()
 {
   if (tiles.begin() != tiles.end())
   {
@@ -191,12 +209,14 @@ QRect TileLayer::getRenderedRect() const
         }
       }
     }
-    return QRect(QPoint(min), QSize(max.x() - min.x(), max.y() - min.y()));
+    renderRect = QRect(QPoint(min), QSize(max.x() - min.x(), max.y() - min.y()));
   }
- return QRect();
+  else
+    renderRect = QRect();
+  dirtyRenderRect = false;
 }
 
-QSize TileLayer::getRenderedSize() const
+void TileLayer::prepareRenderSize()
 {
   if (tiles.begin() != tiles.end())
   {
@@ -223,12 +243,14 @@ QSize TileLayer::getRenderedSize() const
         }
       }
     }
-    return QSize(max.x() - min.x(), max.y() - min.y());
+    renderSize = QSize(max.x() - min.x(), max.y() - min.y());
   }
-  return QSize();
+  else
+    renderSize = QSize();
+  dirtyRenderSize = false;
 }
 
-void TileLayer::renderToFile(const QString& fileName) const
+void TileLayer::renderToFile(const QString& fileName)
 {
   QRect    renderedRect(getRenderedRect());
   QSize    imageSize = renderedRect.size();
@@ -255,4 +277,5 @@ void TileLayer::renderToFile(const QString& fileName) const
   }
   painter.end();
   image.save(fileName);
+  prerendered = true;
 }

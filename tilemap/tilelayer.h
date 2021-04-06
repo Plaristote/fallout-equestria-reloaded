@@ -30,11 +30,11 @@ public:
   const QSize& getSize() const { return size; }
   void setVisible(bool value) { visible = value; emit visibleChanged(); }
   bool isVisible() const { return visible; }
-  void renderToFile(const QString& file) const;
+  void renderToFile(const QString& file);
 
   Q_INVOKABLE Tile* getTile(int x, int y) const;
-  Q_INVOKABLE QSize getRenderedSize() const;
-  Q_INVOKABLE QRect getRenderedRect() const;
+  Q_INVOKABLE QSize getRenderedSize();
+  Q_INVOKABLE QRect getRenderedRect();
   Q_INVOKABLE bool isInside(int x, int y) const;
 
   void initialize(QSize);
@@ -49,6 +49,8 @@ signals:
 private:
   void loadTiles(const QJsonArray&, const QVector<Tileset*>& tilesets);
   void prepareTile(Tile*, const Tileset*, int tid, QPoint position);
+  void prepareRenderRect();
+  void prepareRenderSize();
 
   QString        name;
   QSize          size;
@@ -56,6 +58,9 @@ private:
   QVector<Tile*> tiles;
   bool           visible = true;
   bool           prerendered = false;
+  bool           dirtyRenderRect = true, dirtyRenderSize = true;
+  QRect          renderRect;
+  QSize          renderSize;
 };
 
 #endif // TILELAYER_H
