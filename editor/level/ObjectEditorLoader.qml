@@ -5,6 +5,7 @@ Loader {
   property QtObject levelEditor
   property QtObject gameController: levelEditor.gameController
 
+  signal showClicked()
   signal openInventory(QtObject model)
   signal previousClicked()
   signal saveTemplateClicked()
@@ -52,6 +53,7 @@ Loader {
       onRemoveClicked: gameController.level.deleteObject(model)
       onPreviousClicked: root.previousClicked()
       onSaveTemplateClicked: root.saveTemplateClicked()
+      onShowClicked: root.showClicked()
     }
   }
 
@@ -65,6 +67,7 @@ Loader {
       onRemoveClicked: gameController.level.deleteObject(model)
       onPreviousClicked: root.previousClicked()
       onSaveTemplateClicked: root.saveTemplateClicked()
+      onShowClicked: root.showClicked()
     }
   }
 
@@ -77,6 +80,7 @@ Loader {
       onRemoveClicked: gameController.level.deleteObject(model)
       onPreviousClicked: root.previousClicked()
       onSaveTemplateClicked: root.saveTemplateClicked()
+      onShowClicked: root.showClicked()
     }
   }
 
@@ -89,6 +93,7 @@ Loader {
       onRemoveClicked: gameController.level.deleteObject(model)
       onPreviousClicked: root.previousClicked()
       onSaveTemplateClicked: root.saveTemplateClicked()
+      onShowClicked: root.showClicked()
     }
   }
 
@@ -101,6 +106,7 @@ Loader {
       onRemoveClicked: gameController.level.deleteObject(model)
       onPreviousClicked: root.previousClicked()
       onSaveTemplateClicked: root.saveTemplateClicked()
+      onShowClicked: root.showClicked()
     }
   }
 }

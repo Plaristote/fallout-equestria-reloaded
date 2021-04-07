@@ -7,6 +7,9 @@ import "../ui"
 Pane {
   id: root
   property alias model: repeater.model
+  property alias globalControls: controlButtons.sourceComponent
+  property var listItem
+  property var filter
   property string currentName
   property bool readOnly: false
   background: UiStyle.TerminalPane {}
@@ -15,12 +18,28 @@ Pane {
 
   signal newClicked()
 
-  TerminalButton {
-    visible: model.length === 0 && !readOnly
-    text: "+ Add"
-    onClicked: newClicked()
-    width: parent.width
-    height: 20
+  listItem: defaultListItem
+
+  filter: function(item, text) {
+    return text.length === 0 || item.indexOf(text) >= 0;
+  }
+
+  Component {
+    id: defaultGlobalControls
+    TerminalButton {
+      text: "+ Add"
+      onClicked: newClicked()
+      height: 20
+    }
+  }
+
+  Component {
+    id: defaultListItem
+    TerminalButton {
+      text: model
+      onClicked: { root.currentName = model; }
+      backgroundColor: root.currentName === model || down ? "green" : "transparent"
+    }
   }
 
   Flickable {
@@ -28,26 +47,41 @@ Pane {
     anchors.fill: parent
     contentHeight: column.height
     clip: true
-    Column {
+    ColumnLayout {
       id: column
-      spacing: 5
+      spacing: 0
+      width: parent.width
 
-      TerminalButton {
-        text: "+ Add"
-        onClicked: newClicked()
+      Loader {
+        id: controlButtons
+        sourceComponent: defaultGlobalControls
         visible: !readOnly
-        width: parent.width
-        height: 20
+        Layout.fillWidth: true
+        Layout.bottomMargin: 5
+      }
+
+      TerminalField {
+        id: filterInput
+        Layout.fillWidth: true
+        Layout.bottomMargin: 5
+        placeholderText: "Filter..."
       }
 
       Repeater {
         id: repeater
-        delegate: TerminalButton {
-          text: repeater.model[index]
-          onClicked: { root.currentName = repeater.model[index]; }
-          backgroundColor: root.currentName === repeater.model[index] ? "green" : "transparent"
-          width: column.parent.width
-          height: 25
+        delegate: RowLayout {
+          spacing: 5
+          Layout.fillWidth: true
+
+          Loader {
+            property var model: repeater.model[index]
+            property bool passFilters: root.filter(model, filterInput.text) ? 25 : 0
+            sourceComponent: listItem
+            Layout.fillWidth: true
+            Layout.preferredHeight: passFilters ? 25 : 0
+            Layout.bottomMargin: passFilters ? 5 : 0
+            opacity: passFilters ? 1 : 0
+          }
         }
       }
     }

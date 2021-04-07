@@ -40,6 +40,7 @@ Pane {
     model.setRenderPosition(Qt.point(renderX, renderY));
   }
 
+  signal showClicked()
   signal removeClicked()
   signal previousClicked()
   signal saveTemplateClicked()
@@ -70,22 +71,45 @@ Pane {
     RowLayout {
       width: parent.width
 
-      TerminalLabel {
-        text: "> Object Data"
-        font.pointSize: 13
+      TerminalToolButton {
+        iconName: "back"
         Layout.alignment: Qt.AlignLeft
-      }
-      TerminalButton {
-        text: "save"
-        Layout.alignment: Qt.AlignRight
-        onClicked: objectEditor.saveTemplateClicked()
-      }
-      TerminalButton {
-        text: "<"
-        Layout.alignment: Qt.AlignRight
+        Layout.preferredHeight: 35
+        Layout.preferredWidth: 40
         onClicked: objectEditor.previousClicked()
       }
+
+      TerminalLabel {
+        text: objectEditor.model.objectName
+        font.pointSize: 13
+        Layout.alignment: Qt.AlignLeft
+        Layout.fillWidth: true
+      }
+
+      TerminalToolButton {
+        iconName: "see"
+        Layout.alignment: Qt.AlignRight
+        Layout.preferredHeight: 35
+        Layout.preferredWidth: 40
+        onClicked: objectEditor.showClicked()
+      }
+
+      TerminalToolButton {
+        iconName: "save"
+        Layout.alignment: Qt.AlignRight
+        Layout.preferredHeight: 35
+        Layout.preferredWidth: 40
+        onClicked: objectEditor.saveTemplateClicked()
+      }
+      TerminalToolButton {
+        iconName: "trash"
+        Layout.alignment: Qt.AlignRight
+        Layout.preferredHeight: 35
+        Layout.preferredWidth: 40
+        onClicked: removeClicked()
+      }
     }
+
     GridLayout {
       columns: 2
       width: parent.width
@@ -163,14 +187,6 @@ Pane {
       id: additionalFields
       width: parent.width
       columns: 2
-    }
-
-    TerminalButton {
-      text: "Remove"
-      onClicked: removeClicked()
-      padding: 20
-      height: 40
-      width: parent.width
     }
   } // END Column
 }

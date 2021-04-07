@@ -131,14 +131,16 @@ Item {
             }
           }
 
-          EditorSelectPanel {
+          LevelEditorUi.ObjectSelectPanel {
             id: objectListComponent
-            model: objectList
-            onNewClicked: dialogAddObject.open()
+            model: gameController.level.dynamicObjects
             Layout.fillWidth: true
             Layout.fillHeight: true
             visible: selectedObject == null
             onCurrentNameChanged: selectedObject = gameController.level.getObjectByName(currentName);
+            onNewClicked: dialogAddObject.open()
+            onNewFromTemplateClicked: dialogAddObject.open()
+            onShowClicked: canvas.moveToObject(object)
           }
 
           LevelEditorUi.ObjectEditorLoader {
@@ -158,7 +160,11 @@ Item {
               }
             }
             onSaveTemplateClicked: saveTemplateDialog.open()
-            onPreviousClicked: selectedObject = null;
+            onPreviousClicked: {
+              objectListComponent.currentName = "";
+              selectedObject = null;
+            }
+            onShowClicked: canvas.moveToObject(selectedObject)
           }
 
           ControlZoneEditor {
@@ -167,30 +173,16 @@ Item {
             displayRoofs: displayRoofCheckbox
             displayWalls: displayWallsCheckbox
             Layout.fillWidth: true
+            visible: objectEditorComponent.visible
           }
         }
       }
     }
   }
 
-  UiStyle.CustomDialog {
+  LevelEditorUi.SaveTemplateDialog {
     id: saveTemplateDialog
-    title: "new template"
-    modal: true
-    anchors.centerIn: parent
-    standardButtons: Dialog.Ok | Dialog.Cancel
-    background: UiStyle.Pane {}
-    GridLayout {
-      CustomLabel { text: "Name" }
-      CustomTextField {
-        id: templateNameInput
-        Layout.fillWidth: true
-        Layout.preferredHeight: 40
-      }
-    }
-    onAccepted: {
-      gameObjectTemplates.save(templateNameInput.text, selectedObject);
-    }
+    selectedObject: root.selectedObject
   }
 
   LevelEditorUi.CharacterInventoryEditor {
@@ -210,10 +202,7 @@ Item {
   LevelEditorUi.AddObjectDialog {
     id: dialogAddObject
     gameController: root.gameController
-    onObjectAdded: {
-      console.log("Added object", newObject);
-      objectSelectBox.currentIndex = gameController.level.dynamicObjects.indexOf(newObject);
-    }
+    onObjectAdded: selectedObject = newObject
   }
 
   MenuButton {

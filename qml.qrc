@@ -231,5 +231,9 @@
         <file>game/hud/InteractionColorOverlay.qml</file>
         <file>game/hud/InteractionOverlay.qml</file>
         <file>game/hud/InteractionOverlays.qml</file>
+        <file>assets/ui/Icon.qml</file>
+        <file>ui/TerminalToolButton.qml</file>
+        <file>editor/level/ObjectSelectPanel.qml</file>
+        <file>editor/level/SaveTemplateDialog.qml</file>
     </qresource>
 </RCC>

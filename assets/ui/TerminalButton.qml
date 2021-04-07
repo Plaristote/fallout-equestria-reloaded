@@ -5,10 +5,10 @@ Button {
   property color backgroundColor: down ? "green" : "transparent"
 
   id: button
-  height: 15
+  implicitHeight: 25
   font.family: application.consoleFontName
   contentItem: Text {
-    horizontalAlignment: Text.AlignHCenter
+    horizontalAlignment: Text.AlignLeft
     verticalAlignment: Text.AlignVCenter
     text: button.text
     font: button.font
