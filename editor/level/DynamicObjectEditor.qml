@@ -41,6 +41,8 @@ Pane {
   }
 
   signal removeClicked()
+  signal previousClicked()
+  signal saveTemplateClicked()
 
   onModelChanged: {
     const posMode             = model.floating ? 1 : 0;
@@ -65,7 +67,25 @@ Pane {
     spacing: 5
     width: parent.width
 
-    TerminalLabel { text: "> Object Data"; font.pointSize: 13 }
+    RowLayout {
+      width: parent.width
+
+      TerminalLabel {
+        text: "> Object Data"
+        font.pointSize: 13
+        Layout.alignment: Qt.AlignLeft
+      }
+      TerminalButton {
+        text: "save"
+        Layout.alignment: Qt.AlignRight
+        onClicked: objectEditor.saveTemplateClicked()
+      }
+      TerminalButton {
+        text: "<"
+        Layout.alignment: Qt.AlignRight
+        onClicked: objectEditor.previousClicked()
+      }
+    }
     GridLayout {
       columns: 2
       width: parent.width

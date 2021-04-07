@@ -26,6 +26,7 @@ Item {
 
   onSelectedObjectChanged: {
     canvas.editorObject = selectedObject;
+    objectListComponent.currentName = selectedObject.objectName;
   }
 
   function updateObjectList() {
@@ -85,7 +86,7 @@ Item {
           editingZone: controlZoneEditor.editingZone
           onToggleZoneTile: controlZoneEditor.toggleTile(tileX, tileY)
           onPickedTile: root.pickedTile(tileX, tileY)
-          onPickedObject: objectSelectBox.currentIndex = objectList.indexOf(dynamicObject.objectName);
+          onPickedObject: objectListComponent.currentName = dynamicObject.objectName;
         }
 
         GameComponents.ScreenEdges {
@@ -101,9 +102,11 @@ Item {
         background: UiStyle.Pane {}
         Layout.preferredWidth: 400
         Layout.fillHeight: true
+        Layout.bottomMargin: saveButton.height
 
         ColumnLayout {
           width: parent.width
+          height: parent.height
 
           Row {
             CheckBox {
@@ -128,37 +131,22 @@ Item {
             }
           }
 
-          Row {
+          EditorSelectPanel {
+            id: objectListComponent
+            model: objectList
+            onNewClicked: dialogAddObject.open()
             Layout.fillWidth: true
-            spacing: 5
-            SelectBox {
-              id: objectSelectBox
-              model: objectList
-              height: 40
-              width: parent.width - 100
-              onCurrentIndexChanged: root.selectedObject = gameController.level.dynamicObjects[currentIndex];
-            }
-            Button {
-              text: "Add object"
-              onClicked: dialogAddObject.open()
-              contentItem: Text {
-                text: parent.text
-                color: "white"
-                font.family: application.titleFontName
-                font.pixelSize: 16
-                verticalAlignment: Text.AlignVCenter
-                horizontalAlignment: Text.AlignHCenter
-              }
-              background: UiStyle.Label { style: parent.down ? "dark" : "base" }
-              width: 100
-              height: 40
-            }
+            Layout.fillHeight: true
+            visible: selectedObject == null
+            onCurrentNameChanged: selectedObject = gameController.level.getObjectByName(currentName);
           }
 
           LevelEditorUi.ObjectEditorLoader {
             id: objectEditorComponent
             Layout.fillWidth: true
+            Layout.fillHeight: true
             levelEditor: root
+            visible: selectedObject != null
             onOpenInventory: {
               if (model.getObjectType() === "Character") {
                 characterInventory.character = model;
@@ -169,6 +157,8 @@ Item {
                 lootEditor.open();
               }
             }
+            onSaveTemplateClicked: saveTemplateDialog.open()
+            onPreviousClicked: selectedObject = null;
           }
 
           ControlZoneEditor {
@@ -180,6 +170,26 @@ Item {
           }
         }
       }
+    }
+  }
+
+  UiStyle.CustomDialog {
+    id: saveTemplateDialog
+    title: "new template"
+    modal: true
+    anchors.centerIn: parent
+    standardButtons: Dialog.Ok | Dialog.Cancel
+    background: UiStyle.Pane {}
+    GridLayout {
+      CustomLabel { text: "Name" }
+      CustomTextField {
+        id: templateNameInput
+        Layout.fillWidth: true
+        Layout.preferredHeight: 40
+      }
+    }
+    onAccepted: {
+      gameObjectTemplates.save(templateNameInput.text, selectedObject);
     }
   }
 
@@ -207,6 +217,7 @@ Item {
   }
 
   MenuButton {
+    id: saveButton
     anchors.bottom: parent.bottom
     anchors.right: parent.right
     text: "Save"

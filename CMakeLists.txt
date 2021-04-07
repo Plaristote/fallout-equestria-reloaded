@@ -171,6 +171,8 @@ set(PROJECT_SOURCES
         editor/characterdialogeditor.cpp
         editor/leveleditorcontroller.h
         editor/leveleditorcontroller.cpp
+        editor/gameobjecttemplates.h
+        editor/gameobjecttemplates.cpp
         gamemanager.h
         gamemanager.cpp
         musicmanager.h

@@ -6,6 +6,8 @@ Loader {
   property QtObject gameController: levelEditor.gameController
 
   signal openInventory(QtObject model)
+  signal previousClicked()
+  signal saveTemplateClicked()
 
   Connections {
     target: levelEditor
@@ -48,6 +50,8 @@ Loader {
       gameController: root.gameController
       onOpenInventoryClicked: root.openInventory(selectedObject)
       onRemoveClicked: gameController.level.deleteObject(model)
+      onPreviousClicked: root.previousClicked()
+      onSaveTemplateClicked: root.saveTemplateClicked()
     }
   }
 
@@ -59,6 +63,8 @@ Loader {
       gameController: root.gameController
       onOpenStorageClicked: root.openInventory(selectedObject)
       onRemoveClicked: gameController.level.deleteObject(model)
+      onPreviousClicked: root.previousClicked()
+      onSaveTemplateClicked: root.saveTemplateClicked()
     }
   }
 
@@ -69,6 +75,8 @@ Loader {
       model: selectedObject
       gameController: root.gameController
       onRemoveClicked: gameController.level.deleteObject(model)
+      onPreviousClicked: root.previousClicked()
+      onSaveTemplateClicked: root.saveTemplateClicked()
     }
   }
 
@@ -79,6 +87,8 @@ Loader {
       model: selectedObject
       gameController: root.gameController
       onRemoveClicked: gameController.level.deleteObject(model)
+      onPreviousClicked: root.previousClicked()
+      onSaveTemplateClicked: root.saveTemplateClicked()
     }
   }
 
@@ -89,6 +99,8 @@ Loader {
       model: selectedObject
       gameController: root.gameController
       onRemoveClicked: gameController.level.deleteObject(model)
+      onPreviousClicked: root.previousClicked()
+      onSaveTemplateClicked: root.saveTemplateClicked()
     }
   }
 }
