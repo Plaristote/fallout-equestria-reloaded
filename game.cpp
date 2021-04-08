@@ -5,6 +5,7 @@
 #include <QFile>
 #include <QDir>
 #include "editor/leveleditorcontroller.h"
+#include "cmap/perk.h"
 
 Game* Game::instance = nullptr;
 
@@ -27,6 +28,7 @@ Game::Game(QObject *parent) : StorableObject(parent)
   scriptEngine.globalObject().setProperty("i18n", scriptEngine.newQObject(I18n::get()));
   Race::initialize();
   Trait::initialize();
+  Perk::initialize();
   scriptEngine.evaluate("level.displayConsoleMessage(\"Coucou Script Engine\")");
 
   connect(worldmap, &WorldMap::cityEntered, this, &Game::onCityEntered);

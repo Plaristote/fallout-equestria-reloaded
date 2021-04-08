@@ -2,6 +2,7 @@
 #include "i18n.h"
 #include <QJsonArray>
 #include "cmap/race.h"
+#include "cmap/perk.h"
 #include "game.h"
 
 StatModel::StatModel(QObject *parent) : QObject(parent)
@@ -214,6 +215,11 @@ bool StatModel::isAcceptable() const
   return traits.length() == getMaxTraits() && specialPoints == 0 && name.length() > 0;
 }
 
+QStringList StatModel::getAvailablePerks()
+{
+  return Perk::getAvailablePerks(this);
+}
+
 QStringList StatModel::getAvailableTraits()
 {
   QStringList results;
@@ -251,6 +257,27 @@ void StatModel::toggleTrait(const QString& name, bool value)
       else
         this->traits.removeAll(trait.name);
       emit traitsChanged();
+      break ;
+    }
+  }
+}
+
+void StatModel::togglePerk(const QString &name, bool value)
+{
+  const auto& perks = Perk::getPerks();
+
+  for (auto perk : perks)
+  {
+    if (perk.name == name)
+    {
+      perk.toogle(this, value);
+      if (value)
+        this->perks << perk.name;
+      else
+        this->perks.removeOne(perk.name);
+      availablePerks = availablePerks + (value ? -1 : 1);
+      emit perksChanged();
+      emit availablePerksChanged();
       break ;
     }
   }

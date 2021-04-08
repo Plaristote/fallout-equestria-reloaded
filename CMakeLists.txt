@@ -55,6 +55,8 @@ set(PROJECT_SOURCES
         cmap/trait.cpp
         cmap/race.h
         cmap/race.cpp
+        cmap/perk.h
+        cmap/perk.cpp
         game/scriptcontroller.h
         game/scriptcontroller.cpp
         game/dataengine.h
