@@ -2475,6 +2475,167 @@ export function onToggled(characterSheet, toggled) {
             <div class="end-chapter"></div>
           </div>
         </div>
+        
+        <h2 class="my-4" id="c9">
+          9. Quests
+        </h2>
+        <div class="card mb-4">
+          <div class="card-body">
+            <h4 class="card-title" id="c9-1">9.1 Creating a quest</h4>
+          
+            <p class="card-text">
+              Quests are basically a set of objective that the player can achieve or fail to achieve. Quest scripts are located in the <span class="mono-span">scripts/quests</span> folder. Let's create our own quest:
+            </p>
+            
+<div class="code-header">scripts/quests/myQuest.mjs</div>
+<pre class="code"><code>class MyQuest {
+  constructor(model) {
+    this.model = model;
+  }
+  
+  initialize() {
+    game.appendToConsole("You picked up a new quest !");
+  }
+  
+  getObjectives() {
+    return [
+      {label: "Objectif lune", success: false},
+      {label: "Failed objective", failed: true },
+      {label: "Completed objective", success: true }
+    ];
+  }
+}
+
+export function create(model) {
+  return new MyQuest(model);
+}</code></pre>
+
+            <p class="card-text">
+              Quest scripts are similar to other game object scripts. We added the <span class="mono-span">getObjectives</span> method to return a list of objectives to be displayed to the user. Objectives have three possible state: pending, failure or success (presented in the same order in our method).
+            </p>
+            
+            <div class="end-chapter"></div>
+            
+            <h4 class="card-title" id="c9-2">9.2 Managing player quests</h4>
+            
+            <p class="card-text">
+              Now that we can create our own quests, we should know how to add these quests to the player's quest log. We will see how to add a quest, using the <span class="mono-span">initialize.mjs</span> script as an example:
+            </p>
+
+            <div class="code-header">scripts/initialize.mjs</div>
+            <pre class="code javascript"><code>export function initialize() {
+  game.quests.addQuest("myQuest"); // &lt;-- here we go
+  game.onCityEntered("stable-cavern", "demo-begin");
+  game.worldmap.setPosition(150, 250);
+  game.transitionRequired("intro.mp4", 1);
+}</code></pre>
+
+            <p class="card-text">
+              Here, we use the QuestManager, accessbile using <span class="mono-span">game.quests</span> to add our <i>myQuest</i> quest to the player's active quests. The quest manager can also be used to fetch a specific quest object, or iterate over all active quests, using respectively <span class="mono-span">game.quests.getQuest("myQuest")</span> and <span class="mono-span">game.quests.list</span>.
+            </p>
+            
+            <div class="end-chapter"></div>
+            
+            <h4 class="card-title" id="c9-3">9.3 Completing objectives</h4>
+            
+            <p class="card-text">
+              Now, how would we go around completing our objectives ? Well, this is mainly left to the script to decide. First, we must implement the <span class="mono-span">completeObjective</span> method:
+            </p>
+            
+            <div class="code-header">scripts/quests/myQuest.mjs</div>
+            <pre class="code javascript"><code>class MyQuest {
+  constructor(model) {
+    this.model = model;
+  }
+  
+  completeObjective(objectiveName) {
+    this.model.setVariable(objectiveName, 1);
+    this.model.completed = true;
+  }
+  
+  getObjectives() {
+    return [
+      {label: "Objectif lune", success: this.model.getVariable("myObjective") == 1}
+    ]
+  }
+  
+  onCompleted() {
+    game.player.statistics.addExperience(1000);
+    game.appendToConsole("You gained 1000 experience points for completing MyQuest");
+  }
+}</code></pre>
+
+            <p class="card-text">
+              In our <span class="mono-span">completeObjective</span>, we persist the state of our objective using <span class="mono-span">setVariable</span> on the quest object. Since our quest only includes one objective, we also set the <span class="mono-span">completed</span> property to true on the quest object.
+            </p>
+            
+            <p class="card-text">
+              We also added the <span class="mono-span">onCompleted</span> method, which gets called whenever <span class="mono-span">this.model.completed</span> goes from false to true.
+            </p>
+            
+            <p class="card-text">
+              We know how to react to an objective getting completed. Now, here's how you can trigger an objective completion from scripts:
+            </p>
+            
+            <pre class="code javascript"><code>game.quests.getQuest("myQuest").completeObjective("myObjective")</code></pre>
+            
+            <div class="end-chapter"></div>
+            
+            <h4 class="card-title" id="c9-4">9.4 Watchers</h4>
+            
+            <p class="card-text">
+              We know how to complete a quest objective from another script. But sometimes, it's not most convenient way to monitor quest objectives. Quest scripts can also implement watchers, to be warned when some events happen in the game.
+            </p>
+            
+            <h5 class="card-title" id="9-4-1">9.4.1 Item picking watcher</h5>
+            
+            <p class="card-text">This watcher gets triggered whenever the player picks an item up. Here's an example:</p>
+            
+<pre class="code javascript"><code>class MyQuest {
+  ...
+  
+  onItemPicked(item) {
+    if (item.itemType == "someQuestItem") {
+      this.model.setVariable("itemPicked", 1);
+      this.model.completed = true;
+    }
+  }
+}</code></pre>
+
+            <h5 class="card-title" id="9-4-2">9.4.2 Character killed watcher</h5>
+            
+            <p class="card-text">This watcher gets triggered whenver a character gets killed, including if the killer wasn't the player, or the character didn't die in combat. Here's an example:</p>
+
+<pre class="code javascript"><code>class MyQuest {
+  ...
+  
+  onCharacterKilled(victim, killed) {
+    if (victim.race == "mutated-rat") {
+      const killCount = (this.model.getVariable("ratKilled") || 0) + 1;
+      
+      this.model.getVariable("ratKilled", killCount);
+      if (killCount > 10)
+        this.model.completed = true;
+    }
+  }
+}</code></pre>
+
+            <div class="end-chapter"></div>
+          </div>
+        </div>
+        
+        <h2 class="my-4" id="c10">
+          10. Buffs
+        </h2>
+        <div class="card mb-4">
+          <div class="card-body">
+            <h4 class="card-title" id="c10-1">10.1 TODO</h4>
+          
+            <p class="card-text">
+              TODO
+            </p>
+          </div>
+        </div>
       </div>
 
       <!-- Sidebar Widgets Column -->
@@ -2566,6 +2727,10 @@ export function onToggled(characterSheet, toggled) {
             </div>
             <a href="#c9">9. Quests</a>
             <div class="chapter">
+              <a href="#c9-1">9.1 Creating a quest</a>
+              <a href="#c9-2">9.2 Managing player quests</a>
+              <a href="#c9-3">9.3 Completing objectives</a>
+              <a href="#c9-4">9.4 Watchers</a>
             </div>
             <a href="#c10">10. Buffs</a>
             <div class="chapter">
