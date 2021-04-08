@@ -297,6 +297,29 @@ You will need:
               </p>
 
               <div class="end-chapter"></div>
+              
+              <h4 class="card-title" id="c1-5">1.5 Light zones</h4>
+              
+              <p class="card-text">
+                There is also one last special type of zone: light zones are used to draw light effects on the tilemap, while allowing bonuses for perception related tests on objects affected by a light zone. Light zones can also be turned on and off by scripts.
+              </p>
+              
+              <p class="card-text">
+                Light zones are located in the <span class="mono-span">lights</span> layer group. Create a new tile layer as such:
+              </p>
+              
+              <p class="card-text">
+                <img src="pictures/tiled-light-layer.png" />
+              </p>
+              
+              <p class="card-text">
+                Open the tileset located at <span class="mono-span">assets/tilesets/lights.json</span>, and you can now start drawing light zones:
+              </p>
+              
+              <video class="card-img-top" src="videos/25-draw-light-zone.webm" autoplay loop controls muted>
+              </video>
+
+              <div class="end-chapter"></div>
             </div>
           </div>
         </div>
@@ -440,11 +463,16 @@ The <span class="mono-span">initialize.mjs</span> is a very simple script, and m
 This scripts does three things:
 <ul>
   <li>The first line uses <span class="mono-span">game.onCityEntered</span> to load the <span class="mono-span">stable-cavern</span> level (corresponding to the tilemap stored in <span class="mono-span">assets/tilemaps/stable-cavern.json</span>). The second parameter <span class="mono-span">demo-begin</span> defines the zone in which to insert the player.</li>
+  
 
   <li>The second lines instantly move the character to a specific position on the worldmap.</li>
 
   <li>The third lines starts a transition using <span class="mono-span">game.transitionRequired</span>. Transitions can be started at anytime during the game: the first paremeter specifies which video file to play (the path is relative to the <span class="mono-span">assets/videos</span> folder), and the second parameter defines how much game-world seconds should pass during the transition (in this case, only one second will pass in the game world while the player watches the video).</li>
 </ul>
+            </p>
+            
+            <p class="card-text card-hint">
+              <span class="mono-span">game</span> is a global variable pointing to the main game object. It is available everywhere, and can be used at any time by scripts to move the player to another area, move ahead in time, or start playing a video.
             </p>
             
             <div class="end-chapter"></div>
@@ -462,6 +490,9 @@ The following is the basic structure for all the Game, Level and DynamicObject s
             <pre class="code javascript"><code>class Game {
    constructor(model) {
    }
+   
+   initialize() {
+   }
 }
 
 export function create(model) {
@@ -472,39 +503,68 @@ export function create(model) {
               All game-related scripts must export a <span class="mono-span">create</span> function. The create function takes a model parameter, representing the instance of the managed object. The function must return an instance to a JavaScript object.
             </p>
             
+            <p class="card-text">
+              All game-related scripts may implement an <span class="mono-span">initialize</span> method. While the constructor will be called everytime an object is instantiated, the <span class="mono-span">initialize</span> method will only be called once, after the first instantiation. Since game objects properties are automatically saved by the game engine, it is best to set their initial value here, if needed.
+            </p>
+            
+            <p class="card-text card-hint hint">
+              Note that the managed object (<span class="mono-span">model</span>) for the Game script is the main game object itself, meaning that in this context, <span class="mono-span">model</span> is equal to the <span class="mono-span">game</span> global variable.
+            </p>
+            
             <div class="end-chapter"></div>
             
             <h4 class="card-title" id="c2-4">2.4 Scheduling a task</h4>
 
             <p class="card-text">
-              Let us add some action in that Game script: we will use the TaskManager to create a task that gets called every 5 seconds:
+              Let us add some action in that Game script: we will use the TaskManager to create a task that gets called every 5 seconds, and have the light zone we created earlier switch on and off:
             </p>
             
-            <pre class="code javascript"><code>class Game {
-   constructor(model) {
-     model.tasks.addTask("myTask", 5000, 0);
-   }
-   
-   myTask(count) {
-     game.appendToConsole("Hello world !");
-   }
+            <pre class="code javascript"><code>export class Game {
+  initialize() {
+    game.tasks.addTask("myTask", 5000, 0);
+  }
+
+  myTask() {
+    if (game.level) {
+      const myLight = level.tilemap.getLightLayer("my-light");
+
+      if (myLight) {
+        myLight.visible = !myLight.visible;
+        game.appendToConsole(myLight.visible ? "Lights on !" : "Lights off");
+      }
+    }
+  }
+}
+
+export function create(model) {
+  return new Game(model);
 }</code></pre>
 
             <p class="card-text">
-In this snippet, we use the object's <span class="mono-span">tasks</span> property to access the object's TaskManager, and call <span class="mono-span">addTask</span> to schedule a new task.
+In this snippet, we use the game global object <span class="mono-span">tasks</span> property to access the object's TaskManager, and call <span class="mono-span">addTask</span> to schedule a new task.
 
 <ul>
-  <li>The first parameter is the name of the script's method I want the script to call in 5 seconds.</li>
+  <li>The first parameter is the name of the game object script method I want to call in 5 seconds.</li>
   <li>The second parameter is the time delay between each calls: it is in milliseconds, which means that for a 5 seconds delay, I need to pass a value of 5000</li>
   <li>Finally, the third parameter is the amount of times the task should be triggered. A value of zero means the task will run indefinitely, or until it gets exlicitely removed.</li>
 </ul>
 
-In the <span class="mono-span">myTask</span> method, we then call <span class="mono-span">game.appendToConsole</span> to display a message on the player's HUD console.
-          </p>
+In the <span class="mono-span">myTask</span> method, we then check that a level is currently running, we get a hold of our <span class="mono-span">my-light</span> light zone, created in <a href="#c1-5">section 1.5</a>, and we toggle the light on and off.</p>
 
-          <p class="card-text">
-            Now, if you start a game using this <span class="mono-span">main.mjs</span> script. You should see "Hello world !" popping every five seconds in the HUD console.
-          </p>
+            <p class="card-text card-hint">
+              Keep in mind that the TaskManager does not necessarily call a method from the script that calls <span class="mono-span">addTask</span>: it will try to call that method on the script of the object that owns the TaskManager.
+            </p>
+
+            <p class="card-text">
+              Lastly, we call <span class="mono-span">game.appendToConsole</span> to display a message on the player's HUD console.
+            </p>
+
+            <p class="card-text">
+              Now, here's the result of our new <span class="mono-span">initialize.mjs</span> and <span class="mono-span">main.mjs</span> scripts:
+            </p>
+            
+            <video class="card-img-top" src="videos/26-flicker-light-zone.webm" autoplay loop controls muted>
+            </video>
           </div>
         </div>
 
@@ -769,7 +829,11 @@ export function create(model) {
 }</code></pre>
 
             <p class="card-text">
-              The <span class="mono-span">initialize</span> method is called by the engine when a character first loads. On the other hand, the constructor of your class will be called everytime a character gets loaded into the game. Since scheduled tasks are persistent, it's best not to define those in a constructor.<br/>
+              We first schedule a task that will get called every five seconds.
+            </p>
+
+            <p class="card-text warning">
+              Don't forget to schedule such recurrent tasks in the <span class="mono-span">initialize</span> method, rather than in the constructor. Otherwise, the task would be scheduled each time the character gets instantiated, resulting in a lot more calls to your target method than you probably hoped for.
             </p>
             
             <p class="card-text">
@@ -2250,6 +2314,7 @@ export function create(model) {
               <a href="#c1-2">1.2 Walls</a>
               <a href="#c1-3">1.3 Roofs</a>
               <a href="#c1-4">1.4 Zones</a>
+              <a href="#c1-5">1.5 Light zones</a>
             </div>
             <a href="#c2">2. Scripting introduction</a>
             <div class="chapter">
