@@ -21,7 +21,7 @@ Pane {
   listItem: defaultListItem
 
   filter: function(item, text) {
-    return text.length === 0 || item.indexOf(text) >= 0;
+    return text.length === 0 || item.toLowerCase().indexOf(text.toLowerCase()) >= 0;
   }
 
   Component {

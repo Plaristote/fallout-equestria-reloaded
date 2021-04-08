@@ -33,7 +33,6 @@ Repeater {
     }
 
     function updateVisibility() {
-      console.log("Visibility for", dynamicObject.objectName, ":", lightLayer && lightLayer.visible, dynamicObject.isVisible);
       visible = lightLayer && lightLayer.visible && dynamicObject.isVisible;
     }
 

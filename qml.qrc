@@ -235,5 +235,6 @@
         <file>ui/TerminalToolButton.qml</file>
         <file>editor/level/ObjectSelectPanel.qml</file>
         <file>editor/level/SaveTemplateDialog.qml</file>
+        <file>editor/level/AddTemplateDialog.qml</file>
     </qresource>
 </RCC>

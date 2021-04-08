@@ -10,6 +10,8 @@ class LevelEditorController : public LevelTask
 public:
   LevelEditorController(QObject* parent = nullptr);
 
+  Q_INVOKABLE DynamicObject* generateFromTemplate(const QString& templateName, const QString& name);
+
 private slots:
   void update() override;
 

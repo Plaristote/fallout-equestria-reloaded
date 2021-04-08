@@ -34,19 +34,7 @@ EditorSelectPanel {
         UiStyle.Icon {
           height: 15
           width: 15
-          name: {
-            switch (model.getObjectType()) {
-            case "Character":
-              return "character";
-            case "Doorway":
-              return "door";
-            case "InventoryItem":
-              return "item";
-            case "StorageObject":
-              return "chest";
-            }
-            return "object";
-          }
+          objectType: model.getObjectType()
         }
         Text {
           text: model.objectName

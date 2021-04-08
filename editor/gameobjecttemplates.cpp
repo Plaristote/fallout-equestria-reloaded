@@ -8,6 +8,8 @@
 #define TYPE_BUILDER(TYPE) \
   [](const QJsonObject& data) { TYPE* value = new TYPE; value->load(data); return value; }
 
+GameObjectTemplates* GameObjectTemplates::instance = nullptr;
+
 const QMap<QString, std::function<DynamicObject* (const QJsonObject&)>> GameObjectTemplates::typeMap = {
   {"Character",     TYPE_BUILDER(Character)},
   {"StorageObject", TYPE_BUILDER(StorageObject)},
@@ -17,7 +19,7 @@ const QMap<QString, std::function<DynamicObject* (const QJsonObject&)>> GameObje
 
 GameObjectTemplates::GameObjectTemplates(QObject *parent) : QObject(parent)
 {
-
+  instance = this;
 }
 
 void GameObjectTemplates::initialize()

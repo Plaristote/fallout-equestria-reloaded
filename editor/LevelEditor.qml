@@ -139,7 +139,7 @@ Item {
             visible: selectedObject == null
             onCurrentNameChanged: selectedObject = gameController.level.getObjectByName(currentName);
             onNewClicked: dialogAddObject.open()
-            onNewFromTemplateClicked: dialogAddObject.open()
+            onNewFromTemplateClicked: addTemplateDialog.open()
             onShowClicked: canvas.moveToObject(object)
           }
 
@@ -183,6 +183,12 @@ Item {
   LevelEditorUi.SaveTemplateDialog {
     id: saveTemplateDialog
     selectedObject: root.selectedObject
+  }
+
+  LevelEditorUi.AddTemplateDialog {
+    id: addTemplateDialog
+    gameController: root.gameController
+    onObjectAdded: selectedObject = newObject
   }
 
   LevelEditorUi.CharacterInventoryEditor {
