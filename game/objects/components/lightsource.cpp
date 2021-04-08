@@ -62,15 +62,15 @@ void LightSourceComponent::refreshLightzone()
     QPoint position = getPosition();
     QRect  zone(position.x() - lightRadius, position.y() - lightRadius, lightRadius * 2 + 1, lightRadius * 2 + 1);
 
-    int topTid         = tileset->getFirstGid() + 1;
+    int bottomTid      = tileset->getFirstGid() + 5;
+    int bottomLeftTid  = tileset->getFirstGid() + 8;
     int middleTid      = tileset->getFirstGid() + 4;
-    int leftTid        = tileset->getFirstGid() + 3;
-    int rightTid       = tileset->getFirstGid() + 5;
-    int bottomTid      = tileset->getFirstGid() + 7;
-    int topLeftTid     = tileset->getFirstGid() + 0;
-    int topRightTid    = tileset->getFirstGid() + 2;
-    int bottomLeftTid  = tileset->getFirstGid() + 6;
-    int bottomRightTid = tileset->getFirstGid() + 8;
+    int bottomRightTid = tileset->getFirstGid() + 2;
+    int rightTid       = tileset->getFirstGid() + 1;
+    int topRightTid    = tileset->getFirstGid() + 0;
+    int topTid         = tileset->getFirstGid() + 3;
+    int leftTid        = tileset->getFirstGid() + 7;
+    int topLeftTid     = tileset->getFirstGid() + 6;
 
     lightZone->clear();
     lightZone->fill(QRect(zone.x() + 1, zone.y() + 1, zone.width() - 2, zone.height() - 2), tileset, middleTid);
