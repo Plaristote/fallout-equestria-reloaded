@@ -2,8 +2,9 @@
 #include <QJsonObject>
 #include "game.h"
 
-Quest::Quest(QObject *parent) : QObject(parent)
+Quest::Quest(QObject *parent) : StorableObject(parent)
 {
+  connect(this, &Quest::completedChanged, this, &Quest::onCompletedChanged);
 }
 
 Quest::~Quest()
@@ -19,14 +20,14 @@ void Quest::initialize(const QString& name)
   qDebug() << "INITIALIZING QUEST" << (SCRIPTS_PATH + "quests/" + name + ".mjs");
   script = new ScriptController(SCRIPTS_PATH + "quests/" + name + ".mjs");
   script->initialize(this);
-  if (script->hasMethod("onQuestStart"))
-    script->call("onQuestStart");
+  if (script->hasMethod("initialize"))
+    script->call("initialize");
 }
 
 void Quest::load(const QJsonObject& data)
 {
+  StorableObject::load(data);
   name = data["name"].toString();
-  variables = data["vars"].toObject().toVariantMap();
   completed = data["over"].toBool(false);
   script = new ScriptController(SCRIPTS_PATH + "/quests/" + name + ".mjs");
   script->initialize(this);
@@ -37,8 +38,8 @@ QJsonObject Quest::save() const
   QJsonObject data;
 
   data.insert("name", name);
-  data.insert("vars", QJsonObject::fromVariantMap(variables));
   data.insert("over", completed);
+  StorableObject::save(data);
   return data;
 }
 
@@ -81,4 +82,17 @@ QVariantList Quest::getObjectives() const
   else
     qDebug() << "Quest" << name << ": missing `getObjectives` method";
   return QVariantList();
+}
+
+QJSValue Quest::getScriptObject() const
+{
+  if (script)
+    return script->getObject();
+  return QJSValue();
+}
+
+void Quest::onCompletedChanged()
+{
+  if (completed && script && script->hasMethod("onCompleted"))
+    script->call("onCompleted");
 }
