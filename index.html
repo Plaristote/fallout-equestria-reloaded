@@ -2091,7 +2091,7 @@ export function create(model) {
 
             <div class="end-chapter"></div>
 
-            <h4 class="card-title" id="c7-3">6.3 Dodge and critical failures</h4>
+            <h4 class="card-title" id="c7-3">7.3 Dodge and critical failures</h4>
             
             <p class="card-text">
               Dodging and critical failures are handled by <span class="mono-span">WeaponBehaviour</span>, but you can overload these behaviours by implementing the <span class="mono-span">triggerDodgeUse</span> or <span class="mono-span">triggerCriticalFailure</span> methods. Here's an example of dodge implementation:
@@ -2282,6 +2282,197 @@ export function create(model) {
 
             <div class="end-chapter"></div>
             
+          </div>
+        </div>
+        
+        <h2 class="my-4" id="c8">
+          8. Cutie Mark Acquisition Program
+        </h2>
+        <div class="card mb-4">
+          <div class="card-body">
+            <h4 class="card-title" id="c8-1">8.1 Introduction to CMAP</h4>
+          
+            <p class="card-text">
+              CMAP is a sub-system of the game engine that handles character sheets. Each character includes a CMAP powered character sheet, accessible through the <span class="mono-span">statistics</span> property on Character game objects. It features a set of different values for:
+            </p>
+            
+            <p class="card-text">
+              <ul>
+                <li><b>Face</b>, a set of informations used to draw the face of the character.</li>
+                <li><b>Characteristics</b>, the strength, perception, endurance, charisma, intelligence, agility, luck values.</li>
+                <li><b>Statistics</b>, a set of values computed from characteristics and other modifiers.</li>
+                <li><b>Skills</b>, the level of mastery for each skills.</li>
+                <li><b>Perks</b>, bonuses that can be gained sometimes after gaining a level.</li>
+                <li><b>Traits</b>, which provide both bonuses and maluses, and can be selected during character creation</li>
+                <li><b>Race</b>, which can be used to customize other values, and define which <i>sprite group</i> will be used to render the character.</li>
+              </ul>
+            </p>
+            
+            <p class="card-text">
+              All of these values can be consulted and modified by scripts. Additionally, traits, races and perks are script-based, and entirely customizable.
+            </p>
+            
+            <p class="card-text">
+              All the values can be directly read or overwritten from the character sheet object, accessing them using their full name in lower camelcase, such as:
+            </p>
+            
+<pre class="code"><code>character.statistics.agility
+character.statistics.lockpick
+character.statistics.armorClass
+...
+</code></pre>
+            
+            <div class="end-chapter"></div>
+            
+            <h4 class="card-title" id="c8-2">8.2 Experience and levels</h4>
+
+            <p class="card-text">
+              Among other things, CMAP handles the experience and level of a character. You may manually grant experience to a character with the following code:
+            </p>
+            
+<pre class="code"><code>character.statistics.addExperience(25);</code></pre>
+
+            <p class="card-text">
+              You can also read the current experience, and the experience left until the next level, using the following properties:
+            </p>
+
+<pre class="code"><code>character.statistics.experience
+character.statistics.xpNextLevel</code></pre>
+
+            <p class="card-text">
+              When the next level is reached, the player gains skill points, and sometimes a perk, according to <span class="mono-span">statistics.skillRate</span> and <span class="mono-span">statistics.perkRate</span>, respectively, the amount of skill points gained by level, and the amount of level to pass before gaining a perk.
+            </p>
+            
+            <p class="card-text">
+              The current amount of skill points and perks available to a player can also be directly edited using the following properties:
+            </p>
+
+<pre class="code"><code>character.statistics.skillPoints
+character.statistics.availablePerks</code></pre>
+
+            <div class="end-chapter"></div>
+
+            <h4 class="card-title" id="c8-3">8.3 Scripting traits</h4>
+            
+            <p class="card-text">
+              Traits scripts are located in <span class="mono-span">scripts/cmap/traits</span>. To add a new custom trait, let's create a new file in there:
+            </p>
+
+<div class="code-header">scripts/cmap/traits/fast-learner.mjs</div>
+<pre class="code"><code>export function onToggled(characterSheet, toggled) {
+  if (toggled)
+    characterSheet.strength -= 3;
+  else
+    characterSheet.strength += 3;
+}
+
+export function modifyBaseStatistics(characterSheet, name, value) {
+  if (name == "skillRate")
+    return value + 10;
+  return value;
+}
+
+export function modifyBaseSkill(characterSheet, name, value) {
+  return value + 25;
+}</code></pre>
+
+            <p class="card-text">
+              In this script, we exported all the functions available to traits:
+            </p>
+            
+            <ul>
+              <li><span class="mono-span">onToggled</span> is called when the trait is added or removed</li>
+              <li><span class="mono-span">modifyBaseStatistics</span> is called for each statistic value when the base values are being re-computed</li>
+              <li><span class="mono-span">modifyBaseSkill</span> is called for each skill value when the base values are being re-computed</li>
+            </ul>
+            
+            <p class="card-text card-hint">
+              Base values are computed using SPECIAL points, traits and race. Base values get updated everytime SPECIAL, traits or race are modified.
+            </p>
+
+            <p class="card-text">
+              In our <span class="mono-span">onToggled</span> function, we decrease the character's strength on activation, and increase it on deactivation.
+            </p>
+            
+            <p class="card-text">
+              Our <span class="mono-span">modifyBaseStatistics</span> function increase the character's skillRate by ten, and leave other statistics as is.
+            </p>
+            
+            <p class="card-text">
+              And our <span class="mono-span">modifyBaseSkill</span> function increases each of the character's skill by 25 points.
+            </p>
+            
+            <div class="end-chapter"></div>
+            
+            <h4 class="card-title" id="c8-4">8.4 Scripting perks</h4>
+            
+            <p class="card-text">
+              Perk scripts are located in <span class="mono-span">scripts/cmap/perks</span>. We will now create a simple perk with the following code:
+            </p>
+
+<div class="code-header">scripts/cmap/races/too-cool-for-school.mjs</div>
+<pre class="code"><code>export function onToggled(characterSheet, toggled) {
+  const modifier = toggled ? 1 : -1;
+
+  characterSheet.charisma += (1 * modifier);
+  characterSheet.speech   += (10 * modifier);
+}
+
+export function isAvailableFor(characterSheet) {
+  return characterSheet.level > 2;
+}</code></pre>
+
+            <p class="card-text">
+              You already know the <span class="mono-span">onToggled</span> function, as it is the same as for Traits scripts. In this perk example, we use it to modify the character's charisma characteristic and speech skill.
+            </p>
+            
+            <p class="card-text">
+              The important part here is <span class="mono-span">isAvailableFor</span>. Perks can only be picked if certain conditions are met, and this function will be called everytime the perk picking screen appears to figure out if your perk will be part of the options available to the player. In this script, we ensured that the perk wouldn't be available until the player reaches level 3.
+            </p>
+            
+            <div class="end-chapter"></div>
+            
+            <h4 class="card-title" id="c8-5">8.5 Scripting races</h4>
+            
+            <p class="card-text">
+              Races scripts are located in <span class="mono-span">scripts/cmap/races</span>. Let's create a new race script:
+            </p>
+            
+<div class="code-header">scripts/cmap/races/ghoul.mjs</div>
+<pre class="code"><code>export const isPlayable = false;
+
+export const spriteSheet = "earthpony-green";
+
+export function onToggled(characterSheet, toggled) {
+  const modifier = toggled ? 1 : -1;
+
+  characterSheet.endurance -= (1 * modifier);
+  characterSheet.strength  -= (1 * modifier);
+}
+</code></pre>
+
+            <p class="card-text">
+              Let's go over the exported values from that script:
+            </p>
+            
+            <ul>
+              <li><span class="mono-span">isPlayable</span> defines whether the race can be selected by a player on character creation.</li>
+              <li><span class="mono-span">spriteSheet</span> defines the <a href="#c5-2">sprite group</a> containing the character's animation.</li>
+              <li><span class="mono-span">onToggled</span>, as with other CMAP scripts, allows you to make changes to the character sheet when a character race changes.</li>
+            </ul>
+            
+            <p class="card-text">
+              What if a same race should use several sprite groups ? Neverfear, you can also export <span class="mono-span">spriteSheet</span> as a function, such as:
+            </p>
+            
+<pre class="code"><code>export function spriteSheet(characterSheet) {
+  if (characterSheet.gender == "male")
+    return "ghoul-male";
+  return "ghoul-female";
+}
+</code></pre>
+            
+            <div class="end-chapter"></div>
           </div>
         </div>
       </div>
