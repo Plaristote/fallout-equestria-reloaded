@@ -84,6 +84,7 @@ protected:
   ScriptController* script = nullptr;
   TaskRunner*       taskRunner = nullptr;
   bool              paused = true;
+  bool              initialized = false;
 };
 
 #endif // LEVELTASK_H

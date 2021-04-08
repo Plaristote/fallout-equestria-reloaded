@@ -58,6 +58,8 @@ void Game::newPlayerParty(StatModel* statistics)
   connect(player->getInventory(), &Inventory::itemPicked, quests, &QuestManager::onItemPicked);
   connect(player, &Character::died, this, &Game::gameOver);
   initializeScript();
+  if (script && script->hasMethod("initialize"))
+    script->call("initialize");
 }
 
 void Game::loadFromDataEngine()

@@ -48,12 +48,17 @@ void LevelTask::load(const QString& levelName, DataEngine* dataEngine)
   ParentType::load();
   grid->initializeGrid(tilemap);
   script = new ScriptController(SCRIPTS_PATH + "levels/" + levelName + ".mjs");
-  script->initialize(this);
   taskRunner->setScriptController(script);
+  script->initialize(this);
   for (auto* zone : tilemap->getZones())
     registerZone(zone);
   if (dataEngine->isLevelActive(name))
     loadObjectsFromDataEngine(dataEngine);
+  if (!initialized && script && script->hasMethod("initialize"))
+  {
+    script->call("initialize");
+    initialized = true;
+  }
 }
 
 void LevelTask::loadObjectsFromDataEngine(DataEngine* dataEngine)
@@ -85,6 +90,7 @@ void LevelTask::loadObjectsFromDataEngine(DataEngine* dataEngine)
     object->setRenderPosition(object->getSpritePosition()); // isn't this basically self-assign ?
     registerDynamicObject(object);
   }
+  initialized = levelData["tasks"].toBool(false);
   taskRunner->load(levelData["tasks"].toObject());
   if (!lastUpdate.isUndefined() && !lastUpdate.isNull())
   {
@@ -122,6 +128,7 @@ void LevelTask::save(DataEngine* dataEngine)
   levelData["objects"] = objectArray;
   if (!isGameEditor())
   {
+    levelData["init"] = initialized;
     levelData["lastUpdate"] = static_cast<int>(game->getTimeManager()->getDateTime().GetTimestamp());
     StorableObject::save(levelData);
     taskRunner->save(taskData);

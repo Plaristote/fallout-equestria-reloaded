@@ -15,7 +15,7 @@ ScriptableComponent::~ScriptableComponent()
 
 void ScriptableComponent::initializeIfNeeded()
 {
-  if (script && script->hasMethod("initialize"))
+  if (!scriptInitialized && script && script->hasMethod("initialize"))
   {
     script->call("initialize");
     scriptInitialized = true;
