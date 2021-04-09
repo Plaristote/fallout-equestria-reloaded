@@ -50,6 +50,7 @@ Buff* CharacterBuffs::addBuff(const QString& name)
   if (!buff)
   {
     buff = new Buff(reinterpret_cast<Character*>(this));
+    buff->setProperty("name", name);
     buffs.push_back(buff);
     onBuffAdded(buff);
     buff->initialize(name);
@@ -72,11 +73,16 @@ Buff* CharacterBuffs::getBuff(const QString& name) const
 void CharacterBuffs::onBuffAdded(Buff* buff)
 {
   connect(buff, &Buff::finish, this, &CharacterBuffs::onBuffRemoved, Qt::QueuedConnection);
+  statistics->rbuffs().push_back(buff->getName());
+  emit statistics->buffsChanged();
+  qDebug() << "Buffs are now = to" << buff->getName();
 }
 
 void CharacterBuffs::onBuffRemoved(Buff* buff)
 {
   buffs.removeOne(buff);
+  statistics->rbuffs().removeAll(buff->getName());
+  emit statistics->buffsChanged();
 }
 
 void CharacterBuffs::clearBuffs()

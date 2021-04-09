@@ -6,9 +6,8 @@ Buff::Buff(Character* parent) : StorableObject(parent), target(parent)
   tasks = new TaskRunner(this);
 }
 
-void Buff::initialize(const QString &name)
+void Buff::initialize(const QString&)
 {
-  this->name = name;
   loadScript();
   if (script->hasMethod("initialize"))
     script->call("initialize");

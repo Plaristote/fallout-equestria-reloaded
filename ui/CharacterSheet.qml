@@ -117,6 +117,7 @@ Pane {
         selectedProperty: root.selectedProperty
         onSelectProperty: root.selectedProperty = selectedName
         Layout.fillWidth: true
+        Layout.fillHeight: true
       }
 
       CMAP.Statistics {

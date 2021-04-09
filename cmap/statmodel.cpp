@@ -426,6 +426,7 @@ void StatModel::fromJson(const QJsonObject& json)
   emit specialChanged();
   emit perksChanged();
   emit traitsChanged();
+  emit buffsChanged();
   emit levelChanged();
   emit hitPointsChanged();
   emit nameChanged();

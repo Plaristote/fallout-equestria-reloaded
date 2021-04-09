@@ -78,6 +78,7 @@ class StatModel : public QObject
 
   Q_PROPERTY(QStringList perks  MEMBER perks  NOTIFY perksChanged)
   Q_PROPERTY(QStringList traits MEMBER traits NOTIFY traitsChanged)
+  Q_PROPERTY(QStringList buffs  MEMBER buffs  NOTIFY buffsChanged)
 
   // Statistics
   Q_PROPERTY(int maxHitPoints        READ get_maxHitPoints WRITE set_maxHitPoints NOTIFY statisticsChanged)
@@ -127,6 +128,8 @@ public:
 
   int getXpNextLevel() const;
   void levelUp();
+
+  QStringList& rbuffs() { return buffs; }
 
   const QString& getRace() const { return race; }
   void setRace(const QString& newRace);
@@ -217,6 +220,7 @@ signals:
   void statisticsChanged();
   void perksChanged();
   void traitsChanged();
+  void buffsChanged();
   void acceptableChanged();
   void spriteThemeChanged();
   void faceAccessoriesChanged();
@@ -247,7 +251,7 @@ private:
   StatData  modifiers;
   SkillData spentPoints;
 
-  QStringList traits, perks;
+  QStringList traits, perks, buffs;
   QJsonDocument variables;
   QMap<QString, unsigned int> kills;
 
