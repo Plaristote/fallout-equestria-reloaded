@@ -33,7 +33,7 @@ bool CombatComponent::isPlayerTurn() const
 
 bool CombatComponent::isCharacterTurn(Character *character) const
 {
-  return combattants[combatIterator] == character;
+  return combattants.size() > combatIterator && combattants[combatIterator] == character;
 }
 
 void CombatComponent::onActiveItemChanged()

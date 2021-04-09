@@ -54,6 +54,8 @@ public:
 
   Q_INVOKABLE void advanceTime(unsigned int minutes);
 
+  Q_INVOKABLE QVariantList previewPathTo(int x, int y);
+
   void finalizeRound() override;
 
 signals:

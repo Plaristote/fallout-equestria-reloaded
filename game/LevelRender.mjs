@@ -141,23 +141,57 @@ export class Controller {
     );
   }
 
-  renderMoveCursor() {
-    const coordinates = this.canvas.hoverTile;
+  renderCombatMoveCursor() {
+    if (this.level.player && this.level.isCharacterTurn(this.level.player)) {
+      const coordinates = this.canvas.hoverTile;
 
-    if (coordinates && coordinates.length === 2) {
-      const tile = this.layers.ground.getTile(coordinates[0], coordinates[1]);
+      if (coordinates && coordinates.length === 2) {
+        const path = this.level.previewPathTo(coordinates[0], coordinates[1]);
+        const maxLength = Math.min(this.level.player.actionPoints, path.length);
 
-      if (tile)
-      {
-        const occupied = this.level.grid.isOccupied(coordinates[0], coordinates[1]);
-        const texture  = !occupied ? "move-tile.png" : "move-tile-unavailable.png";
+        for (var i = 0 ; i < maxLength ; ++i) {
+          const tile = this.layers.ground.getTile(path[i].x, path[i].y);
+          const lastTile = i + 1 === maxLength;
+          const texture = lastTile ? "move-tile.png" : "move-tile-unavailable.png";
 
-        this.canvas.hoverTileHintVisible = true;
-        this.renderImage(`../assets/ui/cursors/${texture}`, tile.renderPosition, this.tileSize.width, this.tileSize.height);
-        return ;
+          if (tile) {
+            this.renderImage(`../assets/ui/cursors/${texture}`, tile.renderPosition, this.tileSize.width, this.tileSize.height);
+            if (lastTile) {
+              this.context.font = "bold 20px sans-serif";
+              this.context.fillStyle = "#FFFFFF";
+              this.context.fillText(`${maxLength}`, tile.renderPosition.x + this.tileSize.width / 2 - 10, tile.renderPosition.y + this.tileSize.height / 2);
+              this.context.strokeStyle = "#000000";
+              this.context.strokeText(`${maxLength}`, tile.renderPosition.x + this.tileSize.width / 2 - 10, tile.renderPosition.y + this.tileSize.height / 2);
+            }
+          }
+        }
+        this.canvas.hoverTileHintVisible = !(maxLength !== path.length || path.length === 0);
+        return true;
       }
     }
-    this.canvas.hoverTileHintVisible = false;
+    return false;
+  }
+
+  renderMoveCursor() {
+    if (!this.renderCombatMoveCursor())
+    {
+      const coordinates = this.canvas.hoverTile;
+
+      if (coordinates && coordinates.length === 2) {
+        const tile = this.layers.ground.getTile(coordinates[0], coordinates[1]);
+
+        if (tile)
+        {
+          const occupied = this.level.grid.isOccupied(coordinates[0], coordinates[1]);
+          const texture  = !occupied ? "move-tile.png" : "move-tile-unavailable.png";
+
+          this.canvas.hoverTileHintVisible = true;
+          this.renderImage(`../assets/ui/cursors/${texture}`, tile.renderPosition, this.tileSize.width, this.tileSize.height);
+          return ;
+        }
+      }
+      this.canvas.hoverTileHintVisible = false;
+    }
   }
 
   renderCoordinates(x, y) {

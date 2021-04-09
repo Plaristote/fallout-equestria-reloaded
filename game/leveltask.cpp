@@ -375,3 +375,17 @@ DynamicObject* LevelTask::generateDynamicObject(const QString &name)
   registerDynamicObject(object);
   return object;
 }
+
+QVariantList LevelTask::previewPathTo(int x, int y)
+{
+  auto* grid  = getGrid();
+  QList<QPoint> path;
+  QVariantList result;
+
+  if (getPlayer() && grid->findPath(getPlayer()->getPosition(), QPoint(x, y), path))
+  {
+    for (const auto& point : qAsConst(path))
+      result.push_back(point);
+  }
+  return result;
+}

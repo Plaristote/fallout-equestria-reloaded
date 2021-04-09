@@ -5,8 +5,6 @@ export class ItemBehaviour {
     this.model = model;
     if (this.requiresTarget == undefined)
       this.requiresTarget = true;
-    if (this.triggersCombat == undefined)
-      this.triggersCombat = false;
     if (this.useModes == undefined)
       this.useModes = ["use"];
   }
