@@ -2629,11 +2629,125 @@ export function create(model) {
         </h2>
         <div class="card mb-4">
           <div class="card-body">
-            <h4 class="card-title" id="c10-1">10.1 TODO</h4>
+            <h4 class="card-title" id="c10-1">10.1 Introduction</h4>
           
             <p class="card-text">
-              TODO
+              Buffs are bonuses or maluses that can be added to a Character. Buffs themselves are game objects, and the scripts are located at <span class="mono-span">scripts/buffs</span>. They feature a TaskManager, allowing for functions methods to be called regularly, and eventually remove the buff once it has expired.
             </p>
+            
+            <p class="card-text">
+              Buffs on a character are visible in the status panel in the character sheet view, below the Hit points display:
+            </p>
+
+            <p class="card-text">
+              <img src="pictures/buff-view.png" />
+            </p>
+            
+            <div class="end-chapter"></div>
+            
+            <h4 class="card-title" id="c10-2">10.2 Adding and removing buffs</h4>
+
+            <p class="card-text">
+              Adding a buff on a character is fairly easy. The name of a buff is defined by the name of it scripts. To add the buff defined in <span class="mono-span">scripts/buffs/bleeding.mjs</span>, we would do the following:
+            </p>
+            
+<pre class="code"><code>characters.addBuff("bleeding");</code></pre>
+
+            <p class="card-text">
+              The bleeding buff is a tick-based buff, meaning that once it runs off of ticks, the buff will remove itself. But what if we wanted to remove it, for another reason ? We will first need to fetch the buff game object, before removing it:
+            </p>
+            
+<pre class="code"><code>const buff = characters.getBuff("bleeding");
+
+if (buff)
+  buff.remove();</code></pre>
+
+            <div class="end-chapter"></div>
+            
+            <h4 class="card-title" id="c10-3">10.3 Creating a buff</h4>
+            
+            <p class="card-text">
+              Now that we know how to apply or remove buffs from a character, let's see how to create our own custom buffs. Let's make a blinded buff, reducing the character's perception:
+            </p>
+            
+<div class="code-header">scripts/buffs/blinded.mjs</div>
+<pre class="code"><code>class Blinded {
+  constructor(model) {
+    this.model = model;
+  }
+  
+  initialize() {
+    this.model.target.statistics.perception -= 5;
+  }
+  
+  finalize() {
+    this.model.target.statistics.perception += 5;
+  }
+}
+
+export function create(model) {
+  return new Blinded(model);
+}</code></pre>
+
+            <p class="card-text">
+              As you can see, like other game objects, buffs have an <span class="mono-span">initialize</span> method, whcih gets executed when the buff is applied on the player. But buffs also have a <span class="mono-span">finalize</span> method, which gets called as the buff gets removed from the character.
+            </p>
+            
+            <p class="card-text">
+              Currently, our buff will remain on the character indefinitely, until another script manually removes it. If we want our buff to expire, we can leverage the TaskManager:
+            </p>
+            
+<div class="code-header">scripts/buffs/blinded.mjs</div>
+<pre class="code"><code>class Blinded {
+  constructor(model) {
+    this.model = model;
+  }
+  
+  initialize() {
+    this.model.target.statistics.perception -= 5;
+    this.tasks.addTask("expire", 86400000, 1);
+  }
+  
+  finalize() {
+    this.model.target.statistics.perception += 5;
+  }
+  
+  expire() {
+    this.model.remove();
+  }
+}
+
+export function create(model) {
+  return new Blinded(model);
+}</code></pre>
+
+            <p class="card-text">
+              We now schedule a call to our <span class="mono-span">expire</span> method, one day after the buff gets applied. Then, in the <span class="mono-span">expire</span> method, we call our game object's <span class="mono-span">remove</span> method, which will in turn call the <span class="mono-span">finalize</span> method and remove the buff from the character.
+            </p>
+            
+            <div class="end-chapter"></div>
+            
+            <h4 class="card-title" id="c10-4">10.4 Cumulating buffs</h4>
+            
+            <p class="card-text">
+              There is one important fact to know about buffs: there cannot be several instance of a same buff on the same player at a given time. However, it is possible to cumulate buffs using a single buff game object. We will now see what happens when you add a buff to a character, when an instance of the same buff is already being applied on a character.
+            </p>
+            
+            <p class="card-text">
+              If you were to call <span class="mono-span">character.addBuff("blinded")</span> twice, it's <span class="mono-span">initialize</span> method will only be called once. However, if you provide a <span class="mono-span">repeat</span> method, it will get called instead. Let's see how this might be implemented:
+            </p>
+            
+<div class="code-header">scripts/buffs/blinded.mjs</div>
+<pre class="code"><code>  repeat() {
+    this.tasks.removeTask("expire");
+    this.tasks.addTask("expire", 86400000, 1);
+  }</code></pre>
+
+            <p class="card-text">
+              In our <span class="mono-span">repeat</span> method, we first unschedule the call to our <span class="mono-span">expire</span> method, and re-schedule it to one day in the future. This means applying the buff two times on a character doesn't change anything, but ensure that the buff won't expire until one day after the last addition, rather than one day after the first addition.
+            </p>
+            
+            <div class="end-chapter"></div>
           </div>
         </div>
       </div>
@@ -2734,6 +2848,10 @@ export function create(model) {
             </div>
             <a href="#c10">10. Buffs</a>
             <div class="chapter">
+              <a href="#c10-1">10.1 Introduction</a>
+              <a href="#c10-2">10.2 Adding and removing buffs</a>
+              <a href="#c10-3">10.3 Creating a buff</a>
+              <a href="#c10-4">10.4 Cumulating buffs</a>
             </div>
           </div>
         </div>
