@@ -4,15 +4,15 @@
 # include "globals.h"
 # include "cmap/statmodel.h"
 # include "diplomacy.hpp"
-# include "characters/sight.h"
 # include "characters/field_of_view.hpp"
+# include "characters/buffs.h"
 
 class ActionQueue;
 
-class Character : public CharacterSight
+class Character : public CharacterBuffs
 {
   Q_OBJECT
-  typedef CharacterSight ParentType;
+  typedef CharacterBuffs ParentType;
 
   Q_PROPERTY(ActionQueue* actionQueue MEMBER actionQueue)
   Q_PROPERTY(int actionPoints MEMBER actionPoints NOTIFY actionPointsChanged)
@@ -38,11 +38,11 @@ public:
   Q_INVOKABLE QJSValue getActions();
   Q_INVOKABLE bool isAlive() const { return getStatistics()->getHitPoints() > 0; }
 
-  Q_INVOKABLE void takeDamage(int damage, Character* dealer);
-  Q_INVOKABLE void attackedBy(Character* dealer);
-  Q_INVOKABLE bool useActionPoints(int amount = 1, const QString& motive = "");
-  inline int       getActionPoints() const { return actionPoints; }
-  void             resetActionPoints();
+  Q_INVOKABLE void  takeDamage(int damage, Character* dealer);
+  Q_INVOKABLE void  attackedBy(Character* dealer);
+  Q_INVOKABLE bool  useActionPoints(int amount = 1, const QString& motive = "");
+  inline int        getActionPoints() const { return actionPoints; }
+  void              resetActionPoints();
 
 signals:
   void actionPointsChanged();
@@ -61,6 +61,7 @@ private:
   bool sneakEnabled = false;
   int actionPoints = 0;
   QJSValue jsActionQueue;
+  QVector<Buff*> buffs;
 };
 
 #endif // CHARACTER_H

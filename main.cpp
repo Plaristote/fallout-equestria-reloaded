@@ -22,6 +22,7 @@
 #include "game/lootingcontroller.h"
 #include "gamemanager.h"
 #include "musicmanager.h"
+#include "game/characters/buff.h"
 
 #include "cmap/statmodel.h"
 
@@ -85,6 +86,7 @@ int main(int argc, char *argv[])
   qmlRegisterType<WorldMapZone>("Game", 1,0, "WorldMapZone");
   qmlRegisterType<Inventory>("Game", 1,0, "Inventory");
   qmlRegisterType<TextBubble>("Game", 1,0, "TextBubble");
+  qmlRegisterType<Buff>("Game", 1,0, "Buff");
 
   registerQmlTilemap();
   // GAME EDITOR

@@ -75,6 +75,10 @@ set(PROJECT_SOURCES
         game/characterparty.cpp
         game/characterdialog.h
         game/characterdialog.cpp
+        game/characters/buff.h
+        game/characters/buff.cpp
+        game/characters/buffs.h
+        game/characters/buffs.cpp
         game/characters/sight.h
         game/characters/sight.cpp
         game/characters/inventory.h
