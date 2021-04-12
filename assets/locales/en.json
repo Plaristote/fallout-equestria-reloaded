@@ -13,6 +13,7 @@
       "use":   "{{user}} used {{item}} on {{target}} for {{damage}} damage",
       "dodge": "{{target}} dodged an attack from {{user}}"
     },
+    "damaged": "{{target}} took {{damage}} points of damage",
     "use": "{{user}} used {{item}}.",
     "healed": "{{target}} was healed for {{hp}} hit points",
     "door-locked": "You successfully locked the door",
@@ -35,7 +36,9 @@
     "trap-critical-failure": "You critically failed and triggered the trap.",
     "trap-disarm-failed": "You didn't manage to disarm the trap.",
     "trap-disarmed": "You successfully disarmed the trap.",
-    "trap-detected": "You've found a trap !"
+    "trap-detected": "You've found a trap !",
+    "radiation-over": "You are no longer irradiated.",
+    "radiation-begin": "You've been irradiated by magical waste."
   },
   "use-modes": {
     "use": "Use",
