@@ -13,6 +13,8 @@ public:
   void registerDynamicObject(DynamicObject*);
   void unregisterDynamicObject(DynamicObject*);
 
+  Q_INVOKABLE QJSValue getZoneOccupants(TileZone* zone);
+
 signals:
   void exitZoneEntered(TileZone*);
 

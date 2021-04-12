@@ -44,6 +44,7 @@ protected:
   QList<DynamicObject*> objects;
   QList<Character*>     visibleCharacters;
   TileMap*              tilemap = nullptr;
+  ScriptController*     script = nullptr;
 };
 
 #endif // LEVELBASE_H

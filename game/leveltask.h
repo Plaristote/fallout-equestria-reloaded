@@ -83,7 +83,6 @@ protected:
   QElapsedTimer     clock;
   TimeManager*      timeManager = nullptr;
   SoundManager*     soundManager = nullptr;
-  ScriptController* script = nullptr;
   TaskRunner*       taskRunner = nullptr;
   bool              paused = true;
   bool              initialized = false;

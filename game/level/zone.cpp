@@ -1,6 +1,7 @@
 #include "zone.h"
 #include "tilemap/tilezone.h"
 #include "tilemap/tilemap.h"
+#include "game.h"
 
 ZoneComponent::ZoneComponent(QObject* parent) : GridComponent(parent)
 {
@@ -52,6 +53,8 @@ void ZoneComponent::onZoneEntered(DynamicObject* object, TileZone* zone)
       character->onZoneEntered(zone);
       if (zone->getType() == "exit" && object == getPlayer())
         emit exitZoneEntered(zone);
+      else if (script && script->hasMethod("onZoneEntered"))
+        script->call("onZoneEntered", QJSValueList() << zone->getName() << character->asJSValue());
     }
   }
 }
@@ -59,5 +62,29 @@ void ZoneComponent::onZoneEntered(DynamicObject* object, TileZone* zone)
 void ZoneComponent::onZoneExited(DynamicObject* object, TileZone* zone)
 {
   if (object->isCharacter())
+  {
     reinterpret_cast<Character*>(object)->onZoneExited(zone);
+    if (script && script->hasMethod("onZoneExited"))
+      script->call("onZoneExited", QJSValueList() << zone->getName() << object->asJSValue());
+  }
+}
+
+
+QJSValue ZoneComponent::getZoneOccupants(TileZone* zone)
+{
+  auto*    game = Game::get();
+  auto&    scriptEngine = game->getScriptEngine();
+  QJSValue result = scriptEngine.newArray();
+
+  if (zone)
+  {
+    for (const QPoint& position : zone->getPositions())
+    {
+      QJSValue concat = result.property("concat");
+      QJSValue objectArray = game->getLevel()->getDynamicObjectsAt(position.x(), position.y());
+
+      result = concat.callWithInstance(result, QJSValueList() << objectArray);
+    }
+  }
+  return result;
 }
