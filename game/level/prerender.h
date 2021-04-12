@@ -14,8 +14,10 @@ public:
 
   void load();
 
-protected:
+private:
   void    preRenderTilemap();
+  void    preRenderGround();
+  void    preRenderLayers(const QList<TileLayer*>&, const QString& prefix);
   QString getPreRenderPath() const;
 };
 

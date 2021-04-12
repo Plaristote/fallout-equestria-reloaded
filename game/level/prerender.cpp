@@ -16,8 +16,6 @@ void PreRenderComponent::load()
   layers << tilemap->getLayer("ground") << tilemap->getRoofs() << tilemap->getLights();
   if (!dir.exists(getPreRenderPath()))
     preRenderTilemap();
-  for (auto it = layers.begin() ; it != layers.end() ; ++it)
-    (*it)->setProperty("prerendered", true);
   ParentType::load();
 }
 
@@ -29,20 +27,41 @@ QString PreRenderComponent::getPreRenderPath() const
 void PreRenderComponent::preRenderTilemap()
 {
   QDir dir;
-  QString preRenderFolder = getPreRenderPath();
 
-  dir.mkpath(preRenderFolder);
-  tilemap->getLayer("ground")->renderToFile(preRenderFolder + "tilemap.png");
-  for (TileLayer* roofLayer : tilemap->getRoofs())
+  dir.mkpath(getPreRenderPath());
+  preRenderGround();
+  preRenderLayers(tilemap->getRoofs(), "roof");
+  preRenderLayers(tilemap->getLights(), "lights");
+}
+
+void PreRenderComponent::preRenderGround()
+{
+  QString     tilemapFile = getPreRenderPath() + "tilemap.png";
+  TileLayer*  ground = tilemap->getLayer("ground");
+  QImage      image(ground->getRenderedRect().size(), QImage::Format_ARGB32);
+  QPoint      offset(ground->getRenderedRect().x(), 0);
+  QStringList nonRenderable({"misc", "walls", "ground"});
+  const auto& layers = tilemap->getLayers();
+
+  image.fill(Qt::transparent);
+  ground->renderToImage(image, offset);
+  for (auto it = layers.rbegin() ; it != layers.rend() ; ++it)
   {
-    QString fileName = "roof_" + roofLayer->getName() + ".png";
+    TileLayer* layer = *it;
 
-    roofLayer->renderToFile(preRenderFolder + fileName);
+    if (layer->isVisible() && !nonRenderable.contains(layer->getName()))
+      layer->renderToImage(image, offset);
   }
-  for (TileLayer* lightLayer : tilemap->getLights())
-  {
-    QString fileName = "lights_" + lightLayer->getName() + ".png";
+  image.save(tilemapFile);
+  ground->setProperty("prerendered", true);
+}
 
-    lightLayer->renderToFile(preRenderFolder + fileName);
+void PreRenderComponent::preRenderLayers(const QList<TileLayer*>& layers, const QString &prefix)
+{
+  for (TileLayer* lightLayer : layers)
+  {
+    QString fileName = prefix + '_' + lightLayer->getName() + ".png";
+
+    lightLayer->renderToFile(getPreRenderPath() + fileName);
   }
 }

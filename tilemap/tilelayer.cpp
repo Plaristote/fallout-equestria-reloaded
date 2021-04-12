@@ -254,11 +254,18 @@ void TileLayer::renderToFile(const QString& fileName)
 {
   QRect    renderedRect(getRenderedRect());
   QSize    imageSize = renderedRect.size();
-  QPoint   offset(renderedRect.x(), 0);
   QImage   image(imageSize, QImage::Format_ARGB32);
-  QPainter painter;
 
   image.fill(Qt::transparent);
+  renderToImage(image, QPoint(renderedRect.x(), 0));
+  image.save(fileName);
+  prerendered = true;
+}
+
+void TileLayer::renderToImage(QImage &image, QPoint offset)
+{
+  QPainter painter;
+
   painter.begin(&image);
   for (int x = 0 ; x < size.width() ; ++x)
   {
@@ -276,6 +283,4 @@ void TileLayer::renderToFile(const QString& fileName)
     }
   }
   painter.end();
-  image.save(fileName);
-  prerendered = true;
 }

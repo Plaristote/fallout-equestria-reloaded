@@ -31,6 +31,7 @@ public:
   void setVisible(bool value) { visible = value; emit visibleChanged(); }
   bool isVisible() const { return visible; }
   void renderToFile(const QString& file);
+  void renderToImage(QImage& image, QPoint offset);
 
   Q_INVOKABLE Tile* getTile(int x, int y) const;
   Q_INVOKABLE QSize getRenderedSize();

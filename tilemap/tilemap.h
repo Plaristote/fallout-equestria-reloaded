@@ -35,6 +35,7 @@ public:
   QList<TileZone*>& getZones() { return zones; }
   const QList<TileLayer*>& getRoofs() const { return roofs; }
   const QList<TileLayer*>& getLights() const { return lights; }
+  const QVector<TileLayer*>& getLayers() const { return layers; }
   Tileset* getTileset(const QString& name) const;
 
   Q_INVOKABLE TileLayer* getLayer(const QString& name);
