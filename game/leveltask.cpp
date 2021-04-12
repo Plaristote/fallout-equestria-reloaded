@@ -241,7 +241,7 @@ void LevelTask::advanceTime(unsigned int minutes)
   for (DynamicObject* object : qAsConst(objects))
   {
     object->update(delta);
-    object->getTaskManager()->update(delta);
+    object->updateTasks(delta);
     if (object->isCharacter())
       reinterpret_cast<Character*>(object)->getActionQueue()->update();
   }

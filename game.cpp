@@ -245,7 +245,7 @@ void Game::advanceTime(unsigned int minutes)
     qint64 delta = minutes * 60 * 1000;
 
     for (Character* character : playerParty->getCharacters())
-      character->getTaskManager()->update(delta);
+      character->updateTasks(delta);
     taskManager->update(delta);
   }
 }
