@@ -27,8 +27,13 @@ void ScriptableComponent::setScript(const QString& name)
   if (script)
     delete script;
   scriptName = name;
-  script     = new ScriptController(getScriptPath() + '/' + name);
-  script->initialize(this);
+  if (name.length() > 0)
+  {
+    script     = new ScriptController(getScriptPath() + '/' + name);
+    script->initialize(this);
+  }
+  else
+    script = nullptr;
   emit scriptNameChanged();
 }
 
