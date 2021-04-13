@@ -317,6 +317,7 @@ export class Controller {
     const clippedRect = sprite.getClippedRect();
 
     if (this.shouldRender(offset.x, offset.y, clippedRect.width, clippedRect.height)) {
+      /*
       if (sprite.getShadowSource() !== "")
       {
         this.context.drawImage(
@@ -325,6 +326,7 @@ export class Controller {
           offset.x, offset.y + 3, clippedRect.width, clippedRect.height
         );
       }
+      */
       this.context.drawImage(
         this.pathPrefix + sprite.getSpriteSource(),
         clippedRect.x, clippedRect.y, clippedRect.width, clippedRect.height,
@@ -389,7 +391,7 @@ export class Controller {
   }
 
   clear() {
-    this.context.clearRect(-this.origin.x, -this.origin.y, this.canvas.width * 100, this.canvas.height * 100);
+    this.context.clearRect(-this.origin.x, -this.origin.y, this.canvas.width * 10, this.canvas.height * 10);
   }
 
   getHoveredCase(posX, posY) {
