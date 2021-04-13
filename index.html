@@ -628,7 +628,7 @@ export function create(model) {
             <video class="card-img-top" src="videos/03-character-set-level.webm" autoplay loop controls muted></video>
             
             <p class="card-text warning">
-              Don't forget to <b>click the Confirm button</b> once you're done with your character sheet, otherwise none of your changes will be saved !
+              Don't forget to <b>click the Confirm button</b> once you're done with your character sheet, otherwise none of your changes will be saved. Your changes will be lost if you swap levels or go back to the main menu without saving.
             </p>
             
             <div class="end-chapter"></div>
@@ -1777,11 +1777,11 @@ export function create(model) {
 }</code></pre>
 
             <p class="card-text card-hint">
-              <span class="mono-span">ItemBehaviour</span>, similarly to <span class="mono-span">CharacterBehaviour</span>, and implements default behaviours for all the methods that the game engine might call on Item objects.
+              <span class="mono-span">ItemBehaviour</span>, similarly to <span class="mono-span">CharacterBehaviour</span>, implements default behaviours for all the methods that the game engine might call on Item objects.
             </p>
 
             <p class="card-text">
-              Let's have a look at the properties and methods we've set, and what they're useful for:
+              Let's have a look at the properties and methods we've set up, and what they're useful for:
               
               <ul>
                 <li><span class="mono-span">requiresTarget</span> is a property you can set on your script to hint that your item does not need a target. Such items can be used directly from inventory.</li>
