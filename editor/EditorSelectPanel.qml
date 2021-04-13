@@ -43,7 +43,6 @@ Pane {
   }
 
   Flickable {
-    visible: model.length > 0
     anchors.fill: parent
     contentHeight: column.height
     clip: true
@@ -62,6 +61,7 @@ Pane {
 
       TerminalField {
         id: filterInput
+        visible: model.length > 0
         Layout.fillWidth: true
         Layout.bottomMargin: 5
         placeholderText: "Filter..."

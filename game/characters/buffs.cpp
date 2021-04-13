@@ -87,12 +87,11 @@ void CharacterBuffs::onBuffRemoved(Buff* buff)
 
 void CharacterBuffs::clearBuffs()
 {
-  for (auto it = buffs.begin() ; it != buffs.end() ; ++it)
+  while (buffs.size() > 0)
   {
-    Buff* buff = *it;
+    Buff* buff = buffs.first();
 
     onBuffRemoved(buff);
     buff->deleteLater();
   }
-  buffs.clear();
 }
