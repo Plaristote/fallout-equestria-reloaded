@@ -16,6 +16,8 @@ void PreRenderComponent::load()
   layers << tilemap->getLayer("ground") << tilemap->getRoofs() << tilemap->getLights();
   if (!dir.exists(getPreRenderPath()))
     preRenderTilemap();
+  for (TileLayer* layer : layers)
+    layer->setProperty("prerendered", true);
   ParentType::load();
 }
 
