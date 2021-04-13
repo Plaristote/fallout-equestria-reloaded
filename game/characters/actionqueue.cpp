@@ -119,11 +119,7 @@ void ActionQueue::pushReach(DynamicObject *target, float range)
 
 int ActionQueue::getReachApCost(DynamicObject *target, float range) const
 {
-  auto action = ReachAction(character, target, range);
-
-  if (action.trigger())
-    return action.getApCost();
-  return -1;
+  return ReachAction(character, target, range).getApCost();
 }
 
 void ActionQueue::pushInteraction(DynamicObject *target, const QString &interactionName)

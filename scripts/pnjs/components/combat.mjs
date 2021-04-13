@@ -1,5 +1,4 @@
 import {SkillTargetComponent} from "./skillTarget.mjs";
-import {findPathTo} from "../../behaviour/pathfinding.mjs";
 
 export class CombatComponent extends SkillTargetComponent {
   constructor(model) {
@@ -20,17 +19,18 @@ export class CombatComponent extends SkillTargetComponent {
       this.combatTarget = enemies[0];
     }
     if (this.combatTarget) {
-      const actions = this.model.getActions();
-      const movement = findPathTo(actions, this.combatTarget.getPosition());
-      const itemAp = Math.max(1, actions.getItemUseApCost(this.combatTarget, "use-1"));
-      var   ap = this.model.actionPoints;
+      const actions  = this.model.getActions();
+      const weapon   = this.model.inventory.getEquippedItem("use-1");
+      const movement = actions.getReachApCost(this.combatTarget, weapon.getRange());
+      const itemAp   = Math.max(1, actions.getItemUseApCost(this.combatTarget, "use-1"));
+      var   ap       = this.model.actionPoints;
 
-      console.log(this.model.statistics.name, "onTurnStart", movement.ap, ap);
-      if (movement.ap >= 0) {
+      console.log(this.model.statistics.name, "onTurnStart", movement, ap);
+      if (movement >= 0) {
         actions.reset();
-        if (movement.ap > 0) {
-          ap -= movement.ap;
-          actions.pushMovement(movement.position.x, movement.position.y);
+        if (movement > 0) {
+          ap -= movement;
+          actions.pushReach(this.combatTarget, weapon.getRange());
         }
         while (ap > itemAp) {
           actions.pushItemUse(this.combatTarget, "use-1");

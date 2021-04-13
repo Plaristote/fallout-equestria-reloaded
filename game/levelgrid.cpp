@@ -146,7 +146,7 @@ bool LevelGrid::findPath(QPoint from, QPoint to, QList<QPoint>& path)
     bool toOccupiedBackup = toCase->occupied;
 
     fromCase->occupied = false;
-    toCase->occupied = false;
+    //toCase->occupied = false;
     path.clear();
     astar.SetStartAndGoalStates(*fromCase, *toCase);
     while ((state = astar.SearchStep()) == Pathfinder::Searching && ++iterationCount < 1250);

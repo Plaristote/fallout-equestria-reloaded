@@ -11,10 +11,12 @@ public:
   }
 
   bool trigger() override;
+  int getApCost() const override;
 
 protected:
   void triggerNextMovement() override;
-  QVector<QPoint> getCandidates(int caseDistance);
+  QVector<QPoint> getCandidates(int caseDistance) const;
+  bool alreadyReached() const;
 
   DynamicObject* object;
   float range = 1.f;
