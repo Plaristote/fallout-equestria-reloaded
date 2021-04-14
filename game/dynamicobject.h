@@ -41,6 +41,7 @@ public:
 
   void setObjectName(const QString& value) { objectName = value; emit objectNameChanged(); }
   const QString& getObjectName() const { return objectName; }
+  QString getBaseName() const;
   TaskRunner* getTaskManager() { return taskManager; }
 
   Q_INVOKABLE QString getObjectType() const { return metaObject()->className(); }
@@ -62,6 +63,9 @@ signals:
 
 protected slots:
   void onBlocksPathChanged();
+
+private:
+  bool defaultLookInteraction();
 
 protected:
   TaskRunner* taskManager;

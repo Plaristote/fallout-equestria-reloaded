@@ -1,6 +1,8 @@
+#include <QRegularExpression>
 #include "dynamicobject.h"
 #include "character.h"
 #include "game.h"
+#include "i18n.h"
 
 DynamicObject::DynamicObject(QObject *parent) : ParentType(parent)
 {
@@ -24,16 +26,17 @@ void DynamicObject::updateTasks(qint64 v)
   taskManager->update(v);
 }
 
+QString DynamicObject::getBaseName() const
+{
+  QRegularExpression regexp("#.*$");
+  return QString(objectName).replace(regexp, "");
+}
+
 QStringList DynamicObject::getAvailableInteractions()
 {
   if (script)
-  {
-    qDebug() << "Calling get available interactions on " << getObjectName();
     return script->call("getAvailableInteractions").toVariant().toStringList();
-  }
-  else
-    qDebug() << "/!\\ Missing script on object " << getObjectName();
-  return QStringList();
+  return QStringList() << "look";
 }
 
 bool DynamicObject::triggerInteraction(Character* character, const QString &interactionType)
@@ -45,14 +48,25 @@ bool DynamicObject::triggerInteraction(Character* character, const QString &inte
     {"look",      "onLook"}
   };
 
-  qDebug() << "DynamicObject::triggerInteraction";
   if (character && script)
   {
     const QString callback = callbackMap[interactionType];
 
     return script->call(callback, QJSValueList() << character->asJSValue()).toBool();
   }
+  else if (interactionType == "look")
+    return defaultLookInteraction();
   return false;
+}
+
+bool DynamicObject::defaultLookInteraction()
+{
+  const I18n* i18n = I18n::get();
+
+  Game::get()->appendToConsole(i18n->t("inspection.item", {
+    {"item", i18n->t("objects." + getBaseName())}
+  }));
+  return true;
 }
 
 bool DynamicObject::triggerSkillUse(Character *user, const QString &skillName)
