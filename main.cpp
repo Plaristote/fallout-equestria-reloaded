@@ -88,6 +88,9 @@ int main(int argc, char *argv[])
   qmlRegisterType<TextBubble>("Game", 1,0, "TextBubble");
   qmlRegisterType<Buff>("Game", 1,0, "Buff");
 
+  qRegisterMetaType<Character*>("const Character*");
+  qRegisterMetaType<CharacterDiplomacy*>("const CharacterDiplomacy*");
+
   registerQmlTilemap();
   // GAME EDITOR
   qmlRegisterType<QmlSpriteAnimation>("Game", 1,0, "SpriteAnimation");

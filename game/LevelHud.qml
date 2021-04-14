@@ -64,23 +64,12 @@ Pane {
     onItemActivated: levelController.setActiveItem(activatedSlot)
   }
 
-  Row {
-    anchors.bottom: actionPointPane.top
-    anchors.bottomMargin: 10
-    anchors.horizontalCenter: actionPointPane.horizontalCenter
-    clip: true
-    spacing: 10
-    Repeater {
-      model: levelController.combattants
-      delegate: Rectangle {
-        property QtObject character: levelController.combattants[index]
-
-        height: 20
-        width: 20
-        border.width: 2
-        border.color: levelController.turn === index ? "yellow" : "black"
-        color: character === levelController.player ? "lightgreen" : "blue"
-      }
+  CombatPreview {
+    levelController: root.levelController
+    anchors {
+      bottom: actionPointPane.top
+      bottomMargin: 10
+      horizontalCenter: actionPointPane.horizontalCenter
     }
   }
 

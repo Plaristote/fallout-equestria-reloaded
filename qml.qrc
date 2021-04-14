@@ -236,5 +236,6 @@
         <file>editor/level/ObjectSelectPanel.qml</file>
         <file>editor/level/SaveTemplateDialog.qml</file>
         <file>editor/level/AddTemplateDialog.qml</file>
+        <file>game/hud/CombatPreview.qml</file>
     </qresource>
 </RCC>
