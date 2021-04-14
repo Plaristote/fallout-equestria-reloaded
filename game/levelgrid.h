@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QSize>
 #include <QPoint>
+#include <QMap>
 
 class TileMap;
 class TileZone;
@@ -45,17 +46,23 @@ public:
   bool moveObject(DynamicObject*, int x, int y);
   void removeObject(DynamicObject*);
   void triggerZone(CharacterMovement*, int x, int y);
+  void triggerZone(CharacterMovement* c, QPoint p) { triggerZone(c, p.x(), p.y()); }
   void registerZone(TileZone*);
   void unregisterZone(TileZone*);
   void eachCase(std::function<void (int x, int y, CaseContent&)> callback, QPoint from = QPoint(0,0), QPoint to = QPoint(0,0));
   CaseContent* getGridCase(int x, int y);
+  QVector<TileZone*> getZonesAt(QPoint);
 
 private:
   static void setCaseOccupant(CaseContent&, DynamicObject*);
   void updateObjectVisibility(DynamicObject* object);
+  void updateZoneCases(TileZone*);
+  void setZoneCases(TileZone*, QVector<QPoint>);
 
   QSize                size;
   QVector<CaseContent> grid;
+  QMap<TileZone*, QVector<CaseContent*>>   zoneCases;
+  QMap<TileZone*, QMetaObject::Connection> zoneListener;
 };
 
 #endif // LEVELGRID_H

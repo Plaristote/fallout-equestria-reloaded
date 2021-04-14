@@ -32,6 +32,7 @@ Game::Game(QObject *parent) : StorableObject(parent)
   scriptEngine.evaluate("level.displayConsoleMessage(\"Coucou Script Engine\")");
 
   connect(worldmap, &WorldMap::cityEntered, this, &Game::onCityEntered);
+  connect(this, &Game::gameOver, this, &Game::onGameOver);
 }
 
 Game::~Game()
@@ -46,6 +47,11 @@ Game::~Game()
 
 void Game::deleteLater()
 {
+  if (currentLevel)
+  {
+    delete currentLevel;
+    currentLevel = nullptr;
+  }
   instance = nullptr;
   QObject::deleteLater();
 }
@@ -62,6 +68,12 @@ void Game::newPlayerParty(StatModel* statistics)
   initializeScript();
   if (script && script->hasMethod("initialize"))
     script->call("initialize");
+}
+
+void Game::onGameOver()
+{
+  if (player)
+    disconnect(player, &Character::died, this, &Game::gameOver);
 }
 
 void Game::loadFromDataEngine()
@@ -166,17 +178,22 @@ void Game::switchToLevel(const QString& name, const QString& targetZone)
 
 void Game::exitLevel(bool silent)
 {
-  auto scriptObject = scriptEngine.globalObject();
+  if (currentLevel)
+  {
+    auto scriptObject = scriptEngine.globalObject();
 
-  MusicManager::get()->play("worldmap");
-  playerParty->extractFromLevel(currentLevel);
-  currentLevel->save(dataEngine);
-  currentLevel->deleteLater();
-  currentLevel = nullptr;
-  scriptObject.deleteProperty("level");
-  dataEngine->exitLevel();
-  if (!silent)
-    emit levelChanged();
+    MusicManager::get()->play("worldmap");
+    playerParty->extractFromLevel(currentLevel);
+    currentLevel->save(dataEngine);
+    currentLevel->deleteLater();
+    currentLevel = nullptr;
+    scriptObject.deleteProperty("level");
+    dataEngine->exitLevel();
+    if (!silent)
+      emit levelChanged();
+  }
+  else
+    qDebug() << "Game::exitLevel called, but level is null";
 }
 
 void Game::changeZone(TileZone* tileZone)

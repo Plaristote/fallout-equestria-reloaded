@@ -37,6 +37,7 @@ private slots:
   void stopListeningControlZone(TileZone*);
   void onZoneEntered(DynamicObject*, TileZone*);
   void onZoneExited(DynamicObject*, TileZone*);
+  void onPositionChanged();
   void updateZoneBlock();
 
 private:

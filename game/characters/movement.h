@@ -25,6 +25,8 @@ public:
   const QString&            getOrientation() const { return orientation; }
   const QList<QPoint>&      getCurrentPath() const { return currentPath; }
   const QVector<TileZone*>& getCurrentZones() const { return currentZones; }
+  void                      clearCurrentZones() { currentZones.clear(); }
+  void                      setCurrentZones(QVector<TileZone*> value) { currentZones = value; }
   QList<QPoint>&            rcurrentPath() { return currentPath; }
   Q_INVOKABLE bool          isInZone(TileZone* value) const { return currentZones.indexOf(value) >= 0; }
 

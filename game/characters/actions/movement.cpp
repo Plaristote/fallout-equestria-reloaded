@@ -10,13 +10,20 @@ bool MovementAction::trigger()
     state = InProgress;
   else
     state = Interrupted;
+  firstRound = true;
   return state == InProgress;
 }
 
 void MovementAction::update()
 {
   if (!character->isSpriteMoving())
+  {
+    if (firstRound)
+      firstRound = false;
+    else
+      onMovementFinished();
     triggerNextMovement();
+  }
 }
 
 int MovementAction::getApCost() const
@@ -56,4 +63,13 @@ void MovementAction::triggerNextMovement()
 void MovementAction::interrupt()
 {
   character->setAnimation("idle");
+  onMovementFinished();
+}
+
+void MovementAction::onMovementFinished()
+{
+  auto* level = Game::get()->getLevel();
+  auto* grid  = level->getGrid();
+
+  grid->triggerZone(character, character->getPosition());
 }

@@ -14,6 +14,8 @@ void ZoneComponent::registerDynamicObject(DynamicObject* object)
   connect(object, &DynamicObject::controlZoneRemoved, this, &ZoneComponent::unregisterZone);
   if (object->getControlZone())
     registerZone(object->getControlZone());
+  if (object->isCharacter())
+    dynamic_cast<CharacterMovement*>(object)->setCurrentZones(getGrid()->getZonesAt(object->getPosition()));
   ParentType::registerDynamicObject(object);
 }
 
@@ -23,6 +25,8 @@ void ZoneComponent::unregisterDynamicObject(DynamicObject* object)
   disconnect(object, &DynamicObject::controlZoneRemoved, this, &ZoneComponent::unregisterZone);
   if (object->getControlZone())
     unregisterZone(object->getControlZone());
+  if (object->isCharacter())
+    dynamic_cast<CharacterMovement*>(object)->clearCurrentZones();
   ParentType::unregisterDynamicObject(object);
 }
 

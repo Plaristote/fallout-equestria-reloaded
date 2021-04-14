@@ -18,8 +18,11 @@ public:
 
 protected:
   virtual void triggerNextMovement();
+  virtual void onMovementFinished();
 
   QPoint target;
+private:
+  bool firstRound;
 };
 
 #endif

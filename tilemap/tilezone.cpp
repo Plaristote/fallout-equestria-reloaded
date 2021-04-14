@@ -4,6 +4,7 @@
 
 TileZone::TileZone(QObject *parent) : QObject(parent)
 {
+  offset = QPoint(0, 0);
   clippedRect.setX(72 * 2); clippedRect.setY(0);
   clippedRect.setWidth(72);
   clippedRect.setHeight(36);
@@ -33,7 +34,7 @@ void TileZone::load(const QJsonObject& object, const QSize mapSize)
     int tid = value.toInt();
 
     if (tid > 0)
-      tiles.push_back(currentPosition);
+      positions.push_back(currentPosition);
     if (currentPosition.x() >= mapSize.width() - 1)
     {
       currentPosition.setX(0);
@@ -56,18 +57,40 @@ void TileZone::load(const QJsonObject& object, const QSize mapSize)
 
 bool TileZone::isInside(int x, int y) const
 {
-  return tiles.indexOf(QPoint(x, y)) >= 0;
+  return positions.indexOf(QPoint(x - offset.x(), y - offset.y())) >= 0;
+}
+
+QVector<QPoint> TileZone::getAbsolutePositions() const
+{
+  QVector<QPoint> points;
+
+  points.reserve(positions.size());
+  for (QPoint position : positions)
+    points.push_back(position + offset);
+  return points;
 }
 
 void TileZone::addPosition(QPoint position)
 {
-  tiles << position;
+  qDebug() << "Adding position" << position << "at offset" << offset << " -> " << (position - offset);
+  positions << (position - offset);
   emit tilesChanged();
 }
 
 void TileZone::removePosition(QPoint position)
 {
-  tiles.removeAll(position);
+  positions.removeAll(position - offset);
   emit tilesChanged();
 }
 
+void TileZone::addRelativePosition(QPoint position)
+{
+  positions << position;
+  emit tilesChanged();
+}
+
+void TileZone::removeRelativePosition(QPoint position)
+{
+  positions.removeAll(position);
+  emit tilesChanged();
+}

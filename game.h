@@ -78,6 +78,9 @@ public slots:
   void changeZone(TileZone*);
   void deleteLater();
 
+private slots:
+  void onGameOver();
+
 private:
   void initializeScript();
   LevelTask* newLevelTask();

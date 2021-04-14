@@ -15,6 +15,7 @@ class TileZone : public QObject
 
   Q_PROPERTY(QString name MEMBER name)
   Q_PROPERTY(QString type MEMBER type)
+  Q_PROPERTY(QPoint  offset MEMBER offset NOTIFY tilesChanged)
   Q_PROPERTY(QRect   clippedRect MEMBER clippedRect)
   Q_PROPERTY(bool    accessBlocked MEMBER accessBlocked)
 public:
@@ -30,12 +31,18 @@ public:
   inline bool getAccessBlocked() const { return accessBlocked; }
   inline void setAccessBlocked(bool value) { accessBlocked = value; }
   Q_INVOKABLE bool isInside(int x, int y) const;
-  const QList<QPoint>& getPositions() const { return tiles; }
+  const QList<QPoint>& getPositions() const { return positions; }
+  QVector<QPoint> getAbsolutePositions() const;
+  void setOffset(QPoint value) { offset = value; emit tilesChanged(); }
+  QPoint getOffset() const { return offset; }
 
-  Q_INVOKABLE int    getPositionCount() const { return tiles.size(); }
-  Q_INVOKABLE QPoint getPositionAt(int i) const { return tiles.at(i); }
+  Q_INVOKABLE int    getPositionCount() const { return positions.size(); }
+  Q_INVOKABLE QPoint getPositionAt(int i) const { return offset + positions.at(i); }
+  Q_INVOKABLE QPoint getRelativePosition(int i) const { return positions.at(i); }
   Q_INVOKABLE void   addPosition(QPoint);
   Q_INVOKABLE void   removePosition(QPoint);
+  Q_INVOKABLE void   addRelativePosition(QPoint);
+  Q_INVOKABLE void   removeRelativePosition(QPoint);
 
 signals:
   void enteredZone(DynamicObject*, TileZone*);
@@ -49,7 +56,8 @@ private:
   bool          isDefault = false;
   bool          accessBlocked = false;
   QRect         clippedRect;
-  QList<QPoint> tiles;
+  QList<QPoint> positions;
+  QPoint        offset;
 };
 
 #endif // TILEZONE_H

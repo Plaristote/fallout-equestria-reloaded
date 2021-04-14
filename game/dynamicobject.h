@@ -20,7 +20,6 @@ class DynamicObject : public ControlZoneComponent
 
   Q_PROPERTY(QString objectName MEMBER objectName NOTIFY objectNameChanged)
   Q_PROPERTY(QPoint  position    READ getPosition NOTIFY positionChanged)
-  Q_PROPERTY(QString currentZone READ getCurrentZone)
   Q_PROPERTY(TaskRunner* tasks MEMBER taskManager)
   Q_PROPERTY(bool blocksPath MEMBER blocksPath NOTIFY blocksPathChanged)
   Q_PROPERTY(bool isVisible MEMBER visible NOTIFY visibilityChanged)
@@ -55,9 +54,6 @@ public:
   Q_INVOKABLE virtual bool triggerInteraction(Character*, const QString& interactionType);
   Q_INVOKABLE virtual bool triggerSkillUse(Character* user, const QString& skillName);
 
-  const QString& getCurrentZone() const { return currentZone; }
-  void setCurrentZone(const QString& value) { currentZone = value; }
-
 signals:
   void objectNameChanged();
   void blocksPathChanged();
@@ -74,7 +70,6 @@ protected:
   QString objectName;
   bool visible = true;
   QPoint position, nextPosition;
-  QString currentZone;
 };
 
 #endif // DYNAMICOBJECT_H

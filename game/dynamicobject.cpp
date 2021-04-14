@@ -99,7 +99,6 @@ void DynamicObject::load(const QJsonObject& data)
   nextPosition.setX(data["nextX"].toInt()); nextPosition.setY(data["nextY"].toInt());
   blocksPath = data["blocksPath"].toBool(true);
   emit blocksPathChanged();
-  currentZone = data["currentZone"].toString();
   ParentType::load(data);
   taskManager->load(data);
   emit positionChanged();
@@ -111,7 +110,6 @@ void DynamicObject::save(QJsonObject& data) const
   data["x"] = position.x(); data["y"] = position.y();
   data["nextX"] = nextPosition.x(); data["nextY"] = nextPosition.y();
   data["blocksPath"] = blocksPath;
-  data["currentZone"] = currentZone;
   ParentType::save(data);
   taskManager->save(data);
 }

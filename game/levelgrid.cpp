@@ -53,6 +53,40 @@ void LevelGrid::initializeGrid(TileMap* tilemap)
   initializePathfinding();
 }
 
+void LevelGrid::updateZoneCases(TileZone* zone)
+{
+  setZoneCases(zone, zone->getAbsolutePositions());
+}
+
+void LevelGrid::setZoneCases(TileZone* zone, QVector<QPoint> positions)
+{
+  QVector<CaseContent*>& cases = zoneCases[zone];
+
+  for (auto it = cases.begin() ; it != cases.end() ;)
+  {
+    if (positions.contains((*it)->position))
+    {
+      positions.removeAll((*it)->position);
+      ++it;
+    }
+    else
+    {
+      (*it)->zones.removeOne(zone);
+      it = cases.erase(it);
+    }
+  }
+  for (QPoint position : positions)
+  {
+    CaseContent* gridCase = getGridCase(position.x(), position.y());
+
+    if (gridCase)
+    {
+      gridCase->zones.push_back(zone);
+      cases.push_back(gridCase);
+    }
+  }
+}
+
 void LevelGrid::eachCase(std::function<void (int x, int y, CaseContent&)> callback, QPoint from, QPoint to)
 {
   if (to.x() == 0 && to.y() == 0)
@@ -71,23 +105,26 @@ void LevelGrid::eachCase(std::function<void (int x, int y, CaseContent&)> callba
 
 void LevelGrid::registerZone(TileZone* zone)
 {
-  for (const QPoint position : zone->getPositions())
+  if (!zoneCases.contains(zone))
   {
-    CaseContent* gridCase = getGridCase(position.x(), position.y());
+    auto listener = connect(zone, &TileZone::tilesChanged, [this, zone]() { updateZoneCases(zone); });
 
-    if (gridCase)
-      gridCase->zones.append(zone);
+    zoneListener.insert(zone, listener);
+    zoneCases.insert(zone, {});
+    updateZoneCases(zone);
   }
 }
 
 void LevelGrid::unregisterZone(TileZone* zone)
 {
-  for (const QPoint position : zone->getPositions())
+  if (zoneCases.contains(zone))
   {
-    CaseContent* gridCase = getGridCase(position.x(), position.y());
+    auto listener = zoneListener.find(zone);
 
-    if (gridCase)
-      gridCase->zones.removeOne(zone);
+    disconnect(*listener);
+    zoneListener.erase(listener);
+    zoneCases.remove(zone);
+    setZoneCases(zone, {});
   }
 }
 
@@ -194,6 +231,15 @@ LevelGrid::CaseContent* LevelGrid::getGridCase(int x, int y)
   if (position >= grid.count() || position < 0)
     return nullptr;
   return &(grid[position]);
+}
+
+QVector<TileZone*> LevelGrid::getZonesAt(QPoint position)
+{
+  auto* gridCase = getGridCase(position.x(), position.y());
+
+  if (gridCase)
+    return gridCase->zones;
+  return QVector<TileZone*>();
 }
 
 bool LevelGrid::isOccupied(int x, int y) const

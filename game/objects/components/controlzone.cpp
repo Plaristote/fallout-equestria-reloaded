@@ -17,6 +17,7 @@ TileZone* ControlZoneComponent::addControlZone()
   if (controlZone == nullptr)
   {
     controlZone = new TileZone(this);
+    connect(this, &ControlZoneComponent::positionChanged,    this, &ControlZoneComponent::onPositionChanged);
     emit controlZoneAdded(controlZone);
   }
   return controlZone;
@@ -29,6 +30,7 @@ void ControlZoneComponent::removeControlZone()
     auto* backup = controlZone;
 
     controlZone = nullptr;
+    disconnect(this, &ControlZoneComponent::positionChanged, this, &ControlZoneComponent::onPositionChanged);
     emit controlZoneRemoved(backup);
     backup->deleteLater();
   }
@@ -68,6 +70,11 @@ void ControlZoneComponent::onZoneExited(DynamicObject* object, TileZone* zone)
     script->call("onZoneExited", QJSValueList() << object->asJSValue() << Game::get()->getScriptEngine().newQObject(zone));
 }
 
+void ControlZoneComponent::onPositionChanged()
+{
+  controlZone->setOffset(getPosition());
+}
+
 void ControlZoneComponent::toggleZoneBlocked(bool value)
 {
    if (zoneBlocked != value)
@@ -87,13 +94,18 @@ void ControlZoneComponent::load(const QJsonObject& data)
 {
   if (data["zone"].isArray())
   {
-    controlZone = controlZone ? controlZone : new TileZone(this);
+    if (!controlZone)
+    {
+      controlZone = new TileZone(this);
+      controlZone->setOffset(getPosition());
+      connect(this, &ControlZoneComponent::positionChanged, this, &ControlZoneComponent::onPositionChanged);
+    }
     zoneBlocked = data["zoneBlocked"].toBool();
-    for (QJsonValue posValue : data["zone"].toArray())
+    for (const QJsonValue posValue : data["zone"].toArray())
     {
       QJsonArray posArray(posValue.toArray());
 
-      controlZone->addPosition(QPoint(posArray[0].toInt(), posArray[1].toInt()));
+      controlZone->addRelativePosition(QPoint(posArray[0].toInt(), posArray[1].toInt()));
     }
     emit zoneBlockedChanged();
     emit controlZoneAdded(controlZone);
