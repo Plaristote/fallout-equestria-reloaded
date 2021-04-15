@@ -5,6 +5,7 @@
 #include "characters/actionqueue.h"
 #include "objects/inventoryitem.h"
 #include "objects/doorway.h"
+#include "game/animationSequence/movementhintanimationpart.h"
 
 LevelTask::LevelTask(QObject *parent) : ParentType(parent)
 {
@@ -152,12 +153,22 @@ void LevelTask::tileClicked(int x, int y)
       actions->pushMovement(QPoint(x, y));
     if (!(actions->start()))
       emit displayConsoleMessage("No path.");
+    else if (!getPlayer()->getCurrentPath().empty())
+      displayMovementTargetHint(getPlayer()->getCurrentPath().last());
   }
   else
   {
     emit clickedOnCase(x, y);
     emit clickedOnObject(occupant);
   }
+}
+
+void LevelTask::displayMovementTargetHint(QPoint position)
+{
+  AnimationSequence* animation = new AnimationSequence;
+
+  animation->addAnimationPart(new MovementHintAnimationPart(position));
+  addAnimationSequence(animation);
 }
 
 void LevelTask::registerDynamicObject(DynamicObject* object)

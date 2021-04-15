@@ -19,6 +19,7 @@ public:
   void updateVisualEffects(qint64);
 
   Q_INVOKABLE void addAnimationSequence(QJSValue descriptor);
+  void addAnimationSequence(AnimationSequence*, QJSValue callback = QJSValue());
 
   QQmlListProperty<Sprite> getQmlVisualEffects() { return QQmlListProperty<Sprite>(this, &visualEffects); }
 

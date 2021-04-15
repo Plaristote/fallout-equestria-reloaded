@@ -78,6 +78,9 @@ private slots:
   void onCharacterKill(Character* victim, Character* killer);
   void onItemDropped(InventoryItem* item, QPoint position);
 
+private:
+  void displayMovementTargetHint(QPoint position);
+
 protected:
   QTimer            updateTimer;
   QElapsedTimer     clock;

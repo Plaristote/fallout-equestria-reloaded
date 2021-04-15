@@ -208,6 +208,28 @@
             "width": 68
         }
     },
+    "misc": {
+        "barrel-magical-waste": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 68,
+            "offsetX": 0,
+            "offsetY": 0,
+            "repeat": false,
+            "source": "waste-barrel.png",
+            "width": 72
+        },
+        "movement-hint": {
+            "frameCount": 10,
+            "frameInterval": 45,
+            "height": 36,
+            "offsetX": 0,
+            "offsetY": 0,
+            "repeat": false,
+            "source": "movement-hint.png",
+            "width": 72
+        }
+    },
     "pegasus-black": {
         "cloneOf": "pony",
         "defaultSource": "characters/earthpony-black.png"

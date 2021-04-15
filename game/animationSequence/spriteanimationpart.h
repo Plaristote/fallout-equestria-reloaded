@@ -11,10 +11,12 @@ class SpriteAnimationPart : public IAnimationPart
 {
   Q_OBJECT
 
+protected:
   Sprite*    sprite;
   LevelTask* level;
   bool       over = false;
   QPoint     from, to;
+
 public:
   ~SpriteAnimationPart();
 
@@ -22,7 +24,7 @@ public:
   void start() override;
   bool isOver() const override { return over; }
 
-private slots:
+public slots:
   void onAnimationFinished() { over = true; }
 };
 

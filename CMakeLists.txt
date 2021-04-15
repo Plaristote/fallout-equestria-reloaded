@@ -171,6 +171,8 @@ set(PROJECT_SOURCES
         game/animationSequence/spriteanimationpart.cpp
         game/animationSequence/animationsequence.h
         game/animationSequence/animationsequence.cpp
+        game/animationSequence/movementhintanimationpart.h
+        game/animationSequence/movementhintanimationpart.cpp
         editor/scripteditorcontroller.h
         editor/scripteditorcontroller.cpp
         editor/characterdialogeditor.h

@@ -72,12 +72,17 @@ void VisualEffectsComponent::addAnimationSequence(QJSValue descriptor)
       QJSValue callback = descriptor.property("callback");
 
       animation->initialize(animationSteps);
-      animation->start();
-      runningAnimations << QPair<AnimationSequence*, QJSValue>(animation, callback);
+      addAnimationSequence(animation, callback);
     }
     else
       qDebug() << "VisualEffectsComponent::addAnimationSequence: missing `steps` array";
   }
   else
     qDebug() << "VisualEffectsComponent::addAnimationSequence: invalid parameter";
+}
+
+void VisualEffectsComponent::addAnimationSequence(AnimationSequence* animation, QJSValue callback)
+{
+  animation->start();
+  runningAnimations << QPair<AnimationSequence*, QJSValue>(animation, callback);
 }
