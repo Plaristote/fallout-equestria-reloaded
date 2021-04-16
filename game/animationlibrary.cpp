@@ -265,3 +265,93 @@ QStringList AnimationLibrary::getAnimationList(const QString& group) const
     return getAnimationList(groupData["cloneOf"].toString());
   return list;
 }
+
+#include "utils/layeredspritesheet.h"
+
+void registerPrerenderedSpritesheet(const QString& baseName, const QString& cloneOf)
+{
+  const QDir    armors(ASSETS_PATH + "sprites/armors");
+  const QString prerenderPath(".prerender/spritesheets");
+
+  for (const QString& armorSource : armors.entryList())
+  {
+    const QString armorName = QString(armorSource).replace(QRegularExpression("\\..{3,4}$"), "");
+    const QString finalName = baseName + '-' + armorName;
+
+    QJsonObject spriteData;
+
+    spriteData["defaultSource"] = prerenderPath + '/' + finalName + ".png";
+    spriteData["cloneOf"] = cloneOf;
+
+  }
+}
+
+const QString AnimationLibrary::prerenderPath = QString(".prerender/spritesheets");
+
+QString AnimationLibrary::getCharacterSpriteName(const CharacterSpriteDescriptor& descriptor) const
+{
+  QStringList parts;
+
+  parts << descriptor.base << descriptor.bodyColor.name().replace('#', "")
+        << descriptor.hair << descriptor.hairColor.name().replace('#', "")
+        << descriptor.armor
+        << descriptor.weapon;
+  return parts.join('-');
+}
+
+QString AnimationLibrary::getCharacterSpriteFilepath(const CharacterSpriteDescriptor& descriptor) const
+{
+  return prerenderPath + '/' + getCharacterSpriteName(descriptor) + '.' + getCharacterSpriteFormat();
+}
+
+bool AnimationLibrary::hasSpriteSheetBeenPreRendered(const CharacterSpriteDescriptor& descriptor) const
+{
+  return QFile::exists(getCharacterSpriteFilepath(descriptor));
+}
+
+void AnimationLibrary::prerenderCharacterSpriteSheet(const CharacterSpriteDescriptor& descriptor)
+{
+  const QImage       baseImage(ASSETS_PATH + "sprites/characters/" + descriptor.base + ".png");
+  LayeredSpriteSheet spritesheet(baseImage.size());
+  const QMap<QString, QString> layers({
+    {"sprites/characters/armors",  descriptor.armor},
+    {"sprites/characters/weapons", descriptor.weapon}
+  });
+
+  spritesheet.addLayer(baseImage);
+  // TODO colorize base
+  if (descriptor.hair.length() > 0)
+  {
+    QImage hairImage(ASSETS_PATH + "sprites/characters/hairs" + descriptor.hair + ".png");
+
+    // TODO colorize hair
+    spritesheet.addLayer(hairImage);
+  }
+  for (auto it = layers.begin() ; it != layers.end() ; ++it)
+  {
+    const QImage image(ASSETS_PATH + it.key() + '/' + it.value());
+
+    spritesheet.addLayer(image);
+  }
+  QDir::current().mkpath(prerenderPath);
+  spritesheet.save(getCharacterSpriteFilepath(descriptor));
+}
+
+void AnimationLibrary::registerCharacterSpriteSheet(const CharacterSpriteDescriptor& descriptor)
+{
+  QString name = getCharacterSpriteName(descriptor);
+
+  if (!data[name].isObject())
+  {
+    QString filePath = getCharacterSpriteFilepath(descriptor);
+    QJsonObject spriteData;
+
+    if (!hasSpriteSheetBeenPreRendered(descriptor))
+      prerenderCharacterSpriteSheet(descriptor);
+    spriteData["defaultSource"] = "../../" + getCharacterSpriteFilepath(descriptor);
+    spriteData["cloneOf"]       = descriptor.cloneOf;
+    data[name] = spriteData;
+    textures << spriteData["defaultSource"].toString();
+    images.insert(filePath, QImage(filePath));
+  }
+}

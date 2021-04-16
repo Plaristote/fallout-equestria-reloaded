@@ -6,6 +6,14 @@
 # include <QRect>
 # include <QImage>
 
+struct CharacterSpriteDescriptor
+{
+  bool    layered;
+  QString cloneOf;
+  QString base, hair, armor, weapon;
+  QColor  bodyColor, hairColor;
+};
+
 struct SpriteAnimation
 {
   QString name;
@@ -80,6 +88,13 @@ public:
   Q_INVOKABLE void    remove(const QString& group, const QString& name);
   // END Editor
 
+  QString getCharacterSpriteFormat() const { return "png"; }
+  QString getCharacterSpriteName(const CharacterSpriteDescriptor&) const;
+  QString getCharacterSpriteFilepath(const CharacterSpriteDescriptor&) const;
+  bool hasSpriteSheetBeenPreRendered(const CharacterSpriteDescriptor&) const;
+  void registerCharacterSpriteSheet(const CharacterSpriteDescriptor&);
+  void prerenderCharacterSpriteSheet(const CharacterSpriteDescriptor&);
+
 signals:
   void initialized();
 
@@ -87,6 +102,7 @@ private:
   QStringList           textures;
   QMap<QString, QImage> images;
   QJsonObject           data;
+  static const QString  prerenderPath;
 };
 
 #endif // ANIMATIONLIBRARY_H

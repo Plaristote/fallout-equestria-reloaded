@@ -24,6 +24,9 @@ public:
   bool getIsUnique() const { return isUnique; }
   void setUnique(bool value) { isUnique = value; }
 
+public slots:
+  void updateSpriteSheet();
+
 private slots:
   void onCharacterSheetChanged();
   virtual void initializeFaction() = 0;

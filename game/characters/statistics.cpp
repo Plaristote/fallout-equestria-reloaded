@@ -4,6 +4,8 @@
 CharacterStatistics::CharacterStatistics(QObject *parent) : ParentType(parent)
 {
   connect(this, &CharacterStatistics::characterSheetChanged, this, &CharacterStatistics::onCharacterSheetChanged);
+  connect(this, &CharacterStatistics::characterSheetChanged, this, &CharacterStatistics::updateSpriteSheet);
+  connect(inventory, &Inventory::equippedItemsChanged,       this, &CharacterStatistics::updateSpriteSheet);
 }
 
 void CharacterStatistics::load(const QJsonObject& data)
@@ -65,18 +67,36 @@ void CharacterStatistics::setCharacterSheet(const QString& name)
 
 void CharacterStatistics::onCharacterSheetChanged()
 {
-  qDebug() << "Changing character sheet";
   StatModel* charSheet;
-  const Race* raceController;
 
   charSheet = Game::get()->getDataEngine()->makeStatModel(getObjectName(), characterSheet);
   charSheet->setParent(this);
   setStatistics(charSheet);
-  raceController = charSheet->getRaceController();
-  if (raceController)
+}
+
+void CharacterStatistics::updateSpriteSheet()
+{
+  if (statistics)
   {
-    setSpriteName(raceController->getSpriteSheet(charSheet));
-    moveTo(position.x(), position.y());
-    setAnimation("idle");
+    const Race* raceController = statistics->getRaceController();
+    auto* animationLibrary = AnimationLibrary::get();
+
+    if (raceController)
+    {
+      CharacterSpriteDescriptor descriptor = raceController->getSpriteSheet(statistics);
+      InventoryItem* armor = inventory->getEquippedItem("armor");
+
+      if (armor)
+        descriptor.armor = armor->getAnimation();
+      if (descriptor.layered)
+      {
+        animationLibrary->registerCharacterSpriteSheet(descriptor);
+        setSpriteName(animationLibrary->getCharacterSpriteName(descriptor));
+      }
+      else
+        setSpriteName(descriptor.base);
+      moveTo(position.x(), position.y());
+      setAnimation("idle");
+    }
   }
 }

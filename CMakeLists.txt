@@ -37,6 +37,8 @@ set(PROJECT_SOURCES
         utils/storableobject.cpp
         utils/datetime.hpp
         utils/datetime.cpp
+        utils/layeredspritesheet.h
+        utils/layeredspritesheet.cpp
         tilemap/tileset.h
         tilemap/tileset.cpp
         tilemap/tile.h

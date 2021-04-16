@@ -11,8 +11,9 @@ bool Race::isPlayable() const
   return false;
 }
 
-QString Race::getSpriteSheet(StatModel* model) const
+CharacterSpriteDescriptor Race::getSpriteSheet(StatModel* model) const
 {
+  CharacterSpriteDescriptor descriptor;
   QJSValue value = script.property("spriteSheet");
 
   if (value.isCallable())
@@ -21,7 +22,30 @@ QString Race::getSpriteSheet(StatModel* model) const
 
     value = value.call(QJSValueList() << scriptEngine.newQObject(model));
   }
-  return value.toString();
+  if (value.isString())
+  {
+    descriptor.layered = false;
+    descriptor.base = value.toString();
+  }
+  else if (value.isObject())
+  {
+    descriptor.layered = true;
+    descriptor.base = value.property("base").toString();
+    descriptor.cloneOf = value.property("cloneOf").toString();
+    if (value.hasProperty("hair"))
+       descriptor.hair = value.property("hair").toString();
+    if (value.hasProperty("color"))
+      descriptor.bodyColor = QColor(value.property("color").toString());
+    else
+      descriptor.bodyColor = Qt::transparent;
+    if (value.hasProperty("hairColor"))
+      descriptor.hairColor = QColor(value.property("hairColor").toString());
+    else
+      descriptor.hairColor = Qt::transparent;
+  }
+  else
+    qDebug() << "Race::getSpriteSheet: No spritesheet defined for race" << name;
+  return descriptor;
 }
 
 void Race::initialize()
