@@ -287,47 +287,119 @@
             "repeat": false,
             "width": 46
         },
+        "dead-down": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 47,
+            "offsetX": 376,
+            "offsetY": 188,
+            "repeat": false,
+            "width": 47
+        },
+        "dead-left": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 47,
+            "offsetX": 375,
+            "offsetY": 235,
+            "repeat": false,
+            "width": 47
+        },
+        "dead-right": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 47,
+            "offsetX": 375,
+            "offsetY": 282,
+            "repeat": false,
+            "width": 47
+        },
+        "dead-up": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 47,
+            "offsetX": 376,
+            "offsetY": 328,
+            "repeat": false,
+            "width": 47
+        },
         "death": {
             "height": 46,
             "source": "tombstone.png",
             "width": 46
         },
+        "death-down": {
+            "frameCount": 9,
+            "frameInterval": 120,
+            "height": 47,
+            "offsetX": 0,
+            "offsetY": 188,
+            "repeat": false,
+            "width": 47
+        },
+        "death-left": {
+            "frameCount": 9,
+            "frameInterval": 120,
+            "height": 47,
+            "offsetX": 0,
+            "offsetY": 235,
+            "repeat": false,
+            "width": 47
+        },
+        "death-right": {
+            "frameCount": 9,
+            "frameInterval": 120,
+            "height": 47,
+            "offsetX": 0,
+            "offsetY": 282,
+            "repeat": false,
+            "width": 47
+        },
+        "death-up": {
+            "frameCount": 9,
+            "frameInterval": 120,
+            "height": 47,
+            "offsetX": 0,
+            "offsetY": 329,
+            "repeat": false,
+            "width": 47
+        },
         "defaultSource": "characters/earthpony-purple.png",
         "idle-down": {
             "frameCount": 1,
             "frameInterval": 100,
-            "height": 46,
+            "height": 47,
             "offsetX": 46,
             "offsetY": 0,
             "repeat": false,
-            "width": 48
+            "width": 47
         },
         "idle-left": {
             "frameCount": 1,
             "frameInterval": 100,
-            "height": 46,
+            "height": 47,
             "offsetX": 46,
             "offsetY": 48,
             "repeat": false,
-            "width": 46
+            "width": 47
         },
         "idle-right": {
             "frameCount": 1,
             "frameInterval": 100,
-            "height": 46,
+            "height": 47,
             "offsetX": 46,
             "offsetY": 96,
             "repeat": false,
-            "width": 48
+            "width": 47
         },
         "idle-up": {
             "frameCount": 1,
             "frameInterval": 100,
-            "height": 46,
+            "height": 47,
             "offsetX": 46,
             "offsetY": 144,
             "repeat": false,
-            "width": 48
+            "width": 47
         },
         "running-down": {
             "frameCount": 3,
@@ -382,8 +454,8 @@
         "use-down": {
             "frameCount": 7,
             "frameInterval": 100,
-            "height": 46,
-            "offsetX": 280,
+            "height": 47,
+            "offsetX": 374,
             "offsetY": 0,
             "repeat": false,
             "width": 47
@@ -391,29 +463,29 @@
         "use-left": {
             "frameCount": 7,
             "frameInterval": 100,
-            "height": 46,
-            "offsetX": 417,
-            "offsetY": 51,
+            "height": 47,
+            "offsetX": 374,
+            "offsetY": 47,
             "repeat": false,
-            "width": 44
+            "width": 47
         },
         "use-right": {
             "frameCount": 7,
             "frameInterval": 100,
-            "height": 46,
-            "offsetX": 417,
-            "offsetY": 98,
+            "height": 47,
+            "offsetX": 374,
+            "offsetY": 95,
             "repeat": false,
-            "width": 44
+            "width": 47
         },
         "use-up": {
             "frameCount": 7,
             "frameInterval": 100,
             "height": 46,
-            "offsetX": 417,
-            "offsetY": 147,
+            "offsetX": 376,
+            "offsetY": 144,
             "repeat": false,
-            "width": 44
+            "width": 46
         },
         "walking-down": {
             "frameCount": 3,

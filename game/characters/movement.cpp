@@ -13,10 +13,7 @@ CharacterMovement::CharacterMovement(QObject *parent) : CHARACTER_BASE_OBJECT(pa
 
 void CharacterMovement::setAnimation(const QString &animationName)
 {
-  bool    orientedAnimation     = animationName != "death";
-  QString completeAnimationName = orientedAnimation
-    ? animationName + '-' + orientation
-    : animationName;
+  QString completeAnimationName = animationName + '-' + orientation;
 
   Sprite::setAnimation(completeAnimationName);
   // Fallback to idle for unexisting character animations

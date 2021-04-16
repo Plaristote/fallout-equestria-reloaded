@@ -51,6 +51,7 @@ void Character::takeDamage(int damage, Character* dealer)
   if (hp <= 0)
   {
     setAnimation("death");
+    connect(this, &Sprite::animationFinished, [this]() { setAnimation("dead"); });
     blocksPath = false;
     emit characterKill(this, dealer);
     emit blocksPathChanged();
