@@ -3,6 +3,7 @@
 #include "game.h"
 #include <QFile>
 #include <QJsonArray>
+#include <QDebug>
 
 CharacterDialog::CharacterDialog(QObject *parent) : QObject(parent)
 {

@@ -1,5 +1,6 @@
 #include "statistics.h"
 #include "game.h"
+#include <QDebug>
 
 CharacterStatistics::CharacterStatistics(QObject *parent) : ParentType(parent)
 {

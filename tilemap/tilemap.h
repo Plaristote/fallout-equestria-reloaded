@@ -10,6 +10,7 @@
 # include "tilezone.h"
 # include <QJsonObject>
 # include <QStringList>
+# include "globals.h"
 
 class TileMap : public QObject
 {
@@ -43,9 +44,9 @@ public:
   Q_INVOKABLE TileLayer* getLightLayer(const QString& name);
   Q_INVOKABLE TileZone*  getZone(const QString& name);
 
-  QQmlListProperty<TileZone> getZonesQml() { return QQmlListProperty<TileZone>(this, &zones); }
-  QQmlListProperty<TileLayer> getRoofsQml() { return QQmlListProperty<TileLayer>(this, &roofs); }
-  QQmlListProperty<TileLayer> getLightsQml() { return QQmlListProperty<TileLayer>(this, &lights); }
+  QQmlListProperty<TileZone> getZonesQml() { return QML_QLIST_CONSTRUCTOR(TileZone, zones); }
+  QQmlListProperty<TileLayer> getRoofsQml() { return QML_QLIST_CONSTRUCTOR(TileLayer, roofs); }
+  QQmlListProperty<TileLayer> getLightsQml() { return QML_QLIST_CONSTRUCTOR(TileLayer, lights); }
 
 public slots:
   void addTileZone(TileZone* zone)     { if (zones.indexOf(zone) < 0) { zones << zone; } }

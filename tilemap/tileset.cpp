@@ -1,6 +1,7 @@
 #include "tileset.h"
 #include <QFile>
 #include <QJsonDocument>
+#include <QDebug>
 
 static const QString tilesetsPath = "./assets/tilesets/";
 

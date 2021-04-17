@@ -3,6 +3,7 @@
 #include "../inventoryitemlibrary.h"
 #include "game.h"
 #include "i18n.h"
+#include <QDebug>
 
 InventoryItem::InventoryItem(QObject* parent) : DynamicObject(parent), quantity(1)
 {

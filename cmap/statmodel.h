@@ -3,6 +3,7 @@
 
 # include <QObject>
 # include <QColor>
+# include <QMap>
 # include <QJsonDocument>
 # include <QJsonObject>
 

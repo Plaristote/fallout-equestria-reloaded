@@ -4,6 +4,7 @@
 #include "cmap/race.h"
 #include "cmap/perk.h"
 #include "game.h"
+#include <QDebug>
 
 StatModel::StatModel(QObject *parent) : QObject(parent)
 {

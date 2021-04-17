@@ -5,6 +5,7 @@
 # include <QSize>
 # include <QPoint>
 # include <QRect>
+# include <QVector>
 
 class QJsonObject;
 class DynamicObject;

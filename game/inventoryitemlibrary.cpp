@@ -2,6 +2,7 @@
 #include "inventoryitemlibrary.h"
 #include <QJsonDocument>
 #include <QFile>
+#include <QDebug>
 
 InventoryItemLibrary* InventoryItemLibrary::instance = nullptr;
 

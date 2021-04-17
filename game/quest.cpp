@@ -1,5 +1,6 @@
 #include "quest.h"
 #include <QJsonObject>
+#include <QDebug>
 #include "game.h"
 
 Quest::Quest(QObject *parent) : StorableObject(parent)
@@ -17,7 +18,6 @@ void Quest::initialize(const QString& name)
 {
   this->name = name;
   completed = false;
-  qDebug() << "INITIALIZING QUEST" << (SCRIPTS_PATH + "quests/" + name + ".mjs");
   script = new ScriptController(SCRIPTS_PATH + "quests/" + name + ".mjs");
   script->initialize(this);
   if (script->hasMethod("initialize"))

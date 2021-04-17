@@ -1,6 +1,7 @@
 #include "itemUse.h"
 #include "game/animationSequence/objectanimationpart.h"
 #include "game.h"
+#include <QDebug>
 
 bool ItemAction::trigger()
 {

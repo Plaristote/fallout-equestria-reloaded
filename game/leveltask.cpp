@@ -6,6 +6,7 @@
 #include "objects/inventoryitem.h"
 #include "objects/doorway.h"
 #include "game/animationSequence/movementhintanimationpart.h"
+#include <QDebug>
 
 LevelTask::LevelTask(QObject *parent) : ParentType(parent)
 {

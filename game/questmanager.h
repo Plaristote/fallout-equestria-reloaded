@@ -5,6 +5,7 @@
 #include <QQmlListProperty>
 #include <QJsonObject>
 #include "quest.h"
+#include "globals.h"
 
 class QuestManager : public QObject
 {
@@ -20,7 +21,7 @@ public:
   Q_INVOKABLE void   addQuest(const QString&);
   Q_INVOKABLE Quest* getQuest(const QString&);
 
-  QQmlListProperty<Quest> getQmlList() { return QQmlListProperty<Quest>(this, &list); }
+  QQmlListProperty<Quest> getQmlList() { return QML_QLIST_CONSTRUCTOR(Quest, list); }
 
 signals:
   void listChanged();

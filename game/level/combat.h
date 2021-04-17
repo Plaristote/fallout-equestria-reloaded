@@ -20,7 +20,7 @@ class CombatComponent : public VisualEffectsComponent
 public:
   explicit CombatComponent(QObject* parent = nullptr);
 
-  QQmlListProperty<Character> getQmlCombattants() { return QQmlListProperty<Character>(this, &combattants); }
+  QQmlListProperty<Character> getQmlCombattants() { return QML_QLIST_CONSTRUCTOR(Character, combattants); }
 
   void registerDynamicObject(DynamicObject*);
   void unregisterDynamicObject(DynamicObject*);

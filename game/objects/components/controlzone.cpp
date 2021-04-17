@@ -2,6 +2,7 @@
 #include "tilemap/tilezone.h"
 #include "game.h"
 #include <QJsonArray>
+#include <QDebug>
 
 ControlZoneComponent::ControlZoneComponent(QObject *parent) : ParentType(parent)
 {

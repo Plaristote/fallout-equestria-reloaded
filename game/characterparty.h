@@ -33,7 +33,7 @@ public:
   Q_INVOKABLE bool insertIntoZone(LevelTask*, const QString& zoneName);
   Q_INVOKABLE void extractFromLevel(LevelTask*);
 
-  QQmlListProperty<Character> getQmlCharacters() { return QQmlListProperty<Character>(this, &list); }
+  QQmlListProperty<Character> getQmlCharacters() { return QML_QLIST_CONSTRUCTOR(Character, list); }
 
 signals:
   void nameChanged();

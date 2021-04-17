@@ -2,6 +2,7 @@
 #include "taskrunner.h"
 #include "game.h"
 #include <QJsonArray>
+#include <QDebug>
 #include <cmath>
 
 TaskRunner::TaskRunner(QObject *parent) : QObject(parent)

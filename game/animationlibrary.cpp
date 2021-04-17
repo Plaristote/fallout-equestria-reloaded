@@ -1,5 +1,7 @@
 #include "globals.h"
 #include "animationlibrary.h"
+#include "utils/layeredspritesheet.h"
+#include <QRegularExpression>
 #include <QFile>
 #include <QJsonDocument>
 #include <QDebug>
@@ -266,8 +268,6 @@ QStringList AnimationLibrary::getAnimationList(const QString& group) const
   return list;
 }
 
-#include "utils/layeredspritesheet.h"
-
 void registerPrerenderedSpritesheet(const QString& baseName, const QString& cloneOf)
 {
   const QDir    armors(ASSETS_PATH + "sprites/armors");
@@ -317,7 +317,6 @@ void AnimationLibrary::prerenderCharacterSpriteSheet(const CharacterSpriteDescri
     {"sprites/characters/armors",  descriptor.armor},
     {"sprites/characters/weapons", descriptor.weapon}
   });
-
 
   spritesheet.addLayer(baseImage);
   spritesheet.addColorLayer(descriptor.bodyColor, baseImage);

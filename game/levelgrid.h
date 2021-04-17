@@ -5,6 +5,7 @@
 #include <QSize>
 #include <QPoint>
 #include <QMap>
+#include <QVector>
 
 class TileMap;
 class TileZone;

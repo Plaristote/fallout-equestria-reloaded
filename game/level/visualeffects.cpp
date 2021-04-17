@@ -1,4 +1,5 @@
- #include "visualeffects.h"
+#include "visualeffects.h"
+#include <QDebug>
 
 VisualEffectsComponent::VisualEffectsComponent(QObject* parent) : ParentType(parent)
 {

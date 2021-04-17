@@ -7,6 +7,7 @@
 #include <cmath>
 #include <QLineF>
 #include <QRectF>
+#include <QDebug>
 
 static bool lineIntersectsRect(QLineF line, QRectF rect)
 {
@@ -15,10 +16,14 @@ static bool lineIntersectsRect(QLineF line, QRectF rect)
   QLineF rightSide(rect.topRight(), rect.bottomRight());
   QLineF bottomSide(rect.bottomLeft(), rect.bottomRight());
 
+# if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
+  return false; // TODO find a way to do this without QLineF::intersects
+# else
   return (leftSide.intersects(line, nullptr)   == QLineF::BoundedIntersection) ||
          (topSide.intersects(line, nullptr)    == QLineF::BoundedIntersection) ||
          (rightSide.intersects(line, nullptr)  == QLineF::BoundedIntersection) ||
          (bottomSide.intersects(line, nullptr) == QLineF::BoundedIntersection);
+#endif
 }
 
 bool LevelGrid::CaseContent::isBlocked() const

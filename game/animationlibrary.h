@@ -4,6 +4,7 @@
 # include <QObject>
 # include <QJsonObject>
 # include <QRect>
+# include <QMap>
 # include <QImage>
 
 struct CharacterSpriteDescriptor

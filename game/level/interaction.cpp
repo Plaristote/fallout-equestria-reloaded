@@ -3,6 +3,7 @@
 #include "../characterdialog.h"
 #include "../lootingcontroller.h"
 #include "game/characters/actionqueue.h"
+#include <QDebug>
 
 InteractionComponent::InteractionComponent(QObject *parent) : ParentType(parent)
 {
@@ -220,8 +221,11 @@ void InteractionComponent::pickUpItem(Character* character, InventoryItem* item)
 
 DynamicObject* InteractionComponent::getObjectAt(int posX, int posY) const
 {
-  QVector<DynamicObject*> list(objects.begin(), objects.end());
+  QVector<DynamicObject*> list;
 
+  list.reserve(objects.size());
+  for (auto it = objects.begin() ; it != objects.end() ; ++it)
+    list.push_back(*it);
   std::sort(list.begin(), list.end(), [](DynamicObject* a, DynamicObject* b)
   {
     QPoint posA = a->getPosition();

@@ -41,7 +41,6 @@ bool DetectableComponent::tryDetection(Character* character)
   float        distance   = character->getDistance(reinterpret_cast<DynamicObject*>(this));
   int          result     = Dices::Throw(perception);
 
-  qDebug() << "Try detection on distance" << distance << "with throw" << result;
   if (result >= static_cast<int>(distance))
   {
     if (interruptOnDetection)

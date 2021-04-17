@@ -9,6 +9,7 @@
 # include "../timermanager.h"
 # include "worldmapcity.h"
 # include "worldmapzone.h"
+# include "globals.h"
 
 class WorldMap : public QObject
 {
@@ -30,8 +31,8 @@ public:
   void load(const QJsonObject&);
   QJsonObject save() const;
 
-  QQmlListProperty<WorldMapCity> getCitiesQml() { return QQmlListProperty<WorldMapCity>(this, &cities); }
-  QQmlListProperty<WorldMapZone> getZonesQml() { return QQmlListProperty<WorldMapZone>(this, &zones); }
+  QQmlListProperty<WorldMapCity> getCitiesQml() { return QML_QLIST_CONSTRUCTOR(WorldMapCity, cities); }
+  QQmlListProperty<WorldMapZone> getZonesQml() { return QML_QLIST_CONSTRUCTOR(WorldMapZone, zones); }
 
   Q_INVOKABLE void getIntoCity(WorldMapCity*);
   Q_INVOKABLE void getIntoWasteland(QPoint);

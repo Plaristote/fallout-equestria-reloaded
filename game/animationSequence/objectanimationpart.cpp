@@ -1,5 +1,6 @@
 #include "objectanimationpart.h"
 #include <QJSValue>
+#include <QDebug>
 #include "game/dynamicobject.h"
 
 void ObjectAnimationPart::initialize(QJSValue& value)

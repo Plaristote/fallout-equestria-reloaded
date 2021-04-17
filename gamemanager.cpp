@@ -1,5 +1,6 @@
 #include "gamemanager.h"
 #include <QDir>
+#include <QDebug>
 
 GameManager::GameManager(QObject *parent) : QObject(parent), currentGame(nullptr)
 {

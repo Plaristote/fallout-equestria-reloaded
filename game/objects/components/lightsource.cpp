@@ -82,6 +82,5 @@ void LightSourceComponent::refreshLightzone()
     lightZone->fill(QRect(zone.x() + 1, zone.y() + zone.height() - 1, zone.width() - 2, 1), tileset, leftTid);
     lightZone->setTileIdAt(zone.right(), zone.bottom(), tileset, bottomLeftTid);
     lightZone->fill(QRect(zone.x() + zone.width() - 1, zone.y() + 1, 1, zone.height() - 2), tileset, bottomTid);
-    qDebug() << "Light zone:" << zone << "at" << position;
   }
 }

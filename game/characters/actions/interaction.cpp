@@ -29,7 +29,6 @@ void InteractionAction::update()
 
 void InteractionAction::performAction()
 {
-  qDebug() << "InteractionAction::performAction";
   auto* level = Game::get()->getLevel();
   bool handledByScript = target->triggerInteraction(character, actionName);
 

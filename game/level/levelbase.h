@@ -37,7 +37,7 @@ signals:
   void tilemapReady();
 
 private:
-  QQmlListProperty<DynamicObject> getQmlObjects() { return QQmlListProperty<DynamicObject>(this, &objects); }
+  QQmlListProperty<DynamicObject> getQmlObjects() { return QML_QLIST_CONSTRUCTOR(DynamicObject, objects); }
 
 protected:
   QString               name;

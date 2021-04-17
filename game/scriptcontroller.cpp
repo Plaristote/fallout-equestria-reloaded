@@ -1,5 +1,6 @@
 #include "scriptcontroller.h"
 #include "game.h"
+#include <QDebug>
 
 ScriptController::ScriptController(const QString& modulePath) :
   engine(Game::get()->getScriptEngine()), path(modulePath)
@@ -14,7 +15,6 @@ void ScriptController::initialize(QObject* object)
   Game*     game = Game::get();
   QJSValue createCallback;
 
-  qDebug() << "ScriptController::initialize" << object;
   createCallback = module.property("create");
   model = engine.newQObject(object);
   if (createCallback.isCallable())

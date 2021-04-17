@@ -15,7 +15,7 @@ class TextBubblesComponent : public InteractionComponent
 public:
   explicit TextBubblesComponent(QObject *parent = nullptr);
 
-  QQmlListProperty<TextBubble> getQmlTextBubbles() { return QQmlListProperty<TextBubble>(this, &textBubbles); }
+  QQmlListProperty<TextBubble> getQmlTextBubbles() { return QML_QLIST_CONSTRUCTOR(TextBubble, textBubbles); }
 
   void update(qint64 delta);
 

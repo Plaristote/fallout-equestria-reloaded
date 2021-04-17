@@ -75,7 +75,6 @@ void CharacterBuffs::onBuffAdded(Buff* buff)
   connect(buff, &Buff::finish, this, &CharacterBuffs::onBuffRemoved, Qt::QueuedConnection);
   statistics->rbuffs().push_back(buff->getName());
   emit statistics->buffsChanged();
-  qDebug() << "Buffs are now = to" << buff->getName();
 }
 
 void CharacterBuffs::onBuffRemoved(Buff* buff)

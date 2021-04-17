@@ -28,7 +28,7 @@ find_package(QT NAMES Qt6 Qt5 COMPONENTS Core Quick LinguistTools Gui REQUIRED)
 find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Quick LinguistTools Gui REQUIRED)
 find_package(Qt5Multimedia REQUIRED)
 
-set(TS_FILES falloutequestria_en_US.ts)
+#set(TS_FILES falloutequestria_en_US.ts)
 set(QT_USE_QTMULTIMEDIA TRUE)
 
 set(PROJECT_SOURCES

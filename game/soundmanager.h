@@ -4,6 +4,8 @@
 #include <QObject>
 #include <QMap>
 #include <QUrl>
+#include <QVector>
+#include <QSharedPointer>
 
 class QSoundEffect;
 

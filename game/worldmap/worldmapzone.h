@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QPoint>
 #include <QMap>
+#include <QVector>
 #include <QJsonObject>
 
 class WorldMapZone : public QObject

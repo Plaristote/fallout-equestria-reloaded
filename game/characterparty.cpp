@@ -1,6 +1,7 @@
 #include "characterparty.h"
 #include "leveltask.h"
 #include <QJsonArray>
+#include <QDebug>
 
 CharacterParty::CharacterParty(QObject *parent) : QObject(parent)
 {

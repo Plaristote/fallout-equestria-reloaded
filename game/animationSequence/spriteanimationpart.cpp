@@ -1,5 +1,6 @@
 #include "spriteanimationpart.h"
 #include <QJSValue>
+#include <QDebug>
 #include "game.h"
 #include "game/leveltask.h"
 #include "game/sprite.h"

@@ -23,7 +23,7 @@ public:
   void setUser(Character* value) { user = value; }
   Character* getUser() const { return user; }
 
-  QQmlListProperty<InventoryItem> getQmlItems() { return QQmlListProperty<InventoryItem>(this, &items); }
+  QQmlListProperty<InventoryItem> getQmlItems() { return QML_QLIST_CONSTRUCTOR(InventoryItem, items); }
   const QList<InventoryItem*>& getItems() const { return items; }
 
   Q_INVOKABLE void addItem(InventoryItem* item);

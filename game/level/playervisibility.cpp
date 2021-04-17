@@ -22,7 +22,7 @@ QQmlListProperty<Character> PlayerVisibilityComponent::getQmlVisibleCharacters()
 {
   visibleCharacters = getPlayer()->getFieldOfView()->GetDetectedCharacters();
   visibleCharacters << getPlayer();
-  return QQmlListProperty<Character>(this, &visibleCharacters);
+  return QML_QLIST_CONSTRUCTOR(Character, visibleCharacters);
 }
 
 void PlayerVisibilityComponent::refreshHiddenObjectsDetection()

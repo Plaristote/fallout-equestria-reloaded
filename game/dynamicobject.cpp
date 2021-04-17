@@ -1,4 +1,5 @@
 #include <QRegularExpression>
+#include <QDebug>
 #include "dynamicobject.h"
 #include "character.h"
 #include "game.h"

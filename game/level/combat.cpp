@@ -38,7 +38,6 @@ bool CombatComponent::isCharacterTurn(Character *character) const
 
 void CombatComponent::onActiveItemChanged()
 {
-  qDebug() << "onActiveItemChaned";
   if (activeItem && activeItem->isCombatItem())
     joinCombat(Game::get()->getPlayer());
 }

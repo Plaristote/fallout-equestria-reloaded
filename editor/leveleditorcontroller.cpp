@@ -38,7 +38,7 @@ QQmlListProperty<Character> LevelEditorController::getQmlVisibleCharacters()
     if (object->isCharacter())
       visibleCharacters << reinterpret_cast<Character*>(object);
   }
-  return QQmlListProperty<Character>(this, &visibleCharacters);
+  return QML_QLIST_CONSTRUCTOR(Character, visibleCharacters);
 }
 
 void LevelEditorController::update()

@@ -21,7 +21,7 @@ public:
   Q_INVOKABLE void addAnimationSequence(QJSValue descriptor);
   void addAnimationSequence(AnimationSequence*, QJSValue callback = QJSValue());
 
-  QQmlListProperty<Sprite> getQmlVisualEffects() { return QQmlListProperty<Sprite>(this, &visualEffects); }
+  QQmlListProperty<Sprite> getQmlVisualEffects() { return QML_QLIST_CONSTRUCTOR(Sprite, visualEffects); }
 
 signals:
   void visualEffectsChanged();

@@ -1,6 +1,7 @@
 #include "race.h"
 #include "game.h"
 #include "pluginloader.h"
+#include <QDebug>
 
 QMap<QString, Race> Race::races;
 

@@ -1,6 +1,7 @@
 #include "tilezone.h"
 #include <QJsonObject>
 #include <QJsonArray>
+#include <QDebug>
 
 TileZone::TileZone(QObject *parent) : QObject(parent)
 {
