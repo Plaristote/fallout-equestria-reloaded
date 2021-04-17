@@ -5,7 +5,9 @@ export const isPlayable = true;
 export function spriteSheet(model) {
   return {
     cloneOf: "pony",
-    base:    "earthpony-" + getSpriteColor(model.faceColor)
+    //base:    "earthpony-" + getSpriteColor(model.faceColor)
+    base:    "earthpony-gray",
+    color:   model.faceColor 
   };
 }
 

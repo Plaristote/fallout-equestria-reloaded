@@ -1,17 +1,9 @@
 #include "layeredspritesheet.h"
-#include "game/animationlibrary.h"
 #include <QPainter>
 
 LayeredSpriteSheet::LayeredSpriteSheet(QSize size) : QImage(size, QImage::Format_ARGB32)
 {
   fill(Qt::transparent);
-}
-
-void LayeredSpriteSheet::addLayer(const QString& group, const QString& animation)
-{
-  const QImage& image = AnimationLibrary::get()->getImage(group, animation);
-
-  addLayer(image);
 }
 
 void LayeredSpriteSheet::addLayer(const QImage& source)
@@ -20,5 +12,30 @@ void LayeredSpriteSheet::addLayer(const QImage& source)
 
   painter.begin(this);
   painter.drawImage(0, 0, source);
+  painter.end();
+}
+
+void LayeredSpriteSheet::addColorLayer(QColor color, const QImage &mask)
+{
+  QImage   colorLayer(size(), QImage::Format_ARGB32);
+  QPainter painter;
+
+  color.setAlpha(150);
+  colorLayer.fill(Qt::transparent);
+  painter.begin(&colorLayer);
+  for (int x = 0 ; x < size().width() ; ++x)
+  {
+    for (int y = 0 ; y < size().height() ; ++y)
+    {
+       QColor baseColor   = mask.pixelColor(x, y);
+       bool   blackish    = baseColor.red() == 0 && baseColor.green() == 0 && baseColor.blue() == 0;
+
+       if (!blackish && baseColor != Qt::transparent)
+         colorLayer.setPixelColor(x, y, color);
+    }
+  }
+  painter.end();
+  painter.begin(this);
+  painter.drawImage(0, 0, colorLayer);
   painter.end();
 }

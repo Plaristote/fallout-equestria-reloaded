@@ -318,14 +318,15 @@ void AnimationLibrary::prerenderCharacterSpriteSheet(const CharacterSpriteDescri
     {"sprites/characters/weapons", descriptor.weapon}
   });
 
+
   spritesheet.addLayer(baseImage);
-  // TODO colorize base
+  spritesheet.addColorLayer(descriptor.bodyColor, baseImage);
   if (descriptor.hair.length() > 0)
   {
     QImage hairImage(ASSETS_PATH + "sprites/characters/hairs" + descriptor.hair + ".png");
 
-    // TODO colorize hair
     spritesheet.addLayer(hairImage);
+    spritesheet.addColorLayer(descriptor.hairColor, hairImage);
   }
   for (auto it = layers.begin() ; it != layers.end() ; ++it)
   {
