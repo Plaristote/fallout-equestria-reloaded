@@ -22,7 +22,7 @@ class DynamicObject : public ControlZoneComponent
   Q_PROPERTY(QPoint  position    READ getPosition NOTIFY positionChanged)
   Q_PROPERTY(TaskRunner* tasks MEMBER taskManager)
   Q_PROPERTY(bool blocksPath MEMBER blocksPath NOTIFY blocksPathChanged)
-  Q_PROPERTY(bool isVisible MEMBER visible NOTIFY visibilityChanged)
+  Q_PROPERTY(bool isVisible READ isVisible NOTIFY visibilityChanged)
 
 public:
   explicit DynamicObject(QObject *parent = nullptr);
@@ -36,7 +36,7 @@ public:
 
   inline bool isCharacter() const { return getObjectType() == "Character"; }
   virtual bool isBlockingPath() const { return true; }
-  inline bool isVisible() const { return visible; }
+  inline bool isVisible() const { return visible && !isHidden(); }
   void setVisible(bool value);
 
   void setObjectName(const QString& value) { objectName = value; emit objectNameChanged(); }

@@ -352,6 +352,6 @@ void AnimationLibrary::registerCharacterSpriteSheet(const CharacterSpriteDescrip
     spriteData["cloneOf"]       = descriptor.cloneOf;
     data[name] = spriteData;
     textures << spriteData["defaultSource"].toString();
-    images.insert(filePath, QImage(filePath));
+    images.insert(ASSETS_PATH + "sprites/" + spriteData["defaultSource"].toString(), QImage(filePath));
   }
 }
