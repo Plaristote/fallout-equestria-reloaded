@@ -13,7 +13,7 @@ Character::Character(QObject *parent) : ParentType(parent)
   connect(actionQueue, &ActionQueue::queueCompleted, this, &Character::onActionQueueCompleted);
   connect(this, &Character::characterKill, this, &Character::died);
   connect(this, &Character::died, [this]() { if (script) { script->call("onDied"); } });
-  connect(this, &Character::died, this, &CharacterBuffs::clearBuffs);
+  connect(this, &Character::died, this, &CharacterBuffs::clearBuffs, Qt::QueuedConnection);
 }
 
 void Character::update(qint64 delta)

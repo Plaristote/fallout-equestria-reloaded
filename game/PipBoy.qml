@@ -16,6 +16,14 @@ Pane {
     levelController.paused = true;
   }
 
+  Connections {
+    target: gameController.player
+
+    function onDied() {
+      application.popView();
+    }
+  }
+
   RowLayout {
     anchors.fill: parent
 
