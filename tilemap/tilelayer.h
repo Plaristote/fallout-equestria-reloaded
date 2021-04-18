@@ -5,6 +5,7 @@
 # include <QString>
 # include <QSize>
 # include <QPoint>
+# include <QColor>
 # include <QVector>
 # include "tile.h"
 
@@ -20,6 +21,7 @@ class TileLayer : public QObject
   Q_PROPERTY(QString name    MEMBER name)
   Q_PROPERTY(QSize   size    MEMBER size)
   Q_PROPERTY(QPoint  offset  MEMBER offset)
+  Q_PROPERTY(QColor  color   MEMBER color)
   Q_PROPERTY(bool    visible MEMBER visible NOTIFY visibleChanged)
   Q_PROPERTY(bool    prerendered MEMBER prerendered)
 public:
@@ -56,6 +58,7 @@ private:
   QString        name;
   QSize          size;
   QPoint         offset;
+  QColor         color;
   QVector<Tile*> tiles;
   bool           visible = true;
   bool           prerendered = false;

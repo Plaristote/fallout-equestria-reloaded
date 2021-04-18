@@ -19,6 +19,14 @@ void TileLayer::load(const QJsonObject& object, const QVector<Tileset*>& tileset
   offset.setX(object["offsetx"].toInt());
   offset.setY(object["offsety"].toInt());
   loadTiles(object["data"].toArray(), tilesets);
+  for (QJsonValue property : object["properties"].toArray())
+  {
+    QString propertyName = property["name"].toString();
+    QJsonValue value = property["value"];
+
+    if (propertyName == "color")
+      color = QColor(value.toString());
+  }
 }
 
 static QPoint getRenderPosition(QPoint offset, QPoint currentPosition, QSize tileSize)

@@ -11,11 +11,12 @@ Repeater {
     property QtObject dynamicObject: levelController.dynamicObjects[index]
     property point offset: controller.getAdjustedOffsetFor(dynamicObject)
     property var lightLayer: null
+    property color lightColor: Qt.rgba(1, 1, 1, 0.5)
 
     color: "transparent"
     x: offset.x + origin.x
     y: offset.y + origin.y
-    visible: lightLayer !== null && lightLayer.visible
+    visible: lightLayer !== null && lightLayer.visible && dynamicObject.isVisible
 
     onLightLayerChanged: updateVisibility()
     Component.onCompleted: lightObjectOverlay.updateLightLayer()
@@ -26,6 +27,7 @@ Repeater {
 
         if (layer.isInside(dynamicObject.position.x, dynamicObject.position.y)) {
           lightLayer = layer;
+          lightColor = lightLayer.color;
           return ;
         }
       }
@@ -78,7 +80,7 @@ Repeater {
       visible: false
       width: lightObjectBase.width
       height: lightObjectBase.height
-      color: Qt.rgba(1, 1, 1, 0.5)
+      color: lightObjectOverlay.lightColor
     }
 
     OpacityMask {
