@@ -290,5 +290,19 @@ void TileLayer::renderToImage(QImage &image, QPoint offset)
       }
     }
   }
+  if (color != Qt::transparent)
+  {
+    QImage colorLayer(image.size(), QImage::Format_ARGB32);
+
+    for (int x = 0 ; x < image.size().width() ; ++x)
+    {
+      for (int y = 0 ; y < image.size().height() ; ++y)
+      {
+        if (image.pixelColor(x, y) != Qt::transparent)
+          colorLayer.setPixelColor(x, y, color);
+      }
+    }
+    painter.drawImage(0, 0, colorLayer);
+  }
   painter.end();
 }

@@ -58,7 +58,7 @@ private:
   QString        name;
   QSize          size;
   QPoint         offset;
-  QColor         color;
+  QColor         color = Qt::transparent;
   QVector<Tile*> tiles;
   bool           visible = true;
   bool           prerendered = false;
