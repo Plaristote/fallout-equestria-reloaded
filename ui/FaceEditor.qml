@@ -5,15 +5,15 @@ import "../assets/ui" as UiStyle
 import "../ui"
 import QtQuick.Dialogs 1.2 as WindowDialogs
 
-Dialog {
+UiStyle.CustomDialog {
   property QtObject characterSheet
   property var availableAccessories: ["eye-patch","eye-scar","square-glasses"]
   id: faceEditor
   standardButtons: Dialog.Ok
   modal: true
-  background: UiStyle.Pane {}
   width: parent.width
   height: parent.height
+  header: null
 
   WindowDialogs.ColorDialog {
     id: faceColorDialog
@@ -23,9 +23,18 @@ Dialog {
     }
   }
 
+  WindowDialogs.ColorDialog {
+    id: eyeColorDialog
+    title: "Color"
+    onAccepted: {
+      characterSheet.eyeColor = Qt.rgba(color.r, color.g, color.b, 0.5);
+    }
+  }
+
   FaceDisplay {
     theme:       characterSheet.faceTheme
     color:       characterSheet.faceColor
+    eyeColor:    characterSheet.eyeColor
     accessories: characterSheet.faceAccessories
     anchors.left: fieldsPanel.right
     width: parent.width - fieldsPanel.width
@@ -63,6 +72,17 @@ Dialog {
           color: characterSheet.faceColor
         }
         onClicked: faceColorDialog.open()
+      }
+
+      TerminalLabel { text: "Eye color" }
+      TerminalButton {
+        Layout.fillWidth: true
+        Layout.preferredHeight: 40
+        contentItem: Rectangle {
+          anchors.fill: parent
+          color: characterSheet.eyeColor
+        }
+        onClicked: eyeColorDialog.open()
       }
 
       TerminalLabel { text: "Accessories"; Layout.alignment: Qt.AlignTop }

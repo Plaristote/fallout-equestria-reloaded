@@ -8,6 +8,7 @@ Image {
   property string mood:     "neutral"
   property string ambiance: "wasteland"
   property color  color:    Qt.rgba(0, 205, 80, 0.5)
+  property color  eyeColor: Qt.rgba(255, 0, 0)
   property var    accessories: ["fancypants","eye-scar"]
 
   source: basePath + "/backgrounds/" + ambiance + ".jpg"
@@ -54,6 +55,18 @@ Image {
       anchors.fill: parent
       source: basePath + '/' + theme + '/eyes/' + mood + '.png'
       fillMode: Image.Stretch
+    }
+
+    Image {
+      id: eyesColor
+      anchors.fill: parent
+      source: basePath + '/' + theme + '/eye-colors/' + mood + '.png'
+
+      ColorOverlay {
+        anchors.fill: parent
+        source: parent
+        color: Qt.rgba(eyeColor.r, eyeColor.g, eyeColor.b, 0.5)
+      }
     }
 
     Item {

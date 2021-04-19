@@ -341,6 +341,30 @@ void StatModel::cancelChanges()
   emit skillPointsChanged();
 }
 
+static QColor jsonToColor(QJsonValue value)
+{
+  QColor result = Qt::transparent;
+
+  if (value.isArray())
+  {
+    auto array = value.toArray();
+
+    result.setRed   (array.at(0).toInt());
+    result.setGreen(array.at(1).toInt());
+    result.setBlue (array.at(2).toInt());
+    result.setAlpha(array.at(3).toInt());
+  }
+  return result;
+}
+
+static QJsonArray colorToJson(QColor color)
+{
+  QVariantList list;
+
+  list << color.red() << color.green() << color.blue() << color.alpha();
+  return QJsonArray::fromVariantList(list);
+}
+
 void StatModel::fromJson(const QJsonObject& json)
 {
   const QJsonArray jsonTraits = json["traits"].toArray();
@@ -411,13 +435,10 @@ void StatModel::fromJson(const QJsonObject& json)
   for (const QString& race : json["kills"].toObject().keys())
     addKill(race, json["kills"][race].toVariant().toUInt());
 
-  auto faceColorArray = json["face-color"].toArray();
   spriteTheme = json["sprite-theme"].toString();
   faceTheme   = json["face-theme"].toString();
-  faceColor.setRed  (faceColorArray.at(0).toInt());
-  faceColor.setGreen(faceColorArray.at(1).toInt());
-  faceColor.setBlue (faceColorArray.at(2).toInt());
-  faceColor.setAlpha(faceColorArray.at(3).toInt());
+  faceColor   = jsonToColor(json["face-color"]);
+  eyeColor    = jsonToColor(json["eye-color"]);
 
   faceAccessories.clear();
   for (QJsonValue value : json["face-accessories"].toArray())
@@ -437,6 +458,7 @@ void StatModel::fromJson(const QJsonObject& json)
   emit faceAccessoriesChanged();
   emit faceThemeChanged();
   emit faceColorChanged();
+  emit eyeColorChanged();
   emit raceChanged();
   emit genderChanged();
   emit factionChanged();
@@ -509,6 +531,7 @@ void StatModel::toJson(QJsonObject& json)
 
   json["sprite-theme"]     = spriteTheme;
   json["face-theme"]       = faceTheme;
-  json["face-color"]       = QJsonArray::fromVariantList(QVariantList() << faceColor.red() << faceColor.green() << faceColor.blue() << faceColor.alpha());
+  json["face-color"]       = colorToJson(faceColor);
+  json["eye-color"]        = colorToJson(eyeColor);
   json["face-accessories"] =  QJsonArray::fromStringList(faceAccessories);
 }

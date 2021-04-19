@@ -120,6 +120,7 @@ class StatModel : public QObject
   Q_PROPERTY(QString     spriteTheme     MEMBER spriteTheme     NOTIFY spriteThemeChanged)
   Q_PROPERTY(QString     faceTheme       MEMBER faceTheme       NOTIFY faceThemeChanged)
   Q_PROPERTY(QColor      faceColor       MEMBER faceColor       NOTIFY faceColorChanged)
+  Q_PROPERTY(QColor      eyeColor        MEMBER eyeColor        NOTIFY eyeColorChanged)
 
 public:
   explicit StatModel(QObject *parent = nullptr);
@@ -227,6 +228,7 @@ signals:
   void faceAccessoriesChanged();
   void faceThemeChanged();
   void faceColorChanged();
+  void eyeColorChanged();
   void factionChanged();
   void raceChanged();
   void genderChanged();
@@ -257,7 +259,7 @@ private:
   QMap<QString, unsigned int> kills;
 
   QString     spriteTheme, faceTheme;
-  QColor      faceColor;
+  QColor      faceColor, eyeColor;
   QStringList faceAccessories;
 };
 
