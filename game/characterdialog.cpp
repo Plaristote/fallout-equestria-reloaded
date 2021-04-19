@@ -160,6 +160,8 @@ QString CharacterDialog::getOptionText(const QString& key)
     if (retval.isString())
       return retval.toString();
   }
+  if (answerData["text"].toString() == "")
+    return "[...]";
   return t(answerData["text"].toString());
 }
 
