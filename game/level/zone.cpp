@@ -44,6 +44,21 @@ void ZoneComponent::unregisterZone(TileZone* zone)
   disconnect(zone, &TileZone::exitedZone,  this, &ZoneComponent::onZoneExited);
   grid->unregisterZone(zone);
   tilemap->removeTileZone(zone);
+  for (DynamicObject* object : qAsConst(objects))
+  {
+    if (object->isCharacter())
+    {
+      CharacterMovement* character = reinterpret_cast<CharacterMovement*>(object);
+
+      if (character->getCurrentZones().contains(zone))
+        {
+          QVector<TileZone*> zones(character->getCurrentZones());
+
+          zones.removeAll(zone);
+          character->setCurrentZones(zones);
+        }
+    }
+  }
 }
 
 void ZoneComponent::onZoneEntered(DynamicObject* object, TileZone* zone)

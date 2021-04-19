@@ -68,6 +68,7 @@ export class Trap {
   triggered() {
     this.model.setVariable("disarmed", true);
     explode(this.model.position, 1, getValueFromRange(20, 50));
+    level.deleteObject(this.model);
   }
 }
 
