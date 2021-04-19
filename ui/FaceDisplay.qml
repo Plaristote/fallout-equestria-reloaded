@@ -3,7 +3,7 @@ import QtGraphicalEffects 1.15
 
 Image {
   id: root
-  readonly property string basePath: "qrc:/assets/faces"
+  readonly property string basePath: `${assetPath}/faces`
   property string theme:    "mare-basic"
   property string mood:     "neutral"
   property string ambiance: "wasteland"
@@ -12,6 +12,27 @@ Image {
 
   source: basePath + "/backgrounds/" + ambiance + ".jpg"
   fillMode: Image.PreserveAspectCrop
+
+  Component.onCompleted: {
+    scheduleNextBlink();
+  }
+
+  function scheduleNextBlink() {
+    if (Math.ceil(Math.random() * 15) > 2)
+    {
+      const seconds = Math.ceil(Math.random() * 8);
+
+      blinkTimer.interval = seconds * 1000;
+      blinkTimer.running = true;
+    }
+    else
+      closeEyelids.running = true;
+  }
+
+  Timer {
+    id: blinkTimer
+    onTriggered: closeEyelids.running = true
+  }
 
   Image {
     id: face
@@ -29,8 +50,49 @@ Image {
     }
 
     Image {
+      id: eyes
       anchors.fill: parent
       source: basePath + '/' + theme + '/eyes/' + mood + '.png'
+      fillMode: Image.Stretch
+    }
+
+    Item {
+      anchors { top: eyes.top; left: eyes.left; right: eyes.right }
+      clip: true
+
+      Image {
+        id: eyelids
+        source: basePath + '/' + theme + '/eyes/' + mood + '.png'
+        anchors { top: parent.top; left: parent.left; right: parent.right }
+        height: eyes.height
+
+        ColorOverlay {
+          anchors.fill: parent
+          source: parent
+          color: Qt.rgba(root.color.r, root.color.g, root.color.b, 1)
+        }
+      }
+
+      PropertyAnimation on height {
+        id: openEyelids
+        from: eyes.height
+        to: 0
+        duration: 200
+        onFinished: scheduleNextBlink()
+      }
+
+      PropertyAnimation on height {
+        id: closeEyelids
+        from: 0
+        to: eyes.height
+        duration: 200
+        onFinished: openEyelids.running = true
+      }
+    }
+
+    Image {
+      anchors.fill: parent
+      source: basePath + '/' + theme + '/eyelids/' + mood +  '.png'
       fillMode: Image.Stretch
     }
 
