@@ -146,7 +146,10 @@ void LevelTask::tileClicked(int x, int y)
   if (getPlayer())
   {
     auto* actions = getPlayer()->getActionQueue();
+    QPoint oldTarget(-1, -1);
 
+    if (getPlayer()->getCurrentPath().length() > 0)
+      oldTarget = getPlayer()->getCurrentPath().last();
     actions->reset();
     if (occupant)
       actions->pushReach(occupant, 1);
@@ -155,7 +158,13 @@ void LevelTask::tileClicked(int x, int y)
     if (!(actions->start()))
       emit displayConsoleMessage("No path.");
     else if (!getPlayer()->getCurrentPath().empty())
+    {
+      if (oldTarget == getPlayer()->getCurrentPath().last())
+        getPlayer()->setMovementMode("running");
+      else if (oldTarget == QPoint(-1, -1))
+        getPlayer()->setMovementMode("walking");
       displayMovementTargetHint(getPlayer()->getCurrentPath().last());
+    }
   }
   else
   {
