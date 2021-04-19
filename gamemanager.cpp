@@ -81,3 +81,13 @@ void GameManager::endGame()
   currentGame = nullptr;
   emit currentGameChanged();
 }
+
+int GameManager::getMovementOption()
+{
+  return LevelTask::movementModeOption;
+}
+
+void GameManager::setMovementOption(int value)
+{
+  LevelTask::movementModeOption = value;
+}

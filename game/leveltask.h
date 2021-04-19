@@ -27,7 +27,7 @@ class LevelTask : public CombatComponent
   Q_PROPERTY(bool       paused  MEMBER paused NOTIFY pausedChanged)
   Q_PROPERTY(SoundManager* sounds READ getSoundManager)
   Q_PROPERTY(TaskRunner* tasks MEMBER taskRunner)
-public:
+public:  
   explicit LevelTask(QObject *parent = nullptr);
   virtual ~LevelTask();
 

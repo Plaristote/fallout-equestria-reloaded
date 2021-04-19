@@ -5,6 +5,8 @@
 #include "game/characters/actionqueue.h"
 #include <QDebug>
 
+int InteractionComponent::movementModeOption = InteractionComponent::MixedMovementMode;
+
 InteractionComponent::InteractionComponent(QObject *parent) : ParentType(parent)
 {
 
@@ -59,12 +61,26 @@ int InteractionComponent::getInteractionDistance(DynamicObject* target, const QS
   return distance;
 }
 
+void InteractionComponent::setDefaultMovementMode()
+{
+  switch (movementModeOption)
+  {
+    case RunMovementMode:
+      getPlayer()->setMovementMode("running");
+      break ;
+    case WalkMovementMode:
+      getPlayer()->setMovementMode("walking");
+      break ;
+  }
+}
+
 void InteractionComponent::interactOrderReceived(DynamicObject* target, const QString& interactionType)
 {
   int   distance = getInteractionDistance(target, interactionType);
   auto* player = Game::get()->getPlayer();
   auto* actions = player->getActionQueue();
 
+  setDefaultMovementMode();
   actions->reset();
   actions->pushReach(target, static_cast<float>(distance));
   actions->pushInteraction(target, interactionType);

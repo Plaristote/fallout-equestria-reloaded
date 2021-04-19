@@ -14,6 +14,7 @@ Window {
   property bool isFullScreen: false
   property bool hasSavedGame: false // TODO
   property string gameLoading
+  property int movementMode: 0
 
   Settings {
     property alias x: application.x
@@ -21,8 +22,13 @@ Window {
     property alias width: application.width
     property alias height: application.height
     property alias fullScreen: application.isFullScreen
+    property alias movementMode: application.movementMode
   }
 
+  onMovementModeChanged: {
+    if (gameManager.movementModeOption !== application.movementMode)
+      gameManager.movementModeOption = application.movementMode;
+  }
   onIsFullScreenChanged: updateDisplay()
   Component.onCompleted: updateDisplay()
 
@@ -31,6 +37,7 @@ Window {
       application.showFullScreen();
     else
       application.showNormal();
+    gameManager.movementModeOption = application.movementMode;
   }
 
   function createGame() {

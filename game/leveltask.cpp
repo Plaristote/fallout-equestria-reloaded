@@ -159,10 +159,15 @@ void LevelTask::tileClicked(int x, int y)
       emit displayConsoleMessage("No path.");
     else if (!getPlayer()->getCurrentPath().empty())
     {
-      if (oldTarget == getPlayer()->getCurrentPath().last())
-        getPlayer()->setMovementMode("running");
-      else if (oldTarget == QPoint(-1, -1))
-        getPlayer()->setMovementMode("walking");
+      switch (movementModeOption)
+      {
+        case MixedMovementMode:
+          getPlayer()->setMovementMode(oldTarget == getPlayer()->getCurrentPath().last() ? "running" : "walking");
+          break ;
+        default:
+          setDefaultMovementMode();
+          break ;
+      }
       displayMovementTargetHint(getPlayer()->getCurrentPath().last());
     }
   }

@@ -18,15 +18,26 @@ class InteractionComponent : public PlayerVisibilityComponent
   Q_PROPERTY(int targetMode READ getTargetMode NOTIFY mouseModeChanged)
   Q_PROPERTY(InventoryItem* activeItem READ getActiveItem NOTIFY activeItemChanged)
 public:
-  enum MouseMode {
+  static int movementModeOption;
+
+  enum MouseMode
+  {
     MovementCursor    = 0,
     InteractionCursor = 1,
     TargetCursor      = 2
   };
 
-  enum TargetMode {
+  enum TargetMode
+  {
     AnyTarget       = 0,
     CharacterTarget = 1
+  };
+
+  enum MovementMode
+  {
+    MixedMovementMode = 0,
+    RunMovementMode   = 1,
+    WalkMovementMode  = 2
   };
 
   explicit InteractionComponent(QObject *parent = nullptr);
@@ -44,6 +55,7 @@ public:
   Q_INVOKABLE void useSkill(const QString& skill);
   Q_INVOKABLE void useSkillOn(Character* user, DynamicObject* object, const QString& skill);
   int              getTargetMode() const;
+  void             setDefaultMovementMode();
 
   Q_INVOKABLE DynamicObject*   getObjectAt(int posX, int posY) const;
   DynamicObject*               getObjectAt(QPoint point) const { return getObjectAt(point.x(), point.y()); }

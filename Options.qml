@@ -11,6 +11,7 @@ Pane {
   Component.onCompleted: {
     console.log("Option locale load", i18n.currentLocale, i18n.getAvailableLocales());
     localeInput.currentIndex = i18n.getAvailableLocales().indexOf(i18n.currentLocale);
+    movementInput.currentIndex = gameManager.movementModeOption;
     loaded = true;
   }
 
@@ -48,6 +49,16 @@ Pane {
         to: 100
         Component.onCompleted: { value = musicManager.defaultVolume }
         onValueChanged: { musicManager.defaultVolume = value; }
+      }
+
+      TerminalLabel { text: i18n.t("options.movementMode") }
+      TerminalComboBox {
+        id: movementInput
+        model: [i18n.t("options.movement.mixed"), i18n.t("options.movement.alwaysRun"), i18n.t("options.movement.alwaysWalk")]
+        onCurrentIndexChanged: {
+          if (loaded)
+            application.movementMode = currentIndex;
+        }
       }
     }
   }

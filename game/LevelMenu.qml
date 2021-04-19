@@ -24,6 +24,11 @@ Pane {
     }
 
     MenuButton {
+      text: "Options"
+      onClicked: application.pushView("Options.qml")
+    }
+
+    MenuButton {
       text: "Exit"
       onClicked: {
         console.log("exit");
