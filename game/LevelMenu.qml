@@ -6,7 +6,7 @@ import "../ui"
 Pane {
   id: mainMenu
   width: 280
-  height: 250
+  height: 300
   background: UiStyle.Pane {}
 
   Column {
