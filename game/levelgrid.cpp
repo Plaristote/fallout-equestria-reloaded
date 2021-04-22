@@ -126,10 +126,13 @@ void LevelGrid::unregisterZone(TileZone* zone)
   {
     auto listener = zoneListener.find(zone);
 
-    disconnect(*listener);
-    zoneListener.erase(listener);
-    zoneCases.remove(zone);
+    if (listener != zoneListener.end())
+    {
+      disconnect(*listener);
+      zoneListener.erase(listener);
+    }
     setZoneCases(zone, {});
+    zoneCases.remove(zone);
   }
 }
 
