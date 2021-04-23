@@ -364,7 +364,7 @@
             "repeat": false,
             "width": 47
         },
-        "defaultSource": "characters/earthpony-purple.png",
+        "defaultSource": "characters/earthpony-gray.png",
         "idle-down": {
             "frameCount": 1,
             "frameInterval": 100,
@@ -398,6 +398,42 @@
             "height": 47,
             "offsetX": 46,
             "offsetY": 144,
+            "repeat": false,
+            "width": 47
+        },
+        "melee-down": {
+            "frameCount": 9,
+            "frameInterval": 65,
+            "height": 47,
+            "offsetX": 0,
+            "offsetY": 375,
+            "repeat": false,
+            "width": 47
+        },
+        "melee-left": {
+            "frameCount": 9,
+            "frameInterval": 65,
+            "height": 47,
+            "offsetX": 0,
+            "offsetY": 423,
+            "repeat": false,
+            "width": 47
+        },
+        "melee-right": {
+            "frameCount": 9,
+            "frameInterval": 65,
+            "height": 47,
+            "offsetX": 0,
+            "offsetY": 470,
+            "repeat": false,
+            "width": 47
+        },
+        "melee-up": {
+            "frameCount": 9,
+            "frameInterval": 65,
+            "height": 47,
+            "offsetX": 0,
+            "offsetY": 517,
             "repeat": false,
             "width": 47
         },
