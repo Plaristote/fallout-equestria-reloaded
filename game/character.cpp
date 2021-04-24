@@ -37,7 +37,7 @@ void Character::onActionQueueCompleted()
 
 void Character::afterDeathAnimation()
 {
-  if (getAnimation().startsWith("death"))
+  if (getAnimation().startsWith("fall") && !isAlive())
   {
     setAnimation("dead");
     Game::get()->getLevel()->addBloodStainAt(getPosition());
@@ -60,7 +60,7 @@ void Character::takeDamage(int damage, Character* dealer)
   }
   if (hp <= 0)
   {
-    setAnimation("death");
+    setAnimation("fall");
     blocksPath = false;
     emit characterKill(this, dealer);
     emit blocksPathChanged();

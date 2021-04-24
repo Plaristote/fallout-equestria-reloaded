@@ -156,7 +156,7 @@
     },
     "effects": {
         "explosion": {
-            "frameCount": 44,
+            "frameCount": 35,
             "frameInterval": 5,
             "height": 89,
             "offsetX": 0,
@@ -164,6 +164,297 @@
             "repeat": false,
             "source": "explosion.png",
             "width": 93
+        }
+    },
+    "griffon": {
+        "damaged-down": {
+            "frameCount": 6,
+            "frameInterval": 100,
+            "height": 66,
+            "offsetX": 273,
+            "offsetY": 0,
+            "repeat": false,
+            "width": 91
+        },
+        "damaged-left": {
+            "frameCount": 6,
+            "frameInterval": 100,
+            "height": 66,
+            "offsetX": 273,
+            "offsetY": 66,
+            "repeat": false,
+            "width": 91
+        },
+        "damaged-right": {
+            "frameCount": 6,
+            "frameInterval": 100,
+            "height": 66,
+            "offsetX": 273,
+            "offsetY": 132,
+            "repeat": false,
+            "width": 91
+        },
+        "damaged-up": {
+            "frameCount": 6,
+            "frameInterval": 100,
+            "height": 66,
+            "offsetX": 273,
+            "offsetY": 198,
+            "repeat": false,
+            "width": 91
+        },
+        "dead-down": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 66,
+            "offsetX": 454,
+            "offsetY": 264,
+            "repeat": false,
+            "width": 91
+        },
+        "dead-left": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 66,
+            "offsetX": 454,
+            "offsetY": 330,
+            "repeat": false,
+            "width": 91
+        },
+        "dead-right": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 66,
+            "offsetX": 454,
+            "offsetY": 396,
+            "repeat": false,
+            "width": 91
+        },
+        "dead-up": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 66,
+            "offsetX": 454,
+            "offsetY": 462,
+            "repeat": false,
+            "width": 91
+        },
+        "defaultSource": "characters/griffon.png",
+        "fall-down": {
+            "frameCount": 6,
+            "frameInterval": 150,
+            "height": 66,
+            "offsetX": 0,
+            "offsetY": 264,
+            "repeat": false,
+            "width": 91
+        },
+        "fall-left": {
+            "frameCount": 6,
+            "frameInterval": 150,
+            "height": 66,
+            "offsetX": 0,
+            "offsetY": 330,
+            "repeat": false,
+            "width": 91
+        },
+        "fall-right": {
+            "frameCount": 6,
+            "frameInterval": 150,
+            "height": 66,
+            "offsetX": 0,
+            "offsetY": 396,
+            "repeat": false,
+            "width": 91
+        },
+        "fall-up": {
+            "frameCount": 6,
+            "frameInterval": 150,
+            "height": 66,
+            "offsetX": 0,
+            "offsetY": 462,
+            "repeat": false,
+            "width": 91
+        },
+        "idle-down": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 66,
+            "offsetX": 91,
+            "offsetY": 0,
+            "repeat": false,
+            "width": 91
+        },
+        "idle-left": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 66,
+            "offsetX": 91,
+            "offsetY": 66,
+            "repeat": false,
+            "width": 91
+        },
+        "idle-right": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 66,
+            "offsetX": 91,
+            "offsetY": 132,
+            "repeat": false,
+            "width": 91
+        },
+        "idle-up": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 66,
+            "offsetX": 91,
+            "offsetY": 198,
+            "repeat": false,
+            "width": 91
+        },
+        "melee-down": {
+            "frameCount": 8,
+            "frameInterval": 50,
+            "height": 66,
+            "offsetX": 0,
+            "offsetY": 528,
+            "repeat": false,
+            "width": 91
+        },
+        "melee-left": {
+            "frameCount": 8,
+            "frameInterval": 50,
+            "height": 66,
+            "offsetX": 0,
+            "offsetY": 594,
+            "repeat": false,
+            "width": 91
+        },
+        "melee-right": {
+            "frameCount": 8,
+            "frameInterval": 50,
+            "height": 66,
+            "offsetX": 0,
+            "offsetY": 666,
+            "repeat": false,
+            "width": 91
+        },
+        "melee-up": {
+            "frameCount": 8,
+            "frameInterval": 50,
+            "height": 66,
+            "offsetX": 0,
+            "offsetY": 732,
+            "repeat": false,
+            "width": 91
+        },
+        "use-down": {
+            "frameCount": 6,
+            "frameInterval": 100,
+            "height": 66,
+            "offsetX": 727,
+            "offsetY": 0,
+            "repeat": false,
+            "width": 91
+        },
+        "use-left": {
+            "frameCount": 6,
+            "frameInterval": 100,
+            "height": 66,
+            "offsetX": 727,
+            "offsetY": 66,
+            "repeat": false,
+            "width": 91
+        },
+        "use-right": {
+            "frameCount": 6,
+            "frameInterval": 100,
+            "height": 66,
+            "offsetX": 727,
+            "offsetY": 132,
+            "repeat": false,
+            "width": 91
+        },
+        "use-up": {
+            "frameCount": 6,
+            "frameInterval": 100,
+            "height": 66,
+            "offsetX": 727,
+            "offsetY": 198,
+            "repeat": false,
+            "width": 91
+        },
+        "running-down": {
+            "frameCount": 3,
+            "frameInterval": 100,
+            "height": 66,
+            "offsetX": 0,
+            "offsetY": 0,
+            "repeat": true,
+            "width": 91
+        },
+        "running-left": {
+            "frameCount": 3,
+            "frameInterval": 100,
+            "height": 66,
+            "offsetX": 0,
+            "offsetY": 66,
+            "repeat": true,
+            "width": 91
+        },
+        "running-right": {
+            "frameCount": 3,
+            "frameInterval": 100,
+            "height": 66,
+            "offsetX": 0,
+            "offsetY": 132,
+            "repeat": true,
+            "width": 91
+        },
+        "running-up": {
+            "frameCount": 3,
+            "frameInterval": 100,
+            "height": 66,
+            "offsetX": 0,
+            "offsetY": 198,
+            "repeat": true,
+            "width": 91
+        },
+        "walking-down": {
+            "frameCount": 3,
+            "frameInterval": 250,
+            "height": 66,
+            "offsetX": 0,
+            "offsetY": 0,
+            "repeat": true,
+            "width": 91
+        },
+        "walking-left": {
+            "frameCount": 3,
+            "frameInterval": 250,
+            "height": 66,
+            "offsetX": 0,
+            "offsetY": 66,
+            "repeat": true,
+            "width": 91
+        },
+        "walking-right": {
+            "frameCount": 3,
+            "frameInterval": 250,
+            "height": 66,
+            "offsetX": 0,
+            "offsetY": 132,
+            "repeat": true,
+            "width": 91
+        },
+        "walking-up": {
+            "frameCount": 3,
+            "frameInterval": 250,
+            "height": 66,
+            "offsetX": 0,
+            "offsetY": 198,
+            "repeat": true,
+            "width": 91
         }
     },
     "items": {
@@ -202,6 +493,16 @@
             "height": 36,
             "source": "medikit.png",
             "width": 72
+        },
+        "power-armor": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 34,
+            "offsetX": 0,
+            "offsetY": 0,
+            "repeat": false,
+            "source": "items/power-armor.png",
+            "width": 49
         }
     },
     "landmine": {
@@ -386,12 +687,8 @@
             "repeat": false,
             "width": 47
         },
-        "death": {
-            "height": 46,
-            "source": "tombstone.png",
-            "width": 46
-        },
-        "death-down": {
+        "defaultSource": "characters/earthpony-gray.png",
+        "fall-down": {
             "frameCount": 9,
             "frameInterval": 120,
             "height": 47,
@@ -400,7 +697,7 @@
             "repeat": false,
             "width": 47
         },
-        "death-left": {
+        "fall-left": {
             "frameCount": 9,
             "frameInterval": 120,
             "height": 47,
@@ -409,7 +706,7 @@
             "repeat": false,
             "width": 47
         },
-        "death-right": {
+        "fall-right": {
             "frameCount": 9,
             "frameInterval": 120,
             "height": 47,
@@ -418,7 +715,7 @@
             "repeat": false,
             "width": 47
         },
-        "death-up": {
+        "fall-up": {
             "frameCount": 9,
             "frameInterval": 120,
             "height": 47,
@@ -427,7 +724,6 @@
             "repeat": false,
             "width": 47
         },
-        "defaultSource": "characters/earthpony-gray.png",
         "idle-down": {
             "frameCount": 1,
             "frameInterval": 100,
@@ -624,6 +920,42 @@
         }
     },
     "rat": {
+        "damaged-down": {
+            "frameCount": 3,
+            "frameInterval": 200,
+            "height": 40,
+            "offsetX": 0,
+            "offsetY": 80,
+            "repeat": false,
+            "width": 40
+        },
+        "damaged-left": {
+            "frameCount": 3,
+            "frameInterval": 200,
+            "height": 40,
+            "offsetX": 0,
+            "offsetY": 40,
+            "repeat": false,
+            "width": 40
+        },
+        "damaged-right": {
+            "frameCount": 3,
+            "frameInterval": 200,
+            "height": 40,
+            "offsetX": 0,
+            "offsetY": 120,
+            "repeat": false,
+            "width": 40
+        },
+        "damaged-up": {
+            "frameCount": 3,
+            "frameInterval": 200,
+            "height": 40,
+            "offsetX": 0,
+            "offsetY": 0,
+            "repeat": false,
+            "width": 40
+        },
         "death": {
             "frameCount": 1,
             "frameInterval": 100,
@@ -673,6 +1005,42 @@
             "offsetY": 80,
             "repeat": false,
             "source": "critters/rats.png",
+            "width": 40
+        },
+        "melee-down": {
+            "frameCount": 3,
+            "frameInterval": 200,
+            "height": 40,
+            "offsetX": 0,
+            "offsetY": 80,
+            "repeat": false,
+            "width": 40
+        },
+        "melee-left": {
+            "frameCount": 3,
+            "frameInterval": 200,
+            "height": 40,
+            "offsetX": 0,
+            "offsetY": 40,
+            "repeat": false,
+            "width": 40
+        },
+        "melee-right": {
+            "frameCount": 3,
+            "frameInterval": 200,
+            "height": 40,
+            "offsetX": 0,
+            "offsetY": 120,
+            "repeat": false,
+            "width": 40
+        },
+        "melee-up": {
+            "frameCount": 3,
+            "frameInterval": 200,
+            "height": 40,
+            "offsetX": 0,
+            "offsetY": 0,
+            "repeat": false,
             "width": 40
         },
         "use-down": {
