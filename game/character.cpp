@@ -14,6 +14,7 @@ Character::Character(QObject *parent) : ParentType(parent)
   connect(this, &Character::characterKill, this, &Character::died);
   connect(this, &Character::died, [this]() { if (script) { script->call("onDied"); } });
   connect(this, &Character::died, this, &CharacterBuffs::clearBuffs, Qt::QueuedConnection);
+  connect(this, &Sprite::animationFinished, this, &Character::afterDeathAnimation);
 }
 
 void Character::update(qint64 delta)
@@ -34,6 +35,15 @@ void Character::onActionQueueCompleted()
     script->call("onActionQueueCompleted");
 }
 
+void Character::afterDeathAnimation()
+{
+  if (getAnimation().startsWith("death"))
+  {
+    setAnimation("dead");
+    Game::get()->getLevel()->addBloodStainAt(getPosition());
+  }
+}
+
 void Character::takeDamage(int damage, Character* dealer)
 {
   auto hp = getStatistics()->getHitPoints() - damage;
@@ -51,7 +61,6 @@ void Character::takeDamage(int damage, Character* dealer)
   if (hp <= 0)
   {
     setAnimation("death");
-    connect(this, &Sprite::animationFinished, [this]() { setAnimation("dead"); });
     blocksPath = false;
     emit characterKill(this, dealer);
     emit blocksPathChanged();

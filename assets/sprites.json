@@ -1,4 +1,67 @@
 {
+    "blood-stain#1": {
+        "defaultSource": "blood.png",
+        "idle": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 36,
+            "offsetX": 0,
+            "offsetY": 0,
+            "repeat": false,
+            "width": 72
+        },
+        "spill": {
+            "frameCount": 4,
+            "frameInterval": 350,
+            "height": 36,
+            "offsetX": 0,
+            "offsetY": 37,
+            "repeat": false,
+            "width": 72
+        }
+    },
+    "blood-stain#2": {
+        "defaultSource": "blood.png",
+        "idle": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 36,
+            "offsetX": 73,
+            "offsetY": 0,
+            "repeat": false,
+            "width": 72
+        },
+        "spill": {
+            "frameCount": 4,
+            "frameInterval": 350,
+            "height": 36,
+            "offsetX": 0,
+            "offsetY": 74,
+            "repeat": false,
+            "width": 72
+        }
+    },
+    "blood-stain#3": {
+        "defaultSource": "blood.png",
+        "idle": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 36,
+            "offsetX": 146,
+            "offsetY": 0,
+            "repeat": false,
+            "width": 72
+        },
+        "spill": {
+            "frameCount": 4,
+            "frameInterval": 350,
+            "height": 36,
+            "offsetX": 0,
+            "offsetY": 109,
+            "repeat": false,
+            "width": 72
+        }
+    },
     "cavern-door-right": {
         "close": {
             "frameCount": 6,

@@ -50,11 +50,14 @@ public:
   Q_INVOKABLE Doorway*       generateDoorway(const QString& name);
   Q_INVOKABLE InventoryItem* generateInventoryItem(const QString& name, const QString& type, int quantity = 1);
   Q_INVOKABLE DynamicObject* generateDynamicObject(const QString& name);
-  Q_INVOKABLE void deleteObject(DynamicObject* o) { unregisterDynamicObject(o); o->deleteLater(); }
+  Q_INVOKABLE void           deleteObject(DynamicObject* o);
 
   Q_INVOKABLE void advanceTime(unsigned int minutes);
 
   Q_INVOKABLE QVariantList previewPathTo(int x, int y);
+
+  Q_INVOKABLE void addBloodStainAt(int x, int y) { addBloodStainAt(QPoint(x, y)); }
+  void             addBloodStainAt(QPoint);
 
   void finalizeRound() override;
 

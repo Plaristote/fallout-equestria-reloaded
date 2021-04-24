@@ -52,6 +52,7 @@ signals:
 
 private slots:
   void onActionQueueCompleted();
+  void afterDeathAnimation();
 
 private:
   QVector<QPoint> getAvailableSurroundingCases() const;

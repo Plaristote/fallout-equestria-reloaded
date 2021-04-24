@@ -5,6 +5,7 @@
 #include "characters/actionqueue.h"
 #include "objects/inventoryitem.h"
 #include "objects/doorway.h"
+#include "objects/bloodstain.h"
 #include "game/animationSequence/movementhintanimationpart.h"
 #include <QDebug>
 
@@ -86,6 +87,8 @@ void LevelTask::loadObjectsFromDataEngine(DataEngine* dataEngine)
       object = new Doorway(this);
     else if (type == "InventoryItem")
       object = new InventoryItem(this);
+    else if (type == "BloodStain")
+      object = new BloodStain(this);
     else
       object = new DynamicObject(this);
     object->load(objectData.toObject());
@@ -184,6 +187,12 @@ void LevelTask::displayMovementTargetHint(QPoint position)
 
   animation->addAnimationPart(new MovementHintAnimationPart(position));
   addAnimationSequence(animation);
+}
+
+void LevelTask::deleteObject(DynamicObject *o)
+{
+  unregisterDynamicObject(o);
+  o->deleteLater();
 }
 
 void LevelTask::registerDynamicObject(DynamicObject* object)
@@ -352,6 +361,15 @@ void LevelTask::finalizeRound()
     Game::get()->getTaskManager()->update(WORLDTIME_TURN_DURATION);
   }
   ParentType::finalizeRound();
+}
+
+void LevelTask::addBloodStainAt(QPoint position)
+{
+  BloodStain* object = new BloodStain(this);
+
+  registerDynamicObject(object);
+  setObjectPosition(object, position.x(), position.y());
+  object->initialize();
 }
 
 Character* LevelTask::generateCharacter(const QString &name, const QString &characterSheet)
