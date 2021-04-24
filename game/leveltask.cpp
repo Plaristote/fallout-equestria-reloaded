@@ -285,12 +285,13 @@ void LevelTask::advanceTime(unsigned int minutes)
 
 void LevelTask::update()
 {
-  qint64 delta = clock.restart();
+  qint64     delta      = clock.restart();
+  const auto objectList = objects;
 
   if (!combat)
   {
     timeManager->addElapsedMilliseconds(delta);
-    for (DynamicObject* object : qAsConst(objects))
+    for (DynamicObject* object : objectList)
     {
       Character* asCharacter = reinterpret_cast<Character*>(object);
 
@@ -307,7 +308,7 @@ void LevelTask::update()
   }
   else
   {
-    for (DynamicObject* object : qAsConst(objects))
+    for (DynamicObject* object : objectList)
       object->update(delta);
     if (combattants.size() > combatIterator)
     {
