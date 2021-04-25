@@ -37,11 +37,20 @@ void Character::onActionQueueCompleted()
 
 void Character::afterDeathAnimation()
 {
-  if (getAnimation().startsWith("fall") && !isAlive())
+  if (getAnimation().startsWith("fall"))
   {
-    setAnimation("dead");
-    Game::get()->getLevel()->addBloodStainAt(getPosition());
+    if (!isAlive())
+    {
+      setAnimation("dead");
+      Game::get()->getLevel()->addBloodStainAt(getPosition());
+    }
+    else if (isUncounscious())
+      Game::get()->getLevel()->getGrid()->triggerZone(this, getPosition().x(), getPosition().y());
+    else
+      setAnimation("get-up");
   }
+  else if (getAnimation().startsWith("get-up"))
+    Game::get()->getLevel()->getGrid()->triggerZone(this, getPosition().x(), getPosition().y());
 }
 
 void Character::takeDamage(int damage, Character* dealer)
@@ -155,6 +164,69 @@ bool Character::useActionPoints(int amount, const QString& actionType)
     return false;
   }
   return isAlive();
+}
+
+static QMap<QString, CharacterMovement::Direction> directionByName = {
+  {"up",           CharacterMovement::UpperDir},
+  {"up-left",      CharacterMovement::UpperLeftDir},
+  {"up-right",     CharacterMovement::UpperRightDir},
+  {"left",         CharacterMovement::LeftDir},
+  {"right",        CharacterMovement::RightDir},
+  {"bottom",       CharacterMovement::BottomDir},
+  {"bottom-left",  CharacterMovement::BottomLeftDir},
+  {"bottom-right", CharacterMovement::BottomRightDir}
+};
+
+void Character::fall(int distance, const QString &directionName)
+{
+  if (distance && directionByName.contains(directionName))
+  {
+    QPoint    from      = getPosition();
+    QPoint    target    = from;
+    Direction direction = directionByName[directionName];
+    auto*     level     = Game::get()->getLevel();
+    auto*     grid      = level->getGrid();
+
+    while (distance > 0)
+    {
+      QPoint candidate;
+
+      switch (direction)
+      {
+      case UpperDir:
+        candidate = QPoint(target.x(), target.y() - 1);
+        break ;
+      case UpperLeftDir:
+        candidate = QPoint(target.x() - 1, target.y() - 1);
+        break ;
+      case UpperRightDir:
+        candidate = QPoint(target.x() + 1, target.y() - 1);
+        break ;
+      case LeftDir:
+        candidate = QPoint(target.x() - 1, target.y());
+        break ;
+      case RightDir:
+        candidate = QPoint(target.x() + 1, target.y());
+        break ;
+      case BottomDir:
+        candidate = QPoint(target.x(), target.y() + 1);
+        break ;
+      case BottomLeftDir:
+        candidate = QPoint(target.x() - 1, target.y() + 1);
+        break ;
+      case BottomRightDir:
+        candidate = QPoint(target.x() + 1, target.y() + 1);
+        break ;
+      }
+      if (grid->isOccupied(candidate.x(), candidate.y()))
+        break ;
+      target = candidate;
+    }
+    moveToCoordinates(level->getRenderPositionForTile(target.x(), target.y()));
+    grid->moveObject(this, target.x(), target.y());
+    lookTo(from);
+  }
+  setAnimation("fall");
 }
 
 void Character::resetActionPoints()

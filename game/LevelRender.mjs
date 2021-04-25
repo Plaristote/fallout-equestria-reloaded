@@ -317,16 +317,6 @@ export class Controller {
     const clippedRect = sprite.getClippedRect();
 
     if (this.shouldRender(offset.x, offset.y, clippedRect.width, clippedRect.height)) {
-      /*
-      if (sprite.getShadowSource() !== "")
-      {
-        this.context.drawImage(
-          this.pathPrefix + sprite.getShadowSource(),
-          //clippedRect.x, clippedRect.y, clippedRect.width, clippedRect.height,
-          offset.x, offset.y + 3, clippedRect.width, clippedRect.height
-        );
-      }
-      */
       this.context.drawImage(
         this.pathPrefix + sprite.getSpriteSource(),
         clippedRect.x, clippedRect.y, clippedRect.width, clippedRect.height,

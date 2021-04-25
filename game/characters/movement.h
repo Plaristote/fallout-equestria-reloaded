@@ -11,6 +11,18 @@ class CharacterMovement : public CHARACTER_BASE_OBJECT
   Q_PROPERTY(QString orientation READ getOrientation)
   Q_PROPERTY(QString movementMode READ getMovementMode WRITE setMovementMode)
 public:
+  enum Direction
+  {
+    UpperDir,
+    UpperLeftDir,
+    UpperRightDir,
+    LeftDir,
+    RightDir,
+    BottomDir,
+    BottomLeftDir,
+    BottomRightDir
+  };
+
   explicit CharacterMovement(QObject *parent = nullptr);
 
   virtual void load(const QJsonObject&);
