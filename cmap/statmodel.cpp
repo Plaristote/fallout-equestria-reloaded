@@ -213,7 +213,7 @@ void StatModel::updateBaseValues()
 
 bool StatModel::isAcceptable() const
 {
-  return traits.length() == getMaxTraits() && specialPoints == 0 && name.length() > 0;
+  return traits.length() <= getMaxTraits() && specialPoints == 0 && name.length() > 0;
 }
 
 QStringList StatModel::getAvailablePerks()
