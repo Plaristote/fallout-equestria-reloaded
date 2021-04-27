@@ -30,6 +30,7 @@ public:
   Q_INVOKABLE TileLayer* getRoofFor(DynamicObject*) const;
   Q_INVOKABLE QJSValue getDynamicObjectsAt(int x, int y) const;
   Q_INVOKABLE QPoint getRenderPositionForTile(int x, int y);
+  Q_INVOKABLE float getDistance(QPoint, QPoint);
 
 protected slots:
   virtual void onCharacterDied(Character*);

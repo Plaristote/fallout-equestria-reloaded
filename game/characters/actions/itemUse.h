@@ -19,14 +19,35 @@ public:
   int  getApCost() const override;
   bool trigger() override;
   void update() override;
+  bool canInterrupt() const override;
 
 protected:
   void performAction();
+  virtual QPoint getTargetPosition() const { return target->getPosition(); }
+  virtual QJSValue callItemUseOn();
 
   DynamicObject*    target;
   InventoryItem*    item;
   QJSValue          callback;
   AnimationSequence animation;
+};
+
+class ItemZoneAction : public ItemAction
+{
+public:
+  ItemZoneAction(Character* character, QPoint target, QString itemSlot) : ItemAction(character, nullptr, itemSlot), target(target)
+  {
+  }
+
+  ItemZoneAction(Character* character, QPoint target, InventoryItem* item) : ItemAction(character, nullptr, item), target(target)
+  {
+  }
+
+private:
+  QPoint getTargetPosition() const override { return target; }
+  QJSValue callItemUseOn() override;
+
+  QPoint target;
 };
 
 #endif

@@ -2,10 +2,41 @@
 #include "game.h"
 #include <cmath>
 
+static int rateCase(Game* game, QJSValue callback, QPoint position)
+{
+  return game->scriptCall(callback, QJSValueList() << position.x() << position.y(), "ReachAction").toInt();
+}
+
+static void filterCases(Game* game, QJSValue callback, QVector<QPoint>& candidates)
+{
+  std::remove_if(candidates.begin(), candidates.end(), [game, callback](QPoint position)
+  {
+    return rateCase(game, callback, position) < 0;
+  });
+}
+
+static bool candidateCompare(Character* character, QPoint a, QPoint b)
+{
+  return character->getDistance(a) < character->getDistance(b);
+}
+
+static bool scriptedCandidateCompare(Character* character, QJSValue callback, QPoint a, QPoint b)
+{
+  Game* game = Game::get();
+  int   rateA = rateCase(game, callback, a);
+  int   rateB = rateCase(game, callback, b);
+
+  if (rateA < rateB)
+    return true;
+  return candidateCompare(character, a, b);
+}
+
 QVector<QPoint> ReachAction::getCandidates(int caseDistance) const
 {
+  QPoint position = getTargetPosition();
   QVector<QPoint> candidates;
-  QPoint position = object->getPosition();
+  Game* game = Game::get();
+  std::function<bool (QPoint, QPoint)> compare;
 
   candidates.reserve(caseDistance * caseDistance);
   for (int x = position.x() - caseDistance ; x < position.x() + caseDistance ; ++x)
@@ -16,10 +47,14 @@ QVector<QPoint> ReachAction::getCandidates(int caseDistance) const
         candidates << QPoint(x, y);
     }
   }
-  std::sort(candidates.begin(), candidates.end(), [this](QPoint a, QPoint b)
+  if (rateCallback.isCallable())
   {
-    return character->getDistance(a) < character->getDistance(b);
-  });
+    filterCases(game, rateCallback, candidates);
+    compare = std::bind(&scriptedCandidateCompare, character, rateCallback, std::placeholders::_1, std::placeholders::_2);
+  }
+  else
+    compare = std::bind(&candidateCompare, character, std::placeholders::_1, std::placeholders::_2);
+  std::sort(candidates.begin(), candidates.end(), compare);
   return candidates;
 }
 
@@ -32,7 +67,7 @@ int ReachAction::getApCost() const
   if (alreadyReached())
     return 0;
   else if (range == 0.f)
-    candidates.push_back(object->getPosition());
+    candidates.push_back(getTargetPosition());
   else
     candidates = getCandidates(static_cast<int>(std::floor(range)));
   for (auto it = candidates.begin() ; it != candidates.end() ; ++it)
@@ -54,7 +89,7 @@ bool ReachAction::trigger()
 {
   if (range == 0.f)
   {
-    target = object->getPosition();
+    target = getTargetPosition();
     return MovementAction::trigger();
   }
   else if (alreadyReached())

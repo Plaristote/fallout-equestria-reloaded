@@ -32,4 +32,13 @@ Item {
     x: mouseX - 20
     y: mouseY - 20
   }
+
+  Image {
+    visible: mouseMode === 3
+    source: "qrc:/assets/ui/cursors/wait.png"
+    height: 25
+    width: 25
+    x: mouseX - 12.5
+    y: mouseY - 12.5
+  }
 }

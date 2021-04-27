@@ -3,13 +3,15 @@ import QtQuick 2.15
 Item {
   property QtObject levelController
   property var canvas
+  property bool interactionMode: levelController.mouseMode === 1 || (levelController.mouseMode === 2 && levelController.targetMode === 0);
+  property bool targetMode:      levelController.mouseMode === 2
 
   Loader {
-    sourceComponent: levelController.mouseMode > 0 && levelController.targetMode === 0 ? interactionOverlayComponent : null
+    sourceComponent: interactionMode ? interactionOverlayComponent : null
   }
 
   Loader {
-    sourceComponent: levelController.mouseMode > 0 ? characterInteractionOverlayComponent : characterOverlayComponent
+    sourceComponent: targetMode ? characterInteractionOverlayComponent : characterOverlayComponent
   }
 
   Component {

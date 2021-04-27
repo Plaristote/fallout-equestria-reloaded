@@ -104,6 +104,20 @@ bool InventoryItem::requiresTarget() const
   return true;
 }
 
+bool InventoryItem::usesZoneTarget() const
+{
+  if (script)
+    return script->property("zoneTarget").toBool();
+  return false;
+}
+
+int InventoryItem::getZoneTargetSize() const
+{
+  if (script)
+    return script->property("zoneSize").toInt();
+  return 0;
+}
+
 void InventoryItem::add(int amount)
 {
   quantity += amount;
@@ -184,13 +198,25 @@ bool InventoryItem::isValidTarget(DynamicObject* target)
 
 QJSValue InventoryItem::useOn(DynamicObject* target)
 {
-  if (script) {
-    if (this->requiresTarget() || target) {
+  if (script)
+  {
+    if (this->requiresTarget() || target)
+    {
       if (target && isValidTarget(target))
         return script->call("attemptToUseOn", QJSValueList() << target->asJSValue());
     }
     else
       return script->call("attemptToUseOn");
+  }
+  return false;
+}
+
+QJSValue InventoryItem::useAt(int x, int y)
+{
+  if (script)
+  {
+    if (this->usesZoneTarget())
+      return script->call("attemptToUseAt", QJSValueList() << x << y);
   }
   return false;
 }

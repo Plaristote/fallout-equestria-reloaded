@@ -19,6 +19,7 @@ LevelTask::LevelTask(QObject *parent) : ParentType(parent)
   connect(&updateTimer, &QTimer::timeout, this, &LevelTask::update);
   connect(this, &LevelTask::pausedChanged, this, &LevelTask::onPauseChanged);
   connect(this, &LevelTask::combatChanged, this, &LevelTask::onCombatChanged);
+  connect(this, &InteractionComponent::playerMovingTo, this, &LevelTask::displayMovementTargetHint);
 }
 
 LevelTask::~LevelTask()
@@ -144,38 +145,12 @@ void LevelTask::save(DataEngine* dataEngine)
 
 void LevelTask::tileClicked(int x, int y)
 {
-  DynamicObject* occupant = grid->getOccupant(x, y);
-
   if (getPlayer())
-  {
-    auto* actions = getPlayer()->getActionQueue();
-    QPoint oldTarget(-1, -1);
-
-    if (getPlayer()->getCurrentPath().length() > 0)
-      oldTarget = getPlayer()->getCurrentPath().last();
-    actions->reset();
-    if (occupant)
-      actions->pushReach(occupant, 1);
-    else
-      actions->pushMovement(QPoint(x, y));
-    if (!(actions->start()))
-      emit displayConsoleMessage("No path.");
-    else if (!getPlayer()->getCurrentPath().empty())
-    {
-      switch (movementModeOption)
-      {
-        case MixedMovementMode:
-          getPlayer()->setMovementMode(oldTarget == getPlayer()->getCurrentPath().last() ? "running" : "walking");
-          break ;
-        default:
-          setDefaultMovementMode();
-          break ;
-      }
-      displayMovementTargetHint(getPlayer()->getCurrentPath().last());
-    }
-  }
+    InteractionComponent::tileClicked(x, y);
   else
   {
+    DynamicObject* occupant = grid->getOccupant(x, y);
+
     emit clickedOnCase(x, y);
     emit clickedOnObject(occupant);
   }
@@ -287,6 +262,9 @@ void LevelTask::update()
 {
   qint64     delta      = clock.restart();
   const auto objectList = objects;
+
+  if ((combat && isCharacterTurn(getPlayer())) || !combat)
+    enableWaitingMode(!getPlayer()->getActionQueue()->canInterrupt());
 
   if (!combat)
   {

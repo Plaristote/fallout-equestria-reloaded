@@ -57,6 +57,11 @@ bool AnimationSequence::update()
   return false;
 }
 
+bool AnimationSequence::isRunning() const
+{
+  return !parts.isEmpty();
+}
+
 bool AnimationSequence::nextAnimation()
 {
   parts.pop_front();

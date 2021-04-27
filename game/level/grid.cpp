@@ -2,6 +2,7 @@
 #include "game/characters/actionqueue.h"
 #include "tilemap/tilemap.h"
 #include "game.h"
+#include <cmath>
 
 GridComponent::GridComponent(QObject *parent) : ParentType(parent)
 {
@@ -144,4 +145,12 @@ QPoint GridComponent::getRenderPositionForTile(int x, int y)
   auto* tile  = layer ? layer->getTile(x, y) : nullptr;
 
   return tile ? tile->getRenderPosition() : QPoint();
+}
+
+float GridComponent::getDistance(QPoint pa, QPoint pb)
+{
+  auto a = pa.x() - pb.x();
+  auto b = pa.y() - pb.y();
+
+  return std::sqrt(static_cast<float>(a * a + b * b));
 }

@@ -24,13 +24,15 @@ public:
   {
     MovementCursor    = 0,
     InteractionCursor = 1,
-    TargetCursor      = 2
+    TargetCursor      = 2,
+    WaitCursor        = 3
   };
 
   enum TargetMode
   {
     AnyTarget       = 0,
-    CharacterTarget = 1
+    CharacterTarget = 1,
+    ZoneTarget      = 2
   };
 
   enum MovementMode
@@ -49,20 +51,27 @@ public:
   Q_INVOKABLE void openCountdownDialog(InventoryItem* item);
   Q_INVOKABLE void interactOrderReceived(DynamicObject* target, const QString& interactionType);
   Q_INVOKABLE void swapMouseMode();
+  Q_INVOKABLE void enableWaitingMode(bool);
   Q_INVOKABLE void setActiveItem(const QString&);
   inline InventoryItem* getActiveItem() const { return activeItem; }
   Q_INVOKABLE void objectClicked(DynamicObject*);
   Q_INVOKABLE void useSkill(const QString& skill);
   Q_INVOKABLE void useSkillOn(Character* user, DynamicObject* object, const QString& skill);
+  Q_INVOKABLE void movePlayerTo(int x, int y);
+  Q_INVOKABLE void tileClicked(int x, int y);
   int              getTargetMode() const;
   void             setDefaultMovementMode();
 
   Q_INVOKABLE DynamicObject*   getObjectAt(int posX, int posY) const;
   DynamicObject*               getObjectAt(QPoint point) const { return getObjectAt(point.x(), point.y()); }
 
-  void useItemOn(DynamicObject* object);
-  Q_INVOKABLE void useItemOn(InventoryItem* item, DynamicObject* object);
-  void pickUpItem(Character*, InventoryItem*);
+  void             useItemOn(DynamicObject* object);
+  Q_INVOKABLE void useItemOn(InventoryItem* item, DynamicObject* target);
+  void             useItemOn(Character* user, InventoryItem* item, DynamicObject* target);
+  void             useItemAt(int x, int y);
+  Q_INVOKABLE void useItemAt(InventoryItem* item, int x, int y);
+  void             useItemAt(Character* user, InventoryItem* item, int x, int y);
+  void             pickUpItem(Character*, InventoryItem*);
   Q_INVOKABLE void initializeDialog(Character* npc);
   Q_INVOKABLE void initializeLooting(StorageObject*);
 
@@ -73,6 +82,7 @@ signals:
   void startDialog(CharacterDialog*);
   void startLooting(LootingController*);
   void activeItemChanged();
+  void playerMovingTo(QPoint);
 
 private slots:
   void onActiveItemChanged();

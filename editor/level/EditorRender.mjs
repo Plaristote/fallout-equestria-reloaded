@@ -31,7 +31,7 @@ export class EditorController extends Controller {
       this.canvas.pickedObject(object);
   }
 
-  onMovementClick(mouseX, mouseY) {
+  onCaseClick(mouseX, mouseY) {
     const coords = this.getHoveredCase(mouseX, mouseY);
 
     if (this.canvas.editingZone)

@@ -14,6 +14,7 @@ public:
   void addAnimationPart(IAnimationPart*);
   void start();
   bool update();
+  bool isRunning() const;
 
 private:
   bool nextAnimation();

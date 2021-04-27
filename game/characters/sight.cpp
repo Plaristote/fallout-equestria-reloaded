@@ -24,12 +24,23 @@ bool CharacterSight::hasLineOfSight(DynamicObject *other) const
 
 bool CharacterSight::hasSightFrom(const DynamicObject* other, QPoint pos)
 {
+  if (other)
+    return hasSightFrom(other->getPosition(), pos);
+  return false;
+}
+
+bool CharacterSight::hasLineOfSight(QPoint target) const
+{
+  return hasSightFrom(target, position);
+}
+
+bool CharacterSight::hasSightFrom(QPoint target, QPoint pos)
+{
   auto* level = Game::get()->getLevel();
 
-  if (level && other)
+  if (level)
   {
     auto*  grid   = level->getGrid();
-    QPoint target = other->getPosition();
     int    score  = grid->getVisionQuality(pos.x(), pos.y(), target.x(), target.y());
 
     return score > 0;

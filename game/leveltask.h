@@ -67,9 +67,9 @@ signals:
   void objectsChanged();
   void displayConsoleMessage(const QString&);
   void cameraFocusRequired(DynamicObject*);
+  void visibleCharactersChanged();
   void clickedOnCase(int x, int y);
   void clickedOnObject(DynamicObject*);
-  void visibleCharactersChanged();
 
 public slots:
   void deleteLater();
@@ -80,8 +80,6 @@ private slots:
   void onCombatChanged();
   void onCharacterKill(Character* victim, Character* killer);
   void onItemDropped(InventoryItem* item, QPoint position);
-
-private:
   void displayMovementTargetHint(QPoint position);
 
 protected:

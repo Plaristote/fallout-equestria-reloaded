@@ -5,6 +5,7 @@
 #include "actions/interaction.h"
 #include "actions/movement.h"
 #include "actions/reach.h"
+#include "actions/reachcase.h"
 
 ActionQueue::ActionQueue(QObject *parent) : QObject(parent), character(reinterpret_cast<Character*>(parent))
 {
@@ -51,6 +52,13 @@ void ActionQueue::unpause()
 {
   if (queue.size() > 0)
     queue.first()->trigger();
+}
+
+bool ActionQueue::canInterrupt() const
+{
+  if (!queue.isEmpty())
+    return queue.first()->canInterrupt();
+  return true;
 }
 
 void ActionQueue::onActionOver()
@@ -117,9 +125,39 @@ void ActionQueue::pushReach(DynamicObject *target, float range)
   queue << (new ReachAction(character, target, range));
 }
 
+void ActionQueue::pushReach(DynamicObject *target, float range, QJSValue caseCompare)
+{
+  queue << (new ReachAction(character, target, range, caseCompare));
+}
+
+void ActionQueue::pushReachCase(int x, int y, float range)
+{
+  queue << (new ReachCaseAction(character, QPoint(x, y), range));
+}
+
+void ActionQueue::pushReachCase(int x, int y, float range, QJSValue caseCompare)
+{
+  queue << (new ReachCaseAction(character, QPoint(x, y), range, caseCompare));
+}
+
 int ActionQueue::getReachApCost(DynamicObject *target, float range) const
 {
   return ReachAction(character, target, range).getApCost();
+}
+
+int ActionQueue::getReachApCost(DynamicObject *target, float range, QJSValue caseCompare)
+{
+  return ReachAction(character, target, range, caseCompare).getApCost();
+}
+
+int ActionQueue::getReachCaseApCost(int x, int y, float range) const
+{
+  return (ReachCaseAction(character, QPoint(x, y), range)).getApCost();
+}
+
+int ActionQueue::getReachCaseApCost(int x, int y, float range, QJSValue caseCompare)
+{
+  return (ReachCaseAction(character, QPoint(x, y), range, caseCompare)).getApCost();
 }
 
 void ActionQueue::pushInteraction(DynamicObject *target, const QString &interactionName)
@@ -140,6 +178,16 @@ void ActionQueue::pushItemUse(DynamicObject *target, const QString &itemSlot)
 void ActionQueue::pushItemUse(DynamicObject *target, InventoryItem* item)
 {
   queue << (new ItemAction(character, target, item));
+}
+
+void ActionQueue::pushItemUseAt(int x, int y, const QString &itemSlot)
+{
+  queue << (new ItemZoneAction(character, QPoint(x, y), itemSlot));
+}
+
+void ActionQueue::pushItemUseAt(int x, int y, InventoryItem *item)
+{
+  queue << (new ItemZoneAction(character, QPoint(x, y), item));
 }
 
 int ActionQueue::getItemUseApCost(DynamicObject *target, const QString &itemSlot) const

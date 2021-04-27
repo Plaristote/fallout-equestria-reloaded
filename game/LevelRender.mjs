@@ -1,3 +1,6 @@
+const MouseMode  = { "Movement": 0, "Interaction": 1, "Target": 2, "Wait": 3 };
+const TargetMode = { "Any": 0, "Character": 1, "Zone": 2 };
+
 export class Controller {
   constructor(canvas, params) {
     this.pathPrefix = params.pathPrefix
@@ -65,8 +68,10 @@ export class Controller {
     this.eachCase(this.renderCoordinates.bind(this));
     this.renderVisualEffects();
     this.renderRoofs();
-    if (this.level.mouseMode === 0) // if cursor is movement mode
+    if (this.level.mouseMode === MouseMode.Movement) // if cursor is movement mode
       this.renderMoveCursor();
+    if (this.level.mouseMode === MouseMode.Target && this.level.targetMode == TargetMode.Zone)
+      this.renderZoneCursor();
     this.frameCount++;
   }
 
@@ -139,6 +144,28 @@ export class Controller {
       offset.x,   offset.y,   width, height,
       position.x, position.y, width, height
     );
+  }
+
+  renderZoneCursor() {
+    if (this.level.player && this.level.isCharacterTurn(this.level.player)) {
+      const coordinates = this.canvas.hoverTile;
+      const item = this.level.activeItem;
+
+      if (item && coordinates && coordinates.length === 2) {
+        const from = { x: coordinates[0] - item.zoneSize, y: coordinates[1] - item.zoneSize };
+        const to   = { x: coordinates[0] + item.zoneSize, y: coordinates[1] + item.zoneSize };
+
+        console.log("Rendering zone picker ->", from.x, '/', from.y, ' to ', to.x, '/', to.y);
+        for (var x = from.x ; x <= to.x ; ++x) {
+          for (var y = from.y ; y <= to.y ; ++y) {
+            const tile = this.layers.ground.getTile(x, y);
+
+            if (tile)
+              this.renderImage(`../assets/ui/cursors/target-tile.png`, tile.renderPosition, this.tileSize.width, this.tileSize.height);
+          }
+        }
+      }
+    }
   }
 
   renderCombatMoveCursor() {
@@ -404,16 +431,17 @@ export class Controller {
       mouseY -= this.canvas.origin.y;
       switch (this.level.mouseMode) {
         case 0:
-          this.onMovementClick(mouseX, mouseY);
+        case 2:
+          this.onCaseClick(mouseX, mouseY);
           break ;
-        default:
+        case 1:
           this.onObjectClick(mouseX, mouseY);
           break ;
       }
     }
   }
 
-  onMovementClick(mouseX, mouseY) {
+  onCaseClick(mouseX, mouseY) {
     const coords = this.getHoveredCase(mouseX, mouseY);
 
     if (coords !== null)

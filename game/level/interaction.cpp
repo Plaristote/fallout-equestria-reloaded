@@ -91,6 +91,8 @@ void InteractionComponent::swapMouseMode()
 {
   switch (mouseMode)
   {
+    case WaitCursor:
+      return ;
     case InteractionCursor:
     case TargetCursor:
       mouseMode = MovementCursor;
@@ -105,6 +107,15 @@ void InteractionComponent::swapMouseMode()
   }
   activeSkill = "";
   emit mouseModeChanged();
+}
+
+void InteractionComponent::enableWaitingMode(bool active)
+{
+  if ((mouseMode != WaitCursor && active) || (mouseMode == WaitCursor && !active))
+  {
+    mouseMode = active ? WaitCursor : MovementCursor;
+    emit mouseModeChanged();
+  }
 }
 
 void InteractionComponent::setActiveItem(const QString& slotName)
@@ -128,8 +139,13 @@ void InteractionComponent::onActiveItemChanged()
 
 int InteractionComponent::getTargetMode() const
 {
-  if (activeItem && activeItem->getCategory() == "weapon")
-    return CharacterTarget;
+  if (activeItem)
+  {
+    if (activeItem->usesZoneTarget())
+      return ZoneTarget;
+    else if (activeItem->getCategory() == "weapon")
+      return CharacterTarget;
+  }
   return AnyTarget;
 }
 
@@ -184,19 +200,55 @@ void InteractionComponent::useSkillOn(Character* user, DynamicObject* target, co
 void InteractionComponent::useItemOn(DynamicObject* target)
 {
   if (activeItem)
-    useItemOn(activeItem, target);
+    useItemOn(getPlayer(), activeItem, target);
   else
     qDebug() << "InteractionComponent::useItemOn: activeItem is null";
 }
 
 void InteractionComponent::useItemOn(InventoryItem *item, DynamicObject *target)
 {
-  auto* actions = Game::get()->getPlayer()->getActionQueue();
+  DynamicObject* owner = item->getOwner();
+
+  if (owner && owner->isCharacter())
+    useItemOn(reinterpret_cast<Character*>(owner), item, target);
+}
+
+void InteractionComponent::useItemOn(Character* user, InventoryItem* item, DynamicObject* target)
+{
+  auto* actions = user->getActionQueue();
 
   actions->reset();
   if (target && !item->isInRange(target))
     actions->pushReach(target, item->getRange());
   actions->pushItemUse(target, item);
+  if (actions->start())
+    swapMouseMode();
+}
+
+void InteractionComponent::useItemAt(int x, int y)
+{
+  if (activeItem)
+    useItemAt(getPlayer(), activeItem, x, y);
+  else
+    qDebug() << "InteractionComponent::useItemAt: activeItem is null";
+}
+
+void InteractionComponent::useItemAt(InventoryItem *item, int x, int y)
+{
+  DynamicObject* owner = item->getOwner();
+
+  if (owner && owner->isCharacter())
+    useItemAt(reinterpret_cast<Character*>(owner), item, x, y);
+}
+
+void InteractionComponent::useItemAt(Character *user, InventoryItem *item, int x, int y)
+{
+  auto* actions = user->getActionQueue();
+
+  actions->reset();
+  if (user->getDistance(QPoint(x, y)) > item->getRange())
+    actions->pushReachCase(x, y, item->getRange());
+  actions->pushItemUseAt(x, y, item);
   if (actions->start())
     swapMouseMode();
 }
@@ -272,4 +324,50 @@ DynamicObject* InteractionComponent::getObjectAt(int posX, int posY) const
     }
   }
   return nullptr;
+}
+
+void InteractionComponent::movePlayerTo(int x, int y)
+{
+  DynamicObject* occupant = grid->getOccupant(x, y);
+  auto* actions = getPlayer()->getActionQueue();
+  QPoint oldTarget(-1, -1);
+
+  if (getPlayer()->getCurrentPath().length() > 0)
+    oldTarget = getPlayer()->getCurrentPath().last();
+  actions->reset();
+  if (occupant)
+    actions->pushReach(occupant, 1);
+  else
+    actions->pushMovement(QPoint(x, y));
+  if (!(actions->start()))
+    Game::get()->appendToConsole(I18n::get()->t("no-path"));
+  else if (!getPlayer()->getCurrentPath().empty())
+  {
+    switch (movementModeOption)
+    {
+      case MixedMovementMode:
+        getPlayer()->setMovementMode(oldTarget == getPlayer()->getCurrentPath().last() ? "running" : "walking");
+        break ;
+      default:
+        setDefaultMovementMode();
+        break ;
+    }
+    emit playerMovingTo(getPlayer()->getCurrentPath().last());
+  }
+}
+
+void InteractionComponent::tileClicked(int x, int y)
+{
+  switch (mouseMode)
+  {
+  case MovementCursor:
+    movePlayerTo(x, y);
+    break ;
+  case TargetCursor:
+    if (getTargetMode() == ZoneTarget)
+      useItemAt(x, y);
+    break ;
+  default:
+    break ;
+  }
 }

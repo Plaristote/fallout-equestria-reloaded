@@ -27,6 +27,7 @@
     "door-is-blocked": "Something's in the way.",
     "xp-gain": "You gained {{xp}} experience points.",
     "nothing-happens": "That does nothing.",
+    "no-path": "Can't reach.",
     "invalid-target": "Invalid target.",
     "out-of-range": "Out of range.",
     "not-enough-ap": "Not enough action points.",

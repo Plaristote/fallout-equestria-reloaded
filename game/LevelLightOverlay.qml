@@ -9,9 +9,9 @@ Repeater {
   delegate: Rectangle {
     id: lightObjectOverlay
     property QtObject dynamicObject: levelController.dynamicObjects[index]
-    property point offset: controller.getAdjustedOffsetFor(dynamicObject)
-    property var lightLayer: null
-    property color lightColor: Qt.rgba(1, 1, 1, 0.5)
+    property point    offset: controller.getAdjustedOffsetFor(dynamicObject)
+    property var      lightLayer: null
+    property color    lightColor: Qt.rgba(1, 1, 1, 0.5)
 
     color: "transparent"
     x: offset.x + origin.x

@@ -3,14 +3,24 @@
 #include "game.h"
 #include <QDebug>
 
+QJSValue ItemAction::callItemUseOn()
+{
+  return item->useOn(target);
+}
+
+QJSValue ItemZoneAction::callItemUseOn()
+{
+  return item->useAt(target.x(), target.y());
+}
+
 bool ItemAction::trigger()
 {
   if (item)
   {
-    QJSValue result = item->useOn(target);
+    QJSValue result = callItemUseOn();
 
     if (target)
-      character->lookTo(target->getPosition());
+      character->lookTo(getTargetPosition());
     if (result.isObject())
     {
       QJSValue animationSteps = result.property("steps");
@@ -39,6 +49,11 @@ bool ItemAction::trigger()
     state = Interrupted;
   }
   return state != Interrupted;
+}
+
+bool ItemAction::canInterrupt() const
+{
+  return !(state == InProgress && animation.isRunning());
 }
 
 void ItemAction::update()

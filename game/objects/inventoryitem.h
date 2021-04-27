@@ -22,6 +22,8 @@ class InventoryItem : public DynamicObject
   Q_PROPERTY(QStringList useModes    READ getUseModes NOTIFY useModesChanged)
   Q_PROPERTY(QString     useMode     MEMBER useMode NOTIFY useModeChanged)
   Q_PROPERTY(bool        requiresTarget READ requiresTarget NOTIFY useModeChanged)
+  Q_PROPERTY(bool        zoneTarget     READ usesZoneTarget NOTIFY useModeChanged)
+  Q_PROPERTY(int         zoneSize       READ getZoneTargetSize NOTIFY useModeChanged)
 public:
   explicit InventoryItem(QObject* parent = nullptr);
 
@@ -45,6 +47,8 @@ public:
   void        setVirtual(bool value) { virtualItem = value; emit virtualChanged(); }
   QStringList getUseModes() const;
   bool        requiresTarget() const;
+  bool        usesZoneTarget() const;
+  int         getZoneTargetSize() const;
 
   Q_INVOKABLE bool canEquipInSlot(const QString&);
   void onEquippedBy(Character*, bool on);
@@ -54,7 +58,8 @@ public:
   Q_INVOKABLE bool           isInRange(DynamicObject* target);
   Q_INVOKABLE float          getRange() const;
   Q_INVOKABLE bool           isValidTarget(DynamicObject*);
-  Q_INVOKABLE QJSValue       useOn(DynamicObject* target);
+  QJSValue                   useOn(DynamicObject* target);
+  QJSValue                   useAt(int x, int y);
   Q_INVOKABLE void           useFromInventory();
   Q_INVOKABLE int            getUseSuccessRate(DynamicObject* target);
   Q_INVOKABLE DynamicObject* getOwner() const;

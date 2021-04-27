@@ -4,7 +4,14 @@
 
 CombatComponent::CombatComponent(QObject *parent) : VisualEffectsComponent(parent)
 {
-  connect(this, &InteractionComponent::activeItemChanged, this, &CombatComponent::onActiveItemChanged);
+  connect(this, &InteractionComponent::activeItemChanged,   this, &CombatComponent::onActiveItemChanged);
+  connect(this, &CombatComponent::currentCombattantChanged, this, &CombatComponent::updateWaitingMode);
+  connect(this, &CombatComponent::combatChanged,            this, &CombatComponent::updateWaitingMode);
+}
+
+void CombatComponent::updateWaitingMode()
+{
+  enableWaitingMode(combat && !isCharacterTurn(getPlayer()));
 }
 
 void CombatComponent::registerDynamicObject(DynamicObject* object)

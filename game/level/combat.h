@@ -46,6 +46,7 @@ signals:
 
 private slots:
   void onActiveItemChanged();
+  void updateWaitingMode();
   virtual void onCharacterDied(Character*);
 
 protected:

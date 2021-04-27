@@ -117,6 +117,7 @@ Canvas {
         images.push(texturePath);
       }
       loadImage("../assets/ui/cursors/move-tile.png");
+      loadImage("../assets/ui/cursors/target-tile.png");
     }
     console.log("LevelCanvas: Preloading tilemap", (preRenderPath + "tilemap.png"));
     unloadImage(preRenderPath + "tilemap.png");
