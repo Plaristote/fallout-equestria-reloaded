@@ -437,8 +437,10 @@ void StatModel::fromJson(const QJsonObject& json)
 
   spriteTheme = json["sprite-theme"].toString();
   faceTheme   = json["face-theme"].toString();
+  hairTheme   = json["hair-theme"].toString();
   faceColor   = jsonToColor(json["face-color"]);
   eyeColor    = jsonToColor(json["eye-color"]);
+  hairColor   = jsonToColor(json["hair-color"]);
 
   faceAccessories.clear();
   for (QJsonValue value : json["face-accessories"].toArray())
@@ -457,8 +459,10 @@ void StatModel::fromJson(const QJsonObject& json)
   emit spriteThemeChanged();
   emit faceAccessoriesChanged();
   emit faceThemeChanged();
+  emit hairThemeChanged();
   emit faceColorChanged();
   emit eyeColorChanged();
+  emit hairColorChanged();
   emit raceChanged();
   emit genderChanged();
   emit factionChanged();
@@ -531,7 +535,9 @@ void StatModel::toJson(QJsonObject& json)
 
   json["sprite-theme"]     = spriteTheme;
   json["face-theme"]       = faceTheme;
+  json["hair-theme"]       = hairTheme;
   json["face-color"]       = colorToJson(faceColor);
   json["eye-color"]        = colorToJson(eyeColor);
+  json["hair-color"]       = colorToJson(hairColor);
   json["face-accessories"] =  QJsonArray::fromStringList(faceAccessories);
 }

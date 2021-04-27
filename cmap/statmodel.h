@@ -119,8 +119,10 @@ class StatModel : public QObject
   Q_PROPERTY(QStringList faceAccessories MEMBER faceAccessories NOTIFY faceAccessoriesChanged)
   Q_PROPERTY(QString     spriteTheme     MEMBER spriteTheme     NOTIFY spriteThemeChanged)
   Q_PROPERTY(QString     faceTheme       MEMBER faceTheme       NOTIFY faceThemeChanged)
+  Q_PROPERTY(QString     hairTheme       MEMBER hairTheme       NOTIFY hairThemeChanged)
   Q_PROPERTY(QColor      faceColor       MEMBER faceColor       NOTIFY faceColorChanged)
   Q_PROPERTY(QColor      eyeColor        MEMBER eyeColor        NOTIFY eyeColorChanged)
+  Q_PROPERTY(QColor      hairColor       MEMBER hairColor       NOTIFY hairColorChanged)
 
 public:
   explicit StatModel(QObject *parent = nullptr);
@@ -149,6 +151,8 @@ public:
   Q_INVOKABLE void toggleTrait(const QString& name, bool);
   Q_INVOKABLE void togglePerk(const QString& name, bool);
   Q_INVOKABLE void setFaceColor(int r, int g, int b, int a) { faceColor = QColor(r, g, b, a); emit faceColorChanged(); }
+  Q_INVOKABLE void setEyeColor(int r, int g, int b, int a)  { eyeColor  = QColor(r, g, b, a); emit eyeColorChanged(); }
+  Q_INVOKABLE void setHairColor(int r, int g, int b, int a) { hairColor = QColor(r, g, b, a); emit hairColorChanged(); }
   Q_INVOKABLE void toggleFaceAccessory(const QString&);
 
   Q_INVOKABLE void confirmChanges();
@@ -227,8 +231,10 @@ signals:
   void spriteThemeChanged();
   void faceAccessoriesChanged();
   void faceThemeChanged();
+  void hairThemeChanged();
   void faceColorChanged();
   void eyeColorChanged();
+  void hairColorChanged();
   void factionChanged();
   void raceChanged();
   void genderChanged();
@@ -258,8 +264,8 @@ private:
   QJsonDocument variables;
   QMap<QString, unsigned int> kills;
 
-  QString     spriteTheme, faceTheme;
-  QColor      faceColor, eyeColor;
+  QString     spriteTheme, faceTheme, hairTheme;
+  QColor      faceColor, eyeColor, hairColor;
   QStringList faceAccessories;
 };
 

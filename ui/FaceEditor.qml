@@ -25,16 +25,26 @@ UiStyle.CustomDialog {
 
   WindowDialogs.ColorDialog {
     id: eyeColorDialog
-    title: "Color"
+    title: "Eye color"
     onAccepted: {
       characterSheet.eyeColor = Qt.rgba(color.r, color.g, color.b, 0.5);
     }
   }
 
+  WindowDialogs.ColorDialog {
+    id: hairColorDialog
+    title: "Hair color"
+    onAccepted: {
+      characterSheet.hairColor = Qt.rgba(color.r, color.g, color.b, 1);
+    }
+  }
+
   FaceDisplay {
     theme:       characterSheet.faceTheme
+    hairStyle:   characterSheet.hairTheme
     color:       characterSheet.faceColor
     eyeColor:    characterSheet.eyeColor
+    hairColor:   characterSheet.hairColor
     accessories: characterSheet.faceAccessories
     anchors.left: fieldsPanel.right
     width: parent.width - fieldsPanel.width
@@ -83,6 +93,26 @@ UiStyle.CustomDialog {
           color: characterSheet.eyeColor
         }
         onClicked: eyeColorDialog.open()
+      }
+
+      TerminalLabel { text: "Hair style" }
+      ComboBox {
+        Layout.fillWidth: true
+        id: hairThemeSelect
+        model: ["", "derpy", "pinkie"]
+        currentIndex: model.indexOf(characterSheet.hairTheme)
+        onCurrentIndexChanged: { characterSheet.hairTheme = model[currentIndex] }
+      }
+
+      TerminalLabel { text: "Hair color" }
+      TerminalButton {
+        Layout.fillWidth: true
+        Layout.preferredHeight: 40
+        contentItem: Rectangle {
+          anchors.fill: parent
+          color: characterSheet.hairColor
+        }
+        onClicked: hairColorDialog.open()
       }
 
       TerminalLabel { text: "Accessories"; Layout.alignment: Qt.AlignTop }

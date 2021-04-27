@@ -4,11 +4,13 @@ import QtGraphicalEffects 1.15
 Image {
   id: root
   readonly property string basePath: `${assetPath}/faces`
-  property string theme:    "mare-basic"
-  property string mood:     "neutral"
-  property string ambiance: "wasteland"
-  property color  color:    Qt.rgba(0, 205, 80, 0.5)
-  property color  eyeColor: Qt.rgba(255, 0, 0)
+  property string theme:     "mare-basic"
+  property string hairStyle: ""
+  property string mood:      "neutral"
+  property string ambiance:  "wasteland"
+  property color  color:     Qt.rgba(0, 205, 80, 0.5)
+  property color  eyeColor:  Qt.rgba(255, 0, 0)
+  property color  hairColor: Qt.rgba(255, 255, 0)
   property var    accessories: ["fancypants","eye-scar"]
 
   source: basePath + "/backgrounds/" + ambiance + ".jpg"
@@ -127,6 +129,18 @@ Image {
         anchors.fill: face
         source: basePath + '/' + theme + '/accessories/' + root.accessories[index] + '.png'
         fillMode: Image.Stretch
+      }
+    }
+
+    Image {
+      anchors.fill: parent
+      source: basePath + '/' + theme + '/hairstyles/' + hairStyle + '.png'
+      fillMode: Image.Stretch
+
+      ColorOverlay {
+        anchors.fill: parent
+        source: parent
+        color: Qt.rgba(hairColor.r, hairColor.g, hairColor.b, 0.5)
       }
     }
   }
