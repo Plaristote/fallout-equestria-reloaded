@@ -38,7 +38,7 @@ class TutoChar extends CharacterBehaviour {
   }
 
   startRoutineYell() {
-    level.addTextBubble(this.model, textBubbles.yell, 3000, "yellow");
+    level.addTextBubble(this.model, dialogLines.yell, 3000, "yellow");
   }
 
   joinedPlayer() {
