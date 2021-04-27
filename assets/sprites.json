@@ -503,6 +503,15 @@
             "repeat": false,
             "source": "items/power-armor.png",
             "width": 49
+        },
+        "stable-suit": {
+            "frameCount": 1,
+            "height": 34,
+            "offsetX": 0,
+            "offsetY": 0,
+            "repeat": false,
+            "source": "items/stable-suit.png",
+            "width": 49
         }
     },
     "landmine": {
