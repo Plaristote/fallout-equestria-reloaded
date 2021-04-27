@@ -293,9 +293,11 @@ QString AnimationLibrary::getCharacterSpriteName(const CharacterSpriteDescriptor
   QStringList parts;
 
   parts << descriptor.base << descriptor.bodyColor.name().replace('#', "")
-        << descriptor.hair << descriptor.hairColor.name().replace('#', "")
-        << descriptor.armor
-        << descriptor.weapon;
+        << descriptor.hair << descriptor.hairColor.name().replace('#', "");
+  parts << "static"  << (descriptor.baseStaticColor.isEmpty() ? "blank" : descriptor.baseStaticColor);
+  parts << "overlay" << (descriptor.overLayer.isEmpty()       ? "blank" : descriptor.overLayer);
+  parts << "armor"   << (descriptor.armor.isEmpty()           ? "blank" : descriptor.armor);
+  parts << "equip"   << (descriptor.weapon.isEmpty()          ? "blank" : descriptor.weapon);
   return parts.join('-');
 }
 
@@ -320,18 +322,27 @@ void AnimationLibrary::prerenderCharacterSpriteSheet(const CharacterSpriteDescri
 
   spritesheet.addLayer(baseImage);
   spritesheet.addColorLayer(descriptor.bodyColor, baseImage);
-  if (descriptor.hair.length() > 0)
-  {
-    QImage hairImage(ASSETS_PATH + "sprites/characters/hairs" + descriptor.hair + ".png");
-
-    spritesheet.addLayer(hairImage);
-    spritesheet.addColorLayer(descriptor.hairColor, hairImage);
-  }
+  if (descriptor.baseStaticColor.length() > 0)
+    spritesheet.addLayer(QImage(ASSETS_PATH + "sprites/characters/" + descriptor.baseStaticColor + ".png"));
   for (auto it = layers.begin() ; it != layers.end() ; ++it)
   {
     const QImage image(ASSETS_PATH + it.key() + '/' + it.value());
 
     spritesheet.addLayer(image);
+  }
+  if (descriptor.hair.length() > 0)
+  {
+    QImage hairImage(ASSETS_PATH + "sprites/characters/hairstyles/" + descriptor.hair + ".png");
+
+    spritesheet.addLayer(hairImage);
+    spritesheet.addColorLayer(descriptor.hairColor, hairImage);
+  }
+  if (descriptor.overLayer.length() > 0)
+  {
+    QImage overLayer(ASSETS_PATH + "sprites/characters/" + descriptor.overLayer + ".png");
+
+    spritesheet.addLayer(overLayer);
+    spritesheet.addColorLayer(descriptor.bodyColor, overLayer);
   }
   QDir::current().mkpath(prerenderPath);
   spritesheet.save(getCharacterSpriteFilepath(descriptor));

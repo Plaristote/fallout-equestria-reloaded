@@ -11,7 +11,7 @@ struct CharacterSpriteDescriptor
 {
   bool    layered;
   QString cloneOf;
-  QString base, hair, armor, weapon;
+  QString base, baseStaticColor, hair, armor, weapon, overLayer;
   QColor  bodyColor, hairColor;
 };
 

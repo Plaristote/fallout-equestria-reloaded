@@ -33,8 +33,12 @@ CharacterSpriteDescriptor Race::getSpriteSheet(StatModel* model) const
     descriptor.layered = true;
     descriptor.base = value.property("base").toString();
     descriptor.cloneOf = value.property("cloneOf").toString();
-    if (value.hasProperty("hair"))
+    if (value.hasProperty("staticBase"))
+      descriptor.baseStaticColor = value.property("staticBase").toString();
+    if (value.hasProperty("hair") && value.property("hair").isString())
        descriptor.hair = value.property("hair").toString();
+    if (value.hasProperty("overlay") && value.property("overlay").isString())
+      descriptor.overLayer = value.property("overlay").toString();
     if (value.hasProperty("color"))
       descriptor.bodyColor = QColor(value.property("color").toString());
     else

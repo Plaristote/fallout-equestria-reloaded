@@ -134,26 +134,6 @@
             "width": 73
         }
     },
-    "earthpony-black": {
-        "cloneOf": "pony",
-        "defaultSource": "characters/earthpony-black.png"
-    },
-    "earthpony-gray": {
-        "cloneOf": "pony",
-        "defaultSource": "characters/earthpony-gray.png"
-    },
-    "earthpony-green": {
-        "cloneOf": "pony",
-        "defaultSource": "characters/earthpony-green.png"
-    },
-    "earthpony-orange": {
-        "cloneOf": "pony",
-        "defaultSource": "characters/earthpony-orange.png"
-    },
-    "earthpony-purple": {
-        "cloneOf": "pony",
-        "defaultSource": "characters/earthpony-purple.png"
-    },
     "effects": {
         "explosion": {
             "frameCount": 35,
@@ -348,42 +328,6 @@
             "repeat": false,
             "width": 91
         },
-        "use-down": {
-            "frameCount": 6,
-            "frameInterval": 100,
-            "height": 66,
-            "offsetX": 727,
-            "offsetY": 0,
-            "repeat": false,
-            "width": 91
-        },
-        "use-left": {
-            "frameCount": 6,
-            "frameInterval": 100,
-            "height": 66,
-            "offsetX": 727,
-            "offsetY": 66,
-            "repeat": false,
-            "width": 91
-        },
-        "use-right": {
-            "frameCount": 6,
-            "frameInterval": 100,
-            "height": 66,
-            "offsetX": 727,
-            "offsetY": 132,
-            "repeat": false,
-            "width": 91
-        },
-        "use-up": {
-            "frameCount": 6,
-            "frameInterval": 100,
-            "height": 66,
-            "offsetX": 727,
-            "offsetY": 198,
-            "repeat": false,
-            "width": 91
-        },
         "running-down": {
             "frameCount": 3,
             "frameInterval": 100,
@@ -418,6 +362,42 @@
             "offsetX": 0,
             "offsetY": 198,
             "repeat": true,
+            "width": 91
+        },
+        "use-down": {
+            "frameCount": 6,
+            "frameInterval": 100,
+            "height": 66,
+            "offsetX": 727,
+            "offsetY": 0,
+            "repeat": false,
+            "width": 91
+        },
+        "use-left": {
+            "frameCount": 6,
+            "frameInterval": 100,
+            "height": 66,
+            "offsetX": 727,
+            "offsetY": 66,
+            "repeat": false,
+            "width": 91
+        },
+        "use-right": {
+            "frameCount": 6,
+            "frameInterval": 100,
+            "height": 66,
+            "offsetX": 727,
+            "offsetY": 132,
+            "repeat": false,
+            "width": 91
+        },
+        "use-up": {
+            "frameCount": 6,
+            "frameInterval": 100,
+            "height": 66,
+            "offsetX": 727,
+            "offsetY": 198,
+            "repeat": false,
             "width": 91
         },
         "walking-down": {
@@ -594,62 +574,42 @@
             "width": 72
         }
     },
-    "pegasus-black": {
-        "cloneOf": "pony",
-        "defaultSource": "characters/earthpony-black.png"
-    },
-    "pegasus-gray": {
-        "cloneOf": "pony",
-        "defaultSource": "characters/earthpony-gray.png"
-    },
-    "pegasus-green": {
-        "cloneOf": "pony",
-        "defaultSource": "characters/earthpony-green.png"
-    },
-    "pegasus-orange": {
-        "cloneOf": "pony",
-        "defaultSource": "characters/earthpony-orange.png"
-    },
-    "pegasus-purple": {
-        "cloneOf": "pony",
-        "defaultSource": "characters/earthpony-purple.png"
-    },
     "pony": {
         "damaged-down": {
             "frameCount": 6,
             "frameInterval": 100,
-            "height": 46,
-            "offsetX": 144,
+            "height": 47,
+            "offsetX": 141,
             "offsetY": 0,
             "repeat": false,
-            "width": 46
+            "width": 47
         },
         "damaged-left": {
             "frameCount": 6,
             "frameInterval": 100,
-            "height": 46,
-            "offsetX": 144,
-            "offsetY": 48,
+            "height": 47,
+            "offsetX": 141,
+            "offsetY": 47,
             "repeat": false,
-            "width": 46
+            "width": 47
         },
         "damaged-right": {
             "frameCount": 6,
             "frameInterval": 100,
-            "height": 46,
-            "offsetX": 144,
-            "offsetY": 96,
+            "height": 47,
+            "offsetX": 141,
+            "offsetY": 94,
             "repeat": false,
-            "width": 46
+            "width": 47
         },
         "damaged-up": {
             "frameCount": 6,
             "frameInterval": 100,
-            "height": 46,
-            "offsetX": 144,
-            "offsetY": 144,
+            "height": 47,
+            "offsetX": 141,
+            "offsetY": 141,
             "repeat": false,
-            "width": 46
+            "width": 47
         },
         "dead-down": {
             "frameCount": 1,
@@ -664,7 +624,7 @@
             "frameCount": 1,
             "frameInterval": 0,
             "height": 47,
-            "offsetX": 375,
+            "offsetX": 376,
             "offsetY": 235,
             "repeat": false,
             "width": 47
@@ -673,7 +633,7 @@
             "frameCount": 1,
             "frameInterval": 0,
             "height": 47,
-            "offsetX": 375,
+            "offsetX": 376,
             "offsetY": 282,
             "repeat": false,
             "width": 47
@@ -683,11 +643,11 @@
             "frameInterval": 0,
             "height": 47,
             "offsetX": 376,
-            "offsetY": 328,
+            "offsetY": 329,
             "repeat": false,
             "width": 47
         },
-        "defaultSource": "characters/earthpony-gray.png",
+        "defaultSource": "characters/pony.png",
         "fall-down": {
             "frameCount": 9,
             "frameInterval": 120,
@@ -728,7 +688,7 @@
             "frameCount": 1,
             "frameInterval": 100,
             "height": 47,
-            "offsetX": 46,
+            "offsetX": 47,
             "offsetY": 0,
             "repeat": false,
             "width": 47
@@ -737,7 +697,7 @@
             "frameCount": 1,
             "frameInterval": 100,
             "height": 47,
-            "offsetX": 46,
+            "offsetX": 47,
             "offsetY": 48,
             "repeat": false,
             "width": 47
@@ -746,8 +706,8 @@
             "frameCount": 1,
             "frameInterval": 100,
             "height": 47,
-            "offsetX": 46,
-            "offsetY": 96,
+            "offsetX": 47,
+            "offsetY": 94,
             "repeat": false,
             "width": 47
         },
@@ -755,8 +715,8 @@
             "frameCount": 1,
             "frameInterval": 100,
             "height": 47,
-            "offsetX": 46,
-            "offsetY": 144,
+            "offsetX": 47,
+            "offsetY": 141,
             "repeat": false,
             "width": 47
         },
@@ -765,7 +725,7 @@
             "frameInterval": 65,
             "height": 47,
             "offsetX": 0,
-            "offsetY": 375,
+            "offsetY": 376,
             "repeat": false,
             "width": 47
         },
@@ -799,58 +759,44 @@
         "running-down": {
             "frameCount": 3,
             "frameInterval": 100,
-            "height": 46,
+            "height": 47,
             "offsetX": 0,
             "offsetY": 0,
             "repeat": true,
-            "width": 48
+            "width": 47
         },
         "running-left": {
             "frameCount": 3,
             "frameInterval": 100,
-            "height": 46,
+            "height": 47,
             "offsetX": 0,
-            "offsetY": 48,
+            "offsetY": 47,
             "repeat": true,
-            "width": 46
+            "width": 47
         },
         "running-right": {
             "frameCount": 3,
             "frameInterval": 100,
-            "height": 46,
+            "height": 47,
             "offsetX": 0,
-            "offsetY": 96,
+            "offsetY": 94,
             "repeat": true,
-            "width": 48
+            "width": 47
         },
         "running-up": {
             "frameCount": 3,
             "frameInterval": 100,
-            "height": 46,
+            "height": 47,
             "offsetX": 0,
-            "offsetY": 144,
+            "offsetY": 141,
             "repeat": true,
-            "width": 48
-        },
-        "shadow": {
-            "height": 46,
-            "source": "pony-shadow.png",
-            "width": 46
-        },
-        "uppercut-down": {
-            "frameCount": 7,
-            "frameInterval": 50,
-            "height": 46,
-            "offsetX": 280,
-            "offsetY": 0,
-            "repeat": false,
             "width": 47
         },
         "use-down": {
             "frameCount": 7,
             "frameInterval": 100,
             "height": 47,
-            "offsetX": 374,
+            "offsetX": 376,
             "offsetY": 0,
             "repeat": false,
             "width": 47
@@ -859,7 +805,7 @@
             "frameCount": 7,
             "frameInterval": 100,
             "height": 47,
-            "offsetX": 374,
+            "offsetX": 376,
             "offsetY": 47,
             "repeat": false,
             "width": 47
@@ -868,55 +814,55 @@
             "frameCount": 7,
             "frameInterval": 100,
             "height": 47,
-            "offsetX": 374,
-            "offsetY": 95,
+            "offsetX": 376,
+            "offsetY": 94,
             "repeat": false,
             "width": 47
         },
         "use-up": {
             "frameCount": 7,
             "frameInterval": 100,
-            "height": 46,
+            "height": 47,
             "offsetX": 376,
-            "offsetY": 144,
+            "offsetY": 141,
             "repeat": false,
-            "width": 46
+            "width": 47
         },
         "walking-down": {
             "frameCount": 3,
             "frameInterval": 250,
-            "height": 46,
+            "height": 47,
             "offsetX": 0,
             "offsetY": 0,
             "repeat": true,
-            "width": 48
+            "width": 47
         },
         "walking-left": {
             "frameCount": 3,
             "frameInterval": 250,
-            "height": 46,
+            "height": 47,
             "offsetX": 0,
-            "offsetY": 48,
+            "offsetY": 47,
             "repeat": true,
-            "width": 46
+            "width": 47
         },
         "walking-right": {
             "frameCount": 3,
             "frameInterval": 250,
-            "height": 46,
+            "height": 47,
             "offsetX": 0,
-            "offsetY": 96,
+            "offsetY": 94,
             "repeat": true,
-            "width": 48
+            "width": 47
         },
         "walking-up": {
             "frameCount": 3,
             "frameInterval": 250,
-            "height": 46,
+            "height": 47,
             "offsetX": 0,
-            "offsetY": 144,
+            "offsetY": 141,
             "repeat": true,
-            "width": 48
+            "width": 47
         }
     },
     "rat": {
@@ -1119,25 +1065,5 @@
             "source": "critters/rats.png",
             "width": 40
         }
-    },
-    "unicorn-black": {
-        "cloneOf": "pony",
-        "defaultSource": "characters/earthpony-black.png"
-    },
-    "unicorn-gray": {
-        "cloneOf": "pony",
-        "defaultSource": "characters/earthpony-gray.png"
-    },
-    "unicorn-green": {
-        "cloneOf": "pony",
-        "defaultSource": "characters/earthpony-green.png"
-    },
-    "unicorn-orange": {
-        "cloneOf": "pony",
-        "defaultSource": "characters/earthpony-orange.png"
-    },
-    "unicorn-purple": {
-        "cloneOf": "pony",
-        "defaultSource": "characters/earthpony-purple.png"
     }
 }
