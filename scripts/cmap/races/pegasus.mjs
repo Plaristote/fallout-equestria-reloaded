@@ -1,9 +1,12 @@
-import {getSpriteColor} from "../helpers/spriteColor.mjs";
+import * as Pony from "./earth-pony.mjs";
 
-export const isPlayable = true;
+export const isPlayable  = Pony.isPlayable;
 
 export function spriteSheet(model) {
-  return "pegasus-" + getSpriteColor(model.faceColor);
+  const pony = Pony.spriteSheet(model);
+
+  pony.overlay = "pegasus";
+  return pony;
 }
 
 export function onToggled(statistics, toggled) {

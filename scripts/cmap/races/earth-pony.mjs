@@ -1,13 +1,13 @@
-import {getSpriteColor} from "../helpers/spriteColor.mjs";
-
 export const isPlayable = true;
 
 export function spriteSheet(model) {
   return {
-    cloneOf: "pony",
-    //base:    "earthpony-" + getSpriteColor(model.faceColor)
-    base:    "earthpony-gray",
-    color:   model.faceColor 
+    cloneOf:    "pony",
+    base:       "pony",
+    staticBase: "pony-eyes",
+    color:      model.faceColor,
+    hair:       model.hairTheme,
+    hairColor:  model.hairColor
   };
 }
 

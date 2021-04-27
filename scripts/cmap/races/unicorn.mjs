@@ -1,7 +1,10 @@
-import {getSpriteColor} from "../helpers/spriteColor.mjs";
+import * as Pony from "./earth-pony.mjs";
 
-export const isPlayable = true;
+export const isPlayable  = Pony.isPlayable;
 
 export function spriteSheet(model) {
-  return "unicorn-" + getSpriteColor(model.faceColor);
+  const pony = Pony.spriteSheet(model);
+
+  pony.overlay = "unicorn";
+  return pony;
 }
