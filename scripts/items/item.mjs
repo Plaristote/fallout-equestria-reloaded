@@ -7,6 +7,8 @@ export class ItemBehaviour {
       this.requiresTarget = true;
     if (this.useModes == undefined)
       this.useModes = ["use"];
+    if (this.zoneTarget == undefined)
+      this.zoneTarget = false;
   }
 
   get user() {
@@ -45,8 +47,12 @@ export class ItemBehaviour {
     return false;
   }
 
-  getAnimationSteps(target) {
+  getUseAnimation() {
     return [{ type: "Animation", animation: "use", object: this.user }];
+  }
+
+  getAnimationSteps(target) {
+    return this.getUseAnimation();
   }
 
   attemptToUseActionPointsOn(target) {

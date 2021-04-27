@@ -24,6 +24,14 @@ export class MeleeAttack extends Weapon {
       return this.user.statistics.meleeDamage;
     return 3;
   }
+
+  getAnimationSteps(target) {
+    return [{ type: "Animation", animation: "melee", object: this.user }];
+  }
+
+  getUseAnimation() {
+    return [{ type: "Animation", animation: "melee", object: this.user }];
+  }
 };
 
 export function create(model) {

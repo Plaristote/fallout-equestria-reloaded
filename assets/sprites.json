@@ -144,6 +144,16 @@
             "repeat": false,
             "source": "explosion.png",
             "width": 93
+        },
+        "grenade-throw": {
+            "frameCount": 12,
+            "frameInterval": 65,
+            "height": 16,
+            "offsetX": 0,
+            "offsetY": 37,
+            "repeat": true,
+            "source": "items/grenade.png",
+            "width": 17
         }
     },
     "griffon": {
@@ -447,6 +457,16 @@
             "offsetY": 0,
             "repeat": false,
             "source": "items/dynamite.png",
+            "width": 72
+        },
+        "frag-grenade": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 36,
+            "offsetX": 0,
+            "offsetY": 0,
+            "repeat": false,
+            "source": "items/grenade.png",
             "width": 72
         },
         "gun": {

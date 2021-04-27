@@ -14,7 +14,7 @@ function makeExplosionAnimationAt(x, y) {
   return {};
 }
 
-export function explode(position, radius, damage, wearer) {
+export function explode(position, radius, damage, wearer, damageDealer) {
   const fromPos  = [position.x - radius, position.y - radius];
   const toPos    = [position.x + radius, position.y + radius];
 
@@ -27,7 +27,7 @@ export function explode(position, radius, damage, wearer) {
         console.log("-> object in explode zone", object.objectName, object.getObjectType());
         switch (object.getObjectType()) {
           case "Character":
-            object.takeDamage(object == wearer ? damage * 2 : damage, null);
+            object.takeDamage(object == wearer ? damage * 2 : damage, damageDealer);
             break ;
           case "Doorway":
             console.log("Doorway", object.destructible);
