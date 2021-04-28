@@ -83,7 +83,7 @@ AnimatedCursor::AnimatedCursor(QGuiApplication* parent) : QObject(parent), curre
   connect(&timer, &QTimer::timeout, this, &AnimatedCursor::moveToNextFrame);
 }
 
-AnimatedCursor::AnimatedCursor(QGuiApplication* parent, const QPixmap& pixmap, QPoint hotPoint) : QObject(parent)
+AnimatedCursor::AnimatedCursor(QGuiApplication* parent, const QPixmap& pixmap, QPoint hotPoint) : QObject(parent), currentFrame(0)
 {
   addFrame(pixmap, hotPoint);
 }
