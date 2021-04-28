@@ -234,5 +234,6 @@
         <file>editor/level/SaveTemplateDialog.qml</file>
         <file>editor/level/AddTemplateDialog.qml</file>
         <file>game/hud/CombatPreview.qml</file>
+        <file>game/Interaction.mjs</file>
     </qresource>
 </RCC>

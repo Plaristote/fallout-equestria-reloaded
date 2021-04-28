@@ -1,5 +1,4 @@
-const MouseMode  = { "Movement": 0, "Interaction": 1, "Target": 2, "Wait": 3 };
-const TargetMode = { "Any": 0, "Character": 1, "Zone": 2 };
+import {MouseMode, TargetMode} from "./Interaction.mjs";
 
 export class Controller {
   constructor(canvas, params) {
@@ -155,7 +154,6 @@ export class Controller {
         const from = { x: coordinates[0] - item.zoneSize, y: coordinates[1] - item.zoneSize };
         const to   = { x: coordinates[0] + item.zoneSize, y: coordinates[1] + item.zoneSize };
 
-        console.log("Rendering zone picker ->", from.x, '/', from.y, ' to ', to.x, '/', to.y);
         for (var x = from.x ; x <= to.x ; ++x) {
           for (var y = from.y ; y <= to.y ; ++y) {
             const tile = this.layers.ground.getTile(x, y);

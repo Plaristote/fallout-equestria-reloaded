@@ -1,17 +1,20 @@
 import QtQuick 2.15
+import "../Interaction.mjs" as Interaction;
 
 Item {
   property QtObject levelController
   property var canvas
-  property bool interactionMode: levelController.mouseMode === 1 || (levelController.mouseMode === 2 && levelController.targetMode === 0);
-  property bool targetMode:      levelController.mouseMode === 2
+  property bool interactionMode: Interaction.shouldDisplayInteractionLayer(levelController.mouseMode, levelController.targetMode)
+  property bool targetMode:      Interaction.shouldDisplayTargetLayer(levelController.mouseMode, levelController.targetMode)
+
+  opacity: 0.6
 
   Loader {
     sourceComponent: interactionMode ? interactionOverlayComponent : null
   }
 
   Loader {
-    sourceComponent: targetMode ? characterInteractionOverlayComponent : characterOverlayComponent
+    sourceComponent: targetMode || interactionMode ? characterInteractionOverlayComponent : characterOverlayComponent
   }
 
   Component {
@@ -21,7 +24,7 @@ Item {
       controller:      canvas.controller
       model:           levelController.dynamicObjects
       filter:          function(item) {
-        return !item.hidden && (item.getObjectType() !== "Character" || !item.isAlive());
+        return !item.hidden && !(item.getObjectType() === "Character" && item.isAlive());
       }
     }
   }
@@ -33,9 +36,8 @@ Item {
       controller:       canvas.controller
       filter:           function(item) { return item.isAlive(); }
       model:            levelController.visibleCharacters
-      overlayColor:     levelController.targetMode === 0 ? Qt.rgba(255, 255, 0, 1)   : Qt.rgba(255, 0, 0, 1)
-      overlayMaxColor:  levelController.targetMode === 0 ? Qt.rgba(255, 255, 0, 0.5) : Qt.rgba(255, 0, 0, 0.5)
-      layerOpacity: 0.6
+      overlayColor:     levelController.targetMode === Interaction.TargetMode.Any ? Qt.rgba(255, 255, 0, 1)   : Qt.rgba(255, 0, 0, 1)
+      overlayMaxColor:  levelController.targetMode === Interaction.TargetMode.Any ? Qt.rgba(255, 255, 0, 0.5) : Qt.rgba(255, 0, 0, 0.5)
     }
   }
 
@@ -47,7 +49,6 @@ Item {
       filter:           function(item) { return item.isAlive(); }
       model:            levelController.visibleCharacters
       withColorOverlay: false
-      layerOpacity: 0.6
     }
   }
 }

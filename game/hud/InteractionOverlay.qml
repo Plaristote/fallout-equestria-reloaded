@@ -9,7 +9,6 @@ Repeater {
   property bool     withColorOverlay: true
   property color    overlayColor:    Qt.rgba(255, 255, 0, 1)
   property color    overlayMaxColor: Qt.rgba(255, 255, 0, 0.5)
-  property real     layerOpacity: 0.3
 
   delegate: Image {
     id: dynamicObjectLayer
@@ -19,8 +18,6 @@ Repeater {
     function updateVisibility() {
       dynamicObjectLayer.visible = root.filter(dynamicObject);
     }
-
-    opacity: root.layerOpacity
 
     Component.onCompleted: updateVisibility()
 
