@@ -427,15 +427,10 @@ export class Controller {
     if (!this.level.combat || this.level.isPlayerTurn) {
       mouseX -= this.canvas.origin.x;
       mouseY -= this.canvas.origin.y;
-      switch (this.level.mouseMode) {
-        case 0:
-        case 2:
-          this.onCaseClick(mouseX, mouseY);
-          break ;
-        case 1:
-          this.onObjectClick(mouseX, mouseY);
-          break ;
-      }
+      if (this.level.mouseMode === MouseMode.Movement || (this.level.mouseMode === MouseMode.Target && this.level.targetMode === TargetMode.Zone))
+        this.onCaseClick(mouseX, mouseY);
+      else if (this.level.mouseMode === MouseMode.Target || this.level.mouseMode === MouseMode.Interaction)
+        this.onObjectClick(mouseX, mouseY);
     }
   }
 
