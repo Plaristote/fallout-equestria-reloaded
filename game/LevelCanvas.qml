@@ -94,6 +94,7 @@ Canvas {
     UsageSuccessHint {
       levelController: canvas.levelController
       target: hoveredObject
+      targetTile: hoverTile
     }
   }
 

@@ -62,6 +62,7 @@ public:
   QJSValue                   useAt(int x, int y);
   Q_INVOKABLE void           useFromInventory();
   Q_INVOKABLE int            getUseSuccessRate(DynamicObject* target);
+  Q_INVOKABLE int            getUseAtSuccessRate(int x, int y);
   Q_INVOKABLE DynamicObject* getOwner() const;
   Q_INVOKABLE void           setCountdown(int value);
   Q_INVOKABLE void           swapUseMode();

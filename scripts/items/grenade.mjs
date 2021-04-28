@@ -18,7 +18,7 @@ export class Grenade extends WeaponBehaviour {
   }
 
   triggerUseAt(x, y) {
-    const successRate = this.getUseSuccessRate(x, y);
+    const successRate = this.getUseAtSuccessRate(x, y);
     const roll = getValueFromRange(0, 100);
 
     if (roll < 5) {
@@ -70,17 +70,6 @@ export class Grenade extends WeaponBehaviour {
       });
     }
     return steps;
-  }
-
-  getUseSuccessRate(x, y) {
-    const attackerWeaponSkill = this.getUserSkillValue();
-    const distance = this.user.getDistance(x, y);
-    var baseToHit = attackerWeaponSkill;
-
-    baseToHit -= 25;
-    baseToHit += 8 * Math.max(0, this.getUserPerception() - 2);
-    baseToHit -= Math.max(0, distance - 1) * 7;
-    return Math.max(0, Math.min(baseToHit, 95));
   }
 
   getRange() {

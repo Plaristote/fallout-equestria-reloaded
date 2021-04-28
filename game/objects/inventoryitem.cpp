@@ -283,6 +283,26 @@ int InventoryItem::getUseSuccessRate(DynamicObject* target)
   return 0;
 }
 
+int InventoryItem::getUseAtSuccessRate(int x, int y)
+{
+  if (usesZoneTarget())
+  {
+    DynamicObject* owner = getOwner();
+
+    if (script && script->hasMethod("getUseAtSuccessRate"))
+      return script->call("getUseAtSuccessRate", QJSValueList() << x << y).toInt();
+    else if (owner)
+    {
+      QPoint position = owner->getPosition();
+      QPoint targetPosition(x, y);
+
+      if (getRange() >= Game::get()->getLevel()->getDistance(position, targetPosition))
+        return 95;
+    }
+  }
+  return 0;
+}
+
 DynamicObject* InventoryItem::getOwner() const
 {
   const char* parentType = parent()->metaObject()->className();
