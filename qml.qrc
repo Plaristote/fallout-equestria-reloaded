@@ -174,10 +174,6 @@
         <file>assets/backgrounds/game-over.png</file>
         <file>game/slideshows/LoadingScreen.qml</file>
         <file>game/slideshows/GameOverScreen.qml</file>
-        <file>assets/sprites/characters/alicorn-purple.png</file>
-        <file>assets/sprites/characters/earthpony-purple.png</file>
-        <file>assets/sprites/characters/pegasus-purple.png</file>
-        <file>assets/sprites/characters/unicorn-purple.png</file>
         <file>assets/musics.json</file>
         <file>assets/audio.json</file>
         <file>assets/faces/stallion-basic/accessories/eye-patch.png</file>
