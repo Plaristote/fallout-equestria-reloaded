@@ -1,6 +1,7 @@
 #include "globals.h"
 #include "game.h"
 #include "musicmanager.h"
+#include "game/mousecursor.h"
 #include "i18n.h"
 #include <QFile>
 #include <QDir>
@@ -189,6 +190,7 @@ void Game::exitLevel(bool silent)
     currentLevel = nullptr;
     scriptObject.deleteProperty("level");
     dataEngine->exitLevel();
+    MouseCursor::get()->updatePointerType();
     if (!silent)
       emit levelChanged();
   }

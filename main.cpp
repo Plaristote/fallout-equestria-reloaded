@@ -23,6 +23,7 @@
 #include "gamemanager.h"
 #include "musicmanager.h"
 #include "game/characters/buff.h"
+#include "game/mousecursor.h"
 
 #include "cmap/statmodel.h"
 
@@ -64,6 +65,9 @@ int main(int argc, char *argv[])
 
   QGuiApplication app(argc, argv);
   QQmlApplicationEngine engine;
+  MouseCursor* cursor = new MouseCursor(&app);
+
+  cursor->updatePointerType();
 
   qmlRegisterType<I18n>("I18n", 1,0, "I18n");
   qmlRegisterType<Game>("Game", 1,0, "Controller");

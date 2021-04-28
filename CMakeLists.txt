@@ -59,6 +59,8 @@ set(PROJECT_SOURCES
         cmap/race.cpp
         cmap/perk.h
         cmap/perk.cpp
+        game/mousecursor.h
+        game/mousecursor.cpp
         game/scriptcontroller.h
         game/scriptcontroller.cpp
         game/dataengine.h

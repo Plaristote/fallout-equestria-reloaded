@@ -3,13 +3,15 @@
 #include "../characterdialog.h"
 #include "../lootingcontroller.h"
 #include "game/characters/actionqueue.h"
+#include "game/mousecursor.h"
 #include <QDebug>
 
 int InteractionComponent::movementModeOption = InteractionComponent::MixedMovementMode;
 
 InteractionComponent::InteractionComponent(QObject *parent) : ParentType(parent)
 {
-
+  connect(this, &InteractionComponent::mouseModeChanged, this, &InteractionComponent::mouseStateChanged);
+  connect(this, &InteractionComponent::mouseStateChanged, MouseCursor::get(), &MouseCursor::updatePointerType);
 }
 
 void InteractionComponent::registerDynamicObject(DynamicObject* object)

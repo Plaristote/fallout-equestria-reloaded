@@ -17,6 +17,7 @@ class InteractionComponent : public PlayerVisibilityComponent
   Q_PROPERTY(int mouseMode MEMBER mouseMode NOTIFY mouseModeChanged)
   Q_PROPERTY(int targetMode READ getTargetMode NOTIFY mouseModeChanged)
   Q_PROPERTY(InventoryItem* activeItem READ getActiveItem NOTIFY activeItemChanged)
+  Q_PROPERTY(bool mouseInMap MEMBER mouseInMap NOTIFY mouseStateChanged)
 public:
   static int movementModeOption;
 
@@ -59,7 +60,9 @@ public:
   Q_INVOKABLE void useSkillOn(Character* user, DynamicObject* object, const QString& skill);
   Q_INVOKABLE void movePlayerTo(int x, int y);
   Q_INVOKABLE void tileClicked(int x, int y);
+  MouseMode        getMouseMode() const { return static_cast<MouseMode>(mouseMode); }
   int              getTargetMode() const;
+  bool             mapIncludesMouse() const { return mouseInMap; }
   void             setDefaultMovementMode();
 
   Q_INVOKABLE DynamicObject*   getObjectAt(int posX, int posY) const;
@@ -77,6 +80,7 @@ public:
 
 signals:
   void mouseModeChanged();
+  void mouseStateChanged();
   void interactionRequired(DynamicObject* target, QStringList options);
   void countdownRequired(InventoryItem* item);
   void startDialog(CharacterDialog*);
@@ -94,6 +98,7 @@ protected:
   QString        activeItemSlot, activeSkill;
   InventoryItem* activeItem = nullptr;
   int            mouseMode = MovementCursor;
+  bool           mouseInMap = false;
 };
 
 #endif // INTERACTIONCOMPONENT_H

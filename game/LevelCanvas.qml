@@ -58,6 +58,10 @@ Canvas {
       else if (!levelController.paused)
         controller.onMouseClick(mouse, mouseX, mouseY);
     }
+    onContainsMouseChanged: {
+      levelController.mouseInMap = containsMouse;
+    }
+
     onMouseXChanged: onMouseMoved()
     onMouseYChanged: onMouseMoved()
     cursorShape: enabled ? Qt.BlankCursor : Qt.ArrowCursor
@@ -82,12 +86,10 @@ Canvas {
     levelController: parent.levelController
   }
 
-  LevelCursor {
+  Item {
     id: levelCursor
-    visible: mouseArea.containsMouse && (mouseMode !== 0 || !canvas.hoverTileHintVisible)
-    mouseMode: levelController.mouseMode
-    mouseX: mouseArea.mouseX
-    mouseY: mouseArea.mouseY
+    property real mouseX: mouseArea.mouseX
+    property real mouseY: mouseArea.mouseY
 
     UsageSuccessHint {
       levelController: canvas.levelController
