@@ -13,14 +13,15 @@ class CharacterMovement : public CHARACTER_BASE_OBJECT
 public:
   enum Direction
   {
-    UpperDir,
-    UpperLeftDir,
-    UpperRightDir,
-    LeftDir,
-    RightDir,
-    BottomDir,
-    BottomLeftDir,
-    BottomRightDir
+    NoDir          = 0,
+    UpperDir       = 1,
+    LeftDir        = 2,
+    RightDir       = 4,
+    BottomDir      = 8,
+    UpperLeftDir   = 3,
+    UpperRightDir  = 5,
+    BottomLeftDir  = 10,
+    BottomRightDir = 14
   };
 
   explicit CharacterMovement(QObject *parent = nullptr);

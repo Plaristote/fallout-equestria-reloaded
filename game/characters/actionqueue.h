@@ -42,16 +42,21 @@ public:
   Q_INVOKABLE void pushReach(DynamicObject* target, float range, QJSValue caseCompare);
   Q_INVOKABLE void pushReachCase(int x, int y, float range = 1);
   Q_INVOKABLE void pushReachCase(int x, int y, float range, QJSValue caseCompare);
+  void             pushSliding(QPoint target);
   Q_INVOKABLE bool start();
 
 signals:
   void queueCompleted();
 
 private:
+  void clearStash();
+  void runQueue();
   void onActionOver();
 
   Character* character;
   QVector<ActionBase*> queue;
+  QVector<ActionBase*> stash;
+  bool resetFlag = false;
 };
 
 #endif // ACTIONQUEUE_H

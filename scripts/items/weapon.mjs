@@ -1,5 +1,5 @@
 import {ItemBehaviour} from "./item.mjs";
-import {getValueFromRange} from "../behaviour/random.mjs";
+import {getValueFromRange, randomCheck} from "../behaviour/random.mjs";
 
 export class WeaponBehaviour extends ItemBehaviour {
   constructor(model) {
@@ -49,11 +49,11 @@ export class WeaponBehaviour extends ItemBehaviour {
     console.log("ROLL", roll, '/', successRate);
     if (this.fireSound)
       level.sounds.play(this.fireSound);
-    if (roll > successRate)
-      return this.triggerDodgeUse(target);
-    if (roll < 5)
-      return this.triggerCriticalFailure(target);
-    return super.triggerUseOn(target);
+    return randomCheck(successRate, {
+      failure:         this.triggerDodgeUse.bind(this, target),
+      criticalFailure: this.triggerCriticalFailure.bind(this, target),
+      success:         super.triggerUseOn.bind(this, target)
+    });
   }
 
   triggerDodgeUse(target) {

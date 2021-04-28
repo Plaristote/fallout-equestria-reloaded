@@ -110,6 +110,8 @@ set(PROJECT_SOURCES
         game/characters/actions/reach.cpp
         game/characters/actions/reachcase.h
         game/characters/actions/reachcase.cpp
+        game/characters/actions/sliding.h
+        game/characters/actions/sliding.cpp
         game/lootingcontroller.h
         game/lootingcontroller.cpp
         game/sprite.h

@@ -10,10 +10,11 @@
   "Weight": "Weight",
   "messages": {
     "weapons": {
-      "use":   "{{user}} used {{item}} on {{target}} for {{damage}} damage",
-      "dodge": "{{target}} dodged an attack from {{user}}"
+      "use":   "{{user}} used {{item}} on {{target}} for {{damage}} damage.",
+      "dodge": "{{target}} dodged an attack from {{user}}.",
+      "critical-failure": "{{user}} critically failed to use {{item}}."
     },
-    "damaged": "{{target}} took {{damage}} points of damage",
+    "damaged": "{{target}} took {{damage}} points of damage.",
     "use": "{{user}} used {{item}}.",
     "healed": "{{target}} was healed for {{hp}} hit points",
     "door-locked": "You successfully locked the door",

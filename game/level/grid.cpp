@@ -147,7 +147,7 @@ QPoint GridComponent::getRenderPositionForTile(int x, int y)
   return tile ? tile->getRenderPosition() : QPoint();
 }
 
-float GridComponent::getDistance(QPoint pa, QPoint pb)
+float GridComponent::getDistance(QPoint pa, QPoint pb) const
 {
   auto a = pa.x() - pb.x();
   auto b = pa.y() - pb.y();

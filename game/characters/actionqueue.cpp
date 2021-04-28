@@ -6,6 +6,7 @@
 #include "actions/movement.h"
 #include "actions/reach.h"
 #include "actions/reachcase.h"
+#include "actions/sliding.h"
 
 ActionQueue::ActionQueue(QObject *parent) : QObject(parent), character(reinterpret_cast<Character*>(parent))
 {
@@ -16,15 +17,26 @@ ActionQueue::~ActionQueue()
 {
   for (auto* entry : queue)
     delete entry;
+  for (auto* entry : stash)
+    delete entry;
 }
 
 void ActionQueue::update()
 {
   if (!queue.empty())
-  {
-    auto* action = queue.first();
+    runQueue();
+  if (!stash.empty())
+    clearStash();
+}
 
-    action->update();
+void ActionQueue::runQueue()
+{
+  auto* action = queue.first();
+
+  resetFlag = false;
+  action->update();
+  if (!resetFlag)
+  {
     switch (action->getState())
     {
     case ActionBase::Done:
@@ -40,6 +52,13 @@ void ActionQueue::update()
       break ;
     }
   }
+}
+
+void ActionQueue::clearStash()
+{
+  for (auto* entry : stash)
+    delete entry;
+  stash.clear();
 }
 
 void ActionQueue::pause()
@@ -96,9 +115,11 @@ void ActionQueue::reset()
 {
   if (queue.length() > 0)
     queue.front()->interrupt();
+  stash.reserve(queue.size());
   for (auto* entry : qAsConst(queue))
-    delete entry;
+    stash << entry;
   queue.clear();
+  resetFlag = true;
 }
 
 void ActionQueue::pushMovement(QPoint target)
@@ -203,4 +224,9 @@ void ActionQueue::pushSkillUse(DynamicObject *target, const QString &skillName)
 int ActionQueue::getSkillUseApCost(DynamicObject* target, const QString& skillName) const
 {
   return SkillAction(character, target, skillName).getApCost();
+}
+
+void ActionQueue::pushSliding(QPoint target)
+{
+  queue << (new SlidingAction(character, target));
 }

@@ -1,6 +1,6 @@
 import {WeaponBehaviour} from "./weapon.mjs";
 import {explode} from "../behaviour/explosion.mjs";
-import {getValueFromRange} from "../behaviour/random.mjs";
+import {getValueFromRange, randomCheck} from "../behaviour/random.mjs";
 
 export class Grenade extends WeaponBehaviour {
   constructor(model) {
@@ -17,23 +17,39 @@ export class Grenade extends WeaponBehaviour {
     return false;
   }
 
+  disperseThrow(x, y) {
+    const fromX = Math.min(x, this.user.position.x);
+    const toX   = Math.max(x, this.user.position.x);
+    const fromY = Math.min(y, this.user.position.y);
+    const toY   = Math.max(y, this.user.position.y);
+    const distanceX = toX - fromX;
+    const distanceY = toY - fromY;
+
+    x = x + getValueFromRange(-1, distanceX) * (toX < fromX ? 1 : -1);
+    y = y + getValueFromRange(-1, distanceY) * (toY < fromY ? 1 : -1);
+    return [x,y];
+  }
+
   triggerUseAt(x, y) {
     const successRate = this.getUseAtSuccessRate(x, y);
     const roll = getValueFromRange(0, 100);
 
-    if (roll < 5) {
-      x = this.user.position.x;
-      y = this.user.position.y;
-    }
-    else if (roll <= successRate) {
-      const fromX = Math.min(x, this.user.position.x);
-      const toX   = Math.max(x, this.user.position.x);
-      const fromY = Math.min(y, this.user.position.y);
-      const toY   = Math.max(y, this.user.position.y);
+    randomCheck(successRate, {
+      criticalFailure: () => {
+        game.appendToConsole(i18n.t("messages.weapons.critical-failure", {
+          user: this.user.statistics.name,
+          item: this.trName
+	}));
+        x = this.user.position.x;
+        y = this.user.position.y;
+      },
+      failure: () => {
+        const result = this.disperseThrow(x, y);
 
-      x = getValueFromRange(fromX - 2, toX + 2);
-      y = getValueFromRange(fromY - 2, toY + 2);
-    }
+        x = result[0];  y = result[1];
+      },
+      success: () => {}
+    });
     return {
       steps:    this.getAnimationSteps(x, y),
       callback: this.useAt.bind(this, x, y)

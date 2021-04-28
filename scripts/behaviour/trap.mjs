@@ -1,16 +1,17 @@
-import {explode} from "./explosion.mjs";
-import {getValueFromRange} from "../behaviour/random.mjs";
+import {Explosion} from "./explosion.mjs";
+import {getValueFromRange, randomCheck} from "../behaviour/random.mjs";
 
 export function disarmAttempt(character, difficulty) {
   const skill = character.statistics.explosives;
   const roll = getValueFromRange(0, 100);
+  var result = 0;
 
-  console.log("Roll=", roll, ", threshold=", skill + difficulty * 10);
-  if (skill - difficulty * 10 >= roll)
-    return 1;
-  else if (roll >= 95)
-    return -1;
-  return 0;
+  randomCheck(skill - difficulty * 10, {
+    criticalFailure: function() { result = -1; },
+    failure:         function() { result = 0; },
+    success:         function() { result = 1; }
+  });
+  return result;
 }
 
 export class Trap {
@@ -66,8 +67,12 @@ export class Trap {
   }
 
   triggered() {
+    const explosion = new Explosion(this.model.position);
+
     this.model.setVariable("disarmed", true);
-    explode(this.model.position, 1, getValueFromRange(20, 50));
+    explosion.withRadius(1)
+             .withDamage(getValueFromRange(20, 50))
+             .trigger();
     level.deleteObject(this.model);
   }
 }

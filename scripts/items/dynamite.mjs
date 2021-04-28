@@ -1,6 +1,6 @@
 import {Item} from "./item.mjs";
 import {getValueFromRange} from "../behaviour/random.mjs";
-import {explode} from "../behaviour/explosion.mjs";
+import {Explosion} from "../behaviour/explosion.mjs";
 import {disarmAttempt} from "../behaviour/trap.mjs";
 
 class Dynamite extends Item {
@@ -81,17 +81,18 @@ class Dynamite extends Item {
   }
 
   triggered() {
-    const wearer   = this.model.getOwner();
-    const radius   = 2;
-    const position = wearer ? wearer.position : this.model.position;
-    const damage   = getValueFromRange(20, 50);
+    const wearer    = this.model.getOwner();
+    const position  = wearer ? wearer.position : this.model.position;
+    const explosion = new Explosion(position);
 
+    explosion.withRadius(2)
+             .withDamage(getValueFromRange(20, 50))
+             .withWearer(wearer)
+             .trigger();
     if (this.model.getVariable("trigger-failed") == true)
       game.appendToConsole(i18n.t("messages.explosive-triggered-prematurely", { item: this.trName }));
     else
       game.appendToConsole(i18n.t("messages.explosive-triggered", { item: this.trName }));
-    console.log("Exploding for", damage, "damage.");
-    explode(position, radius, damage, wearer);
     if (wearer)
       wearer.inventory.destroyItem(this.model, 1);
     else

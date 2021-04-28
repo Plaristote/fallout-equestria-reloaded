@@ -37,14 +37,19 @@ public:
 
   Q_INVOKABLE QJSValue getActions();
   Q_INVOKABLE bool isAlive() const { return getStatistics()->getHitPoints() > 0; }
-  Q_INVOKABLE bool isUncounscious() const { return uncounscious; }
+  Q_INVOKABLE bool isUnconscious() const { return unconscious; }
 
   Q_INVOKABLE void  takeDamage(int damage, Character* dealer);
   Q_INVOKABLE void  attackedBy(Character* dealer);
   Q_INVOKABLE bool  useActionPoints(int amount = 1, const QString& motive = "");
   inline int        getActionPoints() const { return actionPoints; }
   void              resetActionPoints();
+  Q_INVOKABLE void  fallAwayFrom(int x, int y, int distance);
   Q_INVOKABLE void  fall(int distance, const QString& direction);
+  void              fall(int distance, Direction direction);
+  Q_INVOKABLE void  fallUnconscious();
+  Q_INVOKABLE void  wakeUp();
+  bool              setFallAnimation();
 
 signals:
   void actionPointsChanged();
@@ -62,7 +67,7 @@ private:
 
   ActionQueue* actionQueue;
   bool sneakEnabled = false;
-  bool uncounscious = false;
+  bool unconscious = false;
   int actionPoints = 0;
   QJSValue jsActionQueue;
   QVector<Buff*> buffs;

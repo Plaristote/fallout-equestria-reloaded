@@ -40,7 +40,7 @@ bool CombatComponent::isPlayerTurn() const
 
 bool CombatComponent::isCharacterTurn(Character *character) const
 {
-  return combattants.size() > combatIterator && combattants[combatIterator] == character;
+  return combatIterator >= 0 && combattants.size() > combatIterator && combattants[combatIterator] == character;
 }
 
 void CombatComponent::onActiveItemChanged()
@@ -169,8 +169,13 @@ void CombatComponent::onCharacterDied(Character* character)
 
 void CombatComponent::initializeCharacterTurn(Character* character)
 {
-  character->getFieldOfView()->runTask();
-  character->scriptCall("onTurnStart");
+  if (!character->isUnconscious())
+  {
+    character->getFieldOfView()->runTask();
+    character->scriptCall("onTurnStart");
+  }
+  else
+    onNextCombatTurn();
 }
 
 void CombatComponent::finalizeCharacterTurn(Character* character)

@@ -37,20 +37,11 @@ void Character::onActionQueueCompleted()
 
 void Character::afterDeathAnimation()
 {
-  if (getAnimation().startsWith("fall"))
+  if (getAnimation().startsWith("fall") && !isAlive())
   {
-    if (!isAlive())
-    {
-      setAnimation("dead");
-      Game::get()->getLevel()->addBloodStainAt(getPosition());
-    }
-    else if (isUncounscious())
-      Game::get()->getLevel()->getGrid()->triggerZone(this, getPosition().x(), getPosition().y());
-    else
-      setAnimation("get-up");
+    setAnimation("dead");
+    Game::get()->getLevel()->addBloodStainAt(getPosition());
   }
-  else if (getAnimation().startsWith("get-up"))
-    Game::get()->getLevel()->getGrid()->triggerZone(this, getPosition().x(), getPosition().y());
 }
 
 void Character::takeDamage(int damage, Character* dealer)
@@ -69,7 +60,8 @@ void Character::takeDamage(int damage, Character* dealer)
   }
   if (hp <= 0)
   {
-    setAnimation("fall");
+    if (!setFallAnimation())
+      afterDeathAnimation();
     blocksPath = false;
     emit characterKill(this, dealer);
     emit blocksPathChanged();
@@ -177,56 +169,91 @@ static QMap<QString, CharacterMovement::Direction> directionByName = {
   {"bottom-right", CharacterMovement::BottomRightDir}
 };
 
+void Character::fallAwayFrom(int x, int y, int distance)
+{
+  int directionFlag = 0;
+
+  if (x > position.x())
+    directionFlag |= LeftDir;
+  else if (x < position.x())
+    directionFlag |= RightDir;
+  if (y > position.y())
+    directionFlag |= UpperDir;
+  else if (y < position.y())
+    directionFlag |= BottomDir;
+  fall(distance, static_cast<Direction>(directionFlag));
+}
+
 void Character::fall(int distance, const QString &directionName)
 {
   if (distance && directionByName.contains(directionName))
   {
-    QPoint    from      = getPosition();
-    QPoint    target    = from;
     Direction direction = directionByName[directionName];
+
+    fall(distance, direction);
+  }
+  else
+    setFallAnimation();
+}
+
+void Character::fall(int distance, Direction direction)
+{
+  QPoint    from      = getPosition();
+  QPoint    target    = from;
+
+  if (direction != NoDir)
+  {
     auto*     level     = Game::get()->getLevel();
     auto*     grid      = level->getGrid();
 
     while (distance > 0)
     {
-      QPoint candidate;
+      QPoint candidate = target;
 
-      switch (direction)
-      {
-      case UpperDir:
-        candidate = QPoint(target.x(), target.y() - 1);
-        break ;
-      case UpperLeftDir:
-        candidate = QPoint(target.x() - 1, target.y() - 1);
-        break ;
-      case UpperRightDir:
-        candidate = QPoint(target.x() + 1, target.y() - 1);
-        break ;
-      case LeftDir:
-        candidate = QPoint(target.x() - 1, target.y());
-        break ;
-      case RightDir:
-        candidate = QPoint(target.x() + 1, target.y());
-        break ;
-      case BottomDir:
-        candidate = QPoint(target.x(), target.y() + 1);
-        break ;
-      case BottomLeftDir:
-        candidate = QPoint(target.x() - 1, target.y() + 1);
-        break ;
-      case BottomRightDir:
-        candidate = QPoint(target.x() + 1, target.y() + 1);
-        break ;
-      }
+      if (direction & UpperDir)
+        candidate.ry() -= 1;
+      else if (direction & BottomDir)
+        candidate.ry() += 1;
+      if (direction & LeftDir)
+        candidate.rx() -= 1;
+      else if (direction & RightDir)
+        candidate.rx() += 1;
       if (grid->isOccupied(candidate.x(), candidate.y()))
         break ;
       target = candidate;
+      distance--;
     }
-    moveToCoordinates(level->getRenderPositionForTile(target.x(), target.y()));
-    grid->moveObject(this, target.x(), target.y());
-    lookTo(from);
   }
-  setAnimation("fall");
+  actionQueue->reset();
+  actionQueue->pushSliding(target);
+  actionQueue->start();
+}
+
+void Character::fallUnconscious()
+{
+  if (!unconscious)
+  {
+    unconscious = true;
+    actionPoints = 0;
+    setFallAnimation();
+    emit actionPointsChanged();
+  }
+}
+
+void Character::wakeUp()
+{
+  unconscious = false;
+  setAnimation("idle");
+}
+
+bool Character::setFallAnimation()
+{
+  if (getAnimation().startsWith("fall"))
+  {
+    setAnimation("fall");
+    return true;
+  }
+  return false;
 }
 
 void Character::resetActionPoints()
@@ -238,12 +265,14 @@ void Character::resetActionPoints()
 void Character::load(const QJsonObject& data)
 {
   actionPoints = data["ap"].toInt();
+  unconscious  = !(data["ko"].toBool(false));
   ParentType::load(data);
 }
 
 void Character::save(QJsonObject& data) const
 {
   data["ap"] = actionPoints;
+  data["ko"] = !unconscious;
   ParentType::save(data);
 }
 
