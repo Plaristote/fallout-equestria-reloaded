@@ -13,14 +13,24 @@ QJSValue ItemZoneAction::callItemUseOn()
   return item->useAt(target.x(), target.y());
 }
 
+void ItemZoneAction::lookAtTarget()
+{
+  character->lookTo(getTargetPosition());
+}
+
+void ItemAction::lookAtTarget()
+{
+  if (target)
+    character->lookTo(getTargetPosition());
+}
+
 bool ItemAction::trigger()
 {
   if (item)
   {
     QJSValue result = callItemUseOn();
 
-    if (target)
-      character->lookTo(getTargetPosition());
+    lookAtTarget();
     if (result.isObject())
     {
       QJSValue animationSteps = result.property("steps");

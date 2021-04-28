@@ -59,13 +59,14 @@ export class Grenade extends WeaponBehaviour {
     const from   = this.user.spritePosition;
     const target = level.getRenderPositionForTile(x, y);
 
-    if (from.x != to.x || from.y != to.y) {
+    if (from.x != target.x || from.y != target.y) {
       steps.push({
         type: "Sprite",
         name: "effects",
         animation: "grenade-throw",
         fromX: from.x, fromY: from.y,
-        toX: target.x, toY: target.y
+        toX: target.x, toY: target.y,
+        speed: 250
       });
     }
     return steps;

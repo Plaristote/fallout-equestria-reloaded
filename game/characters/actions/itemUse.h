@@ -24,6 +24,7 @@ public:
 protected:
   void performAction();
   virtual QPoint getTargetPosition() const { return target->getPosition(); }
+  virtual void lookAtTarget();
   virtual QJSValue callItemUseOn();
 
   DynamicObject*    target;
@@ -45,6 +46,7 @@ public:
 
 private:
   QPoint getTargetPosition() const override { return target; }
+  void lookAtTarget() override;
   QJSValue callItemUseOn() override;
 
   QPoint target;
