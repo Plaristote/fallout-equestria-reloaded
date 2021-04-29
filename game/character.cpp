@@ -239,13 +239,18 @@ void Character::fallUnconscious()
     actionPoints = 0;
     setFallAnimation();
     emit actionPointsChanged();
+    emit unconsciousChanged();
   }
 }
 
 void Character::wakeUp()
 {
-  unconscious = false;
-  setAnimation("get-up");
+  if (unconscious)
+  {
+    unconscious = false;
+    setAnimation("get-up");
+    emit unconsciousChanged();
+  }
 }
 
 bool Character::setFallAnimation()
@@ -267,14 +272,15 @@ void Character::resetActionPoints()
 void Character::load(const QJsonObject& data)
 {
   actionPoints = data["ap"].toInt();
-  unconscious  = !(data["ko"].toBool(false));
+  unconscious  = !(data["ko"].toBool(true));
   ParentType::load(data);
 }
 
 void Character::save(QJsonObject& data) const
 {
   data["ap"] = actionPoints;
-  data["ko"] = !unconscious;
+  if (unconscious)
+    data["ko"] = unconscious;
   ParentType::save(data);
 }
 

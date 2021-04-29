@@ -20,7 +20,7 @@ Text {
 
     if (levelController.mouseMode) {
       const item   = levelController.activeItem;
-      const weapon = item.itemType === "weapon";
+      const weapon = item && item.itemType === "weapon";
 
       switch (levelController.targetMode) {
       case Interaction.TargetMode.Character:

@@ -266,7 +266,12 @@ void LevelTask::update()
   const auto objectList = objects;
 
   if ((combat && isCharacterTurn(getPlayer())) || !combat)
-    enableWaitingMode(!getPlayer()->getActionQueue()->canInterrupt());
+  {
+    bool koMode   = getPlayer()->isUnconscious();
+    bool busyMode = !getPlayer()->getActionQueue()->canInterrupt();
+
+    enableWaitingMode(koMode || busyMode);
+  }
 
   if (!combat)
   {

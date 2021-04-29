@@ -16,6 +16,7 @@ class Character : public CharacterBuffs
 
   Q_PROPERTY(ActionQueue* actionQueue MEMBER actionQueue)
   Q_PROPERTY(int actionPoints MEMBER actionPoints NOTIFY actionPointsChanged)
+  Q_PROPERTY(bool unconscious READ isUnconscious NOTIFY unconsciousChanged)
 public:
   explicit Character(QObject *parent = nullptr);
 
@@ -56,6 +57,7 @@ signals:
   void requireJoinCombat();
   void died();
   void characterKill(Character* victim, Character* killer);
+  void unconsciousChanged();
 
 private slots:
   void onActionQueueCompleted();

@@ -27,6 +27,12 @@ Row {
         return "white";
       }
 
+      CustomLabel {
+        anchors.centerIn: parent
+        visible: character.unconscious
+        text: "KO"
+      }
+
       MouseArea {
         id: mouseArea
         anchors.fill: parent
