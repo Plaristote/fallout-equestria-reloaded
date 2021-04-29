@@ -266,6 +266,42 @@
             "repeat": false,
             "width": 91
         },
+        "get-up-down": {
+            "frameCount": 5,
+            "frameInterval": 200,
+            "height": 66,
+            "offsetX": 454,
+            "offsetY": 264,
+            "repeat": false,
+            "width": 91
+        },
+        "get-up-left": {
+            "frameCount": 5,
+            "frameInterval": 200,
+            "height": 66,
+            "offsetX": 454,
+            "offsetY": 330,
+            "repeat": false,
+            "width": 91
+        },
+        "get-up-right": {
+            "frameCount": 5,
+            "frameInterval": 200,
+            "height": 66,
+            "offsetX": 454,
+            "offsetY": 396,
+            "repeat": false,
+            "width": 91
+        },
+        "get-up-up": {
+            "frameCount": 5,
+            "frameInterval": 200,
+            "height": 66,
+            "offsetX": 454,
+            "offsetY": 462,
+            "repeat": false,
+            "width": 91
+        },
         "idle-down": {
             "frameCount": 1,
             "frameInterval": 0,
@@ -325,7 +361,7 @@
             "frameInterval": 50,
             "height": 66,
             "offsetX": 0,
-            "offsetY": 666,
+            "offsetY": 661,
             "repeat": false,
             "width": 91
         },
@@ -334,7 +370,7 @@
             "frameInterval": 50,
             "height": 66,
             "offsetX": 0,
-            "offsetY": 732,
+            "offsetY": 727,
             "repeat": false,
             "width": 91
         },
@@ -709,6 +745,42 @@
             "frameInterval": 120,
             "height": 47,
             "offsetX": 0,
+            "offsetY": 329,
+            "repeat": false,
+            "width": 47
+        },
+        "get-up-down": {
+            "frameCount": 5,
+            "frameInterval": 200,
+            "height": 47,
+            "offsetX": 423,
+            "offsetY": 188,
+            "repeat": false,
+            "width": 47
+        },
+        "get-up-left": {
+            "frameCount": 5,
+            "frameInterval": 200,
+            "height": 47,
+            "offsetX": 423,
+            "offsetY": 235,
+            "repeat": false,
+            "width": 47
+        },
+        "get-up-right": {
+            "frameCount": 5,
+            "frameInterval": 200,
+            "height": 47,
+            "offsetX": 423,
+            "offsetY": 282,
+            "repeat": false,
+            "width": 47
+        },
+        "get-up-up": {
+            "frameCount": 5,
+            "frameInterval": 200,
+            "height": 47,
+            "offsetX": 423,
             "offsetY": 329,
             "repeat": false,
             "width": 47

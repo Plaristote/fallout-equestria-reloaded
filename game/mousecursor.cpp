@@ -43,9 +43,9 @@ AnimatedCursor* MouseCursor::makeWaitCursor() const
 void MouseCursor::updatePointerType()
 {
   Game* game = Game::get();
-  InteractionComponent* level = game ? game->getLevel() : nullptr;
+  LevelTask* level = game ? game->getLevel() : nullptr;
 
-  if (level && level->mapIncludesMouse())
+  if (level && level->mapIncludesMouse() && !level->isPaused())
   {
     switch (level->getMouseMode())
     {

@@ -57,7 +57,7 @@ export class Explosion {
   }
 
   applyDamageOnCharacter(character) {
-    var resistance = (character.statistics.strength * 2 + character.statistics.endurance + character.statistics.agility) * 2;
+    var resistance = (character.statistics.strength * 2 + character.statistics.endurance + character.statistics.agility);
     var damage = this.damage;
 
     if (character === this.wearer)

@@ -149,7 +149,9 @@ void CombatComponent::onCharacterDied(Character* character)
 
   if (characterIt >= 0)
   {
-    if (isCharacterTurn(character))
+    if (combattants.size() == 1)
+      tryToEndCombat();
+    else if (isCharacterTurn(character))
     {
       onNextCombatTurn();
       combattants.removeAll(character);

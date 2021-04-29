@@ -7,6 +7,7 @@
 #include "objects/doorway.h"
 #include "objects/bloodstain.h"
 #include "game/animationSequence/movementhintanimationpart.h"
+#include "game/mousecursor.h"
 #include <QDebug>
 
 LevelTask::LevelTask(QObject *parent) : ParentType(parent)
@@ -18,6 +19,7 @@ LevelTask::LevelTask(QObject *parent) : ParentType(parent)
   updateTimer.setSingleShot(false);
   connect(&updateTimer, &QTimer::timeout, this, &LevelTask::update);
   connect(this, &LevelTask::pausedChanged, this, &LevelTask::onPauseChanged);
+  connect(this, &LevelTask::pausedChanged, MouseCursor::get(), &MouseCursor::updatePointerType);
   connect(this, &LevelTask::combatChanged, this, &LevelTask::onCombatChanged);
   connect(this, &InteractionComponent::playerMovingTo, this, &LevelTask::displayMovementTargetHint);
 }
@@ -288,7 +290,7 @@ void LevelTask::update()
   {
     for (DynamicObject* object : objectList)
       object->update(delta);
-    if (combattants.size() > combatIterator)
+    if (combattants.size() > combatIterator && combatIterator >= 0)
     {
       auto* combattant = combattants.at(combatIterator);
 

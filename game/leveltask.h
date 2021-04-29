@@ -35,6 +35,7 @@ public:
   void loadObjectsFromDataEngine(DataEngine*);
   void save(DataEngine*);
   void setPaused(bool value) { paused = value; emit pausedChanged(); }
+  bool isPaused() const { return paused; }
 
   const QString& getName() const { return name; }
   SoundManager* getSoundManager() const { return soundManager; }

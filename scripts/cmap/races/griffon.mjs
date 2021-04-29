@@ -1,6 +1,12 @@
-export const isPlayable = false;
+export const isPlayable = true;
 
-export const spriteSheet = "griffon";
+export function spriteSheet(model) {
+  return {
+    cloneOf: "griffon",
+    base:    "griffon",
+    overlay: "griffon-wings"
+  };
+}
 
 export function onToggled(statistics, toggled) {
   let modifier = toggled ? 1 : -1;

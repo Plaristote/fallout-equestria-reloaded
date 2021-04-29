@@ -42,6 +42,8 @@ void Character::afterDeathAnimation()
     setAnimation("dead");
     Game::get()->getLevel()->addBloodStainAt(getPosition());
   }
+  else if (getAnimation().startsWith("get-up"))
+    setAnimation("idle");
 }
 
 void Character::takeDamage(int damage, Character* dealer)
@@ -243,12 +245,12 @@ void Character::fallUnconscious()
 void Character::wakeUp()
 {
   unconscious = false;
-  setAnimation("idle");
+  setAnimation("get-up");
 }
 
 bool Character::setFallAnimation()
 {
-  if (getAnimation().startsWith("fall"))
+  if (!getAnimation().startsWith("fall"))
   {
     setAnimation("fall");
     return true;

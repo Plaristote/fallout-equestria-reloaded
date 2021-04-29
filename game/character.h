@@ -70,7 +70,6 @@ private:
   bool unconscious = false;
   int actionPoints = 0;
   QJSValue jsActionQueue;
-  QVector<Buff*> buffs;
 };
 
 #endif // CHARACTER_H
