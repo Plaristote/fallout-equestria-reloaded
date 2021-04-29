@@ -38,6 +38,11 @@ Item {
     }
   }
 
+  Shortcut {
+    sequence: "F2"
+    onActivated: debugConsole.visible = !debugConsole.visible
+  }
+
   Action {
     id: openMenuAction
     onTriggered: openMenu()
@@ -227,6 +232,16 @@ Item {
   Hud.CountdownDialog {
     id: countdownDialog
     visible: false
+  }
+
+  Hud.DebugConsole {
+    id: debugConsole
+    visible: false
+    gameController: root.gameController
+    anchors {
+      left: parent.left; right: parent.right
+      top: parent.top
+    }
   }
 
   LevelMenu {

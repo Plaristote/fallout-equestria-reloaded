@@ -57,6 +57,16 @@ void Game::deleteLater()
   QObject::deleteLater();
 }
 
+QJSValue Game::eval(const QString& command)
+{
+  return scriptEngine.evaluate(command);
+}
+
+QString Game::consoleEval(const QString &command)
+{
+  return eval(command).toString();
+}
+
 void Game::newPlayerParty(StatModel* statistics)
 {
   player = new Character;

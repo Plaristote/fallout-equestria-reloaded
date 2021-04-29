@@ -235,5 +235,6 @@
         <file>editor/level/AddTemplateDialog.qml</file>
         <file>game/hud/CombatPreview.qml</file>
         <file>game/Interaction.mjs</file>
+        <file>game/hud/DebugConsole.qml</file>
     </qresource>
 </RCC>

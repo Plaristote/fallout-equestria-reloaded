@@ -57,6 +57,8 @@ public:
   QJSEngine& getScriptEngine() { return scriptEngine; }
   QJSValue loadScript(const QString& path);
   QJSValue scriptCall(QJSValue callable, const QJSValueList& args, const QString& scriptName);
+  QJSValue eval(const QString& command);
+  Q_INVOKABLE QString consoleEval(const QString& command);
   void loadCmapTraits();
   void loadCmapRaces();
 
