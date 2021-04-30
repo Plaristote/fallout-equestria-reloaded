@@ -79,6 +79,8 @@ set(PROJECT_SOURCES
         game/characterparty.cpp
         game/characterdialog.h
         game/characterdialog.cpp
+        game/bartercontroller.h
+        game/bartercontroller.cpp
         game/characters/buff.h
         game/characters/buff.cpp
         game/characters/buffs.h

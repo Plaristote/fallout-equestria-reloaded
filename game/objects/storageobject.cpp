@@ -41,8 +41,6 @@ QStringList StorageObject::getAvailableInteractions()
 
 bool StorageObject::onTakeItem(Character* user, InventoryItem* item, int quantity)
 {
-  auto& scriptEngine = Game::get()->getScriptEngine();
-
   if (!user || !item)
     return false;
   if (script && script->hasMethod("onTakeItem"))
@@ -52,8 +50,6 @@ bool StorageObject::onTakeItem(Character* user, InventoryItem* item, int quantit
 
 bool StorageObject::onPutItem(Character* user, InventoryItem* item, int quantity)
 {
-  auto& scriptEngine = Game::get()->getScriptEngine();
-
   if (!user || !item)
     return false;
   if (script && script->hasMethod("onPutItem"))

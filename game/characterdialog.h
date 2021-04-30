@@ -6,6 +6,7 @@
 # include <QJsonDocument>
 # include "character.h"
 # include "i18n.h"
+# include "bartercontroller.h"
 
 class CharacterDialog : public QObject
 {
@@ -20,6 +21,7 @@ class CharacterDialog : public QObject
   Q_PROPERTY(QString     ambiance       MEMBER ambiance NOTIFY ambianceChanged)
   Q_PROPERTY(QStringList stateList      READ   getStateList NOTIFY stateListChanged)
   Q_PROPERTY(QStringList answerList     READ   getAnswerList NOTIFY answerListChanged)
+  Q_PROPERTY(BarterController* barter   READ   getBarterController NOTIFY barterControllerChanged)
 public:
   explicit CharacterDialog(QObject *parent = nullptr);
 
@@ -32,6 +34,7 @@ public:
   Q_INVOKABLE bool    isOptionAvailable(const QString& answer);
   QStringList         getStateList() const;
   QStringList         getAnswerList() const;
+  BarterController*   getBarterController() const { return barter; }
 
   QString             t(const QString& name);
 
@@ -44,6 +47,7 @@ signals:
   void dialogEnded();
   void stateListChanged();
   void answerListChanged();
+  void barterControllerChanged();
   void ready();
 
 protected:
@@ -53,6 +57,7 @@ protected:
   QString getEntryPoint();
 
   ScriptController* script = nullptr;
+  BarterController* barter = nullptr;
   QJsonObject       data;
   Character*        player;
   Character*        npc;

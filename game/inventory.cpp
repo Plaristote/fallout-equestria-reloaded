@@ -7,6 +7,8 @@ Inventory::Inventory(QObject *parent) : QObject(parent)
   connect(this, &Inventory::unequippedItem, this, &Inventory::equippedItemsChanged);
   connect(this, &Inventory::equippedItemsChanged, this, &Inventory::totalWeightChanged);
   connect(this, &Inventory::itemPicked, this, &Inventory::itemsChanged);
+  connect(this, &Inventory::itemsChanged, this, &Inventory::totalWeightChanged);
+  connect(this, &Inventory::itemsChanged, this, &Inventory::totalValueChanged);
 }
 
 void Inventory::addItem(InventoryItem* item)
@@ -271,6 +273,16 @@ void Inventory::setSlots(const QMap<QString, QString>& slotTypes)
       itemSlots.insert(slotName, nullptr);
   }
   emit slotsChanged();
+}
+
+void Inventory::transferTo(Inventory* other)
+{
+  const QList<InventoryItem*> list = items;
+
+  for (InventoryItem* item : list)
+    other->addItem(item);
+  items.clear();
+  emit itemsChanged();
 }
 
 void Inventory::load(const QJsonObject& data)

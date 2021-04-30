@@ -236,5 +236,12 @@
         <file>game/hud/CombatPreview.qml</file>
         <file>game/Interaction.mjs</file>
         <file>game/hud/DebugConsole.qml</file>
+        <file>assets/ui/button-pressed.png</file>
+        <file>assets/ui/button.png</file>
+        <file>assets/ui/PushButton.qml</file>
+        <file>game/Barter.qml</file>
+        <file>ui/ItemTransferDialog.qml</file>
+        <file>ui/dialog/BarterTransferControls.qml</file>
+        <file>ui/dialog/BarterDealPreview.qml</file>
     </qresource>
 </RCC>

@@ -7,6 +7,8 @@ import "qrc:/assets/ui" as UiStyle
 Item {
   id: root
   property QtObject controller
+  property int bottomPartY: textDisplay.y + textDisplay.height
+  property int bottomPartHeight: parent.height - bottomPartY
 
   Connections {
     target: controller
@@ -15,6 +17,40 @@ Item {
       gameManager.currentGame.level.paused = false;
     }
   }
+
+  states: [
+    State {
+      name: "dialog"
+      PropertyChanges { target: barterMode; y: root.height }
+      PropertyChanges { target: dialogMode; y: bottomPartY }
+    },
+    State {
+      name: "barter"
+      PropertyChanges { target: dialogMode; y: root.height }
+      PropertyChanges { target: barterMode; y: bottomPartY }
+    }
+  ]
+
+  state: "dialog"
+
+  transitions: [
+    Transition {
+      from: "dialog"
+      to: "barter"
+      SequentialAnimation {
+        PropertyAnimation { target: dialogMode; property: "y"; from: bottomPartY; to: root.height }
+        PropertyAnimation { target: barterMode; property: "y"; from: root.height; to: bottomPartY }
+      }
+    },
+    Transition {
+      from: "barter"
+      to: "dialog"
+      SequentialAnimation {
+        PropertyAnimation { target: barterMode; property: "y"; from: bottomPartY; to: root.height }
+        PropertyAnimation { target: dialogMode; property: "y"; from: root.height; to: bottomPartY }
+      }
+    }
+  ]
 
   FaceDisplay {
     mood:        controller.mood
@@ -45,40 +81,67 @@ Item {
     text: root.controller.text
   }
 
-  Image {
-    id: leftPane
-    source: "qrc:/assets/ui/dialog/left.png"
-    anchors { top: textDisplay.bottom; bottom: parent.bottom; left: parent.left; }
-    width: 135
-    fillMode: Image.Stretch
-  }
+  Item {
+    id: dialogMode
+    y: bottomPartY
+    height: bottomPartHeight
+    anchors { left: parent.left; right: parent.right }
 
-  Image {
-    id: rightPane
-    source: "qrc:/assets/ui/dialog/right.png"
-    anchors { top: textDisplay.bottom; bottom: parent.bottom; right: parent.right; }
-    width: 132
-    fillMode: Image.Stretch
-  }
+    Image {
+      id: leftPane
+      source: "qrc:/assets/ui/dialog/left.png"
+      anchors { top: parent.top; bottom: parent.bottom; left: parent.left; }
+      width: 135
+      fillMode: Image.Stretch
+    }
 
-  DialogAnswersDisplay {
-    id: answersPane
-    anchors { left: leftPane.right; top: textDisplay.bottom; right: rightPane.left; bottom: parent.bottom }
-    sourceComponent: Column {
-      id: answersList
-      width: parent.width
-      Repeater {
-        model: root.controller.options
-        delegate: Button {
-          text: "> " + root.controller.getOptionText(controller.options[index])
-          font.family: application.consoleFontName
-          hoverEnabled: true
-          contentItem: Text { color: parent.hovered ? "white" : "green"; text: parent.text; font: parent.font; wrapMode: Text.WordWrap }
-          background: Rectangle { color: "transparent" }
-          onClicked: root.controller.selectOption(controller.options[index])
-          width: answersList.width - 10
+    Image {
+      id: rightPane
+      source: "qrc:/assets/ui/dialog/right.png"
+      anchors { top: parent.top; bottom: parent.bottom; right: parent.right; }
+      width: 132
+      fillMode: Image.Stretch
+
+      UiStyle.PushButton {
+        anchors.top: parent.top
+        anchors.topMargin: 20
+        anchors.horizontalCenter: parent.horizontalCenter
+        text: i18n.t("Barter")
+        onClicked: {
+          if (controller.barter.tryToBarter())
+            root.state = "barter"
         }
       }
     }
+
+    DialogAnswersDisplay {
+      id: answersPane
+      anchors { left: leftPane.right; top: parent.top; right: rightPane.left; bottom: parent.bottom }
+      sourceComponent: Column {
+        id: answersList
+        width: parent.width
+        Repeater {
+          model: root.controller.options
+          delegate: Button {
+            text: "> " + root.controller.getOptionText(controller.options[index])
+            font.family: application.consoleFontName
+            hoverEnabled: true
+            contentItem: Text { color: parent.hovered ? "white" : "green"; text: parent.text; font: parent.font; wrapMode: Text.WordWrap }
+            background: Rectangle { color: "transparent" }
+            onClicked: root.controller.selectOption(controller.options[index])
+            width: answersList.width - 10
+          }
+        }
+      }
+    }
+  }
+
+  Barter {
+    id: barterMode
+    anchors { left: parent.left; right: parent.right }
+    y: parent.height
+    height: bottomPartHeight
+    controller: root.controller.barter
+    onClosed: root.state = "dialog"
   }
 }

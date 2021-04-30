@@ -48,6 +48,7 @@ public:
   int getTotalValue() const;
 
   void setSlots(const QMap<QString, QString>&);
+  void transferTo(Inventory*);
 
 signals:
   void itemsChanged();

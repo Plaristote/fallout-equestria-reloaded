@@ -14,6 +14,30 @@ void LootingController::initialize(Character* c, StorageObject* t)
   emit weightsChanged();
 }
 
+bool LootingController::takeAll()
+{
+  if (target->getInventory()->getTotalWeight() <= getCapacityLeft())
+  {
+    const QList<InventoryItem*> list = target->getInventory()->getItems();
+
+    for (InventoryItem* item : list)
+    {
+      if (!target->onTakeItem(character, item, item->getQuantity()))
+      {
+        emit finished();
+        return false;
+      }
+    }
+    for (InventoryItem* item : list)
+    {
+      target->getInventory()->removeItem(item);
+      character->getInventory()->addItem(item);
+    }
+    return true;
+  }
+  return false;
+}
+
 bool LootingController::take(InventoryItem* item, int quantity)
 {
   if (item->getWeight() / item->getQuantity() * quantity <= getCapacityLeft())

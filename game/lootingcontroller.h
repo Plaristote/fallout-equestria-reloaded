@@ -21,6 +21,7 @@ public:
 
   Inventory* getInventory() { return target->getInventory(); }
 
+  Q_INVOKABLE bool takeAll();
   Q_INVOKABLE bool take(InventoryItem* item, int quantity = 1);
   Q_INVOKABLE bool drop(InventoryItem* item, int quantity = 1);
 

@@ -23,7 +23,7 @@ Pane {
   Action {
     id: takeAllAction
     onTriggered: {
-      console.log("TODO: implement take all");
+      controller.takeAll();
     }
   }
 
@@ -62,36 +62,19 @@ Pane {
     }
   }
 
-  UiStyle.CustomDialog {
+  ItemTransferDialog {
     id: quantityInputDialog
-    title: "How much ?"
-    modal: true
     anchors.centerIn: parent
-    standardButtons: Dialog.Ok | Dialog.Cancel
+    inventoryItem: selectedObject
 
-    Row {
-      SpinBox {
-        id: quantityInputField
-        editable: true
-        height: 40
-        from: 1
-        to: selectedObject.quantity
-        contentItem: CustomTextField {
-          text: quantityInputField.value
-          onTextChanged: quantityInputField.value = parseInt(text)
-        }
-      }
-      CustomLabel {
-        text: "/" + selectedObject.quantity
-      }
-    }
+    onPickedValue: {
+      const removed = selectedObject.quantity == amount;
 
-    onAccepted: {
       if (selectedInventory == controller.character.inventory)
-        controller.drop(selectedObject, quantityInputField.value);
+        controller.drop(selectedObject, amount);
       else
-        controller.take(selectedObject, quantityInputField.value);
-      if (selectedObject.quantity == quantityInputField.value)
+        controller.take(selectedObject, amount);
+      if (removed)
         selectedObject = null;
     }
   }

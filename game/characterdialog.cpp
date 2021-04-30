@@ -7,6 +7,7 @@
 
 CharacterDialog::CharacterDialog(QObject *parent) : QObject(parent)
 {
+  barter   = new BarterController(this);
   mood     = "neutral";
   ambiance = "wasteland";
 }
@@ -22,6 +23,7 @@ bool CharacterDialog::load(const QString& name, Character* player, Character* np
     translationGroup = "dialogs." + name;
     data             = QJsonDocument::fromJson(file.readAll()).object();
     script = new ScriptController(SCRIPTS_PATH + "dialogs/" + name + ".mjs");
+    barter->initialize(script, player, npc);
     script->initialize(this);
     loadState(getEntryPoint());
     emit ready();
