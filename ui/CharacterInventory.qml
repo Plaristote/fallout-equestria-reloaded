@@ -42,23 +42,6 @@ Pane {
     anchors.bottom: parent.bottom
     anchors.right: parent.right
 
-    MenuButton {
-      id: useButton
-      text: i18n.t("Use")
-      visible: selectedObject != null && !gameEditorMode
-      onClicked: selectedObject.useFromInventory()
-    }
-
-    MenuButton {
-      id: dropButton
-      text: "Drop"
-      visible: selectedObject != null && !gameEditorMode
-      onClicked: {
-        character.inventory.dropItem(selectedObject);
-        selectedObject = null;
-      }
-    }
-
     Repeater {
       model: additionalControls
       delegate: MenuButton {
@@ -100,66 +83,72 @@ Pane {
       }
     }
 
-    Item {
-      Layout.fillHeight: true
+    ColumnLayout {
       Layout.fillWidth: true
-      clip: true
+      Layout.fillHeight: true
+      Layout.alignment: Qt.AlignTop
 
-      Column {
-        anchors.left: parent.left; anchors.right: parent.right
-        spacing: 10
+      Pane {
+        background: UiStyle.TerminalPane {}
+        visible: selectedObject != null
+        Layout.fillWidth: true
+        Layout.alignment: Qt.AlignTop
 
         RowLayout {
-          anchors.left: parent.left; anchors.right: parent.right
+          anchors { left: parent.left; right: parent.right }
 
-          Pane {
-            background: UiStyle.TerminalPane {}
-            Layout.preferredWidth: parent.width / 2 - 10
-            Layout.fillHeight: true
-            anchors.margins: 10
-            height: characterPreviewColumn.height + 20
+          ColumnLayout {
+            Layout.alignment: Qt.AlignTop
+            Layout.preferredWidth: 150
 
-            Column {
-              id: characterPreviewColumn
-              anchors.left: parent.left; anchors.right: parent.right
+            TerminalButton {
+              text: i18n.t("Inspect")
+              Layout.preferredWidth: 150
+              onClicked: selectedObject.triggerInteraction(character, "look")
+            }
 
-              Image {
-                anchors.horizontalCenter: parent.horizontalCenter
-                source: fileProtocol + character.getSpriteSource()
-                sourceClipRect: character.getClippedRect()
-                height: character.getClippedRect().height
-                width: character.getClippedRect().height
-              }
+            TerminalButton {
+              text: i18n.t("Use")
+              Layout.preferredWidth: 150
+              onClicked: selectedObject.useFromInventory()
+            }
+
+            TerminalButton {
+              text: i18n.t("Drop")
+              Layout.preferredWidth: 150
+              onClicked: character.inventory.dropItem(selectedObject)
             }
           }
 
           InventoryItemPreview {
-            Layout.fillHeight: true
-            Layout.preferredWidth: parent.width / 2
+            background: Item {}
+            Layout.fillWidth: true
             model: root.selectedObject
           }
         }
+      }
 
-        GridLayout {
-          columns: Math.min(2, parent.width / 125)
-          anchors.horizontalCenter: parent.horizontalCenter
+      GridLayout {
+        Layout.fillHeight: true
+        Layout.fillWidth: true
+        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+        columns: Math.min(2, parent.width / 125)
 
-          CharacterInventorySlots {
-            id: slotsView
-            canEditArmor: root.canEditArmor
-            inventory: root.character.inventory
-            selectedObject: root.selectedObject
-          }
+        CharacterInventorySlots {
+          id: slotsView
+          canEditArmor: root.canEditArmor
+          inventory: root.character.inventory
+          selectedObject: root.selectedObject
         }
-      } // END Column
+      }
+    } // END Column
 
-      Connections {
-        target: root.character.inventory
-        function onEquippedItemsChanged() {
-          root.selectedObject = null;
-          slotsView.updateSlots();
-        }
-      } // END Inventory Connections
-    } // END Item
+    Connections {
+      target: root.character.inventory
+      function onEquippedItemsChanged() {
+        root.selectedObject = null;
+        slotsView.updateSlots();
+      }
+    } // END Inventory Connections
   } // END RowLayout
 }

@@ -40,6 +40,16 @@ QString InventoryItem::getDescription() const
   return I18n::get()->t("item-descriptions." + itemType);
 }
 
+bool InventoryItem::defaultLookInteraction()
+{
+  const I18n* i18n = I18n::get();
+
+  Game::get()->appendToConsole(i18n->t("inspection.item", {
+    {"item", i18n->t("items." + itemType)}
+  }));
+  return true;
+}
+
 QStringList InventoryItem::getAvailableInteractions()
 {
   auto list = DynamicObject::getAvailableInteractions();

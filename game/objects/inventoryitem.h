@@ -84,6 +84,7 @@ private slots:
   void updateSprite();
 
 protected:
+  bool        defaultLookInteraction() override;
   virtual QString getScriptPath() const override { return SCRIPTS_PATH + "items"; }
 
 private:

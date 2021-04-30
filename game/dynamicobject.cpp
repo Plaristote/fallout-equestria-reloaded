@@ -48,13 +48,10 @@ bool DynamicObject::triggerInteraction(Character* character, const QString &inte
     {"use",       "onUse"},
     {"look",      "onLook"}
   };
+  const QString callback = callbackMap[interactionType];
 
-  if (character && script)
-  {
-    const QString callback = callbackMap[interactionType];
-
+  if (character && script && script->hasMethod(callback))
     return script->call(callback, QJSValueList() << character->asJSValue()).toBool();
-  }
   else if (interactionType == "look")
     return defaultLookInteraction();
   return false;

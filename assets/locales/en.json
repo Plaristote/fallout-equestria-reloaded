@@ -8,6 +8,8 @@
   "Inventory": "Inventory",
   "Pick an item": "Pick an item",
   "Weight": "Weight",
+  "Drop": "Drop",
+  "Inspect": "Inspect",
   "messages": {
     "weapons": {
       "use":   "{{user}} used {{item}} on {{target}} for {{damage}} damage.",

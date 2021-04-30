@@ -22,6 +22,7 @@ Repeater {
     background: UiStyle.TerminalPane {}
     Layout.preferredHeight: 125
     Layout.preferredWidth: 125
+    Layout.alignment: Qt.AlignHCenter
     clip: true
 
     ColumnLayout {

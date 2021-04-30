@@ -220,11 +220,11 @@ Item {
       id: inventoryView
       character: levelController.player
       anchors { top: parent.top; left: parent.left; right: parent.right }
-      anchors.leftMargin:  parent.width > 1200 ? parent.width / 4 : parent.width / 8
-      anchors.rightMargin: parent.width > 1200 ? parent.width / 4 : parent.width / 8
+      anchors.leftMargin:  parent.width / 8
+      anchors.rightMargin: parent.width / 8
       anchors.bottomMargin: 50
       anchors.topMargin: 50
-      height: parent.height - levelHud.height
+      height: parent.height - levelHud.height - 100
       onClosed: inventoryViewContainer.visible = false
     }
   }

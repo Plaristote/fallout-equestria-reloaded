@@ -8,55 +8,59 @@ Pane {
   id: objectPreview
   background: UiStyle.TerminalPane {}
   height: objectPreviewColumn.height + 50
-  anchors.margins: 10
+  anchors.margins: 5
 
-  Column {
+  ColumnLayout {
     id: objectPreviewColumn
     spacing: 5
     anchors.left: parent.left
     anchors.right: parent.right
-    anchors.leftMargin: 10
-    anchors.rightMargin: 10
-
-    ItemIcon {
-      id: selectedObjectPreviewPicture
-      model: objectPreview.model
-      anchors.horizontalCenter: parent.horizontalCenter
-      height:         sourceClipRect.height
-      width:          sourceClipRect.width
-    }
 
     Text {
+      Layout.fillWidth: true
       font.family: application.consoleFontName
       font.pointSize: 12
       text: i18n.t(`items.${objectPreview.model.objectName}`)
       color: "white"
+      wrapMode: Text.Wrap
     }
 
     Rectangle {
-      height: 1
+      Layout.fillWidth: true
+      Layout.preferredHeight: 1
+      color: "green"
+    }
+
+    Flickable {
+      Layout.fillWidth: true
+      Layout.preferredHeight: 100
+      contentHeight: descText.height
+      clip: true
+
+      ScrollBar.vertical:   UiStyle.TerminalScrollbar { orientation: Qt.Vertical }
+
+      Text {
+        id: descText
+        width: parent.width - 15
+        font.family: application.consoleFontName
+        font.pointSize: 8
+        textFormat: Text.RichText
+        text: model.description
+        wrapMode: Text.WordWrap
+        horizontalAlignment: Text.AlignJustify
+        color: "white"
+      }
+    }
+
+    Rectangle {
+      Layout.fillWidth: true
+      Layout.preferredHeight: 1
       color: "green"
       anchors { left: parent.left; right: parent.right }
     }
 
     Text {
-      font.family: application.consoleFontName
-      font.pointSize: 8
-      textFormat: Text.RichText
-      text: model.description
-      width: parent.width
-      wrapMode: Text.WordWrap
-      horizontalAlignment: Text.AlignJustify
-      color: "white"
-    }
-
-    Rectangle {
-      height: 1
-      color: "green"
-      anchors { left: parent.left; right: parent.right }
-    }
-
-    Text {
+      Layout.fillWidth: true
       font.family: application.consoleFontName
       font.pointSize: 8
       text: i18n.t("Weight") + ": " + objectPreview.model.weight

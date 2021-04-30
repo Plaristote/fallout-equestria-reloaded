@@ -65,7 +65,7 @@ protected slots:
   void onBlocksPathChanged();
 
 private:
-  bool defaultLookInteraction();
+  virtual bool defaultLookInteraction();
 
 protected:
   TaskRunner* taskManager;
