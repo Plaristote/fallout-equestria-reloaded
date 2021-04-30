@@ -52,7 +52,7 @@ bool LootingController::drop(InventoryItem* item, int quantity)
     else if (item->getQuantity() > quantity)
     {
       item->remove(quantity);
-      target->getInventory()->addItemOfType(item->getObjectName());
+      target->getInventory()->addItemOfType(item->getObjectName(), quantity);
       return true;
     }
   }
