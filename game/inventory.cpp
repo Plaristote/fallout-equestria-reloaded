@@ -167,6 +167,19 @@ int Inventory::getTotalValue() const
   return total;
 }
 
+QStringList Inventory::getCategoryList() const
+{
+  QStringList list;
+
+  list << "";
+  for (auto* inventoryItem : items)
+  {
+    if (!list.contains(inventoryItem->getCategory()))
+      list << inventoryItem->getCategory();
+  }
+  return list;
+}
+
 bool Inventory::canEquipItem(InventoryItem *item, const QString &slotName) const
 {
   return item && slotTypes.contains(slotName) && item->canEquipInSlot(slotTypes[slotName]);

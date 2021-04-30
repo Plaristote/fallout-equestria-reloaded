@@ -13,6 +13,7 @@ class Inventory : public QObject
 
   Q_PROPERTY(QQmlListProperty<InventoryItem> items READ getQmlItems NOTIFY itemsChanged)
   Q_PROPERTY(QStringList slotNames MEMBER slotNames NOTIFY slotsChanged)
+  Q_PROPERTY(QStringList categoryList READ getCategoryList NOTIFY itemsChanged)
   Q_PROPERTY(int totalWeight READ getTotalWeight NOTIFY totalWeightChanged)
   Q_PROPERTY(int totalValue  READ getTotalValue  NOTIFY totalValueChanged)
 public:
@@ -25,6 +26,7 @@ public:
 
   QQmlListProperty<InventoryItem> getQmlItems() { return QML_QLIST_CONSTRUCTOR(InventoryItem, items); }
   const QList<InventoryItem*>& getItems() const { return items; }
+  QStringList getCategoryList() const;
 
   Q_INVOKABLE void addItem(InventoryItem* item);
   Q_INVOKABLE void removeItem(InventoryItem* item);

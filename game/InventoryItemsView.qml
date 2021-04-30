@@ -9,15 +9,46 @@ Pane {
   property int itemIconHeight: 72
   property QtObject inventory
   property QtObject selectedObject
+  property alias typeFilter: categoryFilter.currentText
+  property var items: []
   id: root
   background: UiStyle.TerminalPane {}
 
   signal itemSelected(QtObject selectedItem)
 
+  function updateItemList() {
+    if (typeFilter !== "") {
+      const list = [];
+
+      for (var i = 0 ; i < inventory.items.length ; ++i) {
+        if (inventory.items[i].category === typeFilter)
+          list.push(inventory.items[i]);
+      }
+      items = list;
+    }
+    else
+      items = inventory.items;
+  }
+
+  onTypeFilterChanged: updateItemList()
+  onInventoryChanged:  updateItemList()
+
+  Connections {
+    target: inventory
+    function onItemsChanged() { updateItemList(); }
+  }
+
+  TerminalComboBox {
+    id: categoryFilter
+    anchors { left: parent.left; right: parent.right; top: parent.top }
+    model: inventory.categoryList
+  }
+
   Flickable {
     clip: true
     contentHeight: characterInventoryItemsView.height
     anchors.fill: parent
+    anchors.topMargin: categoryFilter.height + 5
     anchors.bottomMargin: 15
 
     Grid {
@@ -27,9 +58,9 @@ Pane {
       spacing: 5
 
       Repeater {
-        model: inventory.items.length
+        model: items.length
         delegate: Rectangle {
-          property QtObject inventoryItem: inventory.items[index]
+          property QtObject inventoryItem: items[index]
           property int itemCount: inventoryItem.quantity
           property bool selected: selectedObject == inventoryItem
 
