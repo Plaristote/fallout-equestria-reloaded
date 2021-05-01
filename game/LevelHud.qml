@@ -25,8 +25,8 @@ Pane {
     anchors.left: parent.left
     anchors.top: parent.top
     anchors.bottom: parent.bottom
-    anchors.margins: -9
-    width: 250
+    anchors.margins: -4
+    width: 275
   }
 
   HudMenu {
@@ -34,10 +34,10 @@ Pane {
     anchors.left: terminalPane.right
     anchors.top: parent.top;
     anchors.bottom: parent.bottom
-    anchors.topMargin: 20
+    anchors.topMargin: 25
     anchors.bottomMargin: 1
     anchors.leftMargin: 5
-    width: 80
+    width: 50
     onOpenInventory: levelHud.openInventory()
     onOpenMenu: levelHud.openMenu()
   }
@@ -49,7 +49,7 @@ Pane {
     anchors.left: menuPane.right
     width: 400
     anchors.top: parent.top
-    anchors.topMargin: 20
+    anchors.topMargin: 10
   }
 
   HudItemSlots {
@@ -73,10 +73,22 @@ Pane {
     }
   }
 
+  HudCombatControls {
+    id: combatControls
+    anchors {
+      bottom: parent.bottom
+      right: countersDisplay.left
+      top: parent.top
+      rightMargin: 10
+      topMargin: 20
+    }
+    width: 100
+  }
+
   Column {
     id: countersDisplay
-    anchors.left: actionPointPane.right
-    anchors.leftMargin: 20
+    anchors.right: rightMenu.left
+    anchors.rightMargin: 10
     anchors.bottom: parent.bottom
 
     Text {
@@ -128,28 +140,6 @@ Pane {
       text: "Pipboy"
       Layout.fillWidth: true
       onClicked: application.pushView("game/PipBoy.qml", {gameController: gameController, levelController: levelController})
-    }
-  }
-
-  Pane {
-    anchors {
-      right: rightMenu.left
-      bottom: parent.bottom
-      left: countersDisplay.right
-      top: parent.top
-      margins: 5
-    }
-
-    background: UiStyle.Pane {}
-
-    Column {
-      anchors.centerIn: parent
-
-      UiStyle.TinyButton {
-        text: "Pass turn"
-        enabled: levelController.combat
-        onClicked: levelController.passTurn(levelController.player)
-      }
     }
   }
 }

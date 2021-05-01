@@ -2,9 +2,8 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 import "qrc:/assets/ui" as UiStyle
 
-Pane {
+Item {
   id: menuPane
-  background: UiStyle.Pane {}
 
   signal openMenu()
   signal openInventory()

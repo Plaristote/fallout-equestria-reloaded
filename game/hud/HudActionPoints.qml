@@ -6,6 +6,7 @@ Item {
   property int actionPoints
   id: actionPointPane
   height: 15
+  visible: levelController.combat
 
   Row {
     anchors.top: parent.top
@@ -17,17 +18,10 @@ Item {
       delegate: Image {
         property bool available: index < actionPoints
         source: "qrc:/assets/ui/hud.png"
-        sourceClipRect: Qt.rect(available ? 404 : 374, 92, 30, 30)
+        sourceClipRect: Qt.rect(available ? 0 : 59, 246, 59, 59)
         height: 15
         width:  15
       }
     }
-  }
-
-  ColorOverlay {
-    source: parent
-    anchors.fill: parent
-    color: "black"
-    visible: !levelController.combat
   }
 }
