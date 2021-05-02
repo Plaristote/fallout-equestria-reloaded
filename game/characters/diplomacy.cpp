@@ -29,31 +29,38 @@ void CharacterDiplomacy::initializeFaction()
 
 bool CharacterDiplomacy::isAlly(const CharacterDiplomacy* other) const
 {
-  return faction && faction->flag == other->getFactionFlag();
+  return other && faction && faction->flag == other->getFactionFlag();
 }
 
 bool CharacterDiplomacy::isEnemy(const CharacterDiplomacy* other) const
 {
-  if (faction)
+  if (other)
   {
-    auto otherFlag = other->getFactionFlag();
+    if (faction)
+    {
+      auto otherFlag = other->getFactionFlag();
 
-    return otherFlag == 0 ? other->isEnemy(this) : (faction->enemyMask & otherFlag) != 0;
+      return otherFlag == 0 ? other->isEnemy(this) : (faction->enemyMask & otherFlag) != 0;
+    }
+    return (enemyFlag & other->getFactionFlag()) != 0;
   }
-  return (enemyFlag & other->getFactionFlag()) != 0;
+  return false;
 }
 
 void CharacterDiplomacy::setAsEnemy(CharacterDiplomacy* other)
 {
-  auto* diplomacy = Game::get()->getDiplomacy();
-  auto* faction   = diplomacy->getFaction(other->getFactionFlag());
+  if (other)
+  {
+    auto* diplomacy = Game::get()->getDiplomacy();
+    auto* faction   = diplomacy->getFaction(other->getFactionFlag());
 
-  if (other->getFactionName() != "") {
-    if (getFactionFlag() > 0)
-      diplomacy->setAsEnemy(true, getFactionFlag(), other->getFactionFlag());
-    else
-      enemyFlag += other->getFactionFlag();
+    if (other->getFactionName() != "") {
+      if (getFactionFlag() > 0)
+        diplomacy->setAsEnemy(true, getFactionFlag(), other->getFactionFlag());
+      else
+        enemyFlag += other->getFactionFlag();
+    }
+    else if (faction)
+      other->setAsEnemy(this);
   }
-  else if (faction)
-    other->setAsEnemy(this);
 }
