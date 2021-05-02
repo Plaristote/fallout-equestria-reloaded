@@ -1,5 +1,9 @@
 export const isPlayable = true;
 
+export const withFaceColor = true;
+
+export const faces = ["mare-basic", "stallion-basic"];
+
 export function spriteSheet(model) {
   return {
     cloneOf:    "pony",

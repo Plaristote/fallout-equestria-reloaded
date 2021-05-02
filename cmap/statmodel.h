@@ -116,13 +116,15 @@ class StatModel : public QObject
   Q_PROPERTY(int gambling     READ get_gambling     WRITE set_gambling     NOTIFY statisticsChanged)
 
   // VISUAL
-  Q_PROPERTY(QStringList faceAccessories MEMBER faceAccessories NOTIFY faceAccessoriesChanged)
-  Q_PROPERTY(QString     spriteTheme     MEMBER spriteTheme     NOTIFY spriteThemeChanged)
-  Q_PROPERTY(QString     faceTheme       MEMBER faceTheme       NOTIFY faceThemeChanged)
-  Q_PROPERTY(QString     hairTheme       MEMBER hairTheme       NOTIFY hairThemeChanged)
-  Q_PROPERTY(QColor      faceColor       MEMBER faceColor       NOTIFY faceColorChanged)
-  Q_PROPERTY(QColor      eyeColor        MEMBER eyeColor        NOTIFY eyeColorChanged)
-  Q_PROPERTY(QColor      hairColor       MEMBER hairColor       NOTIFY hairColorChanged)
+  Q_PROPERTY(QStringList faceOptions     READ   getAvailableFaces NOTIFY raceChanged)
+  Q_PROPERTY(QStringList faceAccessories MEMBER faceAccessories   NOTIFY faceAccessoriesChanged)
+  Q_PROPERTY(QString     spriteTheme     MEMBER spriteTheme       NOTIFY spriteThemeChanged)
+  Q_PROPERTY(QString     faceTheme       MEMBER faceTheme         NOTIFY faceThemeChanged)
+  Q_PROPERTY(QString     hairTheme       MEMBER hairTheme         NOTIFY hairThemeChanged)
+  Q_PROPERTY(QColor      withFaceColor   READ   withFaceColor     NOTIFY raceChanged)
+  Q_PROPERTY(QColor      faceColor       MEMBER faceColor         NOTIFY faceColorChanged)
+  Q_PROPERTY(QColor      eyeColor        MEMBER eyeColor          NOTIFY eyeColorChanged)
+  Q_PROPERTY(QColor      hairColor       MEMBER hairColor         NOTIFY hairColorChanged)
 
 public:
   explicit StatModel(QObject *parent = nullptr);
@@ -142,6 +144,8 @@ public:
   int getHitPoints() const { return hitPoints; }
   void setHitPoints(int value) { hitPoints = value; emit hitPointsChanged(); }
   QString getFaction() const { return faction; }
+  QStringList getAvailableFaces() const;
+  bool withFaceColor() const;
   Q_INVOKABLE void addExperience(int xp);
   Q_INVOKABLE bool isAcceptable() const;
   Q_INVOKABLE int getMaxTraits() const { return 2; }

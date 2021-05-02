@@ -8,6 +8,7 @@ Image {
   property string hairStyle: ""
   property string mood:      "neutral"
   property string ambiance:  "wasteland"
+  property bool   coloured:  false
   property color  color:     Qt.rgba(0, 205, 80, 0.5)
   property color  eyeColor:  Qt.rgba(255, 0, 0)
   property color  hairColor: Qt.rgba(255, 255, 0)
@@ -47,6 +48,7 @@ Image {
     height: Math.min(parent.height - 20, sourceSize.height)
 
     ColorOverlay {
+      visible: coloured
       anchors.fill: parent
       source: parent
       color: root.color
@@ -65,6 +67,7 @@ Image {
       source: basePath + '/' + theme + '/eye-colors/' + mood + '.png'
 
       ColorOverlay {
+        visible: coloured
         anchors.fill: parent
         source: parent
         color: Qt.rgba(eyeColor.r, eyeColor.g, eyeColor.b, 0.5)
@@ -82,6 +85,7 @@ Image {
         height: eyes.height
 
         ColorOverlay {
+          visible: coloured
           anchors.fill: parent
           source: parent
           color: Qt.rgba(root.color.r, root.color.g, root.color.b, 1)
@@ -117,6 +121,7 @@ Image {
       fillMode: Image.Stretch
 
       ColorOverlay {
+        visible: coloured
         anchors.fill: parent
         source: parent
         color: root.color
@@ -138,6 +143,7 @@ Image {
       fillMode: Image.Stretch
 
       ColorOverlay {
+        visible: coloured
         anchors.fill: parent
         source: parent
         color: Qt.rgba(hairColor.r, hairColor.g, hairColor.b, 0.5)

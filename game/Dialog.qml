@@ -58,6 +58,7 @@ Item {
     theme:       controller.npc.statistics.faceTheme
     accessories: controller.npc.statistics.faceAccessories
     color:       controller.npc.statistics.faceColor
+    coloured:    controller.npc.statistics.withFaceColor
     anchors.fill: faceForeground
     anchors.topMargin: 12
     anchors.leftMargin: 287

@@ -1,5 +1,7 @@
 export const isPlayable = true;
 
+export const faces = ["griffon"];
+
 export function spriteSheet(model) {
   return {
     cloneOf: "griffon",

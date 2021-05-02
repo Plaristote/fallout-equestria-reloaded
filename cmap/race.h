@@ -7,7 +7,9 @@
 class Race : public CmapPlugin
 {
 public:
-  bool    isPlayable() const;
+  bool isPlayable() const;
+  bool withFaceColor() const;
+  QStringList getFaces() const;
   CharacterSpriteDescriptor getSpriteSheet(StatModel*) const;
 
   static void initialize();

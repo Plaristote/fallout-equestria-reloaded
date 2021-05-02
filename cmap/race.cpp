@@ -12,6 +12,20 @@ bool Race::isPlayable() const
   return false;
 }
 
+bool Race::withFaceColor() const
+{
+  if (script.hasProperty("withFaceColor"))
+    return script.property("withFaceColor").toBool();
+  return false;
+}
+
+QStringList Race::getFaces() const
+{
+  if (script.hasProperty("faces"))
+    return script.property("faces").toVariant().toStringList();
+  return QStringList();
+}
+
 CharacterSpriteDescriptor Race::getSpriteSheet(StatModel* model) const
 {
   CharacterSpriteDescriptor descriptor;

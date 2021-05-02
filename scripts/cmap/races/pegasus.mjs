@@ -2,6 +2,10 @@ import * as Pony from "./earth-pony.mjs";
 
 export const isPlayable  = Pony.isPlayable;
 
+export const withFaceColor = Pony.withFaceColor;
+
+export const faces = ["mare-basic", "stallion-basic"];
+
 export function spriteSheet(model) {
   const pony = Pony.spriteSheet(model);
 

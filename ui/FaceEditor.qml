@@ -15,6 +15,23 @@ UiStyle.CustomDialog {
   height: parent.height
   header: null
 
+  onCharacterSheetChanged: {
+    if (characterSheet.faceTheme == "" && characterSheet.faceOptions.length > 0)
+      initializeFace();
+  }
+
+  Connections {
+    target: characterSheet
+    function onRaceChanged() {
+      initializeFace();
+    }
+  }
+
+  function initializeFace() {
+    characterSheet.faceTheme = characterSheet.faceOptions[0];
+    characterSheet.faceColor = Qt.rgba(255, 255, 255, 0.5);
+  }
+
   WindowDialogs.ColorDialog {
     id: faceColorDialog
     title: "Color"
@@ -43,6 +60,7 @@ UiStyle.CustomDialog {
     theme:       characterSheet.faceTheme
     hairStyle:   characterSheet.hairTheme
     color:       characterSheet.faceColor
+    coloured:    characterSheet.withFaceColor
     eyeColor:    characterSheet.eyeColor
     hairColor:   characterSheet.hairColor
     accessories: characterSheet.faceAccessories
@@ -68,7 +86,7 @@ UiStyle.CustomDialog {
       ComboBox {
         Layout.fillWidth: true
         id: faceThemeSelect
-        model: ["mare-basic","stallion-basic"]
+        model: characterSheet.faceOptions
         currentIndex: model.indexOf(characterSheet.faceTheme)
         onCurrentIndexChanged: { characterSheet.faceTheme = model[currentIndex] }
       }

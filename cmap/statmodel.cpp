@@ -122,8 +122,28 @@ void StatModel::setRace(const QString& newRace)
   if (raceController)
     raceController->toogle(this, true);
   race = newRace;
+  if (raceController && !raceController->withFaceColor())
+    faceColor = hairColor = eyeColor = Qt::transparent;
   emit raceChanged();
   updateBaseValues();
+}
+
+QStringList StatModel::getAvailableFaces() const
+{
+  const Race* raceController = getRaceController();
+
+  if (raceController)
+    return raceController->getFaces();
+  return QStringList();
+}
+
+bool StatModel::withFaceColor() const
+{
+  const Race* raceController = getRaceController();
+
+  if (raceController)
+    return raceController->withFaceColor();
+  return false;
 }
 
 static void applyCmapPlugin(StatModel* self, const CmapPlugin& plugin, StatData& data)
