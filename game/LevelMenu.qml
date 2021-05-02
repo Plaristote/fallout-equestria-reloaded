@@ -14,31 +14,30 @@ Pane {
     anchors.topMargin: 10
 
     MenuButton {
-      text: "Save Game"
+      text: i18n.t("Save game")
       onClicked: application.pushView("SaveGame.qml")
     }
 
     MenuButton {
-      text: "Load Game"
+      text: i18n.t("Load game")
       onClicked: application.pushView("LoadGame.qml")
     }
 
     MenuButton {
-      text: "Options"
+      text: i18n.t("Options")
       onClicked: application.pushView("Options.qml")
     }
 
     MenuButton {
-      text: "Exit"
+      text: i18n.t("Exit")
       onClicked: {
-        console.log("exit");
         application.popView();
         gameManager.endGame();
       }
     }
 
     MenuButton {
-      text: "Cancel"
+      text: i18n.t("Cancel")
       onClicked: mainMenu.visible = false
     }
   }

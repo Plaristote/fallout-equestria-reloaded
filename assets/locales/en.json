@@ -10,6 +10,23 @@
   "Weight": "Weight",
   "Drop": "Drop",
   "Inspect": "Inspect",
+  "hud": {
+	  "INV": "INV",
+	  "CHA": "CHA",
+	  "Q": "Q",
+	  "HP": "HP",
+	  "AP": "AP",
+	  "AC": "AC",
+	  "skilldex": "Skilldex",
+	  "spellbook": "Spellbook",
+	  "pipboy": "PipBoy"
+  },
+  "item-slots": {
+    "armor": "Armor",
+    "saddle": "Saddle",
+    "use-1": "Use",
+    "use-2": "Use"
+  },
   "messages": {
     "weapons": {
       "use":   "{{user}} used {{item}} on {{target}} for {{damage}} damage.",
@@ -47,17 +64,22 @@
   "use-modes": {
     "use": "Use",
     "shoot": "Shoot",
-    "reload": "Reload"
+    "reload": "Reload",
+    "unload": "Unload",
+    "hit": "Hit",
+    "throw": "Throw"
   },
   "items": {
     "dynamite": "Dynamite",
     "melee-bucking": "Buck",
     "melee-hoofercut": "Hoofercut",
-    "health-potion": "Potion de vie"
+    "health-potion": "Potion de vie",
+    "power-armor": "Power Armor"
   },
   "item-descriptions": {
     "dynamite": "A dangerous explosive. It's probably powerful enough to blast through most doors.",
-    "health-potion": "An average quality health potion."
+    "health-potion": "An average quality health potion.",
+    "power-armor": "A power armor that the Steel Rangers usually wear. Probably the most protective kind of gear you'll ever find in the wastes. It's pretty damn heavy, but the weight is compensated for by increasing the strength of its wearer, while protecting it of magical radiations."
   },
   "dialogs": {
     "tutoCharIntro": {

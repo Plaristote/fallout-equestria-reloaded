@@ -4,6 +4,7 @@ import {getValueFromRange} from "../behaviour/random.mjs";
 export class Medikit extends Item {
   constructor(model) {
     super(model);
+    this.useModes = ["use"];
     this.minHeal = 15;
     this.maxHeal = 30;
   }

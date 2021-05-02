@@ -221,6 +221,18 @@ QJSValue InventoryItem::useOn(DynamicObject* target)
   return false;
 }
 
+void InventoryItem::useReload(bool refill)
+{
+  QStringList modes = getUseModes();
+
+  if (modes.indexOf("reload") >= 0)
+  {
+    const auto backup = useMode;
+
+    useFromInventory(refill ? "reload" : "unload");
+  }
+}
+
 QJSValue InventoryItem::useAt(int x, int y)
 {
   if (script)
@@ -231,10 +243,15 @@ QJSValue InventoryItem::useAt(int x, int y)
   return false;
 }
 
-void InventoryItem::useFromInventory()
+void InventoryItem::useFromInventory(QString mode)
 {
-  QJSValue result = useOn(nullptr);
+  const auto backup = useMode;
+  QJSValue   result;
 
+  if (mode.isEmpty())
+    mode = getUseModes().first();
+  useMode = mode;
+  result = useOn(nullptr);
   if (result.isObject())
   {
     QJSValue callback = result.property("callback");
@@ -242,6 +259,7 @@ void InventoryItem::useFromInventory()
     if (callback.isCallable())
       callback.call();
   }
+  useMode = backup;
 }
 
 void InventoryItem::setCountdown(int value)

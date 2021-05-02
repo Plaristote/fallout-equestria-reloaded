@@ -60,13 +60,16 @@ public:
   Q_INVOKABLE bool           isValidTarget(DynamicObject*);
   QJSValue                   useOn(DynamicObject* target);
   QJSValue                   useAt(int x, int y);
-  Q_INVOKABLE void           useFromInventory();
+  Q_INVOKABLE void           useFromInventory(QString mode = "use");
   Q_INVOKABLE int            getUseSuccessRate(DynamicObject* target);
   Q_INVOKABLE int            getUseAtSuccessRate(int x, int y);
   Q_INVOKABLE DynamicObject* getOwner() const;
   Q_INVOKABLE void           setCountdown(int value);
   Q_INVOKABLE void           swapUseMode();
   void                       resetUseMode();
+
+  Q_INVOKABLE void useReload(bool refill = true);
+  Q_INVOKABLE void useUnload() { useReload(false); }
 
 signals:
   void itemTypeChanged();

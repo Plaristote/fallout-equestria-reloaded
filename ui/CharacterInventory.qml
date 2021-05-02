@@ -108,8 +108,9 @@ Pane {
             }
 
             TerminalButton {
-              text: i18n.t("Use")
+              text: i18n.t("use-modes.use")
               Layout.preferredWidth: 150
+              visible: selectedObject && selectedObject.useModes.indexOf("use") >= 0
               onClicked: selectedObject.useFromInventory()
             }
 
@@ -117,6 +118,20 @@ Pane {
               text: i18n.t("Drop")
               Layout.preferredWidth: 150
               onClicked: character.inventory.dropItem(selectedObject)
+            }
+
+            TerminalButton {
+              text: i18n.t("use-modes.reload")
+              Layout.preferredWidth: 150
+              visible: selectedObject && selectedObject.maxAmmo > 0 && selectedObject.ammo < selectedObject.maxAmmo
+              onClicked: selectedObject.useReload()
+            }
+
+            TerminalButton {
+              text: i18n.t("use-modes.unload")
+              Layout.preferredWidth: 150
+              visible: selectedObject && selectedObject.ammo > 0
+              onClicked: selectedObject.useUnload()
             }
           }
 

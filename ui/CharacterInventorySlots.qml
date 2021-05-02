@@ -30,7 +30,7 @@ Repeater {
 
       Text {
         Layout.alignment: Qt.AlignTop | Qt.AlignHCenter
-        text: slotName
+        text: i18n.t(`item-slots.${slotName}`)
         font.family: application.titleFontName
         color: "yellow"
       }

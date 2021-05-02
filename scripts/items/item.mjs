@@ -6,7 +6,7 @@ export class ItemBehaviour {
     if (this.requiresTarget == undefined)
       this.requiresTarget = true;
     if (this.useModes == undefined)
-      this.useModes = ["use"];
+      this.useModes = [];
     if (this.zoneTarget == undefined)
       this.zoneTarget = false;
   }

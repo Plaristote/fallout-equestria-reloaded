@@ -93,9 +93,12 @@ Pane {
 
     Text {
       anchors.horizontalCenter: parent.horizontalCenter
-      text: "HP"
-      color: "white"
+      text: i18n.t("hud.HP")
+      color: "black"
+      style: Text.Outline
+      styleColor: "white"
       font.family: application.titleFontName
+      font.pixelSize: 16
     }
 
     HudCounter {
@@ -104,9 +107,12 @@ Pane {
 
     Text {
       anchors.horizontalCenter: parent.horizontalCenter
-      text: "AP"
-      color: "white"
+      text: i18n.t("hud.AC")
+      color: "black"
+      style: Text.Outline
+      styleColor: "white"
       font.family: application.titleFontName
+      font.pixelSize: 16
     }
 
     HudCounter {
@@ -125,19 +131,19 @@ Pane {
     spacing: 2
 
     UiStyle.TinyButton {
-      text: "skilldex"
+      text: i18n.t("hud.skilldex")
       Layout.fillWidth: true
       onClicked: openSkilldex()
     }
 
     UiStyle.TinyButton {
-      text: "spellbook"
+      text: i18n.t("hud.spellbook")
       Layout.fillWidth: true
       onClicked: openSpellbook()
     }
 
     UiStyle.TinyButton {
-      text: "Pipboy"
+      text: i18n.t("hud.pipboy")
       Layout.fillWidth: true
       onClicked: application.pushView("game/PipBoy.qml", {gameController: gameController, levelController: levelController})
     }

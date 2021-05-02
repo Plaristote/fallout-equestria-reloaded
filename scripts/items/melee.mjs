@@ -3,6 +3,7 @@ import {Weapon} from "./weapon.mjs";
 export class MeleeAttack extends Weapon {
   constructor(model) {
     super(model);
+    this.useModes = ["hit"];
   }
 
   getActionPointCost() {

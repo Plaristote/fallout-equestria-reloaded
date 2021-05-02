@@ -4,7 +4,6 @@ export class ArmorBehaviour extends ItemBehaviour {
   constructor(model) {
     super(model);
     this.triggersCombat = false;
-    this.useModes = ["use"];
     this.armorClass = 0;
   }
   

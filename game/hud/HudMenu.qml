@@ -14,14 +14,14 @@ Item {
     spacing: 5
 
     UiStyle.TinyButton {
-      text: "INV"
+      text: i18n.t("hud.INV")
       height: 20
       width: parent.width
       onClicked: menuPane.openInventory()
     }
 
     UiStyle.TinyButton {
-      text: "CHA"
+      text: i18n.t("hud.CHA")
       height: 20
       width: parent.width
       onClicked: {
@@ -30,7 +30,7 @@ Item {
     }
 
     UiStyle.TinyButton {
-      text: "Q"
+      text: i18n.t("hud.Q")
       height: 20
       width: parent.width
       onClicked: menuPane.openMenu()

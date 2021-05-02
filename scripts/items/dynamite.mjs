@@ -6,6 +6,7 @@ import {disarmAttempt} from "../behaviour/trap.mjs";
 class Dynamite extends Item {
   constructor(model) {
     super(model);
+    this.useModes = ["use"];
   }
 
   getActionPointCost() {
