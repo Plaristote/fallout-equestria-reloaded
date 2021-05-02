@@ -101,33 +101,38 @@ Pane {
             Layout.alignment: Qt.AlignTop
             Layout.preferredWidth: 150
 
-            TerminalButton {
+            TerminalToolButton {
+              iconName: "see"
               text: i18n.t("Inspect")
               Layout.preferredWidth: 150
               onClicked: selectedObject.triggerInteraction(character, "look")
             }
 
-            TerminalButton {
+            TerminalToolButton {
+              iconName: "use"
               text: i18n.t("use-modes.use")
               Layout.preferredWidth: 150
               visible: selectedObject && selectedObject.useModes.indexOf("use") >= 0
               onClicked: selectedObject.useFromInventory()
             }
 
-            TerminalButton {
+            TerminalToolButton {
+              iconName: "drop"
               text: i18n.t("Drop")
               Layout.preferredWidth: 150
               onClicked: character.inventory.dropItem(selectedObject)
             }
 
-            TerminalButton {
+            TerminalToolButton {
+              iconName: "reload"
               text: i18n.t("use-modes.reload")
               Layout.preferredWidth: 150
               visible: selectedObject && selectedObject.maxAmmo > 0 && selectedObject.ammo < selectedObject.maxAmmo
               onClicked: selectedObject.useReload()
             }
 
-            TerminalButton {
+            TerminalToolButton {
+              iconName: "unload"
               text: i18n.t("use-modes.unload")
               Layout.preferredWidth: 150
               visible: selectedObject && selectedObject.ammo > 0
