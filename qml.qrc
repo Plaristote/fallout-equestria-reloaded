@@ -244,5 +244,6 @@
         <file>ui/dialog/BarterTransferControls.qml</file>
         <file>ui/dialog/BarterDealPreview.qml</file>
         <file>game/hud/HudCombatControls.qml</file>
+        <file>game/RenderQueue.mjs</file>
     </qresource>
 </RCC>

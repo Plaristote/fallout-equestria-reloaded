@@ -11,6 +11,7 @@ public:
 
   void initialize();
   int getZIndex() const override { return 0; }
+  bool hasInteractionOverlay() const override { return false; }
 
 private slots:
   void onAnimationEnded();

@@ -1,4 +1,5 @@
 import {MouseMode, TargetMode} from "./Interaction.mjs";
+import {initializeRenderQueue, fillRenderQueue} from "./RenderQueue.mjs";
 
 export class Controller {
   constructor(canvas, params) {
@@ -31,30 +32,8 @@ export class Controller {
   }
 
   initializeRenderObjects() {
-    const _detectedCharacters = this.level.visibleCharacters;
-    const detectedCharacters = [];
-
-    for (var i = 0 ; i < _detectedCharacters.length ; ++i)
-      detectedCharacters.push(_detectedCharacters[i].objectName);
-    this.renderObjects = [];
-    for (var x = 0 ; x < this.mapSize.width ; ++x) {
-      this.renderObjects[x] = [];
-      for (var y = 0 ; y < this.mapSize.height ; ++y)
-        this.renderObjects[x][y] = [];
-    }
-    for (var i = 0 ; i < this.level.dynamicObjects.length ; ++i) {
-      const object = this.level.dynamicObjects[i];
-      const position = object.getPosition();
-      const isValid = position.x >= 0 && position.y >= 0;
-      const isVisible = isValid && this.isObjectVisible(object, detectedCharacters);
-
-      if (!isVisible)
-        continue ;
-      this.renderObjects[position.x][position.y].push(object);
-      this.renderObjects[position.x][position.y].sort(function(a, b) {
-        return a.getZIndex() < b.getZIndex();
-      });
-    }
+    this.renderObjects = initializeRenderQueue(this.mapSize);
+    this.renderObjects = fillRenderQueue(this.renderObjects, this.level);
   }
 
   render() {
@@ -341,14 +320,19 @@ export class Controller {
     const offset      = this.getAdjustedOffsetFor(sprite);
     const clippedRect = sprite.getClippedRect();
 
-    if (this.shouldRender(offset.x, offset.y, clippedRect.width, clippedRect.height)) {
-      this.context.drawImage(
-        this.pathPrefix + sprite.getSpriteSource(),
-        clippedRect.x, clippedRect.y, clippedRect.width, clippedRect.height,
-        offset.x, offset.y, clippedRect.width, clippedRect.height
-      );
-      return true;
+    try {
+      if (this.shouldRender(offset.x, offset.y, clippedRect.width, clippedRect.height)) {
+        this.context.drawImage(
+          this.pathPrefix + sprite.spriteSource,
+          clippedRect.x, clippedRect.y, clippedRect.width, clippedRect.height,
+          offset.x, offset.y, clippedRect.width, clippedRect.height
+        );
+        return true;
+      }
+    } catch (err) {
+      console.log("LevelRender: cannot render", sprite.getObjectType(), ':', sprite.objectName, ": src=", this.pathPrefix + sprite.spriteSource, ", animation=" + sprite.getAnimation());
     }
+    return false;
   }
 
   renderSprite(sprite) {

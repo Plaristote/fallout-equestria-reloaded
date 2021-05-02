@@ -24,7 +24,7 @@ Item {
       controller:      canvas.controller
       model:           levelController.dynamicObjects
       filter:          function(item) {
-        return !item.hidden && !(item.getObjectType() === "Character" && item.isAlive());
+        return !item.hidden && item.hasInteractionOverlay();
       }
     }
   }

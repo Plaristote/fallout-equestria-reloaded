@@ -47,6 +47,7 @@ public:
   Q_INVOKABLE QString getObjectType() const { return metaObject()->className(); }
   Q_INVOKABLE QPoint getPosition() const { return position; }
   Q_INVOKABLE virtual int getZIndex() const { return 1; }
+  Q_INVOKABLE virtual bool hasInteractionOverlay() const { return true; }
   virtual int getInteractionDistance() const { return 1; }
   virtual QStringList getAvailableInteractions();
   void setPosition(QPoint value) { position = value; emit positionChanged(); }
