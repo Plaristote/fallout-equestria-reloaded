@@ -98,7 +98,9 @@ void MusicManager::startTrack(const QString& filename)
   }
   audioManager = new QMediaPlayer(this);
   audioManager->setMedia(QUrl::fromLocalFile(ASSETS_PATH + "audio/" + currentTrack));
+#ifndef _WIN32
   audioManager->play();
+#endif
   setVolumeToDefault();
   connect(audioManager, &QMediaPlayer::stateChanged, this, &MusicManager::onStateChanged);
 }

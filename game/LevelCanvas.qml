@@ -43,8 +43,11 @@ Canvas {
   }
 
   onAvailableChanged: {
-    initializeRenderer();
-    afterLoadCameraCenter.running = true;
+    console.log("(!) LevelCanvas.available changed:", available);
+    if (available) {
+      initializeRenderer();
+      afterLoadCameraCenter.running = true;
+    }
   }
 
   MouseArea {
@@ -109,7 +112,7 @@ Canvas {
 
   function preloadImages() {
     const images = [];
-    const preRenderPath = "file://" + levelController.preRenderPath;
+    const preRenderPath = "file:///" + levelController.preRenderPath;
     var i;
 
     for (i = 0 ; i < levelController.tilemap.textureList.length ; ++i) {

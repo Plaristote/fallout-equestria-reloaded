@@ -9,7 +9,7 @@ export class Controller {
     this.tilemap  = params.tilemap;
     this.level    = params.level;
     this.rootPath = params.rootPath;
-    this.preRenderPath = "file://" + this.level.preRenderPath;
+    this.preRenderPath = "file:///" + this.level.preRenderPath;
     this.mapSize  = this.tilemap.mapSize
     this.tileSize = this.tilemap.tileSize
     this.wallSize = { width: this.tileSize.width, height: this.tileSize.height * 3 };
