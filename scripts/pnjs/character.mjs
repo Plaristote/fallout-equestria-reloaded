@@ -36,6 +36,7 @@ export class CharacterBehaviour extends CombatComponent {
       level.initializeDialog(this.model, this.dialog);
     else
       this.displayRandomTextBubble();
+    return true;
   }
 
   displayRandomTextBubble() {
