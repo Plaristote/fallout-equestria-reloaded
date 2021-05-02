@@ -966,6 +966,10 @@
             "width": 47
         }
     },
+    "giant-rat": {
+      "defaultSource": "critters/giant-mutated-rat.png",
+      "cloneOf": "griffon"
+    },
     "rat": {
         "damaged-down": {
             "frameCount": 3,
@@ -1003,17 +1007,115 @@
             "repeat": false,
             "width": 40
         },
-        "death": {
+        "dead-down": {
             "frameCount": 1,
-            "frameInterval": 100,
+            "frameInterval": 0,
             "height": 40,
             "offsetX": 120,
             "offsetY": 0,
             "repeat": false,
-            "source": "critters/rats.png",
+            "width": 40
+        },
+        "dead-left": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 40,
+            "offsetX": 120,
+            "offsetY": 0,
+            "repeat": false,
+            "width": 40
+        },
+        "dead-right": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 40,
+            "offsetX": 120,
+            "offsetY": 0,
+            "repeat": false,
+            "width": 40
+        },
+        "dead-up": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 40,
+            "offsetX": 120,
+            "offsetY": 0,
+            "repeat": false,
             "width": 40
         },
         "defaultSource": "critters/rats.png",
+        "fall-down": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 40,
+            "offsetX": 120,
+            "offsetY": 0,
+            "repeat": false,
+            "width": 40
+        },
+        "fall-left": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 40,
+            "offsetX": 120,
+            "offsetY": 0,
+            "repeat": false,
+            "width": 40
+        },
+        "fall-right": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 40,
+            "offsetX": 120,
+            "offsetY": 0,
+            "repeat": false,
+            "width": 40
+        },
+        "fall-up": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 40,
+            "offsetX": 120,
+            "offsetY": 0,
+            "repeat": false,
+            "width": 40
+        },
+        "get-up-down": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 40,
+            "offsetX": 0,
+            "offsetY": 0,
+            "repeat": false,
+            "width": 40
+        },
+        "get-up-left": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 40,
+            "offsetX": 0,
+            "offsetY": 40,
+            "repeat": false,
+            "width": 40
+        },
+        "get-up-right": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 40,
+            "offsetX": 0,
+            "offsetY": 120,
+            "repeat": false,
+            "width": 40
+        },
+        "get-up-up": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 40,
+            "offsetX": 0,
+            "offsetY": 80,
+            "repeat": false,
+            "width": 40
+        },
         "idle-down": {
             "frameCount": 1,
             "frameInterval": 100,
@@ -1021,7 +1123,6 @@
             "offsetX": 0,
             "offsetY": 0,
             "repeat": false,
-            "source": "critters/rats.png",
             "width": 40
         },
         "idle-left": {
@@ -1031,7 +1132,6 @@
             "offsetX": 0,
             "offsetY": 40,
             "repeat": false,
-            "source": "critters/rats.png",
             "width": 40
         },
         "idle-right": {
@@ -1041,7 +1141,6 @@
             "offsetX": 0,
             "offsetY": 120,
             "repeat": false,
-            "source": "critters/rats.png",
             "width": 40
         },
         "idle-up": {
@@ -1051,7 +1150,6 @@
             "offsetX": 0,
             "offsetY": 80,
             "repeat": false,
-            "source": "critters/rats.png",
             "width": 40
         },
         "melee-down": {
