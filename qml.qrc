@@ -1,7 +1,7 @@
 <RCC>
     <qresource prefix="/">
         <file>main.qml</file>
-        <file>assets/backgrounds/default.jpg</file>
+        <file>assets/backgrounds/default.png</file>
         <file>MainMenu.qml</file>
         <file>assets/ui/menuButton/active.png</file>
         <file>assets/ui/menuButton/normal.png</file>
@@ -57,9 +57,9 @@
         <file>assets/sprites/ZEkA10000-green.png</file>
         <file>scripts/pnjs/dummy.mjs</file>
         <file>assets/sprites/library.png</file>
-        <file>assets/backgrounds/ministry-of-peace.jpg</file>
+        <file>assets/backgrounds/ministry-of-peace.png</file>
         <file>ui/FaceDisplay.qml</file>
-        <file>assets/faces/backgrounds/wasteland.jpg</file>
+        <file>assets/faces/backgrounds/wasteland.png</file>
         <file>assets/faces/mare-basic/eyes/angry.png</file>
         <file>assets/faces/mare-basic/eyes/neutral.png</file>
         <file>assets/faces/mare-basic/eyes/sad.png</file>

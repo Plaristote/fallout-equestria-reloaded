@@ -1,7 +1,7 @@
 import QtQuick 2.15
 
 Image {
-  source: "qrc:/assets/backgrounds/ministry-of-peace.jpg"
+  source: "qrc:/assets/backgrounds/ministry-of-peace.png"
   anchors.fill: parent
   fillMode: Image.PreserveAspectCrop
 

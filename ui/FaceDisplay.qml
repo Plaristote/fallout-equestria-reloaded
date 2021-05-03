@@ -14,7 +14,7 @@ Image {
   property color  hairColor: Qt.rgba(255, 255, 0)
   property var    accessories: ["fancypants","eye-scar"]
 
-  source: basePath + "/backgrounds/" + ambiance + ".jpg"
+  source: basePath + "/backgrounds/" + ambiance + ".png"
   fillMode: Image.PreserveAspectCrop
 
   Component.onCompleted: {
