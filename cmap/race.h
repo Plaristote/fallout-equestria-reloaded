@@ -10,6 +10,7 @@ public:
   bool isPlayable() const;
   bool withFaceColor() const;
   QStringList getFaces() const;
+  QStringList getHairs(QString face = "") const;
   CharacterSpriteDescriptor getSpriteSheet(StatModel*) const;
 
   static void initialize();

@@ -2,6 +2,7 @@
 #include "game.h"
 #include "pluginloader.h"
 #include <QDebug>
+#include <QDir>
 
 QMap<QString, Race> Race::races;
 
@@ -24,6 +25,23 @@ QStringList Race::getFaces() const
   if (script.hasProperty("faces"))
     return script.property("faces").toVariant().toStringList();
   return QStringList();
+}
+
+QStringList Race::getHairs(QString face) const
+{
+  if (face.isEmpty() && getFaces().size() > 0)
+    face = *(getFaces().begin());
+  if (!face.isEmpty())
+  {
+    QString     path = ASSETS_PATH + "faces/" + face + "/hairstyles";
+    QStringList list = QDir(path).entryList(QDir::Files);
+
+    for (QString& entry : list)
+      entry = entry.replace(".png", "");
+    list.prepend("");
+    return list;
+  }
+  return QStringList() << "";
 }
 
 CharacterSpriteDescriptor Race::getSpriteSheet(StatModel* model) const

@@ -137,6 +137,15 @@ QStringList StatModel::getAvailableFaces() const
   return QStringList();
 }
 
+QStringList StatModel::getAvailableHairs() const
+{
+  const Race* raceController = getRaceController();
+
+  if (raceController)
+    return raceController->getHairs(faceTheme);
+  return QStringList();
+}
+
 bool StatModel::withFaceColor() const
 {
   const Race* raceController = getRaceController();

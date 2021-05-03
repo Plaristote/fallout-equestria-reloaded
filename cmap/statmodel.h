@@ -117,6 +117,7 @@ class StatModel : public QObject
 
   // VISUAL
   Q_PROPERTY(QStringList faceOptions     READ   getAvailableFaces NOTIFY raceChanged)
+  Q_PROPERTY(QStringList hairOptions     READ   getAvailableHairs NOTIFY faceThemeChanged)
   Q_PROPERTY(QStringList faceAccessories MEMBER faceAccessories   NOTIFY faceAccessoriesChanged)
   Q_PROPERTY(QString     spriteTheme     MEMBER spriteTheme       NOTIFY spriteThemeChanged)
   Q_PROPERTY(QString     faceTheme       MEMBER faceTheme         NOTIFY faceThemeChanged)
@@ -145,6 +146,7 @@ public:
   void setHitPoints(int value) { hitPoints = value; emit hitPointsChanged(); }
   QString getFaction() const { return faction; }
   QStringList getAvailableFaces() const;
+  QStringList getAvailableHairs() const;
   bool withFaceColor() const;
   Q_INVOKABLE void addExperience(int xp);
   Q_INVOKABLE bool isAcceptable() const;

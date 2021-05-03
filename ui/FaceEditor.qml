@@ -117,7 +117,7 @@ UiStyle.CustomDialog {
       ComboBox {
         Layout.fillWidth: true
         id: hairThemeSelect
-        model: ["", "derpy", "pinkie"]
+        model: characterSheet.hairOptions
         currentIndex: model.indexOf(characterSheet.hairTheme)
         onCurrentIndexChanged: { characterSheet.hairTheme = model[currentIndex] }
       }
