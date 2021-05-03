@@ -91,10 +91,11 @@ UiStyle.CustomDialog {
         onCurrentIndexChanged: { characterSheet.faceTheme = model[currentIndex] }
       }
 
-      TerminalLabel { text: "Color" }
+      TerminalLabel { text: "Color"; visible: characterSheet.withFaceColor }
       TerminalButton {
         Layout.fillWidth: true
         Layout.preferredHeight: 40
+        visible: characterSheet.withFaceColor
         contentItem: Rectangle {
           anchors.fill: parent
           color: characterSheet.faceColor
@@ -122,10 +123,11 @@ UiStyle.CustomDialog {
         onCurrentIndexChanged: { characterSheet.hairTheme = model[currentIndex] }
       }
 
-      TerminalLabel { text: "Hair color" }
+      TerminalLabel { text: "Hair color"; visible: characterSheet.withFaceColor }
       TerminalButton {
         Layout.fillWidth: true
         Layout.preferredHeight: 40
+        visible: characterSheet.withFaceColor
         contentItem: Rectangle {
           anchors.fill: parent
           color: characterSheet.hairColor

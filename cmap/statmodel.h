@@ -122,7 +122,7 @@ class StatModel : public QObject
   Q_PROPERTY(QString     spriteTheme     MEMBER spriteTheme       NOTIFY spriteThemeChanged)
   Q_PROPERTY(QString     faceTheme       MEMBER faceTheme         NOTIFY faceThemeChanged)
   Q_PROPERTY(QString     hairTheme       MEMBER hairTheme         NOTIFY hairThemeChanged)
-  Q_PROPERTY(QColor      withFaceColor   READ   withFaceColor     NOTIFY raceChanged)
+  Q_PROPERTY(bool        withFaceColor   READ   withFaceColor     NOTIFY raceChanged)
   Q_PROPERTY(QColor      faceColor       MEMBER faceColor         NOTIFY faceColorChanged)
   Q_PROPERTY(QColor      eyeColor        MEMBER eyeColor          NOTIFY eyeColorChanged)
   Q_PROPERTY(QColor      hairColor       MEMBER hairColor         NOTIFY hairColorChanged)

@@ -67,7 +67,6 @@ Image {
       source: basePath + '/' + theme + '/eye-colors/' + mood + '.png'
 
       ColorOverlay {
-        visible: coloured
         anchors.fill: parent
         source: parent
         color: Qt.rgba(eyeColor.r, eyeColor.g, eyeColor.b, 0.5)
@@ -85,7 +84,6 @@ Image {
         height: eyes.height
 
         ColorOverlay {
-          visible: coloured
           anchors.fill: parent
           source: parent
           color: Qt.rgba(root.color.r, root.color.g, root.color.b, 1)
