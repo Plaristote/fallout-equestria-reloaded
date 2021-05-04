@@ -54,10 +54,13 @@ void CharacterStatistics::setStatistics(StatModel* value)
     statistics->deleteLater();
   }
   statistics = value;
-  connect(statistics, &StatModel::factionChanged, this, &CharacterStatistics::initializeFaction);
-  qDebug() << "set stat sheet on" << getObjectName() << ':' << statistics->getName() << " with faction " << statistics->property("faction").toString();
-  initializeFaction();
-  emit statisticsChanged();
+  if (value)
+  {
+    connect(statistics, &StatModel::factionChanged, this, &CharacterStatistics::initializeFaction);
+    qDebug() << "set stat sheet on" << getObjectName() << ':' << statistics->getName() << " with faction " << statistics->property("faction").toString();
+    initializeFaction();
+    emit statisticsChanged();
+  }
 }
 
 void CharacterStatistics::setCharacterSheet(const QString& name)

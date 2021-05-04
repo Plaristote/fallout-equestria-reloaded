@@ -9,7 +9,7 @@ class CharacterStatistics : public CharacterMovement
   Q_OBJECT
   typedef CharacterMovement ParentType;
 
-  Q_PROPERTY(StatModel*   statistics  MEMBER statistics NOTIFY statisticsChanged)
+  Q_PROPERTY(StatModel* statistics READ getStatistics WRITE setStatistics NOTIFY statisticsChanged)
   Q_PROPERTY(bool isUnique MEMBER isUnique NOTIFY uniqueChanged)
   Q_PROPERTY(QString characterSheet MEMBER characterSheet NOTIFY characterSheetChanged)
 public:
