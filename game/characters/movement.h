@@ -8,7 +8,7 @@ class CharacterMovement : public CHARACTER_BASE_OBJECT
 {
   Q_OBJECT
 
-  Q_PROPERTY(QString orientation READ getOrientation)
+  Q_PROPERTY(QString orientation READ getOrientation WRITE setOrientation NOTIFY orientationChanged)
   Q_PROPERTY(QString movementMode READ getMovementMode WRITE setMovementMode)
 public:
   enum Direction
@@ -29,6 +29,7 @@ public:
   virtual void load(const QJsonObject&);
   virtual void save(QJsonObject&) const;
 
+  QString                   getAnimationBaseName() const;
   void                      setAnimation(const QString& animationName) override;
   void                      moveTo(int x, int y);
   Q_INVOKABLE void          lookTo(int x, int y);
@@ -36,6 +37,7 @@ public:
   const QString&            getMovementMode() const { return movementMode; }
   void                      setMovementMode(const QString&);
   const QString&            getOrientation() const { return orientation; }
+  void                      setOrientation(const QString&);
   const QList<QPoint>&      getCurrentPath() const { return currentPath; }
   const QVector<TileZone*>& getCurrentZones() const { return currentZones; }
   void                      clearCurrentZones() { currentZones.clear(); }
@@ -49,6 +51,7 @@ public slots:
   void onZoneExited(TileZone* value) { currentZones.removeOne(value); }
 
 signals:
+  void orientationChanged();
   void reachedDestination();
   void pathBlocked();
 

@@ -11,6 +11,13 @@ CharacterMovement::CharacterMovement(QObject *parent) : CHARACTER_BASE_OBJECT(pa
   connect(this, &CharacterMovement::reachedDestination, this, &CharacterMovement::onDestinationReached);
 }
 
+QString CharacterMovement::getAnimationBaseName() const
+{
+  static const QRegularExpression regexp("-(up|left|down|right)$");
+
+  return getAnimation().replace(regexp, "");
+}
+
 void CharacterMovement::setAnimation(const QString &animationName)
 {
   QString completeAnimationName = animationName + '-' + orientation;
@@ -21,20 +28,30 @@ void CharacterMovement::setAnimation(const QString &animationName)
     setAnimation("idle");
 }
 
+void CharacterMovement::setOrientation(const QString& value)
+{
+  if (value != orientation)
+  {
+    orientation = value;
+    setAnimation(getAnimationBaseName());
+    emit orientationChanged();
+  }
+}
+
 void CharacterMovement::lookTo(int x, int y)
 {
   if (position.x() > x && position.y() > y)
-    orientation = "up";
+    setOrientation("up");
   else if (position.x() < x && position.y() < y)
-    orientation = "down";
+    setOrientation("down");
   else if (position.x() == x && position.y() > y)
-    orientation = "right";
+    setOrientation("right");
   else if (position.x() == x && position.y() < y)
-    orientation = "left";
+    setOrientation("left");
   else if (position.x() >= x)
-    orientation = "left";
+    setOrientation("left");
   else
-    orientation = "right";
+    setOrientation("right");
 }
 
 void CharacterMovement::moveTo(int x, int y)
