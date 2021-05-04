@@ -35,6 +35,7 @@ public:
 
   Q_INVOKABLE void addItemOfType(const QString& name, int quantity = 1);
   Q_INVOKABLE bool removeItemOfType(const QString& name, int quantity = 1);
+  Q_INVOKABLE InventoryItem* getItemOfType(const QString& name) const;
 
   Q_INVOKABLE bool equipItem(InventoryItem* item, const QString& slotName);
   Q_INVOKABLE bool canEquipItem(InventoryItem* item, const QString& slotName) const;

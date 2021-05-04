@@ -134,6 +134,16 @@ bool Inventory::removeItemOfType(const QString &name, int quantity)
   return false;
 }
 
+InventoryItem* Inventory::getItemOfType(const QString &name) const
+{
+  for (auto* inventoryItem : items)
+  {
+    if (inventoryItem->getItemType() == name)
+      return inventoryItem;
+  }
+  return nullptr;
+}
+
 int Inventory::count(const QString& name) const
 {
   int total = 0;
