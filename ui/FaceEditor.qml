@@ -83,7 +83,7 @@ UiStyle.CustomDialog {
       anchors.left: parent.left
 
       TerminalLabel { text: "Face" }
-      ComboBox {
+      TerminalComboBox {
         Layout.fillWidth: true
         id: faceThemeSelect
         model: characterSheet.faceOptions
@@ -115,7 +115,7 @@ UiStyle.CustomDialog {
       }
 
       TerminalLabel { text: "Hair style" }
-      ComboBox {
+      TerminalComboBox {
         Layout.fillWidth: true
         id: hairThemeSelect
         model: characterSheet.hairOptions
