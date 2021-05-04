@@ -22,6 +22,8 @@ QQmlListProperty<Character> PlayerVisibilityComponent::getQmlVisibleCharacters()
 {
   visibleCharacters = getPlayer()->getFieldOfView()->GetDetectedCharacters();
   visibleCharacters << getPlayer();
+  sortByRenderOrder(visibleCharacters);
+  std::reverse(visibleCharacters.begin(), visibleCharacters.end());
   return QML_QLIST_CONSTRUCTOR(Character, visibleCharacters);
 }
 

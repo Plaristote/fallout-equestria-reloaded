@@ -296,15 +296,7 @@ DynamicObject* InteractionComponent::getObjectAt(int posX, int posY) const
   list.reserve(objects.size());
   for (auto it = objects.begin() ; it != objects.end() ; ++it)
     list.push_back(*it);
-  std::sort(list.begin(), list.end(), [](DynamicObject* a, DynamicObject* b)
-  {
-    QPoint posA = a->getPosition();
-    QPoint posB = b->getPosition();
-
-    if (posA.x() == posB.x())
-      return posA.y() > posB.y();
-    return posA.x() > posB.x();
-  });
+  sortByRenderOrder(list);
   for (DynamicObject* object : qAsConst(list))
   {
     if (!object->isCharacter() || visibleCharacters.indexOf(reinterpret_cast<Character*>(object)) >= 0)

@@ -33,12 +33,19 @@ public:
   Q_INVOKABLE float getDistance(QPoint, QPoint) const;
   Q_INVOKABLE float getDistance(int ax, int ay, int bx, int by) const { return getDistance(QPoint(ax, ay), QPoint(bx, by)); }
 
+  template<typename LIST>
+  static void sortByRenderOrder(LIST& list)
+  {
+    std::sort(list.begin(), list.end(), &GridComponent::isRenderedBefore);
+  }
+
 protected slots:
   virtual void onCharacterDied(Character*);
   void         onRoofVisibilityChanged(TileLayer*);
 
 protected:
   void addCharacterObserver(Character*, QMetaObject::Connection);
+  static bool isRenderedBefore(const DynamicObject*, const DynamicObject*);
 
   LevelGrid* grid = nullptr;
 private:

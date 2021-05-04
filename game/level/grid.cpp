@@ -154,3 +154,14 @@ float GridComponent::getDistance(QPoint pa, QPoint pb) const
 
   return std::sqrt(static_cast<float>(a * a + b * b));
 }
+
+bool GridComponent::isRenderedBefore(const DynamicObject* a, const DynamicObject* b)
+{
+  QPoint posA = a->getPosition();
+  QPoint posB = b->getPosition();
+
+  if (posA.x() == posB.x())
+    return posA.y() > posB.y();
+  return posA.x() > posB.x();
+}
+
