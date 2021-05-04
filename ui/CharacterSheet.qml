@@ -5,6 +5,8 @@ import "../assets/ui" as UiStyle
 import "../cmap" as CMAP
 import "../ui"
 
+import Game 1.0 as Game;
+
 Pane {
   id: root
   property QtObject characterSheet
@@ -34,12 +36,14 @@ Pane {
   Button {
     id: faceEditorButton
     background: UiStyle.Label { style: parent.down ? "dark" : "base" }
-    FaceDisplay {
+    clip: true
+    CharacterSpritePreview {
       anchors.fill: parent
-      anchors.margins: 5
-      theme: characterSheet.faceTheme
-      color: characterSheet.faceColor
-      accessories: characterSheet.faceAccessories
+      animationName: "walking"
+      animationRepeat: true
+      character: Game.Character {
+        statistics: root.characterSheet
+      }
     }
     onClicked: if (createMode) { faceEditor.open() }
     anchors { top: characterNameRow.top; left: characterNameRow.right; leftMargin: 10 }
