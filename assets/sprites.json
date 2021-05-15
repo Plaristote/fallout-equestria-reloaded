@@ -134,6 +134,265 @@
             "width": 73
         }
     },
+    "diamond-dog": {
+        "damaged-down": {
+            "frameCount": 4,
+            "frameInterval": 218,
+            "height": 62,
+            "offsetX": 748,
+            "offsetY": 0,
+            "repeat": false,
+            "width": 124
+        },
+        "damaged-left": {
+            "frameCount": 5,
+            "frameInterval": 175,
+            "height": 62,
+            "offsetX": 748,
+            "offsetY": 62,
+            "repeat": false,
+            "width": 124
+        },
+        "damaged-right": {
+            "frameCount": 5,
+            "frameInterval": 175,
+            "height": 62,
+            "offsetX": 748,
+            "offsetY": 124,
+            "repeat": false,
+            "width": 124
+        },
+        "damaged-up": {
+            "frameCount": 4,
+            "frameInterval": 218,
+            "height": 62,
+            "offsetX": 748,
+            "offsetY": 186,
+            "repeat": false,
+            "width": 124
+        },
+        "defaultSource": "characters/diamond-dog.png",
+        "fall-down": {
+            "frameCount": 6,
+            "frameInterval": 240,
+            "height": 62,
+            "offsetX": 0,
+            "offsetY": 250,
+            "repeat": false,
+            "width": 124
+        },
+        "fall-left": {
+            "frameCount": 6,
+            "frameInterval": 240,
+            "height": 62,
+            "offsetX": 0,
+            "offsetY": 312,
+            "repeat": false,
+            "width": 124
+        },
+        "fall-right": {
+            "frameCount": 5,
+            "frameInterval": 240,
+            "height": 62,
+            "offsetX": 0,
+            "offsetY": 374,
+            "repeat": false,
+            "width": 124
+        },
+        "fall-up": {
+            "frameCount": 5,
+            "frameInterval": 240,
+            "height": 62,
+            "offsetX": 0,
+            "offsetY": 436,
+            "repeat": false,
+            "width": 124
+        },
+        "get-up-down": {
+            "frameCount": 5,
+            "frameInterval": 175,
+            "height": 62,
+            "offsetX": 620,
+            "offsetY": 250,
+            "repeat": false,
+            "width": 124
+        },
+        "get-up-left": {
+            "frameCount": 5,
+            "frameInterval": 175,
+            "height": 62,
+            "offsetX": 620,
+            "offsetY": 312,
+            "repeat": false,
+            "width": 124
+        },
+        "get-up-right": {
+            "frameCount": 5,
+            "frameInterval": 175,
+            "height": 62,
+            "offsetX": 620,
+            "offsetY": 374,
+            "repeat": false,
+            "width": 124
+        },
+        "get-up-up": {
+            "frameCount": 5,
+            "frameInterval": 175,
+            "height": 62,
+            "offsetX": 620,
+            "offsetY": 436,
+            "repeat": false,
+            "width": 124
+        },
+        "idle-down": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 62,
+            "offsetX": 0,
+            "offsetY": 186,
+            "repeat": false,
+            "width": 124
+        },
+        "idle-left": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 62,
+            "offsetX": 0,
+            "offsetY": 62,
+            "repeat": false,
+            "width": 124
+        },
+        "idle-right": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 62,
+            "offsetX": 0,
+            "offsetY": 124,
+            "repeat": false,
+            "width": 124
+        },
+        "idle-up": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 62,
+            "offsetX": 0,
+            "offsetY": 0,
+            "repeat": false,
+            "width": 124
+        },
+        "melee-down": {
+            "frameCount": 10,
+            "frameInterval": 100,
+            "height": 62,
+            "offsetX": 0,
+            "offsetY": 498,
+            "repeat": false,
+            "width": 124
+        },
+        "melee-left": {
+            "frameCount": 10,
+            "frameInterval": 100,
+            "height": 62,
+            "offsetX": 0,
+            "offsetY": 560,
+            "repeat": false,
+            "width": 124
+        },
+        "melee-right": {
+            "frameCount": 10,
+            "frameInterval": 100,
+            "height": 62,
+            "offsetX": 0,
+            "offsetY": 622,
+            "repeat": false,
+            "width": 124
+        },
+        "melee-up": {
+            "frameCount": 10,
+            "frameInterval": 100,
+            "height": 62,
+            "offsetX": 0,
+            "offsetY": 684,
+            "repeat": false,
+            "width": 124
+        },
+        "use-down": {
+            "frameCount": 5,
+            "frameInterval": 200,
+            "height": 62,
+            "offsetX": 1240,
+            "offsetY": 0,
+            "repeat": false,
+            "width": 124
+        },
+        "use-left": {
+            "frameCount": 5,
+            "frameInterval": 200,
+            "height": 62,
+            "offsetX": 1240,
+            "offsetY": 62,
+            "repeat": false,
+            "width": 124
+        },
+        "use-right": {
+            "frameCount": 5,
+            "frameInterval": 200,
+            "height": 62,
+            "offsetX": 1240,
+            "offsetY": 124,
+            "repeat": false,
+            "width": 124
+        },
+        "use-up": {
+            "frameCount": 5,
+            "frameInterval": 200,
+            "height": 62,
+            "offsetX": 1240,
+            "offsetY": 186,
+            "repeat": false,
+            "width": 124
+        },
+        "walking-down": {
+            "frameCount": 3,
+            "frameInterval": 250,
+            "height": 62,
+            "offsetX": 124,
+            "offsetY": 0,
+            "repeat": true,
+            "width": 124
+        },
+        "walking-left": {
+            "frameCount": 4,
+            "frameInterval": 250,
+            "height": 62,
+            "offsetX": 124,
+            "offsetY": 62,
+            "repeat": true,
+            "width": 124
+        },
+        "walking-right": {
+            "frameCount": 4,
+            "frameInterval": 250,
+            "height": 62,
+            "offsetX": 124,
+            "offsetY": 124,
+            "repeat": true,
+            "width": 124
+        },
+        "walking-up": {
+            "frameCount": 3,
+            "frameInterval": 250,
+            "height": 62,
+            "offsetX": 124,
+            "offsetY": 186,
+            "repeat": true,
+            "width": 124
+        }
+    },
+    "diamong-dog-gray": {
+        "cloneOf": "diamond-dog",
+        "defaultSource": "characters/diamond-dog-gray.png"
+    },
     "effects": {
         "explosion": {
             "frameCount": 35,
