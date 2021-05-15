@@ -415,6 +415,10 @@
             "width": 17
         }
     },
+    "giant-rat": {
+        "cloneOf": "griffon",
+        "defaultSource": "critters/giant-mutated-rat.png"
+    },
     "griffon": {
         "damaged-down": {
             "frameCount": 6,
@@ -1225,10 +1229,6 @@
             "width": 47
         }
     },
-    "giant-rat": {
-      "defaultSource": "critters/giant-mutated-rat.png",
-      "cloneOf": "griffon"
-    },
     "rat": {
         "damaged-down": {
             "frameCount": 3,
@@ -1674,7 +1674,7 @@
             "repeat": false,
             "width": 72
         },
-        "walk-down": {
+        "walking-down": {
             "frameCount": 2,
             "frameInterval": 200,
             "height": 45,
@@ -1683,7 +1683,7 @@
             "repeat": false,
             "width": 72
         },
-        "walk-left": {
+        "walking-left": {
             "frameCount": 4,
             "frameInterval": 200,
             "height": 45,
@@ -1692,7 +1692,7 @@
             "repeat": false,
             "width": 72
         },
-        "walk-right": {
+        "walking-right": {
             "frameCount": 4,
             "frameInterval": 200,
             "height": 45,
@@ -1701,7 +1701,7 @@
             "repeat": false,
             "width": 72
         },
-        "walk-up": {
+        "walking-up": {
             "frameCount": 2,
             "frameInterval": 200,
             "height": 45,

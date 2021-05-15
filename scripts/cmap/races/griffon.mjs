@@ -14,6 +14,7 @@ export function spriteSheet(model) {
 export function onToggled(statistics, toggled) {
   let modifier = toggled ? 1 : -1;
 
+  statistics.setFaceColor(188, 188, 188, 1);
   statistics.strength   += modifier;
   statistics.perception += modifier;
   statistics.endurance  += modifier;
