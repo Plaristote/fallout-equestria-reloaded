@@ -1856,6 +1856,78 @@
         "defaultSource": "critters/timberwolf.png"
     },
     "wolf": {
+        "damaged-down": {
+            "frameCount": 2,
+            "frameInterval": 250,
+            "height": 45,
+            "offsetX": 0,
+            "offsetY": 180,
+            "repeat": false,
+            "width": 72
+        },
+        "damaged-left": {
+            "frameCount": 2,
+            "frameInterval": 200,
+            "height": 45,
+            "offsetX": 0,
+            "offsetY": 270,
+            "repeat": false,
+            "width": 72
+        },
+        "damaged-right": {
+            "frameCount": 2,
+            "frameInterval": 200,
+            "height": 45,
+            "offsetX": 0,
+            "offsetY": 315,
+            "repeat": false,
+            "width": 72
+        },
+        "damaged-up": {
+            "frameCount": 2,
+            "frameInterval": 200,
+            "height": 45,
+            "offsetX": 0,
+            "offsetY": 225,
+            "repeat": false,
+            "width": 72
+        },
+        "dead-down": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 45,
+            "offsetX": 144,
+            "offsetY": 180,
+            "repeat": false,
+            "width": 72
+        },
+        "dead-left": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 45,
+            "offsetX": 144,
+            "offsetY": 270,
+            "repeat": false,
+            "width": 72
+        },
+        "dead-right": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 45,
+            "offsetX": 144,
+            "offsetY": 315,
+            "repeat": false,
+            "width": 72
+        },
+        "dead-up": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 45,
+            "offsetX": 144,
+            "offsetY": 225,
+            "repeat": false,
+            "width": 72
+        },
         "defaultSource": "critters/wolf.png",
         "fall-down": {
             "frameCount": 3,
@@ -1962,6 +2034,42 @@
             "height": 45,
             "offsetX": 0,
             "offsetY": 45,
+            "repeat": false,
+            "width": 72
+        },
+        "use-down": {
+            "frameCount": 5,
+            "frameInterval": 150,
+            "height": 45,
+            "offsetX": 0,
+            "offsetY": 360,
+            "repeat": false,
+            "width": 72
+        },
+        "use-left": {
+            "frameCount": 5,
+            "frameInterval": 150,
+            "height": 45,
+            "offsetX": 0,
+            "offsetY": 450,
+            "repeat": false,
+            "width": 72
+        },
+        "use-right": {
+            "frameCount": 5,
+            "frameInterval": 150,
+            "height": 45,
+            "offsetX": 0,
+            "offsetY": 495,
+            "repeat": false,
+            "width": 72
+        },
+        "use-up": {
+            "frameCount": 5,
+            "frameInterval": 150,
+            "height": 45,
+            "offsetX": 0,
+            "offsetY": 405,
             "repeat": false,
             "width": 72
         },
