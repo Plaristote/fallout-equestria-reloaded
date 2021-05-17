@@ -1,5 +1,7 @@
 export const withFaceColor = true;
 
+export const faces = ["gator-pony"];
+
 export function spriteSheet(model) {
   return {
     cloneOf:    "gator-pony",
