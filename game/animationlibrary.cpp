@@ -326,7 +326,7 @@ void AnimationLibrary::prerenderCharacterSpriteSheet(const CharacterSpriteDescri
     spritesheet.addLayer(QImage(ASSETS_PATH + "sprites/characters/" + descriptor.baseStaticColor + ".png"));
   for (auto it = layers.begin() ; it != layers.end() ; ++it)
   {
-    const QImage image(ASSETS_PATH + it.key() + '/' + it.value());
+    const QImage image(ASSETS_PATH + it.key() + '/' + descriptor.base + '/' + it.value());
 
     spritesheet.addLayer(image);
   }
