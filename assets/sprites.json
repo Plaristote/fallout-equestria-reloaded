@@ -524,7 +524,7 @@
             "repeat": false,
             "width": 85
         },
-        "defaultSource": "characters/gator-pony-2.png",
+        "defaultSource": "characters/gator-pony.png",
         "fall-down": {
             "frameCount": 9,
             "frameInterval": 150,
@@ -2037,42 +2037,6 @@
             "repeat": false,
             "width": 72
         },
-        "use-down": {
-            "frameCount": 5,
-            "frameInterval": 150,
-            "height": 45,
-            "offsetX": 0,
-            "offsetY": 360,
-            "repeat": false,
-            "width": 72
-        },
-        "use-left": {
-            "frameCount": 5,
-            "frameInterval": 150,
-            "height": 45,
-            "offsetX": 0,
-            "offsetY": 450,
-            "repeat": false,
-            "width": 72
-        },
-        "use-right": {
-            "frameCount": 5,
-            "frameInterval": 150,
-            "height": 45,
-            "offsetX": 0,
-            "offsetY": 495,
-            "repeat": false,
-            "width": 72
-        },
-        "use-up": {
-            "frameCount": 5,
-            "frameInterval": 150,
-            "height": 45,
-            "offsetX": 0,
-            "offsetY": 405,
-            "repeat": false,
-            "width": 72
-        },
         "melee-down": {
             "frameCount": 5,
             "frameInterval": 150,
@@ -2101,6 +2065,42 @@
             "width": 72
         },
         "melee-up": {
+            "frameCount": 5,
+            "frameInterval": 150,
+            "height": 45,
+            "offsetX": 0,
+            "offsetY": 405,
+            "repeat": false,
+            "width": 72
+        },
+        "use-down": {
+            "frameCount": 5,
+            "frameInterval": 150,
+            "height": 45,
+            "offsetX": 0,
+            "offsetY": 360,
+            "repeat": false,
+            "width": 72
+        },
+        "use-left": {
+            "frameCount": 5,
+            "frameInterval": 150,
+            "height": 45,
+            "offsetX": 0,
+            "offsetY": 450,
+            "repeat": false,
+            "width": 72
+        },
+        "use-right": {
+            "frameCount": 5,
+            "frameInterval": 150,
+            "height": 45,
+            "offsetX": 0,
+            "offsetY": 495,
+            "repeat": false,
+            "width": 72
+        },
+        "use-up": {
             "frameCount": 5,
             "frameInterval": 150,
             "height": 45,

@@ -12,6 +12,7 @@ StatModel::StatModel(QObject *parent) : QObject(parent)
   hitPoints = 1;
   skillPoints = 0;
   experience = 0;
+  faceColor = eyeColor = hairColor = Qt::transparent;
   connect(this, &StatModel::specialChanged, this, &StatModel::updateBaseValues);
   connect(this, &StatModel::traitsChanged,  this, &StatModel::updateBaseValues);
   connect(this, &StatModel::raceChanged,    this, &StatModel::updateBaseValues);
@@ -277,7 +278,7 @@ void StatModel::toggleTrait(const QString& name, bool value)
   if ((value  && this->traits.contains(name)) ||
       (!value && !this->traits.contains(name)))
     return ;
-  for (auto trait : traits)
+  for (const auto& trait : traits)
   {
     if  (trait.name == name)
     {
@@ -296,7 +297,7 @@ void StatModel::togglePerk(const QString &name, bool value)
 {
   const auto& perks = Perk::getPerks();
 
-  for (auto perk : perks)
+  for (const auto& perk : perks)
   {
     if (perk.name == name)
     {

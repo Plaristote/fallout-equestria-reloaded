@@ -15,21 +15,23 @@ UiStyle.CustomDialog {
   height: parent.height
   header: null
 
-  onCharacterSheetChanged: {
-    if (characterSheet.faceTheme == "" && characterSheet.faceOptions.length > 0)
-      initializeFace();
-  }
+  onCharacterSheetChanged: initializeFace()
 
   Connections {
     target: characterSheet
     function onRaceChanged() {
+      characterSheet.faceTheme = "";
       initializeFace();
     }
   }
 
   function initializeFace() {
-    characterSheet.faceTheme = characterSheet.faceOptions[0];
-    characterSheet.faceColor = Qt.rgba(255, 255, 255, 0.5);
+    /*
+    if (characterSheet.faceTheme == "" && characterSheet.faceOptions.length > 0) {
+      characterSheet.faceTheme = characterSheet.faceOptions[0];
+      characterSheet.faceColor = Qt.rgba(255, 255, 255, 0.5);
+    }
+    */
   }
 
   WindowDialogs.ColorDialog {

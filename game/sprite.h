@@ -18,7 +18,7 @@ class Sprite : public StorableObject
 public:
   explicit Sprite(QObject *parent = nullptr);
 
-  void update(qint64);
+  Q_INVOKABLE void update(qint64);
 
   Q_INVOKABLE void setSpriteName(const QString& value) { name = value; }
   Q_INVOKABLE QString getSpriteName() const { return name; }
