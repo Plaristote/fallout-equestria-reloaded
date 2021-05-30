@@ -29,14 +29,6 @@ void TileLayer::load(const QJsonObject& object, const QVector<Tileset*>& tileset
   }
 }
 
-static QPoint getRenderPosition(QPoint offset, QPoint currentPosition, QSize tileSize)
-{
-  return QPoint(
-    offset.x() + currentPosition.x() * tileSize.width()  / 2 - currentPosition.y() * tileSize.width()  / 2,
-    offset.y() + currentPosition.y() * tileSize.height() / 2 + currentPosition.x() * tileSize.height() / 2
-  );
-}
-
 void TileLayer::initialize(QSize size)
 {
   this->size = size;
@@ -72,7 +64,7 @@ void TileLayer::fill(Tileset* tileset, int tileId)
         tile = new Tile(this);
         *it = tile;
       }
-      prepareTile(tile, tileset, tileId, tile->getPosition());
+      tile->prepare(offset, tileset, tileId, tile->getPosition());
     }
     dirtyRenderRect = dirtyRenderSize = true;
   }
@@ -112,19 +104,10 @@ void TileLayer::setTileIdAt(int x, int y, Tileset *tileset, int tileId)
         tile->setPosition(coordinates);
         tiles[position] = tile;
       }
-      prepareTile(tile, tileset, tileId, coordinates);
+      tile->prepare(offset, tileset, tileId, coordinates);
     }
   }
   dirtyRenderRect = dirtyRenderSize = true;
-}
-
-void TileLayer::prepareTile(Tile* tile, const Tileset* tileset, int tid, QPoint position)
-{
-  tile->setTexture(&(tileset->getImage()));
-  tile->setImage(&tileset->getSource());
-  tile->setPosition(position);
-  tile->setRect(tileset->getClipRectFor(tid));
-  tile->setRenderPosition(getRenderPosition(offset, position, tileset->getTileSize()));
 }
 
 void TileLayer::loadTiles(const QJsonArray& tileArray, const QVector<Tileset*>& tilesets)
@@ -144,7 +127,7 @@ void TileLayer::loadTiles(const QJsonArray& tileArray, const QVector<Tileset*>& 
         {
           Tile* tile = new Tile(this);
 
-          prepareTile(tile, tileset, tid, currentPosition);
+          tile->prepare(offset, tileset, tid, currentPosition);
           tiles.push_back(tile);
           break ;
         }

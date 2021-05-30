@@ -22,6 +22,22 @@ static bool lineIntersectsRect(QLineF line, QRectF rect)
          (bottomSide.intersects(line, nullptr) == QLineF::BoundedIntersection);
 }
 
+static bool isWall(const TileLayer* layer, int x, int y)
+{
+  if (layer)
+  {
+    Tile* tile = layer->getTile(x, y);
+
+    if (tile)
+    {
+      QVariant doorwayProp = tile->getProperty("doorway");
+
+      return doorwayProp.isNull() || doorwayProp.toBool() == false;
+    }
+  }
+  return false;
+}
+
 bool LevelGrid::CaseContent::isBlocked() const
 {
   if (!occupied)
@@ -42,13 +58,17 @@ LevelGrid::LevelGrid(QObject *parent) : QObject(parent)
 
 void LevelGrid::initializeGrid(TileMap* tilemap)
 {
-  auto* wallLayer = tilemap->getLayer("walls");
+  auto* blocks = tilemap->getLayer("blocks");
+  auto* wallsV = tilemap->getLayer("walls-v");
+  auto* wallsH = tilemap->getLayer("walls-h");
 
   size = tilemap->getSize();
   grid.resize(size.width() * size.height());
-  eachCase([wallLayer](int x, int y, CaseContent& gridCase)
+  eachCase([blocks, wallsV, wallsH](int x, int y, CaseContent& gridCase)
   {
-    gridCase.occupied = wallLayer->getTile(x, y) != nullptr;
+    gridCase.occupied = isWall(blocks, x, y);
+    gridCase.hwall    = isWall(wallsH, x, y);
+    gridCase.vwall    = isWall(wallsV, x, y);
     gridCase.position = QPoint(x, y);
   });
   initializePathfinding();
@@ -152,22 +172,31 @@ void LevelGrid::initializePathfinding()
 
     std::function<bool (LevelGrid::CaseContent*)> isAvailable = [](LevelGrid::CaseContent* entry) { return entry && !entry->occupied; };
 
+    bool upWalled        = up && up->hwall;
+    bool upLeftWalled    = (upLeft  && (upLeft->hwall || upLeft->vwall)) || (left && left->vwall) || upWalled;
+    bool upRightWalled   = (upRight && upRight->hwall) || (gridCase.vwall) || upWalled || (up && up->vwall);
+    bool downWalled      = gridCase.hwall;
+    bool downLeftWalled  = gridCase.hwall || (left  && (left->hwall || left->vwall)) || (downLeft && downLeft->vwall);
+    bool downRightWalled = gridCase.hwall || gridCase.vwall || (right && right->hwall) || (down && down->vwall);
+    bool leftWalled      = left && left->vwall;
+    bool rightWalled     = gridCase.vwall;
+
     gridCase.successors.clear();
-    if (isAvailable(upLeft) && !(!isAvailable(left) && !isAvailable(up)))
+    if (!upLeftWalled    && isAvailable(upLeft) && !(!isAvailable(left) && !isAvailable(up)))
       gridCase.successors.push_back(upLeft);
-    if (isAvailable(up))
+    if (!upWalled        && isAvailable(up))
       gridCase.successors.push_back(up);
-    if (isAvailable(upRight) && !(!isAvailable(up) && !isAvailable(right)))
+    if (!upRightWalled   && isAvailable(upRight) && !(!isAvailable(up) && !isAvailable(right)))
       gridCase.successors.push_back(upRight);
-    if (isAvailable(left))
+    if (!leftWalled      && isAvailable(left))
       gridCase.successors.push_back(left);
-    if (isAvailable(right))
+    if (!rightWalled     && isAvailable(right))
       gridCase.successors.push_back(right);
-    if (isAvailable(downLeft) && !(!isAvailable(left) && !isAvailable(down)))
+    if (!downLeftWalled  && isAvailable(downLeft) && !(!isAvailable(left) && !isAvailable(down)))
       gridCase.successors.push_back(downLeft);
-    if (isAvailable(down))
+    if (!downWalled      && isAvailable(down))
       gridCase.successors.push_back(down);
-    if (isAvailable(downRight) && !(!isAvailable(down) && !isAvailable(right)))
+    if (!downRightWalled && isAvailable(downRight) && !(!isAvailable(down) && !isAvailable(right)))
       gridCase.successors.push_back(downRight);
   }
 }

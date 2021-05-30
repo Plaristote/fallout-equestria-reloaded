@@ -51,7 +51,6 @@ signals:
 
 private:
   void loadTiles(const QJsonArray&, const QVector<Tileset*>& tilesets);
-  void prepareTile(Tile*, const Tileset*, int tid, QPoint position);
   void prepareRenderRect();
   void prepareRenderSize();
 

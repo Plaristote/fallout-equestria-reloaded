@@ -1,6 +1,9 @@
 #include "tileset.h"
+#include "properties.h"
 #include <QFile>
 #include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonArray>
 #include <QDebug>
 
 static const QString tilesetsPath = "./assets/tilesets/";
@@ -29,11 +32,24 @@ bool Tileset::load(const QString& filepath, int firstGid)
     sourceSize.setWidth(document["imagewidth"].toInt());
     sourceSize.setHeight(document["imageheight"].toInt());
     tileCount = document["tilecount"].toInt();
+    loadProperties(document);
     return true;
   }
   else
     qDebug() << "Tileset: failed to open tileset" << filepath;
   return false;
+}
+
+void Tileset::loadProperties(const QJsonDocument& document)
+{
+  const QJsonArray tiles = document["tiles"].toArray();
+
+  for (const QJsonValue& descriptors : tiles)
+  {
+    int tileId = descriptors["id"].toInt();
+
+    tileProperties.insert(tileId, loadTiledProperties(descriptors.toObject()));
+  }
 }
 
 QRect Tileset::getClipRectFor(int tileId) const
@@ -53,4 +69,17 @@ QRect Tileset::getClipRectFor(int tileId) const
   else
     qDebug() << "Tileset:" << name << ": out of range tile" << tileId;
   return result;
+}
+
+QVariant Tileset::getProperty(int tileId, const QByteArray &name) const
+{
+  tileId -= firstGid;
+  if (tileProperties.contains(tileId))
+  {
+    const QVariantMap& properties = tileProperties[tileId];
+
+    if (properties.contains(name))
+      return properties[name];
+  }
+  return QVariant();
 }

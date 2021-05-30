@@ -18,6 +18,7 @@ class LevelGrid : public QObject
 
   struct CaseContent
   {
+    bool                      hwall = false, vwall = false;
     bool                      occupied = false;
     DynamicObject*            occupant = nullptr;
     QPoint                    position;

@@ -63,6 +63,7 @@ private:
   void loadRoofFolder(const QJsonObject&);
   void loadLightFolder(const QJsonObject&);
   void loadZoneFolder(const QJsonObject&);
+  void loadWallFolder(const QJsonObject&);
   void loadLightTileset();
 
   QSize                   tileSize;

@@ -15,7 +15,9 @@ export class Controller {
     this.wallSize = { width: this.tileSize.width, height: this.tileSize.height * 3 };
     this.layers   = {
       ground: this.tilemap.getLayer("ground"),
-      walls:  this.tilemap.getLayer("walls"),
+      blocks: this.tilemap.getLayer("blocks"),
+      vwalls: this.tilemap.getLayer("walls-v"),
+      hwalls: this.tilemap.getLayer("walls-h"),
       misc:   this.tilemap.getLayer("misc")
     };
     this.frameCount = 0;
@@ -199,13 +201,22 @@ export class Controller {
   }
 
   renderCoordinates(x, y) {
-    const wall = this.layers.walls.getTile(x, y);
+    const block = this.layers.blocks ? this.layers.blocks.getTile(x, y) : null;
 
-    if (wall)
-      this.renderWall(wall, x, y);
-    else {
+    if (block)
+      this.renderWall(block, x, y);
+    {
+      const vwall = this.layers.vwalls ? this.layers.vwalls.getTile(x, y) : null;
+      const hwall = this.layers.hwalls ? this.layers.hwalls.getTile(x, y) : null;
+
       this.renderMisc(x, y);
       this.renderObjects[x][y].forEach(this.renderDynamicObject.bind(this));
+      if (this.playerPosition.x === x && this.playerPosition.y === y)
+        this.renderAfterPlayer = true;
+      if (vwall)
+        this.renderWall(vwall, x, y);
+      if (hwall)
+        this.renderWall(hwall, x, y);
     }
   }
 
