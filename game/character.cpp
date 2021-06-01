@@ -200,17 +200,18 @@ void Character::fall(int distance, const QString &directionName)
 
 void Character::fall(int distance, Direction direction)
 {
-  QPoint    from      = getPosition();
-  QPoint    target    = from;
+  QPoint from   = getPosition();
+  QPoint target = from;
 
   if (direction != NoDir)
   {
-    auto*     level     = Game::get()->getLevel();
-    auto*     grid      = level->getGrid();
+    auto* level = Game::get()->getLevel();
+    auto* grid  = level->getGrid();
 
     while (distance > 0)
     {
       QPoint candidate = target;
+      auto*  currentCase = grid->getGridCase(candidate.x(), candidate.y());
 
       if (direction & UpperDir)
         candidate.ry() -= 1;
@@ -220,7 +221,7 @@ void Character::fall(int distance, Direction direction)
         candidate.rx() -= 1;
       else if (direction & RightDir)
         candidate.rx() += 1;
-      if (grid->isOccupied(candidate.x(), candidate.y()))
+      if (currentCase && !currentCase->isLinkedTo(candidate))
         break ;
       target = candidate;
       distance--;

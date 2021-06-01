@@ -8,7 +8,7 @@ QVariant tiledPropertyToVariant(const QJsonObject& object)
 
   if (typeName == "bool")
     return object["value"].toBool();
-  if (typeName == "string" || typeName == "color")
+  if (typeName == "string" || typeName == "color" || typeName == "file")
     return object["value"].toString();
   if (typeName == "float")
     return object["value"].toDouble();

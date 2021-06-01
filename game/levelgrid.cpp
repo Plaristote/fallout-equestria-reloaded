@@ -22,6 +22,20 @@ static bool lineIntersectsRect(QLineF line, QRectF rect)
          (bottomSide.intersects(line, nullptr) == QLineF::BoundedIntersection);
 }
 
+static bool losIntersectsWithHWall(QLineF line, QRectF rect)
+{
+  QLineF bottomSide(rect.bottomLeft(), rect.bottomRight());
+
+  return bottomSide.intersects(line, nullptr) == QLineF::BoundedIntersection;
+}
+
+static bool losIntersectsWithVWall(QLineF line, QRectF rect)
+{
+  QLineF rightSide(rect.topRight(), rect.bottomRight());
+
+  return rightSide.intersects(line, nullptr) == QLineF::BoundedIntersection;
+}
+
 static bool isWall(const TileLayer* layer, int x, int y)
 {
   if (layer)
@@ -38,6 +52,23 @@ static bool isWall(const TileLayer* layer, int x, int y)
   return false;
 }
 
+static char getCoverValue(const TileLayer* layer, const LevelGrid::CaseContent& caseContent)
+{
+  if (layer)
+  {
+    Tile* tile = layer->getTile(caseContent.position.x(), caseContent.position.y());
+
+    if (tile)
+    {
+      QVariant coverProp = tile->getProperty("cover");
+
+      if (!coverProp.isNull())
+        return static_cast<char>(coverProp.toInt());
+    }
+  }
+  return caseContent.hwall || caseContent.vwall || caseContent.occupied ? 100 : 0;
+}
+
 bool LevelGrid::CaseContent::isBlocked() const
 {
   if (!occupied)
@@ -52,24 +83,43 @@ bool LevelGrid::CaseContent::isBlocked() const
   return true;
 }
 
+bool LevelGrid::CaseContent::isLinkedTo(QPoint position) const
+{
+  auto iterator = std::find_if(successors.begin(), successors.end(), [position](CaseContent* successor) -> bool
+  {
+    return !successor->isBlocked() && successor->position == position;
+  });
+
+  return iterator != successors.end();
+}
+
 LevelGrid::LevelGrid(QObject *parent) : QObject(parent)
 {
 }
 
 void LevelGrid::initializeGrid(TileMap* tilemap)
 {
+  auto* ground = tilemap->getLayer("ground");
   auto* blocks = tilemap->getLayer("blocks");
   auto* wallsV = tilemap->getLayer("walls-v");
   auto* wallsH = tilemap->getLayer("walls-h");
 
   size = tilemap->getSize();
   grid.resize(size.width() * size.height());
-  eachCase([blocks, wallsV, wallsH](int x, int y, CaseContent& gridCase)
+  eachCase([ground, blocks, wallsV, wallsH](int x, int y, CaseContent& gridCase)
   {
-    gridCase.occupied = isWall(blocks, x, y);
+    gridCase.occupied = gridCase.block = isWall(blocks, x, y);
     gridCase.hwall    = isWall(wallsH, x, y);
     gridCase.vwall    = isWall(wallsV, x, y);
     gridCase.position = QPoint(x, y);
+    if (gridCase.block)
+      gridCase.cover  = getCoverValue(blocks, gridCase);
+    else
+      gridCase.cover  = getCoverValue(ground, gridCase);
+    if (gridCase.hwall)
+      gridCase.hcover = getCoverValue(wallsH, gridCase);
+    if (gridCase.vwall)
+      gridCase.vcover = getCoverValue(wallsV, gridCase);
   });
   initializePathfinding();
 }
@@ -315,7 +365,8 @@ int LevelGrid::getVisionQuality(int fromX, int fromY, int toX, int toY)
   const QPointF sightFrom(static_cast<qreal>(fromX - minX) * caseSize, static_cast<qreal>(fromY - minY) * caseSize);
   const QPointF sightTo  (static_cast<qreal>(toX - minX) * caseSize,   static_cast<qreal>(toY - minY) * caseSize);
   const QLineF  sightLine(sightFrom, sightTo);
-  int visionScore = 100;
+  char  cover = 0;
+  char  obstacleCount = 0;
 
   for (int x = minX ; x <= maxX ; ++x)
   {
@@ -323,26 +374,42 @@ int LevelGrid::getVisionQuality(int fromX, int fromY, int toX, int toY)
     {
       LevelGrid::CaseContent* gridCase;
       qreal posX, posY;
+      QRectF caseRect;
 
       if ((x == fromX && y == fromY) || (x == toX && y == toY))
         continue ;
       gridCase = getGridCase(x, y);
-      if (!gridCase || !gridCase->occupied)
+      if (!gridCase || (!gridCase->occupant && (gridCase->cover + gridCase->hcover + gridCase->vcover) == 0))
         continue ;
       posX = static_cast<qreal>(x - minX) * 10;
       posY = static_cast<qreal>(y - minY) * 10;
-      if (lineIntersectsRect(sightLine, QRectF(posX, posY, caseSize, caseSize)))
+      caseRect = QRectF(posX, posY, caseSize, caseSize);
+      if (lineIntersectsRect(sightLine, caseRect))
       {
+        cover = std::max(cover, gridCase->cover);
+        if (gridCase->block)
+          obstacleCount++;
+        if (gridCase->hwall && losIntersectsWithHWall(sightLine, caseRect))
+        {
+          cover = std::max(cover, gridCase->hcover);
+          obstacleCount++;
+        }
+        if (gridCase->vwall && losIntersectsWithVWall(sightLine, caseRect))
+        {
+          cover = std::max(cover, gridCase->vcover);
+          obstacleCount++;
+        }
         if (gridCase->occupant)
-          visionScore -= gridCase->occupant->getCoverValue();
-        else
-          visionScore = 0;
-        if (visionScore <= 0)
-          return std::max(0, visionScore);
+        {
+          cover = std::max(cover, static_cast<char>(gridCase->occupant->getCoverValue()));
+          obstacleCount++;
+        }
+        if (cover >= 100)
+          return 0;
       }
     }
   }
-  return std::max(0, visionScore);
+  return std::max(0, 100 - cover - obstacleCount);
 }
 
 void LevelGrid::removeObject(DynamicObject* object)

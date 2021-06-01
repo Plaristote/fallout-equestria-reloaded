@@ -16,9 +16,11 @@ class LevelGrid : public QObject
 {
   Q_OBJECT
 
+public:
   struct CaseContent
   {
-    bool                      hwall = false, vwall = false;
+    char                      hcover = 0, vcover = 0, cover = 0;
+    bool                      hwall = false, vwall = false, block = false;
     bool                      occupied = false;
     DynamicObject*            occupant = nullptr;
     QPoint                    position;
@@ -26,6 +28,7 @@ class LevelGrid : public QObject
     QVector<TileZone*>        zones;
 
     bool  isBlocked() const;
+    bool  isLinkedTo(QPoint) const;
     bool  operator==(const CaseContent& other) { return position == other.position; }
     bool  operator==(const CaseContent* other) { return position == other->position; }
     float GetCost(const CaseContent&) const { return 1.f; }
@@ -33,7 +36,6 @@ class LevelGrid : public QObject
     std::list<CaseContent*> GetSuccessors(const CaseContent* parent) const;
   };
 
-public:
   explicit LevelGrid(QObject *parent = nullptr);
 
   void initializeGrid(TileMap*);
