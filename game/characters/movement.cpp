@@ -63,6 +63,7 @@ void CharacterMovement::moveTo(int x, int y)
     QString animationName;
     QPoint  renderPosition = level->getRenderPositionForTile(x, y);
 
+    renderPosition.ry() -= level->getTileMap()->getTileSize().height() / 4;
     lookTo(x, y);
     animationName = movementMode + '-' + orientation;
     moveToCoordinates(renderPosition);

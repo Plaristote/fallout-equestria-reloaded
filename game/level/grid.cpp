@@ -84,6 +84,8 @@ void GridComponent::setObjectPosition(DynamicObject* object, int x, int y)
   {
     QPoint renderPosition = getRenderPositionForTile(x, y);
 
+    if (object->isCharacter())
+      renderPosition.ry() -= tilemap->getTileSize().height() / 4;
     object->setRenderPosition(renderPosition);
   }
 }
