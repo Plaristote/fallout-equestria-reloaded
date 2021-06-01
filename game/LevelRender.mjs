@@ -338,6 +338,16 @@ export class Controller {
           clippedRect.x, clippedRect.y, clippedRect.width, clippedRect.height,
           offset.x, offset.y, clippedRect.width, clippedRect.height
         );
+/*
+                if (sprite.getObjectType() === "Character") {
+                  const vision_score = this.level.grid.getVisionQuality(this.level.player.position.x, this.level.player.position.y, sprite.position.x, sprite.position.y);
+                  this.context.font = "bold 20px sans-serif";
+                  this.context.fillStyle = "#FFFFFF";
+                  this.context.fillText(`${vision_score}%`, offset.x, offset.y);
+                  this.context.strokeStyle = "#000000";
+                  this.context.strokeText(`${vision_score}%`, offset.x, offset.y);
+                }
+*/
         return true;
       }
     } catch (err) {

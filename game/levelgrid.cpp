@@ -52,7 +52,7 @@ static bool isWall(const TileLayer* layer, int x, int y)
   return false;
 }
 
-static char getCoverValue(const TileLayer* layer, const LevelGrid::CaseContent& caseContent)
+static char getCoverValue(const TileLayer* layer, const LevelGrid::CaseContent& caseContent, bool hasObstacle)
 {
   if (layer)
   {
@@ -66,7 +66,7 @@ static char getCoverValue(const TileLayer* layer, const LevelGrid::CaseContent& 
         return static_cast<char>(coverProp.toInt());
     }
   }
-  return caseContent.hwall || caseContent.vwall || caseContent.occupied ? 100 : 0;
+  return hasObstacle ? 100 : 0;
 }
 
 bool LevelGrid::CaseContent::isBlocked() const
@@ -113,13 +113,13 @@ void LevelGrid::initializeGrid(TileMap* tilemap)
     gridCase.vwall    = isWall(wallsV, x, y);
     gridCase.position = QPoint(x, y);
     if (gridCase.block)
-      gridCase.cover  = getCoverValue(blocks, gridCase);
+      gridCase.cover  = getCoverValue(blocks, gridCase, gridCase.block);
     else
-      gridCase.cover  = getCoverValue(ground, gridCase);
+      gridCase.cover  = getCoverValue(ground, gridCase, gridCase.block);
     if (gridCase.hwall)
-      gridCase.hcover = getCoverValue(wallsH, gridCase);
+      gridCase.hcover = getCoverValue(wallsH, gridCase, gridCase.hwall);
     if (gridCase.vwall)
-      gridCase.vcover = getCoverValue(wallsV, gridCase);
+      gridCase.vcover = getCoverValue(wallsV, gridCase, gridCase.vwall);
   });
   initializePathfinding();
 }
