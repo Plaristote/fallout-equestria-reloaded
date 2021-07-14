@@ -35,7 +35,7 @@ export class Controller {
 
   initializeRenderObjects() {
     this.renderObjects = initializeRenderQueue(this.mapSize);
-    this.renderObjects = fillRenderQueue(this.renderObjects, this.level);
+    this.renderObjects = fillRenderQueue(this.renderObjects, this.level, this.optionViewAll);
   }
 
   render() {

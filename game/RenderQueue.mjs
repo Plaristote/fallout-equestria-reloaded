@@ -38,7 +38,7 @@ export function initializeRenderQueue(mapSize) {
   return queue;
 }
 
-export function fillRenderQueue(renderQueue, level) {
+export function fillRenderQueue(renderQueue, level, viewAll) {
   const objects            = level.dynamicObjects;
   const detectedCharacters = makeDetectionList(level.visibleCharacters);
 
@@ -46,7 +46,7 @@ export function fillRenderQueue(renderQueue, level) {
     const object    = objects[i];
     const position  = object.getPosition();
     const isValid   = position.x >= 0 && position.y >= 0;
-    const isVisible = isValid && isObjectVisible(object, detectedCharacters);
+    const isVisible = isValid && (viewAll || isObjectVisible(object, detectedCharacters));
     var   array     = renderQueue[position.x][position.y];
 
     if (!isVisible)
