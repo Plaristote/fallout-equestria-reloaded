@@ -93,25 +93,30 @@ bool LevelGrid::CaseContent::isLinkedTo(QPoint position) const
   return iterator != successors.end();
 }
 
-LevelGrid::LevelGrid(QObject *parent) : QObject(parent)
+struct PrepareCaseFunctor
 {
-}
+  TileLayer* ground;
+  TileLayer* blocks;
+  TileLayer* wallsV;
+  TileLayer* wallsH;
 
-void LevelGrid::initializeGrid(TileMap* tilemap)
-{
-  auto* ground = tilemap->getLayer("ground");
-  auto* blocks = tilemap->getLayer("blocks");
-  auto* wallsV = tilemap->getLayer("walls-v");
-  auto* wallsH = tilemap->getLayer("walls-h");
+  void run(int x, int y, LevelGrid::CaseContent& gridCase)
+  {
+    obstacle(x, y, gridCase);
+    cover(gridCase);
+  }
 
-  size = tilemap->getSize();
-  grid.resize(size.width() * size.height());
-  eachCase([ground, blocks, wallsV, wallsH](int x, int y, CaseContent& gridCase)
+private:
+  void obstacle(int x, int y, LevelGrid::CaseContent& gridCase)
   {
     gridCase.occupied = gridCase.block = isWall(blocks, x, y);
     gridCase.hwall    = isWall(wallsH, x, y);
     gridCase.vwall    = isWall(wallsV, x, y);
     gridCase.position = QPoint(x, y);
+  }
+
+  void cover(LevelGrid::CaseContent& gridCase)
+  {
     if (gridCase.block)
       gridCase.cover  = getCoverValue(blocks, gridCase, gridCase.block);
     else
@@ -120,7 +125,24 @@ void LevelGrid::initializeGrid(TileMap* tilemap)
       gridCase.hcover = getCoverValue(wallsH, gridCase, gridCase.hwall);
     if (gridCase.vwall)
       gridCase.vcover = getCoverValue(wallsV, gridCase, gridCase.vwall);
-  });
+  }
+};
+
+LevelGrid::LevelGrid(QObject *parent) : QObject(parent)
+{
+}
+
+void LevelGrid::initializeGrid(TileMap* tilemap)
+{
+  PrepareCaseFunctor functor;
+
+  functor.ground = tilemap->getLayer("ground");
+  functor.blocks = tilemap->getLayer("blocks");
+  functor.wallsV = tilemap->getLayer("walls-v");
+  functor.wallsH = tilemap->getLayer("walls-h");
+  size = tilemap->getSize();
+  grid.resize(size.width() * size.height());
+  eachCase(std::bind(&PrepareCaseFunctor::run, &functor, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
   initializePathfinding();
 }
 
