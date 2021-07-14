@@ -92,7 +92,7 @@ void TileMap::loadLayers(const QJsonArray& layersData)
       auto loader = loaders.find(layerName);
 
       if (loader != loaders.end())
-        (this->*loader.value())(layerData);
+        (this->**loader)(layerData);
     }
   }
 }
