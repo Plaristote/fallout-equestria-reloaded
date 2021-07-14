@@ -1177,6 +1177,16 @@
             "source": "medikit.png",
             "width": 72
         },
+        "misc": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 36,
+            "offsetX": 0,
+            "offsetY": 0,
+            "repeat": false,
+            "source": "items/misc.png",
+            "width": 72
+        },
         "power-armor": {
             "frameCount": 1,
             "frameInterval": 0,
