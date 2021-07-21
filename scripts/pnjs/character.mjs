@@ -23,7 +23,29 @@ export class CharacterBehaviour extends CombatComponent {
   }
 
   onLook() {
-    game.appendToConsole(i18n.t("inspection.character", {target: this.model.statistics.name}));
+    var message = i18n.t("inspection.character", {target: this.model.statistics.name});
+    const hpPercentage = this.model.statistics.hpPercentage;
+    const gender = this.model.statistics.gender;
+    const states = {
+      "max":    function (value) { return value >= 100; },
+      "fine":   function (value) { return value >= 50; },
+      "middle": function (value) { return value >= 25; },
+      "low":    function (value) { return value >= 10; },
+      "min":    function (value) { return value >= 0; }
+    }
+
+    message += ' ';
+    if (this.model.isAlive()) {
+      for (var key in states) {
+        if (states[key](hpPercentage)) {
+          message += i18n.t(`inspection.character-state-${gender}`, {state: i18n.t(`inspection.character-states.${key}`)});
+          break ;
+	}
+      }
+    }
+    else
+      message += i18n.t(`inspection.character-dead-${gender}`);
+    game.appendToConsole(message);
     return true;
   }
 

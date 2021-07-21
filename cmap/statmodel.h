@@ -65,6 +65,7 @@ class StatModel : public QObject
   Q_PROPERTY(int  availablePerks MEMBER availablePerks NOTIFY availablePerksChanged)
   Q_PROPERTY(int  specialPoints  MEMBER specialPoints NOTIFY specialChanged)
   Q_PROPERTY(bool acceptable     READ isAcceptable NOTIFY acceptableChanged)
+  Q_PROPERTY(float hpPercentage  READ hpPercentage NOTIFY hitPointsChanged)
 
   Q_PROPERTY(QJsonDocument variables MEMBER variables)
 
@@ -138,6 +139,7 @@ public:
 
   QStringList& rbuffs() { return buffs; }
 
+  float hpPercentage() const;
   const QString& getRace() const { return race; }
   void setRace(const QString& newRace);
   const QString& getName() const { return name; }

@@ -21,6 +21,15 @@ StatModel::StatModel(QObject *parent) : QObject(parent)
   connect(this, &StatModel::nameChanged,    this, &StatModel::acceptableChanged);
 }
 
+float StatModel::hpPercentage() const
+{
+  float maxHp = static_cast<float>(get_maxHitPoints());
+
+  if (maxHp > 0)
+    return static_cast<float>(hitPoints) / maxHp * 100.f;
+  return 0;
+}
+
 QStringList StatModel::getAvailableRaces() const
 {
   Game* game = Game::get();

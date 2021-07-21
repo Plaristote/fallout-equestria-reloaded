@@ -122,7 +122,18 @@
         }
     },
     "inspection": {
-        "character": "You see {{target}}.",
+        "character-male": "You see {{target}}.",
+	"character-dead-male": "He's dead.",
+	"character-dead-female": "She's dead.",
+	"character-state-male": "He looks {{state}}.",
+	"character-state-female": "She looks {{state}}.",
+	"character-states": {
+          "max": "unharmed",
+	  "fine": "slightly hurt",
+	  "middle": "rough",
+	  "low": "badly wounded",
+	  "min": "almost dead"
+	},
 	"item": "You see {{item}}.",
         "trap": "You see a trap.",
 	"disarmed": "It's disarmed.",
