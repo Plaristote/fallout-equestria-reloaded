@@ -87,6 +87,8 @@ void InteractionComponent::interactOrderReceived(DynamicObject* target, const QS
   actions->pushReach(target, static_cast<float>(distance));
   actions->pushInteraction(target, interactionType);
   actions->start();
+  if (!actions->isEmpty())
+    swapMouseMode();
 }
 
 void InteractionComponent::swapMouseMode()
