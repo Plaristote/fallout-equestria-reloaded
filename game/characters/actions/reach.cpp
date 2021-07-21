@@ -39,9 +39,9 @@ QVector<QPoint> ReachAction::getCandidates(int caseDistance) const
   std::function<bool (QPoint, QPoint)> compare;
 
   candidates.reserve(caseDistance * caseDistance);
-  for (int x = position.x() - caseDistance ; x < position.x() + caseDistance ; ++x)
+  for (int x = position.x() - caseDistance ; x <= position.x() + caseDistance ; ++x)
   {
-    for (int y = position.y() - caseDistance ; y < position.y() + caseDistance ; ++y)
+    for (int y = position.y() - caseDistance ; y <= position.y() + caseDistance ; ++y)
     {
       if (x != position.x() || y != position.y())
         candidates << QPoint(x, y);
