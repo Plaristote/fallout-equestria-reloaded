@@ -5,6 +5,7 @@
 CharacterSight::CharacterSight(QObject *parent) : ParentType(parent)
 {
   fieldOfView = new FieldOfView(reinterpret_cast<Character&>(*this));
+  connect(this, &CharacterDiplomacy::diplomacyUpdated, this, &CharacterSight::refreshFieldOfView);
 }
 
 CharacterSight::~CharacterSight()
@@ -65,4 +66,13 @@ float CharacterSight::getDistance(QPoint other) const
   auto b = self.y() - other.y();
 
   return std::sqrt(static_cast<float>(a * a + b * b));
+}
+
+void CharacterSight::refreshFieldOfView()
+{
+  if (fieldOfView)
+  {
+    fieldOfView->reset();
+    fieldOfView->runTask();
+  }
 }

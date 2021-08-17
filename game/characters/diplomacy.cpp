@@ -49,7 +49,7 @@ bool CharacterDiplomacy::isEnemy(const CharacterDiplomacy* other) const
 
 void CharacterDiplomacy::setAsEnemy(CharacterDiplomacy* other)
 {
-  if (other)
+  if (other && !isEnemy(other))
   {
     auto* diplomacy = Game::get()->getDiplomacy();
     auto* faction   = diplomacy->getFaction(other->getFactionFlag());
@@ -62,5 +62,25 @@ void CharacterDiplomacy::setAsEnemy(CharacterDiplomacy* other)
     }
     else if (faction)
       other->setAsEnemy(this);
+    emit diplomacyUpdated();
+  }
+}
+
+void CharacterDiplomacy::setAsFriendly(CharacterDiplomacy* other)
+{
+  if (other && isEnemy(other))
+  {
+    auto* diplomacy = Game::get()->getDiplomacy();
+    auto* faction   = diplomacy->getFaction(other->getFactionFlag());
+
+    if (other->getFactionName() != "") {
+      if (getFactionFlag() > 0)
+        diplomacy->setAsEnemy(false, getFactionFlag(), other->getFactionFlag());
+      else
+        enemyFlag -= other->getFactionFlag();
+    }
+    else if (faction)
+      other->setAsFriendly(this);
+    emit diplomacyUpdated();
   }
 }

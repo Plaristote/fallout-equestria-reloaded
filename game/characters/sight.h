@@ -27,6 +27,9 @@ public:
   float             getDistance(QPoint) const;
   FieldOfView*      getFieldOfView() const { return fieldOfView; }
 
+private slots:
+  void refreshFieldOfView();
+
 protected:
   inline void updateFieldOfView(double duration) { fieldOfView->update(duration); }
   inline bool hasLivingEnemiesInSight() const { return fieldOfView->hasLivingEnemiesInSight(); }

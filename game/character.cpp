@@ -48,36 +48,48 @@ void Character::afterDeathAnimation()
 
 void Character::takeDamage(int damage, Character* dealer)
 {
-  auto hp = getStatistics()->getHitPoints() - damage;
-
-  setAnimation("damaged");
-  getStatistics()->setHitPoints(hp);
-  if (script && hp > 0)
+  if (isAlive())
   {
-    QJSValueList args = QJSValueList() << damage;
+    auto hp = getStatistics()->getHitPoints() - damage;
 
-    if (dealer)
-      args << dealer->asJSValue();
-    script->call("onDamageTaken", args);
+    setAnimation("damaged");
+    getStatistics()->setHitPoints(hp);
+    if (script && hp > 0)
+    {
+      QJSValueList args = QJSValueList() << damage;
+
+      if (dealer)
+        args << dealer->asJSValue();
+      script->call("onDamageTaken", args);
+    }
+    if (hp <= 0)
+    {
+      if (!setFallAnimation())
+        afterDeathAnimation();
+      blocksPath = false;
+      emit characterKill(this, dealer);
+      emit blocksPathChanged();
+    }
+    else
+      attackedBy(dealer);
   }
-  if (hp <= 0)
-  {
-    if (!setFallAnimation())
-      afterDeathAnimation();
-    blocksPath = false;
-    emit characterKill(this, dealer);
-    emit blocksPathChanged();
-  }
-  else
-    attackedBy(dealer);
 }
 
 void Character::attackedBy(Character* dealer)
 {
   if (dealer != nullptr && !isAlly(dealer) && !isEnemy(dealer))
   {
-    setAsEnemy(dealer);
-    emit requireJoinCombat();
+    if (hasVariable("surrender"))
+    {
+      qDebug() << "Surrendering";
+      unsetVariable("surrender");
+    }
+    else
+    {
+      qDebug() << "Attacked by is only triggered now...";
+      setAsEnemy(dealer);
+      emit requireJoinCombat();
+    }
   }
 }
 

@@ -17,11 +17,13 @@ public:
   Q_INVOKABLE bool isAlly(const CharacterDiplomacy*) const;
   Q_INVOKABLE bool isEnemy(const CharacterDiplomacy*) const;
   Q_INVOKABLE void setAsEnemy(CharacterDiplomacy*);
+  Q_INVOKABLE void setAsFriendly(CharacterDiplomacy*);
 
   void load(const QJsonObject&) override;
   void save(QJsonObject&) const override;
 
 signals:
+  void diplomacyUpdated();
 
 private slots:
   void initializeFaction();
