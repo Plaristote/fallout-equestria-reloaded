@@ -285,13 +285,13 @@ Item {
             TerminalComboBox {
               id: optionstateInput
               Layout.fillWidth: true
-              model: controller.stateList
+              model: [''].concat(controller.stateList)
               onCurrentTextChanged: controller.optionState = currentText
               Connections {
                 target: controller
                 function onCurrentOptionChanged() {
                   if (optionstateInput.currentText !== controller.optionState) {
-                    optionstateInput.currentIndex = controller.stateList.indexOf(controller.optionState);
+                    optionstateInput.currentIndex = controller.stateList.indexOf(controller.optionState) + 1;
                   }
                 }
               }
