@@ -245,5 +245,6 @@
         <file>game/hud/HudCombatControls.qml</file>
         <file>game/RenderQueue.mjs</file>
         <file>ui/CharacterSpritePreview.qml</file>
+        <file>game/TutorialPane.qml</file>
     </qresource>
 </RCC>

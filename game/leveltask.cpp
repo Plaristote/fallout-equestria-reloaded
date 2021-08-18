@@ -47,10 +47,20 @@ bool LevelTask::insertPartyIntoZone(CharacterParty* party, const QString& zoneNa
   return false;
 }
 
+void LevelTask::loadTutorial()
+{
+  if (TutorialComponent::hasTutorialForLevel(name))
+  {
+    tutorial = new TutorialComponent(this);
+    emit tutorialChanged();
+  }
+}
+
 void LevelTask::load(const QString& levelName, DataEngine* dataEngine)
 {
   name = levelName;
   timeManager = Game::get()->getTimeManager();
+  loadTutorial();
   ParentType::load();
   grid->initializeGrid(tilemap);
   script = new ScriptController(SCRIPTS_PATH + "levels/" + levelName + ".mjs");

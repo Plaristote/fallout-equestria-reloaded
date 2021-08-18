@@ -161,6 +161,7 @@ set(PROJECT_SOURCES
         game/level/prerender.cpp
         game/level/zone.h
         game/level/zone.cpp
+        game/level/tutorialcomponent.cpp
         game/objects/doorway.h
         game/objects/doorway.cpp
         game/objects/storageobject.h

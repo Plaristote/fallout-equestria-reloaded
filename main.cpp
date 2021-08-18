@@ -91,6 +91,7 @@ int main(int argc, char *argv[])
   qmlRegisterType<Inventory>("Game", 1,0, "Inventory");
   qmlRegisterType<TextBubble>("Game", 1,0, "TextBubble");
   qmlRegisterType<Buff>("Game", 1,0, "Buff");
+  qmlRegisterType<TutorialComponent>("Game", 1,0, "TutorialComponent");
 
   qRegisterMetaType<Character*>("const Character*");
   qRegisterMetaType<CharacterDiplomacy*>("const CharacterDiplomacy*");

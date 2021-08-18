@@ -249,4 +249,19 @@ Item {
     anchors.centerIn: parent
     visible: false
   }
+
+  Loader {
+    visible: root.levelController.tutorial
+    sourceComponent: visible ? tutorialPane : null
+    height: parent.height
+    width:  325
+  }
+
+  Component {
+    id: tutorialPane
+    TutorialPane {
+      anchors.fill: parent
+      controller: root.levelController.tutorial
+    }
+  }
 }

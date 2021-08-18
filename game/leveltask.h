@@ -13,6 +13,7 @@
 # include "dynamicobject.h"
 
 # include "level/combat.h"
+# include "level/tutorialcomponent.h"
 
 class Doorway;
 class CharacterParty;
@@ -25,14 +26,16 @@ class LevelTask : public CombatComponent
   typedef CombatComponent ParentType;
 
   Q_PROPERTY(bool       paused  MEMBER paused NOTIFY pausedChanged)
-  Q_PROPERTY(SoundManager* sounds READ getSoundManager)
-  Q_PROPERTY(TaskRunner* tasks MEMBER taskRunner)
+  Q_PROPERTY(SoundManager* sounds READ getSoundManager CONSTANT)
+  Q_PROPERTY(TaskRunner* tasks MEMBER taskRunner CONSTANT)
+  Q_PROPERTY(TutorialComponent* tutorial MEMBER tutorial NOTIFY tutorialChanged)
 public:  
   explicit LevelTask(QObject *parent = nullptr);
   virtual ~LevelTask();
 
   void load(const QString& levelName, DataEngine*);
   void loadObjectsFromDataEngine(DataEngine*);
+  void loadTutorial();
   void save(DataEngine*);
   void setPaused(bool value) { paused = value; emit pausedChanged(); }
   bool isPaused() const { return paused; }
@@ -66,6 +69,7 @@ signals:
   void updated();
   void pausedChanged();
   void objectsChanged();
+  void tutorialChanged();
   void displayConsoleMessage(const QString&);
   void cameraFocusRequired(DynamicObject*);
   void visibleCharactersChanged();
@@ -84,13 +88,14 @@ private slots:
   void displayMovementTargetHint(QPoint position);
 
 protected:
-  QTimer            updateTimer;
-  QElapsedTimer     clock;
-  TimeManager*      timeManager = nullptr;
-  SoundManager*     soundManager = nullptr;
-  TaskRunner*       taskRunner = nullptr;
-  bool              paused = true;
-  bool              initialized = false;
+  QTimer             updateTimer;
+  QElapsedTimer      clock;
+  TimeManager*       timeManager = nullptr;
+  SoundManager*      soundManager = nullptr;
+  TaskRunner*        taskRunner = nullptr;
+  TutorialComponent* tutorial = nullptr;
+  bool               paused = true;
+  bool               initialized = false;
 };
 
 #endif // LEVELTASK_H
