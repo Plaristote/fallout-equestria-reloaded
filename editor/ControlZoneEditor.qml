@@ -18,14 +18,15 @@ Pane {
   function toggleTile(tileX, tileY) {
     const zone = selectedObject.controlZone;
 
+    zone.offset = selectedObject.position;
     if (zone.isInside(tileX, tileY))
     {
-      console.log("Removing tile", tileX, ",", tileY, "from", selectedObject, "control zone");
+      console.log("Removing tile", tileX, ",", tileY, "from", selectedObject, selectedObject.position, "control zone");
       zone.removePosition(Qt.point(tileX, tileY));
     }
     else
     {
-      console.log("Adding tile", tileX, ",", tileY, "to", selectedObject, "control zone");
+      console.log("Adding tile", tileX, ",", tileY, "to", selectedObject, selectedObject.position, "control zone");
       zone.addPosition(Qt.point(tileX, tileY));
     }
   }
