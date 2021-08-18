@@ -11,5 +11,7 @@
   "dodge":             "weapons/dodge.wav",
   "explosion":         "weapons/explosion.wav",
   "reload":            "weapons/reload.wav",
-  "gunshot":           "weapons/gunshot.wav"
+  "gunshot":           "weapons/gunshot.wav",
+  "door-locked":       "door-locked.wav",
+  "door-open":         "door-open.wav"
 }
