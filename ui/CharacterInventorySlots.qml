@@ -39,7 +39,7 @@ Repeater {
         Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
         model:  equippedItem
         Layout.maximumHeight: 50
-        Layout.maximumWidth: 125
+        Layout.maximumWidth: 115
         visible: equippedItem.icon !== "any.png"
       }
 
@@ -48,17 +48,18 @@ Repeater {
 
         TerminalButton {
           visible: equippedItem !== null && equippedItem.isVirtual !== true
-          text: "-"
+          text: "✖"
           height: 20
-          width: 70 / 2
+          width: 25
           onClicked: inventory.unequipItem(slotName)
         }
 
         TerminalButton {
           visible: root.selectedObject !== null && inventory.canEquipItem(root.selectedObject, slotName)
-          text: "+"
+          text: "✓"
           height: 20
-          width: 70 / 2
+          width: 25
+          font.bold: true
           onClicked: inventory.equipItem(selectedObject, slotName);
         }
       }
