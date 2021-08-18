@@ -20,6 +20,7 @@ export class Trap {
     if (this.model.blocksPath)
       this.model.blocksPath = false;
     this.difficulty = 1;
+    this.model.setAnimation(this.model.getVariable("disarmed") == true ? "off" : "on");
   }
 
   initialize() {
