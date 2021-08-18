@@ -1,6 +1,8 @@
-export class MetabolismComponent {
+import {MovementComponent} from "./movement.mjs";
+
+export class MetabolismComponent extends MovementComponent {
   constructor(model) {
-    this.model = model;
+    super(model);
     if (!this.model.hasVariable("metabolismEnabled"))
     {
       this.model.setVariable("metabolismEnabled", true);
