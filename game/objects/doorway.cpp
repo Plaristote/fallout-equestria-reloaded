@@ -9,6 +9,8 @@ Doorway::Doorway(QObject* parent) : DynamicObject(parent)
   lockpickLevel = 1;
   connect(this, &Doorway::openedChanged, this, &Doorway::updateAccessPath);
   connect(this, &Doorway::openedChanged, this, &Doorway::updateAnimation);
+  openSound = closeSound = "door-open";
+  lockedSound = "door-locked";
 }
 
 void Doorway::updateAccessPath()
@@ -62,7 +64,7 @@ QStringList Doorway::getAvailableInteractions()
 
 bool Doorway::triggerInteraction(Character *character, const QString &interactionType)
 {
-  if (interactionType == "use" && !script->hasMethod("onUse"))
+  if (interactionType == "use")
     return onUse(character);
   return DynamicObject::triggerInteraction(character, interactionType);
 }
@@ -74,10 +76,13 @@ bool Doorway::onUse(Character* character)
   auto* grid  = level->getGrid();
   QPoint position = getPosition();
 
+  if (script->hasMethod("onUse") && script->call("onUse", QJSValueList() << character->asJSValue()).toBool())
+    return true;
   if (locked)
   {
     if (character == level->getPlayer())
       game->appendToConsole(I18n::get()->t("messages.door-is-locked"));
+    level->getSoundManager()->play(lockedSound);
     return false;
   }
   if (opened)
@@ -85,15 +90,20 @@ bool Doorway::onUse(Character* character)
     if (!grid->isOccupied(position.x(), position.y()))
     {
       opened = false;
+      level->getSoundManager()->play(closeSound);
       emit openedChanged();
       return true;
     }
     else if (character == level->getPlayer())
       game->appendToConsole(I18n::get()->t("messages.door-is-blocked"));
+    level->getSoundManager()->play(lockedSound);
     return false;
   }
   else
+  {
     opened = true;
+    level->getSoundManager()->play(openSound);
+  }
   emit openedChanged();
   return true;
 }

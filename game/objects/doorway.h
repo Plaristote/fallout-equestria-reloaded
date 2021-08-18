@@ -13,6 +13,9 @@ class Doorway : public DynamicObject
   Q_PROPERTY(QString keyName       MEMBER keyName NOTIFY keyNameChanged)
   Q_PROPERTY(int     lockpickLevel MEMBER lockpickLevel NOTIFY lockpickLevelChanged)
   Q_PROPERTY(bool    destructible  READ isDestructible)
+  Q_PROPERTY(QString openSound   MEMBER openSound   NOTIFY soundChanged)
+  Q_PROPERTY(QString closeSound  MEMBER closeSound  NOTIFY soundChanged);
+  Q_PROPERTY(QString lockedSound MEMBER lockedSound NOTIFY soundChanged);
 public:
   Doorway(QObject* parent = nullptr);
 
@@ -33,6 +36,7 @@ signals:
   void lockedChanged();
   void keyNameChanged();
   void lockpickLevelChanged();
+  void soundChanged();
 
 private slots:
   void updateAccessPath();
@@ -44,6 +48,7 @@ private:
   bool      locked = false;
   QString   keyName;
   int       lockpickLevel;
+  QString   openSound, closeSound, lockedSound;
 };
 
 #endif // DOORWAY_H
