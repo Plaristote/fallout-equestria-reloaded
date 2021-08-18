@@ -86,7 +86,14 @@ export class ItemBehaviour {
   }
 
   useOn(target) {
-    this.logFailure("That does nothing.");
+    switch (target.getObjectType()) {
+    case "Doorway":
+      target.getScriptObject().onUseItem(this.user, this.model);
+      break ;
+    default:
+      this.logFailure(i18n.t("messages.nothing-happens"));
+      break ;
+    }
   }
 
   logFailure(message) {
@@ -96,3 +103,7 @@ export class ItemBehaviour {
 }
 
 export const Item = ItemBehaviour;
+
+export function create(model) {
+  return new Item(model);
+}
