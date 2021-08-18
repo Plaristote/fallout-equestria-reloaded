@@ -7,6 +7,7 @@ CombatComponent::CombatComponent(QObject *parent) : VisualEffectsComponent(paren
   connect(this, &InteractionComponent::activeItemChanged,   this, &CombatComponent::onActiveItemChanged);
   connect(this, &CombatComponent::currentCombattantChanged, this, &CombatComponent::updateWaitingMode);
   connect(this, &CombatComponent::combatChanged,            this, &CombatComponent::updateWaitingMode);
+  connect(this, &CombatComponent::combatChanged,            this, &CombatComponent::onCombatStateChanged);
 }
 
 void CombatComponent::updateWaitingMode()
@@ -197,4 +198,15 @@ void CombatComponent::passTurn(Character *character)
 {
   if (isCharacterTurn(character))
     onNextCombatTurn();
+}
+
+void CombatComponent::onCombatStateChanged()
+{
+  if (script)
+  {
+    if (combat && script->hasMethod("onCombatStarted"))
+      script->call("onCombatStarted");
+    else if (!combat && script->hasMethod("onCombatEnded"))
+      script->call("onCombatEnded");
+  }
 }
