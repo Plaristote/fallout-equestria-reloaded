@@ -174,6 +174,8 @@ void CombatComponent::initializeCharacterTurn(Character* character)
 {
   if (!character->isUnconscious())
   {
+    if (character == getPlayer())
+      Game::get()->getLevel()->getSoundManager()->play("start-turn");
     character->getFieldOfView()->runTask();
     character->scriptCall("onTurnStart");
   }
@@ -183,6 +185,8 @@ void CombatComponent::initializeCharacterTurn(Character* character)
 
 void CombatComponent::finalizeCharacterTurn(Character* character)
 {
+  if (character == getPlayer())
+    Game::get()->getLevel()->getSoundManager()->play("end-turn");
   character->getActionQueue()->reset();
   character->resetActionPoints();
   character->updateTasks(WORLDTIME_TURN_DURATION);
@@ -202,6 +206,7 @@ void CombatComponent::passTurn(Character *character)
 
 void CombatComponent::onCombatStateChanged()
 {
+  Game::get()->getLevel()->getSoundManager()->play(combat ? "start-combat" : "end-combat");
   if (script)
   {
     if (combat && script->hasMethod("onCombatStarted"))

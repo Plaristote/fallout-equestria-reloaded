@@ -13,5 +13,9 @@
   "reload":            "weapons/reload.wav",
   "gunshot":           "weapons/gunshot.wav",
   "door-locked":       "door-locked.wav",
-  "door-open":         "door-open.wav"
+  "door-open":         "door-open.wav",
+  "start-combat":      "combat/start-combat.wav",
+  "end-combat":        "combat/end-combat.wav",
+  "start-turn":        "combat/start-turn.wav",
+  "end-turn":          "combat/end-turn.wav"
 }
