@@ -56,9 +56,11 @@ Item {
     mood:        controller.mood
     ambiance:    controller.ambiance
     theme:       controller.npc.statistics.faceTheme
+    hairStyle:   controller.npc.statistics.hairTheme
     accessories: controller.npc.statistics.faceAccessories
     color:       controller.npc.statistics.faceColor
     coloured:    controller.npc.statistics.withFaceColor
+    hairColor:   controller.npc.statistics.hairColor
     anchors.fill: faceForeground
     anchors.topMargin: 12
     anchors.leftMargin: 287
