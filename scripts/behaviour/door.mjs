@@ -38,14 +38,14 @@ export class Door {
           game.appendToConsole(this.model.locked
             ? i18n.t("messages.door-locked")
             : i18n.t("messages.door-unlocked")
-	  );
+          );
           if (xp > 0)
             game.appendToConsole(i18n.t("messages.xp-gain", {xp: xp}));
-	}
+        }
         if (xp > 0) {
           this.model.setVariable("xp", 0);
           user.statistics.addExperience(xp);
-	}
+        }
       }
       else if (user === level.player) {
         if (roll >= 95 && getValueFromRange(0, 10) > user.statistics.luck) {
