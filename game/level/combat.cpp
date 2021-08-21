@@ -207,6 +207,7 @@ void CombatComponent::passTurn(Character *character)
 void CombatComponent::onCombatStateChanged()
 {
   Game::get()->getLevel()->getSoundManager()->play(combat ? "start-combat" : "end-combat");
+  getPlayer()->getActionQueue()->reset();
   if (script)
   {
     if (combat && script->hasMethod("onCombatStarted"))
