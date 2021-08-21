@@ -88,7 +88,7 @@ bool InventoryItem::isGroupable(InventoryItem* other)
   {
     QJSValueList args;
 
-    args << other->asJSValue()
+    args << (other ? other->asJSValue() : QJSValue())
          << result;
     result = script->call("isGroupable", args).toBool();
   }
