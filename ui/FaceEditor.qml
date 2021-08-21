@@ -20,7 +20,7 @@ UiStyle.CustomDialog {
   Connections {
     target: characterSheet
     function onRaceChanged() {
-      characterSheet.faceTheme = "";
+      //characterSheet.faceTheme = "";
       initializeFace();
     }
   }
@@ -86,11 +86,17 @@ UiStyle.CustomDialog {
 
       TerminalLabel { text: "Face" }
       TerminalComboBox {
+        property bool ignoreFirstEvent: true
         Layout.fillWidth: true
         id: faceThemeSelect
         model: characterSheet.faceOptions
         currentIndex: model.indexOf(characterSheet.faceTheme)
-        onCurrentIndexChanged: { characterSheet.faceTheme = model[currentIndex] }
+        onCurrentIndexChanged: {
+          if (!ignoreFirstEvent)
+            characterSheet.faceTheme = model[currentIndex]
+          else
+            ignoreFirstEvent = false;
+        }
       }
 
       TerminalLabel { text: "Color"; visible: characterSheet.withFaceColor }
@@ -118,11 +124,17 @@ UiStyle.CustomDialog {
 
       TerminalLabel { text: "Hair style" }
       TerminalComboBox {
+        property bool ignoreFirstEvent: true
         Layout.fillWidth: true
         id: hairThemeSelect
         model: characterSheet.hairOptions
         currentIndex: model.indexOf(characterSheet.hairTheme)
-        onCurrentIndexChanged: { characterSheet.hairTheme = model[currentIndex] }
+        onCurrentIndexChanged: {
+          if (!ignoreFirstEvent)
+            characterSheet.hairTheme = model[currentIndex]
+          else
+            ignoreFirstEvent = false;
+        }
       }
 
       TerminalLabel { text: "Hair color"; visible: characterSheet.withFaceColor }
