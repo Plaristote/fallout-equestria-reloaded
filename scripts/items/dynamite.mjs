@@ -24,6 +24,10 @@ class Dynamite extends Item {
     return true;
   }
 
+  isGroupable(other, defaultValue) {
+    return this.model.tasks.hasTask("triggered") ? false : defaultValue;
+  }
+
   useOn(target) {
     console.log("Using dynamite on", target);
     if (target == null) {
@@ -53,6 +57,19 @@ class Dynamite extends Item {
     }
     else
       this.model.setVariable("trigger-failed", false);
+    this.scheduleTrigger(timeout);
+    if (this.model.quantity > 1)
+      this.splitFromInactiveItems();
+  }
+
+  splitFromInactiveItems() {
+    const itemsToRecreate = this.model.quantity - 1;
+
+    this.model.quantity = 1;
+    this.model.getOwner().inventory.addItemOfType(this.model.itemType, itemsToRecreate);
+  }
+
+  scheduleTrigger(timeout) {
     this.model.tasks.addTask("beforeTriggered", (timeout - 3) * 1000, 1);
     this.model.tasks.addTask("triggered", timeout * 1000, 1);
   }
