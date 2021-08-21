@@ -1,5 +1,7 @@
 #include "tutorialcomponent.h"
 #include "globals.h"
+#include "game.h"
+#include "game/leveltask.h"
 #include <QFile>
 #include <QDir>
 #include "i18n.h"
@@ -16,6 +18,7 @@ TutorialComponent::TutorialComponent(QObject *parent) : QObject(parent)
   visible = false;
   page = -1;
   connect(this, &TutorialComponent::pageChanged, this, &TutorialComponent::loadPage);
+  connect(this, &TutorialComponent::visibleChanged, this, &TutorialComponent::onVisibilityChanged);
   pages = directory.entryList(QStringList() << "*.html", QDir::Files);
 }
 
@@ -47,4 +50,9 @@ void TutorialComponent::loadPage()
   }
   else
     qDebug() << "Cannot load page...";
+}
+
+void TutorialComponent::onVisibilityChanged()
+{
+  Game::get()->getLevel()->getSoundManager()->play("tutorial-show");
 }

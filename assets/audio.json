@@ -17,5 +17,6 @@
   "start-combat":      "combat/start-combat.wav",
   "end-combat":        "combat/end-combat.wav",
   "start-turn":        "combat/start-turn.wav",
-  "end-turn":          "combat/end-turn.wav"
+  "end-turn":          "combat/end-turn.wav",
+  "tutorial-show":     "page-flip.wav"
 }

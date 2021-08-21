@@ -26,6 +26,7 @@ signals:
 
 private slots:
   void loadPage();
+  void onVisibilityChanged();
 
 private:
   QString getHtmlPath() const;
