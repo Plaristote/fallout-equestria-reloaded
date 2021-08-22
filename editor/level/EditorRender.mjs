@@ -1,6 +1,8 @@
 import {Controller} from "../../game/LevelRender.mjs";
 
 export class EditorController extends Controller {
+  get optionViewAll() { return true; }
+
   isObjectVisible() {
     return true;
   }
