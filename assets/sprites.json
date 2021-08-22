@@ -1918,6 +1918,39 @@
             "width": 40
         }
     },
+    "shelf": {
+        "defaultSource": "shelf.png",
+        "idle": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 43,
+            "offsetX": 0,
+            "offsetY": 0,
+            "repeat": false,
+            "width": 72
+        }
+    },
+    "stable-door-west": {
+        "close": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 147,
+            "offsetX": 0,
+            "offsetY": 147,
+            "repeat": false,
+            "width": 110
+        },
+        "defaultSource": "cavern/stable-door-west.png",
+        "open": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 147,
+            "offsetX": 0,
+            "offsetY": 0,
+            "repeat": false,
+            "width": 110
+        }
+    },
     "timberwolf": {
         "cloneOf": "wolf",
         "defaultSource": "critters/timberwolf.png"
@@ -2213,54 +2246,6 @@
             "width": 72
         }
     },
-    "wooden-fence-door-right": {
-        "close": {
-            "frameCount": 8,
-            "frameInterval": 50,
-            "height": 108,
-            "offsetX": 0,
-            "offsetY": 109,
-            "repeat": false,
-            "width": 72
-        },
-        "defaultSource": "cavern/wooden-fence-door-72x108.png",
-        "destroyed": {
-            "frameCount": 1,
-            "frameInterval": 0,
-            "height": 108,
-            "offsetX": 0,
-            "offsetY": 109,
-            "repeat": false,
-            "width": 72
-        },
-        "idle": {
-            "frameCount": 1,
-            "frameInterval": 0,
-            "height": 108,
-            "offsetX": 0,
-            "offsetY": 0,
-            "repeat": false,
-            "width": 72
-        },
-        "idle-open": {
-            "frameCount": 1,
-            "frameInterval": 0,
-            "height": 108,
-            "offsetX": 0,
-            "offsetY": 109,
-            "repeat": false,
-            "width": 72
-        },
-        "open": {
-            "frameCount": 8,
-            "frameInterval": 50,
-            "height": 108,
-            "offsetX": 0,
-            "offsetY": 0,
-            "repeat": false,
-            "width": 72
-        }
-    },
     "wooden-fence-door-left": {
         "close": {
             "frameCount": 8,
@@ -2305,6 +2290,54 @@
             "height": 108,
             "offsetX": 0,
             "offsetY": 218,
+            "repeat": false,
+            "width": 72
+        }
+    },
+    "wooden-fence-door-right": {
+        "close": {
+            "frameCount": 8,
+            "frameInterval": 50,
+            "height": 108,
+            "offsetX": 0,
+            "offsetY": 109,
+            "repeat": false,
+            "width": 72
+        },
+        "defaultSource": "cavern/wooden-fence-door-72x108.png",
+        "destroyed": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 108,
+            "offsetX": 0,
+            "offsetY": 109,
+            "repeat": false,
+            "width": 72
+        },
+        "idle": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 108,
+            "offsetX": 0,
+            "offsetY": 0,
+            "repeat": false,
+            "width": 72
+        },
+        "idle-open": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 108,
+            "offsetX": 0,
+            "offsetY": 109,
+            "repeat": false,
+            "width": 72
+        },
+        "open": {
+            "frameCount": 8,
+            "frameInterval": 50,
+            "height": 108,
+            "offsetX": 0,
+            "offsetY": 0,
             "repeat": false,
             "width": 72
         }

@@ -56,7 +56,6 @@
         <file>scripts/cmap/traits/small-frame.mjs</file>
         <file>assets/sprites/ZEkA10000-green.png</file>
         <file>scripts/pnjs/dummy.mjs</file>
-        <file>assets/sprites/library.png</file>
         <file>assets/backgrounds/ministry-of-peace.png</file>
         <file>ui/FaceDisplay.qml</file>
         <file>assets/faces/backgrounds/wasteland.png</file>
@@ -94,6 +93,8 @@
         <file>assets/ui/interactions/use-skill-active.png</file>
         <file>assets/ui/interactions/use-skill-normal.png</file>
         <file>assets/ui/interactions/use-skill-pressed.png</file>
+        <file>assets/ui/ap-active.png</file>
+        <file>assets/ui/ap-inactive.png</file>
         <file>game/Dialog.qml</file>
         <file>assets/ui/dialog/center.png</file>
         <file>assets/ui/dialog/left.png</file>
