@@ -148,6 +148,7 @@ void CombatComponent::onCharacterDied(Character* character)
 {
   int characterIt = combattants.indexOf(character);
 
+  finalizeArmorClassBonus(character);
   if (characterIt >= 0)
   {
     if (combattants.size() == 1)
@@ -170,6 +171,34 @@ void CombatComponent::onCharacterDied(Character* character)
   TextBubblesComponent::onCharacterDied(character);
 }
 
+void CombatComponent::initializeArmorClassBonus(Character* character)
+{
+  int armorClass = character->getStatistics()->get_armorClass();
+
+  armorClassBonuses.insert(character, character->getActionPoints());
+  character->getStatistics()->set_armorClass(armorClass + character->getActionPoints());
+}
+
+void CombatComponent::finalizeArmorClassBonus(Character* character)
+{
+  auto it = armorClassBonuses.find(character);
+
+  if (it != armorClassBonuses.end())
+  {
+    int armorClass = character->getStatistics()->get_armorClass();
+
+    character->getStatistics()->set_armorClass(armorClass - it.value());
+    armorClassBonuses.erase(it);
+  }
+  armorClassBonuses.remove(character);
+}
+
+void CombatComponent::finalizeAllArmorClassBonus()
+{
+  for (Character* character : armorClassBonuses.keys())
+    finalizeArmorClassBonus(character);
+}
+
 void CombatComponent::initializeCharacterTurn(Character* character)
 {
   if (!character->isUnconscious())
@@ -177,6 +206,7 @@ void CombatComponent::initializeCharacterTurn(Character* character)
     if (character == getPlayer())
       Game::get()->getLevel()->getSoundManager()->play("start-turn");
     character->getFieldOfView()->runTask();
+    finalizeArmorClassBonus(character);
     character->scriptCall("onTurnStart");
   }
   else
@@ -187,6 +217,7 @@ void CombatComponent::finalizeCharacterTurn(Character* character)
 {
   if (character == getPlayer())
     Game::get()->getLevel()->getSoundManager()->play("end-turn");
+  initializeArmorClassBonus(character);
   character->getActionQueue()->reset();
   character->resetActionPoints();
   character->updateTasks(WORLDTIME_TURN_DURATION);
@@ -208,6 +239,8 @@ void CombatComponent::onCombatStateChanged()
 {
   Game::get()->getLevel()->getSoundManager()->play(combat ? "start-combat" : "end-combat");
   getPlayer()->getActionQueue()->reset();
+  if (!combat)
+    finalizeAllArmorClassBonus();
   if (script)
   {
     if (combat && script->hasMethod("onCombatStarted"))

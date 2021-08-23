@@ -57,9 +57,14 @@ protected:
   virtual void finalizeRound();
   void initializeCharacterTurn(Character*);
 
+  void initializeArmorClassBonus(Character*);
+  void finalizeArmorClassBonus(Character*);
+  void finalizeAllArmorClassBonus();
+
   bool combat = false;
   int combatIterator = 0;
   QList<Character*> combattants;
+  QMap<Character*, int> armorClassBonuses;
 };
 
 #endif // COMBATCOMPONENT_H
