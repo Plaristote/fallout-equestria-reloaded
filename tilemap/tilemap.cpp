@@ -121,6 +121,8 @@ void TileMap::loadRoofFolder(const QJsonObject& layerData)
     QJsonObject roofLayerData = value.toObject();
     auto* roofLayer = new TileLayer(this);
 
+    roofLayerData["offsetx"] = layerData["offsetx"].toInt() + roofLayerData["offsetx"].toInt();
+    roofLayerData["offsety"] = layerData["offsety"].toInt() + roofLayerData["offsety"].toInt();
     roofLayer->load(roofLayerData, tilesets);
     roofs.push_back(roofLayer);
   }

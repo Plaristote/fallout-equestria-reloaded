@@ -42,7 +42,7 @@ void PreRenderComponent::preRenderGround()
   TileLayer*  ground = tilemap->getLayer("ground");
   QImage      image(ground->getRenderedRect().size(), QImage::Format_ARGB32);
   QPoint      offset(ground->getRenderedRect().x(), 0);
-  QStringList nonRenderable({"misc", "walls", "ground"});
+  QStringList nonRenderable({"misc", "walls", "blocks", "ground"});
   const auto& layers = tilemap->getLayers();
 
   image.fill(Qt::transparent);
