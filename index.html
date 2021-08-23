@@ -137,7 +137,7 @@ You will need:
                 Download and install <a href="https://thorbjorn.itch.io/tiled">Tiled</a>, if you haven't already done so, and let's get started:
               </p>
             
-              <h4 class="card-title" id="c2-1">1.1 Creating a new tilemap</h4>
+              <h4 class="card-title" id="c1-1">1.1 Creating a new tilemap</h4>
 
               <p class="card-text">
                 Go to <span class="mono-span">File -> New -> New map</span> to open the new tilemap dialog:
@@ -192,34 +192,85 @@ You will need:
 
               <div class="end-chapter"></div>
 
-              <h4 class="card-title" id="c1-2">1.2 Walls</h4>
+              <h4 class="card-title" id="c1-2">1.2 Blocks</h4>
               
               <p class="card-text">
-                Now that we know how to paint the ground, let's move on to the walls. We will need to create a new layer of tiles, called <i>walls</i>:
+                Now that we know how to paint the ground, let's move on to the blocks. Blocks are bigger tiles of 72x108 pixels, which block the path and line of sight of characters. We will need to create a new layer of tiles, called <i>blocks</i>:
               </p>
               
               <p class="card-text">
-                <img src="pictures/tiled-wall-layer.png" />
+                <img src="pictures/tiled-blocks-layer.png" />
               </p>
               
               <p class="card-text">
-                You can pick walls from the <i>walls-1</i> tileset we opened earlier, and start painting your walls now.
+                You can pick blocks from the <i>blocks.json</i> tileset we opened earlier, and start painting your blocks now.
+              </p>
+             
+              <h4 class="card-title" id="c1-3">1.3 Walls</h4>
+              
+              <p class="card-text">
+                Walls have the same function as blocks, but instead of blocking a whole tile, they merely block the path on a tile's border, horizontally or vertically.
               </p>
               
               <p class="card-text">
-                It is important to note that walls will be used by the game engine to figure out which tiles the characters can move on, and which should be blocked.
+                To handle rendering order and direction of walls, we will make a single layer for each orientation of wall (north, east, south, west). These layers will be part of a layer group that must be called `walls`.
+              </p>
+              
+              <img src="pictures/tiled-wall-layer.png" />
+              
+              <p class="card-text">
+                <br />
+                Here's a representation of which walls should belong to which layer when drawing a room:
+              </p>
+              
+              <img src="pictures/tiled-walls-orientation.png" width="100%" />
+              
+              <div class="end-chapter"></div>
+
+              <h4 class="card-title" id="c1-4">1.4 Doorways</h4>
+              
+              <p class="card-text">
+                Doorways are special tiles from the `blocks` or `walls` layers which don't block the characters movement. They are typically used as frame for door objects, although those aren't created within Tiled, but within the Game Editor.
               </p>
               
               <p class="card-text">
-                If you wish to put on wall-like structures, but which do not block the path (doorways for instance), you may create another layer, called <i>misc</i>. Tiles in the <i>misc</i> layer are rendered in the same process as walls. The <i>walls-1</i> tileset includes such doorways that should be inserted in the <i>misc</i> layer. Do not worry about the render order as it is shown by Tiled: for the game engine, tiles from the <i>walls</i> and <i>misc</i> layers act as if they were from the same layer.
+                To differentiate doorways from regular walls, we use Tiled "custom properties". Try opening the `junk-walls.json` tileset, and check out the custom properties on a doorway tile:
+              </p>
+              
+              <img src="pictures/tiled-tileset-doorway.png" />
+              
+              <p class="card-text">
+                In the corresponding custom properties, we added a custom property of boolean type called `doorway`, and set the value to true.
               </p>
 
               <div class="end-chapter"></div>
 
-              <h4 class="card-title" id="c1-3">1.3 Roofs</h4>
+              <h4 class="card-title" id="c1-5">1.5 Cover</h4>
               
               <p class="card-text">
-                We'll now put roofs over those walls. Unlike the ground and the walls, roofs are stored in multiple layers: that is because when the player character is under a roof tile, the whole layer disappears, while the other roof layers remain visible.
+                Walls and blocks break line of sights from characters, but you might not always want those to. You wall might feature a window, for instance, or your block might just be a short obstacle, providing cover. In those case, similarly to doorways, you must set a custom property on the corresponding tile, as such:
+              </p>
+              
+              <img src="pictures/tiled-tileset-cover.png" />
+              
+              <p class="card-text">
+                The cover property is of `int` type, and won't block line of sights as soon as the value is above zero.
+              </p>
+              
+              <p class="card-text">
+                The cover value will also be used to lower the chances of success of any attack that would go through the tile. It will also decrease the chances of detecting a character that's sneaking. The higher the value, the harder it will be for someone to aim or see through the tile.
+              </p>
+              
+              <p class="card-text card-hint">
+                When a line of sight crosses several tiles which have a cover value, the highest cover value will be used to determine the chances of success of the attack.
+              </p>
+
+              <div class="end-chapter"></div>
+              
+              <h4 class="card-title" id="c1-6">1.6 Roofs</h4>
+              
+              <p class="card-text">
+                We'll now put roofs over those walls. Roofs are stored in multiple layers: that is because when the player character is under a roof tile, the whole layer disappears, while the other roof layers remain visible.
               </p>
               
               <p class="card-text">
@@ -231,7 +282,7 @@ You will need:
               </p>
               
               <p class="card-text">
-                Roof layers also have another particularity: they are rendered at a diffrent offset than other layers. For each of your roof layer, you must set the property "Vertical offset" to -72:
+                Roof layers also have another particularity: they are rendered at a diffrent offset than other layers. The roof group layer must have its "Vertical offset" property set to -72:
               </p>
               
               <p class="card-text">
@@ -244,7 +295,7 @@ You will need:
 
               <div class="end-chapter"></div>
 
-              <h4 class="card-title" id="c1-4">1.4 Zones</h4>
+              <h4 class="card-title" id="c1-7">1.7 Zones</h4>
               
               <p class="card-text">
                 The last thing you will have to do in Tiled will be drawing tile zone. Tile zones can serve the following purposes:
@@ -298,7 +349,7 @@ You will need:
 
               <div class="end-chapter"></div>
               
-              <h4 class="card-title" id="c1-5">1.5 Light zones</h4>
+              <h4 class="card-title" id="c1-8">1.8 Light zones</h4>
               
               <p class="card-text">
                 There is also one last special type of zone: light zones are used to draw light effects on the tilemap, while allowing bonuses for perception related tests on objects affected by a light zone. Light zones can also be turned on and off by scripts.
@@ -2777,10 +2828,13 @@ export function create(model) {
             <a href="#c1">1. Level design</a>
             <div class="chapter">
               <a href="#c1-1">1.1 Creating a new tilemap</a>
-              <a href="#c1-2">1.2 Walls</a>
-              <a href="#c1-3">1.3 Roofs</a>
-              <a href="#c1-4">1.4 Zones</a>
-              <a href="#c1-5">1.5 Light zones</a>
+              <a href="#c1-2">1.2 Blocks</a>
+              <a href="#c1-3">1.3 Walls</a>
+              <a href="#c1-4">1.4 Doorways</a>
+              <a href="#c1-5">1.5 Cover</a>
+              <a href="#c1-6">1.6 Roofs</a>
+              <a href="#c1-7">1.7 Zones</a>
+              <a href="#c1-8">1.8 Light zones</a>
             </div>
             <a href="#c2">2. Scripting introduction</a>
             <div class="chapter">
