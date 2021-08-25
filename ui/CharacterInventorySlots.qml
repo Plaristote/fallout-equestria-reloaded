@@ -3,66 +3,33 @@ import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
 import "../assets/ui" as UiStyle
 
-Repeater {
+Pane {
   id: root
   property QtObject inventory
   property QtObject selectedObject
   property bool canEditArmor: true
-
-  model: inventory.slotNames
+  property var layout
 
   function updateSlots() {
-    model = [];
-    model = inventory.slotNames;
+    repeater.model = [];
+    repeater.model = inventory.slotNames;
   }
 
-  delegate: Pane {
-    property string slotName: inventory.slotNames[index]
-    property QtObject equippedItem: inventory.getEquippedItem(slotName)
-    background: UiStyle.TerminalPane {}
-    Layout.preferredHeight: 125
-    Layout.preferredWidth: 125
-    Layout.alignment: Qt.AlignHCenter
-    clip: true
+  background: UiStyle.TerminalPane {}
 
-    ColumnLayout {
-      anchors.fill: parent
-
-      Text {
-        Layout.alignment: Qt.AlignTop | Qt.AlignHCenter
-        text: i18n.t(`item-slots.${slotName}`)
-        font.family: application.titleFontName
-        color: "yellow"
-      }
-
-      ItemIcon {
-        Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
-        model:  equippedItem
-        Layout.maximumHeight: 50
-        Layout.maximumWidth: 115
-        visible: equippedItem.icon !== "any.png"
-      }
-
-      Row {
-        Layout.alignment: Qt.AlignBottom | Qt.AlignHCenter
-
-        TerminalButton {
-          visible: equippedItem !== null && equippedItem.isVirtual !== true
-          text: "✖"
-          height: 20
-          width: 25
-          onClicked: inventory.unequipItem(slotName)
-        }
-
-        TerminalButton {
-          visible: root.selectedObject !== null && inventory.canEquipItem(root.selectedObject, slotName)
-          text: "✓"
-          height: 20
-          width: 25
-          font.bold: true
-          onClicked: inventory.equipItem(selectedObject, slotName);
-        }
-      }
-    }
-  } // END Slot
-} // END Slots
+  Image {
+    anchors.centerIn: parent
+    source: `qrc:/assets/ui/equipment/${layout.source}`
+    Repeater {
+      id: repeater
+      model: inventory.slotNames
+      delegate: InventorySlot {
+        slotName: inventory.slotNames[index]
+        equippedItem: inventory.getEquippedItem(slotName)
+        background: Rectangle { color: "transparent" }
+        x: layout[slotName].x
+        y: layout[slotName].y
+      } // END Slot
+    } // END Slots
+  }
+}

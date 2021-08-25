@@ -2,18 +2,20 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
 import "../assets/ui" as UiStyle
+import "../assets/ui/equipment/settings.mjs" as EquipmentStyle
 import "../ui"
 import "../game" as GameComponents
 
 Pane {
   id: root
   property QtObject character
-  property var mode: "standard"
+  property string mode: "standard"
   readonly property bool gameEditorMode: mode === "gameEditor"
   readonly property bool canEditArmor:   mode !== "combat"
   property QtObject selectedObject
   property var additionalControls: []
   property alias title: header.text
+  property var slotLayout: EquipmentStyle.layoutFor(character)
 
   background: UiStyle.Pane {}
 
@@ -21,7 +23,7 @@ Pane {
 
   onSelectedObjectChanged: {
     console.log("Selected object changed maggle");
-    slotsView.updateSlots();
+    slotsView.item.updateSlots();
   }
 
   onCharacterChanged: character !== null ? itemsView.inventory = character.inventory : null
@@ -148,27 +150,40 @@ Pane {
         }
       }
 
-      GridLayout {
+      Loader {
+        id: slotsView
         Layout.fillHeight: true
         Layout.fillWidth: true
         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-        columns: Math.min(2, parent.width / 125)
-
-        CharacterInventorySlots {
-          id: slotsView
-          canEditArmor: root.canEditArmor
-          inventory: root.character.inventory
-          selectedObject: root.selectedObject
-        }
+        sourceComponent: slotLayout === null ? gridInventorySlots : customInventorySlots
       }
     } // END Column
-
-    Connections {
-      target: root.character.inventory
-      function onEquippedItemsChanged() {
-        root.selectedObject = null;
-        slotsView.updateSlots();
-      }
-    } // END Inventory Connections
   } // END RowLayout
+
+  Component {
+    id: gridInventorySlots
+    GridInventorySlots {
+      canEditArmor: root.canEditArmor
+      inventory: root.character.inventory
+      selectedObject: root.selectedObject
+    }
+  }
+
+  Component {
+    id: customInventorySlots
+    CharacterInventorySlots {
+      canEditArmor: root.canEditArmor
+      inventory: root.character.inventory
+      selectedObject: root.selectedObject
+      layout: slotLayout
+    }
+  }
+
+  Connections {
+    target: root.character.inventory
+    function onEquippedItemsChanged() {
+      root.selectedObject = null;
+      slotsView.item.updateSlots();
+    }
+  } // END Inventory Connections
 }

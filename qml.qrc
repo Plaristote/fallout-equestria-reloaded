@@ -248,5 +248,9 @@
         <file>ui/CharacterSpritePreview.qml</file>
         <file>game/TutorialPane.qml</file>
         <file>assets/ui/WarningRectangle.qml</file>
+        <file>assets/ui/equipment/pony.png</file>
+        <file>assets/ui/equipment/settings.mjs</file>
+        <file>ui/GridInventorySlots.qml</file>
+        <file>ui/InventorySlot.qml</file>
     </qresource>
 </RCC>
