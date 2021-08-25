@@ -75,6 +75,8 @@ public:
   Q_INVOKABLE void useItemAt(InventoryItem* item, int x, int y);
   void             useItemAt(Character* user, InventoryItem* item, int x, int y);
   void             pickUpItem(Character*, InventoryItem*);
+  Q_INVOKABLE bool canSneak(Character*);
+  Q_INVOKABLE bool useSneak(Character*);
   Q_INVOKABLE void initializeDialog(Character* npc);
   Q_INVOKABLE void initializeLooting(StorageObject*);
 

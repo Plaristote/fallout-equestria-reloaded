@@ -3,6 +3,11 @@ export class MovementComponent {
     this.model = model;
   }
 
+  onMovementStart() {
+    if (this.model.movementMode === "running")
+      this.model.toggleSneaking(false);
+  }
+
   followCharacter(character, distance = 3) {
     if (!level.combat) {
       const actions = this.model.getActions();

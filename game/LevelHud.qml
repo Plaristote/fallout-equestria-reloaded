@@ -19,6 +19,20 @@ Pane {
   signal openSkilldex()
   signal openSpellbook()
 
+  RowLayout {
+    anchors { bottom: parent.top; bottomMargin: 10 }
+
+    UiStyle.WarningRectangle {
+      visible: levelController.player.statistics.hasLeveledUp
+      label: i18n.t("cmap.level-up")
+    }
+
+    UiStyle.WarningRectangle {
+      visible: levelController.player.sneaking
+      label: i18n.t("cmap.sneak")
+    }
+  }
+
   HudConsole {
     id: terminalPane
     gameController: levelHud.gameController

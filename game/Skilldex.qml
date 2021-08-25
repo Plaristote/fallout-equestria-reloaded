@@ -21,7 +21,7 @@ Pane {
       delegate: Row {
         Button {
           background: UiStyle.Label { style: parent.down ? "dark" : "base" }
-          text: root.skills[index]
+          text: i18n.t(`cmap.${root.skills[index]}`)
           width: 160
           height: 30
           contentItem: Label {

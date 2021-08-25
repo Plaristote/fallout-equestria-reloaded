@@ -177,7 +177,7 @@ void InteractionComponent::objectClicked(DynamicObject* object)
 void InteractionComponent::useSkill(const QString &skill)
 {
   if (skill == "sneak")
-    qDebug() << "TODO: implement sneak skill";
+    useSneak(getPlayer());
   else
   {
     activeSkill = skill;
@@ -186,6 +186,33 @@ void InteractionComponent::useSkill(const QString &skill)
     emit activeItemChanged();
     emit mouseModeChanged();
   }
+}
+
+bool InteractionComponent::canSneak(Character* user)
+{
+  return findCharacters([user](Character& other)
+  {
+    if (other.isAlive() && !other.isAlly(user))
+    {
+      float radius   = other.getFieldOfView()->GetRadius();
+      float distance = other.getDistance(user);
+
+      return distance <= radius && other.hasLineOfSight(user);
+    }
+    return false;
+  }).size() == 0;
+}
+
+bool InteractionComponent::useSneak(Character* user)
+{
+  if (canSneak(user))
+  {
+    user->toggleSneaking(true);
+    return true;
+  }
+  else if (user == getPlayer())
+    Game::get()->appendToConsole(I18n::get()->t("messages.cannot-sneak"));
+  return false;
 }
 
 void InteractionComponent::useSkillOn(Character* user, DynamicObject* target, const QString &skill)

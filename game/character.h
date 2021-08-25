@@ -34,6 +34,7 @@ public:
   Q_INVOKABLE void moveAway(Character*);
 
   int getInteractionDistance() const override;
+  int  getSneakAbility() const override;
   bool isBlockingPath() const override { return isAlive(); }
 
   Q_INVOKABLE QJSValue getActions();
@@ -69,7 +70,6 @@ private:
   virtual QString getScriptPath() const override { return SCRIPTS_PATH + "pnjs"; }
 
   ActionQueue* actionQueue;
-  bool sneakEnabled = false;
   bool unconscious = false;
   int actionPoints = 0;
   QJSValue jsActionQueue;

@@ -56,6 +56,7 @@ signals:
   void pathBlocked();
 
 private slots:
+  void onMovementStart();
   void onMovementEnded();
   void onDestinationReached();
 

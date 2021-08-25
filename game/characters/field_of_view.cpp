@@ -234,29 +234,14 @@ void FieldOfView::DetectCharacters()
   }
 }
 
-bool FieldOfView::CheckIfEnemyIsDetected(const Character& enemy) const
+bool FieldOfView::CheckIfEnemyIsDetected(Character& enemy) const
 {
-  return !(enemy.isSneaking()) ||
-          CheckIfSneakingEnemyIsDetected(enemy);
+  return !(enemy.isSneaking()) || CheckIfSneakingEnemyIsDetected(enemy);
 }
 
-bool FieldOfView::CheckIfSneakingEnemyIsDetected(const Character& enemy) const
+bool FieldOfView::CheckIfSneakingEnemyIsDetected(Character& enemy) const
 {
-  const StatModel* enemy_stats = enemy.getStatistics();
-  const StatModel* self_stats  = character.getStatistics();
-
-  if (enemy_stats && self_stats)
-  {
-    int perception         = self_stats->property("perception").toInt();
-    int sneak_skill        = enemy_stats->get_sneak();
-    int sneak_success_rate = sneak_skill - (perception * (3 + (sneak_skill / 100)));
-
-    if (sneak_success_rate > 95)
-      sneak_success_rate     = 95;
-    if (Dices::Throw(100) < sneak_success_rate)
-      return false;
-  }
-  return true;
+  return enemy.tryDetection(&character);
 }
 
 void FieldOfView::setEnemyDetected(Character* enemy)
@@ -276,7 +261,10 @@ void FieldOfView::InsertOrUpdateCharacterInList(Character& character, std::list<
   if (iterator != list.end())
     iterator->time_to_live = FOV_TTL;
   else
+  {
     list.push_back(&character);
+    emit characterDetected(&character);
+  }
 }
 
 float FieldOfView::GetRadius() const

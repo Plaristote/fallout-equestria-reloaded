@@ -20,7 +20,6 @@ public:
 
   static bool       hasSightFrom(const DynamicObject*, QPoint position);
   static bool       hasSightFrom(QPoint target, QPoint position);
-  Q_INVOKABLE bool  isSneaking() const { return sneakEnabled; }
   float             getDistance(const DynamicObject*) const;
   Q_INVOKABLE float getDistance(DynamicObject* v) const;
   Q_INVOKABLE float getDistance(int x, int y) const { return getDistance(QPoint(x, y)); }
@@ -29,6 +28,7 @@ public:
 
 private slots:
   void refreshFieldOfView();
+  void onCharacterDetected(Character*);
 
 protected:
   inline void updateFieldOfView(double duration) { fieldOfView->update(duration); }
@@ -36,7 +36,6 @@ protected:
 
 private:
   FieldOfView* fieldOfView;
-  bool sneakEnabled = false;
 };
 
 #endif // CHARACTERSIGHT_H

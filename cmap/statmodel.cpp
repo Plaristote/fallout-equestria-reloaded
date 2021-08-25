@@ -95,6 +95,7 @@ void StatModel::addExperience(int xp)
 
 void StatModel::levelUp()
 {
+  hasLeveledUp = true;
   level       += 1;
   skillPoints += get_skillRate();
   lastPerk    += 1;
@@ -109,6 +110,7 @@ void StatModel::levelUp()
   emit levelChanged();
   emit skillPointsChanged();
   emit hitPointsChanged();
+  emit leveledUpChanged();
 }
 
 const Race* StatModel::getRaceController() const
@@ -416,6 +418,7 @@ void StatModel::fromJson(const QJsonObject& json)
   hitPoints      = json["hp"].toInt(1);
   level          = json["lvl"].toInt();
   experience     = json["xp"].toInt();
+  hasLeveledUp   = json["lvlup"].toBool(false);
   skillPoints    = json["skill-points"].toInt(0);
   availablePerks = json["available-perks"].toInt(0);
   lastPerk = json["last-perk"].toInt(0);
@@ -516,6 +519,8 @@ void StatModel::toJson(QJsonObject& json)
   json["hp"]   = hitPoints;
   json["lvl"]  = level;
   json["xp"]   = experience;
+  if (hasLeveledUp)
+    json["lvlup"] = true;
   json["skill-points"] = skillPoints;
   json["available-perks"] = availablePerks;
   json["last-perk"] = lastPerk;

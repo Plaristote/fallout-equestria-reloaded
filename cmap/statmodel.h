@@ -66,6 +66,7 @@ class StatModel : public QObject
   Q_PROPERTY(int  specialPoints  MEMBER specialPoints NOTIFY specialChanged)
   Q_PROPERTY(bool acceptable     READ isAcceptable NOTIFY acceptableChanged)
   Q_PROPERTY(float hpPercentage  READ hpPercentage NOTIFY hitPointsChanged)
+  Q_PROPERTY(bool hasLeveledUp   MEMBER hasLeveledUp NOTIFY leveledUpChanged)
 
   Q_PROPERTY(QJsonDocument variables MEMBER variables)
 
@@ -246,6 +247,7 @@ signals:
   void factionChanged();
   void raceChanged();
   void genderChanged();
+  void leveledUpChanged();
 
 private slots:
   void updateBaseValues();
@@ -263,6 +265,7 @@ private:
   int level = 1;
   int experience = 0;
   int specialPoints = 0;
+  bool hasLeveledUp = false;
 
   StatData  data;
   StatData  modifiers;

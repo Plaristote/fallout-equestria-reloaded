@@ -35,13 +35,21 @@ void DetectableComponent::toggleSneaking(bool value)
   }
 }
 
-bool DetectableComponent::tryDetection(Character* character)
+int DetectableComponent::getSneakAbility() const
+{
+  if (script && script->getObject().hasProperty("sneak"))
+    return script->getObject().property("sneak").toInt();
+  return 50;
+}
+
+bool DetectableComponent::tryDetection(const Character* character)
 {
   unsigned int perception = character->getStatistics()->property("perception").toUInt();
   float        distance   = character->getDistance(reinterpret_cast<DynamicObject*>(this));
-  int          result     = Dices::Throw(perception);
+  int          difficulty = getSneakAbility() + static_cast<int>(distance * 5);
+  int          result     = Dices::Throw(perception * 10 + 50);
 
-  if (result >= static_cast<int>(distance))
+  if (result >= difficulty)
   {
     if (interruptOnDetection)
       character->getActionQueue()->reset();

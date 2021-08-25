@@ -19,10 +19,11 @@ public:
   void load(const QJsonObject&);
   void save(QJsonObject&) const;
 
-  bool tryDetection(Character*);
+  bool tryDetection(const Character*);
   bool isHidden() const { return hidden; }
   bool isSneaking() const { return sneaking; }
   Q_INVOKABLE virtual void toggleSneaking(bool);
+  Q_INVOKABLE virtual int getSneakAbility() const;
 
 signals:
   void sneakingChanged();

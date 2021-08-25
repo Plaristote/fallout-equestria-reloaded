@@ -61,12 +61,13 @@ public:
 
 signals:
   void                 refreshed();
+  void                 characterDetected(Character*);
 
 protected:
   void                 LoseTrackOfCharacters(std::list<Entry>&);
   void                 DetectCharacters(void);
-  bool                 CheckIfEnemyIsDetected(const Character& enemy)                  const;
-  bool                 CheckIfSneakingEnemyIsDetected(const Character& enemy)          const;
+  bool                 CheckIfEnemyIsDetected(Character& enemy)                  const;
+  bool                 CheckIfSneakingEnemyIsDetected(Character& enemy)          const;
   void                 InsertOrUpdateCharacterInList(Character&, std::list<Entry>&);
   bool                 IsCharacterInList(const Character*, const std::list<Entry>&)    const;
   void                 AppendEntriesToCharacterList(const std::list<Entry>&, CharacterList&) const;

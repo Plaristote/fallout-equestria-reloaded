@@ -77,25 +77,34 @@ void Character::takeDamage(int damage, Character* dealer)
 
 void Character::attackedBy(Character* dealer)
 {
-  if (dealer != nullptr && !isAlly(dealer) && !isEnemy(dealer))
+  if (dealer != nullptr && !isAlly(dealer))
   {
-    if (hasVariable("surrender"))
+    if (!isEnemy(dealer))
     {
-      qDebug() << "Surrendering";
-      unsetVariable("surrender");
+      if (hasVariable("surrender"))
+      {
+        qDebug() << "Surrendering";
+        unsetVariable("surrender");
+      }
+      else
+      {
+        qDebug() << "Attacked by is only triggered now...";
+        setAsEnemy(dealer);
+        emit requireJoinCombat();
+      }
     }
-    else
-    {
-      qDebug() << "Attacked by is only triggered now...";
-      setAsEnemy(dealer);
-      emit requireJoinCombat();
-    }
+    dealer->toggleSneaking(false);
   }
 }
 
 int Character::getInteractionDistance() const
 {
   return isAlive() ? 1 : 0;
+}
+
+int Character::getSneakAbility() const
+{
+  return statistics ? statistics->get_sneak() : DetectableComponent::getSneakAbility();
 }
 
 QVector<QPoint> Character::getAvailableSurroundingCases() const

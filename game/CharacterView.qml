@@ -9,6 +9,7 @@ CharacterSheet {
 
   Component.onCompleted: {
     gameController.level.paused = true;
+    characterSheet.hasLeveledUp = false;
     if (characterSheet.skillPoints > 0)
       mode = "edit";
   }

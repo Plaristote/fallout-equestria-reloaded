@@ -71,6 +71,7 @@ void CharacterMovement::moveTo(int x, int y)
       setAnimation(movementMode);
     level->getGrid()->moveObject(this, x, y);
     level->getGrid()->triggerZone(this, x, y);
+    onMovementStart();
   }
 }
 
@@ -83,6 +84,12 @@ void CharacterMovement::setMovementMode(const QString& mode)
 void CharacterMovement::onIdle()
 {
   setAnimation("idle");
+}
+
+void CharacterMovement::onMovementStart()
+{
+  if (script)
+    script->call("onMovementStart");
 }
 
 void CharacterMovement::onMovementEnded()
