@@ -6,6 +6,10 @@ function isJinxed(character) {
   return character.statistics.traits.indexOf("jinxed") >= 0;
 }
 
+export function randomInterval(min, max) {
+  return Math.random() * (max - min) + min;
+}
+
 export function randomCheck(threshold, handlers) {
   const criticalThreshold = isJinxed(level.player) ? 5 : 15;
   const roll = getValueFromRange(0, 100);
