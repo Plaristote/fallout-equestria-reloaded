@@ -23,6 +23,7 @@
 #include "gamemanager.h"
 #include "musicmanager.h"
 #include "game/characters/buff.h"
+#include "game/characters/actionqueue.h"
 #include "game/mousecursor.h"
 
 #include "cmap/statmodel.h"
@@ -92,6 +93,7 @@ int main(int argc, char *argv[])
   qmlRegisterType<TextBubble>("Game", 1,0, "TextBubble");
   qmlRegisterType<Buff>("Game", 1,0, "Buff");
   qmlRegisterType<TutorialComponent>("Game", 1,0, "TutorialComponent");
+  qmlRegisterType<ActionQueue>("Game", 1,0, "ActionQueue");
 
   qRegisterMetaType<Character*>("const Character*");
   qRegisterMetaType<CharacterDiplomacy*>("const CharacterDiplomacy*");
