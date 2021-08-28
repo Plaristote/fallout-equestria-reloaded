@@ -35,6 +35,8 @@ bool TutorialComponent::hasTutorialForLevel(const QString& name)
 
 void TutorialComponent::loadPage()
 {
+  if (!enabled)
+    return ;
   if (page >= 0 && page < pages.size() && parent())
   {
     QFile file(getHtmlPath() + '/' + pages[page]);
@@ -43,6 +45,7 @@ void TutorialComponent::loadPage()
     {
       title = I18n::get()->t("tutorial." + QString::number(page + 1));
       html  = file.readAll();
+      Game::get()->getLevel()->getSoundManager()->play("tutorial-show");
       emit htmlChanged();
     }
     else
@@ -54,5 +57,4 @@ void TutorialComponent::loadPage()
 
 void TutorialComponent::onVisibilityChanged()
 {
-  Game::get()->getLevel()->getSoundManager()->play("tutorial-show");
 }

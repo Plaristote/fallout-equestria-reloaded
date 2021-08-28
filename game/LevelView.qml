@@ -251,9 +251,12 @@ Item {
   }
 
   Loader {
+    anchors {
+      top: parent.top; topMargin: 50
+      bottom: levelHud.top; left: parent.left
+    }
     visible: root.levelController.tutorial
     sourceComponent: visible ? tutorialPane : null
-    height: parent.height
     width:  325
   }
 
