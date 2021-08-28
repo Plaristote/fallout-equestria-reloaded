@@ -14,7 +14,7 @@ class Character : public CharacterBuffs
   Q_OBJECT
   typedef CharacterBuffs ParentType;
 
-  Q_PROPERTY(ActionQueue* actionQueue MEMBER actionQueue)
+  Q_PROPERTY(ActionQueue* actionQueue READ getActionQueue CONSTANT)
   Q_PROPERTY(int actionPoints MEMBER actionPoints NOTIFY actionPointsChanged)
   Q_PROPERTY(bool unconscious READ isUnconscious NOTIFY unconsciousChanged)
 public:

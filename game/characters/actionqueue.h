@@ -42,6 +42,7 @@ public:
   Q_INVOKABLE void pushReach(DynamicObject* target, float range, QJSValue caseCompare);
   Q_INVOKABLE void pushReachCase(int x, int y, float range = 1);
   Q_INVOKABLE void pushReachCase(int x, int y, float range, QJSValue caseCompare);
+  Q_INVOKABLE void pushReachNear(int x, int y, int range);
   void             pushSliding(QPoint target);
   Q_INVOKABLE bool start();
 

@@ -5,6 +5,14 @@
 #include <QDebug>
 #include <cmath>
 
+struct TaskUpdateLock
+{
+  TaskUpdateLock(TaskRunner& runner) : runner(runner)
+  { runner.updating = true; }
+  ~TaskUpdateLock() { runner.updating = false; }
+  TaskRunner& runner;
+};
+
 TaskRunner::TaskRunner(QObject *parent) : QObject(parent)
 {
 
@@ -12,6 +20,8 @@ TaskRunner::TaskRunner(QObject *parent) : QObject(parent)
 
 void TaskRunner::update(qint64 delta)
 {
+  TaskUpdateLock updateLock(*this);
+
   for (auto it = tasks.begin() ; it != tasks.end() ;)
   {
     auto elapsedTime = delta;
@@ -45,6 +55,9 @@ void TaskRunner::update(qint64 delta)
     else
       it++;
   }
+  for (const Task& task : pendingAdditions)
+    tasks << task;
+  pendingAdditions.clear();
 }
 
 bool TaskRunner::runTask(Task& task, int iterations)
@@ -87,7 +100,10 @@ void TaskRunner::addTask(const QString &name, qint64 interval, int iterationCoun
   }
   else
     task.iterationCount = iterationCount;
-  tasks << task;
+  if (!updating)
+    tasks << task;
+  else
+    pendingAdditions << task;
 }
 
 bool TaskRunner::removeTask(const QString &name)

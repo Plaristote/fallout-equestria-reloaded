@@ -1,5 +1,6 @@
 #include "actionqueue.h"
 #include "game.h"
+#include "game/dices.hpp"
 #include "actions/itemUse.h"
 #include "actions/skillUse.h"
 #include "actions/interaction.h"
@@ -159,6 +160,35 @@ void ActionQueue::pushReachCase(int x, int y, float range)
 void ActionQueue::pushReachCase(int x, int y, float range, QJSValue caseCompare)
 {
   queue << (new ReachCaseAction(character, QPoint(x, y), range, caseCompare));
+}
+
+void ActionQueue::pushReachNear(int x, int y, int range)
+{
+  QVector<QPoint> choices;
+  LevelGrid*      grid = Game::get()->getLevel()->getGrid();
+  QPoint          position = character->getPosition();
+
+  choices.reserve((range + 1) * (range + 1) - 1);
+  for (int xx = x - range ; xx < x + range ; ++xx) {
+    for (int yy = y - range ; yy < y + range ; ++yy) {
+      if (xx == position.x() && yy == position.y())
+        continue ;
+      if (!grid->isOccupied(xx, yy))
+        choices.push_back(QPoint(xx, yy));
+    }
+  }
+  while (choices.size() > 0)
+  {
+    unsigned int it = Dices::Throw(choices.size() - 1);
+    qDebug() << "Choicez" << choices.size() << ", roll" << it;
+    QPoint candidate = choices[it];
+
+    if (getMovementApCost(candidate) > 0)
+    {
+      pushMovement(candidate);
+      break ;
+    }
+  }
 }
 
 int ActionQueue::getReachApCost(DynamicObject *target, float range) const

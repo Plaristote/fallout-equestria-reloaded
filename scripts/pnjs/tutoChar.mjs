@@ -49,7 +49,7 @@ class TutoChar extends CharacterBehaviour {
 
   followPlayer() {
     if (!level.combat) {
-      const actions = this.model.getActions();
+      const actions = this.model.actionQueue;
 
       this.model.movementMode = "running";
       actions.reset();

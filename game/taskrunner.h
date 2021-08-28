@@ -6,9 +6,13 @@
 # include <QJsonObject>
 # include "scriptcontroller.h"
 
+struct TaskUpdateLock;
+
 class TaskRunner : public QObject
 {
   Q_OBJECT
+
+  friend class TaskUpdateLock;
 
   struct Task
   {
@@ -38,7 +42,8 @@ signals:
 private:
   bool runTask(Task&, int iterations);
 
-  QList<Task> tasks;
+  bool updating = false;
+  QList<Task> tasks, pendingAdditions;
   ScriptController* script = nullptr;
 };
 

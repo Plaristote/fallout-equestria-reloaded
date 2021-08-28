@@ -19,7 +19,7 @@ export class CombatComponent extends SkillTargetComponent {
       this.combatTarget = enemies[0];
     }
     if (this.combatTarget) {
-      const actions  = this.model.getActions();
+      const actions  = this.model.actionQueue;
       const weapon   = this.model.inventory.getEquippedItem("use-1");
       const movement = actions.getReachApCost(this.combatTarget, weapon.getRange());
       const itemAp   = Math.max(1, actions.getItemUseApCost(this.combatTarget, "use-1"));
