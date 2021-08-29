@@ -1,20 +1,21 @@
-import {Item} from "./item.mjs";
+//import {Item} from "./item.mjs";
+import {ThrowableBehaviour} from "./throwable.mjs";
 import {getValueFromRange} from "../behaviour/random.mjs";
 import {Explosion} from "../behaviour/explosion.mjs";
 import {disarmAttempt} from "../behaviour/trap.mjs";
 
-class Dynamite extends Item {
+class Dynamite extends ThrowableBehaviour {
   constructor(model) {
     super(model);
-    this.useModes = ["use"];
+    this.useModes = ["use", "throw"];
   }
 
   getActionPointCost() {
+    switch (this.model.useMode) {
+    case "throw":
+      return 2;
+    }
     return 5;
-  }
-
-  get requiresTarget() {
-    return false;
   }
 
   onLook() {

@@ -1,13 +1,27 @@
-import {WeaponBehaviour} from "./weapon.mjs";
-import {explode} from "../behaviour/explosion.mjs";
+import {ItemBehaviour} from "./item.mjs";
 import {getValueFromRange, randomCheck} from "../behaviour/random.mjs";
 
-export class Grenade extends WeaponBehaviour {
+export class ThrowableBehaviour extends ItemBehaviour {
   constructor(model) {
     super(model);
-    this.zoneTarget = true;
-    this.zoneSize = 1;
     this.useModes = ["throw"];
+    this.zoneSize = 0;
+  }
+
+  get zoneTarget() {
+    return this.isThrowing();
+  }
+
+  get triggersCombat() {
+    return this.isThrowing();
+  }
+
+  get requiresTarget() {
+    return this.isThrowing();
+  }
+
+  isThrowing() {
+    return this.model.useMode === "throw";
   }
 
   attemptToUseAt(x, y) {
@@ -52,26 +66,24 @@ export class Grenade extends WeaponBehaviour {
       success: () => {}
     });
     return {
-      steps:    this.getAnimationSteps(x, y),
+      steps:    this.getThrowAnimationSteps(x, y),
       callback: this.useAt.bind(this, x, y)
     };
   }
 
   useAt(x, y) {
-    const damage = getValueFromRange(...this.getDamageRange());
+    const oldQuantity = this.model.quantity;
+    const user = this.user;
 
-    explode(
-      { x: x, y: y },
-      this.zoneSize,
-      damage,
-      null,
-      this.user
-    );
-    this.model.remove(1);
+    this.model.quantity = 1;
+    user.inventory.dropItem(this.model);
+    level.setObjectPosition(this.model, x, y);
+    if (oldQuantity > 1)
+      user.inventory.addItemOfType(this.model.itemType, oldQuantity - 1);
     return true;
   }
 
-  getAnimationSteps(x, y) {
+  getThrowAnimationSteps(x, y) {
     const steps  = this.getUseAnimation();
     const from   = this.user.spritePosition;
     const target = level.getRenderPositionForTile(x, y);
@@ -79,8 +91,8 @@ export class Grenade extends WeaponBehaviour {
     if (from.x != target.x || from.y != target.y) {
       steps.push({
         type: "Sprite",
-        name: "effects",
-        animation: "grenade-throw",
+        name: "items",
+        animation: this.model.itemType,
         fromX: from.x, fromY: from.y,
         toX: target.x, toY: target.y,
         speed: 250
@@ -95,11 +107,14 @@ export class Grenade extends WeaponBehaviour {
     return Math.max(3, strength + 1);
   }
 
-  getDamageRange() {
-    return [15, 25];
-  }
-}
+  getUseAtSuccessRate(x, y) {
+    const attackerWeaponSkill = this.user.statistics["unarmed"];
+    const distance = this.user.getDistance(x, y);
+    var baseToHit = attackerWeaponSkill;
 
-export function create(model) {
-  return new Grenade(model);
+    baseToHit -= 25;
+    baseToHit += 8 * Math.max(0, this.user.statistics.perception - 2);
+    baseToHit -= Math.max(0, distance - 1) * 7;
+    return Math.max(0, Math.min(baseToHit, 95));
+  }
 }

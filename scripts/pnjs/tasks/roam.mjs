@@ -36,9 +36,7 @@ class RoamTask {
     const maxInterval = this.model.getVariable("roamMax");
     const interval    = randomInterval(minInterval * 1000, maxInterval * 1000);
 
-    console.log("ZCHEDULING", minInterval, maxInterval, interval);
     this.model.tasks.addTask("_roamTask", Math.floor(interval), 1);
-    console.log("ZCHEDULING#2");
   }
 
   exists() {
@@ -46,18 +44,14 @@ class RoamTask {
   }
 
   run() {
-    console.log("COUCOU #1");
     if (this.exists()) {
-      console.log("COUCOU #2");
       if (!level.isInCombat(this.model) && this.model.actionQueue.isEmpty()) {
-        console.log("COUCOU #3");
         const range = this.model.getVariable("roamRange");
         const center = {
           x: this.model.getVariable("roamX"),
           y: this.model.getVariable("roamY")
         };
 
-        console.log("ROAM TAZK PUZH NEAR", range, center.x, center.y);
         this.model.actionQueue.pushReachNear(center.x, center.y, range);
         this.model.actionQueue.start();
       }
@@ -80,7 +74,6 @@ function prepareRoamTask(range, minInterval = 5, maxInterval = 15) {
 }
 
 function roamTask() {
-  console.log("ROAM TAZK TRIGGER", this.roamTask, this.roamTask.run);
   this.roamTask.run();
 }
 
