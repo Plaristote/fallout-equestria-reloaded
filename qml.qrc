@@ -252,5 +252,6 @@
         <file>assets/ui/equipment/settings.mjs</file>
         <file>ui/GridInventorySlots.qml</file>
         <file>ui/InventorySlot.qml</file>
+        <file>assets/icon.ico</file>
     </qresource>
 </RCC>

@@ -1,6 +1,7 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
+#include <QIcon>
 
 #include "globals.h"
 #include "i18n.h"
@@ -68,6 +69,7 @@ int main(int argc, char *argv[])
   QQmlApplicationEngine engine;
   MouseCursor* cursor = new MouseCursor(&app);
 
+  app.setWindowIcon(QIcon(":/assets/icon.ico"));
   cursor->updatePointerType();
 
   qmlRegisterType<I18n>("I18n", 1,0, "I18n");
