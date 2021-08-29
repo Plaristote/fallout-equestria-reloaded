@@ -35,6 +35,7 @@ public:
   explicit Game(QObject *parent = nullptr);
   ~Game();
 
+  Q_INVOKABLE QStringList getCharacterTemplateList() const;
   Q_INVOKABLE void prepareEditor();
   void loadFromDataEngine();
   Q_INVOKABLE void save();

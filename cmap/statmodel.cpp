@@ -406,6 +406,27 @@ static QJsonArray colorToJson(QColor color)
   return QJsonArray::fromVariantList(list);
 }
 
+void StatModel::fromTemplate(const QString &name)
+{
+  QFile file(ASSETS_PATH + "characterTemplates/" + name + ".json");
+
+  if (file.open(QIODevice::ReadOnly))
+  {
+    QByteArray json = file.readAll();
+
+    file.close();
+    fromJson(QJsonDocument::fromJson(json).object());
+    setProperty("specialPoints", 0);
+  }
+  else
+  {
+    qDebug() << "StatModel::fromTemplate: template" << name << "not found";
+    fromJson(QJsonObject());
+    setProperty("specialPoints", 5);
+  }
+  setHitPoints(get_maxHitPoints());
+}
+
 void StatModel::fromJson(const QJsonObject& json)
 {
   const QJsonArray jsonTraits = json["traits"].toArray();

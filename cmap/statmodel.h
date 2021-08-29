@@ -132,6 +132,7 @@ class StatModel : public QObject
 public:
   explicit StatModel(QObject *parent = nullptr);
 
+  Q_INVOKABLE void fromTemplate(const QString& name);
   void fromJson(const QJsonObject&);
   void toJson(QJsonObject&);
 

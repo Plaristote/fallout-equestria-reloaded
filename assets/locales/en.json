@@ -10,6 +10,12 @@
   "Weight": "Weight",
   "Drop": "Drop",
   "Inspect": "Inspect",
+  "templates": {
+	  "title": "Pick your character",
+	  "create": "New character",
+	  "customize": "Customize",
+	  "pick": "Pick"
+  },
   "hud": {
 	  "INV": "INV",
 	  "CHA": "CHA",

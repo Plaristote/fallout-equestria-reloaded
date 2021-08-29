@@ -115,6 +115,16 @@ void Game::initializeScript()
   script->initialize(this);
 }
 
+QStringList Game::getCharacterTemplateList() const
+{
+  QDir directory(ASSETS_PATH + "characterTemplates");
+  QStringList results = directory.entryList(QStringList() << "*.json");
+
+  for (QString& name : results)
+    name = name.remove(".json");
+  return results;
+}
+
 void Game::prepareEditor()
 {
   getDataEngine()->loadFromFile("");
