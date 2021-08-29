@@ -1,5 +1,9 @@
 export const spriteSheet = "diamond-dog";
 
+export const withFaceColor = true;
+
+export const faces = ["diamond-dog"];
+
 export function onToggled(statistics, toggled) {
   let modifier = toggled ? 1 : -1;
 }
