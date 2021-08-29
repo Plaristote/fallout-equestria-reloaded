@@ -11,6 +11,23 @@ Item {
   signal customize(string templateName)
   signal accepted(string templateName)
 
+  onVisibleChanged: {
+    if (visible)
+      root.forceActiveFocus();
+  }
+
+  Shortcut {
+    enabled: root.visible && nextButton.visible
+    sequence: StandardKey.MoveToNextChar
+    onActivated: currentIndex++
+  }
+
+  Shortcut {
+    enabled: root.visible && previousButton.visible
+    sequence: StandardKey.MoveToPreviousChar
+    onActivated: currentIndex--
+  }
+
   Repeater {
     model: templates
     delegate: Image {
@@ -20,9 +37,6 @@ Item {
       visible: currentIndex === index
     }
   }
-
-  Keys.onRightPressed: if (root.visible && nextButton.visible)     { currentIndex++ }
-  Keys.onLeftPressed:  if (root.visible && previousButton.visible) { currentIndex-- }
 
   Text {
     color: "white"
@@ -60,7 +74,7 @@ Item {
     Item { Layout.fillWidth: true }
     MenuButton {
       text: i18n.t("templates.create")
-      onClicked: root.customize();
+      onClicked: root.customize("");
     }
     MenuButton {
       text: i18n.t("templates.customize")
