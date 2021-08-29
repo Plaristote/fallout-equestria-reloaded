@@ -33,6 +33,8 @@ void Inventory::addItem(InventoryItem* item)
 
 void Inventory::removeItem(InventoryItem *item)
 {
+  if (itemSlots.values().contains(item))
+    unequipItem(item);
   items.removeAll(item);
   disconnect(item, &InventoryItem::weightChanged, this, &Inventory::totalWeightChanged);
   disconnect(item, &InventoryItem::valueChanged, this, &Inventory::totalValueChanged);
@@ -239,6 +241,18 @@ void Inventory::unequipItem(const QString &slotName, bool dropped)
       else
         oldItem->deleteLater();
       emit unequippedItem(slotName);
+    }
+  }
+}
+
+void Inventory::unequipItem(InventoryItem* item, bool dropped)
+{
+  for (auto it = itemSlots.begin() ; it != itemSlots.end() ; ++it)
+  {
+    if (it.value() == item)
+    {
+      unequipItem(it.key(), dropped);
+      break ;
     }
   }
 }

@@ -43,6 +43,7 @@ public:
   QString     getIcon() const;
   QString     getDescription() const;
   bool        isGroupable(InventoryItem* = nullptr);
+  bool        isBlockingPath() const override { return false; }
   bool        isVirtual() const { return virtualItem; }
   void        setVirtual(bool value) { virtualItem = value; emit virtualChanged(); }
   QStringList getUseModes() const;

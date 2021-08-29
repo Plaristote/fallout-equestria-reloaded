@@ -40,6 +40,7 @@ public:
   Q_INVOKABLE bool equipItem(InventoryItem* item, const QString& slotName);
   Q_INVOKABLE bool canEquipItem(InventoryItem* item, const QString& slotName) const;
   Q_INVOKABLE void unequipItem(const QString& slotName, bool dropped = false);
+  Q_INVOKABLE void unequipItem(InventoryItem*, bool dropped = false);
   Q_INVOKABLE InventoryItem* getEquippedItem(const QString& slotName) const;
   QVector<InventoryItem*> getEquippedItems() const;
 
