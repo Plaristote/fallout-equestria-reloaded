@@ -75,6 +75,16 @@ Item {
     levelController: parent.levelController
   }
 
+  Loader {
+    anchors {
+      top: parent.top; topMargin: 50
+      bottom: levelHud.top; left: parent.left
+    }
+    visible: root.levelController.tutorial
+    sourceComponent: visible ? tutorialPane : null
+    width:  325
+  }
+
   ScreenEdges {
     enabled: !parent.levelController.paused
     onMoveTop:    { canvas.translate(0, scrollSpeed); }
@@ -248,16 +258,6 @@ Item {
     id: mainMenu
     anchors.centerIn: parent
     visible: false
-  }
-
-  Loader {
-    anchors {
-      top: parent.top; topMargin: 50
-      bottom: levelHud.top; left: parent.left
-    }
-    visible: root.levelController.tutorial
-    sourceComponent: visible ? tutorialPane : null
-    width:  325
   }
 
   Component {
