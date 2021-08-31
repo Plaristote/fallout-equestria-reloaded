@@ -35,16 +35,26 @@ export class SkillTargetComponent extends DialogComponent {
   onTakeItem(user, item, quantity) {
     console.log("on take item", user, item, quantity);
     if (this.model.isAlive()) {
-      level.addTextBubble(this.model, "Hey ! Don't touch that", 3000, "red");
-      return false;
+      var target = this.model.statistics.perception * 12;
+      var weight = item.weight / item.quantity * quantity;
+
+      if (this.model.fieldOfView.isDetected(user))
+        target += 40;
+      target += weight;
+      return skillCheck(user, "steal", {
+        target:          target,
+        failure:         this.onStealFailure.bind(this, user, false, item),
+        criticalFailure: this.onStealFailure.bind(this, user, true, item)
+      });
     }
     return true;
   }
 
   onPutItem(user, item, quantity) {
-    if (this.model.isAlive()) {
-    }
-    console.log("on put item", user, item, quantity);
-    return true;
+    return this.onTakeItem(user, item, quantity);
+  }
+
+  onStealFailure(character, critical, item) {
+    console.log("onStealFailure", critical);
   }
 }
