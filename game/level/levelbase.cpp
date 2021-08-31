@@ -57,6 +57,13 @@ QVector<DynamicObject*> LevelBase::findDynamicObjects(std::function<bool (Dynami
   return results;
 }
 
+QJSValue LevelBase::getScriptObject() const
+{
+  if (script)
+    return script->getObject();
+  return QJSValue();
+}
+
 void LevelBase::registerDynamicObject(DynamicObject* object)
 {
   objects.push_back(object);

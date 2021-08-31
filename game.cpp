@@ -133,7 +133,7 @@ void Game::prepareEditor()
 
 QJSValue Game::loadScript(const QString& path)
 {
-  auto module = scriptEngine.importModule(path);
+  QJSValue module = scriptEngine.importModule(path);
 
   if (module.isError())
   {

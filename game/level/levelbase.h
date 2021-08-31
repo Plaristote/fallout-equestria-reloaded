@@ -25,6 +25,7 @@ public:
   QList<Character*>          findCharacters(std::function<bool (Character&)> compare) const;
   QVector<DynamicObject*>    findDynamicObjects(std::function<bool (DynamicObject&)> compare) const;
   Q_INVOKABLE DynamicObject* getObjectByName(const QString& name) const;
+  Q_INVOKABLE QJSValue       getScriptObject() const;
   TileMap*                   getTileMap() const { return tilemap; }
 
   void update(qint64) {}

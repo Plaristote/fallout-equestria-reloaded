@@ -71,7 +71,7 @@ float CharacterSight::getDistance(QPoint other) const
 
 void CharacterSight::refreshFieldOfView()
 {
-  if (fieldOfView)
+  if (fieldOfView && Game::get()->getLevel())
   {
     fieldOfView->reset();
     fieldOfView->runTask();
