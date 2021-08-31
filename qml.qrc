@@ -254,5 +254,7 @@
         <file>ui/InventorySlot.qml</file>
         <file>assets/icon.ico</file>
         <file>ui/CharacterTemplatePicker.qml</file>
+        <file>game/pipboy/quests/Index.qml</file>
+        <file>game/pipboy/quests/Show.qml</file>
     </qresource>
 </RCC>

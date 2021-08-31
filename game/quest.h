@@ -14,6 +14,8 @@ class Quest : public StorableObject
 
   Q_PROPERTY(QString     name      MEMBER name      NOTIFY nameChanged)
   Q_PROPERTY(bool        completed MEMBER completed NOTIFY completedChanged)
+  Q_PROPERTY(bool        failed    MEMBER failed    NOTIFY completedChanged)
+  Q_PROPERTY(bool        inProgress READ inProgress NOTIFY completedChanged)
 public:
   enum ObjectiveState { InProgress = 0, Done, Failed };
 
@@ -26,6 +28,7 @@ public:
 
   Q_INVOKABLE void completeObjective(const QString&);
   Q_INVOKABLE bool isObjectiveCompleted(const QString&) const;
+  inline bool inProgress() const { return !completed && !failed; }
 
   Q_INVOKABLE QVariantList getObjectives() const;
   Q_INVOKABLE QJSValue getScriptObject() const;
@@ -43,7 +46,7 @@ private slots:
 
 private:
   QString           name;
-  bool              completed;
+  bool              completed, failed;
   ScriptController* script = nullptr;
 };
 

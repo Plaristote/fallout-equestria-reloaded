@@ -17,7 +17,7 @@ Quest::~Quest()
 void Quest::initialize(const QString& name)
 {
   this->name = name;
-  completed = false;
+  completed = failed = false;
   script = new ScriptController(SCRIPTS_PATH + "quests/" + name + ".mjs");
   script->initialize(this);
   if (script->hasMethod("initialize"))
@@ -29,6 +29,7 @@ void Quest::load(const QJsonObject& data)
   StorableObject::load(data);
   name = data["name"].toString();
   completed = data["over"].toBool(false);
+  failed = data["failed"].isBool();
   script = new ScriptController(SCRIPTS_PATH + "/quests/" + name + ".mjs");
   script->initialize(this);
 }
@@ -39,6 +40,8 @@ QJsonObject Quest::save() const
 
   data.insert("name", name);
   data.insert("over", completed);
+  if (failed)
+    data.insert("failed", true);
   StorableObject::save(data);
   return data;
 }
