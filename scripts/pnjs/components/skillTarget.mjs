@@ -1,7 +1,8 @@
-import {MetabolismComponent} from "./metabolism.mjs";
+import {DialogComponent} from "./dialog.mjs";
 import {getValueFromRange} from "../../behaviour/random.mjs";
+import {skillCheck} from "../../cmap/helpers/checks.mjs";
 
-export class SkillTargetComponent extends MetabolismComponent {
+export class SkillTargetComponent extends DialogComponent {
   constructor(model) {
     super(model);
   }

@@ -12,8 +12,8 @@ class CharacterDialog : public QObject
 {
   Q_OBJECT
 
-  Q_PROPERTY(Character*  player         MEMBER player)
-  Q_PROPERTY(Character*  npc            MEMBER npc)
+  Q_PROPERTY(Character*  player         MEMBER player CONSTANT)
+  Q_PROPERTY(Character*  npc            MEMBER npc CONSTANT)
   Q_PROPERTY(QString     stateReference MEMBER stateReference NOTIFY stateReferenceChanged)
   Q_PROPERTY(QString     text           MEMBER text NOTIFY textChanged)
   Q_PROPERTY(QStringList options        MEMBER options NOTIFY optionsChanged)
