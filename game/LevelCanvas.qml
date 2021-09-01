@@ -94,6 +94,15 @@ Canvas {
     property real mouseX: mouseArea.mouseX
     property real mouseY: mouseArea.mouseY
 
+    Image {
+      visible: !hoverTileHintVisible && levelController.mouseMode === 0
+      source: "qrc:/assets/ui/cursors/move-tile.png"
+      height: 36
+      width: 72
+      x: mouseX - 18
+      y: mouseY - 36
+    }
+
     UsageSuccessHint {
       levelController: canvas.levelController
       target: hoveredObject
