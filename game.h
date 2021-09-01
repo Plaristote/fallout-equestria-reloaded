@@ -20,14 +20,14 @@ class Game : public StorableObject
 
   Q_PROPERTY(QStringList     consoleMessages MEMBER consoleMessages NOTIFY consoleUpdated)
   Q_PROPERTY(LevelTask*      level       MEMBER currentLevel NOTIFY levelChanged)
-  Q_PROPERTY(WorldMap*       worldmap    MEMBER worldmap)
-  Q_PROPERTY(Character*      player      MEMBER player)
-  Q_PROPERTY(CharacterParty* playerParty MEMBER playerParty)
-  Q_PROPERTY(DataEngine*     dataEngine  MEMBER dataEngine)
-  Q_PROPERTY(TimeManager*    timeManager MEMBER timeManager)
-  Q_PROPERTY(TaskRunner*     tasks       MEMBER taskManager)
-  Q_PROPERTY(QuestManager*   quests      MEMBER quests)
-  Q_PROPERTY(bool isGameEditor MEMBER isGameEditor)
+  Q_PROPERTY(WorldMap*       worldmap    MEMBER worldmap CONSTANT)
+  Q_PROPERTY(Character*      player      MEMBER player CONSTANT)
+  Q_PROPERTY(CharacterParty* playerParty MEMBER playerParty CONSTANT)
+  Q_PROPERTY(DataEngine*     dataEngine  MEMBER dataEngine CONSTANT)
+  Q_PROPERTY(TimeManager*    timeManager MEMBER timeManager CONSTANT)
+  Q_PROPERTY(TaskRunner*     tasks       MEMBER taskManager CONSTANT)
+  Q_PROPERTY(QuestManager*   quests      MEMBER quests CONSTANT)
+  Q_PROPERTY(bool isGameEditor MEMBER isGameEditor NOTIFY gameEditorEnabled)
 
   static Game* instance;
 
@@ -69,6 +69,7 @@ public:
   Q_INVOKABLE void       advanceTime(unsigned int minutes);
 
 signals:
+  void gameEditorEnabled();
   void levelChanged();
   void levelSwapped();
   void consoleUpdated();
