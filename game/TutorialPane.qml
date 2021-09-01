@@ -75,6 +75,9 @@ Item {
       anchors { left: parent.left; right: parent.right; bottom: parent.bottom }
       contentHeight: htmlView.height
       //contentWidth: htmlView.width
+
+      ScrollBar.vertical: UiStyle.TerminalScrollbar { orientation: Qt.Vertical }
+
       clip: true
       Text {
         id: htmlView

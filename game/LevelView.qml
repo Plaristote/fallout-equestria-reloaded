@@ -82,7 +82,7 @@ Item {
     }
     visible: root.levelController.tutorial
     sourceComponent: visible ? tutorialPane : null
-    width:  325
+    width:  350
   }
 
   ScreenEdges {
