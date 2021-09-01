@@ -2,6 +2,7 @@
 #include <QJsonObject>
 #include <QDebug>
 #include "game.h"
+#include "i18n.h"
 
 Quest::Quest(QObject *parent) : StorableObject(parent)
 {
@@ -92,6 +93,18 @@ QJSValue Quest::getScriptObject() const
   if (script)
     return script->getObject();
   return QJSValue();
+}
+
+QString Quest::getDescription() const
+{
+  if (script && script->hasMethod("getDescription"))
+    return script->call("getDescription").toString();
+  return tr("description");
+}
+
+QString Quest::tr(const QString& key, const QVariantMap& options)
+{
+  return I18n::get()->t("quests." + name + '.' + key, options);
 }
 
 void Quest::onCompletedChanged()

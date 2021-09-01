@@ -53,8 +53,13 @@ Flickable {
           font.pointSize: 14
         }
 
-        TerminalLabel {
-          text: "placeholder for quest description"
+        Text {
+          text: quest.description
+          font.pointSize: 14
+          horizontalAlignment: Text.AlignJustify
+          wrapMode: Text.WordWrap
+          Layout.preferredWidth: (root.width / 2) - 50
+          color: "green"
         }
 
         Item { Layout.fillHeight: true }
