@@ -14,6 +14,7 @@ Pane {
 
   Component.onCompleted: {
     levelController.paused = true;
+    contentApplication.sourceComponent = questsApplication
   }
 
   Connections {
