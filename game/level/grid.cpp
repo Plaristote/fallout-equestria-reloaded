@@ -90,7 +90,7 @@ void GridComponent::setObjectPosition(DynamicObject* object, int x, int y)
   }
 }
 
-QPoint GridComponent::getAdjustedOffsetFor(DynamicObject* object) const
+QPoint GridComponent::getAdjustedOffsetFor(const DynamicObject* object) const
 {
   if (object)
   {

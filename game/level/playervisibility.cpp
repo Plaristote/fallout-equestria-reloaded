@@ -5,6 +5,13 @@ PlayerVisibilityComponent::PlayerVisibilityComponent(QObject* parent) : ParentTy
 
 };
 
+void PlayerVisibilityComponent::unregisterDynamicObject(DynamicObject* object)
+{
+  if (object->isCharacter())
+    visibleCharacters.removeOne(reinterpret_cast<Character*>(object));
+  ParentType::unregisterDynamicObject(object);
+}
+
 void PlayerVisibilityComponent::load()
 {
   ParentType::load();

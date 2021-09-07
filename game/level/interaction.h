@@ -5,6 +5,7 @@
 # include "playervisibility.h"
 # include "../dynamicobject.h"
 # include "../objects/inventoryitem.h"
+# include "interactiontargetlist.h"
 
 class CharacterDialog;
 class LootingController;
@@ -18,6 +19,7 @@ class InteractionComponent : public PlayerVisibilityComponent
   Q_PROPERTY(int targetMode READ getTargetMode NOTIFY mouseModeChanged)
   Q_PROPERTY(InventoryItem* activeItem READ getActiveItem NOTIFY activeItemChanged)
   Q_PROPERTY(bool mouseInMap MEMBER mouseInMap NOTIFY mouseStateChanged)
+  Q_PROPERTY(InteractionTargetList* targetList READ getTargetList CONSTANT)
 public:
   static int movementModeOption;
 
@@ -79,6 +81,7 @@ public:
   Q_INVOKABLE bool useSneak(Character*);
   Q_INVOKABLE void initializeDialog(Character* npc);
   Q_INVOKABLE void initializeLooting(StorageObject*);
+  Q_INVOKABLE void centerCursorOn(DynamicObject* object);
 
 signals:
   void mouseModeChanged();
@@ -95,12 +98,15 @@ private slots:
 
 private:
   int getInteractionDistance(DynamicObject* target, const QString& interactionType);
+  InteractionTargetList* getTargetList() { return &targetList; }
+  QPoint getClickableOffsetFor(const DynamicObject* target) const;
 
 protected:
   QString        activeItemSlot, activeSkill;
   InventoryItem* activeItem = nullptr;
   int            mouseMode = MovementCursor;
   bool           mouseInMap = false;
+  InteractionTargetList targetList;
 };
 
 #endif // INTERACTIONCOMPONENT_H

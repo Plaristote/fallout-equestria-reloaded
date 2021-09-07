@@ -17,6 +17,7 @@ class LevelBase : public StorableObject
   Q_PROPERTY(Character*                      player         READ getPlayer     NOTIFY playerChanged)
   Q_PROPERTY(QQmlListProperty<DynamicObject> dynamicObjects READ getQmlObjects NOTIFY objectsChanged)
   Q_PROPERTY(TileMap*                        tilemap        READ getTileMap    NOTIFY tilemapReady)
+  Q_PROPERTY(QPoint                          canvasOffset   MEMBER canvasOffset NOTIFY cameraMoved)
 public:
   explicit LevelBase(QObject *parent = nullptr);
 
@@ -36,6 +37,7 @@ signals:
   void playerChanged();
   void objectsChanged();
   void tilemapReady();
+  void cameraMoved();
 
 private:
   QQmlListProperty<DynamicObject> getQmlObjects() { return QML_QLIST_CONSTRUCTOR(DynamicObject, objects); }
@@ -43,9 +45,9 @@ private:
 protected:
   QString               name;
   QList<DynamicObject*> objects;
-  QList<Character*>     visibleCharacters;
   TileMap*              tilemap = nullptr;
   ScriptController*     script = nullptr;
+  QPoint                canvasOffset;
 };
 
 #endif // LEVELBASE_H

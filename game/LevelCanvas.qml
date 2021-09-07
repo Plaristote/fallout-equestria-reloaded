@@ -199,4 +199,9 @@ Canvas {
     sequence: "c"
     onActivated: moveToObject(levelController.player)
   }
+
+  Connections {
+    target: gamepad
+    function onCameraAxisClicked() { moveToObject(levelController.player) }
+  }
 }

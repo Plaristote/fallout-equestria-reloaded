@@ -36,6 +36,38 @@ Item {
     onActivated: moveBottom()
   }
 
+  Item {
+    id: gamepadCamera
+    property real cumulatedXMovement: 0
+    property real cumulatedYMovement: 0
+    property real threshold: 2
+
+    Connections {
+      target: gamepad
+      function onMoveCameraXAxis(value) {
+        gamepadCamera.cumulatedXMovement += value;
+        if (gamepadCamera.cumulatedXMovement > gamepadCamera.threshold)
+          moveRight();
+        else if (gamepadCamera.cumulatedXMovement <= -gamepadCamera.threshold)
+          moveLeft();
+        else
+          return ;
+        gamepadCamera.cumulatedXMovement = 0;
+      }
+
+      function onMoveCameraYAxis(value) {
+        gamepadCamera.cumulatedYMovement += value;
+        if (gamepadCamera.cumulatedYMovement >= gamepadCamera.threshold)
+          moveBottom();
+        else if (gamepadCamera.cumulatedYMovement <= -gamepadCamera.threshold)
+          moveTop();
+        else
+          return ;
+        gamepadCamera.cumulatedYMovement = 0;
+      }
+    }
+  }
+
   MouseArea {
     id: topLeftCorner
     anchors { top: parent.top; left: parent.left }

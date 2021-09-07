@@ -24,8 +24,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 #    endif()
 #endif()
 
-find_package(QT NAMES Qt6 Qt5 COMPONENTS Core Quick LinguistTools Gui REQUIRED)
-find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Quick LinguistTools Gui REQUIRED)
+find_package(QT NAMES Qt6 Qt5 COMPONENTS Core Quick LinguistTools Gui Gamepad REQUIRED)
+find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Quick LinguistTools Gui Gamepad REQUIRED)
 find_package(Qt5Multimedia REQUIRED)
 
 #set(TS_FILES falloutequestria_en_US.ts)
@@ -62,6 +62,8 @@ set(PROJECT_SOURCES
         cmap/perk.cpp
         game/mousecursor.h
         game/mousecursor.cpp
+        game/gamepadcontroller.h
+        game/gamepadcontroller.cpp
         game/scriptcontroller.h
         game/scriptcontroller.cpp
         game/dataengine.h
@@ -162,6 +164,8 @@ set(PROJECT_SOURCES
         game/level/zone.h
         game/level/zone.cpp
         game/level/tutorialcomponent.cpp
+        game/level/interactiontargetlist.h
+        game/level/interactiontargetlist.cpp
         game/objects/doorway.h
         game/objects/doorway.cpp
         game/objects/storageobject.h
@@ -234,4 +238,5 @@ target_link_libraries(falloutequestria
           Qt${QT_VERSION_MAJOR}::Quick
           Qt${QT_VERSION_MAJOR}::Gui
           Qt${QT_VERSION_MAJOR}::Multimedia
+          Qt${QT_VERSION_MAJOR}::Gamepad
 )

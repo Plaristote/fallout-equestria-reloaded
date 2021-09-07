@@ -26,6 +26,7 @@
 #include "game/characters/buff.h"
 #include "game/characters/actionqueue.h"
 #include "game/mousecursor.h"
+#include "game/gamepadcontroller.h"
 
 #include "cmap/statmodel.h"
 
@@ -68,6 +69,7 @@ int main(int argc, char *argv[])
   QGuiApplication app(argc, argv);
   QQmlApplicationEngine engine;
   MouseCursor* cursor = new MouseCursor(&app);
+  GamepadController* gamepad = new GamepadController(&app);
 
   app.setWindowIcon(QIcon(":/assets/icon.ico"));
   cursor->updatePointerType();
@@ -96,9 +98,11 @@ int main(int argc, char *argv[])
   qmlRegisterType<Buff>("Game", 1,0, "Buff");
   qmlRegisterType<TutorialComponent>("Game", 1,0, "TutorialComponent");
   qmlRegisterType<ActionQueue>("Game", 1,0, "ActionQueue");
+  qmlRegisterType<InteractionTargetList>("Game", 1,0, "InteractionTargetList");
 
   qRegisterMetaType<Character*>("const Character*");
   qRegisterMetaType<CharacterDiplomacy*>("const CharacterDiplomacy*");
+  qRegisterMetaType<DynamicObject*>("const DynamicObject*");
 
   registerQmlTilemap();
   // GAME EDITOR
@@ -125,12 +129,16 @@ int main(int argc, char *argv[])
   engine.rootContext()->setContextProperty("scriptPath", scriptPath);
   engine.rootContext()->setContextProperty("assetPath", assetPath);
   engine.rootContext()->setContextProperty("scriptController", &scriptEditorController);
+  engine.rootContext()->setContextProperty("gamepad", gamepad);
+  engine.rootContext()->setContextProperty("mouseCursor", cursor);
 
   const QUrl url(QStringLiteral("qrc:/main.qml"));
-  QObject::connect(&engine, &QQmlApplicationEngine::objectCreated, &app, [url](QObject *obj, const QUrl &objUrl)
+  QObject::connect(&engine, &QQmlApplicationEngine::objectCreated, &app, [url, cursor](QObject *obj, const QUrl &objUrl)
   {
     if (!obj && url == objUrl)
       QCoreApplication::exit(-1);
+    else
+      cursor->setWindow(obj);
   }, Qt::QueuedConnection);
   engine.load(url);
   return app.exec();

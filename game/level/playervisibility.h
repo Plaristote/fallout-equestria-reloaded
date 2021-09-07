@@ -13,6 +13,7 @@ public:
   PlayerVisibilityComponent(QObject* parent = nullptr);
 
   void load();
+  virtual void unregisterDynamicObject(DynamicObject*);
 
 signals:
   void visibleCharactersChanged();

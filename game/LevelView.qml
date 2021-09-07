@@ -20,9 +20,13 @@ Item {
 
   onHasOverlayChanged: levelController.paused = hasOverlay
 
-  Shortcut {
-    sequence: "Esc"
-    onActivated: {
+  Action {
+    id: backAction
+    shortcut: Shortcut {
+      sequence: "Esc"
+      onActivated: backAction.trigger()
+    }
+    onTriggered: {
       if  (mainMenu.visible)
         mainMenu.visible = false;
       else if (interactionMenu.visible)
@@ -33,9 +37,43 @@ Item {
         inventoryViewContainer.visible = false;
       else if (skilldex.visible)
         skilldex.visible = false;
+      else if (itemPickerContainer.visible)
+        itemPicker.closed();
       else
         openMenuAction.trigger()
     }
+  }
+  Connections {
+    target: gamepad
+    function onBackClicked() {
+      if (root.hasOverlay)
+        backAction.trigger();
+      else if (levelController.combat && levelController.isPlayerTurn)
+        levelController.passTurn(levelController.player);
+    }
+    function onSkilldexClicked() {
+      openSkilldexAction.trigger();
+    }
+    function onInventoryClicked() {
+      openInventoryAction.trigger();
+    }
+  }
+
+  Action {
+    id: previousTargetAction
+    shortcut: Shortcut {
+      sequence: "Ctrl+Left"
+      onActivated: previousTargetAction.trigger()
+    }
+    onTriggered: levelController.centerCursorOn(levelController.targetList.previousTarget())
+  }
+  Action {
+    id: nextTargetAction
+    shortcut: Shortcut {
+      sequence: "Ctrl+Right"
+      onActivated: nextTargetAction.trigger()
+    }
+    onTriggered: levelController.centerCursorOn(levelController.targetList.nextTarget())
   }
 
   Shortcut {
@@ -46,6 +84,12 @@ Item {
   Action {
     id: openMenuAction
     onTriggered: openMenu()
+  }
+  Connections {
+    target: gamepad
+    function onStartClicked() { openMenuAction.trigger() }
+    function onLeftClicked() { previousTargetAction.trigger() }
+    function onRightClicked() { nextTargetAction.trigger() }
   }
 
   Action {
@@ -73,6 +117,7 @@ Item {
   LevelCanvas {
     id: canvas
     levelController: parent.levelController
+    onOriginChanged: levelController.canvasOffset = origin
   }
 
   Loader {

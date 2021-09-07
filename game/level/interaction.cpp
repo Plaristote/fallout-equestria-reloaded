@@ -21,6 +21,7 @@ void InteractionComponent::registerDynamicObject(DynamicObject* object)
 
 void InteractionComponent::unregisterDynamicObject(DynamicObject* object)
 {
+  targetList.unregisterDynamicObject(object);
   if (object->isCharacter())
     reinterpret_cast<Character*>(object)->getActionQueue()->reset();
   ParentType::unregisterDynamicObject(object);
@@ -99,9 +100,11 @@ void InteractionComponent::swapMouseMode()
       return ;
     case InteractionCursor:
     case TargetCursor:
+      targetList.reset();
       mouseMode = MovementCursor;
       break ;
     default:
+      targetList.findNearbyTargets(objects);
       mouseMode = InteractionCursor;
       break ;
   }
@@ -139,6 +142,8 @@ void InteractionComponent::onActiveItemChanged()
     qDebug() << "InteractionComponent::onActiveItemChanged" << activeItem->getItemType() << ": " << activeItem->requiresTarget();
   if (activeItem && !activeItem->requiresTarget())
     useItemOn(nullptr);
+  else if (activeItem)
+    targetList.findItemTargets(activeItem, objects, visibleCharacters);
 }
 
 int InteractionComponent::getTargetMode() const
@@ -183,6 +188,7 @@ void InteractionComponent::useSkill(const QString &skill)
     activeSkill = skill;
     mouseMode = TargetCursor;
     activeItem = nullptr;
+    targetList.findNearbyTargets(objects);
     emit activeItemChanged();
     emit mouseModeChanged();
   }
@@ -347,6 +353,37 @@ DynamicObject* InteractionComponent::getObjectAt(int posX, int posY) const
     }
   }
   return nullptr;
+}
+
+QPoint InteractionComponent::getClickableOffsetFor(const DynamicObject *target) const
+{
+  QPoint position = getAdjustedOffsetFor(target);
+  const QImage& image = target->getImage();
+
+  for (int x = 0 ; x < image.width() ; ++x)
+  {
+    for (int y = 0 ; y < image.height() ; ++y)
+    {
+      if (image.pixelColor(x, y) != Qt::transparent)
+      {
+        QPoint pixelPosition = position + QPoint(x, y);
+
+        if (getObjectAt(pixelPosition) == target)
+          return pixelPosition;
+      }
+    }
+  }
+  return position;
+}
+
+void InteractionComponent::centerCursorOn(DynamicObject *object)
+{
+  if (object)
+  {
+    QPoint position = canvasOffset + getClickableOffsetFor(object);
+
+    MouseCursor::get()->setRelativePosition(position);
+  }
 }
 
 void InteractionComponent::movePlayerTo(int x, int y)

@@ -49,7 +49,14 @@ public:
 
   static MouseCursor* get() { return instance; }
 
+  QPoint windowOffset() const;
+  QSize  windowSize() const;
+  QPoint relativePosition() const;
+  Q_INVOKABLE bool setRelativePosition(const QPoint&);
+  void setWindow(QObject* value) { window = value; }
+
 public slots:
+  void click(bool pressed);
   void updatePointerType();
 
 private:
@@ -58,6 +65,7 @@ private:
 
   QMap<PointerType, AnimatedCursor*> cursors;
   PointerType currentPointer = EmptyPointer;
+  QObject* window = nullptr;
 };
 
 #endif // MOUSECURSOR_H

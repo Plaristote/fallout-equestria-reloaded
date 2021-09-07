@@ -26,7 +26,7 @@ public:
 
   void setCharacterPosition(Character*, int x, int y);
   Q_INVOKABLE void setObjectPosition(DynamicObject*, int x, int y);
-  Q_INVOKABLE QPoint getAdjustedOffsetFor(DynamicObject*) const;
+  Q_INVOKABLE QPoint getAdjustedOffsetFor(const DynamicObject*) const;
   Q_INVOKABLE TileLayer* getRoofFor(DynamicObject*) const;
   Q_INVOKABLE QJSValue getDynamicObjectsAt(int x, int y) const;
   Q_INVOKABLE QPoint getRenderPositionForTile(int x, int y);

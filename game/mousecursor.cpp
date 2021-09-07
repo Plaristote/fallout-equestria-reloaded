@@ -5,6 +5,8 @@
 #include <QGuiApplication>
 #include <QDebug>
 #include <QCursor>
+#include <QGuiApplication>
+#include <QMouseEvent>
 
 static const QString cursorPath = ASSETS_PATH + "ui/cursors/";
 
@@ -74,6 +76,53 @@ void MouseCursor::setCurrentPointer(PointerType type)
     cursors[currentPointer]->enable(false);
     cursors[type]->enable(true);
     currentPointer = type;
+  }
+}
+
+QPoint MouseCursor::windowOffset() const
+{
+  if (window)
+    return QPoint(window->property("x").toInt(), window->property("y").toInt());
+  return QPoint(0, 0);
+}
+
+QSize MouseCursor::windowSize() const
+{
+  if (window)
+    return QSize(window->property("width").toInt(), window->property("height").toInt());
+  return QSize(0, 0);
+}
+
+QPoint MouseCursor::relativePosition() const
+{
+  return QCursor::pos() - windowOffset();
+}
+
+bool MouseCursor::setRelativePosition(const QPoint& position)
+{
+  QSize limits(windowSize());
+
+  if (position.x() > 0 && position.y() > 0 && position.x() < limits.width() && position.y() < limits.height())
+  {
+    QCursor::setPos(position + windowOffset());
+    return true;
+  }
+  return false;
+}
+
+void MouseCursor::click(bool pressed)
+{
+  if (window)
+  {
+    QMouseEvent event(
+      pressed ? QEvent::MouseButtonPress : QEvent::MouseButtonRelease,
+      QCursor::pos() - windowOffset(),
+      Qt::LeftButton,
+      Qt::NoButton,
+      Qt::NoModifier
+    );
+
+    QGuiApplication::sendEvent(window, &event);
   }
 }
 
