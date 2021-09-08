@@ -13,9 +13,6 @@ GamepadController::GamepadController(QObject *parent) : QObject(parent)
   auto gamepads = QGamepadManager::instance()->connectedGamepads();
 
   instance = this;
-  xMovement = yMovement = 0;
-  cursorTimer.setInterval(10);
-  cursorTimer.setSingleShot(false);
   if (gamepads.isEmpty())
     qDebug() << "Did not find any connected gamepads";
   else
@@ -23,8 +20,8 @@ GamepadController::GamepadController(QObject *parent) : QObject(parent)
     gamepad = new QGamepad(*gamepads.begin(), this);
     connect(gamepad, &QGamepad::axisLeftXChanged,   this, &GamepadController::updateCursorOnXAxis);
     connect(gamepad, &QGamepad::axisLeftYChanged,   this, &GamepadController::updateCursorOnYAxis);
-    connect(gamepad, &QGamepad::axisRightXChanged,  this, &GamepadController::moveCameraXAxis);
-    connect(gamepad, &QGamepad::axisRightYChanged,  this, &GamepadController::moveCameraYAxis);
+    connect(gamepad, &QGamepad::axisRightXChanged,  this, &GamepadController::updateCameraOnXAxis);
+    connect(gamepad, &QGamepad::axisRightYChanged,  this, &GamepadController::updateCameraOnYAxis);
     connect(gamepad, &QGamepad::buttonStartChanged, this, &GamepadController::startPressedChange);
     connect(gamepad, &QGamepad::buttonBChanged,     this, &GamepadController::buttonBPressedChange);
     connect(gamepad, &QGamepad::buttonAChanged,     this, &GamepadController::buttonAPressedChange);
@@ -40,42 +37,74 @@ GamepadController::GamepadController(QObject *parent) : QObject(parent)
     connect(gamepad, &QGamepad::buttonDownChanged,  this, &GamepadController::downPressedChange);
     connect(gamepad, &QGamepad::buttonLeftChanged,  this, &GamepadController::leftPressedChange);
     connect(gamepad, &QGamepad::buttonRightChanged, this, &GamepadController::rightPressedChange);
-    connect(&cursorTimer, &QTimer::timeout, this, &GamepadController::updateCursorPosition);
+    connect(&cursorTimer.ticker, &QTimer::timeout, this, &GamepadController::updateCursorPosition);
+    connect(&cameraTimer.ticker, &QTimer::timeout, this, &GamepadController::updateCameraPosition);
   }
+}
+
+GamepadController::CursorTimer::CursorTimer()
+{
+  x = y = 0;
+  ticker.setInterval(10);
+  ticker.setSingleShot(false);
+}
+
+void GamepadController::CursorTimer::updateState()
+{
+  if (y == 0.0 && x == 0.0)
+    ticker.stop();
+  else if (!ticker.isActive())
+  {
+    ticker.start();
+    timer.restart();
+  }
+}
+
+void GamepadController::updateCameraPosition()
+{
+  long ticks = cameraTimer.ticks();
+  auto x = (cameraTimer.x * 25) * static_cast<double>(ticks);
+  auto y = (cameraTimer.y * 25) * static_cast<double>(ticks);
+
+  if (x != 0.0)
+    emit moveCameraXAxis(x);
+  if (y != 0.0)
+    emit moveCameraYAxis(y);
+}
+
+void GamepadController::updateCameraOnXAxis(double value)
+{
+  cameraTimer.x = value;
+  cameraTimer.updateState();
+}
+
+void GamepadController::updateCameraOnYAxis(double value)
+{
+  cameraTimer.y = value;
+  cameraTimer.updateState();
 }
 
 void GamepadController::updateCursorPosition()
 {
   QPoint p = QCursor::pos();
-  int ticks = cursorElapsedTimer.elapsed() / cursorTimer.interval();
+  long ticks = cursorTimer.ticks();
 
-  p.rx() += static_cast<int>(xMovement * 25) * ticks;
-  p.ry() += static_cast<int>(yMovement * 25) * ticks;
+  p.rx() += static_cast<int>(cursorTimer.x * 25) * ticks;
+  p.ry() += static_cast<int>(cursorTimer.y * 25) * ticks;
   QCursor::setPos(p);
-  cursorElapsedTimer.restart();
-}
-
-void GamepadController::updateCursorTimerState()
-{
-  if (yMovement == 0.0 && xMovement == 0.0)
-    cursorTimer.stop();
-  else if (!cursorTimer.isActive())
-  {
-    cursorTimer.start();
-    cursorElapsedTimer.restart();
-  }
+  cursorTimer.timer.restart();
 }
 
 void GamepadController::updateCursorOnXAxis(double value)
 {
-  xMovement = value;
-  updateCursorTimerState();
+  cursorTimer.x = value;
+  cursorTimer.updateState();
 }
 
 void GamepadController::updateCursorOnYAxis(double value)
 {
-  yMovement = value;
-  updateCursorTimerState();
+  cursorTimer.y = value;
+  cursorTimer.updateState();
 }
 
 void GamepadController::startPressedChange(bool pressed)

@@ -11,6 +11,16 @@ class GamepadController : public QObject
 {
   Q_OBJECT
 
+  struct CursorTimer
+  {
+    CursorTimer();
+    void updateState();
+    long ticks() const { return timer.elapsed() / ticker.interval(); }
+    QTimer        ticker;
+    QElapsedTimer timer;
+    double        x, y;
+  };
+
   static GamepadController* instance;
 public:
   explicit GamepadController(QObject *parent = nullptr);
@@ -32,8 +42,12 @@ signals:
 
 private slots:
   void movementAxisClicked(bool pressed);
+  void updateCursorPosition();
   void updateCursorOnXAxis(double value);
   void updateCursorOnYAxis(double value);
+  void updateCameraPosition();
+  void updateCameraOnXAxis(double value);
+  void updateCameraOnYAxis(double value);
   void startPressedChange(bool pressed);
   void buttonBPressedChange(bool pressed);
   void buttonAPressedChange(bool pressed) { clickEvent(pressed); }
@@ -47,7 +61,6 @@ private slots:
   void downPressedChange(bool pressed);
   void leftPressedChange(bool pressed);
   void rightPressedChange(bool pressed);
-  void updateCursorPosition();
 
 private:
   void clickEvent(bool);
@@ -56,8 +69,7 @@ private:
   void updateCursorTimerState();
 
   QGamepad* gamepad = nullptr;
-  QTimer    cursorTimer;
-  QElapsedTimer cursorElapsedTimer;
+  CursorTimer cursorTimer, cameraTimer;
   double    xMovement, yMovement;
 };
 
