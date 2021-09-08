@@ -31,6 +31,9 @@
         <file>Game.qml</file>
         <file>assets/ui/PlayPanel.qml</file>
         <file>assets/ui/play-panel.png</file>
+        <file>assets/ui/play-panel-left.png</file>
+        <file>assets/ui/play-panel-center.png</file>
+        <file>assets/ui/play-panel-right.png</file>
         <file>assets/tilesets/metal.png</file>
         <file>assets/tilesets/metal-walls.png</file>
         <file>game/ScreenEdges.qml</file>

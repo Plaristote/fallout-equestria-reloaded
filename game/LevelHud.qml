@@ -11,13 +11,16 @@ Pane {
   property QtObject levelController;
 
   height: 135
-  width: Math.min(parent.width, 1025)
-  background: UiStyle.PlayPanel {}
+  width: Math.min(parent.width, 1070)
+  background: UiStyle.PlayPanel {
+    leftWidth: terminalPane.width + 45
+  }
 
   signal openMenu()
   signal openInventory()
   signal openSkilldex()
   signal openSpellbook()
+  signal openPipboy()
 
   RowLayout {
     anchors { bottom: parent.top; bottomMargin: 10 }
@@ -40,7 +43,7 @@ Pane {
     anchors.top: parent.top
     anchors.bottom: parent.bottom
     anchors.margins: -4
-    width: 275
+    width: 300
   }
 
   HudMenu {
@@ -159,7 +162,7 @@ Pane {
     UiStyle.TinyButton {
       text: i18n.t("hud.pipboy")
       Layout.fillWidth: true
-      onClicked: application.pushView("game/PipBoy.qml", {gameController: gameController, levelController: levelController})
+      onClicked: openPipboy()
     }
   }
 }

@@ -43,17 +43,21 @@ Item {
         openMenuAction.trigger()
     }
   }
+
   Connections {
     target: gamepad
+
     function onBackClicked() {
       if (root.hasOverlay)
         backAction.trigger();
       else if (levelController.combat && levelController.isPlayerTurn)
         levelController.passTurn(levelController.player);
     }
+
     function onSkilldexClicked() {
       openSkilldexAction.trigger();
     }
+
     function onInventoryClicked() {
       openInventoryAction.trigger();
     }
@@ -67,6 +71,7 @@ Item {
     }
     onTriggered: levelController.centerCursorOn(levelController.targetList.previousTarget())
   }
+
   Action {
     id: nextTargetAction
     shortcut: Shortcut {
@@ -111,6 +116,17 @@ Item {
     }
     onTriggered: {
       skilldex.visible = !skilldex.visible;
+    }
+  }
+
+  Action {
+    id: openPipboyAction
+    shortcut: Shortcut {
+      sequence: "p"
+      onActivated: openPipboyAction.trigger()
+    }
+    onTriggered: {
+      application.pushView("game/PipBoy.qml", {gameController: gameController, levelController: levelController})
     }
   }
 
@@ -207,6 +223,7 @@ Item {
     levelController: root.levelController
 
     onOpenMenu: openMenuAction.trigger()
+    onOpenPipboy: openPipboyAction.trigger()
     onOpenInventory: openInventoryAction.trigger()
     onOpenSkilldex: {
       skilldex.target = null;

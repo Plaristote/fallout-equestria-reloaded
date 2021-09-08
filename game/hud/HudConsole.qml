@@ -22,12 +22,13 @@ Pane {
       Repeater {
         model: gameController.consoleMessages
         delegate: Text {
+          horizontalAlignment: Text.AlignJustify
           wrapMode: Text.WordWrap
-          width: terminalContent.width
+          width: terminalContent.width - 5
           text: "> " + gameController.consoleMessages[index]
           color: "green"
           font.family: application.consoleFontName
-          font.pointSize: 6
+          font.pointSize: 10
         }
       }
     }
