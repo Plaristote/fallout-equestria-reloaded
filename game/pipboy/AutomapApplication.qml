@@ -2,21 +2,28 @@ import QtQuick 2.12
 import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.12
 import "qrc:/assets/ui" as UiStyle
+import "../../ui"
 
 Item {
   property QtObject levelController
+  property point player: levelController.player.position
   property var size: levelController.grid.getSize()
   property int caseSize: 15
   property color obstacleColor: "green"
   property color playerColor: "white"
 
   anchors.fill: parent
-  Flickable {
+  CustomFlickable {
+    id: flickable
     anchors.fill: parent
     contentHeight: automapView.height + 15
     contentWidth:  automapView.width  + 15
     ScrollBar.vertical:   UiStyle.TerminalScrollbar { orientation: Qt.Vertical }
     ScrollBar.horizontal: UiStyle.TerminalScrollbar { orientation: Qt.Horizontal }
+    contentX: (player.x * caseSize) - width
+    contentY: (player.y * caseSize) - height
+
+    Component.onCompleted: centerOn(player)
 
     GridLayout {
       id: automapView
@@ -33,6 +40,7 @@ Item {
           delegate: Item {
             property int xIndex: index
             property int caseFlag: levelController.grid.getCaseFlags(xIndex, yIndex)
+            property bool isPlayerPosition: player.x === xIndex && player.y === yIndex
             Layout.preferredWidth:  caseSize
             Layout.preferredHeight: caseSize
 
@@ -57,7 +65,7 @@ Item {
             }
             Rectangle {
               color: playerColor
-              visible: levelController.player.position.x === xIndex && levelController.player.position.y === yIndex
+              visible: isPlayerPosition
               anchors.fill: parent
             }
           }
