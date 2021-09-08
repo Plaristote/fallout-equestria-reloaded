@@ -356,6 +356,24 @@ bool LevelGrid::isOccupied(int x, int y) const
   return grid.at(index).isBlocked();
 }
 
+int LevelGrid::getCaseFlags(int x, int y) const
+{
+  int index = y * size.width() + x;
+  int flag = 0;
+
+  if (index >= grid.count() || index < 0)
+    return 1;
+  const CaseContent& gridCase = grid.at(index);
+
+  if (gridCase.block)
+    flag += 1;
+  if (gridCase.vwall)
+    flag += 2;
+  if (gridCase.hwall)
+    flag += 4;
+  return flag;
+}
+
 void LevelGrid::setCaseOccupant(CaseContent& _case, DynamicObject* occupant)
 {
   if (occupant && occupant->isBlockingPath())

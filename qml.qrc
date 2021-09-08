@@ -256,5 +256,6 @@
         <file>ui/CharacterTemplatePicker.qml</file>
         <file>game/pipboy/quests/Index.qml</file>
         <file>game/pipboy/quests/Show.qml</file>
+        <file>game/pipboy/AutomapApplication.qml</file>
     </qresource>
 </RCC>

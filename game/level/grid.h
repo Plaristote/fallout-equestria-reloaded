@@ -12,7 +12,7 @@ class GridComponent : public LevelBase
   Q_OBJECT
   typedef LevelBase ParentType;
 
-  Q_PROPERTY(LevelGrid* grid MEMBER grid)
+  Q_PROPERTY(LevelGrid* grid MEMBER grid CONSTANT)
 public:
   explicit GridComponent(QObject *parent = nullptr);
 

@@ -45,6 +45,7 @@ public:
   Q_INVOKABLE bool           isOccupied(int x, int y) const;
   Q_INVOKABLE DynamicObject* getOccupant(int x, int y);
   Q_INVOKABLE int            getVisionQuality(int x, int y, int toX, int toY);
+  Q_INVOKABLE int            getCaseFlags(int x, int y) const;
 
   bool findPath(QPoint from, QPoint to, QList<QPoint>& path);
   bool moveObject(DynamicObject*, int x, int y);

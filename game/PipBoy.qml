@@ -58,6 +58,7 @@ Pane {
           }
           MenuButton {
             text: "Automap"
+            onClicked: contentApplication.sourceComponent = automapApplication
           }
           MenuButton {
             text: "Close"
@@ -96,6 +97,13 @@ Pane {
       id: questsApplication
       PipBoyUi.QuestsApplication {
         questManager: root.gameController.getQuestManager()
+      }
+    }
+
+    Component {
+      id: automapApplication
+      PipBoyUi.AutomapApplication {
+        levelController: root.levelController
       }
     }
   }
