@@ -27,8 +27,8 @@ Pane {
           width: terminalContent.width - 5
           text: "> " + gameController.consoleMessages[index]
           color: "green"
-          font.family: application.consoleFontName
-          font.pointSize: 10
+          font.family: application.consoleFont.name
+          font.pointSize: application.consoleFont.tinySize
         }
       }
     }

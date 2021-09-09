@@ -60,8 +60,8 @@ Repeater {
       id: specialQualifier
       Layout.minimumWidth: 100
       text: getQualifierLabel(characterSheet[propertyName [index]])
-      font.family: application.consoleFontName
-      font.pointSize: 8
+      font.family: application.consoleFont.name
+      font.pointSize: application.consoleFont.tinySize
       color: "white"
       horizontalAlignment: Qt.AlignHCenter
       verticalAlignment: Qt.AlignVCenter

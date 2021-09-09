@@ -19,15 +19,15 @@ Pane {
         Text {
           width: killsPane.width - countText.width - 25
           text: killedRaces[index]
-          font.family: application.consoleFontName
-          font.pointSize: 8
+          font.family: application.consoleFont.name
+          font.pointSize: application.consoleFont.tinySize
           color: "white"
         }
         Text {
           id: countText
           text: characterSheet.getKillCount(killedRaces[index])
-          font.family: application.consoleFontName
-          font.pointSize: 8
+          font.family: application.consoleFont.name
+          font.pointSize: application.consoleFont.tinySize
           color: "white"
         }
       }

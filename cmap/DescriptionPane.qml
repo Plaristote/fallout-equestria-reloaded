@@ -45,9 +45,9 @@ Pane {
       text: i18n.t("cmap.descriptions." + selectedProperty)
       wrapMode: Text.WordWrap
       width: parent.width
-      font.family: application.consoleFontName
-      font.pointSize: 12
-      font.bold: true
+      horizontalAlignment: Text.AlignJustify
+      font.family: application.consoleFont.name
+      font.pointSize: application.consoleFont.bigSize
     }
   }
 }

@@ -264,5 +264,6 @@
         <file>cmap/AvailableSkillPoints.qml</file>
         <file>cmap/AvailableSkillProficiencies.qml</file>
         <file>cmap/CharacterData.qml</file>
+        <file>ui/FontStyle.qml</file>
     </qresource>
 </RCC>

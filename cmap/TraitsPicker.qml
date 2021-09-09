@@ -19,8 +19,8 @@ Pane {
     text: i18n.t("cmap.available-traits") + ": " + (maxTraits - characterSheet.traits.length)
     color: "white"
     font.bold: true
-    font.pointSize: 12
-    font.family: application.consoleFontName
+    font.pointSize: application.consoleFont.bigSize
+    font.family: application.consoleFont.name
     width: parent.width
   }
 
@@ -73,8 +73,8 @@ Pane {
               Text {
                 text: traitLabel
                 color: textColor
-                font.family: application.consoleFontName
-                font.pointSize: 8
+                font.family: application.consoleFont.name
+                font.pointSize: application.consoleFont.normalSize
                 MouseArea { anchors.fill: parent; onClicked: selectProperty(traitName); }
               }
             }

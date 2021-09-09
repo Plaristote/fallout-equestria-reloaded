@@ -80,8 +80,8 @@ Pane {
       color: textColor
       topPadding: 5
       bottomPadding: 5
-      font.family: application.consoleFontName
-      font.pointSize: fontSize
+      font.pointSize: application.consoleFont.normalSize
+      font.family:    application.consoleFont.name
       MouseArea { anchors.fill: parent; onClicked: root.selectProperty(propertyName) }
     }
   }
@@ -94,8 +94,8 @@ Pane {
       color: textColor
       topPadding: 5
       bottomPadding: 5
-      font.family: application.consoleFontName
-      font.pointSize: fontSize
+      font.pointSize: application.consoleFont.normalSize
+      font.family:    application.consoleFont.name
       MouseArea { anchors.fill: parent; onClicked: root.selectProperty(propertyName) }
     }
   }

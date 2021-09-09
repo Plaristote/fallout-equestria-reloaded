@@ -33,16 +33,16 @@ Pane {
           text: i18n.t("cmap." + parent.propertyName)
           Layout.alignment: Qt.AlignLeft
           color: parent.textColor
-          font.family: application.consoleFontName
-          font.pointSize: 8
+          font.family: application.consoleFont.name
+          font.pointSize: application.consoleFont.tinySize
           MouseArea { anchors.fill: parent; onClicked: selectProperty(parent.parent.propertyName) }
         }
         Text {
           text: characterSheet.hitPoints + '/' + characterSheet.maxHitPoints
           Layout.alignment: Qt.AlignRight
           color: parent.textColor
-          font.family: application.consoleFontName
-          font.pointSize: 8
+          font.family: application.consoleFont.name
+          font.pointSize: application.consoleFont.tinySize
           MouseArea { anchors.fill: parent; onClicked: selectProperty(parent.parent.propertyName) }
         }
       }
@@ -55,8 +55,8 @@ Pane {
 
           text: i18n.t(propertyName)
           color: textColor
-          font.family: application.consoleFontName
-          font.pointSize: 8
+          font.family: application.consoleFont.name
+          font.pointSize: application.consoleFont.tinySize
           MouseArea { anchors.fill: parent; onClicked: selectProperty(parent.propertyName) }
         }
       }

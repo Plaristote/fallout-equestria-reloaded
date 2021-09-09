@@ -2,6 +2,7 @@ import QtQuick 2.15
 import QtQuick.Window 2.15
 import QtQuick.Controls 2.15
 import Qt.labs.settings 1.1
+import "ui"
 
 Window {
   id: application
@@ -80,9 +81,12 @@ Window {
   property alias consoleFontName: consoleFont.name
   property alias titleFontName: titleFont.name
 
-  FontLoader {
+  property var consoleFont: FontStyle {
     id: consoleFont
     source: "./assets/fonts/JH_FALLOUT.TTF"
+    pointSize: 9
+    tinySize:  8
+    bigSize:   12
   }
 
   FontLoader {

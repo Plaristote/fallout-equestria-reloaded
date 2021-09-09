@@ -14,42 +14,42 @@ Pane {
     anchors.left: parent.left
     anchors.right: parent.right
 
-    Text {
-      Layout.alignment: Qt.AlignCenter
-      text: i18n.t("cmap.level") + ": " + characterSheet.level
-      color: "white"
-      font.family: application.consoleFontName
-      font.pointSize: 8
+    RowLayout {
 
       TerminalButton {
         visible: editable
-        anchors.left: parent.right; anchors.top: parent.top
-        anchors.leftMargin: 10
         text: "+"
         onClicked: characterSheet.addExperience(characterSheet.xpNextLevel)
       }
 
+      Text {
+        Layout.alignment: Qt.AlignCenter
+        text: i18n.t("cmap.level") + ": " + characterSheet.level
+        color: "white"
+        font.family: application.consoleFont.name
+        font.pointSize: application.consoleFont.tinySize
+      }
+
       TerminalButton {
         visible: editable
-        anchors.right: parent.left; anchors.top: parent.top
-        anchors.rightMargin: 10
         text: "-"
         //onClicked: TODO
       }
     }
+
     Text {
       Layout.alignment: Qt.AlignCenter
       text: i18n.t("cmap.experience") + ": " + characterSheet.experience
       color: "white"
-      font.family: application.consoleFontName
-      font.pointSize: 8
+      font.family: application.consoleFont.name
+      font.pointSize: application.consoleFont.tinySize
     }
     Text {
       Layout.alignment: Qt.AlignCenter
       text: i18n.t("cmap.next-level") + ": " + characterSheet.xpNextLevel
       color: "white"
-      font.family: application.consoleFontName
-      font.pointSize: 8
+      font.family: application.consoleFont.name
+      font.pointSize: application.consoleFont.tinySize
     }
   }
 }

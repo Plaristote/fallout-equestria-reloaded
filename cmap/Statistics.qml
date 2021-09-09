@@ -32,8 +32,8 @@ Pane {
         property color textColor: selectedProperty == propertyName ? "green" : "white"
         Text {
           text: i18n.t("cmap." + propertyName)
-          font.family: application.consoleFontName
-          font.pointSize: 8
+          font.family: application.consoleFont.name
+          font.pointSize: application.consoleFont.tinySize
           color: textColor
           Layout.alignment: Qt.AlignLeft
           width: 200
@@ -41,8 +41,8 @@ Pane {
         }
         Text {
           text: characterSheet[propertyName]
-          font.family: application.consoleFontName
-          font.pointSize: 8
+          font.family: application.consoleFont.name
+          font.pointSize: application.consoleFont.tinySize
           color: textColor
           Layout.alignment: Qt.AlignRight
           MouseArea { anchors.fill: parent; onClicked: selectProperty(propertyName) }
