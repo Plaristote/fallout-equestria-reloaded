@@ -9,6 +9,9 @@ Pane {
   id: root
   property QtObject gameController
   property QtObject levelController
+  property var      appNames:      ["Clock", "Quests", "Archives", "Automap"]
+  property var      appComponents: [waitApplication, questsApplication, archiveApplication, automapApplication]
+  property string   currentApp:    "Quests"
 
   background: UiStyle.Pane {}
 
@@ -17,12 +20,42 @@ Pane {
     contentApplication.sourceComponent = questsApplication
   }
 
+  onCurrentAppChanged: {
+    const index = appNames.indexOf(currentApp);
+    contentApplication.sourceComponent = appComponents[index];
+  }
+
   Connections {
     target: gameController.player
 
     function onDied() {
       application.popView();
     }
+  }
+
+  Action {
+    id: nextAppAction
+    shortcut: Shortcut { sequence: "PgDown"; onActivated: nextAppAction.trigger() }
+    onTriggered: {
+      const index = appNames.indexOf(currentApp);
+      currentApp = appNames[index + 1 >= appNames.length ? 0 : index + 1];
+    }
+  }
+
+  Action {
+    id: previousAppAction
+    shortcut: Shortcut { sequence: "PgUp"; onActivated: previousAppAction.trigger() }
+    onTriggered: {
+      const index = appNames.indexOf(currentApp);
+      currentApp = appNames[index - 1 < 0 ? appNames.length - 1 : index - 1];
+    }
+  }
+
+  Connections {
+    target: gamepad
+
+    function onLeftTriggerClicked() { previousAppAction.trigger(); }
+    function onRightTriggerClicked() { nextAppAction.trigger(); }
   }
 
   RowLayout {
@@ -36,9 +69,6 @@ Pane {
       PipBoyUi.TimeDisplay {
         timeManager: gameController.timeManager
         Layout.alignment: Qt.AlignTop | Qt.AlignCenter
-        onWaitClicked: {
-          contentApplication.sourceComponent = waitApplication
-        }
       }
 
       Item {
@@ -49,19 +79,17 @@ Pane {
         background: UiStyle.Pane {}
         Layout.alignment: Qt.AlignBottom | Qt.AlignCenter
         Column {
-          MenuButton {
-            text: "Quests"
-            onClicked: contentApplication.sourceComponent = questsApplication
+          Repeater {
+            model: appNames
+            delegate: MenuButton {
+              text: i18n.t(`pipboy.${appNames[index]}`)
+              textColor: appNames[index] === currentApp ? "yellow" : "white"
+              onClicked: currentApp = appNames[index]
+            }
           }
+
           MenuButton {
-            text: "Archives"
-          }
-          MenuButton {
-            text: "Automap"
-            onClicked: contentApplication.sourceComponent = automapApplication
-          }
-          MenuButton {
-            text: "Close"
+            text: i18n.t("Close")
             onClicked: {
               levelController.paused = false;
               application.popView();
@@ -97,6 +125,13 @@ Pane {
       id: questsApplication
       PipBoyUi.QuestsApplication {
         questManager: root.gameController.getQuestManager()
+      }
+    }
+
+    Component {
+      id: archiveApplication
+      Text {
+        text: "Nothing here yet !"
       }
     }
 

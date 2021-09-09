@@ -8,8 +8,6 @@ Pane {
   background: UiStyle.Pane {}
   padding: 10
 
-  signal waitClicked();
-
   RowLayout {
     width: parent.width
     anchors.verticalCenter: parent.verticalCenter
@@ -23,6 +21,8 @@ Pane {
         padding: 5
         text: timeManager.day
         color: "white"
+        font.family: application.consoleFont.name
+        font.pointSize: application.consoleFont.normalSize
       }
     }
 
@@ -35,6 +35,8 @@ Pane {
         padding: 5
         text: ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"][timeManager.month - 1]
         color: "white"
+        font.family: application.consoleFont.name
+        font.pointSize: application.consoleFont.normalSize
       }
     }
 
@@ -47,6 +49,8 @@ Pane {
         padding: 5
         text: timeManager.year
         color: "white"
+        font.family: application.consoleFont.name
+        font.pointSize: application.consoleFont.normalSize
       }
     }
 
@@ -59,16 +63,9 @@ Pane {
         padding: 5
         text: timeManager.hour + 'h' + (timeManager.minute >= 10 ? timeManager.minute : '0' + timeManager.minute)
         color: "white"
+        font.family: application.consoleFont.name
+        font.pointSize: application.consoleFont.normalSize
       }
-    }
-
-    Button {
-      background: UiStyle.Label { style: parent.down ? "dark" : "base" }
-      contentItem: Text {
-        color: "white"
-        text: "Wait"
-      }
-      onClicked: waitClicked()
     }
   }
 } // END TimeManager Display

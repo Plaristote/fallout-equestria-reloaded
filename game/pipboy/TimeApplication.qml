@@ -80,9 +80,9 @@ Column {
 
       contentItem: Text {
         color: "yellow"
-        font.family: application.consoleFont
-        font.pointSize: 12
         text: intervalData.label
+        font.family: application.consoleFont.name
+        font.pointSize: application.consoleFont.bigSize
         font.underline: parent.hovered
       }
 

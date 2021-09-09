@@ -141,25 +141,45 @@ void GamepadController::buttonXPressedChange(bool pressed)
 void GamepadController::buttonL1PressedChange(bool pressed)
 {
   if (!pressed)
-    swapUseMode("use-1");
+  {
+    if (isLevelMode())
+      swapUseMode("use-1");
+    else
+      emit leftTriggerClicked();
+  }
 }
 
 void GamepadController::buttonL2PressedChange(bool pressed)
 {
   if (!pressed)
-    triggerItemUse("use-1");
+  {
+    if (isLevelMode())
+      triggerItemUse("use-1");
+    else
+      emit leftTriggerClicked();
+  }
 }
 
 void GamepadController::buttonR1PressedChange(bool pressed)
 {
   if (!pressed)
-    swapUseMode("use-2");
+  {
+    if (isLevelMode())
+      swapUseMode("use-2");
+    else
+      emit rightTriggerClicked();
+  }
 }
 
 void GamepadController::buttonR2PressedChange(bool pressed)
 {
   if (!pressed)
-    triggerItemUse("use-2");
+  {
+    if (isLevelMode())
+      triggerItemUse("use-2");
+    else
+      emit rightTriggerClicked();
+  }
 }
 
 void GamepadController::upPressedChange(bool pressed)
@@ -190,10 +210,8 @@ void GamepadController::movementAxisClicked(bool pressed)
 {
   if (!pressed)
   {
-    auto* game = Game::get();
-
-    if (game && game->getLevel())
-      game->getLevel()->swapMouseMode();
+    if (isLevelMode())
+      Game::get()->getLevel()->swapMouseMode();
   }
 }
 
@@ -205,20 +223,22 @@ void GamepadController::clickEvent(bool pressed)
 void GamepadController::swapUseMode(const QString &slotName)
 {
   auto* game = Game::get();
+  InventoryItem* item = game->getLevel()->getPlayer()->getInventory()->getEquippedItem(slotName);
 
-  if (game && game->getLevel())
-  {
-    InventoryItem* item = game->getLevel()->getPlayer()->getInventory()->getEquippedItem(slotName);
-
-    if (item)
-      item->swapUseMode();
-  }
+  if (item)
+    item->swapUseMode();
 }
 
 void GamepadController::triggerItemUse(const QString &slotName)
 {
   auto* game = Game::get();
 
-  if (game && game->getLevel())
-    game->getLevel()->setActiveItem(slotName);
+  game->getLevel()->setActiveItem(slotName);
+}
+
+bool GamepadController::isLevelMode() const
+{
+  auto* game = Game::get();
+
+  return game && game->getLevel() && !game->getLevel()->isPaused();
 }

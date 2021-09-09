@@ -39,6 +39,8 @@ signals:
   void rightClicked();
   void upClicked();
   void bottomClicked();
+  void leftTriggerClicked();
+  void rightTriggerClicked();
 
 private slots:
   void movementAxisClicked(bool pressed);
@@ -64,6 +66,7 @@ private slots:
 
 private:
   void clickEvent(bool);
+  bool isLevelMode() const;
   void swapUseMode(const QString& slotName);
   void triggerItemUse(const QString& slotName);
   void updateCursorTimerState();

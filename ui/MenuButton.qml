@@ -3,6 +3,8 @@ import QtQuick.Controls 2.15
 import "qrc:/assets/ui" as UiStyle
 
 Button {
+  property color textColor: "white"
+
   implicitWidth: 248
   implicitHeight: 48
   font.bold: true
@@ -15,7 +17,7 @@ Button {
     leftPadding: 25
     text: parent.text
     font: parent.font
-    color: "white"
+    color: textColor
     styleColor: "gray"
     style: {
       if (parent.focus)

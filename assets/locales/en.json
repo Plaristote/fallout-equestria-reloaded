@@ -27,6 +27,12 @@
 	  "spellbook": "Spellbook",
 	  "pipboy": "PipBoy"
   },
+  "pipboy": {
+    "Clock":    "Clock",
+    "Quests":   "Quests",
+    "Archives": "Archives",
+    "Automap":  "Automap"
+  },
   "item-slots": {
     "armor": "Armor",
     "saddle": "Saddle",
