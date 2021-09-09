@@ -46,7 +46,8 @@ Pane {
       wrapMode: Text.WordWrap
       width: parent.width
       font.family: application.consoleFontName
-      font.pointSize: 8
+      font.pointSize: 12
+      font.bold: true
     }
   }
 }

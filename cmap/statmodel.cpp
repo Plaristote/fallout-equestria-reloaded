@@ -602,6 +602,7 @@ void StatModel::fromJson(const QJsonObject& json)
   emit raceChanged();
   emit genderChanged();
   emit factionChanged();
+  emit proficienciesChanged();
 }
 
 void StatModel::toJson(QJsonObject& json)

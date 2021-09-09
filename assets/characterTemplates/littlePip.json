@@ -107,5 +107,10 @@
         "gifted",
         "chem-resistant"
     ],
+    "profs": [
+        "sneak",
+        "lockpick",
+        "energyGuns"
+    ],
     "xp": 0
 }

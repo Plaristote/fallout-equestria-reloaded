@@ -45,13 +45,14 @@ Pane {
           property int    column:       index % content.columns
           property bool   isSelected:   propertyName == root.selectedProperty
           property color  textColor: {
-            if (characterSheet.proficiencies.indexOf(propertyName) >= 0)
+            if (characterSheet && characterSheet.proficiencies.indexOf(propertyName) >= 0)
               return isSelected ? "lightgreen" : "yellow";
             return isSelected ? "green" : "white";
           }
 
           Layout.fillWidth: column === 1
           sourceComponent: {
+            if (!characterSheet) { return null; }
             switch (column) {
             case 0: return root.canPickProficiencies ? proficiencyControl : placeholder;
             case 1: return labelColumn;
@@ -68,14 +69,13 @@ Pane {
     id: placeholder
     Rectangle {
       implicitWidth: 1
-      color: Qt.transparent
+      color: "transparent"
     }
   }
 
   Component {
     id: labelColumn
     Text {
-      horizontalAlignment: Qt.AlignRight
       text: i18n.t("cmap." + propertyName)
       color: textColor
       topPadding: 5
@@ -89,6 +89,7 @@ Pane {
   Component {
     id: valueColumn
     Text {
+      horizontalAlignment: Qt.AlignRight
       text: characterSheet[propertyName] + "%"
       color: textColor
       topPadding: 5

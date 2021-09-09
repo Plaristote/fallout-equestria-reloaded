@@ -107,5 +107,10 @@
         "heavy-handed",
         "bloody-mess"
     ],
+    "profs": [
+        "unarmed",
+        "meleeWeapons",
+        "bigGuns"
+    ],
     "xp": 0
 }

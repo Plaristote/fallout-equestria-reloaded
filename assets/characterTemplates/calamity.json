@@ -107,5 +107,10 @@
         "skilled",
         "bruiser"
     ],
+    "profs": [
+        "explosives",
+        "smallGuns",
+        "outdoorsman"
+    ],
     "xp": 0
 }
