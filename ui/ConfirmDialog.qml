@@ -7,7 +7,7 @@ UiStyle.CustomDialog {
   property string text;
   id: root
   modal: true
-  standardButtons: Dialog.Ok | Dialog.Cancel
+  standardButtons: QuickControls.Dialog.Ok | QuickControls.Dialog.Cancel
 
   QuickControls.Label {
     text: i18n.t("are-you-sure")

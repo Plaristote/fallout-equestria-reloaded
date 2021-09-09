@@ -45,7 +45,6 @@ Item {
       const index = directions.indexOf(model.orientation);
       const nextIndex = index + 1 >= directions.length ? 0 : index + 1;
 
-      console.log("Orientation:", model.orientation, index, nextIndex, directions[nextIndex]);
       model.orientation = directions[nextIndex];
     }
   }

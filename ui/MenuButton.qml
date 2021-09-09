@@ -16,6 +16,14 @@ Button {
     text: parent.text
     font: parent.font
     color: "white"
+    styleColor: "gray"
+    style: {
+      if (parent.focus)
+        return Text.Outline;
+      else if (parent.down)
+        return Text.Sunken;
+      return Text.Normal;
+    }
   }
   background: UiStyle.MenuButton {}
 }

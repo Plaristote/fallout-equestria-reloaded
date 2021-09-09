@@ -79,9 +79,11 @@ class StatModel : public QObject
   Q_PROPERTY(int agility      MEMBER agility      NOTIFY specialChanged)
   Q_PROPERTY(int luck         MEMBER luck         NOTIFY specialChanged)
 
-  Q_PROPERTY(QStringList perks  MEMBER perks  NOTIFY perksChanged)
-  Q_PROPERTY(QStringList traits MEMBER traits NOTIFY traitsChanged)
-  Q_PROPERTY(QStringList buffs  MEMBER buffs  NOTIFY buffsChanged)
+  Q_PROPERTY(QStringList perks         MEMBER perks  NOTIFY perksChanged)
+  Q_PROPERTY(QStringList traits        MEMBER traits NOTIFY traitsChanged)
+  Q_PROPERTY(QStringList buffs         MEMBER buffs  NOTIFY buffsChanged)
+  Q_PROPERTY(QStringList proficiencies MEMBER proficiencies NOTIFY proficienciesChanged)
+  Q_PROPERTY(int maxProficiencies MEMBER maxProficiencies NOTIFY proficienciesChanged)
 
   // Statistics
   Q_PROPERTY(int maxHitPoints        READ get_maxHitPoints WRITE set_maxHitPoints NOTIFY statisticsChanged)
@@ -141,6 +143,7 @@ public:
 
   QStringList& rbuffs() { return buffs; }
 
+  int getMaxProficiencies() const;
   float hpPercentage() const;
   const QString& getRace() const { return race; }
   void setRace(const QString& newRace);
@@ -164,6 +167,7 @@ public:
   Q_INVOKABLE void setEyeColor(int r, int g, int b, int a)  { eyeColor  = QColor(r, g, b, a); emit eyeColorChanged(); }
   Q_INVOKABLE void setHairColor(int r, int g, int b, int a) { hairColor = QColor(r, g, b, a); emit hairColorChanged(); }
   Q_INVOKABLE void toggleFaceAccessory(const QString&);
+  Q_INVOKABLE static QStringList getSkillList();
 
   Q_INVOKABLE void confirmChanges();
   Q_INVOKABLE void cancelChanges();
@@ -176,9 +180,17 @@ public:
 
 #define SKILL_METHODS(skillName) \
   STAT_METHODS(skillName) \
+  Q_INVOKABLE bool skillName##CanIncrease() { return skillIncreaseCost(#skillName) <= skillPoints; } \
   Q_INVOKABLE bool skillName##CanDecrease() { return spentPoints.skillName > 0; } \
-  Q_INVOKABLE void skillName##Increase() { spentPoints.skillName++; modifiers.skillName++; skillPoints--; emit skillPointsChanged(); emit statisticsChanged(); } \
-  Q_INVOKABLE void skillName##Decrease() { spentPoints.skillName--; modifiers.skillName--; skillPoints++; emit skillPointsChanged(); emit statisticsChanged(); }
+  Q_INVOKABLE void skillName##Increase() { increaseSkill(#skillName, modifiers.skillName, spentPoints.skillName); } \
+  Q_INVOKABLE void skillName##Decrease() { decreaseSkill(#skillName, modifiers.skillName, spentPoints.skillName); }
+
+  Q_INVOKABLE void addProficiency(const QString& skillName);
+  Q_INVOKABLE void removeProficiency(const QString& skillName);
+  Q_INVOKABLE void toggleProficiency(const QString& skillName);
+  int skillIncreaseCost(const QString& skillName) const;
+  void increaseSkill(const QString& skillName, int& skillValue, int& spentPoints);
+  void decreaseSkill(const QString& skillName, int& skillValue, int& spentPoints);
 
   // Statistics
   STAT_METHODS(maxHitPoints)
@@ -249,6 +261,7 @@ signals:
   void raceChanged();
   void genderChanged();
   void leveledUpChanged();
+  void proficienciesChanged();
 
 private slots:
   void updateBaseValues();
@@ -266,13 +279,14 @@ private:
   int level = 1;
   int experience = 0;
   int specialPoints = 0;
+  int maxProficiencies = 3;
   bool hasLeveledUp = false;
 
   StatData  data;
   StatData  modifiers;
   SkillData spentPoints;
 
-  QStringList traits, perks, buffs;
+  QStringList traits, perks, proficiencies, buffs;
   QJsonDocument variables;
   QMap<QString, unsigned int> kills;
 

@@ -261,5 +261,8 @@
         <file>game/pipboy/quests/Show.qml</file>
         <file>game/pipboy/AutomapApplication.qml</file>
         <file>ui/CustomFlickable.qml</file>
+        <file>cmap/AvailableSkillPoints.qml</file>
+        <file>cmap/AvailableSkillProficiencies.qml</file>
+        <file>cmap/CharacterData.qml</file>
     </qresource>
 </RCC>

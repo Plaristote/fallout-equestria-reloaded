@@ -167,6 +167,63 @@ bool StatModel::withFaceColor() const
   return false;
 }
 
+void StatModel::addProficiency(const QString &skillName)
+{
+  if (!proficiencies.contains(skillName))
+  {
+    proficiencies << skillName;
+    emit proficienciesChanged();
+  }
+}
+
+void StatModel::removeProficiency(const QString &skillName)
+{
+  if (proficiencies.contains(skillName))
+  {
+    proficiencies.removeOne(skillName);
+    emit proficienciesChanged();
+  }
+}
+
+void StatModel::toggleProficiency(const QString &skillName)
+{
+  if (proficiencies.contains(skillName))
+    removeProficiency(skillName);
+  else
+    addProficiency(skillName);
+}
+
+int StatModel::skillIncreaseCost(const QString& skillName) const
+{
+  int value = property(skillName.toStdString().c_str()).toInt();
+
+  if (value > 100)
+    return 2;
+  return 1;
+}
+
+void StatModel::increaseSkill(const QString& skillName, int& skillValue, int& spentPoints)
+{
+  int amount = proficiencies.contains(skillName) ? 2 : 1;
+
+  skillValue  += amount;
+  spentPoints += amount;
+  skillPoints -= skillIncreaseCost(skillName);
+  emit skillPointsChanged();
+  emit statisticsChanged();
+}
+
+void StatModel::decreaseSkill(const QString &skillName, int &skillValue, int& spentPoints)
+{
+  int amount = proficiencies.contains(skillName) ? 2 : 1;
+
+  skillPoints += skillIncreaseCost(skillName);
+  spentPoints -= amount;
+  skillValue  -= amount;
+  emit skillPointsChanged();
+  emit statisticsChanged();
+}
+
 static void applyCmapPlugin(StatModel* self, const CmapPlugin& plugin, StatData& data)
 {
   data.actionPoints        = plugin.modifyBaseStatistic(self, "actionPoints",        data.actionPoints);
@@ -382,6 +439,17 @@ void StatModel::cancelChanges()
   emit skillPointsChanged();
 }
 
+QStringList StatModel::getSkillList()
+{
+  return QStringList{
+    "smallGuns", "bigGuns", "energyGuns",
+    "explosives", "unarmed", "meleeWeapons",
+    "lockpick", "sneak", "medicine", "repair",
+    "science", "speech", "barter", "spellcasting",
+    "steal", "gambling", "outdoorsman"
+  };
+}
+
 static QColor jsonToColor(QJsonValue value)
 {
   QColor result = Qt::transparent;
@@ -429,8 +497,9 @@ void StatModel::fromTemplate(const QString &name)
 
 void StatModel::fromJson(const QJsonObject& json)
 {
-  const QJsonArray jsonTraits = json["traits"].toArray();
-  const QJsonArray jsonPerks  = json["perks"].toArray();
+  const QJsonArray jsonTraits        = json["traits"].toArray();
+  const QJsonArray jsonPerks         = json["perks"].toArray();
+  const QJsonArray jsonProficiencies = json["profs"].toArray();
 
   name = json["name"].toString();
   age  = json["age"].toInt(21);
@@ -451,12 +520,16 @@ void StatModel::fromJson(const QJsonObject& json)
   agility      = json["agi"].toInt(5);
   luck         = json["luc"].toInt(5);
   faction      = json["faction"].toString();
+  maxProficiencies = json["mp"].toInt(3);
   traits.clear();
   perks.clear();
+  proficiencies.clear();
   for (const QJsonValue& value : jsonTraits)
     traits.push_back(value.toString());
   for (const QJsonValue& value : jsonPerks)
     perks.push_back(value.toString());
+  for (const QJsonValue& value : jsonProficiencies)
+    proficiencies.push_back(value.toString());
 
   auto loadStatData = [&json](const QString& prefix, StatData& obj) {
     obj.maxHitPoints        = json[prefix + "-hp"].toInt();
@@ -555,6 +628,8 @@ void StatModel::toJson(QJsonObject& json)
   json["faction"] = faction;
   json["perks"]  = QJsonArray::fromStringList(perks);
   json["traits"] = QJsonArray::fromStringList(traits);
+  json["profs"]  = QJsonArray::fromStringList(proficiencies);
+  json["mp"] = maxProficiencies;
 
   auto storeStatData = [&json](const QString& prefix, const StatData& obj) {
     json[prefix + "-hp"]  = obj.maxHitPoints;
