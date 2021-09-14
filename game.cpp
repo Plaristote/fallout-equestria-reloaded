@@ -199,6 +199,24 @@ void Game::switchToLevel(const QString& name, const QString& targetZone)
   emit levelSwapped();
 }
 
+void Game::switchToEncounter(const QString &name, const QVariantMap &parameters)
+{
+  const QVariantList list = parameters.value("parties").toList();
+
+  if (!currentLevel)
+    goToLevel(name);
+  else
+    switchToLevel(name, "");
+  currentLevel->setProperty("persistent", parameters.value("persistent", false));
+  for (const QVariant& entry : list)
+  {
+    const QVariantMap partyData(entry.toMap());
+    CharacterParty*   party = CharacterParty::factory(partyData, currentLevel);
+
+    party->insertIntoZone(currentLevel, partyData.value("zone").toString());
+  }
+}
+
 void Game::exitLevel(bool silent)
 {
   if (currentLevel)
@@ -288,5 +306,7 @@ void Game::advanceTime(unsigned int minutes)
     for (Character* character : playerParty->getCharacters())
       character->updateTasks(delta);
     taskManager->update(delta);
+    if (script)
+      script->call("outdoorsTick");
   }
 }

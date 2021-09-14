@@ -44,6 +44,7 @@ public:
   Q_INVOKABLE void appendToConsole(const QString&);
   Q_INVOKABLE void goToLevel(const QString& name);
   Q_INVOKABLE void switchToLevel(const QString& name, const QString& targetZone);
+  Q_INVOKABLE void switchToEncounter(const QString& name, const QVariantMap& parameters = QVariantMap());
   void exitLevel(bool silence = false);
 
   static Game* get() { return instance; }

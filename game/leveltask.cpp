@@ -68,7 +68,7 @@ void LevelTask::load(const QString& levelName, DataEngine* dataEngine)
   script->initialize(this);
   for (auto* zone : tilemap->getZones())
     registerZone(zone);
-  if (dataEngine->isLevelActive(name))
+  if (persistent && dataEngine->isLevelActive(name))
     loadObjectsFromDataEngine(dataEngine);
   if (!initialized && script && script->hasMethod("initialize"))
   {
@@ -123,36 +123,46 @@ void LevelTask::loadObjectsFromDataEngine(DataEngine* dataEngine)
   }
 }
 
+void LevelTask::persist()
+{
+  save(Game::get()->getDataEngine());
+}
+
 void LevelTask::save(DataEngine* dataEngine)
 {
-  Game* game = Game::get();
-  QJsonObject levelData = dataEngine->getLevelData(name);
-  QJsonObject taskData;
-  QJsonArray  objectArray;
-  auto*       playerParty = Game::get()->getPlayerParty();
-
-  for (DynamicObject* object : qAsConst(objects))
+  if (persistent)
   {
-    QJsonObject objectData;
-    QString     type(object->metaObject()->className());
+    Game* game = Game::get();
+    QJsonObject levelData = dataEngine->getLevelData(name);
+    QJsonObject taskData;
+    QJsonArray  objectArray;
+    auto*       playerParty = Game::get()->getPlayerParty();
 
-    if (type != "Character" || !playerParty->containsCharacter(reinterpret_cast<Character*>(object)))
+    for (DynamicObject* object : qAsConst(objects))
     {
-      objectData["type"] = type;
-      object->save(objectData);
-      objectArray << objectData;
+      QJsonObject objectData;
+      QString     type(object->metaObject()->className());
+
+      if (type != "Character" || !playerParty->containsCharacter(reinterpret_cast<Character*>(object)))
+      {
+        objectData["type"] = type;
+        object->save(objectData);
+        objectArray << objectData;
+      }
     }
+    levelData["objects"] = objectArray;
+    if (!isGameEditor())
+    {
+      levelData["init"] = initialized;
+      levelData["lastUpdate"] = static_cast<int>(game->getTimeManager()->getDateTime().GetTimestamp());
+      StorableObject::save(levelData);
+      taskRunner->save(taskData);
+      levelData.insert("tasks", taskData);
+    }
+    dataEngine->setLevelData(name, levelData);
   }
-  levelData["objects"] = objectArray;
-  if (!isGameEditor())
-  {
-    levelData["init"] = initialized;
-    levelData["lastUpdate"] = static_cast<int>(game->getTimeManager()->getDateTime().GetTimestamp());
-    StorableObject::save(levelData);
-    taskRunner->save(taskData);
-    levelData.insert("tasks", taskData);
-  }
-  dataEngine->setLevelData(name, levelData);
+  else
+    qDebug() << "(!) Level is not persistent and it's current state has been discarded.";
 }
 
 void LevelTask::tileClicked(int x, int y)

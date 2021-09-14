@@ -29,6 +29,7 @@ class LevelTask : public CombatComponent
   Q_PROPERTY(SoundManager* sounds READ getSoundManager CONSTANT)
   Q_PROPERTY(TaskRunner* tasks MEMBER taskRunner CONSTANT)
   Q_PROPERTY(TutorialComponent* tutorial MEMBER tutorial NOTIFY tutorialChanged)
+  Q_PROPERTY(bool persistent MEMBER persistent NOTIFY persistentChanged)
 public:  
   explicit LevelTask(QObject *parent = nullptr);
   virtual ~LevelTask();
@@ -49,6 +50,7 @@ public:
   void registerDynamicObject(DynamicObject*);
   void unregisterDynamicObject(DynamicObject*);
 
+  Q_INVOKABLE void           persist();
   Q_INVOKABLE Character*     generateCharacter(const QString& name, const QString& characterSheet);
   Q_INVOKABLE StorageObject* generateStorageObject(const QString& name);
   Q_INVOKABLE Doorway*       generateDoorway(const QString& name);
@@ -70,6 +72,7 @@ signals:
   void pausedChanged();
   void objectsChanged();
   void tutorialChanged();
+  void persistentChanged();
   void displayConsoleMessage(const QString&);
   void cameraFocusRequired(DynamicObject*);
   void visibleCharactersChanged();
@@ -96,6 +99,7 @@ protected:
   TutorialComponent* tutorial = nullptr;
   bool               paused = true;
   bool               initialized = false;
+  bool               persistent = true;
 };
 
 #endif // LEVELTASK_H
