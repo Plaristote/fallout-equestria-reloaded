@@ -17,10 +17,14 @@ class CharacterParty : public QObject
 public:
   explicit CharacterParty(QObject *parent = nullptr);
 
+  static CharacterParty* factory(const QVariantMap& parameters, QObject* parent = nullptr);
+
+  const QString& getName() const { return name; }
   void loadIntoLevel(LevelTask*);
   void load(const QJsonObject&);
   void save(QJsonObject&);
 
+  Q_INVOKABLE void createCharacter(const QString &name, const QString &characterSheet, bool uniq = false);
   Q_INVOKABLE void addCharacter(Character*);
   Q_INVOKABLE void removeCharacter(Character*);
   Q_INVOKABLE void removeCharacter(const QString& name);

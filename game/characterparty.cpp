@@ -8,6 +8,48 @@ CharacterParty::CharacterParty(QObject *parent) : QObject(parent)
 
 }
 
+CharacterParty* CharacterParty::factory(const QVariantMap& parameters, QObject* parent)
+{
+  const QVariantList members(parameters["members"].toList());
+  CharacterParty*    party = new CharacterParty(parent);
+  unsigned int       it = 1;
+
+  party->setProperty("name", parameters["name"]);
+  for (const QVariant& entry : members)
+  {
+    const QVariantMap characterData = entry.toMap();
+    unsigned int count = characterData.value("amount", 1).toUInt();
+
+    if (characterData.contains("sheet"))
+    {
+      for (unsigned int i = 0 ; i < count ; ++i)
+      {
+        const QString defaultName = party->getName() + '#' + QString::number(it);
+
+        party->createCharacter(
+          characterData.value("name", defaultName).toString(),
+          characterData["sheet"].toString(),
+          characterData.value("uniq", false).toBool()
+        );
+        it++;
+      }
+    }
+    else
+      qDebug() << "partyFactory: missing `sheet` property for character";
+  }
+  return party;
+}
+
+void CharacterParty::createCharacter(const QString& name, const QString& characterSheet, bool uniq)
+{
+  Character* character = new Character;
+
+  character->setObjectName(name);
+  character->setUnique(uniq);
+  character->setCharacterSheet(characterSheet);
+  addCharacter(character);
+}
+
 void CharacterParty::addCharacter(Character* character)
 {
   character->setParent(this);
