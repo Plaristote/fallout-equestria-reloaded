@@ -90,6 +90,10 @@ private slots:
   void onItemDropped(InventoryItem* item, QPoint position);
   void displayMovementTargetHint(QPoint position);
 
+private:
+  void combatTask(qint64);
+  void realTimeTask(qint64);
+
 protected:
   QTimer             updateTimer;
   QElapsedTimer      clock;

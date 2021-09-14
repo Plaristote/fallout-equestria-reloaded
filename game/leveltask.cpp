@@ -282,8 +282,7 @@ void LevelTask::advanceTime(unsigned int minutes)
 
 void LevelTask::update()
 {
-  qint64     delta      = clock.restart();
-  const auto objectList = objects;
+  qint64 delta = clock.restart();
 
   if ((combat && isCharacterTurn(getPlayer())) || !combat)
   {
@@ -294,43 +293,56 @@ void LevelTask::update()
   }
 
   if (!combat)
-  {
-    timeManager->addElapsedMilliseconds(delta);
-    for (DynamicObject* object : objectList)
-    {
-      Character* asCharacter = reinterpret_cast<Character*>(object);
-
-      object->update(delta);
-      object->updateTasks(delta);
-      if (object->isCharacter() && asCharacter->isAlive())
-      {
-        asCharacter->getFieldOfView()->update(delta);
-        asCharacter->getActionQueue()->update();
-      }
-    }
-    taskRunner->update(delta);
-    Game::get()->getTaskManager()->update(delta);
-  }
+    realTimeTask(delta);
   else
-  {
-    for (DynamicObject* object : objectList)
-      object->update(delta);
-    if (combattants.size() > combatIterator && combatIterator >= 0)
-    {
-      auto* combattant = combattants.at(combatIterator);
-
-      if (combattant->getActionPoints() > 0 || !combattant->getActionQueue()->isEmpty())
-        combattant->getActionQueue()->update();
-      else
-        onNextCombatTurn();
-    }
-    else
-      throw std::runtime_error("combattants.size() > combatIterator");
-  }
+    combatTask(delta);
   updateVisualEffects(delta);
   soundManager->update();
   ParentType::update(delta);
   emit updated();
+}
+
+void LevelTask::realTimeTask(qint64 delta)
+{
+  const auto objectList = objects;
+
+  timeManager->addElapsedMilliseconds(delta);
+  for (DynamicObject* object : objectList)
+  {
+    Character* asCharacter = reinterpret_cast<Character*>(object);
+
+    object->update(delta);
+    object->updateTasks(delta);
+    if (object->isCharacter() && asCharacter->isAlive())
+    {
+      asCharacter->getFieldOfView()->update(delta);
+      asCharacter->getActionQueue()->update();
+    }
+  }
+  taskRunner->update(delta);
+  Game::get()->getTaskManager()->update(delta);
+}
+
+void LevelTask::combatTask(qint64 delta)
+{
+  const auto objectList = objects;
+
+  for (DynamicObject* object : objectList)
+    object->update(delta);
+  if (combattants.size() > combatIterator && combatIterator >= 0)
+  {
+    auto* combattant = combattants.at(combatIterator);
+    bool hasActionPoints  = combattant->getActionPoints() > 0;
+    bool hasRunningAction = !combattant->getActionQueue()->isEmpty();
+    bool isIdle           = combattant == getPlayer() && hasActionPoints;
+
+    if (hasRunningAction || isIdle)
+      combattant->getActionQueue()->update();
+    else
+      onNextCombatTurn();
+  }
+  else
+    throw std::runtime_error("combattants.size() > combatIterator");
 }
 
 void LevelTask::onCombatChanged()
