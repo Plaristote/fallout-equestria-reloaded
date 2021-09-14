@@ -2,6 +2,8 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Shapes 1.15
 import "../../assets/ui" as UiStyle
+import "../../ui"
+import "../hud" as LevelHud
 import Game 1.0 as MyGame
 
 Item {
@@ -132,11 +134,13 @@ Item {
 
     Pane {
       background: UiStyle.Pane {}
+      id: cityListPane
       anchors.top: clockView.bottom
       anchors.topMargin: 20
       anchors.left: parent.left
       anchors.right: parent.right
-      anchors.bottom: parent.bottom
+      anchors.bottom: hudConsole.top
+      anchors.bottomMargin: 20
 
       Column {
         Repeater {
@@ -158,6 +162,15 @@ Item {
           }
         }
       }
+    }
+
+    LevelHud.HudConsole {
+      id: hudConsole
+      gameController: gameManager.currentGame
+      height: 200
+      anchors.left: parent.left
+      anchors.right: parent.right
+      anchors.bottom: parent.bottom
     }
   }
 }
