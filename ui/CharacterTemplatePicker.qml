@@ -78,6 +78,18 @@ Item {
             }
           }
 
+          Text { text: i18n.t("cmap.proficiencies"); visible: character.proficiencies.length > 0; color: "yellow"; font.bold: true; font.pointSize: 18 }
+
+          Repeater {
+            model: character.proficiencies
+            delegate: Text {
+              text: i18n.t("cmap." + character.proficiencies[index])
+              color: "white"
+              font.capitalization: Font.Capitalize
+              font.pointSize: 15
+            }
+          }
+
           Item { Layout.fillHeight: true }
         } // END Traits
 
