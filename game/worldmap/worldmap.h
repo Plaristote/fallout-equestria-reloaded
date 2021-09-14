@@ -24,12 +24,15 @@ class WorldMap : public QObject
   Q_PROPERTY(QQmlListProperty<WorldMapCity> cities READ getCitiesQml NOTIFY citiesChanged)
   Q_PROPERTY(QQmlListProperty<WorldMapZone> zones READ getZonesQml NOTIFY zonesChanged)
   Q_PROPERTY(QStringList discoveredCities MEMBER discoveredCities NOTIFY discoveredCitiesChanged)
-  Q_PROPERTY(bool paused MEMBER paused)
+  Q_PROPERTY(bool paused MEMBER paused NOTIFY pausedChanged)
+  Q_PROPERTY(bool moving READ isMoving NOTIFY movingChanged)
 public:
   WorldMap(QObject* parent = nullptr);
 
   void load(const QJsonObject&);
   QJsonObject save() const;
+
+  bool isMoving() const { return updateTimer.isActive(); }
 
   QQmlListProperty<WorldMapCity> getCitiesQml() { return QML_QLIST_CONSTRUCTOR(WorldMapCity, cities); }
   QQmlListProperty<WorldMapZone> getZonesQml() { return QML_QLIST_CONSTRUCTOR(WorldMapZone, zones); }
@@ -52,6 +55,8 @@ public:
 
   Q_INVOKABLE QPoint getCaseAt(QPoint position) const;
   Q_INVOKABLE WorldMapZone* getCurrentZone() const;
+  Q_INVOKABLE QStringList getCurrentZones() const;
+  QVector<WorldMapZone*>  getCurrentZoneList() const;
 
 signals:
   void currentPositionChanged();
@@ -64,6 +69,8 @@ signals:
   void zonesChanged();
   void caseRevealed(int caseX, int caseY);
   void discoveredCitiesChanged();
+  void pausedChanged();
+  void movingChanged();
 
 private slots:
   void update();

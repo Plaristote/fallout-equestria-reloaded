@@ -142,11 +142,17 @@ bool WorldMap::isVisible(int x, int y) const
 
 float WorldMap::getCurrentMovementSpeed() const
 {
-  const WorldMapZone* zone = getCurrentZone();
+  const auto zones = getCurrentZoneList();
+  float movementSpeed = 5.f;
 
-  if (zone)
-    return static_cast<float>(zone->getMovementSpeed());
-  return 5.f;
+  for (const WorldMapZone* zone : zones)
+  {
+    auto zoneSpeed = static_cast<float>(zone->getMovementSpeed());
+
+    if (zoneSpeed < movementSpeed)
+      movementSpeed = zoneSpeed;
+  }
+  return movementSpeed;
 }
 
 void WorldMap::update()
@@ -179,12 +185,14 @@ void WorldMap::onTargetPositionChanged()
 {
   qDebug() << "Starting update timer";
   updateTimer.start();
+  emit movingChanged();
 }
 
 void WorldMap::onTargetPositionReached()
 {
   qDebug() << "Stopping update timer";
   updateTimer.stop();
+  emit movingChanged();
 }
 
 WorldMapCity* WorldMap::getCity(const QString &name) const
@@ -328,4 +336,28 @@ WorldMapZone* WorldMap::getCurrentZone() const
       return zone;
   }
   return nullptr;
+}
+
+QVector<WorldMapZone*> WorldMap::getCurrentZoneList() const
+{
+  QVector<WorldMapZone*> list;
+  QPoint currentCase = getCaseAt(currentPosition);
+
+  for (WorldMapZone* zone : qAsConst(zones))
+  {
+    if (zone->containsCase(currentCase.x(), currentCase.y()))
+      list.push_back(zone);
+  }
+  return list;
+}
+
+QStringList WorldMap::getCurrentZones() const
+{
+  const auto  zones = getCurrentZoneList();
+  QStringList list;
+
+  list.reserve(zones.size());
+  for (WorldMapZone* zone : zones)
+    list.push_back(zone->getName());
+  return list;
 }

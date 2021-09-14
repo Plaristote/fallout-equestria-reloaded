@@ -19,6 +19,7 @@ public:
   void load(const QJsonObject&);
   QJsonObject save() const;
 
+  const QString&     getName() const { return name; }
   Q_INVOKABLE int    caseCount() const { return cases.size(); }
   Q_INVOKABLE QPoint caseAt(int index) const { return index < cases.size() ? cases[index] : QPoint(); }
   Q_INVOKABLE bool   containsCase(int x, int y) const { return cases.contains(QPoint(x, y)); }
