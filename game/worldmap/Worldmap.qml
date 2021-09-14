@@ -28,7 +28,7 @@ Item {
   ConfirmDialog {
     id: encounterConfirmDialog
     anchors.centerIn: parent
-    onAccepted: gameManager.currentGame.triggerScheduledEncounter()
+    onAccepted: gameManager.currentGame.randomEncounters.triggerScheduledEncounter()
     onRejected: {
       root.state = "default";
       root.controller.paused = false;

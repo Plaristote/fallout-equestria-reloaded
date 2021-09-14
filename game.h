@@ -9,6 +9,7 @@
 # include "game/timermanager.h"
 # include "game/questmanager.h"
 # include "game/worldmap/worldmap.h"
+# include "game/worldmap/randomencountercontroller.h"
 # include "game/diplomacy.hpp"
 # include <QJSEngine>
 # include "cmap/trait.h"
@@ -27,6 +28,7 @@ class Game : public StorableObject
   Q_PROPERTY(TimeManager*    timeManager MEMBER timeManager CONSTANT)
   Q_PROPERTY(TaskRunner*     tasks       MEMBER taskManager CONSTANT)
   Q_PROPERTY(QuestManager*   quests      MEMBER quests CONSTANT)
+  Q_PROPERTY(RandomEncounterController* randomEncounters MEMBER randomEncounters CONSTANT)
   Q_PROPERTY(bool isGameEditor MEMBER isGameEditor NOTIFY gameEditorEnabled)
 
   static Game* instance;
@@ -44,8 +46,6 @@ public:
   Q_INVOKABLE void appendToConsole(const QString&);
   Q_INVOKABLE void goToLevel(const QString& name);
   Q_INVOKABLE void switchToLevel(const QString& name, const QString& targetZone);
-  Q_INVOKABLE void switchToEncounter(const QString& name, const QVariantMap& parameters = QVariantMap());
-  Q_INVOKABLE void triggerOutdoorEncounter(const QString& name, const QVariantMap& parameters = QVariantMap());
   void exitLevel(bool silence = false);
 
   static Game* get() { return instance; }
@@ -84,7 +84,6 @@ public slots:
   void onCityEntered(QString name);
   void onCityEnteredAt(const QString& city, const QString& zone);
   void changeZone(TileZone*);
-  void triggerScheduledEncounter();
   void deleteLater();
 
 private slots:
@@ -100,6 +99,7 @@ private:
   WorldDiplomacy* diplomacy;
   QuestManager* quests;
   WorldMap* worldmap;
+  RandomEncounterController* randomEncounters;
   LevelTask*  currentLevel = nullptr;
   CharacterParty* playerParty = nullptr;
   Character* player = nullptr;
@@ -107,10 +107,6 @@ private:
   QJSEngine   scriptEngine;
   ScriptController* script = nullptr;
   TaskRunner* taskManager = nullptr;
-
-  QTimer encounterTimer;
-  QString scheduledEncounterName;
-  QVariantMap scheduledEncounter;
 
   QMap<QString, Trait> cmapTraits;
   QMap<QString, Race>  cmapRaces;

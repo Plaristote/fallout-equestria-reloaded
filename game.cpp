@@ -20,6 +20,7 @@ Game::Game(QObject *parent) : StorableObject(parent)
   diplomacy = new WorldDiplomacy(*dataEngine);
   playerParty = new CharacterParty(this);
   worldmap = new WorldMap(this);
+  randomEncounters = new RandomEncounterController(this);
   quests = new QuestManager(this);
   taskManager = new TaskRunner(this);
   scriptEngine.installExtensions(QJSEngine::ConsoleExtension);
@@ -34,10 +35,6 @@ Game::Game(QObject *parent) : StorableObject(parent)
 
   connect(worldmap, &WorldMap::cityEntered, this, &Game::onCityEntered);
   connect(this, &Game::gameOver, this, &Game::onGameOver);
-
-  encounterTimer.setSingleShot(true);
-  encounterTimer.setInterval(2000);
-  connect(&encounterTimer, &QTimer::timeout, this, &Game::triggerScheduledEncounter);
 }
 
 Game::~Game()
@@ -201,43 +198,6 @@ void Game::switchToLevel(const QString& name, const QString& targetZone)
   currentLevel->insertPartyIntoZone(playerParty, targetZone);
   currentLevel->setPaused(false);
   emit levelSwapped();
-}
-
-void Game::switchToEncounter(const QString &name, const QVariantMap &parameters)
-{
-  const QVariantList list = parameters.value("parties").toList();
-  const QString entryZone = parameters.value("entryZone", "").toString();
-
-  if (!currentLevel)
-  {
-    emit encounterTriggered(parameters.value("title", "Something's in the way.").toString());
-    goToLevel(name);
-    currentLevel->insertPartyIntoZone(playerParty, entryZone);
-  }
-  else
-    switchToLevel(name, entryZone);
-  currentLevel->setProperty("persistent", parameters.value("persistent", false));
-  for (const QVariant& entry : list)
-  {
-    const QVariantMap partyData(entry.toMap());
-    CharacterParty*   party = CharacterParty::factory(partyData, currentLevel);
-
-    party->insertIntoZone(currentLevel, partyData.value("zone").toString());
-  }
-}
-
-void Game::triggerOutdoorEncounter(const QString &name, const QVariantMap &parameters)
-{
-  scheduledEncounter = parameters;
-  scheduledEncounterName = name;
-  if (!parameters.value("optional", false).toBool())
-    encounterTimer.start();
-  emit encounterNotify(scheduledEncounterName, scheduledEncounter);
-}
-
-void Game::triggerScheduledEncounter()
-{
-  switchToEncounter(scheduledEncounterName, scheduledEncounter);
 }
 
 void Game::exitLevel(bool silent)

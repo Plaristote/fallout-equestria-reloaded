@@ -131,6 +131,8 @@ set(PROJECT_SOURCES
         game/worldmap/worldmapcity.cpp
         game/worldmap/worldmapzone.h
         game/worldmap/worldmapzone.cpp
+        game/worldmap/randomencountercontroller.h
+        game/worldmap/randomencountercontroller.cpp
         game/taskrunner.h
         game/taskrunner.cpp
         game/inventory.h
