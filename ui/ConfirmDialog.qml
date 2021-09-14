@@ -4,12 +4,13 @@ import QtQuick.Layouts 1.12
 import "../assets/ui" as UiStyle
 
 UiStyle.CustomDialog {
-  property string text;
+  property alias text: label.text
   id: root
   modal: true
   standardButtons: QuickControls.Dialog.Ok | QuickControls.Dialog.Cancel
 
   QuickControls.Label {
+    id: label
     text: i18n.t("are-you-sure")
     color: "white"
     font.family: application.titleFontName

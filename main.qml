@@ -16,7 +16,7 @@ Window {
   property bool hasSavedGame: false // TODO
   property string gameLoading
   property int movementMode: 0
-  property alias depth: mainView.depth
+  property alias currentView: mainView.currentItem
 
   Settings {
     property alias x: application.x

@@ -45,6 +45,7 @@ public:
   Q_INVOKABLE void goToLevel(const QString& name);
   Q_INVOKABLE void switchToLevel(const QString& name, const QString& targetZone);
   Q_INVOKABLE void switchToEncounter(const QString& name, const QVariantMap& parameters = QVariantMap());
+  Q_INVOKABLE void triggerOutdoorEncounter(const QString& name, const QVariantMap& parameters = QVariantMap());
   void exitLevel(bool silence = false);
 
   static Game* get() { return instance; }
@@ -76,11 +77,14 @@ signals:
   void consoleUpdated();
   void gameOver();
   void transitionRequired(const QString& video, int elapsingTime = 0);
+  void encounterTriggered(const QString& encounterTitle);
+  void encounterNotify(const QString& encounterName, const QVariantMap& parameter);
 
 public slots:
   void onCityEntered(QString name);
   void onCityEnteredAt(const QString& city, const QString& zone);
   void changeZone(TileZone*);
+  void triggerScheduledEncounter();
   void deleteLater();
 
 private slots:
@@ -103,6 +107,10 @@ private:
   QJSEngine   scriptEngine;
   ScriptController* script = nullptr;
   TaskRunner* taskManager = nullptr;
+
+  QTimer encounterTimer;
+  QString scheduledEncounterName;
+  QVariantMap scheduledEncounter;
 
   QMap<QString, Trait> cmapTraits;
   QMap<QString, Race>  cmapRaces;

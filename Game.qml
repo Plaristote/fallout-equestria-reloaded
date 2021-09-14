@@ -10,7 +10,6 @@ Item {
   property string mystate;
   property var gameController;
   property string currentLevelName;
-  property bool hasActiveView: application.depth > 3
   anchors.fill: parent
 
   function openLevelView() {
@@ -18,6 +17,14 @@ Item {
       gameController: gameController,
       levelController: gameController.level
     });
+  }
+
+  function hasActiveView() {
+    const viewName = application.currentView.toString();
+
+    if (viewName.startsWith("NewGame_QMLTYPE") || viewName.startsWith("Game_QMLTYPE"))
+      return false;
+    return true;
   }
 
   Component.onCompleted: {
@@ -78,7 +85,10 @@ Item {
   Timer {
     id: deferredWorldmapDisplay
     interval: 500
-    onTriggered: application.pushView("game/worldmap/Worldmap.qml", { controller: root.gameController.worldmap })
+    onTriggered: {
+      gameManager.currentGame.worldmap.paused = false;
+      application.pushView("game/worldmap/Worldmap.qml", { controller: root.gameController.worldmap })
+    }
   }
 
   Timer {

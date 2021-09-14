@@ -72,7 +72,9 @@
     "trap-disarmed": "You successfully disarmed the trap.",
     "trap-detected": "You've found a trap !",
     "radiation-over": "You are no longer irradiated.",
-    "radiation-begin": "You've been irradiated by magical waste."
+    "radiation-begin": "You've been irradiated by magical waste.",
+    "encounter-title": "You've stumbled upon {{title}}.",
+    "encounter-prompt": "Do you wish to check it out ?"
   },
   "use-modes": {
     "use": "Use",

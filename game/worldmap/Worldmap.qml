@@ -11,9 +11,33 @@ Item {
   property point movementStart: controller.currentPosition
   id: root
 
+  Connections {
+    target: controller
+
+    function onEncounterTriggered(title) { application.popView(); }
+    function onEncounterNotify(name, params) {
+      root.state = "randomEncounter";
+      if (params.optional) {
+        encounterConfirmDialog.text = i18n.t("messages.encounter-title", params) + ' ' + i18n.t("messages.encounter-prompt");
+        encounterConfirmDialog.open();
+      }
+      root.controller.paused = true;
+    }
+  }
+
+  ConfirmDialog {
+    id: encounterConfirmDialog
+    anchors.centerIn: parent
+    onAccepted: gameManager.currentGame.triggerScheduledEncounter()
+    onRejected: {
+      root.state = "default";
+      root.controller.paused = false;
+    }
+  }
+
   function clickedOnPlayer() {
-    console.log("Clicked on player at", controller.currentPosition);
-    //application.popView();
+    console.log("Clicked on player at", controller.currentPosition, controller.paused);
+    if (controller.paused) { return ; }
     for (var i = 0 ; i < controller.cities.length ; ++i) {
       if (controller.cities[i].isInside(controller.currentPosition)) {
         application.popView();
@@ -24,12 +48,14 @@ Item {
   }
 
   function clickedOnMap() {
-    console.log("Clicked on map", worldmapView.mouseX, worldmapView.mouseY);
+    console.log("Clicked on map", worldmapView.mouseX, worldmapView.mouseY, controller.paused);
+    if (controller.paused) { return ; }
     movementStart = controller.currentPosition;
     controller.targetPosition = Qt.point(worldmapView.mouseX, worldmapView.mouseY);
   }
 
   function clickedOnCity(city) {
+    if (controller.paused) { return ; }
     movementStart = controller.currentPosition;
     controller.targetPosition = city.position;
   }
@@ -80,7 +106,38 @@ Item {
         onClicked: clickedOnPlayer()
       }
     }
+
+    Rectangle {
+      id: encounterShape
+      visible: false
+      x: controller.currentPosition.x - width / 2; y: controller.currentPosition.y - height / 2
+      width: 50
+      height: 50
+      radius: width * 0.5
+      color: Qt.rgba(255, 0, 0, 0.5);
+      border.color: "red"
+      border.width: 3
+      RotationAnimation on color {
+        loops: Animation.Infinite
+        from: Qt.rgba(255, 0, 0, 0.5);
+        to: Qt.rgba(255, 0, 0, 0);
+      }
+    }
   }
+
+  states: [
+    State {
+      name: "randomEncounter"
+      PropertyChanges { target: encounterShape; visible: true }
+      PropertyChanges { target: positionShape;  visible: false }
+    },
+    State {
+      name: "default"
+      PropertyChanges { target: encounterShape; visible: false }
+      PropertyChanges { target: positionShape;  visible: true }
+    }
+
+  ]
 
   Pane {
     id: sidebar

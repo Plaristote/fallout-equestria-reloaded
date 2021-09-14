@@ -13,6 +13,10 @@ WorldMap::WorldMap(QObject* parent) : QObject(parent)
   connect(this, &WorldMap::mapSizeChanged, this, &WorldMap::onMapSizeChanged);
   connect(this, &WorldMap::targetPositionChanged, this, &WorldMap::onTargetPositionChanged);
   connect(this, &WorldMap::currentPositionChanged, this, &WorldMap::onCurrentPositionChanged);
+  connect(Game::get(), &Game::encounterTriggered, this, &WorldMap::onEncounterTriggered);
+  connect(Game::get(), &Game::encounterNotify,    this, &WorldMap::onEncounterTriggered);
+  connect(Game::get(), &Game::encounterTriggered, this, &WorldMap::encounterTriggered);
+  connect(Game::get(), &Game::encounterNotify,    this, &WorldMap::encounterNotify);
   timeManager = Game::get()->getTimeManager();
 }
 
@@ -338,6 +342,16 @@ WorldMapZone* WorldMap::getCurrentZone() const
   return nullptr;
 }
 
+WorldMapCity* WorldMap::getCurrentCity() const
+{
+  for (WorldMapCity* city : cities)
+  {
+    if (city->isInside(currentPosition))
+      return city;
+  }
+  return nullptr;
+}
+
 QVector<WorldMapZone*> WorldMap::getCurrentZoneList() const
 {
   QVector<WorldMapZone*> list;
@@ -360,4 +374,9 @@ QStringList WorldMap::getCurrentZones() const
   for (WorldMapZone* zone : zones)
     list.push_back(zone->getName());
   return list;
+}
+
+void WorldMap::onEncounterTriggered()
+{
+  updateTimer.stop();
 }

@@ -56,6 +56,7 @@ public:
   Q_INVOKABLE QPoint getCaseAt(QPoint position) const;
   Q_INVOKABLE WorldMapZone* getCurrentZone() const;
   Q_INVOKABLE QStringList getCurrentZones() const;
+  Q_INVOKABLE WorldMapCity* getCurrentCity() const;
   QVector<WorldMapZone*>  getCurrentZoneList() const;
 
 signals:
@@ -71,12 +72,15 @@ signals:
   void discoveredCitiesChanged();
   void pausedChanged();
   void movingChanged();
+  void encounterTriggered(const QString& encounterTitle);
+  void encounterNotify(const QString& levelName, const QVariantMap& encounter);
 
 private slots:
   void update();
   void onCurrentPositionChanged();
   void onTargetPositionChanged();
   void onTargetPositionReached();
+  void onEncounterTriggered();
 
 private slots:
   void onMapSizeChanged();
