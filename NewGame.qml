@@ -16,7 +16,6 @@ Rectangle {
   Action {
     id: acceptedAction
     onTriggered: {
-      console.log("Start a new game");
       statModel.faction = "player";
       gameManager.launchNewGame();
       application.popView();

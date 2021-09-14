@@ -104,6 +104,8 @@ void Game::loadFromDataEngine()
     goToLevel(currentLevelName);
     playerParty->loadIntoLevel(currentLevel);
   }
+  else
+    emit levelChanged();
   dataStore = dataEngine->getVariables();
   initializeScript();
 }

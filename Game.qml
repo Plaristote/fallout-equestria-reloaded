@@ -10,6 +10,7 @@ Item {
   property string mystate;
   property var gameController;
   property string currentLevelName;
+  property bool hasActiveView: application.depth > 3
   anchors.fill: parent
 
   function openLevelView() {
@@ -124,10 +125,9 @@ Item {
       if (gameController.level)
         deferredLevelLoading.running = true;
       else
-      {
         deferredWorldmapDisplay.running = true;
+      if (root.hasActiveView())
         application.popView();
-      }
     }
 
     function onLevelSwapped() {
