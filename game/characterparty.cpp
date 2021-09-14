@@ -25,12 +25,9 @@ CharacterParty* CharacterParty::factory(const QVariantMap& parameters, QObject* 
       for (unsigned int i = 0 ; i < count ; ++i)
       {
         const QString defaultName = party->getName() + '#' + QString::number(it);
+        const QString name = characterData.value("name", defaultName).toString();
 
-        party->createCharacter(
-          characterData.value("name", defaultName).toString(),
-          characterData["sheet"].toString(),
-          characterData.value("uniq", false).toBool()
-        );
+        party->createCharacter(name, characterData);
         it++;
       }
     }
@@ -40,13 +37,14 @@ CharacterParty* CharacterParty::factory(const QVariantMap& parameters, QObject* 
   return party;
 }
 
-void CharacterParty::createCharacter(const QString& name, const QString& characterSheet, bool uniq)
+void CharacterParty::createCharacter(const QString& name, const QVariantMap& attributes)
 {
   Character* character = new Character;
 
   character->setObjectName(name);
-  character->setUnique(uniq);
-  character->setCharacterSheet(characterSheet);
+  character->setUnique(attributes.value("uniq", false).toBool());
+  character->setCharacterSheet(attributes["sheet"].toString());
+  character->setScript(attributes.value("script", "character").toString());
   addCharacter(character);
 }
 

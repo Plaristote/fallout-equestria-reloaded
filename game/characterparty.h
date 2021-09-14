@@ -24,7 +24,7 @@ public:
   void load(const QJsonObject&);
   void save(QJsonObject&);
 
-  Q_INVOKABLE void createCharacter(const QString &name, const QString &characterSheet, bool uniq = false);
+  Q_INVOKABLE void createCharacter(const QString &name, const QVariantMap& parameters);
   Q_INVOKABLE void addCharacter(Character*);
   Q_INVOKABLE void removeCharacter(Character*);
   Q_INVOKABLE void removeCharacter(const QString& name);
