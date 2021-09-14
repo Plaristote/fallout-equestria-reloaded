@@ -57,6 +57,8 @@ void GameManager::launchNewGame()
     currentGame->scriptCall(initializeFunction, QJSValueList(), "initialize.mjs");
   else
     qDebug() << "Missing initialize function in scripts/initialize.mjs";
+  if (!currentGame->getLevel())
+    emit currentGame->levelChanged();
 }
 
 void GameManager::loadGame(const QString& path)
