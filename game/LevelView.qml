@@ -198,27 +198,11 @@ Item {
     }
   }
 
-  Rectangle {
+  Hud.PlayerInventory {
     id: inventoryViewContainer
-    color: Qt.rgba(0, 0, 0, 0.5)
     anchors.fill: parent
     visible: false
-
-    MouseArea {
-      anchors.fill: parent
-    }
-
-    CharacterInventory {
-      id: inventoryView
-      character: levelController.player
-      anchors { top: parent.top; left: parent.left; right: parent.right }
-      anchors.leftMargin:  parent.width / 8
-      anchors.rightMargin: parent.width / 8
-      anchors.bottomMargin: 50
-      anchors.topMargin: 50
-      height: parent.height - levelHud.height - 100
-      onClosed: inventoryViewContainer.visible = false
-    }
+    inventoryHeight: height - levelHud.height - 100
   }
 
   Hud.CountdownDialog {
@@ -236,7 +220,7 @@ Item {
     }
   }
 
-  LevelMenu {
+  Hud.Menu {
     id: mainMenu
     anchors.centerIn: parent
     visible: false

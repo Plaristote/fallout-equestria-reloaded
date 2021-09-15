@@ -152,7 +152,7 @@
         <file>ui/TerminalCheckBox.qml</file>
         <file>editor/level/EditorCanvas.qml</file>
         <file>editor/level/EditorRender.mjs</file>
-        <file>game/LevelMenu.qml</file>
+        <file>game/hud/Menu.qml</file>
         <file>game/LevelHud.qml</file>
         <file>game/LevelFrameRate.qml</file>
         <file>ui/FaceEditor.qml</file>
@@ -266,5 +266,8 @@
         <file>cmap/CharacterData.qml</file>
         <file>ui/FontStyle.qml</file>
         <file>game/hud/Actions.qml</file>
+        <file>game/hud/PlayerInventory.qml</file>
+        <file>game/worldmap/WorldmapSidebar.qml</file>
+        <file>ui/ClockWidget.qml</file>
     </qresource>
 </RCC>

@@ -8,7 +8,7 @@ CharacterSheet {
   mode: "view"
 
   Component.onCompleted: {
-    gameController.level.paused = true;
+    swapPauseMode(true);
     characterSheet.hasLeveledUp = false;
     if (characterSheet.skillPoints > 0)
       mode = "edit";
@@ -24,8 +24,15 @@ CharacterSheet {
     close();
   }
 
+  function swapPauseMode(value) {
+    if (gameController.level)
+      gameController.level.paused = value;
+    else
+      gameController.worldmap.paused = value;
+  }
+
   function close() {
-    gameController.level.paused = false;
+    swapPauseMode(false);
     application.popView();
   }
 }

@@ -1,5 +1,6 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+import QtQuick.Layouts 1.12
 import QtQuick.Shapes 1.15
 import "../../assets/ui" as UiStyle
 import "../../ui"
@@ -9,7 +10,10 @@ import Game 1.0 as MyGame
 Item {
   property QtObject controller // WorldMap
   property point movementStart: controller.currentPosition
+  property bool hasOverlay: inventoryViewContainer.visible || mainMenu.visible
   id: root
+  state: "default"
+  //onHasOverlayChanged: controller.paused = hasOverlay || root.state != "default";
 
   Connections {
     target: controller
@@ -32,6 +36,21 @@ Item {
     onRejected: {
       root.state = "default";
       root.controller.paused = false;
+    }
+  }
+
+  LevelHud.Actions {
+    id: actions
+    enabled: application.currentView.toString().startsWith("Worldmap_QMLTYPE") && root.state == "default"
+    onMenuTriggered:           mainMenu.visible = true
+    onInventoryTriggered:      inventoryViewContainer.visible = true
+    onBackTriggered: {
+      if  (mainMenu.visible)
+        mainMenu.visible = false;
+      else if (inventoryViewContainer.visible)
+        inventoryViewContainer.visible = false;
+      else
+        mainMenu.visible = true
     }
   }
 
@@ -136,98 +155,24 @@ Item {
       PropertyChanges { target: encounterShape; visible: false }
       PropertyChanges { target: positionShape;  visible: true }
     }
-
   ]
 
-  Pane {
+  WorldmapSidebar {
     id: sidebar
-    background: UiStyle.Pane {}
     anchors { right: parent.right; top: parent.top; bottom: parent.bottom }
+    controller: root.controller
+  }
 
-    Connections {
-      target: controller.timeManager
-      function onDateChanged() {
-        dateText.text = dateText.renderDateText();
-      }
-    }
+  LevelHud.PlayerInventory {
+    id: inventoryViewContainer
+    visible: false
+    anchors.fill: parent
+  }
 
-    Image {
-      id: clockView
-      source: "qrc:/assets/ui/clock.png"
-      anchors.top: parent.top
-      anchors.horizontalCenter: parent.horizontalCenter
-      width: 150
-      height: 150
-      rotation: (controller.timeManager.hour + (controller.timeManager.minute / 60)) * -15 -220
-    }
-
-    Image {
-      source: "qrc:/assets/ui/clock-overlay.png"
-      anchors.fill: clockView
-    }
-
-    Pane {
-      background: UiStyle.TerminalPane {}
-      height: clockView.height / 2 + 10
-      anchors.left: clockView.left
-      anchors.right: clockView.right
-      anchors.bottom: clockView.bottom
-
-      Text {
-        id: dateText
-        text: renderDateText()
-        color: "white"
-        anchors.centerIn: parent
-
-        function renderDateText() {
-          return controller.timeManager.year + "/"
-              + ('0' + controller.timeManager.month).slice(-2) + "/"
-              + ('0' + controller.timeManager.day).slice(-2) + " "
-              + ('0' + controller.timeManager.hour).slice(-2) + ":"
-              + ('0' + controller.timeManager.minute).slice(-2);
-        }
-      }
-    }
-
-    Pane {
-      background: UiStyle.Pane {}
-      id: cityListPane
-      anchors.top: clockView.bottom
-      anchors.topMargin: 20
-      anchors.left: parent.left
-      anchors.right: parent.right
-      anchors.bottom: hudConsole.top
-      anchors.bottomMargin: 20
-
-      Column {
-        Repeater {
-          model: controller.discoveredCities
-          delegate: Row {
-            property QtObject city: controller.getCity(controller.discoveredCities[index]);
-
-            UiStyle.TinyButton {
-              id: cityButton
-              onClicked: clickedOnCity(city)
-            }
-            Label {
-              height: cityButton.height
-              text: city.name
-              color: "white"
-              padding: 5
-              background: UiStyle.Label {}
-            }
-          }
-        }
-      }
-    }
-
-    LevelHud.HudConsole {
-      id: hudConsole
-      gameController: gameManager.currentGame
-      height: 200
-      anchors.left: parent.left
-      anchors.right: parent.right
-      anchors.bottom: parent.bottom
-    }
+  LevelHud.Menu {
+    id: mainMenu
+    anchors.centerIn: parent
+    visible: false
+    onVisibleChanged: controller.paused = visible
   }
 }

@@ -16,15 +16,19 @@ Pane {
   background: UiStyle.Pane {}
 
   Component.onCompleted: {
-    if (gameController.level) {
-      levelController.paused = true;
+    swapPauseMode(true);
+    if (levelController)
       appComponents = appComponents.concat([automapApplication]);
-    }
-    else {
-      gameController.worldmap.paused = true;
+    else
       appComponents = appComponents.concat([null]);
-    }
     contentApplication.sourceComponent = questsApplication;
+  }
+
+  function swapPauseMode(value) {
+    if (levelController)
+      levelController.paused = value;
+    else
+      gameController.worldmap.paused = value;
   }
 
   onCurrentAppChanged: {
@@ -98,7 +102,7 @@ Pane {
           MenuButton {
             text: i18n.t("Close")
             onClicked: {
-              levelController.paused = false;
+              swapPauseMode(false);
               application.popView();
             }
           }
