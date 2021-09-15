@@ -146,14 +146,18 @@ QJsonArray mergeLayerData(const QJsonArray& a, const QJsonArray& b)
 {
   QJsonArray result;
 
-  for (int i = 0 ; i < a.size() ; ++i)
+  if (a.size() > 0 && b.size() > 0)
   {
-    int valueA = a[i].toInt();
-    int valueB = b[i].toInt();
+    for (int i = 0 ; i < a.size() ; ++i)
+    {
+      int valueA = a[i].toInt();
+      int valueB = b[i].toInt();
 
-    result.push_back(valueA > 0 ? valueA : valueB);
+      result.push_back(valueA > 0 ? valueA : valueB);
+    }
+    return result;
   }
-  return result;
+  return a.size() == 0 ? b : a;
 }
 
 void TileMap::loadWallFolder(const QJsonObject& layerData)
@@ -161,26 +165,31 @@ void TileMap::loadWallFolder(const QJsonObject& layerData)
   const QJsonArray layersData = layerData["layers"].toArray();
   auto* wallsV = new TileLayer(this);
   auto* wallsH = new TileLayer(this);
-  QJsonObject layerObjects[4];
-  QStringList directions;
+  QStringList vDirections{"north", "south"};
+  QStringList hDirections{"east", "west"};
+  QJsonObject vLayer{{"name","walls-v"}};
+  QJsonObject hLayer{{"name","walls-h"}};
 
-  directions << "north" << "south" << "east" << "west";
-  for (QJsonValue value : layersData)
+  for (const QJsonValue& value : layersData)
   {
     QString name = value["name"].toString();
-    int index = directions.indexOf(name);
+    QJsonObject* wallLayer;
 
-    if (index >= 0)
-      layerObjects[index] = value.toObject();
+    if (vDirections.contains(name, Qt::CaseInsensitive))
+      wallLayer = &vLayer;
+    else if (hDirections.contains(name, Qt::CaseInsensitive))
+      wallLayer = &hLayer;
     else
+    {
       qDebug() << "/!\\ Invalid wall layer" << name;
+      continue ;
+    }
+    wallLayer->insert("width",  value["width"].toInt());
+    wallLayer->insert("height", value["height"].toInt());
+    wallLayer->insert("data",   mergeLayerData(value["data"].toArray(), wallLayer->value("data").toArray()));
   }
-  layerObjects[0]["name"] = "walls-v";
-  layerObjects[0]["data"] = mergeLayerData(layerObjects[0]["data"].toArray(), layerObjects[1]["data"].toArray());
-  layerObjects[2]["name"] = "walls-h";
-  layerObjects[2]["data"] = mergeLayerData(layerObjects[2]["data"].toArray(), layerObjects[3]["data"].toArray());
-  wallsV->load(layerObjects[0], tilesets);
-  wallsH->load(layerObjects[2], tilesets);
+  wallsV->load(vLayer, tilesets);
+  wallsH->load(hLayer, tilesets);
   layers.push_back(wallsV);
   layers.push_back(wallsH);
 }
