@@ -117,10 +117,10 @@ Item {
       color: Qt.rgba(255, 0, 0, 0.5);
       border.color: "red"
       border.width: 3
-      RotationAnimation on color {
+      RotationAnimation on opacity {
         loops: Animation.Infinite
-        from: Qt.rgba(255, 0, 0, 0.5);
-        to: Qt.rgba(255, 0, 0, 0);
+        from: 1
+        to:   0.5
       }
     }
   }
