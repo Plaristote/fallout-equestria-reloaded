@@ -58,17 +58,24 @@ UiStyle.CustomDialog {
     }
   }
 
-  FaceDisplay {
-    theme:       characterSheet.faceTheme
-    hairStyle:   characterSheet.hairTheme
-    color:       characterSheet.faceColor
-    coloured:    characterSheet.withFaceColor
-    eyeColor:    characterSheet.eyeColor
-    hairColor:   characterSheet.hairColor
-    accessories: characterSheet.faceAccessories
+  Loader {
     anchors.left: fieldsPanel.right
     width: parent.width - fieldsPanel.width
     height: parent.height
+    sourceComponent: characterSheet.faceTheme != "" ? faceDisplay : null
+  }
+
+  Component {
+    id: faceDisplay
+    FaceDisplay {
+      theme:       characterSheet.faceTheme
+      hairStyle:   characterSheet.hairTheme
+      color:       characterSheet.faceColor
+      coloured:    characterSheet.withFaceColor
+      eyeColor:    characterSheet.eyeColor
+      hairColor:   characterSheet.hairColor
+      accessories: characterSheet.faceAccessories
+    }
   }
 
   Pane {

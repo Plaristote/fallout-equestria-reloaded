@@ -3,7 +3,7 @@ import QtGraphicalEffects 1.15
 
 Image {
   id: root
-  readonly property string basePath: `${assetPath}/faces`
+  readonly property string basePath: `${assetPath}faces`
   property string theme:     "mare-basic"
   property string hairStyle: ""
   property string mood:      "neutral"
@@ -135,16 +135,23 @@ Image {
       }
     }
 
-    Image {
+    Loader {
       anchors.fill: parent
-      source: basePath + '/' + theme + '/hairstyles/' + hairStyle + '.png'
-      fillMode: Image.Stretch
+      sourceComponent: hairStyle != "" ? hairStyleDisplay : null
+    }
 
-      ColorOverlay {
-        visible: coloured
-        anchors.fill: parent
-        source: parent
-        color: Qt.rgba(hairColor.r, hairColor.g, hairColor.b, 0.5)
+    Component {
+      id: hairStyleDisplay
+      Image {
+        source: basePath + '/' + theme + '/hairstyles/' + hairStyle + '.png'
+        fillMode: Image.Stretch
+
+        ColorOverlay {
+          visible: coloured
+          anchors.fill: parent
+          source: parent
+          color: Qt.rgba(hairColor.r, hairColor.g, hairColor.b, 0.5)
+        }
       }
     }
   }
