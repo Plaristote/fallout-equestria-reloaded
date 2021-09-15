@@ -28,8 +28,6 @@ Pane {
     }
   ]
 
-  onStateChanged: console.log("ON ZTATE CHANGED MAGGLE", state)
-
   Column {
     anchors.centerIn: parent
 

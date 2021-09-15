@@ -46,9 +46,9 @@ Pane {
       spacing: 5
 
       Layout.preferredWidth: 300
-      InventoryItemPreview {
-        anchors.left: parent.left; anchors.right: parent.right;
-        model: root.selectedObject
+      Loader {
+        anchors { left: parent.left; right: parent.right }
+        sourceComponent: root.selectedObject ? itemPreviewComponent : null
       }
 
       MenuButton {
@@ -81,5 +81,12 @@ Pane {
     id: removeItemDialog
     inventory: root.inventory
     selectedObject: root.selectedObject
+  }
+
+  Component {
+    id: itemPreviewComponent
+    InventoryItemPreview {
+      model: root.selectedObject
+    }
   }
 }

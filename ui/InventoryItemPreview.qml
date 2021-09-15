@@ -56,7 +56,6 @@ Pane {
       Layout.fillWidth: true
       Layout.preferredHeight: 1
       color: "green"
-      anchors { left: parent.left; right: parent.right }
     }
 
     Text {

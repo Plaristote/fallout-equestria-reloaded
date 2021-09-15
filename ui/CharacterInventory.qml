@@ -142,10 +142,9 @@ Pane {
             }
           }
 
-          InventoryItemPreview {
-            background: Item {}
+          Loader {
             Layout.fillWidth: true
-            model: root.selectedObject
+            sourceComponent: root.selectedObject ? itemPreviewComponent : null
           }
         }
       }
@@ -159,6 +158,14 @@ Pane {
       }
     } // END Column
   } // END RowLayout
+
+  Component {
+    id: itemPreviewComponent
+    InventoryItemPreview {
+      background: Item {}
+      model: root.selectedObject
+    }
+  }
 
   Component {
     id: gridInventorySlots

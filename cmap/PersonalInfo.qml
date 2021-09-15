@@ -54,10 +54,7 @@ RowLayout {
     enabled: root.editable
     model: characterSheet.getGendersLabels()
     Component.onCompleted: currentIndex = characterSheet.getGenders().indexOf(characterSheet.gender)
-    onCurrentIndexChanged: {
-      console.log("genders", characterSheet.getGenders(), currentIndex);
-      characterSheet.gender = characterSheet.getGenders()[currentIndex];
-    }
+    onCurrentIndexChanged: characterSheet.gender = characterSheet.getGenders()[currentIndex]
   }
 
   SelectBox {
@@ -67,9 +64,6 @@ RowLayout {
     enabled: root.editable
     model: characterSheet.getAvailableRacesLabels()
     Component.onCompleted: currentIndex = characterSheet.getAvailableRaces().indexOf(characterSheet.race)
-    onCurrentIndexChanged: {
-      console.log("races", characterSheet.getAvailableRaces(), currentIndex);
-      characterSheet.race = characterSheet.getAvailableRaces()[currentIndex];
-    }
+    onCurrentIndexChanged: characterSheet.race = characterSheet.getAvailableRaces()[currentIndex]
   }
 }

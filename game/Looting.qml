@@ -105,11 +105,9 @@ Pane {
         anchors.fill: parent
         anchors.margins: 10
 
-        InventoryItemPreview {
-          id: selectedObjectPreview
-          anchors.left: parent.left
-          anchors.right: parent.right
-          model: selectedObject
+        Loader {
+          anchors { left: parent.left; right: parent.right }
+          sourceComponent: selectedObject ? itemPreviewComponent : null
         }
 
         MenuButton {
@@ -151,6 +149,13 @@ Pane {
     MenuButton {
       text: "Close"
       action: closeAction
+    }
+  }
+
+  Component {
+    id: itemPreviewComponent
+    InventoryItemPreview {
+      model: selectedObject
     }
   }
 }

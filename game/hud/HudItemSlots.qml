@@ -90,7 +90,7 @@ Item {
         ItemIcon {
           anchors.centerIn: parent
           model: slotItem
-          visible: slotItem.icon !== "any.png"
+          visible: slotItem && slotItem.icon !== "any.png"
         }
 
         Loader {

@@ -38,9 +38,9 @@ Pane {
       onItemSelected: root.selectedObject = selectedItem
     }
 
-    InventoryItemPreview {
+    Loader {
       Layout.fillWidth: true
-      model: root.selectedObject
+      sourceComponent: root.selectedObject ? itemPreviewComponent : null
     }
   }
 
@@ -60,6 +60,13 @@ Pane {
       id: closeButton
       text: i18n.t("Close")
       onClicked: root.closed();
+    }
+  }
+
+  Component {
+    id: itemPreviewComponent
+    InventoryItemPreview {
+      model: root.selectedObject
     }
   }
 }

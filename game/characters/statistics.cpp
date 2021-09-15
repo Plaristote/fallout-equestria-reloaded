@@ -57,7 +57,6 @@ void CharacterStatistics::setStatistics(StatModel* value)
   if (value)
   {
     connect(statistics, &StatModel::factionChanged, this, &CharacterStatistics::initializeFaction);
-    qDebug() << "set stat sheet on" << getObjectName() << ':' << statistics->getName() << " with faction " << statistics->property("faction").toString();
     initializeFaction();
     emit statisticsChanged();
   }

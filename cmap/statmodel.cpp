@@ -300,12 +300,9 @@ void StatModel::updateBaseValues()
       applyCmapPlugin(this, trait, data);
   }
   if (raceController)
-  {
-    qDebug() << "Update base values running race plugin" << race;
     applyCmapPlugin(this, *raceController, data);
-  }
   else
-    qDebug() << "No race controller for race" << race << "ma gueule";
+    qDebug() << "/!\\ Missing race controller for race" << race;
   emit statisticsChanged();
 }
 

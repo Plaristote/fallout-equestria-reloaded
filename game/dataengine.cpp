@@ -149,11 +149,10 @@ void DataEngine::loadFromFile(const QString &path)
     quests     = data["quests"].toObject();
     worldmap   = data["worldmap"].toObject();
     variables  = data["vars"].toObject();
-    qDebug() << "Diplomacy data loadded:" << QJsonDocument(diplomacy).toJson();
     emit diplomacyUpdated();
   }
   else
-    qDebug() << "Could not load save file" << path;
+    qDebug() << "/!\\ Could not load save file" << path;
 }
 
 void DataEngine::saveToFile(const QString &path)

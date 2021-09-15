@@ -10,7 +10,6 @@ Rectangle {
   property var templates: gameController.getCharacterTemplateList()
   property int currentIndex: 0
   property bool cmapEnabled: templates.length === 0
-  anchors.fill: parent
   color: "black"
 
   Action {

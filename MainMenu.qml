@@ -4,7 +4,6 @@ import "qrc:/ui"
 
 Image {
   source: "qrc:/assets/backgrounds/default.png"
-  anchors.fill: parent
   fillMode: Image.PreserveAspectCrop
 
   Action {

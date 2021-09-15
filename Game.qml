@@ -10,7 +10,6 @@ Item {
   property string mystate;
   property var gameController;
   property string currentLevelName;
-  anchors.fill: parent
 
   function openLevelView() {
     application.pushView("game/LevelView.qml", {

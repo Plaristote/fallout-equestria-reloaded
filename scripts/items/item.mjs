@@ -25,7 +25,6 @@ export class ItemBehaviour {
   }
 
   onEquipped(character, on) {
-    console.log("ON EQUIPED ITEM MAGGLE", this.model, character, on);
   }
 
   getActionPointCost() {
