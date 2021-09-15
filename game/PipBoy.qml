@@ -7,17 +7,24 @@ import "./pipboy" as PipBoyUi
 
 Pane {
   id: root
-  property QtObject gameController
-  property QtObject levelController
+  property QtObject gameController:  gameManager.currentGame
+  property QtObject levelController: gameController.level
   property var      appNames:      ["Clock", "Quests", "Archives", "Automap"]
-  property var      appComponents: [waitApplication, questsApplication, archiveApplication, automapApplication]
+  property var      appComponents: [waitApplication, questsApplication, archiveApplication]
   property string   currentApp:    "Quests"
 
   background: UiStyle.Pane {}
 
   Component.onCompleted: {
-    levelController.paused = true;
-    contentApplication.sourceComponent = questsApplication
+    if (gameController.level) {
+      levelController.paused = true;
+      appComponents = appComponents.concat([automapApplication]);
+    }
+    else {
+      gameController.worldmap.paused = true;
+      appComponents = appComponents.concat([null]);
+    }
+    contentApplication.sourceComponent = questsApplication;
   }
 
   onCurrentAppChanged: {

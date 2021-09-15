@@ -7,6 +7,7 @@ Item {
 
   signal openMenu()
   signal openInventory()
+  signal openCharacterSheet()
 
   Column {
     anchors.fill: parent
@@ -24,9 +25,7 @@ Item {
       text: i18n.t("hud.CHA")
       height: 20
       width: parent.width
-      onClicked: {
-        application.pushView("game/CharacterView.qml", {gameController: root.gameController})
-      }
+      onClicked: menuPane.openCharacterSheet()
     }
 
     UiStyle.TinyButton {

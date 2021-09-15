@@ -265,5 +265,6 @@
         <file>cmap/AvailableSkillProficiencies.qml</file>
         <file>cmap/CharacterData.qml</file>
         <file>ui/FontStyle.qml</file>
+        <file>game/hud/Actions.qml</file>
     </qresource>
 </RCC>

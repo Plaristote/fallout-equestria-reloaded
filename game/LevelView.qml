@@ -20,13 +20,16 @@ Item {
 
   onHasOverlayChanged: levelController.paused = hasOverlay
 
-  Action {
-    id: backAction
-    shortcut: Shortcut {
-      sequence: "Esc"
-      onActivated: backAction.trigger()
-    }
-    onTriggered: {
+  Hud.Actions {
+    id: actions
+    level: root.levelController
+    enabled: application.currentView.toString().startsWith("LevelView_QMLTYPE")
+    onMenuTriggered:           root.openMenu()
+    onPreviousTargetTriggered: levelController.centerCursorOn(levelController.targetList.previousTarget())
+    onNextTargetTriggered:     levelController.centerCursorOn(levelController.targetList.nextTarget())
+    onInventoryTriggered:      inventoryViewContainer.visible = true
+    onSkilldexTriggered:       skilldex.visible = !skilldex.visible
+    onBackTriggered: {
       if  (mainMenu.visible)
         mainMenu.visible = false;
       else if (interactionMenu.visible)
@@ -39,94 +42,10 @@ Item {
         skilldex.visible = false;
       else if (itemPickerContainer.visible)
         itemPicker.closed();
-      else
-        openMenuAction.trigger()
-    }
-  }
-
-  Connections {
-    target: gamepad
-
-    function onBackClicked() {
-      if (root.hasOverlay)
-        backAction.trigger();
       else if (levelController.combat && levelController.isPlayerTurn)
         levelController.passTurn(levelController.player);
-    }
-
-    function onSkilldexClicked() {
-      openSkilldexAction.trigger();
-    }
-
-    function onInventoryClicked() {
-      openInventoryAction.trigger();
-    }
-  }
-
-  Action {
-    id: previousTargetAction
-    shortcut: Shortcut {
-      sequence: "Ctrl+Left"
-      onActivated: previousTargetAction.trigger()
-    }
-    onTriggered: levelController.centerCursorOn(levelController.targetList.previousTarget())
-  }
-
-  Action {
-    id: nextTargetAction
-    shortcut: Shortcut {
-      sequence: "Ctrl+Right"
-      onActivated: nextTargetAction.trigger()
-    }
-    onTriggered: levelController.centerCursorOn(levelController.targetList.nextTarget())
-  }
-
-  Shortcut {
-    sequence: "F2"
-    onActivated: debugConsole.visible = !debugConsole.visible
-  }
-
-  Action {
-    id: openMenuAction
-    onTriggered: openMenu()
-  }
-  Connections {
-    target: gamepad
-    function onStartClicked() { openMenuAction.trigger() }
-    function onLeftClicked() { previousTargetAction.trigger() }
-    function onRightClicked() { nextTargetAction.trigger() }
-  }
-
-  Action {
-    id: openInventoryAction
-    shortcut: Shortcut {
-      sequence: "i"
-      onActivated: openInventoryAction.trigger()
-    }
-    onTriggered: {
-      inventoryViewContainer.visible = true;
-    }
-  }
-
-  Action {
-    id: openSkilldexAction
-    shortcut: Shortcut {
-      sequence: "s"
-      onActivated: openSkilldexAction.trigger()
-    }
-    onTriggered: {
-      skilldex.visible = !skilldex.visible;
-    }
-  }
-
-  Action {
-    id: openPipboyAction
-    shortcut: Shortcut {
-      sequence: "p"
-      onActivated: openPipboyAction.trigger()
-    }
-    onTriggered: {
-      application.pushView("game/PipBoy.qml", {gameController: gameController, levelController: levelController})
+      else
+        root.openMenu()
     }
   }
 
@@ -222,12 +141,13 @@ Item {
     gameController:  root.gameController
     levelController: root.levelController
 
-    onOpenMenu: openMenuAction.trigger()
-    onOpenPipboy: openPipboyAction.trigger()
-    onOpenInventory: openInventoryAction.trigger()
+    onOpenMenu: actions.openMenu.trigger()
+    onOpenPipboy: actions.openPipboy.trigger()
+    onOpenInventory: actions.openInventory.trigger()
+    onOpenCharacterSheet: actions.openCharacterSheet.trigger()
     onOpenSkilldex: {
       skilldex.target = null;
-      openSkilldexAction.trigger();
+      actions.openSkilldex.trigger();
     }
   }
 
@@ -239,7 +159,7 @@ Item {
     visible: false
     character: levelController.player
     onPickedSkill: {
-      openSkilldexAction.trigger();
+      actions.openSkilldex.trigger();
       if (skilldex.target)
         levelController.useSkillOn(levelController.player, skilldex.target, skillName);
       else

@@ -20,6 +20,7 @@ Pane {
   signal openInventory()
   signal openSkilldex()
   signal openSpellbook()
+  signal openCharacterSheet()
   signal openPipboy()
 
   RowLayout {
@@ -56,6 +57,7 @@ Pane {
     anchors.leftMargin: 5
     width: 50
     onOpenInventory: levelHud.openInventory()
+    onOpenCharacterSheet: levelHud.openCharacterSheet()
     onOpenMenu: levelHud.openMenu()
   }
 
