@@ -2,7 +2,7 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.12
 import "qrc:/assets/ui" as UiStyle
-import "../ui"
+import "../../ui"
 
 Item {
   property QtObject controller

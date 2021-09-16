@@ -249,7 +249,7 @@
         <file>game/hud/HudCombatControls.qml</file>
         <file>game/RenderQueue.mjs</file>
         <file>ui/CharacterSpritePreview.qml</file>
-        <file>game/TutorialPane.qml</file>
+        <file>game/hud/TutorialPane.qml</file>
         <file>assets/ui/WarningRectangle.qml</file>
         <file>assets/ui/equipment/pony.png</file>
         <file>assets/ui/equipment/settings.mjs</file>
@@ -269,5 +269,6 @@
         <file>game/hud/PlayerInventory.qml</file>
         <file>game/worldmap/WorldmapSidebar.qml</file>
         <file>ui/ClockWidget.qml</file>
+	<file>game/LevelTextBubbles.qml</file>
     </qresource>
 </RCC>

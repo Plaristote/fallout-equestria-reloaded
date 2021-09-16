@@ -35,7 +35,7 @@ Item {
 
         onClicked:{
           if (interactionType === "use-skill") {
-            openSkilldexAction.trigger();
+            actions.openSkilldex.trigger();
             skilldex.target = interactionMenu.interactionTarget;
           }
           else if (interactionType === "use-object") {
