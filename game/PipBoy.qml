@@ -77,8 +77,7 @@ Pane {
       Layout.preferredWidth: 400
       Layout.fillHeight: true
 
-      PipBoyUi.TimeDisplay {
-        timeManager: gameController.timeManager
+      ClockWidget {
         Layout.alignment: Qt.AlignTop | Qt.AlignCenter
       }
 

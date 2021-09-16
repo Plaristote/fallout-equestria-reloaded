@@ -7,9 +7,10 @@ Pane {
   property QtObject timeManager: gameController.timeManager
   background: UiStyle.Pane {}
   padding: 10
+  implicitWidth: row.width + 30
 
   RowLayout {
-    width: parent.width
+    id: row
     anchors.verticalCenter: parent.verticalCenter
 
     Rectangle {

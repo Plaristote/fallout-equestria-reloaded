@@ -197,7 +197,7 @@
         <file>game/UsageSuccessHint.qml</file>
         <file>cmap/KillsPane.qml</file>
         <file>game/PipBoy.qml</file>
-        <file>game/pipboy/TimeDisplay.qml</file>
+        <file>ui/TimeDisplay.qml</file>
         <file>game/pipboy/TimeApplication.qml</file>
         <file>game/pipboy/QuestsApplication.qml</file>
         <file>editor/WorldMapEditor.qml</file>

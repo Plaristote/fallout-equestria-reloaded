@@ -6,8 +6,8 @@ import "../assets/ui" as UiStyle
 Item {
   property QtObject timeManager: gameManager.currentGame.timeManager
   id: clockViewContainer
-  implicitHeight: clockView.height
-  implicitWidth:  clockView.width
+  implicitHeight: clockView.height + 15
+  implicitWidth:  Math.max(clockView.width, timeDisplay.width)
 
   Image {
     id: clockView
@@ -23,26 +23,12 @@ Item {
     anchors.fill: clockView
   }
 
-  Pane {
-    background: UiStyle.TerminalPane {}
-    height: clockView.height / 2 + 10
-    anchors.left: clockView.left
-    anchors.right: clockView.right
+  TimeDisplay {
+    id: timeDisplay
+    timeManager: clockViewContainer.timeManager
+    height: clockView.height / 2 + 15
+    anchors.horizontalCenter: clockView.horizontalCenter
     anchors.bottom: clockView.bottom
-
-    Text {
-      id: dateText
-      text: renderDateText()
-      color: "white"
-      anchors.centerIn: parent
-
-      function renderDateText() {
-        return timeManager.year + "/"
-            + ('0' + timeManager.month).slice(-2) + "/"
-            + ('0' + timeManager.day).slice(-2) + " "
-            + ('0' + timeManager.hour).slice(-2) + ":"
-            + ('0' + timeManager.minute).slice(-2);
-      }
-    }
+    anchors.bottomMargin: -10
   }
 }
