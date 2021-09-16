@@ -20,6 +20,7 @@ Item {
   signal menuTriggered()
   signal inventoryTriggered()
   signal skilldexTriggered()
+  signal debugModeTriggered()
 
   Connections {
     target: gamepad
@@ -70,7 +71,7 @@ Item {
   Shortcut {
     sequence: "F2"
     enabled: root.enabled
-    onActivated: debugConsole.visible = !debugConsole.visible
+    onActivated: debugModeTriggered()
   }
 
   Action {

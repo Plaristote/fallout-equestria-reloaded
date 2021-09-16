@@ -29,6 +29,7 @@ Item {
     onNextTargetTriggered:     levelController.centerCursorOn(levelController.targetList.nextTarget())
     onInventoryTriggered:      inventoryViewContainer.visible = true
     onSkilldexTriggered:       skilldex.visible = !skilldex.visible
+    onDebugModeTriggered:      debugConsole.visible = !debugConsole.visible
     onBackTriggered: {
       if  (mainMenu.visible)
         mainMenu.visible = false;
