@@ -20,6 +20,32 @@ bool Race::withFaceColor() const
   return false;
 }
 
+QVariantMap Race::AgeRange::toVariant() const
+{
+  return {{"child", child}, {"adult", adult}, {"old", old}, {"lifespan", lifespan}};
+}
+
+Race::AgeRange Race::getAgeRange() const
+{
+  QJSValue source = script.property("ageRange");
+  AgeRange ageRange;
+
+  if (source.isObject())
+  {
+    if (source.hasProperty("child"))
+      ageRange.child    = static_cast<unsigned short>(source.property("child").toUInt());
+    if (source.hasProperty("adult"))
+      ageRange.adult    = static_cast<unsigned short>(source.property("adult").toUInt());
+    if (source.hasProperty("lifespan"))
+      ageRange.lifespan = static_cast<unsigned short>(source.property("lifespan").toUInt());
+    if (source.hasProperty("old"))
+      ageRange.old      = static_cast<unsigned short>(source.property("old").toUInt());
+    else
+      ageRange.old = ageRange.lifespan;
+  }
+  return ageRange;
+}
+
 QStringList Race::getFaces() const
 {
   if (script.hasProperty("faces"))
@@ -44,6 +70,39 @@ QStringList Race::getHairs(QString face) const
   return QStringList() << "";
 }
 
+static CharacterSpriteDescriptor spriteDescriptorFromString(const QString& value)
+{
+  CharacterSpriteDescriptor descriptor;
+
+  descriptor.layered = false;
+  descriptor.base = value;
+  return descriptor;
+}
+
+static CharacterSpriteDescriptor spriteDescriptorFromObject(QJSValue value)
+{
+  CharacterSpriteDescriptor descriptor;
+
+  descriptor.layered = true;
+  descriptor.base = value.property("base").toString();
+  descriptor.cloneOf = value.property("cloneOf").toString();
+  if (value.hasProperty("staticBase"))
+    descriptor.baseStaticColor = value.property("staticBase").toString();
+  if (value.hasProperty("hair") && value.property("hair").isString())
+     descriptor.hair = value.property("hair").toString();
+  if (value.hasProperty("overlay") && value.property("overlay").isString())
+    descriptor.overLayer = value.property("overlay").toString();
+  if (value.hasProperty("color"))
+    descriptor.bodyColor = QColor(value.property("color").toString());
+  else
+    descriptor.bodyColor = Qt::transparent;
+  if (value.hasProperty("hairColor"))
+    descriptor.hairColor = QColor(value.property("hairColor").toString());
+  else
+    descriptor.hairColor = Qt::transparent;
+  return descriptor;
+}
+
 CharacterSpriteDescriptor Race::getSpriteSheet(StatModel* model) const
 {
   CharacterSpriteDescriptor descriptor;
@@ -56,30 +115,9 @@ CharacterSpriteDescriptor Race::getSpriteSheet(StatModel* model) const
     value = value.call(QJSValueList() << scriptEngine.newQObject(model));
   }
   if (value.isString())
-  {
-    descriptor.layered = false;
-    descriptor.base = value.toString();
-  }
+    return spriteDescriptorFromString(value.toString());
   else if (value.isObject())
-  {
-    descriptor.layered = true;
-    descriptor.base = value.property("base").toString();
-    descriptor.cloneOf = value.property("cloneOf").toString();
-    if (value.hasProperty("staticBase"))
-      descriptor.baseStaticColor = value.property("staticBase").toString();
-    if (value.hasProperty("hair") && value.property("hair").isString())
-       descriptor.hair = value.property("hair").toString();
-    if (value.hasProperty("overlay") && value.property("overlay").isString())
-      descriptor.overLayer = value.property("overlay").toString();
-    if (value.hasProperty("color"))
-      descriptor.bodyColor = QColor(value.property("color").toString());
-    else
-      descriptor.bodyColor = Qt::transparent;
-    if (value.hasProperty("hairColor"))
-      descriptor.hairColor = QColor(value.property("hairColor").toString());
-    else
-      descriptor.hairColor = Qt::transparent;
-  }
+    return spriteDescriptorFromObject(value);
   else
     qDebug() << "Race::getSpriteSheet: No spritesheet defined for race" << name;
   return descriptor;

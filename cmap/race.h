@@ -7,10 +7,17 @@
 class Race : public CmapPlugin
 {
 public:
-  bool isPlayable() const;
-  bool withFaceColor() const;
-  QStringList getFaces() const;
-  QStringList getHairs(QString face = "") const;
+  struct AgeRange
+  {
+    unsigned short child = 0, adult = 15, old = 60, lifespan = 120;
+    QVariantMap toVariant() const;
+  };
+
+  bool                      isPlayable() const;
+  bool                      withFaceColor() const;
+  AgeRange                  getAgeRange() const;
+  QStringList               getFaces() const;
+  QStringList               getHairs(QString face = "") const;
   CharacterSpriteDescriptor getSpriteSheet(StatModel*) const;
 
   static void initialize();

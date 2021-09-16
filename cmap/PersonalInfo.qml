@@ -36,7 +36,7 @@ RowLayout {
     Layout.fillHeight: true
     color: "white"
     readOnly: !root.editable
-    placeholderText: qsTr("age")
+    placeholderText: i18n.t("age")
     placeholderTextColor: "lightgray"
     validator: IntValidator { bottom: 15; top: 100 }
     font.family: application.titleFontName
@@ -44,7 +44,14 @@ RowLayout {
     background: UiStyle.Label {
       style: parent.focus ? "dark" : "base"
     }
-    onTextChanged: characterSheet.age = parseInt(text)
+    onTextChanged: {
+      var value = parseInt(text);
+
+      value = Math.max(value, 0);
+      value = Math.min(value, characterSheet.ageRanges.lifespan);
+      if (value !== characterSheet.age)
+        characterSheet.age = value;
+    }
   }
 
   SelectBox {

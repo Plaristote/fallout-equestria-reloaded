@@ -51,11 +51,13 @@ class StatModel : public QObject
 {
   Q_OBJECT
 
-  Q_PROPERTY(QString name    MEMBER name    NOTIFY nameChanged)
-  Q_PROPERTY(int     age     MEMBER age     NOTIFY ageChanged)
-  Q_PROPERTY(QString faction MEMBER faction NOTIFY factionChanged)
-  Q_PROPERTY(QString race    READ getRace WRITE setRace NOTIFY raceChanged)
-  Q_PROPERTY(QString gender  MEMBER gender  NOTIFY genderChanged)
+  Q_PROPERTY(QString        name      MEMBER name        NOTIFY nameChanged)
+  Q_PROPERTY(unsigned short age       MEMBER age         NOTIFY ageChanged)
+  Q_PROPERTY(QString        ageClass  READ   getAgeClass NOTIFY ageClassChanged)
+  Q_PROPERTY(QVariantMap    ageRanges READ   getAgeRange NOTIFY raceChanged)
+  Q_PROPERTY(QString        faction   MEMBER faction     NOTIFY factionChanged)
+  Q_PROPERTY(QString        gender    MEMBER gender      NOTIFY genderChanged)
+  Q_PROPERTY(QString        race      READ   getRace WRITE setRace NOTIFY raceChanged)
 
   Q_PROPERTY(int  hitPoints      MEMBER hitPoints    NOTIFY hitPointsChanged)
   Q_PROPERTY(int  experience     READ getExperience  NOTIFY experienceChanged)
@@ -146,6 +148,8 @@ public:
   int getMaxProficiencies() const;
   float hpPercentage() const;
   const QString& getRace() const { return race; }
+  QVariantMap getAgeRange() const;
+  QString getAgeClass() const;
   void setRace(const QString& newRace);
   const QString& getName() const { return name; }
   int getExperience() const { return experience; }
@@ -239,6 +243,7 @@ signals:
   void damageReceived(int damage, QString type);
   void nameChanged();
   void ageChanged();
+  void ageClassChanged();
   void hitPointsChanged();
   void experienceChanged();
   void levelChanged();
@@ -268,7 +273,7 @@ private slots:
 
 private:
   QString name, faction;
-  int age = 21;
+  unsigned short age = 21;
   QString gender;
   QString race;
   int strength, perception, endurance, charisma, intelligence, agility, luck;

@@ -13,6 +13,8 @@ StatModel::StatModel(QObject *parent) : QObject(parent)
   skillPoints = 0;
   experience = 0;
   faceColor = eyeColor = hairColor = Qt::transparent;
+  connect(this, &StatModel::ageChanged,     this, &StatModel::ageClassChanged);
+  connect(this, &StatModel::raceChanged,    this, &StatModel::ageClassChanged);
   connect(this, &StatModel::specialChanged, this, &StatModel::updateBaseValues);
   connect(this, &StatModel::traitsChanged,  this, &StatModel::updateBaseValues);
   connect(this, &StatModel::raceChanged,    this, &StatModel::updateBaseValues);
@@ -111,6 +113,30 @@ void StatModel::levelUp()
   emit skillPointsChanged();
   emit hitPointsChanged();
   emit leveledUpChanged();
+}
+
+QVariantMap StatModel::getAgeRange() const
+{
+  const Race*    raceController = getRaceController();
+  Race::AgeRange ageRange;
+
+  if (raceController)
+    ageRange = raceController->getAgeRange();
+  return ageRange.toVariant();
+}
+
+QString StatModel::getAgeClass() const
+{
+  const Race*    raceController = getRaceController();
+  Race::AgeRange ageRange;
+
+  if (raceController)
+    ageRange = raceController->getAgeRange();
+  if (age < ageRange.adult)
+    return "child";
+  if (age > ageRange.old)
+    return "old";
+  return "adult";
 }
 
 const Race* StatModel::getRaceController() const
