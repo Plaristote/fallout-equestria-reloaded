@@ -62,6 +62,16 @@ Pane {
     }
   }
 
+  Action {
+    id: closeAction
+    shortcut: Shortcut { sequence: "Esc"; onActivated: closeAction.trigger() }
+    text: i18n.t("Close")
+    onTriggered: {
+      swapPauseMode(false);
+      application.popView();
+    }
+  }
+
   Connections {
     target: gamepad
 
@@ -98,13 +108,7 @@ Pane {
             }
           }
 
-          MenuButton {
-            text: i18n.t("Close")
-            onClicked: {
-              swapPauseMode(false);
-              application.popView();
-            }
-          }
+          MenuButton { action: closeAction }
         }
       }
     }
