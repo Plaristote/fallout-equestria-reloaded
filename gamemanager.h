@@ -22,6 +22,9 @@ public:
   Q_INVOKABLE QStringList getSavedGames() const;
 
 signals:
+  void newGameStarted();
+  void gameLoaded();
+  void gameOver();
   void currentGameChanged();
   void movementOptionChanged();
 

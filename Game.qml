@@ -6,28 +6,15 @@ import "game/slideshows/"
 
 Item {
   id: root
-  property string initialState;
-  property string mystate;
-  property var gameController;
-  property string currentLevelName;
+  property var gameController
+  property string currentLevelName
+  property bool hasActiveView: application.currentView !== this
 
   function openLevelView() {
     application.pushView("game/LevelView.qml", {
       gameController: gameController,
       levelController: gameController.level
     });
-  }
-
-  function hasActiveView() {
-    const viewName = application.currentView.toString();
-
-    if (viewName.startsWith("NewGame_QMLTYPE") || viewName.startsWith("Game_QMLTYPE"))
-      return false;
-    return true;
-  }
-
-  Component.onCompleted: {
-    mystate = initialState;
   }
 
   onGameControllerChanged: {
@@ -37,26 +24,6 @@ Item {
     }
     else
       deferredGameEnding.running = true;
-  }
-
-  onMystateChanged: {
-    console.log("(!) My state changed", mystate);
-    if (mystate == "new-game") {
-      gameManager.startNewGame();
-    }
-    else if (mystate == "create-character") {
-      deferredCharacterCreate.running = true;
-    }
-    else if (mystate == "level" && currentLevelName != "") {
-      console.log("Game.kml going to open level", currentLevelName);
-      gameManager.currentGame.goToLevel(currentLevelName);
-    }
-    else if (mystate == "worldmap") {
-      console.log("Game.kml going to open worldmap");
-      deferredWorldmapDisplay = true;
-    }
-    else
-      console.log("/!\\ Game state changed to", mystate, "and I don't know what to do.");
   }
 
   // Level control
@@ -98,8 +65,11 @@ Item {
 
   Timer {
     id: deferredGameEnding
-    interval: 500
-    onTriggered: application.popView();
+    interval: gameController.level ? 3500 : 100
+    onTriggered: {
+      application.popView();
+      gameController.level.paused = true;
+    }
   }
 
   Timer {
@@ -117,12 +87,10 @@ Item {
     function onCurrentGameChanged() {
       console.log("(!) Current game changed");
       root.gameController = gameManager.currentGame;
-      if (mystate == "new-game")
-        mystate = "create-character";
-      else if (mystate == "load-game" && root.gameController.level)
-        mystate = "level";
-      else if (mystate == "load-game")
-        mystate = "worldmap";
+    }
+
+    function onNewGameStarted() {
+      deferredCharacterCreate.running = true;
     }
   }
 
@@ -135,7 +103,7 @@ Item {
         deferredLevelLoading.running = true;
       else
         deferredWorldmapDisplay.running = true;
-      if (root.hasActiveView())
+      if (root.hasActiveView)
         application.popView();
     }
 

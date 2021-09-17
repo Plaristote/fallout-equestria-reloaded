@@ -44,8 +44,7 @@ public:
   void newPlayerParty(StatModel*);
 
   Q_INVOKABLE void appendToConsole(const QString&);
-  Q_INVOKABLE void goToLevel(const QString& name);
-  Q_INVOKABLE void switchToLevel(const QString& name, const QString& targetZone);
+  Q_INVOKABLE void switchToLevel(const QString name, const QString targetZone);
   void exitLevel(bool silence = false);
 
   static Game* get() { return instance; }
@@ -91,6 +90,7 @@ private slots:
 
 private:
   void initializeScript();
+  void loadLevel(const QString& name, const QString& targetZone = "");
   LevelTask* newLevelTask();
 
   bool isGameEditor = false;

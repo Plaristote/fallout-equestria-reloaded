@@ -4,7 +4,9 @@
 
 GameManager::GameManager(QObject *parent) : QObject(parent), currentGame(nullptr)
 {
-
+  connect(this, &GameManager::newGameStarted, this, &GameManager::currentGameChanged);
+  connect(this, &GameManager::gameLoaded,     this, &GameManager::currentGameChanged);
+  connect(this, &GameManager::gameOver,       this, &GameManager::currentGameChanged);
 }
 
 bool GameManager::hasContinueGame() const
@@ -40,7 +42,7 @@ void GameManager::startNewGame()
     // TODO initialize other factions
     currentGame->getWorldmap()->load(currentGame->getDataEngine()->getWorldmap());
     currentGame->getPlayer()->getStatistics()->setProperty("faction", "player");
-    emit currentGameChanged();
+    emit newGameStarted();
   }
   else
     qDebug() << "ERROR cannot start new game while another is still running";
@@ -68,7 +70,7 @@ void GameManager::loadGame(const QString& path)
   currentGame = new Game(this);
   currentGame->getDataEngine()->loadFromFile(path + ".json");
   currentGame->loadFromDataEngine();
-  emit currentGameChanged();
+  emit gameLoaded();
 }
 
 void GameManager::saveGame(const QString& path)
@@ -81,7 +83,7 @@ void GameManager::endGame()
 {
   currentGame->deleteLater();
   currentGame = nullptr;
-  emit currentGameChanged();
+  emit gameOver();
 }
 
 int GameManager::getMovementOption()

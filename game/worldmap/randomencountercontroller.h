@@ -16,6 +16,9 @@ public slots:
   void startEncounter(const QString&, const QVariantMap& = QVariantMap());
   void triggerScheduledEncounter();
 
+private slots:
+  void initializeEncounter();
+
 private:
   QTimer      encounterTimer;
   QString     scheduledEncounterName;

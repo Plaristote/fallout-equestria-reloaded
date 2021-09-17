@@ -134,6 +134,7 @@ void CharacterParty::extractFromLevel(LevelTask* level)
 
   for (Character* character : list)
   {
+    character->clearCurrentZones();
     character->getFieldOfView()->reset();
     grid->removeObject(character);
     level->unregisterDynamicObject(character);

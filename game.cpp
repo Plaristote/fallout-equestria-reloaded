@@ -9,6 +9,7 @@
 #include "cmap/perk.h"
 
 Game* Game::instance = nullptr;
+const QString nullTargetZone("_load");
 
 Game::Game(QObject *parent) : StorableObject(parent)
 {
@@ -101,10 +102,7 @@ void Game::loadFromDataEngine()
   player = playerParty->getCharacters().first();
   connect(player, &Character::died, this, &Game::gameOver);
   if (currentLevelName != "")
-  {
-    goToLevel(currentLevelName);
-    playerParty->loadIntoLevel(currentLevel);
-  }
+    loadLevel(currentLevelName, nullTargetZone);
   else
     emit levelChanged();
   dataStore = dataEngine->getVariables();
@@ -149,14 +147,12 @@ QJSValue Game::loadScript(const QString& path)
 
 void Game::onCityEntered(QString name)
 {
-  goToLevel(name);
-  currentLevel->insertPartyIntoZone(playerParty);
+  switchToLevel(name, "");
 }
 
 void Game::onCityEnteredAt(const QString& name, const QString& zone)
 {
-  goToLevel(name);
-  currentLevel->insertPartyIntoZone(playerParty, zone);
+  switchToLevel(name, zone);
 }
 
 LevelTask* Game::newLevelTask()
@@ -166,11 +162,10 @@ LevelTask* Game::newLevelTask()
   return new LevelTask(this);
 }
 
-void Game::goToLevel(const QString& name)
+void Game::loadLevel(const QString &name, const QString& targetZone)
 {
   auto scriptObject = scriptEngine.globalObject();
 
-  appendToConsole("You reached " + name);
   MusicManager::get()->play(name);
   dataEngine->setCurrentLevel(name);
   currentLevel = newLevelTask();
@@ -179,25 +174,24 @@ void Game::goToLevel(const QString& name)
   connect(currentLevel, &LevelTask::exitZoneEntered, this, &Game::changeZone);
   currentLevel->load(name, dataEngine);
   currentLevel->setPaused(false);
+  if (targetZone == nullTargetZone)
+    playerParty->loadIntoLevel(currentLevel);
+  else if (!isGameEditor)
+    currentLevel->insertPartyIntoZone(playerParty, targetZone);
   emit levelChanged();
 }
 
-void Game::switchToLevel(const QString& name, const QString& targetZone)
+void Game::switchToLevel(const QString name, const QString targetZone)
 {
-  auto scriptObject = scriptEngine.globalObject();
+  auto function = std::bind(&Game::loadLevel, this, name, targetZone);
 
   if (currentLevel)
+  {
+    connect(currentLevel, &QObject::destroyed, function);
     exitLevel(true);
-  MusicManager::get()->play(name);
-  dataEngine->setCurrentLevel(name);
-  currentLevel = newLevelTask();
-  scriptObject.setProperty("level", scriptEngine.newQObject(currentLevel));
-  connect(currentLevel, &LevelTask::displayConsoleMessage, this, &Game::appendToConsole);
-  connect(currentLevel, &LevelTask::exitZoneEntered, this, &Game::changeZone);
-  currentLevel->load(name, dataEngine);
-  currentLevel->insertPartyIntoZone(playerParty, targetZone);
-  currentLevel->setPaused(false);
-  emit levelSwapped();
+  }
+  else
+    function();
 }
 
 void Game::exitLevel(bool silent)
@@ -207,6 +201,8 @@ void Game::exitLevel(bool silent)
     auto scriptObject = scriptEngine.globalObject();
 
     MusicManager::get()->play("worldmap");
+    disconnect(currentLevel, &LevelTask::displayConsoleMessage, this, &Game::appendToConsole);
+    disconnect(currentLevel, &LevelTask::exitZoneEntered, this, &Game::changeZone);
     playerParty->extractFromLevel(currentLevel);
     currentLevel->save(dataEngine);
     currentLevel->deleteLater();

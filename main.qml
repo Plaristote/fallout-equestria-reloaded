@@ -43,7 +43,8 @@ Window {
   }
 
   function createGame() {
-    pushView("Game.qml", { initialState: "new-game" });
+    pushView("Game.qml");
+    gameManager.startNewGame();
   }
 
   function pushView(path, properties = {}) {

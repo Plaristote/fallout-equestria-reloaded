@@ -51,12 +51,12 @@ void ZoneComponent::unregisterZone(TileZone* zone)
       CharacterMovement* character = reinterpret_cast<CharacterMovement*>(object);
 
       if (character->getCurrentZones().contains(zone))
-        {
-          QVector<TileZone*> zones(character->getCurrentZones());
+      {
+        QVector<TileZone*> zones(character->getCurrentZones());
 
-          zones.removeAll(zone);
-          character->setCurrentZones(zones);
-        }
+        zones.removeAll(zone);
+        character->setCurrentZones(zones);
+      }
     }
   }
 }

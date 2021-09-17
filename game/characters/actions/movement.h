@@ -22,7 +22,7 @@ protected:
 
   QPoint target;
 private:
-  bool firstRound;
+  bool firstRound = true;
 };
 
 #endif

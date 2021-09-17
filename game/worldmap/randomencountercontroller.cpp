@@ -29,18 +29,22 @@ void RandomEncounterController::startEncounter(const QString &name, const QVaria
 {
   Game* game = Game::get();
   I18n* i18n = I18n::get();
-  const QVariantList list = parameters.value("parties").toList();
   const QString entryZone = parameters.value("entryZone", "").toString();
 
+  scheduledEncounter = parameters;
   if (!game->getLevel())
-  {
     emit game->encounterTriggered(parameters.value("title", i18n->t("messages.encounter-unknown")).toString());
-    game->goToLevel(name);
-    game->getLevel()->insertPartyIntoZone(game->getPlayerParty(), entryZone);
-  }
-  else
-    game->switchToLevel(name, entryZone);
-  game->getLevel()->setProperty("persistent", parameters.value("persistent", false));
+  connect(game, &Game::levelChanged, this, &RandomEncounterController::initializeEncounter);
+  game->switchToLevel(name, entryZone);
+}
+
+void RandomEncounterController::initializeEncounter()
+{
+  Game* game = Game::get();
+  const QVariantList list = scheduledEncounter.value("parties").toList();
+  
+  disconnect(game, &Game::levelChanged, this, &RandomEncounterController::initializeEncounter);
+  game->getLevel()->setProperty("persistent", scheduledEncounter.value("persistent", false));
   for (const QVariant& entry : list)
   {
     const QVariantMap partyData(entry.toMap());
