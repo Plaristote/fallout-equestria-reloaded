@@ -15,22 +15,19 @@ Window {
   property bool isFullScreen: false
   property bool hasSavedGame: false // TODO
   property string gameLoading
-  property int movementMode: 0
   property alias currentView: mainView.currentItem
 
   Settings {
+    id: settings
     property alias x: application.x
     property alias y: application.y
     property alias width: application.width
     property alias height: application.height
     property alias fullScreen: application.isFullScreen
-    property alias movementMode: application.movementMode
+    property int   movementMode: gameManager.movementModeOption
+    property real  combatSpeed:  gameManager.combatSpeedOption
   }
 
-  onMovementModeChanged: {
-    if (gameManager.movementModeOption !== application.movementMode)
-      gameManager.movementModeOption = application.movementMode;
-  }
   onIsFullScreenChanged: updateDisplay()
   Component.onCompleted: updateDisplay()
 
@@ -39,7 +36,8 @@ Window {
       application.showFullScreen();
     else
       application.showNormal();
-    gameManager.movementModeOption = application.movementMode;
+    gameManager.movementModeOption = settings.movementMode;
+    gameManager.combatSpeedOption = settings.combatSpeed;
   }
 
   function createGame() {
@@ -74,7 +72,7 @@ Window {
     interval: 500
     running: gameLoading.length > 0
     onTriggered: {
-      pushView("Game.qml", { initialState: "load-game" });
+      pushView("Game.qml");
       gameManager.loadGame(gameLoading);
       gameLoading = "";
     }

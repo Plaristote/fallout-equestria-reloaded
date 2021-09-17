@@ -295,7 +295,11 @@ void LevelTask::update()
   if (!combat)
     realTimeTask(delta);
   else
+  {
+    if (!isCharacterTurn(getPlayer()))
+      delta *= static_cast<int>(combatSpeedOption);
     combatTask(delta);
+  }
   updateVisualEffects(delta);
   soundManager->update();
   ParentType::update(delta);

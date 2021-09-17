@@ -86,12 +86,30 @@ void GameManager::endGame()
   emit gameOver();
 }
 
-int GameManager::getMovementOption()
+int GameManager::getMovementOption() const
 {
   return LevelTask::movementModeOption;
 }
 
 void GameManager::setMovementOption(int value)
 {
-  LevelTask::movementModeOption = value;
+  if (value != LevelTask::movementModeOption)
+  {
+    LevelTask::movementModeOption = value;
+    emit movementOptionChanged();
+  }
+}
+
+double GameManager::getCombatSpeedOption() const
+{
+  return LevelTask::combatSpeedOption;
+}
+
+void GameManager::setCombatSpeedOption(double value)
+{
+  if (value != LevelTask::combatSpeedOption)
+  {
+    LevelTask::combatSpeedOption = value;
+    emit combatSpeedOptionChanged();
+  }
 }

@@ -10,6 +10,7 @@ class GameManager : public QObject
 
   Q_PROPERTY(Game* currentGame MEMBER currentGame NOTIFY currentGameChanged)
   Q_PROPERTY(int movementModeOption READ getMovementOption WRITE setMovementOption NOTIFY movementOptionChanged)
+  Q_PROPERTY(double combatSpeedOption READ getCombatSpeedOption WRITE setCombatSpeedOption NOTIFY combatSpeedOptionChanged)
 public:
   explicit GameManager(QObject *parent = nullptr);
 
@@ -27,10 +28,13 @@ signals:
   void gameOver();
   void currentGameChanged();
   void movementOptionChanged();
+  void combatSpeedOptionChanged();
 
 private:
-  int getMovementOption();
+  int getMovementOption() const;
   void setMovementOption(int);
+  double getCombatSpeedOption() const;
+  void setCombatSpeedOption(double);
 
   Game* currentGame;
 };

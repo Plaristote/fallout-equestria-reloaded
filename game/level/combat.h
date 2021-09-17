@@ -18,6 +18,8 @@ class CombatComponent : public VisualEffectsComponent
   Q_PROPERTY(int  turn MEMBER combatIterator NOTIFY currentCombattantChanged)
   Q_PROPERTY(bool isPlayerTurn READ isPlayerTurn NOTIFY currentCombattantChanged)
 public:
+  static double combatSpeedOption;
+
   explicit CombatComponent(QObject* parent = nullptr);
 
   QQmlListProperty<Character> getQmlCombattants() { return QML_QLIST_CONSTRUCTOR(Character, combattants); }

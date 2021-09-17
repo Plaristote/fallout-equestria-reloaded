@@ -55,10 +55,17 @@ Pane {
       TerminalComboBox {
         id: movementInput
         model: [i18n.t("options.movement.mixed"), i18n.t("options.movement.alwaysRun"), i18n.t("options.movement.alwaysWalk")]
-        onCurrentIndexChanged: {
-          if (loaded)
-            application.movementMode = currentIndex;
-        }
+        currentIndex: gameManager.movementModeOption
+        onCurrentIndexChanged: gameManager.movementModeOption = currentIndex
+      }
+
+      TerminalLabel { text: i18n.t("options.combatSpeed") }
+      Slider {
+        id: combatSpeedInput
+        value: gameManager.combatSpeedOption
+        from: 1
+        to: 10
+        onValueChanged: gameManager.combatSpeedOption = value
       }
     }
   }
