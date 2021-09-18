@@ -18,12 +18,12 @@ Item {
     mainMenu.visible = !mainMenu.visible;
   }
 
-  onHasOverlayChanged: levelController.paused = hasOverlay
+  onHasOverlayChanged: if (application.currentView === root) { levelController.paused = hasOverlay }
 
   Hud.Actions {
     id: actions
     level: root.levelController
-    enabled: application.currentView.toString().startsWith("LevelView_QMLTYPE")
+    enabled: application.currentView === root
     onMenuTriggered:           root.openMenu()
     onPreviousTargetTriggered: levelController.centerCursorOn(levelController.targetList.previousTarget())
     onNextTargetTriggered:     levelController.centerCursorOn(levelController.targetList.nextTarget())

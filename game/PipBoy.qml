@@ -16,19 +16,9 @@ Pane {
   background: UiStyle.Pane {}
 
   Component.onCompleted: {
-    swapPauseMode(true);
-    if (levelController)
-      appComponents = appComponents.concat([automapApplication]);
-    else
-      appComponents = appComponents.concat([null]);
-    contentApplication.sourceComponent = questsApplication;
-  }
-
-  function swapPauseMode(value) {
-    if (levelController)
-      levelController.paused = value;
-    else
-      gameController.worldmap.paused = value;
+    pauseController.paused = true;
+    appComponents = appComponents.concat(levelController ? [automapApplication] : [null]);
+    contentApplication.sourceComponent = appComponents[appNames.indexOf(currentApp)];
   }
 
   onCurrentAppChanged: {
@@ -36,47 +26,17 @@ Pane {
     contentApplication.sourceComponent = appComponents[index];
   }
 
+  PauseController { id: pauseController }
+
+  PipBoyUi.Actions {
+    id: actions
+    pipboy: root
+    onClosed: pauseController.paused = false
+  }
+
   Connections {
     target: gameController.player
-
-    function onDied() {
-      application.popView();
-    }
-  }
-
-  Action {
-    id: nextAppAction
-    shortcut: Shortcut { sequence: "PgDown"; onActivated: nextAppAction.trigger() }
-    onTriggered: {
-      const index = appNames.indexOf(currentApp);
-      currentApp = appNames[index + 1 >= appNames.length ? 0 : index + 1];
-    }
-  }
-
-  Action {
-    id: previousAppAction
-    shortcut: Shortcut { sequence: "PgUp"; onActivated: previousAppAction.trigger() }
-    onTriggered: {
-      const index = appNames.indexOf(currentApp);
-      currentApp = appNames[index - 1 < 0 ? appNames.length - 1 : index - 1];
-    }
-  }
-
-  Action {
-    id: closeAction
-    shortcut: Shortcut { sequence: "Esc"; onActivated: closeAction.trigger() }
-    text: i18n.t("Close")
-    onTriggered: {
-      swapPauseMode(false);
-      application.popView();
-    }
-  }
-
-  Connections {
-    target: gamepad
-
-    function onLeftTriggerClicked() { previousAppAction.trigger(); }
-    function onRightTriggerClicked() { nextAppAction.trigger(); }
+    function onDied() { application.popView(); }
   }
 
   RowLayout {
@@ -108,7 +68,7 @@ Pane {
             }
           }
 
-          MenuButton { action: closeAction }
+          MenuButton { action: actions.close }
         }
       }
     }

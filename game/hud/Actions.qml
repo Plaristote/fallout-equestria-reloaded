@@ -37,6 +37,7 @@ Item {
     enabled: root.enabled
     shortcut: Shortcut {
       sequence: "Esc"
+      enabled: backAction.enabled
       onActivated: backAction.trigger()
     }
     onTriggered: backTriggered()
@@ -53,6 +54,7 @@ Item {
     enabled: root.enabled
     shortcut: Shortcut {
       sequence: "Ctrl+Left"
+      enabled: previousTargetAction.enabled
       onActivated: previousTargetAction.trigger()
     }
     onTriggered: previousTargetTriggered()
@@ -63,6 +65,7 @@ Item {
     enabled: root.enabled
     shortcut: Shortcut {
       sequence: "Ctrl+Right"
+      enabled: nextTargetAction.enabled
       onActivated: nextTargetAction.trigger()
     }
     onTriggered: nextTargetTriggered()
@@ -85,6 +88,7 @@ Item {
     enabled: root.enabled
     shortcut: Shortcut {
       sequence: "i"
+      enabled: openInventoryAction.enabled
       onActivated: openInventoryAction.trigger()
     }
     onTriggered: inventoryTriggered()
@@ -95,6 +99,7 @@ Item {
     enabled: root.enabled && level
     shortcut: Shortcut {
       sequence: "s"
+      enabled: openSkilldexAction.enabled
       onActivated: openSkilldexAction.trigger()
     }
     onTriggered: skilldexTriggered()
@@ -105,6 +110,7 @@ Item {
     enabled: root.enabled
     shortcut: Shortcut {
       sequence: "o"
+      enabled: openCharacterSheetAction.enabled
       onActivated: openCharacterSheetAction.trigger()
     }
     onTriggered: application.pushView("game/CharacterView.qml", {gameController: gameManager.currentGame})
@@ -115,6 +121,7 @@ Item {
     enabled: root.enabled
     shortcut: Shortcut {
       sequence: "p"
+      enabled: openPipboyAction.enabled
       onActivated: openPipboyAction.trigger()
     }
     onTriggered: application.pushView("game/PipBoy.qml")

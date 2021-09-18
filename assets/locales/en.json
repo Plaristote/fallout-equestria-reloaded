@@ -39,6 +39,18 @@
     "use-1": "Use",
     "use-2": "Use"
   },
+  "options": {
+    "combatSpeed": "Combat speed",
+    "volume": "Music volume",
+    "fullscreen": "Full screen",
+    "locale": "Language",
+    "movementMode": "Movement mode",
+    "movement": {
+      "alwaysWalk": "Always walk",
+      "alwaysRun": "Always run",
+      "mixed": "Run on double-click"
+    }
+  },
   "messages": {
     "weapons": {
       "use":   "{{user}} used {{item}} on {{target}} for {{damage}} damage.",

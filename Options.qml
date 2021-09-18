@@ -3,6 +3,7 @@ import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
 import "qrc:/assets/ui" as UiStyle
 import "./ui"
+import "./game"
 
 Pane {
   property bool loaded: false
@@ -13,6 +14,22 @@ Pane {
     localeInput.currentIndex = i18n.getAvailableLocales().indexOf(i18n.currentLocale);
     movementInput.currentIndex = gameManager.movementModeOption;
     loaded = true;
+    pauseController.paused = true;
+  }
+
+  PauseController { id: pauseController }
+
+  Action {
+    id: closeAction
+    text: i18n.t("Close")
+    shortcut: Shortcut {
+      sequence: "Esc"
+      onActivated: closeAction.trigger()
+    }
+    onTriggered: {
+      pauseController.paused = false;
+      application.popView();
+    }
   }
 
   Pane {
@@ -26,6 +43,7 @@ Pane {
       TerminalLabel { text: i18n.t("options.locale") }
       TerminalComboBox {
         id: localeInput
+        Layout.fillWidth: true
         model: i18n.getAvailableLocales()
         onCurrentIndexChanged: {
           const newLocale = i18n.getAvailableLocales()[currentIndex];
@@ -45,6 +63,7 @@ Pane {
       TerminalLabel { text: i18n.t("options.volume") }
       Slider {
         id: volumeInput
+        Layout.fillWidth: true
         from: 0
         to: 100
         Component.onCompleted: { value = musicManager.defaultVolume }
@@ -54,6 +73,7 @@ Pane {
       TerminalLabel { text: i18n.t("options.movementMode") }
       TerminalComboBox {
         id: movementInput
+        Layout.fillWidth: true
         model: [i18n.t("options.movement.mixed"), i18n.t("options.movement.alwaysRun"), i18n.t("options.movement.alwaysWalk")]
         currentIndex: gameManager.movementModeOption
         onCurrentIndexChanged: gameManager.movementModeOption = currentIndex
@@ -62,6 +82,7 @@ Pane {
       TerminalLabel { text: i18n.t("options.combatSpeed") }
       Slider {
         id: combatSpeedInput
+        Layout.fillWidth: true
         value: gameManager.combatSpeedOption
         from: 1
         to: 10
@@ -74,7 +95,6 @@ Pane {
     id: formControls
     anchors.horizontalCenter: parent.horizontalCenter
     anchors.bottom: parent.bottom
-    onClicked: application.popView()
-    text: i18n.t("exit")
+    action: closeAction
   }
 }
