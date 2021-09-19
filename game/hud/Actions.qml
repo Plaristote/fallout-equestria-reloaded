@@ -24,6 +24,7 @@ Item {
 
   Connections {
     target: gamepad
+    enabled: root.enabled
     function onBackClicked() { backAction.trigger() }
     function onSkilldexClicked() { openSkilldexAction.trigger() }
     function onInventoryClicked() { openInventoryAction.trigger() }

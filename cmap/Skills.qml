@@ -36,8 +36,10 @@ Pane {
 
     GridLayout {
       id: content
-      columns: 4
       width: parent.width - 20
+      columns: 4
+      rowSpacing:    3
+      columnSpacing: 5
       Repeater {
         model: root.list.length * content.columns
         delegate: Loader {
@@ -60,6 +62,8 @@ Pane {
             case 3: return root.canEdit ? skillPointControl : placeholder;
             }
           }
+
+          MouseArea { anchors.fill: parent; onClicked: root.selectProperty(propertyName) }
         } // END Cell Loader
       } // END Repeater
     } // END Table
@@ -82,7 +86,6 @@ Pane {
       bottomPadding: 5
       font.pointSize: application.consoleFont.normalSize
       font.family:    application.consoleFont.name
-      MouseArea { anchors.fill: parent; onClicked: root.selectProperty(propertyName) }
     }
   }
 
@@ -96,7 +99,6 @@ Pane {
       bottomPadding: 5
       font.pointSize: application.consoleFont.normalSize
       font.family:    application.consoleFont.name
-      MouseArea { anchors.fill: parent; onClicked: root.selectProperty(propertyName) }
     }
   }
 

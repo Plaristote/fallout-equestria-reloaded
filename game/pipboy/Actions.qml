@@ -41,6 +41,7 @@ Item {
 
   Connections {
     target: gamepad
+    function onBackClicked() { closeAction.trigger(); }
     function onLeftTriggerClicked() { previousAppAction.trigger(); }
     function onRightTriggerClicked() { nextAppAction.trigger(); }
   }

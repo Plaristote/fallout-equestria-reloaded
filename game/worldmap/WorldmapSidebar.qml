@@ -56,6 +56,8 @@ Pane {
     }
 
     RowLayout {
+      Layout.alignment: Qt.AlignHCenter
+
       UiStyle.TinyButton {
         text: i18n.t("hud.INV")
         height: 20
@@ -76,6 +78,7 @@ Pane {
     }
 
     UiStyle.TinyButton {
+      Layout.alignment: Qt.AlignHCenter
       text: i18n.t("hud.Q")
       height: 20
       width: 20

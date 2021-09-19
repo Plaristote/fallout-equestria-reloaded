@@ -22,6 +22,16 @@ Pane {
   signal accepted()
   signal canceled()
 
+  BackAction {
+    id: cancelAction
+    onTriggered: canceled()
+  }
+
+  Connections {
+    target: gamepad
+    function onBackClicked() { cancelAction.trigger() }
+  }
+
   CMAP.PersonalInfo {
     id: characterNameRow
     characterSheet: root.characterSheet
@@ -208,7 +218,7 @@ Pane {
 
   ConfirmDialog {
     id: cancelConfirmDialog
-    onAccepted: root.canceled()
+    onAccepted: cancelAction.trigger()
     anchors.centerIn: parent
   }
 
@@ -224,7 +234,7 @@ Pane {
     MenuButton {
       visible: !gameEditorMode
       text: viewMode ? i18n.t("Close") : i18n.t("Cancel")
-      onClicked: viewMode ? root.canceled() : cancelConfirmDialog.open()
+      onClicked: viewMode ? cancelAction.trigger() : cancelConfirmDialog.open()
     }
   }
 }

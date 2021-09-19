@@ -44,7 +44,7 @@ Pane {
     model: inventory.categoryList
   }
 
-  Flickable {
+  CustomFlickable {
     clip: true
     contentHeight: characterInventoryItemsView.height
     anchors.fill: parent

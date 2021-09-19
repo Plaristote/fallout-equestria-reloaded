@@ -51,7 +51,7 @@ Pane {
 
           Repeater {
             model: availableTraits.length / 2
-            delegate: Row {
+            delegate: RowLayout {
               property string traitName: availableTraits[index + offsetIndex]
               property string traitLabel: availableTraitsLabels[index + offsetIndex]
               property color textColor: selectedProperty === traitName ? "green" : "white"
@@ -59,6 +59,7 @@ Pane {
               spacing: 10
 
               UiStyle.TerminalButton {
+                id: pickButton
                 backgroundColor: isPicked ? "lightgreen" : "transparent"
                 text: " "
                 onClicked: {
@@ -75,6 +76,8 @@ Pane {
                 color: textColor
                 font.family: application.consoleFont.name
                 font.pointSize: application.consoleFont.normalSize
+                verticalAlignment: Qt.AlignVCenter
+                height: pickButton.height
                 MouseArea { anchors.fill: parent; onClicked: selectProperty(traitName); }
               }
             }

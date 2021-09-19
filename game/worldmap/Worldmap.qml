@@ -41,7 +41,7 @@ Item {
 
   LevelHud.Actions {
     id: actions
-    enabled: application.currentView.toString().startsWith("Worldmap_QMLTYPE") && root.state == "default"
+    enabled: application.currentView === root && root.state == "default"
     onMenuTriggered:           mainMenu.visible = true
     onInventoryTriggered:      inventoryViewContainer.visible = true
     onBackTriggered: {
@@ -81,6 +81,7 @@ Item {
 
   WorldmapView {
     id: worldmapView
+    activated: actions.enabled
     anchors { top: parent.top; left: parent.left; bottom: parent.bottom; right: sidebar.left }
     controller: root.controller
     onMapClicked: clickedOnMap()

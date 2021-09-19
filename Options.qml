@@ -19,17 +19,18 @@ Pane {
 
   PauseController { id: pauseController }
 
-  Action {
+  BackAction {
     id: closeAction
     text: i18n.t("Close")
-    shortcut: Shortcut {
-      sequence: "Esc"
-      onActivated: closeAction.trigger()
-    }
     onTriggered: {
       pauseController.paused = false;
       application.popView();
     }
+  }
+
+  Connections {
+    target: gamepad
+    function onBackClicked() { closeAction.trigger() }
   }
 
   Pane {
