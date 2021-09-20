@@ -15,8 +15,15 @@ class CharacterMovement;
 class LevelGrid : public QObject
 {
   Q_OBJECT
-
 public:
+  enum CaseFlag
+  {
+    BlockCase      = 1,
+    VerticalWall   = 2,
+    HorizontalWall = 4
+  };
+  Q_ENUM(CaseFlag)
+
   struct CaseContent
   {
     char                      hcover = 0, vcover = 0, cover = 0;

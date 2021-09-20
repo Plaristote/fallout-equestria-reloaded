@@ -362,15 +362,15 @@ int LevelGrid::getCaseFlags(int x, int y) const
   int flag = 0;
 
   if (index >= grid.count() || index < 0)
-    return 1;
+    return BlockCase;
   const CaseContent& gridCase = grid.at(index);
 
   if (gridCase.block)
-    flag += 1;
+    flag += BlockCase;
   if (gridCase.vwall)
-    flag += 2;
+    flag += VerticalWall;
   if (gridCase.hwall)
-    flag += 4;
+    flag += HorizontalWall;
   return flag;
 }
 

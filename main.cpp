@@ -99,6 +99,7 @@ int main(int argc, char *argv[])
   qmlRegisterType<TutorialComponent>("Game", 1,0, "TutorialComponent");
   qmlRegisterType<ActionQueue>("Game", 1,0, "ActionQueue");
   qmlRegisterType<InteractionTargetList>("Game", 1,0, "InteractionTargetList");
+  qmlRegisterType<LevelGrid>("Game", 1,0, "LevelGrid");
 
   qRegisterMetaType<Character*>("const Character*");
   qRegisterMetaType<CharacterDiplomacy*>("const CharacterDiplomacy*");

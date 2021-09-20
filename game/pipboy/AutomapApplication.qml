@@ -1,6 +1,7 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.12
+import Game 1.0
 import "qrc:/assets/ui" as UiStyle
 import "../../ui"
 
@@ -40,37 +41,59 @@ Item {
           delegate: Item {
             property int xIndex: index
             property int caseFlag: levelController.grid.getCaseFlags(xIndex, yIndex)
-            property bool isPlayerPosition: player.x === xIndex && player.y === yIndex
             Layout.preferredWidth:  caseSize
             Layout.preferredHeight: caseSize
 
             Rectangle {
               color: obstacleColor
-              visible: caseFlag & 1
+              visible: caseFlag & LevelGrid.BlockCase
               anchors.fill: parent
             }
             Rectangle {
               color: obstacleColor
-              visible: caseFlag & 2
+              visible: caseFlag & LevelGrid.VerticalWall
               width:   caseSize / 5
               height:  caseSize
-              anchors.left: parent.left
+              anchors.left: parent.right
             }
             Rectangle {
               color: obstacleColor
-              visible: caseFlag & 4
+              visible: caseFlag & LevelGrid.HorizontalWall
               height:  caseSize / 5
               width:   caseSize
               anchors.bottom: parent.bottom
-            }
-            Rectangle {
-              color: playerColor
-              visible: isPlayerPosition
-              anchors.fill: parent
             }
           }
         } // END col
       } // END row
     } // END grid
+
+    Repeater {
+      model: levelController.visibleCharacters
+      delegate: Rectangle {
+        property QtObject character: levelController.visibleCharacters[index];
+        property color colorReference: {
+          if (character === levelController.player)
+            return "white";
+          if (character.isEnemy(levelController.player))
+            return "red";
+          else if (character.isAlly(levelController.player))
+            return "lightgreen";
+          return "green";
+        }
+        x: caseSize * character.position.x
+        y: caseSize * character.position.y
+        width:  caseSize
+        height: caseSize
+        radius: width * 0.5
+        color: colorReference
+        SequentialAnimation on color {
+          loops: Animation.Infinite
+          ColorAnimation { to: "black"; duration: 1000 }
+          ColorAnimation { to: colorReference; duration: 100 }
+        }
+
+      }
+    }
   }
 }
