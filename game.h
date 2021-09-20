@@ -84,13 +84,13 @@ public slots:
   void onCityEnteredAt(const QString& city, const QString& zone);
   void changeZone(TileZone*);
   void deleteLater();
+  void loadLevel(const QString& name, const QString& targetZone = "");
 
 private slots:
   void onGameOver();
 
 private:
   void initializeScript();
-  void loadLevel(const QString& name, const QString& targetZone = "");
   LevelTask* newLevelTask();
 
   bool isGameEditor = false;

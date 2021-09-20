@@ -19,7 +19,7 @@ Item {
   onCurrentLevelNameChanged: {
     selectedObject = null;
     levelEditorUiLoader.sourceComponent = null;
-    gameController.switchToLevel(currentLevelName.replace(".json", ""));
+    gameController.loadLevel(currentLevelName.replace(".json", ""), "");
     if (currentLevelName.length > 0)
       levelEditorUiLoader.sourceComponent = levelEditorUi;
   }
