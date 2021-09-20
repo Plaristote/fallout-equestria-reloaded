@@ -10,6 +10,11 @@
   "Weight": "Weight",
   "Drop": "Drop",
   "Inspect": "Inspect",
+  "worldmap": {
+    "places": {
+      "random-desert-cabin": "a shack in the middle of the desert"
+    }
+  },
   "templates": {
 	  "title": "Pick your character",
 	  "create": "New character",

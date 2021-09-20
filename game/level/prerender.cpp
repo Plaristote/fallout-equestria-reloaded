@@ -9,15 +9,17 @@ PreRenderComponent::PreRenderComponent(QObject* parent) : ParentType(parent)
 
 void PreRenderComponent::load()
 {
-  QDir dir;
-  QList<TileLayer*> layers;
+  if (tilemap->load(name))
+  {
+    QDir dir;
+    QList<TileLayer*> layers;
 
-  tilemap->load(name);
-  layers << tilemap->getLayer("ground") << tilemap->getRoofs() << tilemap->getLights();
-  if (!dir.exists(getPreRenderPath()))
-    preRenderTilemap();
-  for (TileLayer* layer : layers)
-    layer->setProperty("prerendered", true);
+    layers << tilemap->getLayer("ground") << tilemap->getRoofs() << tilemap->getLights();
+    if (!dir.exists(getPreRenderPath()))
+      preRenderTilemap();
+    for (TileLayer* layer : layers)
+      layer->setProperty("prerendered", true);
+  }
   ParentType::load();
 }
 
