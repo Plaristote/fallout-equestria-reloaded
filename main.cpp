@@ -132,6 +132,11 @@ int main(int argc, char *argv[])
   engine.rootContext()->setContextProperty("gamepad", gamepad);
   engine.rootContext()->setContextProperty("mouseCursor", cursor);
 
+  QObject::connect(i18n, &I18n::currentLocaleChanged, &app, [&engine, i18n]()
+  {
+    engine.rootContext()->setContextProperty("i18n", i18n);
+  });
+
   const QUrl url(QStringLiteral("qrc:/main.qml"));
   QObject::connect(&engine, &QQmlApplicationEngine::objectCreated, &app, [url, cursor](QObject *obj, const QUrl &objUrl)
   {
