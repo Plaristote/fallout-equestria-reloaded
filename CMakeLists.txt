@@ -168,6 +168,10 @@ set(PROJECT_SOURCES
         game/level/tutorialcomponent.cpp
         game/level/interactiontargetlist.h
         game/level/interactiontargetlist.cpp
+        game/objects/objectgroup.h
+        game/objects/objectgroup.cpp
+        game/objects/objectfactory.h
+        game/objects/objectfactory.cpp
         game/objects/doorway.h
         game/objects/doorway.cpp
         game/objects/storageobject.h

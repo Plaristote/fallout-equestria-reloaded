@@ -14,7 +14,9 @@ struct Dices
   
   static int Throw(unsigned int max)
   {
-    return ((rand() % max) + 1);
+    if (max != 0)
+      return ((rand() % max) + 1);
+    return max;
   }
 
   static bool Test(int successPercentage)

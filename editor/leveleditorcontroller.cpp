@@ -26,7 +26,7 @@ DynamicObject* LevelEditorController::generateFromTemplate(const QString& templa
   object->setObjectName(name);
   object->setPosition(QPoint(-1, -1));
   object->setRenderPosition(object->getSpritePosition()); // isn't this basically self-assign ?
-  registerDynamicObject(object);
+  appendObject(object);
   return object;
 }
 

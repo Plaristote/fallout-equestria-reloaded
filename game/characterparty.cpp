@@ -105,7 +105,7 @@ bool CharacterParty::insertIntoZone(LevelTask* level, TileZone* zone)
     {
       Character* character = list.at(characterIt);
 
-      level->registerDynamicObject(character);
+      level->appendObject(character);
       level->setCharacterPosition(character, position.x(), position.y());
       if (++characterIt >= list.length())
         break ;
@@ -137,7 +137,7 @@ void CharacterParty::extractFromLevel(LevelTask* level)
     character->clearCurrentZones();
     character->getFieldOfView()->reset();
     grid->removeObject(character);
-    level->unregisterDynamicObject(character);
+    level->detachObject(character);
   }
 }
 
@@ -178,6 +178,6 @@ void CharacterParty::loadIntoLevel(LevelTask* level)
   for (Character* character : list)
   {
     grid->moveObject(character, character->getPosition().x(), character->getPosition().y());
-    level->registerDynamicObject(character);
+    level->appendObject(character);
   }
 }

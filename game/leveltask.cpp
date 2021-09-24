@@ -9,6 +9,7 @@
 #include "game/animationSequence/movementhintanimationpart.h"
 #include "game/mousecursor.h"
 #include <QDebug>
+#include "objects/objectfactory.h"
 
 LevelTask::LevelTask(QObject *parent) : ParentType(parent)
 {
@@ -106,7 +107,7 @@ void LevelTask::loadObjectsFromDataEngine(DataEngine* dataEngine)
       object = new DynamicObject(this);
     object->load(objectData.toObject());
     object->setRenderPosition(object->getSpritePosition()); // isn't this basically self-assign ?
-    registerDynamicObject(object);
+    appendObject(object);
   }
   initialized = levelData["tasks"].toBool(false);
   taskRunner->load(levelData["tasks"].toObject());
@@ -186,12 +187,6 @@ void LevelTask::displayMovementTargetHint(QPoint position)
   addAnimationSequence(animation);
 }
 
-void LevelTask::deleteObject(DynamicObject *o)
-{
-  unregisterDynamicObject(o);
-  o->deleteLater();
-}
-
 void LevelTask::registerDynamicObject(DynamicObject* object)
 {
   if (object->isCharacter())
@@ -231,7 +226,7 @@ void LevelTask::onItemDropped(InventoryItem* item, QPoint position)
 {
   item->setParent(this);
   item->setPosition(position);
-  registerDynamicObject(item);
+  appendObject(item);
   setObjectPosition(item, position.x(), position.y());
 }
 
@@ -389,57 +384,34 @@ void LevelTask::addBloodStainAt(QPoint position)
 {
   BloodStain* object = new BloodStain(this);
 
-  registerDynamicObject(object);
+  appendObject(object);
   setObjectPosition(object, position.x(), position.y());
   object->initialize();
 }
 
 Character* LevelTask::generateCharacter(const QString &name, const QString &characterSheet)
 {
-  Character* object = new Character(this);
-  object->setObjectName(name);
-  object->setCharacterSheet(characterSheet);
-  registerDynamicObject(object);
-  return object;
+  return factory()->generateCharacter(name, characterSheet);
 }
 
 StorageObject* LevelTask::generateStorageObject(const QString &name)
 {
-  StorageObject* object = new StorageObject(this);
-
-  object->setObjectName(name);
-  registerDynamicObject(object);
-  return object;
+  return factory()->generateStorageObject(name);
 }
 
 InventoryItem* LevelTask::generateInventoryItem(const QString& name, const QString& type, int quantity)
 {
-  InventoryItem* object = new InventoryItem(this);
-
-  object->setObjectName(name);
-  object->setItemType(type);
-  if (quantity > 1)
-    object->add(quantity - 1);
-  registerDynamicObject(object);
-  return object;
+  return factory()->generateInventoryItem(name, type, quantity);
 }
 
 Doorway* LevelTask::generateDoorway(const QString &name)
 {
-  Doorway* object = new Doorway(this);
-
-  object->setObjectName(name);
-  registerDynamicObject(object);
-  return object;
+  return factory()->generateDoorway(name);
 }
 
 DynamicObject* LevelTask::generateDynamicObject(const QString &name)
 {
-  DynamicObject* object = new DynamicObject(this);
-
-  object->setObjectName(name);
-  registerDynamicObject(object);
-  return object;
+  return factory()->generateDynamicObject(name);
 }
 
 QVariantList LevelTask::previewPathTo(int x, int y)

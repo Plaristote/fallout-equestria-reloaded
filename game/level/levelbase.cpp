@@ -1,7 +1,7 @@
 #include "levelbase.h"
 #include "game.h"
 
-LevelBase::LevelBase(QObject *parent) : StorableObject(parent)
+LevelBase::LevelBase(QObject *parent) : ObjectGroup(parent)
 {
 
 }
@@ -14,16 +14,6 @@ bool LevelBase::isGameEditor() const
 Character* LevelBase::getPlayer() const
 {
   return Game::get()->getPlayer();
-}
-
-DynamicObject* LevelBase::getObjectByName(const QString &name) const
-{
-  for (DynamicObject* object : objects)
-  {
-    if (object->getObjectName() == name)
-      return object;
-  }
-  return nullptr;
 }
 
 QList<Character*> LevelBase::findCharacters(std::function<bool (Character &)> compare) const
@@ -44,34 +34,36 @@ QList<Character*> LevelBase::findCharacters(std::function<bool (Character &)> co
   return characters;
 }
 
-QVector<DynamicObject*> LevelBase::findDynamicObjects(std::function<bool (DynamicObject &)> compare) const
+void LevelBase::onChildrenGroupAdded(ObjectGroup* group)
 {
-  QVector<DynamicObject*> results;
-
-  results.reserve(objects.size());
-  for (DynamicObject* object : objects)
-  {
-    if (compare(*object))
-      results << object;
-  }
-  return results;
+  connect(group, &ObjectGroup::objectAdded,   this, &LevelBase::onChildrenObjectAdded);
+  connect(group, &ObjectGroup::objectRemoved, this, &LevelBase::onChildrenObjectRemoved);
+  connect(group, &ObjectGroup::groupAdded,    this, &LevelBase::onChildrenGroupAdded);
+  connect(group, &ObjectGroup::groupRemoved,  this, &LevelBase::onChildrenGroupRemoved);
 }
 
-QJSValue LevelBase::getScriptObject() const
+void LevelBase::onChildrenGroupRemoved(ObjectGroup* group)
 {
-  if (script)
-    return script->getObject();
-  return QJSValue();
+  disconnect(group, &ObjectGroup::objectAdded,   this, &LevelBase::onChildrenObjectAdded);
+  disconnect(group, &ObjectGroup::objectRemoved, this, &LevelBase::onChildrenObjectRemoved);
+  disconnect(group, &ObjectGroup::groupAdded,    this, &LevelBase::onChildrenGroupAdded);
+  disconnect(group, &ObjectGroup::groupRemoved,  this, &LevelBase::onChildrenGroupRemoved);
 }
 
-void LevelBase::registerDynamicObject(DynamicObject* object)
+void LevelBase::onChildrenObjectAdded(DynamicObject* object)
 {
-  objects.push_back(object);
-  emit objectsChanged();
+  registerDynamicObject(object);
 }
 
-void LevelBase::unregisterDynamicObject(DynamicObject* object)
+void LevelBase::onChildrenObjectRemoved(DynamicObject* object)
 {
-  objects.removeAll(object);
-  emit objectsChanged();
+  unregisterDynamicObject(object);
+}
+
+void LevelBase::registerDynamicObject(DynamicObject*)
+{
+}
+
+void LevelBase::unregisterDynamicObject(DynamicObject*)
+{
 }

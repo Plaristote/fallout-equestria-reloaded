@@ -5,15 +5,15 @@
 # include "game/sprite.h"
 # include "game/dynamicobject.h"
 # include "game/character.h"
+# include "game/objects/objectgroup.h"
 # include "utils/storableobject.h"
 
 class TileMap;
 
-class LevelBase : public StorableObject
+class LevelBase : public ObjectGroup
 {
   Q_OBJECT
 
-  Q_PROPERTY(QString                         name           MEMBER name)
   Q_PROPERTY(Character*                      player         READ getPlayer     NOTIFY playerChanged)
   Q_PROPERTY(QQmlListProperty<DynamicObject> dynamicObjects READ getQmlObjects NOTIFY objectsChanged)
   Q_PROPERTY(TileMap*                        tilemap        READ getTileMap    NOTIFY tilemapReady)
@@ -24,9 +24,6 @@ public:
   bool                       isGameEditor() const;
   Character*                 getPlayer() const;
   QList<Character*>          findCharacters(std::function<bool (Character&)> compare) const;
-  QVector<DynamicObject*>    findDynamicObjects(std::function<bool (DynamicObject&)> compare) const;
-  Q_INVOKABLE DynamicObject* getObjectByName(const QString& name) const;
-  Q_INVOKABLE QJSValue       getScriptObject() const;
   TileMap*                   getTileMap() const { return tilemap; }
 
   void update(qint64) {}
@@ -35,18 +32,20 @@ public:
 
 signals:
   void playerChanged();
-  void objectsChanged();
   void tilemapReady();
   void cameraMoved();
+
+private slots:
+  void onChildrenObjectAdded(DynamicObject*);
+  void onChildrenObjectRemoved(DynamicObject*);
+  void onChildrenGroupAdded(ObjectGroup*);
+  void onChildrenGroupRemoved(ObjectGroup*);
 
 private:
   QQmlListProperty<DynamicObject> getQmlObjects() { return QML_QLIST_CONSTRUCTOR(DynamicObject, objects); }
 
 protected:
-  QString               name;
-  QList<DynamicObject*> objects;
   TileMap*              tilemap = nullptr;
-  ScriptController*     script = nullptr;
   QPoint                canvasOffset;
 };
 
