@@ -35,6 +35,7 @@ public:
   virtual ~LevelTask();
 
   void load(const QString& levelName, DataEngine*);
+  void passElapsedTime(int lastUpdate);
   void loadObjectsFromDataEngine(DataEngine*);
   void loadTutorial();
   void save(DataEngine*);

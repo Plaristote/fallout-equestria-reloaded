@@ -1,14 +1,14 @@
 #ifndef  DETECTABLECOMPONENT_H
  #define DETECTABLECOMPONENT_H
 
-# include "scriptable.h"
+# include "sprite.h"
 
 class Character;
 
-class DetectableComponent : public ScriptableComponent
+class DetectableComponent : public Sprite
 {
   Q_OBJECT
-  typedef ScriptableComponent ParentType;
+  typedef Sprite ParentType;
 
   Q_PROPERTY(bool sneaking MEMBER sneaking NOTIFY sneakingChanged)
   Q_PROPERTY(bool hidden MEMBER hidden NOTIFY hiddenChanged)

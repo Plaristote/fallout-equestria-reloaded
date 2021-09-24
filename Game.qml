@@ -1,6 +1,6 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
-import "qrc:/assets/ui" as UiStyle
+import "./assets/ui" as UiStyle
 import "game/"
 import "game/slideshows/"
 
@@ -122,6 +122,27 @@ Item {
       deferredTransitionLoading.video = video;
       deferredTransitionLoading.elapsingTime = elapsingTime;
       deferredTransitionLoading.running = true;
+    }
+
+    function onLoadError(message) {
+      errorDialog.text = message;
+      errorDialog.open();
+    }
+  }
+
+  UiStyle.CustomDialog {
+    property alias text: errorMessage.text
+    id: errorDialog
+    modal: true
+    parent: Overlay.overlay
+    standardButtons: Dialog.Ok
+    anchors.centerIn: parent
+
+    Label {
+      id: errorMessage
+      color: "white"
+      font.family: application.titleFontName
+      font.pixelSize: 16
     }
   }
 

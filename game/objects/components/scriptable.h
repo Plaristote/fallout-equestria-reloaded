@@ -1,14 +1,14 @@
 #ifndef  SCRIPTABLECOMPONENT_H
 # define SCRIPTABLECOMPONENT_H
 
-# include "../../sprite.h"
 # include "../../scriptcontroller.h"
+# include "utils/storableobject.h"
 # include "globals.h"
 
-class ScriptableComponent : public Sprite
+class ScriptableComponent : public StorableObject
 {
   Q_OBJECT
-  typedef Sprite ParentType;
+  typedef StorableObject ParentType;
 
   Q_PROPERTY(QString scriptName READ getScriptName NOTIFY scriptNameChanged)
 public:
@@ -28,7 +28,7 @@ public:
 signals:
   void scriptNameChanged();
 
-private slots:
+protected slots:
   void initializeIfNeeded();
 
 protected:

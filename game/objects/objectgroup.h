@@ -1,16 +1,17 @@
 #ifndef  OBJECTGROUP_H
 # define OBJECTGROUP_H
 
-#include "utils/storableobject.h"
+#include "components/scriptable.h"
 #include "../dynamicobject.h"
 #include <QQmlListProperty>
 
 class ObjectFactory;
 
-class ObjectGroup : public StorableObject
+class ObjectGroup : public ScriptableComponent
 {
   Q_OBJECT
   friend class ObjectFactory;
+  typedef ScriptableComponent ParentType;
 
   Q_PROPERTY(QString                         name    MEMBER name NOTIFY nameChanged)
   Q_PROPERTY(QString                         path    READ getPath NOTIFY pathChanged)
@@ -30,10 +31,13 @@ public:
   void           setOffset(QPoint);
   int            objectCount() const;
 
+  void           load(const QJsonObject&);
+  void           save(QJsonObject&) const;
   Q_INVOKABLE ObjectFactory* factory();
   Q_INVOKABLE QString validateObjectName(const QString&);
 
   Q_INVOKABLE QJSValue       getScriptObject() const;
+  void                       eachObject(std::function<void(DynamicObject*)>) const;
   QVector<DynamicObject*>    findDynamicObjects(std::function<bool (DynamicObject&)> compare) const;
   void                       collectObjects(std::function<bool (DynamicObject&)> compare, QVector<DynamicObject*>&) const;
   Q_INVOKABLE DynamicObject* findObject(const QString& path) const { return find<DynamicObject>(path, &ObjectGroup::getObjectByName); }
@@ -86,7 +90,6 @@ protected:
   QPoint                offset;
   QList<ObjectGroup*>   groups;
   QList<DynamicObject*> objects;
-  ScriptController*     script = nullptr;
   ObjectFactory*        _factory = nullptr;
 };
 

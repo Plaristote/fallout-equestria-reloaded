@@ -10,6 +10,8 @@ class ZoneComponent : public GridComponent
 public:
   ZoneComponent(QObject* parent = nullptr);
 
+  void load(const QJsonObject&);
+
   void registerDynamicObject(DynamicObject*);
   void unregisterDynamicObject(DynamicObject*);
 

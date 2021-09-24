@@ -12,9 +12,9 @@ void PlayerVisibilityComponent::unregisterDynamicObject(DynamicObject* object)
   ParentType::unregisterDynamicObject(object);
 }
 
-void PlayerVisibilityComponent::load()
+void PlayerVisibilityComponent::load(const QJsonObject& data)
 {
-  ParentType::load();
+  ParentType::load(data);
   if (isGameEditor())
     connect(this, &LevelBase::objectsChanged, this, &PlayerVisibilityComponent::visibleCharactersChanged);
   else

@@ -12,7 +12,7 @@ class PlayerVisibilityComponent : public PreRenderComponent
 public:
   PlayerVisibilityComponent(QObject* parent = nullptr);
 
-  void load();
+  void load(const QJsonObject&);
   virtual void unregisterDynamicObject(DynamicObject*);
 
 signals:

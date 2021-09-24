@@ -2,7 +2,7 @@
 #include <cmath>
 #include <QDebug>
 
-Sprite::Sprite(QObject *parent) : StorableObject(parent)
+Sprite::Sprite(QObject *parent) : ParentType(parent)
 {
   movementSpeed = 100;
 }
@@ -109,7 +109,7 @@ void Sprite::load(const QJsonObject& data)
   spriteMovementTarget.setX(data["mtx"].toInt()); spriteMovementTarget.setY(data["mty"].toInt());
   floating = data["float"].toBool();
   Sprite::setAnimation(data["animation"].toString());
-  StorableObject::load(data);
+  ParentType::load(data);
 }
 
 void Sprite::save(QJsonObject& data) const
@@ -119,5 +119,5 @@ void Sprite::save(QJsonObject& data) const
   data["mtx"] = spriteMovementTarget.x(); data["mty"] = spriteMovementTarget.y();
   data["animation"] = animation.name;
   data["float"] = floating;
-  StorableObject::save(data);
+  ParentType::save(data);
 }

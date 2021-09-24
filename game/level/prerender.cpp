@@ -7,20 +7,19 @@ PreRenderComponent::PreRenderComponent(QObject* parent) : ParentType(parent)
 {
 }
 
-void PreRenderComponent::load()
+void PreRenderComponent::load(const QJsonObject& data)
 {
-  if (tilemap->load(name))
-  {
-    QDir dir;
-    QList<TileLayer*> layers;
+  QDir dir;
+  QList<TileLayer*> layers;
 
-    layers << tilemap->getLayer("ground") << tilemap->getRoofs() << tilemap->getLights();
-    if (!dir.exists(getPreRenderPath()))
-      preRenderTilemap();
-    for (TileLayer* layer : layers)
-      layer->setProperty("prerendered", true);
-  }
-  ParentType::load();
+  ParentType::load(data);
+  layers << tilemap->getLayer("ground")
+         << tilemap->getRoofs()
+         << tilemap->getLights();
+  if (!dir.exists(getPreRenderPath()))
+    preRenderTilemap();
+  for (TileLayer* layer : layers)
+    layer->setProperty("prerendered", true);
 }
 
 QString PreRenderComponent::getPreRenderPath() const

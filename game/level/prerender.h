@@ -12,7 +12,7 @@ class PreRenderComponent : public ZoneComponent
 public:
   PreRenderComponent(QObject* parent = nullptr);
 
-  void load();
+  void load(const QJsonObject&);
 
 private:
   void    preRenderTilemap();

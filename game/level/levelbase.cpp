@@ -1,6 +1,8 @@
 #include "levelbase.h"
 #include "game.h"
 
+static bool freezeObjectRegistration = false;
+
 LevelBase::LevelBase(QObject *parent) : ObjectGroup(parent)
 {
 
@@ -34,6 +36,13 @@ QList<Character*> LevelBase::findCharacters(std::function<bool (Character &)> co
   return characters;
 }
 
+void LevelBase::load(const QJsonObject& data)
+{
+  freezeObjectRegistration = true;
+  ObjectGroup::load(data);
+  freezeObjectRegistration = false;
+}
+
 void LevelBase::onChildrenGroupAdded(ObjectGroup* group)
 {
   connect(group, &ObjectGroup::objectAdded,   this, &LevelBase::onChildrenObjectAdded);
@@ -52,12 +61,18 @@ void LevelBase::onChildrenGroupRemoved(ObjectGroup* group)
 
 void LevelBase::onChildrenObjectAdded(DynamicObject* object)
 {
-  registerDynamicObject(object);
+  if (!freezeObjectRegistration)
+    registerDynamicObject(object);
 }
 
 void LevelBase::onChildrenObjectRemoved(DynamicObject* object)
 {
   unregisterDynamicObject(object);
+}
+
+void LevelBase::registerAllDynamicObjects()
+{
+  eachObject(std::bind(&LevelBase::registerDynamicObject, this, std::placeholders::_1));
 }
 
 void LevelBase::registerDynamicObject(DynamicObject*)

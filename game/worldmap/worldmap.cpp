@@ -123,7 +123,6 @@ void WorldMap::load(const QJsonObject& data)
   emit citiesChanged();
   emit zonesChanged();
   emit discoveredCitiesChanged();
-
 }
 
 static int axisMovement(int current, int final, int speed)

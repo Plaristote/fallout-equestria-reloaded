@@ -2,14 +2,16 @@
 # define SPRITE_H
 
 # include <QRect>
-# include "animationlibrary.h"
+# include "game/animationlibrary.h"
 # include "utils/storableobject.h"
+# include "scriptable.h"
 
 class QJsonObject;
 
-class Sprite : public StorableObject
+class Sprite : public ScriptableComponent
 {
   Q_OBJECT
+  typedef ScriptableComponent ParentType;
 
   Q_PROPERTY(bool floating MEMBER floating NOTIFY floatingChanged)
   Q_PROPERTY(QString spriteSource   READ getSpriteSource   NOTIFY spriteSourceChanged)

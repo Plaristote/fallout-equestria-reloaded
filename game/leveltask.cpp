@@ -13,7 +13,6 @@
 
 LevelTask::LevelTask(QObject *parent) : ParentType(parent)
 {
-  tilemap = new TileMap(this);
   soundManager = new SoundManager(this);
   taskRunner = new TaskRunner(this);
   updateTimer.setInterval(15);
@@ -28,8 +27,6 @@ LevelTask::LevelTask(QObject *parent) : ParentType(parent)
 LevelTask::~LevelTask()
 {
   qDebug() << "LevelTask::destroyed";
-  if (script)
-    delete script;
 }
 
 void LevelTask::deleteLater()
@@ -59,69 +56,38 @@ void LevelTask::loadTutorial()
 
 void LevelTask::load(const QString& levelName, DataEngine* dataEngine)
 {
-  name = levelName;
+  QJsonObject levelData   = dataEngine->getLevelData(levelName);
+  QJsonValue  lastUpdate  = levelData["lastUpdate"];
+  bool        initialized = levelData["init"].toBool(false);
+
+  levelData["name"]   = levelName;
+  levelData["script"] = levelName;
+  levelData["init"]   = true; // Delay level initialization
+  qDebug() << "LevelTask::load" << levelName;
   timeManager = Game::get()->getTimeManager();
   loadTutorial();
-  ParentType::load();
-  grid->initializeGrid(tilemap);
-  script = new ScriptController(SCRIPTS_PATH + "levels/" + levelName + ".mjs");
+  ParentType::load(levelData);
+  registerAllDynamicObjects();
   taskRunner->setScriptController(script);
-  script->initialize(this);
-  for (auto* zone : tilemap->getZones())
-    registerZone(zone);
-  if (persistent && dataEngine->isLevelActive(name))
-    loadObjectsFromDataEngine(dataEngine);
-  if (!initialized && script && script->hasMethod("initialize"))
-  {
-    script->call("initialize");
-    initialized = true;
-  }
-}
-
-void LevelTask::loadObjectsFromDataEngine(DataEngine* dataEngine)
-{
-  QJsonObject levelData = dataEngine->getLevelData(name);
-  QJsonValue  lastUpdate = levelData["lastUpdate"];
-
-  StorableObject::load(levelData);
-  for (QJsonValue objectData : levelData["objects"].toArray())
-  {
-    QString type = objectData["type"].toString();
-    DynamicObject* object;
-    Character* character = nullptr;
-
-    if (type == "Character")
-    {
-      character = new Character(this);
-      object = character;
-    }
-    else if (type == "StorageObject")
-      object = new StorageObject(this);
-    else if (type == "Doorway")
-      object = new Doorway(this);
-    else if (type == "InventoryItem")
-      object = new InventoryItem(this);
-    else if (type == "BloodStain")
-      object = new BloodStain(this);
-    else
-      object = new DynamicObject(this);
-    object->load(objectData.toObject());
-    object->setRenderPosition(object->getSpritePosition()); // isn't this basically self-assign ?
-    appendObject(object);
-  }
-  initialized = levelData["tasks"].toBool(false);
   taskRunner->load(levelData["tasks"].toObject());
   if (!lastUpdate.isUndefined() && !lastUpdate.isNull())
-  {
-    std::time_t timestamp    = static_cast<std::time_t>(lastUpdate.toInt());
-    std::time_t newTimestamp = Game::get()->getTimeManager()->getDateTime().GetTimestamp();
-    std::time_t elapsedTime  = newTimestamp - timestamp;
+    passElapsedTime(lastUpdate.toInt());
+  if (!initialized)
+    ScriptableComponent::initializeIfNeeded();
+}
 
-    qDebug() << "ADVANCING TIME IN LEVEL" << timestamp << newTimestamp << elapsedTime;
-    for (DynamicObject* object : qAsConst(objects))
-      object->getTaskManager()->update(elapsedTime * 1000);
-    taskRunner->update(elapsedTime *  1000);
-  }
+void LevelTask::passElapsedTime(int lastUpdate)
+{
+  std::time_t timestamp    = static_cast<std::time_t>(lastUpdate);
+  std::time_t newTimestamp = Game::get()->getTimeManager()->getDateTime().GetTimestamp();
+  std::time_t elapsedTime  = newTimestamp - timestamp;
+
+  qDebug() << "ADVANCING TIME IN LEVEL" << timestamp << newTimestamp << elapsedTime;
+  eachObject([elapsedTime](DynamicObject* object)
+  {
+    object->getTaskManager()->update(elapsedTime * 1000);
+  });
+  taskRunner->update(elapsedTime *  1000);
 }
 
 void LevelTask::persist()
@@ -131,7 +97,7 @@ void LevelTask::persist()
 
 void LevelTask::save(DataEngine* dataEngine)
 {
-  if (persistent)
+  if (persistent || isGameEditor())
   {
     Game* game = Game::get();
     QJsonObject levelData = dataEngine->getLevelData(name);
@@ -139,24 +105,12 @@ void LevelTask::save(DataEngine* dataEngine)
     QJsonArray  objectArray;
     auto*       playerParty = Game::get()->getPlayerParty();
 
-    for (DynamicObject* object : qAsConst(objects))
-    {
-      QJsonObject objectData;
-      QString     type(object->metaObject()->className());
-
-      if (type != "Character" || !playerParty->containsCharacter(reinterpret_cast<Character*>(object)))
-      {
-        objectData["type"] = type;
-        object->save(objectData);
-        objectArray << objectData;
-      }
-    }
-    levelData["objects"] = objectArray;
+    ParentType::save(levelData);
+    levelData.remove("name");
+    levelData.remove("script");
     if (!isGameEditor())
     {
-      levelData["init"] = initialized;
       levelData["lastUpdate"] = static_cast<int>(game->getTimeManager()->getDateTime().GetTimestamp());
-      StorableObject::save(levelData);
       taskRunner->save(taskData);
       levelData.insert("tasks", taskData);
     }

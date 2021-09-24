@@ -78,6 +78,7 @@ signals:
   void transitionRequired(const QString& video, int elapsingTime = 0);
   void encounterTriggered(const QString& encounterTitle);
   void encounterNotify(const QString& encounterName, const QVariantMap& parameter);
+  void loadError(const QString&);
 
 public slots:
   void onCityEntered(QString name);

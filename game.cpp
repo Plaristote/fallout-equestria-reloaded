@@ -172,12 +172,21 @@ void Game::loadLevel(const QString &name, const QString& targetZone)
   scriptObject.setProperty("level", scriptEngine.newQObject(currentLevel));
   connect(currentLevel, &LevelTask::displayConsoleMessage, this, &Game::appendToConsole);
   connect(currentLevel, &LevelTask::exitZoneEntered, this, &Game::changeZone);
-  currentLevel->load(name, dataEngine);
-  currentLevel->setPaused(false);
-  if (targetZone == nullTargetZone)
-    playerParty->loadIntoLevel(currentLevel);
-  else if (!isGameEditor)
-    currentLevel->insertPartyIntoZone(playerParty, targetZone);
+  try
+  {
+    currentLevel->load(name, dataEngine);
+    currentLevel->setPaused(false);
+    if (targetZone == nullTargetZone)
+      playerParty->loadIntoLevel(currentLevel);
+    else if (!isGameEditor)
+      currentLevel->insertPartyIntoZone(playerParty, targetZone);
+  }
+  catch (const std::runtime_error& error)
+  {
+    delete currentLevel;
+    currentLevel = nullptr;
+    emit loadError(QString(error.what()));
+  }
   emit levelChanged();
 }
 

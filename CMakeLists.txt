@@ -119,8 +119,6 @@ set(PROJECT_SOURCES
         game/characters/actions/sliding.cpp
         game/lootingcontroller.h
         game/lootingcontroller.cpp
-        game/sprite.h
-        game/sprite.cpp
         game/animationlibrary.h
         game/animationlibrary.cpp
         game/timermanager.h
@@ -182,6 +180,8 @@ set(PROJECT_SOURCES
         game/objects/bloodstain.cpp
         game/objects/components/scriptable.h
         game/objects/components/scriptable.cpp
+        game/objects/components/sprite.h
+        game/objects/components/sprite.cpp
         game/objects/components/controlzone.h
         game/objects/components/controlzone.cpp
         game/objects/components/detectable.h

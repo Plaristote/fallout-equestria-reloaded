@@ -20,7 +20,7 @@ public:
   Q_INVOKABLE DynamicObject* getOccupantAt(int x, int y) { return getOccupantAt(QPoint(x, y)); }
   DynamicObject*             getOccupantAt(QPoint);
 
-  void             load();
+  void             load(const QJsonObject&);
   void             registerDynamicObject(DynamicObject*);
   void             unregisterDynamicObject(DynamicObject*);
 

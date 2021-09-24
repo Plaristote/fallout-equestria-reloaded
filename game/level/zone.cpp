@@ -3,9 +3,16 @@
 #include "tilemap/tilemap.h"
 #include "game.h"
 
-ZoneComponent::ZoneComponent(QObject* parent) : GridComponent(parent)
+ZoneComponent::ZoneComponent(QObject* parent) : ParentType(parent)
 {
 
+}
+
+void ZoneComponent::load(const QJsonObject& data)
+{
+  ParentType::load(data);
+  for (auto* zone : tilemap->getZones())
+    registerZone(zone);
 }
 
 void ZoneComponent::registerDynamicObject(DynamicObject* object)

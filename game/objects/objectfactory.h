@@ -16,11 +16,12 @@ class ObjectFactory : public QObject
 public:
   ObjectFactory(ObjectGroup*);
 
-  Q_INVOKABLE Character*     generateCharacter(const QString &name, const QString &characterSheet);
-  Q_INVOKABLE StorageObject* generateStorageObject(const QString &name);
-  Q_INVOKABLE InventoryItem* generateInventoryItem(const QString& name, const QString& type, int quantity);
-  Q_INVOKABLE Doorway*       generateDoorway(const QString &name);
-  Q_INVOKABLE DynamicObject* generateDynamicObject(const QString &name);
+  DynamicObject*             loadFromJson(const QJsonObject&) const;
+  Q_INVOKABLE Character*     generateCharacter(const QString &name, const QString &characterSheet) const;
+  Q_INVOKABLE StorageObject* generateStorageObject(const QString &name) const;
+  Q_INVOKABLE InventoryItem* generateInventoryItem(const QString& name, const QString& type, int quantity) const;
+  Q_INVOKABLE Doorway*       generateDoorway(const QString &name) const;
+  Q_INVOKABLE DynamicObject* generateDynamicObject(const QString &name) const;
 
 private:
   ObjectGroup* root;

@@ -1,7 +1,9 @@
 #include "objectgroup.h"
 #include "objectfactory.h"
+#include <QJsonObject>
+#include <QJsonArray>
 
-ObjectGroup::ObjectGroup(QObject *parent) : StorableObject(parent)
+ObjectGroup::ObjectGroup(QObject *parent) : ParentType(parent)
 {
   connect(this, &ObjectGroup::nameChanged,   this, &ObjectGroup::pathChanged);
   connect(this, &ObjectGroup::parentChanged, this, &ObjectGroup::pathChanged);
@@ -9,6 +11,53 @@ ObjectGroup::ObjectGroup(QObject *parent) : StorableObject(parent)
   connect(this, &ObjectGroup::objectRemoved, this, &ObjectGroup::objectsChanged);
   connect(this, &ObjectGroup::groupAdded,    this, &ObjectGroup::groupsChanged);
   connect(this, &ObjectGroup::groupRemoved,  this, &ObjectGroup::groupsChanged);
+}
+
+void ObjectGroup::load(const QJsonObject& data)
+{
+  ParentType::load(data);
+  name = data["name"].toString();
+  for (QJsonValue groupData : data["groups"].toArray())
+  {
+    ObjectGroup* childGroup = new ObjectGroup(this);
+
+    childGroup->load(data);
+    appendGroup(childGroup);
+  }
+  for (QJsonValue objectData : data["objects"].toArray())
+  {
+    DynamicObject* childObject = factory()->loadFromJson(objectData.toObject());
+
+    if (childObject)
+      appendObject(childObject);
+    else
+      qDebug() << "/!\\ ObjectGroup: failed to load object:" << getPath() << objectData["name"].toString();
+  }
+  emit nameChanged();
+}
+
+void ObjectGroup::save(QJsonObject& data) const
+{
+  QJsonArray jsonGroups, jsonObjects;
+
+  ParentType::save(data);
+  for (ObjectGroup* group : groups)
+  {
+    QJsonObject jsonGroup;
+
+    group->save(jsonGroup);
+    jsonGroups << jsonGroup;
+  }
+  for (DynamicObject* object : objects)
+  {
+    QJsonObject jsonObject{{"type",object->metaObject()->className()}};
+
+    object->save(jsonObject);
+    jsonObjects << jsonObject;
+  }
+  data["name"]    = name;
+  data["groups"]  = jsonGroups;
+  data["objects"] = jsonObjects;
 }
 
 ObjectFactory* ObjectGroup::factory()
@@ -71,6 +120,14 @@ void ObjectGroup::setOffset(QPoint newOffset)
     object->getPosition();
   }
   emit offsetChanged();
+}
+
+void ObjectGroup::eachObject(std::function<void (DynamicObject *)> callback) const
+{
+  for (ObjectGroup* group : groups)
+    group->eachObject(callback);
+  for (DynamicObject* object : objects)
+    callback(object);
 }
 
 QVector<DynamicObject*> ObjectGroup::findDynamicObjects(std::function<bool (DynamicObject &)> compare) const

@@ -2,7 +2,6 @@
 # define LEVELBASE_H
 
 # include <QObject>
-# include "game/sprite.h"
 # include "game/dynamicobject.h"
 # include "game/character.h"
 # include "game/objects/objectgroup.h"
@@ -27,6 +26,8 @@ public:
   TileMap*                   getTileMap() const { return tilemap; }
 
   void update(qint64) {}
+  void load(const QJsonObject&);
+  void registerAllDynamicObjects();
   void registerDynamicObject(DynamicObject*);
   void unregisterDynamicObject(DynamicObject*);
 
@@ -45,8 +46,10 @@ private:
   QQmlListProperty<DynamicObject> getQmlObjects() { return QML_QLIST_CONSTRUCTOR(DynamicObject, objects); }
 
 protected:
-  TileMap*              tilemap = nullptr;
-  QPoint                canvasOffset;
+  QString getScriptPath() const { return SCRIPTS_PATH + "levels"; }
+
+  TileMap* tilemap = nullptr;
+  QPoint   canvasOffset;
 };
 
 #endif // LEVELBASE_H

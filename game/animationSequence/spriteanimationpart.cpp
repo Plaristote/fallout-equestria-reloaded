@@ -3,7 +3,7 @@
 #include <QDebug>
 #include "game.h"
 #include "game/leveltask.h"
-#include "game/sprite.h"
+#include "game/objects/components/sprite.h"
 
 SpriteAnimationPart::~SpriteAnimationPart()
 {
