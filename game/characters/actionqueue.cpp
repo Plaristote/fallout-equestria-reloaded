@@ -188,6 +188,8 @@ void ActionQueue::pushReachNear(int x, int y, int range)
       pushMovement(candidate);
       break ;
     }
+    else
+      choices.removeAt(static_cast<int>(it));
   }
 }
 
