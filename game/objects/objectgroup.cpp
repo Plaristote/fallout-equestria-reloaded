@@ -1,5 +1,6 @@
 #include "objectgroup.h"
 #include "objectfactory.h"
+#include "game.h"
 #include <QJsonObject>
 #include <QJsonArray>
 
@@ -110,17 +111,40 @@ QPoint ObjectGroup::getPosition() const
   return parent ? parent->getPosition() + offset : offset;
 }
 
+static void adjustOffsetWithLevel(LevelTask* level, DynamicObject* object, QPoint movement)
+{
+  auto newPosition = object->getPosition() + movement;
+
+  if (object->isCharacter())
+    level->setCharacterPosition(reinterpret_cast<Character*>(object), newPosition.x(), newPosition.y());
+  else
+    level->setObjectPosition(object, newPosition.x(), newPosition.y());
+}
+
+static void adjustOffsetWithoutLevel(DynamicObject* object, QPoint movement)
+{
+  object->setPosition(object->getPosition() + movement);
+}
+
 void ObjectGroup::setOffset(QPoint newOffset)
 {
-  QPoint diff = newOffset - offset;
+  using namespace std;
 
-  for (ObjectGroup* group : groups)
-    group->setOffset(group->getOffset() + diff);
-  for (DynamicObject* object : objects)
+  if (newOffset != offset)
   {
-    object->getPosition();
+    QPoint     diff = newOffset - offset;
+    LevelTask* level = Game::get()->getLevel();
+    auto       objectAdjustStrategy = level
+      ? function<void (DynamicObject*)>(bind(&adjustOffsetWithLevel, level, placeholders::_1, diff))
+      : function<void (DynamicObject*)>(bind(&adjustOffsetWithoutLevel, placeholders::_1, diff));
+
+    offset = newOffset;
+    for (ObjectGroup* group : groups)
+      group->setOffset(group->getOffset() + diff);
+    for (DynamicObject* object : objects)
+      objectAdjustStrategy(object);
+    emit offsetChanged();
   }
-  emit offsetChanged();
 }
 
 void ObjectGroup::eachObject(std::function<void (DynamicObject *)> callback) const

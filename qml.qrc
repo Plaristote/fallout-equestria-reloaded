@@ -39,8 +39,8 @@
         <file>game/ScreenEdges.qml</file>
         <file>game/LevelCanvas.qml</file>
         <file>game/LevelRender.mjs</file>
-	<file>game/level/CanvasRenderer.mjs</file>
-	<file>game/level/Cursor.mjs</file>
+        <file>game/level/CanvasRenderer.mjs</file>
+        <file>game/level/Cursor.mjs</file>
         <file>game/LevelView.qml</file>
         <file>cmap/PersonalInfo.qml</file>
         <file>cmap/SpecialCounter.qml</file>
