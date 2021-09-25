@@ -26,8 +26,13 @@ DynamicObjectEditor {
     TerminalLabel { text: "Dialog" },
     TerminalButton {
       Layout.fillWidth: true
-      text: characterEditor.model.scriptName.length > 0 ? characterEditor.model.getDialogName() : ""
-      onClicked: console.log("TODO: jump to dialog editor");
+      text: {
+        if (characterEditor.model.scriptName.length > 0 && characterEditor.model.getDialogName() != undefined)
+          return characterEditor.model.getDialogName();
+        return "N/A";
+      }
+      enabled: text !== "N/A"
+      onClicked: console.log("TODO: jump to dialog editor", characterEditor.model.getDialogName(), characterEditor.model.scriptName.length);
     },
 
     TerminalLabel { text: "Faction" },

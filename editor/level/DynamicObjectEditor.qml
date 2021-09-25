@@ -58,7 +58,6 @@ ColumnLayout {
     gridYInput.text          = position.y;
     renderXInput.text        = renderPosition.x;
     renderYInput.text        = renderPosition.y;
-    scriptInput.currentIndex = scriptInput.model.indexOf(model.scriptName);
     nameInput.text           = model.objectName;
   }
 
@@ -100,14 +99,12 @@ ColumnLayout {
       }
 
       TerminalLabel { text: "Script"; visible: !readOnlyScript }
-      TerminalComboBox {
-        Layout.fillWidth: true
+      TerminalButton {
         id: scriptInput
-        visible: !readOnlyScript
-        model: scriptController.getScripts(scriptCategory)
-        onCurrentTextChanged: {
-          objectEditor.model.setScript(currentText);
-        }
+        text: objectEditor.model.hasScript ? objectEditor.model.scriptName : "N/A"
+        enabled: !readOnlyScript
+        Layout.fillWidth: true
+        onClicked: scriptPicker.openWithCategory(scriptCategory)
       }
 
       TerminalLabel { text: "Sprite"; visible: !readOnlySprite }
@@ -146,5 +143,14 @@ ColumnLayout {
     id: additionalFields
     width: parent.width
     columns: 2
+  }
+
+  // Misc
+  ScriptPicker {
+    id: scriptPicker
+    parent: Overlay.overlay
+    anchors.centerIn: parent
+    onAccepted: objectEditor.model.setScript(pickedOption)
+    onClosed: scriptInput.forceActiveFocus()
   }
 }
