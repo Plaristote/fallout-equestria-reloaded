@@ -21,7 +21,9 @@ Item {
     target: gameController
 
     function onLevelChanged() {
-      levelEditorUiLoader.sourceComponent = gameController.level ? levelEditorUi : null;
+      levelEditorUiLoader.sourceComponent = null;
+      if (gameController.level)
+        levelEditorUiLoader.sourceComponent = levelEditorUi;
     }
 
     function onLoadError(error) {
