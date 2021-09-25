@@ -12,7 +12,7 @@ ComboBox {
     font.family: application.consoleFontName
   }
   background: Rectangle {
-    border.color: "green"
+    border.color: root.activeFocus ? "white" : "green"
     border.width: 1
     color: "transparent"
   }

@@ -17,7 +17,7 @@ Button {
     color: textColor
   }
   background: Rectangle {
-    border.color: "green"
+    border.color: button.enabled ? (button.activeFocus ? "white" : "green") : "gray"
     color: backgroundColor
     radius: 5
   }

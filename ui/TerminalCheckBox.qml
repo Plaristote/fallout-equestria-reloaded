@@ -14,7 +14,7 @@ CheckBox {
     height: root.size
     color: "transparent"
     border.width: 1
-    border.color: "green"
+    border.color: root.activeFocus ? "white" : "green"
 
     Text {
       anchors.centerIn: parent
