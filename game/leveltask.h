@@ -48,8 +48,8 @@ public:
   Q_INVOKABLE bool insertPartyIntoZone(CharacterParty*, const QString& zoneName = "");
   Q_INVOKABLE void tileClicked(int x, int y);
 
-  void registerDynamicObject(DynamicObject*);
-  void unregisterDynamicObject(DynamicObject*);
+  void registerDynamicObject(DynamicObject*) override;
+  void unregisterDynamicObject(DynamicObject*) override;
 
   Q_INVOKABLE void persist();
 

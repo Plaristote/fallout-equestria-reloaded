@@ -4,6 +4,7 @@ import "../assets/ui" as UiStyle
 TerminalButton {
   id: root
   property string iconName
+  property bool hideText: false
 
   padding: 0
   contentItem: Row {
@@ -25,7 +26,7 @@ TerminalButton {
       text: root.text
       color: "white"
       font.family: root.font.family
-      visible: root.text.length > 0
+      visible: root.text.length > 0 && !hideText
     }
 
     Item { width: 5; height: 5 }

@@ -10,116 +10,53 @@ Pane {
   Layout.fillHeight: true
   Layout.preferredWidth: 200
 
-  property QtObject gameController
+  property QtObject levelEditor
+  property QtObject gameController: levelEditor.gameController
+  property alias controlZone: controlZoneEditor
   property QtObject currentObject
   property QtObject currentGroup
-  property var crumbs: currentGroup.path.split('.')
+  property string currentPath: currentObject ? currentObject.path : currentGroup.path
 
   signal newObjectClicked()
   signal newGroupClicked()
+  signal removeObjectClicked(QtObject object)
+  signal removeGroupClicked(QtObject object)
   signal showClicked(QtObject object)
+  signal openInventory(QtObject object)
 
   function goToPath(path) {
-    const group = gameController.level.findGroup(path);
+    if (currentPath === path)
+      return ;
+    currentObject = null;
+    if (path.length > 0) {
+      const group = gameController.level.findGroup(path);
 
-    if (group)
-      currentGroup = group;
+      if (group)
+        currentGroup = group;
+      else
+        console.log("/!\\ Group", path, "not found");
+    }
     else
-      console.log("/!\\ Group", path, "not found");
-  }
-
-  Component.onCompleted: {
-    currentGroup = gameController.level;
-  }
-
-  Action {
-    id: addObjectAction
-    text: "Add object"
-    shortcut: Shortcut {
-      sequence: "Ctrl+A"
-      onActivated: addObjectAction.trigger()
-    }
-    onTriggered: newObjectClicked()
-  }
-
-  Action {
-    id: addGroupAction
-    text: "Add group"
-    shortcut: Shortcut {
-      sequence: "Ctrl+N"
-      onActivated: addGroupAction.trigger()
-    }
-    onTriggered: newGroupClicked()
-  }
-
-  Action {
-    id: cutAction
-    text: "Cut"
-    shortcut: Shortcut { sequence: "Ctrl+X"; onActivated: cutAction.trigger() }
-    onTriggered: {
-      if (currentObject) {
-        const object = currentObject;
-
-        currentObject = null;
-        gameController.level.copy(object);
-        gameController.level.removeObject(object);
-      }
-      else if (currentGroup.parent) {
-        const group = currentGroup;
-
-        currentGroup = group.parent;
-        gameController.level.copy(group);
-        currentGroup.parent.removeObject(group);
-      }
-    }
-  }
-
-  Action {
-    id: copyAction
-    text: "Copy"
-    shortcut: Shortcut { sequence: "Ctrl+C"; onActivated: copyAction.trigger() }
-    onTriggered: gameController.level.copy(currentObject || currentGroup)
-  }
-
-  Action {
-    id: pasteAction
-    text: "Paste"
-    shortcut: Shortcut { sequence: "Ctrl+V"; onActivated: pasteAction.trigger() }
-    onTriggered: gameController.level.pasteIn(currentGroup)
+      currentGroup = gameController.level;
   }
 
   ColumnLayout {
     anchors.fill: parent
-    Flickable {
-      id: breadcrumbs
-      clip: true
-      contentWidth: breadcrumbsRow.width
-      Layout.preferredHeight: breadcrumbsRow.height
-      Layout.fillWidth: true
-      Row {
-        id: breadcrumbsRow
-        TerminalButton {
-          text: 'root'
-          onClicked: currentGroup = gameController.level
-        }
 
-        Repeater {
-          model: crumbs
-          delegate: TerminalButton {
-            text: crumbs[index]
-            onClicked: goToPath(crumbs.slice(0, index - 1).join('.'))
-          }
-        }
-      }
-    }
-
-    RowLayout {
-      TerminalButton { action: addObjectAction }
-      TerminalButton { action: addGroupAction  }
+    LevelToolBar {
+      gameController:     root.gameController
+      currentGroup:       root.currentGroup
+      currentObject:      root.currentObject
+      onShowClicked:      root.showClicked(object)
+      onNewObjectClicked: root.newObjectClicked()
+      onNewGroupClicked:  root.newGroupClicked()
+      onPathChanged:      goToPath(newPath)
+      onRemoveClicked:    currentObject ? root.removeObjectClicked(currentObject) : root.removeGroupClicked(currentGroup)
     }
 
     Flickable {
       clip: true
+      visible: currentObject === null
       Layout.fillWidth: true
       Layout.fillHeight: true
       contentHeight: treeEditorGroup.height
@@ -131,6 +68,38 @@ Pane {
         onShowClicked:   root.showClicked(object)
         onGroupClicked:  root.currentGroup = object
         onObjectClicked: root.currentObject = object
+      }
+    }
+
+    Flickable {
+      clip: true
+      visible: currentObject !== null
+      Layout.fillWidth: true
+      Layout.fillHeight: true
+      contentHeight: objectEditorWrapper.height
+      ScrollBar.vertical: UiStyle.TerminalScrollbar { orientation: Qt.Vertical }
+      Item {
+        id: objectEditorWrapper
+        width: parent.width - 20
+        height: objectEditor.height + controlZoneEditor.height + 10
+
+        ObjectEditorLoader {
+          id: objectEditor
+          levelEditor: root.levelEditor
+          onOpenInventory: root.openInventory(currentObject)
+          width: parent.width
+        }
+
+        ControlZoneEditor {
+          id: controlZoneEditor
+          anchors.topMargin: 10
+          anchors.top: objectEditor.bottom
+          width: parent.width
+          selectedObject: root.currentObject
+          displayRoofs: displayRoofCheckbox
+          displayWalls: displayWallsCheckbox
+          visible: root.currentObject !== null
+        }
       }
     }
   }

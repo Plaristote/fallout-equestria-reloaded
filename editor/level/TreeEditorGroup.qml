@@ -9,7 +9,7 @@ ColumnLayout {
   property string filter: ""
   property QtObject objectGroup
 
-  spacing: 0
+  spacing: 5
 
   signal showClicked(QtObject object)
   signal objectClicked(QtObject object)

@@ -16,7 +16,7 @@ public:
   Q_INVOKABLE DynamicObject* nextTarget();
   Q_INVOKABLE DynamicObject* previousTarget();
 
-  void unregisterDynamicObject(DynamicObject* object);
+  virtual void unregisterDynamicObject(DynamicObject* object);
   void reset();
   void findItemTargets(InventoryItem* item, const QList<DynamicObject*>& objects, const QList<Character*>& visibleCharacters);
   void findNearbyTargets(const QList<DynamicObject*>& objects);

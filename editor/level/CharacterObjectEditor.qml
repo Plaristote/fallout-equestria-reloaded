@@ -24,11 +24,10 @@ DynamicObjectEditor {
     },
 
     TerminalLabel { text: "Dialog" },
-    TerminalComboBox {
+    TerminalButton {
       Layout.fillWidth: true
-      model: scriptController.getScripts("dialogs")
-      enabled: false
-      currentIndex: scriptController.getScript("dialogs").indexOf(characterEditor.model.getDialog())
+      text: characterEditor.model.scriptName.length > 0 ? characterEditor.model.getDialogName() : ""
+      onClicked: console.log("TODO: jump to dialog editor");
     },
 
     TerminalLabel { text: "Faction" },

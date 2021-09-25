@@ -134,6 +134,8 @@
         <file>editor/NpcEditor.qml</file>
         <file>editor/EditorSelectPanel.qml</file>
         <file>editor/LevelEditor.qml</file>
+        <file>editor/level/LevelToolBar.qml</file>
+        <file>editor/level/Breadcrumbs.qml</file>
         <file>editor/level/TreeEditorPanel.qml</file>
         <file>editor/level/TreeEditorGroup.qml</file>
         <file>editor/level/AddObjectDialog.qml</file>

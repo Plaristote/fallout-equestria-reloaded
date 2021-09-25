@@ -21,8 +21,8 @@ public:
   DynamicObject*             getOccupantAt(QPoint);
 
   void             load(const QJsonObject&);
-  void             registerDynamicObject(DynamicObject*);
-  void             unregisterDynamicObject(DynamicObject*);
+  virtual void     registerDynamicObject(DynamicObject*);
+  virtual void     unregisterDynamicObject(DynamicObject*);
 
   void setCharacterPosition(Character*, int x, int y);
   Q_INVOKABLE void setObjectPosition(DynamicObject*, int x, int y);

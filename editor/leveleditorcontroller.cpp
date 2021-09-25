@@ -42,6 +42,22 @@ QQmlListProperty<Character> LevelEditorController::getQmlVisibleCharacters()
   return QML_QLIST_CONSTRUCTOR(Character, visibleCharacters);
 }
 
+void LevelEditorController::swapMouseMode()
+{
+  switch (mouseMode)
+  {
+    case WaitCursor:
+    case InteractionCursor:
+    case TargetCursor:
+      mouseMode = MovementCursor;
+      break ;
+    default:
+      mouseMode = InteractionCursor;
+      break ;
+  }
+  emit mouseModeChanged();
+}
+
 void LevelEditorController::update()
 {
   qint64 delta = clock.restart();
@@ -73,6 +89,7 @@ void LevelEditorController::copy(StorableObject* object)
     reinterpret_cast<DynamicObject*>(object)->save(clipper);
   else
     reinterpret_cast<ObjectGroup*>(object)->save(clipper);
+  emit clipperChanged();
 }
 
 StorableObject* LevelEditorController::pasteIn(ObjectGroup* target)

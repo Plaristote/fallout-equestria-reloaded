@@ -3,16 +3,11 @@ import {Controller} from "../../game/LevelRender.mjs";
 export class EditorController extends Controller {
   get optionViewAll() { return true; }
 
-  isObjectVisible() {
-    return true;
-  }
-
   getTextureForZone(zone) {
     const texture = super.getTextureForZone(zone);
 
-    if (texture === null && this.canvas.editorObject && this.canvas.editorObject.controlZone === zone) {
+    if (texture === null && this.canvas.editorObject && this.canvas.editorObject.controlZone === zone)
       return "../assets/tilesets/zones.png";
-    }
     return null;
   }
 

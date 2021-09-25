@@ -21,7 +21,7 @@ public:
 
   Q_INVOKABLE void addTextBubble(DynamicObject* target, const QString& content, qint64 duration, const QString& color = "white");
 
-  void unregisterDynamicObject(DynamicObject* object);
+  virtual void unregisterDynamicObject(DynamicObject* object);
 
 signals:
   void textBubblesChanged();

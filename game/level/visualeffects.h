@@ -14,8 +14,8 @@ public:
   explicit VisualEffectsComponent(QObject* parent = nullptr);
   virtual ~VisualEffectsComponent();
 
-  void registerVisualEffect(Sprite*);
-  void unregisterVisualEffect(Sprite*);
+  virtual void registerVisualEffect(Sprite*);
+  virtual void unregisterVisualEffect(Sprite*);
   void updateVisualEffects(qint64);
 
   Q_INVOKABLE void addAnimationSequence(QJSValue descriptor);

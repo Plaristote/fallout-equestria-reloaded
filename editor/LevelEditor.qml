@@ -13,13 +13,20 @@ Item {
   property alias currentLevelName: levelSelect.currentName
 
   onCurrentLevelNameChanged: {
+    console.log("LevelEditor::onCurrentLevelNameChanged")
     gameController.switchToLevel(currentLevelName, "");
   }
 
   Connections {
     target: gameController
+
     function onLevelChanged() {
       levelEditorUiLoader.sourceComponent = gameController.level ? levelEditorUi : null;
+    }
+
+    function onLoadError(error) {
+      errorDialog.text = error;
+      errorDialog.open()
     }
   }
 
@@ -54,6 +61,22 @@ Item {
     id: levelEditorUi
     LevelEditorUi.Editor {
       gameController: root.gameController
+    }
+  }
+
+  UiStyle.CustomDialog {
+    property alias text: errorMessage.text
+    id: errorDialog
+    modal: true
+    parent: Overlay.overlay
+    standardButtons: Dialog.Ok
+    anchors.centerIn: parent
+
+    Label {
+      id: errorMessage
+      color: "white"
+      font.family: application.titleFontName
+      font.pixelSize: 16
     }
   }
 }

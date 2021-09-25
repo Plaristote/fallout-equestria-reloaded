@@ -24,8 +24,8 @@ public:
 
   QQmlListProperty<Character> getQmlCombattants() { return QML_QLIST_CONSTRUCTOR(Character, combattants); }
 
-  void registerDynamicObject(DynamicObject*);
-  void unregisterDynamicObject(DynamicObject*);
+  virtual void registerDynamicObject(DynamicObject*);
+  virtual void unregisterDynamicObject(DynamicObject*);
 
   void startCombat(Character* character);
   void onNextCombatTurn();

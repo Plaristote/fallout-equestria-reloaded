@@ -47,13 +47,13 @@ public:
 
   explicit InteractionComponent(QObject *parent = nullptr);
 
-  void registerDynamicObject(DynamicObject*);
-  void unregisterDynamicObject(DynamicObject*);
+  virtual void registerDynamicObject(DynamicObject*);
+  virtual void unregisterDynamicObject(DynamicObject*);
 
   bool             openInteractionMenu(DynamicObject* target);
   Q_INVOKABLE void openCountdownDialog(InventoryItem* item);
   Q_INVOKABLE void interactOrderReceived(DynamicObject* target, const QString& interactionType);
-  Q_INVOKABLE void swapMouseMode();
+  Q_INVOKABLE virtual void swapMouseMode();
   Q_INVOKABLE void enableWaitingMode(bool);
   Q_INVOKABLE void setActiveItem(const QString&);
   inline InventoryItem* getActiveItem() const { return activeItem; }

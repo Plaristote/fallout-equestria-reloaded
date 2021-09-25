@@ -6,7 +6,8 @@ import "../../ui"
 import "../../game" as GameComponents
 import Game 1.0
 
-Pane {
+ColumnLayout {
+  spacing: 5
   property QtObject gameController
   property QtObject model
   property string scriptCategory: "behaviour"
@@ -16,7 +17,6 @@ Pane {
   property bool readOnlyAnimation: false
   property bool readOnlyScript: false
   id: objectEditor
-  background: UiStyle.TerminalPane {}
 
   function setTilePosition(tileX, tileY) {
     if (!model.floating) {
@@ -40,10 +40,7 @@ Pane {
     model.setRenderPosition(Qt.point(renderX, renderY));
   }
 
-  signal showClicked()
-  signal removeClicked()
-  signal previousClicked()
-  signal saveTemplateClicked()
+  //signal saveTemplateClicked()
 
   onModelChanged: {
     const posMode             = model.floating ? 1 : 0;
@@ -62,57 +59,19 @@ Pane {
     renderXInput.text        = renderPosition.x;
     renderYInput.text        = renderPosition.y;
     scriptInput.currentIndex = scriptInput.model.indexOf(model.scriptName);
+    nameInput.text           = model.objectName;
   }
 
-  Column {
-    spacing: 5
-    width: parent.width
+  GridLayout {
+    columns: 2
+    Layout.fillWidth: true
 
-    RowLayout {
-      width: parent.width
-
-      TerminalToolButton {
-        iconName: "back"
-        Layout.alignment: Qt.AlignLeft
-        Layout.preferredHeight: 35
-        Layout.preferredWidth: 40
-        onClicked: objectEditor.previousClicked()
-      }
-
-      TerminalLabel {
-        text: objectEditor.model.objectName
-        font.pointSize: 13
-        Layout.alignment: Qt.AlignLeft
+      TerminalLabel { text: "Name" }
+      TerminalField {
+        id: nameInput
+        onTextChanged: if (objectEditor.model.objectName !== text) { objectEditor.model.objectName = text; }
         Layout.fillWidth: true
       }
-
-      TerminalToolButton {
-        iconName: "see"
-        Layout.alignment: Qt.AlignRight
-        Layout.preferredHeight: 35
-        Layout.preferredWidth: 40
-        onClicked: objectEditor.showClicked()
-      }
-
-      TerminalToolButton {
-        iconName: "save"
-        Layout.alignment: Qt.AlignRight
-        Layout.preferredHeight: 35
-        Layout.preferredWidth: 40
-        onClicked: objectEditor.saveTemplateClicked()
-      }
-      TerminalToolButton {
-        iconName: "trash"
-        Layout.alignment: Qt.AlignRight
-        Layout.preferredHeight: 35
-        Layout.preferredWidth: 40
-        onClicked: removeClicked()
-      }
-    }
-
-    GridLayout {
-      columns: 2
-      width: parent.width
 
       TerminalLabel { text: "Positionning"; visible: !objectEditor.readOnlyPositionType }
       TerminalComboBox {
@@ -181,12 +140,11 @@ Pane {
       }
     }
 
-    TerminalLabel { text: "> Behaviour"; font.pointSize: 13 }
+  TerminalLabel { text: "> Behaviour"; font.pointSize: 13 }
 
-    GridLayout {
-      id: additionalFields
-      width: parent.width
-      columns: 2
-    }
-  } // END Column
+  GridLayout {
+    id: additionalFields
+    width: parent.width
+    columns: 2
+  }
 }

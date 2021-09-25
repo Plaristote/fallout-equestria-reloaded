@@ -12,8 +12,8 @@ public:
 
   void load(const QJsonObject&);
 
-  void registerDynamicObject(DynamicObject*);
-  void unregisterDynamicObject(DynamicObject*);
+  virtual void registerDynamicObject(DynamicObject*);
+  virtual void unregisterDynamicObject(DynamicObject*);
 
   Q_INVOKABLE QJSValue getZoneOccupants(TileZone* zone);
 

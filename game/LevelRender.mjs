@@ -22,12 +22,6 @@ export class Controller extends CursorController {
     this.frameCount = 0;
   }
 
-  isObjectVisible(object, detectedCharacters) {
-    if (object.getObjectType() === "Character")
-      return detectedCharacters.indexOf(object.objectName) >= 0;
-    return !object.hidden;
-  }
-
   initializeRenderObjects() {
     this.renderObjects = initializeRenderQueue(this.mapSize);
     this.renderObjects = fillRenderQueue(this.renderObjects, this.level, this.optionViewAll);

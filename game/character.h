@@ -25,7 +25,7 @@ public:
   void save(QJsonObject&) const override;
 
   ActionQueue* getActionQueue() const { return actionQueue; }
-  QString      getDialogName();
+  Q_INVOKABLE QString getDialogName();
   unsigned int getXpValue() const;
   Q_INVOKABLE bool isMoving() const { return Sprite::isMoving() || currentPath.size() > 0; }
   bool         isSpriteMoving() const { return Sprite::isMoving(); }

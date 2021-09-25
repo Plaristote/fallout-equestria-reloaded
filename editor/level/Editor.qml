@@ -42,10 +42,13 @@ Item {
         showHoverCoordinates: true
         editorObject: selectedObject
 
-        editingZone: controlZoneEditor.editingZone
-        onToggleZoneTile: controlZoneEditor.toggleTile(tileX, tileY)
+        editingZone:      childrenView.controlZone.editingZone
+        onToggleZoneTile: childrenView.controlZone.toggleTile(tileX, tileY)
         onPickedTile: root.pickedTile(tileX, tileY)
-        onPickedObject: objectListComponent.currentName = dynamicObject.objectName;
+        onPickedObject: {
+          root.selectedGroup  = dynamicObject.parent;
+          root.selectedObject = dynamicObject;
+        }
       }
 
       GameComponents.ScreenEdges {
@@ -59,7 +62,7 @@ Item {
 
     Pane {
       background: UiStyle.Pane {}
-      Layout.preferredWidth: 400
+      Layout.preferredWidth: 500
       Layout.fillHeight: true
       Layout.bottomMargin: saveButton.height
 
@@ -92,16 +95,34 @@ Item {
 
         TreeEditorPanel {
           id: childrenView
-          gameController: root.gameController
+          levelEditor: root
           currentGroup: root.gameController.level
           Layout.fillWidth: true
           Layout.fillHeight: true
-          visible: currentObject == null
+          //visible: currentObject == null
           onNewObjectClicked: dialogAddObject.openWithGroup(currentGroup)
           onNewGroupClicked:  dialogAddGroup.openWithGroup(currentGroup)
           onShowClicked:      canvas.moveToObject(object)
+          onRemoveObjectClicked: {
+            currentGroup = object.parent;
+            gameController.level.deleteObject(object);
+          }
+          onRemoveGroupClicked:  {
+            currentGroup = object.parent;
+            gameController.level.deleteGroup(object);
+          }
+          onOpenInventory: {
+            if (object.getObjectType() === "Character") {
+              characterInventory.character = object;
+              characterInventory.open();
+            }
+            else {
+              lootEditor.inventory = object.inventory;
+              lootEditor.open();
+            }
+          }
         }
-
+/*
         ObjectEditorLoader {
           id: objectEditorComponent
           Layout.fillWidth: true
@@ -131,6 +152,7 @@ Item {
           Layout.fillWidth: true
           visible: objectEditorComponent.visible
         }
+*/
       }
     }
   }

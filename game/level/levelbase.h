@@ -28,8 +28,8 @@ public:
   void update(qint64) {}
   void load(const QJsonObject&);
   void registerAllDynamicObjects();
-  void registerDynamicObject(DynamicObject*);
-  void unregisterDynamicObject(DynamicObject*);
+  virtual void registerDynamicObject(DynamicObject*);
+  virtual void unregisterDynamicObject(DynamicObject*);
 
 signals:
   void playerChanged();

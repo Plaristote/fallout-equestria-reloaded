@@ -3,6 +3,7 @@ import QtQuick.Controls 2.15
 
 Button {
   property color backgroundColor: down ? "green" : "transparent"
+  property color textColor: "white"
 
   id: button
   implicitHeight: 25
@@ -13,7 +14,7 @@ Button {
     verticalAlignment: Text.AlignVCenter
     text: button.text
     font: button.font
-    color: "white"
+    color: textColor
   }
   background: Rectangle {
     border.color: "green"

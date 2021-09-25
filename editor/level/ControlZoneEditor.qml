@@ -2,17 +2,18 @@ import QtQuick 2.0
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
-import "qrc:/assets/ui" as UiStyle
 import "../../ui"
 
-Pane {
+Rectangle {
   property bool editingZone: false
   property QtObject selectedObject: null
   property var displayRoofs: null
   property var displayWalls: null
   property bool hasControlZone: false
 
-  background: UiStyle.TerminalPane {}
+  border.color: "green"
+  border.width: 1
+  color: "transparent"
   onSelectedObjectChanged: refresh()
 
   function toggleTile(tileX, tileY) {
@@ -62,6 +63,8 @@ Pane {
     width: parent.width
     spacing: 5
 
+    TerminalLabel { text: "> Control zone"; font.pointSize: 13 }
+
     TerminalButton {
       text: "Add a control zone"
       visible: !hasControlZone
@@ -82,7 +85,7 @@ Pane {
       id: pathBlockedInput
       text: "Path blocked"
       visible: hasControlZone
-      checked: selectedObject.zoneBlocked
+      checked: selectedObject && selectedObject.zoneBlocked
       onCheckedChanged: { selectedObject.zoneBlocked = checked; }
     }
 

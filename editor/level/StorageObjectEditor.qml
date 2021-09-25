@@ -12,13 +12,14 @@ DynamicObjectEditor {
   signal openStorageClicked()
 
   fields: [
-    TerminalButton {
+    TerminalToolButton {
       Layout.columnSpan: 2
       Layout.fillWidth: true
+      Layout.preferredHeight: 40
       text: "Inventory"
+      iconName: "item"
       onClicked: openStorageClicked();
       padding: 20
-      height: 40
     }
   ]
 }

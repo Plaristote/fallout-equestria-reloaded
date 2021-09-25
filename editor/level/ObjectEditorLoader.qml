@@ -12,6 +12,7 @@ Loader {
 
   Connections {
     target: levelEditor
+
     function onSelectedObjectChanged() {
       var component = null;
 
@@ -34,11 +35,12 @@ Loader {
           break ;
         }
       }
-      objectEditorComponent.sourceComponent = component;
+      root.sourceComponent = component;
     }
 
     function onPickedTile(tileX, tileY) {
-      root.item.setTilePosition(tileX, tileY);
+      if (root.item)
+        root.item.setTilePosition(tileX, tileY);
     }
   }
 
@@ -50,10 +52,6 @@ Loader {
       model: selectedObject && selectedObject.getObjectType() === "Character" ? selectedObject : null
       gameController: root.gameController
       onOpenInventoryClicked: root.openInventory(selectedObject)
-      onRemoveClicked: gameController.level.deleteObject(model)
-      onPreviousClicked: root.previousClicked()
-      onSaveTemplateClicked: root.saveTemplateClicked()
-      onShowClicked: root.showClicked()
     }
   }
 
@@ -64,10 +62,6 @@ Loader {
       model: selectedObject
       gameController: root.gameController
       onOpenStorageClicked: root.openInventory(selectedObject)
-      onRemoveClicked: gameController.level.deleteObject(model)
-      onPreviousClicked: root.previousClicked()
-      onSaveTemplateClicked: root.saveTemplateClicked()
-      onShowClicked: root.showClicked()
     }
   }
 
@@ -77,10 +71,6 @@ Loader {
       width: parent.width
       model: selectedObject
       gameController: root.gameController
-      onRemoveClicked: gameController.level.deleteObject(model)
-      onPreviousClicked: root.previousClicked()
-      onSaveTemplateClicked: root.saveTemplateClicked()
-      onShowClicked: root.showClicked()
     }
   }
 
@@ -90,10 +80,6 @@ Loader {
       width: parent.width
       model: selectedObject
       gameController: root.gameController
-      onRemoveClicked: gameController.level.deleteObject(model)
-      onPreviousClicked: root.previousClicked()
-      onSaveTemplateClicked: root.saveTemplateClicked()
-      onShowClicked: root.showClicked()
     }
   }
 
@@ -103,10 +89,6 @@ Loader {
       width: parent.width
       model: selectedObject
       gameController: root.gameController
-      onRemoveClicked: gameController.level.deleteObject(model)
-      onPreviousClicked: root.previousClicked()
-      onSaveTemplateClicked: root.saveTemplateClicked()
-      onShowClicked: root.showClicked()
     }
   }
 }

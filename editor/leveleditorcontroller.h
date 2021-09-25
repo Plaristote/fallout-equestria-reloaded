@@ -7,6 +7,8 @@
 class LevelEditorController : public LevelTask
 {
   Q_OBJECT
+
+  Q_PROPERTY(bool clipperFilled READ clipperFilled NOTIFY clipperChanged);
 public:
   LevelEditorController(QObject* parent = nullptr);
 
@@ -14,6 +16,12 @@ public:
   Q_INVOKABLE void cut(StorableObject* object);
   Q_INVOKABLE void copy(StorableObject* object);
   Q_INVOKABLE StorableObject* pasteIn(ObjectGroup* target);
+
+  void swapMouseMode() override;
+  bool clipperFilled() const { return clipper.keys().size() > 0; }
+
+signals:
+  void clipperChanged();
 
 private slots:
   void update() override;
