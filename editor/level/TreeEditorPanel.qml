@@ -74,6 +74,7 @@ Pane {
     ObjectGroupForm {
       visible: currentObject === null && currentGroup.parent !== null
       Layout.fillWidth: true
+      currentGroup: root.currentGroup
     }
 
     Flickable {
