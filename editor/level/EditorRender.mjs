@@ -7,7 +7,7 @@ export class EditorController extends Controller {
     const texture = super.getTextureForZone(zone);
 
     if (texture === null && this.canvas.editorObject && this.canvas.editorObject.controlZone === zone)
-      return "../assets/tilesets/zones.png";
+      return "qrc:/assets/tilesets/zones.png";
     return null;
   }
 

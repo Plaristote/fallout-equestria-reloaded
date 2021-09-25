@@ -61,7 +61,7 @@ export class Controller extends CursorController {
 
   getTextureForZone(zone) {
     if (zone.type === "exit")
-      return "../assets/tilesets/zones.png";
+      return "qrc:/assets/tilesets/zones.png";
     return null;
   }
 
@@ -72,12 +72,15 @@ export class Controller extends CursorController {
 
       if (zoneTexture !== null)
       {
-        for (var ii = 0 ; ii < this.tilemap.zones[i].getPositionCount() ; ++ii)
+        for (var ii = 0 ; ii < zone.getPositionCount() ; ++ii)
         {
-          const position = this.tilemap.zones[i].getPositionAt(ii);
+          const position = zone.getPositionAt(ii);
           const tile = this.layers.ground.getTile(position.x, position.y);
 
-          this.renderImage(zoneTexture, tile.renderPosition, this.tileSize.width, this.tileSize.height, zone.clippedRect);
+          if (tile)
+            this.renderImage(zoneTexture, tile.renderPosition, this.tileSize.width, this.tileSize.height, zone.clippedRect);
+          else
+            console.log("Invalid position", position);
         }
       }
     }
