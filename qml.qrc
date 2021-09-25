@@ -281,5 +281,6 @@
         <file>game/LevelTextBubbles.qml</file>
         <file>game/PauseController.qml</file>
         <file>ui/BackAction.qml</file>
+        <file>editor/level/ObjectGroupForm.qml</file>
     </qresource>
 </RCC>
