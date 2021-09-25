@@ -5,7 +5,7 @@ static bool freezeObjectRegistration = false;
 
 LevelBase::LevelBase(QObject *parent) : ObjectGroup(parent)
 {
-
+  onChildrenGroupAdded(this);
 }
 
 bool LevelBase::isGameEditor() const
