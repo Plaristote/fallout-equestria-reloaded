@@ -29,7 +29,7 @@ void ScriptableComponent::setScript(const QString& name)
   scriptName = name;
   if (name.length() > 0)
   {
-    script     = new ScriptController(getScriptPath() + '/' + name);
+    script = new ScriptController(getScriptPath() + '/' + name);
     script->initialize(this);
   }
   else

@@ -282,5 +282,6 @@
         <file>game/PauseController.qml</file>
         <file>ui/BackAction.qml</file>
         <file>editor/level/ObjectGroupForm.qml</file>
+        <file>editor/level/ScriptPicker.qml</file>
     </qresource>
 </RCC>

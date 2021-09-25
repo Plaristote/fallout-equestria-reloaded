@@ -79,8 +79,6 @@ export class Controller extends CursorController {
 
           if (tile)
             this.renderImage(zoneTexture, tile.renderPosition, this.tileSize.width, this.tileSize.height, zone.clippedRect);
-          else
-            console.log("Invalid position", position);
         }
       }
     }
