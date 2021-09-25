@@ -1,6 +1,7 @@
 #include "leveleditorcontroller.h"
 #include "gameobjecttemplates.h"
 #include "game/objects/doorway.h"
+#include "game/objects/objectfactory.h"
 
 LevelEditorController::LevelEditorController(QObject* parent) : LevelTask(parent)
 {
@@ -48,4 +49,35 @@ void LevelEditorController::update()
   for (DynamicObject* object : qAsConst(objects))
     object->update(delta);
   emit updated();
+}
+
+void LevelEditorController::cut(StorableObject* object)
+{
+  static DynamicObject sample;
+
+  copy(object);
+  if (object->metaObject()->inherits(sample.metaObject()))
+
+    reinterpret_cast<DynamicObject*>(object)->save(clipper);
+  else
+    reinterpret_cast<ObjectGroup*>(object)->save(clipper);
+}
+
+
+void LevelEditorController::copy(StorableObject* object)
+{
+  static DynamicObject sample;
+
+  clipper = QJsonObject{{"type", object->metaObject()->className()}};
+  if (object->metaObject()->inherits(sample.metaObject()))
+    reinterpret_cast<DynamicObject*>(object)->save(clipper);
+  else
+    reinterpret_cast<ObjectGroup*>(object)->save(clipper);
+}
+
+StorableObject* LevelEditorController::pasteIn(ObjectGroup* target)
+{
+  if (clipper["type"].toString() == target->metaObject()->className())
+    return target->factory()->loadJsonGroup(clipper);
+  return target->factory()->loadFromJson(clipper);
 }

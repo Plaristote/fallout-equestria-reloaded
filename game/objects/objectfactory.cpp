@@ -4,6 +4,7 @@
 #include "inventoryitem.h"
 #include "bloodstain.h"
 #include "doorway.h"
+#include "game.h"
 
 #define GAME_OBJECT_CONSTRUCTOR(TYPENAME) \
   {#TYPENAME, [](QObject* parent) { return new TYPENAME(parent); }}
@@ -39,9 +40,28 @@ DynamicObject* ObjectFactory::loadFromJson(const QJsonObject& data) const
   return nullptr;
 }
 
+ObjectGroup* ObjectFactory::loadJsonGroup(const QJsonObject& data) const
+{
+  ObjectGroup* newGroup = new ObjectGroup(root);
+
+  newGroup->load(data);
+  root->appendGroup(newGroup);
+  return newGroup;
+}
+
+ObjectGroup* ObjectFactory::generateGroup(const QString &name) const
+{
+  ObjectGroup* group = new ObjectGroup(root);
+
+  group->setProperty("name", name);
+  root->appendGroup(group);
+  return group;
+}
+
 Character* ObjectFactory::generateCharacter(const QString &name, const QString &characterSheet) const
 {
   Character* object = new Character(root);
+
   object->setObjectName(name);
   object->setCharacterSheet(characterSheet);
   root->appendObject(object);
@@ -85,4 +105,16 @@ DynamicObject* ObjectFactory::generateDynamicObject(const QString &name) const
   object->setObjectName(name);
   root->appendObject(object);
   return object;
+}
+
+DynamicObject* ObjectFactory::addBloodStainAt(QPoint position) const
+{
+  BloodStain* object = new BloodStain(root);
+  LevelTask* level = Game::get()->getLevel();
+  QPoint offset = root->getPosition();
+
+  root->appendObject(object);
+  if (level)
+    level->setObjectPosition(object, offset.x() + position.x(), offset.y() + position.y());
+  object->initialize();
 }

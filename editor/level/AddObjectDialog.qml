@@ -7,9 +7,15 @@ import Game 1.0
 
 UiStyle.CustomDialog {
   id: dialogAddObject
-  property QtObject gameController
+  property QtObject objectGroup
 
   signal objectAdded(QtObject newObject)
+
+  function openWithGroup(group) {
+    objectGroup = group;
+    open();
+    objectTypeInput.forceActiveFocus();
+  }
 
   function resetInputs() {
     objectNameInput.text = "";
@@ -61,18 +67,19 @@ UiStyle.CustomDialog {
   }
 
   onAccepted: {
+    const factory = objectGroup.factory();
     var newObject;
 
     if (objectTypeInput.currentText === "character")
-      newObject = gameController.level.generateCharacter(objectNameInput.text, sheetInput.currentText.replace(".json", ""));
+      newObject = factory.generateCharacter(objectNameInput.text, sheetInput.currentText.replace(".json", ""));
     else if (objectTypeInput.currentText == "storage")
-      newObject = gameController.level.generateStorageObject(objectNameInput.text);
+      newObject = factory.generateStorageObject(objectNameInput.text);
     else if (objectTypeInput.currentText == "door")
-      newObject = gameController.level.generateDoorway(objectNameInput.text);
+      newObject = factory.generateDoorway(objectNameInput.text);
     else if (objectTypeInput.currentText == "item")
-      newObject = gameController.level.generateInventoryItem(objectNameInput.text, itemTypeInput.currentText);
+      newObject = factory.generateInventoryItem(objectNameInput.text, itemTypeInput.currentText);
     else
-      newObject = gameController.level.generateDynamicObject(objectNameInput.text);
+      newObject = factory.generateDynamicObject(objectNameInput.text);
     objectAdded(newObject);
     resetInputs();
   }

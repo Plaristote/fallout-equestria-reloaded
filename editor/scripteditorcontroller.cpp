@@ -84,8 +84,11 @@ void ScriptEditorController::loadCharacterSheet(const QString &name, StatModel* 
 QStringList ScriptEditorController::getLevels()
 {
   QDir dir("assets/tilemaps");
+  auto levels = dir.entryList(QStringList() << "*.json", QDir::NoFilter, QDir::Name);
 
-  return dir.entryList(QStringList() << "*.json", QDir::NoFilter, QDir::Name);
+  for (auto& levelName : levels)
+    levelName.replace(".json", "");
+  return levels;
 }
 
 QStringList ScriptEditorController::getFactions()

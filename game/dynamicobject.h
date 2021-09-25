@@ -12,6 +12,7 @@
 
 class TileZone;
 class Character;
+class ObjectGroup;
 
 class DynamicObject : public ControlZoneComponent
 {
@@ -19,10 +20,12 @@ class DynamicObject : public ControlZoneComponent
   typedef ControlZoneComponent ParentType;
 
   Q_PROPERTY(QString objectName MEMBER objectName NOTIFY objectNameChanged)
+  Q_PROPERTY(QString path READ getPath NOTIFY pathChanged)
   Q_PROPERTY(QPoint  position    READ getPosition NOTIFY positionChanged)
   Q_PROPERTY(TaskRunner* tasks MEMBER taskManager)
   Q_PROPERTY(bool blocksPath MEMBER blocksPath NOTIFY blocksPathChanged)
   Q_PROPERTY(bool isVisible READ isVisible NOTIFY visibilityChanged)
+  Q_PROPERTY(ObjectGroup* parent READ getGroup NOTIFY parentChanged)
 
 public:
   explicit DynamicObject(QObject *parent = nullptr);
@@ -40,6 +43,8 @@ public:
   void setVisible(bool value);
 
   void setObjectName(const QString& value) { objectName = value; emit objectNameChanged(); }
+  ObjectGroup* getGroup() const;
+  QString getPath() const;
   const QString& getObjectName() const { return objectName; }
   QString getBaseName() const;
   TaskRunner* getTaskManager() { return taskManager; }
@@ -61,6 +66,8 @@ signals:
   void blocksPathChanged();
   //void positionChanged();
   void visibilityChanged();
+  void parentChanged();
+  void pathChanged();
 
 protected slots:
   void onBlocksPathChanged();

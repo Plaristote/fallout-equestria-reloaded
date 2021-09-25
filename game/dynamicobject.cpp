@@ -10,10 +10,26 @@ DynamicObject::DynamicObject(QObject *parent) : ParentType(parent)
   position = QPoint(-1,-1);
   taskManager = new TaskRunner(this);
   connect(this, &DynamicObject::blocksPathChanged, this, &DynamicObject::onBlocksPathChanged);
+  connect(this, &DynamicObject::objectNameChanged, this, &DynamicObject::pathChanged);
+  connect(this, &DynamicObject::parentChanged,     this, &DynamicObject::pathChanged);
 }
 
 DynamicObject::~DynamicObject()
 {
+}
+
+ObjectGroup* DynamicObject::getGroup() const
+{
+  if (parent()->metaObject()->className() == QString("ObjectGroup"))
+    return reinterpret_cast<ObjectGroup*>(parent());
+  return nullptr;
+}
+
+QString DynamicObject::getPath() const
+{
+  ObjectGroup* group = getGroup();
+
+  return group ? group->getName() + '.' + getObjectName() : getObjectName();
 }
 
 void DynamicObject::setScript(const QString& name)

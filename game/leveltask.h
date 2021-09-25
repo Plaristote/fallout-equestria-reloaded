@@ -51,12 +51,7 @@ public:
   void registerDynamicObject(DynamicObject*);
   void unregisterDynamicObject(DynamicObject*);
 
-  Q_INVOKABLE void           persist();
-  Q_INVOKABLE Character*     generateCharacter(const QString& name, const QString& characterSheet);
-  Q_INVOKABLE StorageObject* generateStorageObject(const QString& name);
-  Q_INVOKABLE Doorway*       generateDoorway(const QString& name);
-  Q_INVOKABLE InventoryItem* generateInventoryItem(const QString& name, const QString& type, int quantity = 1);
-  Q_INVOKABLE DynamicObject* generateDynamicObject(const QString& name);
+  Q_INVOKABLE void persist();
 
   Q_INVOKABLE void advanceTime(unsigned int minutes);
 

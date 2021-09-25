@@ -132,7 +132,10 @@
         <file>editor/NpcEditor.qml</file>
         <file>editor/EditorSelectPanel.qml</file>
         <file>editor/LevelEditor.qml</file>
+        <file>editor/level/TreeEditorPanel.qml</file>
+        <file>editor/level/TreeEditorGroup.qml</file>
         <file>editor/level/AddObjectDialog.qml</file>
+        <file>editor/level/AddGroupDialog.qml</file>
         <file>editor/level/ObjectEditorLoader.qml</file>
         <file>editor/level/CharacterObjectEditor.qml</file>
         <file>editor/level/ItemObjectEditor.qml</file>
@@ -143,12 +146,13 @@
         <file>editor/level/AddItemDialog.qml</file>
         <file>editor/level/RemoveItemDialog.qml</file>
         <file>editor/level/CharacterInventoryEditor.qml</file>
+        <file>editor/level/Editor.qml</file>
         <file>assets/fonts/fallout.ttf</file>
         <file>assets/fonts/JH_FALLOUT.TTF</file>
         <file>ui/CharacterInventory.qml</file>
         <file>ui/InventoryItemPreview.qml</file>
         <file>ui/TerminalLabel.qml</file>
-        <file>editor/ControlZoneEditor.qml</file>
+        <file>editor/level/ControlZoneEditor.qml</file>
         <file>ui/TerminalCheckBox.qml</file>
         <file>editor/level/EditorCanvas.qml</file>
         <file>editor/level/EditorRender.mjs</file>

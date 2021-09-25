@@ -50,7 +50,7 @@ void ObjectGroup::save(QJsonObject& data) const
   }
   for (DynamicObject* object : objects)
   {
-    QJsonObject jsonObject{{"type",object->metaObject()->className()}};
+    QJsonObject jsonObject{{"type", object->metaObject()->className()}};
 
     object->save(jsonObject);
     jsonObjects << jsonObject;
@@ -92,14 +92,15 @@ ObjectGroup* ObjectGroup::getParent() const
 QString ObjectGroup::getPath() const
 {
   ObjectGroup* parentIt = getParent();
-  QStringList  parts{getName()};
+  QString path;
 
-  while (parentIt)
-  {
-    parts.prepend(parentIt->getName());
-    parentIt = parentIt->getParent();
-  }
-  return parts.join('.');
+  if (parentIt)
+    path = parentIt->getPath();
+  if (path.length() > 0)
+    path += '.';
+  if (parentIt)
+    path += getName();
+  return path;
 }
 
 QPoint ObjectGroup::getPosition() const
@@ -182,14 +183,18 @@ ObjectGroup* ObjectGroup::getGroupByName(const QString &name) const
 
 void ObjectGroup::appendGroup(ObjectGroup* group)
 {
+  group->setParent(this);
   groups.push_back(group);
   emit groupAdded(group);
+  emit group->parentChanged();
 }
 
 void ObjectGroup::appendObject(DynamicObject* object)
 {
+  object->setParent(this);
   objects.push_back(object);
   emit objectAdded(object);
+  emit object->parentChanged();
 }
 
 template<typename TYPE>

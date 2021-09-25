@@ -18,6 +18,8 @@ Image {
       return "item";
     case "StorageObject":
       return "chest";
+    case "ObjectGroup":
+      return "group";
     }
     return "object";
   }

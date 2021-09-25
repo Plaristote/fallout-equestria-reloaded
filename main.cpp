@@ -18,6 +18,7 @@
 #include "game/dynamicobject.h"
 #include "game/objects/inventoryitem.h"
 #include "game/objects/doorway.h"
+#include "game/objects/objectfactory.h"
 #include "game/leveltask.h"
 #include "game/characterdialog.h"
 #include "game/lootingcontroller.h"
@@ -100,10 +101,13 @@ int main(int argc, char *argv[])
   qmlRegisterType<ActionQueue>("Game", 1,0, "ActionQueue");
   qmlRegisterType<InteractionTargetList>("Game", 1,0, "InteractionTargetList");
   qmlRegisterType<LevelGrid>("Game", 1,0, "LevelGrid");
+  qmlRegisterType<ObjectGroup>("Game", 1,0, "ObjectGroup");
 
   qRegisterMetaType<Character*>("const Character*");
   qRegisterMetaType<CharacterDiplomacy*>("const CharacterDiplomacy*");
   qRegisterMetaType<DynamicObject*>("const DynamicObject*");
+  qRegisterMetaType<ObjectFactory*>("ObjectFactory*");
+  qRegisterMetaType<ObjectGroup*>("const ObjectGroup*");
 
   registerQmlTilemap();
   // GAME EDITOR

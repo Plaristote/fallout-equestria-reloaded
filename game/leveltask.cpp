@@ -336,36 +336,7 @@ void LevelTask::finalizeRound()
 
 void LevelTask::addBloodStainAt(QPoint position)
 {
-  BloodStain* object = new BloodStain(this);
-
-  appendObject(object);
-  setObjectPosition(object, position.x(), position.y());
-  object->initialize();
-}
-
-Character* LevelTask::generateCharacter(const QString &name, const QString &characterSheet)
-{
-  return factory()->generateCharacter(name, characterSheet);
-}
-
-StorageObject* LevelTask::generateStorageObject(const QString &name)
-{
-  return factory()->generateStorageObject(name);
-}
-
-InventoryItem* LevelTask::generateInventoryItem(const QString& name, const QString& type, int quantity)
-{
-  return factory()->generateInventoryItem(name, type, quantity);
-}
-
-Doorway* LevelTask::generateDoorway(const QString &name)
-{
-  return factory()->generateDoorway(name);
-}
-
-DynamicObject* LevelTask::generateDynamicObject(const QString &name)
-{
-  return factory()->generateDynamicObject(name);
+  factory()->addBloodStainAt(position);
 }
 
 QVariantList LevelTask::previewPathTo(int x, int y)

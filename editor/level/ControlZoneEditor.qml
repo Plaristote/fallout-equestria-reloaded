@@ -3,7 +3,7 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
 import "qrc:/assets/ui" as UiStyle
-import "../ui"
+import "../../ui"
 
 Pane {
   property bool editingZone: false
