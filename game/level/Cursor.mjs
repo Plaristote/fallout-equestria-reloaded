@@ -116,7 +116,6 @@ export class CursorController extends CanvasRenderer {
   onCaseClick(mouseX, mouseY) {
     const coords = this.getHoveredCase(mouseX, mouseY);
 
-    console.log("onCazeClick", coords);
     if (coords !== null)
       this.level.tileClicked(coords[0], coords[1]);
   }

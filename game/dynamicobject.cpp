@@ -20,7 +20,7 @@ DynamicObject::~DynamicObject()
 
 ObjectGroup* DynamicObject::getGroup() const
 {
-  if (parent()->metaObject()->className() == QString("ObjectGroup"))
+  if (parent() && parent()->metaObject()->className() == QString("ObjectGroup"))
     return reinterpret_cast<ObjectGroup*>(parent());
   return nullptr;
 }

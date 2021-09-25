@@ -49,10 +49,18 @@ void LevelBase::onChildrenGroupAdded(ObjectGroup* group)
   connect(group, &ObjectGroup::objectRemoved, this, &LevelBase::onChildrenObjectRemoved);
   connect(group, &ObjectGroup::groupAdded,    this, &LevelBase::onChildrenGroupAdded);
   connect(group, &ObjectGroup::groupRemoved,  this, &LevelBase::onChildrenGroupRemoved);
+  for (ObjectGroup* subgroup : group->getGroups())
+    onChildrenGroupAdded(subgroup);
+  for (DynamicObject* object : group->getObjects())
+    onChildrenObjectAdded(object);
 }
 
 void LevelBase::onChildrenGroupRemoved(ObjectGroup* group)
 {
+  for (ObjectGroup* subgroup : group->getGroups())
+    onChildrenGroupRemoved(subgroup);
+  for (DynamicObject* object : group->getObjects())
+    onChildrenObjectRemoved(object);
   disconnect(group, &ObjectGroup::objectAdded,   this, &LevelBase::onChildrenObjectAdded);
   disconnect(group, &ObjectGroup::objectRemoved, this, &LevelBase::onChildrenObjectRemoved);
   disconnect(group, &ObjectGroup::groupAdded,    this, &LevelBase::onChildrenGroupAdded);
@@ -61,13 +69,14 @@ void LevelBase::onChildrenGroupRemoved(ObjectGroup* group)
 
 void LevelBase::onChildrenObjectAdded(DynamicObject* object)
 {
-  if (!freezeObjectRegistration)
+  if (!freezeObjectRegistration && !attachedObjects.contains(object))
     registerDynamicObject(object);
 }
 
 void LevelBase::onChildrenObjectRemoved(DynamicObject* object)
 {
-  unregisterDynamicObject(object);
+  if (attachedObjects.contains(object))
+    unregisterDynamicObject(object);
 }
 
 void LevelBase::registerAllDynamicObjects()
@@ -75,10 +84,12 @@ void LevelBase::registerAllDynamicObjects()
   eachObject(std::bind(&LevelBase::registerDynamicObject, this, std::placeholders::_1));
 }
 
-void LevelBase::registerDynamicObject(DynamicObject*)
+void LevelBase::registerDynamicObject(DynamicObject* object)
 {
+  attachedObjects.push_back(object);
 }
 
-void LevelBase::unregisterDynamicObject(DynamicObject*)
+void LevelBase::unregisterDynamicObject(DynamicObject* object)
 {
+  attachedObjects.removeOne(object);
 }

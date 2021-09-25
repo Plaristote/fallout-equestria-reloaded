@@ -43,13 +43,14 @@ private slots:
   void onChildrenGroupRemoved(ObjectGroup*);
 
 private:
-  QQmlListProperty<DynamicObject> getQmlObjects() { return QML_QLIST_CONSTRUCTOR(DynamicObject, objects); }
+  QQmlListProperty<DynamicObject> getQmlObjects() { return QML_QLIST_CONSTRUCTOR(DynamicObject, attachedObjects); }
 
 protected:
-  QString getScriptPath() const { return SCRIPTS_PATH + "levels"; }
+  QString getScriptPath() const override { return SCRIPTS_PATH + "levels"; }
 
   TileMap* tilemap = nullptr;
   QPoint   canvasOffset;
+  QList<DynamicObject*> attachedObjects;
 };
 
 #endif // LEVELBASE_H

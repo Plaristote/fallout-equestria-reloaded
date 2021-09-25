@@ -21,7 +21,7 @@ void ObjectGroup::load(const QJsonObject& data)
   {
     ObjectGroup* childGroup = new ObjectGroup(this);
 
-    childGroup->load(data);
+    childGroup->load(groupData.toObject());
     appendGroup(childGroup);
   }
   for (QJsonValue objectData : data["objects"].toArray())

@@ -30,6 +30,8 @@ public:
   QPoint         getOffset() const { return offset; }
   void           setOffset(QPoint);
   int            objectCount() const;
+  const QList<ObjectGroup*>&   getGroups() const { return groups; }
+  const QList<DynamicObject*>& getObjects() const { return objects; }
 
   void           load(const QJsonObject&);
   void           save(QJsonObject&) const;
