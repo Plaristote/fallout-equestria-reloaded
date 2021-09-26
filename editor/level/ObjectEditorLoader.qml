@@ -7,6 +7,8 @@ Loader {
 
   signal showClicked()
   signal openInventory(QtObject model)
+  signal requestSpriteView(string group)
+  signal requestCharacterView(string characterSheet)
   signal previousClicked()
   signal saveTemplateClicked()
 
@@ -52,6 +54,7 @@ Loader {
       model: selectedObject && selectedObject.getObjectType() === "Character" ? selectedObject : null
       gameController: root.gameController
       onOpenInventoryClicked: root.openInventory(selectedObject)
+      onRequestCharacterView: root.requestCharacterView(characterSheet)
     }
   }
 

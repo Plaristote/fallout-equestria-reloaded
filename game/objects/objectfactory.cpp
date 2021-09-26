@@ -117,4 +117,5 @@ DynamicObject* ObjectFactory::addBloodStainAt(QPoint position) const
   if (level)
     level->setObjectPosition(object, offset.x() + position.x(), offset.y() + position.y());
   object->initialize();
+  return object;
 }

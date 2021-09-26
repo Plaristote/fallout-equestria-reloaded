@@ -6,6 +6,7 @@
 
 ObjectGroup::ObjectGroup(QObject *parent) : ParentType(parent)
 {
+  connect(this, &ObjectGroup::offsetChanged, this, &ObjectGroup::positionChanged);
   connect(this, &ObjectGroup::nameChanged,   this, &ObjectGroup::pathChanged);
   connect(this, &ObjectGroup::parentChanged, this, &ObjectGroup::pathChanged);
   connect(this, &ObjectGroup::objectAdded,   this, &ObjectGroup::objectsChanged);

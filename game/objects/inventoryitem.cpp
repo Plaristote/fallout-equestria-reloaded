@@ -354,7 +354,7 @@ void InventoryItem::updateScript()
   QString scriptName = itemType + ".mjs";
 
   if (itemData.isObject())
-    scriptName = itemData["script"].toString(scriptName);
+    scriptName = itemData["scriptName"].toString(scriptName);
   setScript(scriptName);
   emit useModesChanged();
 }

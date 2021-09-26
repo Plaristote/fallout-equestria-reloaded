@@ -23,6 +23,8 @@ Pane {
   signal removeGroupClicked(QtObject object)
   signal showClicked(QtObject object)
   signal openInventory(QtObject object)
+  signal requestCharacterView(string characterSheet)
+  signal requestSpriteView(string group)
 
   function goToPath(path) {
     if (currentPath === path)
@@ -82,31 +84,25 @@ Pane {
       visible: currentObject !== null
       Layout.fillWidth: true
       Layout.fillHeight: true
-      contentHeight: objectEditorWrapper.height
+      contentHeight: objectEditor.height
       ScrollBar.vertical: UiStyle.TerminalScrollbar { orientation: Qt.Vertical }
-      Item {
-        id: objectEditorWrapper
-        width: parent.width - 20
-        height: objectEditor.height + controlZoneEditor.height + 10
-
-        ObjectEditorLoader {
-          id: objectEditor
-          levelEditor: root.levelEditor
-          onOpenInventory: root.openInventory(currentObject)
-          width: parent.width
-        }
-
-        ControlZoneEditor {
-          id: controlZoneEditor
-          anchors.topMargin: 10
-          anchors.top: objectEditor.bottom
-          width: parent.width
-          selectedObject: root.currentObject
-          displayRoofs: displayRoofCheckbox
-          displayWalls: displayWallsCheckbox
-          visible: root.currentObject !== null
-        }
+      ObjectEditorLoader {
+        id: objectEditor
+        levelEditor: root.levelEditor
+        onOpenInventory: root.openInventory(currentObject)
+        onRequestCharacterView: root.requestCharacterView(characterSheet)
+        onRequestSpriteView: root.requestSpriteView(group)
+        width: parent.width
       }
+    }
+
+    ControlZoneEditor {
+      id: controlZoneEditor
+      Layout.fillWidth: true
+      selectedObject: root.currentObject || root.currentGroup
+      displayRoofs: displayRoofCheckbox
+      displayWalls: displayWallsCheckbox
+      visible: currentObject !== null || currentGroup.parent !== null
     }
   }
 }

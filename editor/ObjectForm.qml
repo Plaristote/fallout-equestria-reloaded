@@ -27,7 +27,7 @@ Pane {
       value: parseInt(valueInput.text),
       sprite: spriteInput.currentText,
       icon: iconInput.text,
-      script: scriptInput.currentText,
+      scriptName: scriptInput.currentText,
       isGroupable: groupableInput.checked
     };
     itemLibrary.setObject(currentName, currentObject);
@@ -138,65 +138,13 @@ Pane {
       text: "script"
     }
 
-    RowLayout {
+    ScriptInputField {
       Layout.fillWidth: true
-      id: scriptHeader
-      spacing: 5
-
-      TerminalComboBox {
-        Layout.fillWidth: true
-        id: scriptInput
-        model: scriptList
-        currentIndex: scriptList.indexOf(currentObject.script)
-        onCurrentTextChanged: {
-          scriptEditor.text = scriptController.getScript("items", scriptInput.currentText)
-        }
-      }
-
-      TerminalButton {
-        text: "Add script"
-        height: scriptInput.height
-        onClicked: {
-          newScriptDialog.open();
-        }
-      }
+      scriptCategory: "items"
+      model: currentObject
+      onValueChanged: currentObject.scriptName = newValue
     }
   } // END Grid Layout
-
-  Rectangle {
-    anchors.top: formGrid.bottom
-    anchors { left: parent.left; bottom: parent.bottom; right: parent.right }
-    border.width: 1
-    border.color: "green"
-    color: "transparent"
-    ScrollView {
-      anchors.fill: parent;
-      clip: true
-      contentHeight: scriptEditor.contentHeight
-      contentWidth: scriptEditor.contentWidth
-      TextEdit {
-        id: scriptEditor
-        padding: 5
-        color: "white"
-        selectByMouse: true
-      }
-    }
-  }
-
-  TextPromptDialog {
-    id: newScriptDialog
-    title: "Adding an item script"
-    anchors.centerIn: parent
-    onAccepted: {
-      if (scriptList.indexOf(newScriptDialog.value) < 0) {
-        const newName = scriptController.setScript("items", newScriptDialog.value, "");
-        updateScriptList();
-        scriptInput.currentIndex = scriptList.indexOf(newName);
-      }
-      else
-        scriptInput.currentIndex = scriptList.indexOf(newScriptDialog.value);
-    }
-  }
 
   BiDialog.FileDialog {
     property var target: iconInput

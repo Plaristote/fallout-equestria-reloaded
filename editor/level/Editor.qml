@@ -12,10 +12,8 @@ Item {
   property alias selectedGroup: childrenView.currentGroup
 
   signal pickedTile(int tileX, int tileY)
-
-  onSelectedObjectChanged: {
-    canvas.editorObject = selectedObject;
-  }
+  signal requestCharacterView(string characterSheet)
+  signal requestSpriteView(string group)
 
   Connections {
     target: gameController.level
@@ -40,8 +38,7 @@ Item {
         renderRoofs: displayRoofCheckbox.checked
         renderWalls: displayWallsCheckbox.checked
         showHoverCoordinates: true
-        editorObject: selectedObject
-
+        editorObject:     selectedObject || selectedGroup
         editingZone:      childrenView.controlZone.editingZone
         onToggleZoneTile: childrenView.controlZone.toggleTile(tileX, tileY)
         onPickedTile: root.pickedTile(tileX, tileY)
@@ -111,6 +108,8 @@ Item {
             currentGroup = object.parent;
             gameController.level.deleteGroup(object);
           }
+          onRequestCharacterView: root.requestCharacterView(characterSheet)
+          onRequestSpriteView: root.requestSpriteView(group)
           onOpenInventory: {
             if (object.getObjectType() === "Character") {
               characterInventory.character = object;
@@ -122,37 +121,6 @@ Item {
             }
           }
         }
-/*
-        ObjectEditorLoader {
-          id: objectEditorComponent
-          Layout.fillWidth: true
-          Layout.fillHeight: true
-          levelEditor: root
-          visible: selectedObject != null
-          onOpenInventory: {
-            if (model.getObjectType() === "Character") {
-              characterInventory.character = model;
-              characterInventory.open();
-            }
-            else {
-              lootEditor.inventory = model.inventory;
-              lootEditor.open();
-            }
-          }
-          onSaveTemplateClicked: saveTemplateDialog.open()
-          onPreviousClicked: childrenView.currentObject = null
-          onShowClicked: canvas.moveToObject(selectedObject)
-        }
-
-        ControlZoneEditor {
-          id: controlZoneEditor
-          selectedObject: root.selectedObject
-          displayRoofs: displayRoofCheckbox
-          displayWalls: displayWallsCheckbox
-          Layout.fillWidth: true
-          visible: objectEditorComponent.visible
-        }
-*/
       }
     }
   }

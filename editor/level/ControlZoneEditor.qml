@@ -4,16 +4,13 @@ import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
 import "../../ui"
 
-Rectangle {
+ColumnLayout {
   property bool editingZone: false
   property QtObject selectedObject: null
   property var displayRoofs: null
   property var displayWalls: null
   property bool hasControlZone: false
 
-  border.color: "green"
-  border.width: 1
-  color: "transparent"
   onSelectedObjectChanged: refresh()
 
   function toggleTile(tileX, tileY) {
@@ -59,45 +56,42 @@ Rectangle {
     }
   }
 
-  Column {
+  spacing: 5
+
+  TerminalLabel { text: "> Control zone"; font.pointSize: 13 }
+
+  TerminalButton {
+    text: "Add a control zone"
+    visible: !hasControlZone
     width: parent.width
-    spacing: 5
+    height: 20
+    onClicked: selectedObject.addControlZone()
+  }
 
-    TerminalLabel { text: "> Control zone"; font.pointSize: 13 }
+  TerminalButton {
+    text: !canvas.editingZone ? "Edit control zone" : "End control zone edit"
+    visible: hasControlZone
+    width: parent.width
+    height: 20
+    action: toggleZoneEditAction
+  }
 
-    TerminalButton {
-      text: "Add a control zone"
-      visible: !hasControlZone
-      width: parent.width
-      height: 20
-      onClicked: selectedObject.addControlZone()
-    }
+  TerminalCheckBox {
+    id: pathBlockedInput
+    text: "Path blocked"
+    visible: hasControlZone
+    checked: selectedObject && selectedObject.zoneBlocked
+    onCheckedChanged: { selectedObject.zoneBlocked = checked; }
+  }
 
-    TerminalButton {
-      text: !canvas.editingZone ? "Edit control zone" : "End control zone edit"
-      visible: hasControlZone
-      width: parent.width
-      height: 20
-      action: toggleZoneEditAction
-    }
-
-    TerminalCheckBox {
-      id: pathBlockedInput
-      text: "Path blocked"
-      visible: hasControlZone
-      checked: selectedObject && selectedObject.zoneBlocked
-      onCheckedChanged: { selectedObject.zoneBlocked = checked; }
-    }
-
-    TerminalButton {
-      text: "Remove control zone"
-      visible: hasControlZone
-      width: parent.width
-      height: 20
-      onClicked: {
-        editingZone = false;
-        selectedObject.removeControlZone();
-      }
+  TerminalButton {
+    text: "Remove control zone"
+    visible: hasControlZone
+    width: parent.width
+    height: 20
+    onClicked: {
+      editingZone = false;
+      selectedObject.removeControlZone();
     }
   }
 }

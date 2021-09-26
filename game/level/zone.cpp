@@ -15,12 +15,25 @@ void ZoneComponent::load(const QJsonObject& data)
     registerZone(zone);
 }
 
-void ZoneComponent::registerDynamicObject(DynamicObject* object)
+void ZoneComponent::registerZoneController(ControlZoneComponent* object)
 {
   connect(object, &DynamicObject::controlZoneAdded,   this, &ZoneComponent::registerZone);
   connect(object, &DynamicObject::controlZoneRemoved, this, &ZoneComponent::unregisterZone);
   if (object->getControlZone())
     registerZone(object->getControlZone());
+}
+
+void ZoneComponent::unregisterZoneController(ControlZoneComponent* object)
+{
+  disconnect(object, &ControlZoneComponent::controlZoneAdded,   this, &ZoneComponent::registerZone);
+  disconnect(object, &ControlZoneComponent::controlZoneRemoved, this, &ZoneComponent::unregisterZone);
+  if (object->getControlZone())
+    unregisterZone(object->getControlZone());
+}
+
+void ZoneComponent::registerDynamicObject(DynamicObject* object)
+{
+  registerZoneController(object);
   if (object->isCharacter())
     dynamic_cast<CharacterMovement*>(object)->setCurrentZones(getGrid()->getZonesAt(object->getPosition()));
   ParentType::registerDynamicObject(object);
@@ -28,10 +41,7 @@ void ZoneComponent::registerDynamicObject(DynamicObject* object)
 
 void ZoneComponent::unregisterDynamicObject(DynamicObject* object)
 {
-  disconnect(object, &DynamicObject::controlZoneAdded,   this, &ZoneComponent::registerZone);
-  disconnect(object, &DynamicObject::controlZoneRemoved, this, &ZoneComponent::unregisterZone);
-  if (object->getControlZone())
-    unregisterZone(object->getControlZone());
+  unregisterZoneController(object);
   if (object->isCharacter())
     dynamic_cast<CharacterMovement*>(object)->clearCurrentZones();
   ParentType::unregisterDynamicObject(object);

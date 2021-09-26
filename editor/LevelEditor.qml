@@ -12,6 +12,9 @@ Item {
   property var gameController
   property alias currentLevelName: levelSelect.currentName
 
+  signal requestCharacterView(string characterSheet)
+  signal requestSpriteView(string group)
+
   onCurrentLevelNameChanged: {
     console.log("LevelEditor::onCurrentLevelNameChanged")
     gameController.switchToLevel(currentLevelName, "");
@@ -63,6 +66,8 @@ Item {
     id: levelEditorUi
     LevelEditorUi.Editor {
       gameController: root.gameController
+      onRequestCharacterView: root.requestCharacterView(characterSheet)
+      onRequestSpriteView: root.requestSpriteView(group)
     }
   }
 

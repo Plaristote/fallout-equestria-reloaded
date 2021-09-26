@@ -7,17 +7,17 @@
 # include <QJSValue>
 # include <QTimer>
 # include <QJsonObject>
-# include "objects/components/controlzone.h"
+# include "objects/components/lightsource.h"
 # include "taskrunner.h"
 
 class TileZone;
 class Character;
 class ObjectGroup;
 
-class DynamicObject : public ControlZoneComponent
+class DynamicObject : public LightSourceComponent
 {
   Q_OBJECT
-  typedef ControlZoneComponent ParentType;
+  typedef LightSourceComponent ParentType;
 
   Q_PROPERTY(QString objectName MEMBER objectName NOTIFY objectNameChanged)
   Q_PROPERTY(QString path READ getPath NOTIFY pathChanged)

@@ -30,6 +30,8 @@ public:
   void registerAllDynamicObjects();
   virtual void registerDynamicObject(DynamicObject*);
   virtual void unregisterDynamicObject(DynamicObject*);
+  virtual void registerZoneController(ControlZoneComponent*) {}
+  virtual void unregisterZoneController(ControlZoneComponent*) {}
 
 signals:
   void playerChanged();

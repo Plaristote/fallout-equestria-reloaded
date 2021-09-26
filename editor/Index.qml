@@ -15,6 +15,16 @@ Pane {
     Component.onCompleted: prepareEditor()
   }
 
+  function goToSprite(group) {
+    header.currentTab = "sprites";
+    spriteEditor.animationGroup = group;
+  }
+
+  function goToNpc(characterSheet) {
+    header.currentTab = "npcs";
+    npcEditor.currentCharacter = characterSheet + ".json";
+  }
+
   TabRow {
     id: header
     anchors.top: parent.top
@@ -37,6 +47,7 @@ Pane {
   }
 
   SpriteEditor {
+    id: spriteEditor
     visible: header.currentTab == "sprites"
     anchors { top: header.bottom; left: parent.left; right: parent.right; bottom: parent.bottom }
   }
@@ -47,6 +58,7 @@ Pane {
   }
 
   NpcEditor {
+    id: npcEditor
     visible: header.currentTab == "npcs"
     anchors { top: header.bottom; left: parent.left; right: parent.right; bottom: parent.bottom }
   }
@@ -55,6 +67,8 @@ Pane {
     visible: header.currentTab == "levels"
     anchors { top: header.bottom; left: parent.left; right: parent.right; bottom: parent.bottom }
     gameController: game
+    onRequestCharacterView: goToNpc(characterSheet)
+    onRequestSpriteView: goToSprite(group)
   }
 
   WorldMapEditor {

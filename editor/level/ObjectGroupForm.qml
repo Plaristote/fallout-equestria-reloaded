@@ -33,4 +33,11 @@ GridLayout {
     Layout.fillWidth: true
     onTextChanged: currentGroup.offset = Qt.point(parseInt(groupOffsetXInput.text), parseInt(groupOffsetYInput.text))
   }
+
+  TerminalLabel { text: "Script"; visible: !readOnlyScript }
+  ScriptInputField {
+    Layout.fillWidth: true
+    Layout.columnSpan: 2
+    model: currentGroup
+  }
 }

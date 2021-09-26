@@ -20,7 +20,8 @@ UiStyle.CustomDialog {
   width: 800
 
   function startPicking(category) {
-    currentFilter  = "";
+    currentFilter = "";
+    currentIndex = availableSprites.indexOf(category);
     open();
     filterInput.forceActiveFocus()
   }

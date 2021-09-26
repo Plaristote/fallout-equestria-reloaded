@@ -285,5 +285,8 @@
         <file>editor/level/ScriptPicker.qml</file>
         <file>editor/level/SpritePicker.qml</file>
         <file>editor/AnimationPreview.qml</file>
+        <file>editor/level/ScriptInputField.qml</file>
+        <file>editor/level/SpriteInputField.qml</file>
+        <file>editor/ScriptInputField.qml</file>
     </qresource>
 </RCC>

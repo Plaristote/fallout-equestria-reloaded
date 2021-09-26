@@ -11,15 +11,23 @@ DynamicObjectEditor {
   scriptCategory: "pnjs"
 
   signal openInventoryClicked()
+  signal requestCharacterView(string characterSheet)
 
   fields: [
     TerminalLabel { text: "Character Sheet" },
-    TerminalComboBox {
+    RowLayout {
       Layout.fillWidth: true
-      model: scriptController.getCharacterSheets()
-      currentIndex: scriptController.getCharacterSheets().indexOf(characterEditor.model.characterSheet + ".json")
-      onCurrentIndexChanged: {
-        characterEditor.model.characterSheet = scriptController.getCharacterSheets()[currentIndex].replace(".json", "");
+      TerminalComboBox {
+        Layout.fillWidth: true
+        model: scriptController.getCharacterSheets()
+        currentIndex: scriptController.getCharacterSheets().indexOf(characterEditor.model.characterSheet + ".json")
+        onCurrentIndexChanged: {
+          characterEditor.model.characterSheet = scriptController.getCharacterSheets()[currentIndex].replace(".json", "");
+        }
+      }
+      TerminalToolButton {
+        iconName: "open"
+        onClicked: characterEditor.requestCharacterView(characterEditor.model.characterSheet)
       }
     },
 

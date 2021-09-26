@@ -3,15 +3,14 @@
 
 # include <QRect>
 # include "game/animationlibrary.h"
-# include "utils/storableobject.h"
-# include "scriptable.h"
+# include "controlzone.h"
 
 class QJsonObject;
 
-class Sprite : public ScriptableComponent
+class Sprite : public ControlZoneComponent
 {
   Q_OBJECT
-  typedef ScriptableComponent ParentType;
+  typedef ControlZoneComponent ParentType;
 
   Q_PROPERTY(bool floating MEMBER floating NOTIFY floatingChanged)
   Q_PROPERTY(QString spriteName     READ getSpriteName WRITE setSpriteName NOTIFY spriteGroupChanged)

@@ -1,32 +1,32 @@
 #ifndef  OBJECTGROUP_H
 # define OBJECTGROUP_H
 
-#include "components/scriptable.h"
+#include "components/controlzone.h"
 #include "../dynamicobject.h"
 #include <QQmlListProperty>
 
 class ObjectFactory;
 
-class ObjectGroup : public ScriptableComponent
+class ObjectGroup : public ControlZoneComponent
 {
   Q_OBJECT
   friend class ObjectFactory;
-  typedef ScriptableComponent ParentType;
+  typedef ControlZoneComponent ParentType;
 
-  Q_PROPERTY(QString                         name    MEMBER name NOTIFY nameChanged)
-  Q_PROPERTY(QString                         path    READ getPath NOTIFY pathChanged)
-  Q_PROPERTY(QPoint                          offset  READ getOffset WRITE setOffset NOTIFY offsetChanged)
-  Q_PROPERTY(QPoint                          position READ getPosition NOTIFY offsetChanged)
-  Q_PROPERTY(QQmlListProperty<ObjectGroup>   groups  READ getQmlGroups  NOTIFY groupsChanged)
-  Q_PROPERTY(QQmlListProperty<DynamicObject> objects READ getQmlObjects NOTIFY objectsChanged)
-  Q_PROPERTY(ObjectGroup*                    parent  READ getParent NOTIFY parentChanged)
+  Q_PROPERTY(QString                         name     MEMBER name NOTIFY nameChanged)
+  Q_PROPERTY(QString                         path     READ getPath NOTIFY pathChanged)
+  Q_PROPERTY(QPoint                          offset   READ getOffset WRITE setOffset NOTIFY offsetChanged)
+  Q_PROPERTY(QPoint                          position READ getPosition NOTIFY positionChanged)
+  Q_PROPERTY(QQmlListProperty<ObjectGroup>   groups   READ getQmlGroups  NOTIFY groupsChanged)
+  Q_PROPERTY(QQmlListProperty<DynamicObject> objects  READ getQmlObjects NOTIFY objectsChanged)
+  Q_PROPERTY(ObjectGroup*                    parent   READ getParent NOTIFY parentChanged)
 public:
   explicit ObjectGroup(QObject *parent = nullptr);
 
   QString        getPath() const;
   const QString& getName() const { return name; }
   ObjectGroup*   getParent() const;
-  QPoint         getPosition() const;
+  QPoint         getPosition() const override;
   QPoint         getOffset() const { return offset; }
   void           setOffset(QPoint);
   int            objectCount() const;

@@ -27,7 +27,6 @@ signals:
   void lightTypeChanged();
   void lightZoneRemoved(TileLayer*);
   void lightZoneAdded(TileLayer*);
-  void positionChanged();
 
 public slots:
   void reloadLightzone();

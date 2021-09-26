@@ -161,6 +161,8 @@ SpriteAnimation AnimationLibrary::getAnimation(const QString &group, const QStri
     object.clippedRect.setWidth(animationData["width"].toInt());
     object.clippedRect.setHeight(animationData["height"].toInt());
   }
+  else if (groupData["idle"].isObject())
+    return getAnimation(group, "idle");
   else
     return makeDefaultSpriteAnimation(animation, defaultSource);
   return object;

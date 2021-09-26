@@ -45,6 +45,7 @@ void LevelBase::load(const QJsonObject& data)
 
 void LevelBase::onChildrenGroupAdded(ObjectGroup* group)
 {
+  registerZoneController(group);
   connect(group, &ObjectGroup::objectAdded,   this, &LevelBase::onChildrenObjectAdded);
   connect(group, &ObjectGroup::objectRemoved, this, &LevelBase::onChildrenObjectRemoved);
   connect(group, &ObjectGroup::groupAdded,    this, &LevelBase::onChildrenGroupAdded);
@@ -57,6 +58,7 @@ void LevelBase::onChildrenGroupAdded(ObjectGroup* group)
 
 void LevelBase::onChildrenGroupRemoved(ObjectGroup* group)
 {
+  unregisterZoneController(group);
   for (ObjectGroup* subgroup : group->getGroups())
     onChildrenGroupRemoved(subgroup);
   for (DynamicObject* object : group->getObjects())

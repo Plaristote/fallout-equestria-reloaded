@@ -18,6 +18,8 @@ ColumnLayout {
   property bool readOnlyScript: false
   id: objectEditor
 
+  signal requestSpriteView(string group)
+
   function setTilePosition(tileX, tileY) {
     if (!model.floating) {
       gridXInput.text = tileX;
@@ -39,8 +41,6 @@ ColumnLayout {
 
     model.setRenderPosition(Qt.point(renderX, renderY));
   }
-
-  //signal saveTemplateClicked()
 
   onModelChanged: {
     const posMode             = model.floating ? 1 : 0;
@@ -99,35 +99,18 @@ ColumnLayout {
       }
 
       TerminalLabel { text: "Script"; visible: !readOnlyScript }
-      RowLayout {
+      ScriptInputField {
         Layout.fillWidth: true
-        TerminalButton {
-          id: scriptInput
-          Layout.fillWidth: true
-          text: objectEditor.model.hasScript ? objectEditor.model.scriptName : "N/A"
-          enabled: !readOnlyScript
-          onClicked: scriptPicker.openWithCategory(scriptCategory)
-        }
-        TerminalToolButton {
-          iconName: "open"
-          onClicked: Qt.openUrlExternally(scriptPath + '/' + scriptCategory + '/' + objectEditor.model.scriptName)
-        }
+        scriptCategory: objectEditor.scriptCategory
+        model: objectEditor.model
       }
 
       TerminalLabel { text: "Sprite"; visible: !readOnlySprite }
-      RowLayout {
+      SpriteInputField {
         Layout.fillWidth: true
         visible: !readOnlySprite
-        TerminalButton {
-          id: spriteInput
-          text: objectEditor.model.spriteName
-          Layout.fillWidth: true
-          onClicked: spritePicker.startPicking()
-        }
-        TerminalToolButton {
-          iconName: "open"
-          onClicked: console.log("TODO open in SpriteEditor", objectEditor.model.spriteName)
-        }
+        model: objectEditor.model
+        onRequestSpriteView: root.requestSpriteView(group)
       }
 
       TerminalLabel { text: "Animation"; visible: !readOnlyAnimation }
@@ -150,22 +133,5 @@ ColumnLayout {
     id: additionalFields
     width: parent.width
     columns: 2
-  }
-
-  // Misc
-  ScriptPicker {
-    id: scriptPicker
-    parent: Overlay.overlay
-    anchors.centerIn: parent
-    onAccepted: objectEditor.model.setScript(pickedOption)
-    onClosed: scriptInput.forceActiveFocus()
-  }
-
-  SpritePicker {
-    id: spritePicker
-    parent: Overlay.overlay
-    anchors.centerIn: parent
-    onAccepted: objectEditor.model.spriteName = pickedOption
-    onClosed: spriteInput.forceActiveFocus()
   }
 }
