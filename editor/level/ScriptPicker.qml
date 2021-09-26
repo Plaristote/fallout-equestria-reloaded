@@ -67,13 +67,18 @@ UiStyle.CustomDialog {
 
       GridLayout {
         Layout.fillWidth: true
-        columns: 2
+        columns: 3
         TerminalLabel { text: "Script type:" }
         TerminalLabel { text: scriptCategory }
+        TerminalToolButton {
+          iconName: "add"
+          onClicked: newScriptDialog.open()
+        }
         TerminalLabel { text: "Filter:" }
         TerminalField {
           id: filterInput; Layout.fillWidth: true
           onAccepted: root.accept()
+          Layout.columnSpan: 2
         }
       }
 
@@ -102,6 +107,24 @@ UiStyle.CustomDialog {
           } // END Repeater
         } // END ColumnLayout
       } // END Flickable
+    }
+  }
+
+  TextPromptDialog {
+    id: newScriptDialog
+    title: `Adding ${scriptCategory} script`
+    parent: Overlay.overlay
+    anchors.centerIn: parent
+    onAccepted: {
+      var newName = newScriptDialog.value;
+      if (availableScripts.indexOf(newName) < 0) {
+        newName = scriptController.setScript(scriptCategory, newName, "");
+        root.scriptCategoryChanged() // should refresh availableScripts
+      }
+      root.currentIndex = availableScripts.indexOf(newName);
+      console.log("New current index", root.currentIndex, newName)
+      newScriptDialog.value = "";
+      filterInput.forceActiveFocus();
     }
   }
 }

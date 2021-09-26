@@ -6,8 +6,15 @@
 #include "game.h"
 #include "i18n.h"
 
+const QRegularExpression jsExtensionExp("\\.m?js$");
+const QMap<QString, QPair<QString, QString> > scriptDefaultSuper = {
+  {"pnjs",  {"CharacterBehaviour", "character.mjs"}},
+  {"items", {"ItemBehaviour", "item.mjs"}}
+};
+
 ScriptEditorController::ScriptEditorController(QObject *parent) : QObject(parent)
 {
+  connect(this, &ScriptEditorController::error, this, [](QString value) { qDebug() << "ScriptEditorController:" << value; });
 }
 
 QStringList ScriptEditorController::getScripts(const QString& type)
@@ -35,19 +42,94 @@ QString ScriptEditorController::getScript(const QString &type, const QString &na
     file.close();
   }
   else
-    qDebug() << "Could not open script: scripts7" << type << '/' << name;
+    qDebug() << "Could not open script: scripts/" << type << '/' << name;
   return result;
 }
 
-void ScriptEditorController::setScript(const QString &type, const QString &name, const QString &content)
+static QString capitalize(const QString& source)
 {
-  QFile file("scripts/" + type + '/' + name);
+  QString result;
 
+  result.reserve(source.size());
+  for (int i = 0 ; i < source.size() ; ++i)
+  {
+    if (i == 0 || !source[i - 1].isLetter())
+      result += source[i].toUpper();
+    else if (source[i].isLetter())
+      result += source[i];
+  }
+  return result;
+}
+
+static QString scriptTemplate(const QString& scriptName, const QString& scriptCategory, const QString& relativePath)
+{
+  QString className = capitalize(scriptName);
+  QString code;
+  QPair<QString, QString> superclass;
+  int depth = relativePath.split('/').size();
+
+  if (scriptDefaultSuper.contains(scriptCategory))
+    superclass = scriptDefaultSuper[scriptCategory];
+  if (!superclass.first.isEmpty())
+  {
+    code += "import {" + superclass.first + "} from \"./";
+    for (int i = 1 ; i < depth ; ++i)
+      code += "../";
+    code += superclass.second + "\";\n\n";
+  }
+  code += "class " + className;
+  if (!superclass.first.isEmpty())
+    code += " extends " + superclass.first;
+  code += " {\n";
+  code += "  constructor(model) {\n";
+  if (!superclass.first.isEmpty())
+    code += "    super(model);\n";
+  else
+    code += "    this.model = model;\n";
+  code += "  }\n";
+  code += "}\n\n";
+  code += "export function create(model) {\n";
+  code += "  return new " + className + "(model);\n";
+  code += "}";
+  return code;
+}
+
+static bool editFile(QFile& file, const QString& content)
+{
   if (file.open(QIODevice::WriteOnly))
   {
     file.write(QByteArray(content.toStdString().c_str(), content.length()));
     file.close();
+    return true;
   }
+  return false;
+}
+
+QString ScriptEditorController::setScript(const QString &type, const QString &name, const QString &content)
+{
+  QString path = "scripts/" + type + '/';
+  auto    relativePath = name.split('/');
+  QString fullName(name + (name.indexOf(jsExtensionExp) >= 0 ? "" : ".mjs"));
+  QFile   file(path + fullName);
+  QString scriptName = relativePath.last();
+  QDir    dir;
+
+  scriptName.replace(jsExtensionExp, "");
+  relativePath.removeLast();
+  if (dir.mkpath(path + relativePath.join('/')))
+  {
+    bool result = true;
+
+    if (!file.exists() && content.size() == 0)
+      result = editFile(file, scriptTemplate(scriptName, type, relativePath.join('/')));
+    else if (content.size() > 0)
+      result = editFile(file, content);
+    if (!result)
+      emit error("Failed to open file " + path + name);
+  }
+  else
+    emit error("Could not create directory " + path);
+  return fullName;
 }
 
 void ScriptEditorController::saveCharacterSheet(const QString &name, StatModel* model)

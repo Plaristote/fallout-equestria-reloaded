@@ -188,9 +188,13 @@ Pane {
     title: "Adding an item script"
     anchors.centerIn: parent
     onAccepted: {
-      scriptList.push(newScriptDialog.value);
-      scriptListChanged();
-      scriptInput.currentIndex = scriptList.length - 1;
+      if (scriptList.indexOf(newScriptDialog.value) < 0) {
+        const newName = scriptController.setScript("items", newScriptDialog.value, "");
+        updateScriptList();
+        scriptInput.currentIndex = scriptList.indexOf(newName);
+      }
+      else
+        scriptInput.currentIndex = scriptList.indexOf(newScriptDialog.value);
     }
   }
 

@@ -12,7 +12,7 @@ public:
 
   Q_INVOKABLE QStringList getScripts(const QString& type);
   Q_INVOKABLE QString     getScript(const QString& type, const QString& name);
-  Q_INVOKABLE void        setScript(const QString& type, const QString& name, const QString& content);
+  Q_INVOKABLE QString     setScript(const QString& type, const QString& name, const QString& content);
 
   Q_INVOKABLE QStringList getCharacterSheets();
   Q_INVOKABLE void        saveCharacterSheet(const QString& name, StatModel*);
@@ -27,7 +27,7 @@ public:
   Q_INVOKABLE void setTranslation(const QString& key, const QString& text);
 
 signals:
-
+  void error(QString message);
 };
 
 #endif // SCRIPTEDITORCONTROLLER_H
