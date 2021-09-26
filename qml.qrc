@@ -283,5 +283,7 @@
         <file>ui/BackAction.qml</file>
         <file>editor/level/ObjectGroupForm.qml</file>
         <file>editor/level/ScriptPicker.qml</file>
+        <file>editor/level/SpritePicker.qml</file>
+        <file>editor/AnimationPreview.qml</file>
     </qresource>
 </RCC>

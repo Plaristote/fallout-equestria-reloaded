@@ -104,7 +104,7 @@ void Sprite::runMovement(qint64 delta)
 
 void Sprite::load(const QJsonObject& data)
 {
-  name = data["spriteName"].toString();
+  setSpriteName(data["spriteName"].toString());
   spritePosition.setX(data["rx"].toInt()); spritePosition.setY(data["ry"].toInt());
   spriteMovementTarget.setX(data["mtx"].toInt()); spriteMovementTarget.setY(data["mty"].toInt());
   floating = data["float"].toBool();

@@ -38,16 +38,23 @@ UiStyle.CustomDialog {
   onAvailableScriptsChanged: afterFilterUpdate()
   onCurrentFilterChanged:    afterFilterUpdate()
 
-  Shortcut {
-    enabled: parent.visible
-    sequence: "Down"
-    onActivated: currentIndex = currentIndex + 1 < filteredScripts.length ? currentIndex + 1 : 0
+  Loader {
+    sourceComponent: parent.visible ? shortcuts : null
   }
 
-  Shortcut {
-    enabled: parent.visible
-    sequence: "Up"
-    onActivated: currentIndex = currentIndex > 0 ? currentIndex - 1 : filteredScripts.length - 1
+  Component {
+    id: shortcuts
+    Item {
+      Shortcut {
+        sequence: "Down"
+        onActivated: currentIndex = currentIndex + 1 < filteredScripts.length ? currentIndex + 1 : 0
+      }
+
+      Shortcut {
+        sequence: "Up"
+        onActivated: currentIndex = currentIndex > 0 ? currentIndex - 1 : filteredScripts.length - 1
+      }
+    }
   }
 
   Pane {

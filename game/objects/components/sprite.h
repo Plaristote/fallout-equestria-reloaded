@@ -14,6 +14,7 @@ class Sprite : public ScriptableComponent
   typedef ScriptableComponent ParentType;
 
   Q_PROPERTY(bool floating MEMBER floating NOTIFY floatingChanged)
+  Q_PROPERTY(QString spriteName     READ getSpriteName WRITE setSpriteName NOTIFY spriteGroupChanged)
   Q_PROPERTY(QString spriteSource   READ getSpriteSource   NOTIFY spriteSourceChanged)
   Q_PROPERTY(QPoint  spritePosition READ getSpritePosition NOTIFY spritePositionChanged)
   Q_PROPERTY(QRect   clippedRect    READ getClippedRect    NOTIFY clippedRectChanged)
@@ -22,8 +23,8 @@ public:
 
   Q_INVOKABLE void update(qint64);
 
-  Q_INVOKABLE void setSpriteName(const QString& value) { name = value; }
-  Q_INVOKABLE QString getSpriteName() const { return name; }
+  void    setSpriteName(const QString& value) { name = value; emit spriteGroupChanged(); }
+  QString getSpriteName() const { return name; }
   Q_INVOKABLE virtual void setAnimation(const QString& animationName);
   Q_INVOKABLE QString getAnimation() const { return animation.name; }
   const QImage& getImage() const;
@@ -44,6 +45,7 @@ public:
   void save(QJsonObject&) const;
 
 signals:
+  void spriteGroupChanged();
   void spriteSourceChanged();
   void spritePositionChanged();
   void clippedRectChanged();

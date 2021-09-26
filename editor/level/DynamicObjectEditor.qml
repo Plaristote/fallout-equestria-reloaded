@@ -44,15 +44,15 @@ ColumnLayout {
 
   onModelChanged: {
     const posMode             = model.floating ? 1 : 0;
-    const spriteName          = model.getSpriteName();
+    const spriteName          = model.spriteName;
     const animationName       = model.getAnimation();
     const position            = model.getPosition();
     const renderPosition      = model.getSpritePosition();
+    const animationList       = animationLibrary.getAnimationList(model.spriteName);
 
     readOnlyPositionType = model.getObjectType() === "Character";
     readOnlyAnimation    = model.getObjectType() === "Character";
-    spriteInput.currentIndex      = spriteInput.model.indexOf(spriteName);
-    animationInput.currentIndex   = animationInput.model.indexOf(animationName);
+    animationInput.currentIndex   = animationList.indexOf(animationName);
     positioningInput.currentIndex = posMode
     gridXInput.text          = position.x;
     gridYInput.text          = position.y;
@@ -99,27 +99,34 @@ ColumnLayout {
       }
 
       TerminalLabel { text: "Script"; visible: !readOnlyScript }
-      TerminalButton {
-        id: scriptInput
-        text: objectEditor.model.hasScript ? objectEditor.model.scriptName : "N/A"
-        enabled: !readOnlyScript
+      RowLayout {
         Layout.fillWidth: true
-        onClicked: scriptPicker.openWithCategory(scriptCategory)
+        TerminalButton {
+          id: scriptInput
+          Layout.fillWidth: true
+          text: objectEditor.model.hasScript ? objectEditor.model.scriptName : "N/A"
+          enabled: !readOnlyScript
+          onClicked: scriptPicker.openWithCategory(scriptCategory)
+        }
+        TerminalToolButton {
+          iconName: "open"
+          onClicked: Qt.openUrlExternally(scriptPath + '/' + scriptCategory + '/' + objectEditor.model.scriptName)
+        }
       }
 
       TerminalLabel { text: "Sprite"; visible: !readOnlySprite }
-      TerminalComboBox {
+      RowLayout {
         Layout.fillWidth: true
-        id: spriteInput
         visible: !readOnlySprite
-        model: animationLibrary.getGroups();
-        currentIndex: model.indexOf(objectEditor.model.getSpriteName())
-        onCurrentTextChanged: {
-          objectEditor.model.setSpriteName(currentText);
-          if (objectEditor.model.getObjectType() === "Character")
-            objectEditor.model.setAnimation("idle");
-          else
-            objectEditor.model.setAnimation(objectEditor.model.getAnimation())
+        TerminalButton {
+          id: spriteInput
+          text: objectEditor.model.spriteName
+          Layout.fillWidth: true
+          onClicked: spritePicker.startPicking()
+        }
+        TerminalToolButton {
+          iconName: "open"
+          onClicked: console.log("TODO open in SpriteEditor", objectEditor.model.spriteName)
         }
       }
 
@@ -128,7 +135,7 @@ ColumnLayout {
         Layout.fillWidth: true
         id: animationInput
         visible: !readOnlyAnimation
-        model: animationLibrary.getAnimationList(spriteInput.currentText);
+        model: animationLibrary.getAnimationList(objectEditor.model.spriteName);
         currentIndex: model.indexOf(objectEditor.model.getAnimation())
         onCurrentTextChanged: {
           if (!readOnlyAnimation)
@@ -152,5 +159,13 @@ ColumnLayout {
     anchors.centerIn: parent
     onAccepted: objectEditor.model.setScript(pickedOption)
     onClosed: scriptInput.forceActiveFocus()
+  }
+
+  SpritePicker {
+    id: spritePicker
+    parent: Overlay.overlay
+    anchors.centerIn: parent
+    onAccepted: objectEditor.model.spriteName = pickedOption
+    onClosed: spriteInput.forceActiveFocus()
   }
 }
