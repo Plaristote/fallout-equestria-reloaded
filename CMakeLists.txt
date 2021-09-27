@@ -182,6 +182,8 @@ set(PROJECT_SOURCES
         game/objects/components/scriptable.cpp
         game/objects/components/sprite.h
         game/objects/components/sprite.cpp
+        game/objects/components/orientedsprite.h
+        game/objects/components/orientedsprite.cpp
         game/objects/components/controlzone.h
         game/objects/components/controlzone.cpp
         game/objects/components/detectable.h

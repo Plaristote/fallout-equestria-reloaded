@@ -3,55 +3,36 @@
 #include <QJsonArray>
 #include <QJsonObject>
 
-CharacterMovement::CharacterMovement(QObject *parent) : CHARACTER_BASE_OBJECT(parent)
+CharacterMovement::CharacterMovement(QObject *parent) : ParentType(parent)
 {
-  orientation  = "down";
+  orientation  = BottomDir;
   movementMode = "walking";
   connect(this, &Sprite::movementFinished,              this, &CharacterMovement::onMovementEnded);
   connect(this, &CharacterMovement::reachedDestination, this, &CharacterMovement::onDestinationReached);
 }
 
-QString CharacterMovement::getAnimationBaseName() const
-{
-  static const QRegularExpression regexp("-(up|left|down|right)$");
-
-  return getAnimation().replace(regexp, "");
-}
-
 void CharacterMovement::setAnimation(const QString &animationName)
 {
-  QString completeAnimationName = animationName + '-' + orientation;
-
-  Sprite::setAnimation(completeAnimationName);
+  ParentType::setAnimation(animationName);
   // Fallback to idle for unexisting character animations
-  if (getAnimation() != completeAnimationName && animationName != "idle")
-    setAnimation("idle");
-}
-
-void CharacterMovement::setOrientation(const QString& value)
-{
-  if (value != orientation)
-  {
-    orientation = value;
-    setAnimation(getAnimationBaseName());
-    emit orientationChanged();
-  }
+  if (getAnimationBaseName() != animationName && animationName != "idle")
+    ParentType::setAnimation("idle");
 }
 
 void CharacterMovement::lookTo(int x, int y)
 {
   if (position.x() > x && position.y() > y)
-    setOrientation("up");
+    setOrientation(UpperDir);
   else if (position.x() < x && position.y() < y)
-    setOrientation("down");
+    setOrientation(BottomDir);
   else if (position.x() == x && position.y() > y)
-    setOrientation("right");
+    setOrientation(RightDir);
   else if (position.x() == x && position.y() < y)
-    setOrientation("left");
+    setOrientation(LeftDir);
   else if (position.x() >= x)
-    setOrientation("left");
+    setOrientation(LeftDir);
   else
-    setOrientation("right");
+    setOrientation(RightDir);
 }
 
 void CharacterMovement::moveTo(int x, int y)
@@ -65,7 +46,7 @@ void CharacterMovement::moveTo(int x, int y)
 
     renderPosition.ry() -= level->getTileMap()->getTileSize().height() / 4;
     lookTo(x, y);
-    animationName = movementMode + '-' + orientation;
+    animationName = movementMode + '-' + getOrientationName();
     moveToCoordinates(renderPosition);
     if (getCurrentAnimation() != animationName)
       setAnimation(movementMode);
@@ -116,11 +97,8 @@ void CharacterMovement::load(const QJsonObject& data)
     pathPoint.setY(pathPointData["y"].toInt());
     currentPath << pathPoint;
   }
-  orientation = data["orientation"].toString("down");
-  if (orientation.length() == 0)
-    orientation = "down";
   setMovementMode(data["moveMode"].toString("walking"));
-  CHARACTER_BASE_OBJECT::load(data);
+  ParentType::load(data);
 }
 
 void CharacterMovement::save(QJsonObject& data) const
@@ -136,7 +114,6 @@ void CharacterMovement::save(QJsonObject& data) const
     currentPathData << pathPointData;
   }
   data["currentPath"] = currentPathData;
-  data["orientation"] = orientation;
   data["moveMode"]    = movementMode;
-  CHARACTER_BASE_OBJECT::save(data);
+  ParentType::save(data);
 }
