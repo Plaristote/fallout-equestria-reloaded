@@ -154,20 +154,38 @@ void ObjectGroup::eachObject(std::function<void (DynamicObject *)> callback) con
     callback(object);
 }
 
+QVector<DynamicObject*> ObjectGroup::allDynamicObjects() const
+{
+  QVector<DynamicObject*> results;
+
+  results.reserve(512);
+  for (ObjectGroup* group : groups)
+    group->collectObjects(results);
+  collectObjects(results);
+  return results;
+}
+
 QVector<DynamicObject*> ObjectGroup::findDynamicObjects(std::function<bool (DynamicObject &)> compare) const
 {
   QVector<DynamicObject*> results;
 
-  results.reserve(objectCount());
+  results.reserve(results.size() + objectCount());
   for (ObjectGroup* group : groups)
     group->collectObjects(compare, results);
   collectObjects(compare, results);
   return results;
 }
 
+void ObjectGroup::collectObjects(QVector<DynamicObject*>& results) const
+{
+  results.reserve(results.size() + objects.size());
+  for (DynamicObject* object : objects)
+    results << object;
+}
+
 void ObjectGroup::collectObjects(std::function<bool (DynamicObject &)> compare, QVector<DynamicObject*>& results) const
 {
-  results.reserve(objects.size());
+  results.reserve(results.size() + objects.size());
   for (DynamicObject* object : objects)
   {
     if (compare(*object))

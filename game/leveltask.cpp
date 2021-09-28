@@ -257,7 +257,7 @@ void LevelTask::update()
 
 void LevelTask::realTimeTask(qint64 delta)
 {
-  const auto objectList = objects;
+  const auto objectList = allDynamicObjects();
 
   timeManager->addElapsedMilliseconds(delta);
   for (DynamicObject* object : objectList)
@@ -278,7 +278,7 @@ void LevelTask::realTimeTask(qint64 delta)
 
 void LevelTask::combatTask(qint64 delta)
 {
-  const auto objectList = objects;
+  const auto objectList = allDynamicObjects();
 
   for (DynamicObject* object : objectList)
     object->update(delta);

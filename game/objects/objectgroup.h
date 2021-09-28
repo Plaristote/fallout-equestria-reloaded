@@ -41,6 +41,8 @@ public:
   Q_INVOKABLE QJSValue       getScriptObject() const;
   void                       eachObject(std::function<void(DynamicObject*)>) const;
   QVector<DynamicObject*>    findDynamicObjects(std::function<bool (DynamicObject&)> compare) const;
+  QVector<DynamicObject*>    allDynamicObjects() const;
+  void                       collectObjects(QVector<DynamicObject*>&) const;
   void                       collectObjects(std::function<bool (DynamicObject&)> compare, QVector<DynamicObject*>&) const;
   Q_INVOKABLE DynamicObject* findObject(const QString& path) const { return find<DynamicObject>(path, &ObjectGroup::getObjectByName); }
   Q_INVOKABLE ObjectGroup*   findGroup(const QString& path)  const { return find<ObjectGroup>  (path, &ObjectGroup::getGroupByName); }
