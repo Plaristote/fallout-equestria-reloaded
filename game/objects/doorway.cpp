@@ -30,8 +30,8 @@ void Doorway::updateTileConnections()
   LevelGrid::CaseContent*      doorwayCase = grid->getGridCase(origin);
   static const QVector<QPoint> upperTargets {QPoint(-1, -1), QPoint(0, -1), QPoint(1, -1)};
   static const QVector<QPoint> bottomTargets{QPoint(-1,  1), QPoint(0,  1), QPoint(1,  1)};
-  static const QVector<QPoint> leftTargets  {QPoint(-1, -1), QPoint(-1, -1), QPoint(-1, -1)};
-  static const QVector<QPoint> rightTargets {QPoint(1,  1), QPoint(1,  1), QPoint(1,  1)};
+  static const QVector<QPoint> leftTargets  {QPoint(-1, -1), QPoint(-1, 0), QPoint(-1, 1)};
+  static const QVector<QPoint> rightTargets {QPoint(1,  -1), QPoint(1,  0), QPoint(1,  1)};
   QVector<QPoint>              targets;
 
   removeTileConnections();
@@ -40,7 +40,7 @@ void Doorway::updateTileConnections()
   else if (getOrientation() == LeftDir || getOrientation() == RightDir)
     targets << leftTargets << rightTargets;
   else
-    qDebug() << "Unsupported Doorway direction" << getOrientationName();
+    qDebug() << "Unsupported Doorway direction" << getOrientationName() << "for" << getObjectName();
   for (const QPoint& target : targets)
   {
     LevelGrid::CaseContent*    targetCase = grid->getGridCase(origin + target);
@@ -155,6 +155,7 @@ bool Doorway::onUse(Character* character)
 
   if (script->hasMethod("onUse") && script->call("onUse", QJSValueList() << character->asJSValue()).toBool())
     return true;
+  character->useActionPoints(2, "door");
   if (locked)
   {
     if (character == level->getPlayer())
