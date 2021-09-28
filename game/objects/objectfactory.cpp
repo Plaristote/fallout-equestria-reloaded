@@ -34,6 +34,7 @@ DynamicObject* ObjectFactory::loadFromJson(const QJsonObject& data) const
     object->load(data);
     object->setRenderPosition(object->getSpritePosition()); // isn't this basically self-assign ?
     root->appendObject(object);
+    return object;
   }
   else
     qDebug() << "/!\\ ObjectFactory: could not load object" << (root->getPath() + '.' + data["name"].toString()) << "of type" << data["type"].toString();
