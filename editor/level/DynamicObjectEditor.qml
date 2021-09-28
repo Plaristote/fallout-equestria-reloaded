@@ -50,8 +50,6 @@ ColumnLayout {
     const renderPosition      = model.getSpritePosition();
     const animationList       = animationLibrary.getAnimationList(model.spriteName);
 
-    readOnlyPositionType = model.getObjectType() === "Character";
-    readOnlyAnimation    = model.getObjectType() === "Character";
     animationInput.currentIndex   = animationList.indexOf(animationName);
     positioningInput.currentIndex = posMode
     gridXInput.text          = position.x;

@@ -15,7 +15,6 @@ public:
   virtual void load(const QJsonObject&);
   virtual void save(QJsonObject&) const;
 
-  void                      setAnimation(const QString& animationName) override;
   void                      moveTo(int x, int y);
   Q_INVOKABLE void          lookTo(int x, int y);
   inline void               lookTo(QPoint target) { lookTo(target.x(), target.y()); }
@@ -44,7 +43,6 @@ private slots:
 
 protected:
   QList<QPoint>      currentPath;
-  QString            orientation;
   QString            movementMode;
   QVector<TileZone*> currentZones;
 };

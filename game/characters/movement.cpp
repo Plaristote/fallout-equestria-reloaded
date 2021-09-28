@@ -5,18 +5,10 @@
 
 CharacterMovement::CharacterMovement(QObject *parent) : ParentType(parent)
 {
-  orientation  = BottomDir;
+  setOrientation(BottomDir);
   movementMode = "walking";
   connect(this, &Sprite::movementFinished,              this, &CharacterMovement::onMovementEnded);
   connect(this, &CharacterMovement::reachedDestination, this, &CharacterMovement::onDestinationReached);
-}
-
-void CharacterMovement::setAnimation(const QString &animationName)
-{
-  ParentType::setAnimation(animationName);
-  // Fallback to idle for unexisting character animations
-  if (getAnimationBaseName() != animationName && animationName != "idle")
-    ParentType::setAnimation("idle");
 }
 
 void CharacterMovement::lookTo(int x, int y)

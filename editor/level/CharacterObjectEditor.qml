@@ -9,6 +9,8 @@ import Game 1.0
 DynamicObjectEditor {
   id: characterEditor
   scriptCategory: "pnjs"
+  readOnlyAnimation: true
+  readOnlyPositionType: true
 
   signal openInventoryClicked()
   signal requestCharacterView(string characterSheet)

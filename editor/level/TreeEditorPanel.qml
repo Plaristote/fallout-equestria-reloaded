@@ -92,7 +92,7 @@ Pane {
         onOpenInventory: root.openInventory(currentObject)
         onRequestCharacterView: root.requestCharacterView(characterSheet)
         onRequestSpriteView: root.requestSpriteView(group)
-        width: parent.width
+        width: parent.width - 15
       }
     }
 

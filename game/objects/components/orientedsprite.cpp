@@ -18,6 +18,7 @@ const QMap<QString, OrientedSprite::Direction> OrientedSprite::directionByName{
   {"up-right",     OrientedSprite::UpperRightDir},
   {"left",         OrientedSprite::LeftDir},
   {"right",        OrientedSprite::RightDir},
+  {"down",         OrientedSprite::BottomDir},
   {"bottom",       OrientedSprite::BottomDir},
   {"bottom-left",  OrientedSprite::BottomLeftDir},
   {"bottom-right", OrientedSprite::BottomRightDir}
@@ -41,6 +42,8 @@ void OrientedSprite::setAnimation(const QString &animationName)
     QString completeAnimationName = animationName + '-' + orientationSuffix[orientation];
 
     Sprite::setAnimation(completeAnimationName);
+    if (getAnimationBaseName() != animationName && animationName != "idle") // fallback
+      ParentType::setAnimation("idle");
   }
   else
     Sprite::setAnimation(animationName);

@@ -181,17 +181,6 @@ bool Character::useActionPoints(int amount, const QString& actionType)
   return isAlive();
 }
 
-static QMap<QString, CharacterMovement::Direction> directionByName = {
-  {"up",           CharacterMovement::UpperDir},
-  {"up-left",      CharacterMovement::UpperLeftDir},
-  {"up-right",     CharacterMovement::UpperRightDir},
-  {"left",         CharacterMovement::LeftDir},
-  {"right",        CharacterMovement::RightDir},
-  {"bottom",       CharacterMovement::BottomDir},
-  {"bottom-left",  CharacterMovement::BottomLeftDir},
-  {"bottom-right", CharacterMovement::BottomRightDir}
-};
-
 void Character::fallAwayFrom(int x, int y, int distance)
 {
   int directionFlag = 0;

@@ -8,8 +8,25 @@ import Game 1.0
 
 DynamicObjectEditor {
   id: doorwayEditor
+  property var directions: ["", "left", "up", "right", "down"]
+  readOnlyAnimation: true
 
   fields: [
+    TerminalLabel { text: "Orientation" },
+    TerminalComboBox {
+      id: orientationInput
+      Layout.fillWidth: true
+      model: ["none", "left", "up", "right", "bottom"]
+      currentIndex: {
+        console.log("Updating current index", doorwayEditor.model.orientation);
+        directions.indexOf(doorwayEditor.model.orientation)
+      }
+      onCurrentIndexChanged: {
+        console.log("Set orientation on doorway", doorwayEditor.model, directions[currentIndex]);
+        doorwayEditor.model.orientation = directions[currentIndex];
+      }
+    },
+
     TerminalLabel { text: "Opened" },
     TerminalCheckBox {
       checked: model.opened
