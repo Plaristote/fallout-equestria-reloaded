@@ -1,6 +1,7 @@
 #include "zone.h"
 #include "tilemap/tilezone.h"
 #include "tilemap/tilemap.h"
+#include "game/objects/doorway.h"
 #include "game.h"
 
 ZoneComponent::ZoneComponent(QObject* parent) : ParentType(parent)
@@ -36,6 +37,8 @@ void ZoneComponent::registerDynamicObject(DynamicObject* object)
   registerZoneController(object);
   if (object->isCharacter())
     dynamic_cast<CharacterMovement*>(object)->setCurrentZones(getGrid()->getZonesAt(object->getPosition()));
+  else if (object->getObjectType() == "Doorway")
+    dynamic_cast<Doorway*>(object)->updateTileConnections();
   ParentType::registerDynamicObject(object);
 }
 
@@ -44,6 +47,8 @@ void ZoneComponent::unregisterDynamicObject(DynamicObject* object)
   unregisterZoneController(object);
   if (object->isCharacter())
     dynamic_cast<CharacterMovement*>(object)->clearCurrentZones();
+  else if (object->getObjectType() == "Doorway")
+    dynamic_cast<Doorway*>(object)->removeTileConnections();
   ParentType::unregisterDynamicObject(object);
 }
 

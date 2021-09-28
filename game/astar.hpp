@@ -15,10 +15,11 @@
 /*
  * A bit of documentation so you don't have to read this gorgeous piece of code:
  * UserState must implements at least
- * bool  operator==()                                     : comparaison between two references to a UserState
- * float GetCost(UserState)                               : the cost to go from a UserState to the one passed as parameter
- * float GoalDistanceEstimate(UserState)                  : Heuristic between a UserState and another oneç
- * std::list<UserState*> GetSuccessors(UserState* parent) : All the possible successor to the UserState, considering the parent
+ * Actor type definition                                          : a type for the reference to the object moving through the nodes
+ * bool  operator==()                                             : comparaison between two references to a UserState
+ * float GetCost(UserState, Actor*)                               : the cost to go from a UserState to the one passed as parameter, for a given Actor
+ * float GoalDistanceEstimate(UserState)                          : Heuristic between a UserState and another oneç
+ * std::list<UserState*> GetSuccessors(UserState* parent, Actor*) : All the possible successor to the UserState, considering the parent and the Actor
  */
 template <class UserState>
 class AstarPathfinding
@@ -53,8 +54,9 @@ public:
       bool operator() ( const Node *x, const Node *y ) const { return (x->f > y->f); }
   };
 
-  AstarPathfinding(void) : _state(NotInitialized), _cancelRequest(false)
+  AstarPathfinding(typename UserState::Actor* actor = nullptr) : _state(NotInitialized), _cancelRequest(false)
   {
+    _actor          = actor;
     _allocateNodeIt = 0;
     _start          = 0;
     _goal           = 0;
@@ -149,7 +151,7 @@ public:
         SearchSuccedded(node);
       else // not goal
       {
-        std::list<UserState*> userSuccessors = node->userNode.GetSuccessors(node->parent ? &node->parent->userNode : 0);
+        std::list<UserState*> userSuccessors = node->userNode.GetSuccessors(node->parent ? &node->parent->userNode : 0, _actor);
 
         typename std::list<UserState*>::iterator successorIt  = userSuccessors.begin();
         typename std::list<UserState*>::iterator successorEnd = userSuccessors.end();
@@ -160,7 +162,7 @@ public:
 
           successor->userNode = *(*successorIt);
           //      The g value for this successor ...
-          float newg = node->g + node->userNode.GetCost(successor->userNode);
+          float newg = node->g + node->userNode.GetCost(successor->userNode, _actor);
 
           // Now we need to find whether the node is on the open or closed lists
           // If it is but the node that is already on them is better (lower g)
@@ -336,6 +338,7 @@ private:
   Node*    _goal;
 
   unsigned int _allocateNodeIt;
+  typename UserState::Actor* _actor = nullptr;
 };
 
 #endif

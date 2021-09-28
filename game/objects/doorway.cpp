@@ -9,8 +9,49 @@ Doorway::Doorway(QObject* parent) : DynamicObject(parent)
   lockpickLevel = 1;
   connect(this, &Doorway::openedChanged, this, &Doorway::updateAccessPath);
   connect(this, &Doorway::openedChanged, this, &Doorway::updateAnimation);
+  connect(this, &DynamicObject::positionChanged,     this, &Doorway::updateTileConnections);
+  connect(this, &OrientedSprite::orientationChanged, this, &Doorway::updateTileConnections);
   openSound = closeSound = "door-open";
   lockedSound = "door-locked";
+  tileConnections.reserve(8);
+}
+
+void Doorway::removeTileConnections()
+{
+  for (void* caseContent : qAsConst(tileConnections))
+    reinterpret_cast<LevelGrid::CaseConnection*>(caseContent)->doorway = nullptr;
+  tileConnections.clear();
+}
+
+void Doorway::updateTileConnections()
+{
+  QPoint                       origin = getPosition();
+  LevelGrid*                   grid = Game::get()->getLevel()->getGrid();
+  LevelGrid::CaseContent*      doorwayCase = grid->getGridCase(origin);
+  static const QVector<QPoint> upperTargets {QPoint(-1, -1), QPoint(0, -1), QPoint(1, -1)};
+  static const QVector<QPoint> bottomTargets{QPoint(-1,  1), QPoint(0,  1), QPoint(1,  1)};
+  static const QVector<QPoint> leftTargets  {QPoint(-1, -1), QPoint(-1, -1), QPoint(-1, -1)};
+  static const QVector<QPoint> rightTargets {QPoint(1,  1), QPoint(1,  1), QPoint(1,  1)};
+  QVector<QPoint>              targets;
+
+  removeTileConnections();
+  if (getOrientation() == UpperDir || getOrientation() == BottomDir)
+    targets << upperTargets << bottomTargets;
+  else if (getOrientation() == LeftDir || getOrientation() == RightDir)
+    targets << leftTargets << rightTargets;
+  else
+    qDebug() << "Unsupported Doorway direction" << getOrientationName();
+  for (const QPoint& target : targets)
+  {
+    LevelGrid::CaseContent*    targetCase = grid->getGridCase(origin + target);
+    LevelGrid::CaseConnection* connection = targetCase ? targetCase->connectionWith(doorwayCase) : nullptr;
+
+    if (connection)
+    {
+      connection->doorway = this;
+      tileConnections.push_back(connection);
+    }
+  }
 }
 
 void Doorway::updateAccessPath()
@@ -19,8 +60,11 @@ void Doorway::updateAccessPath()
     toggleZoneBlocked(!opened);
   else
   {
-    blocksPath = !opened;
-    emit blocksPathChanged();
+    LevelGrid*              grid = Game::get()->getLevel()->getGrid();
+    LevelGrid::CaseContent* doorwayCase = grid->getGridCase(getPosition());
+
+    if (doorwayCase)
+      doorwayCase->cover = opened ? 75 : 100;
   }
 }
 
@@ -53,6 +97,39 @@ bool Doorway::bustOpen(int damage)
     emit openedChanged();
   }
   return success;
+}
+
+bool Doorway::onGoThrough(Character* character)
+{
+  if (!opened && canGoThrough(character))
+  {
+    auto* level = Game::get()->getLevel();
+
+    character->useActionPoints(2, "doorway");
+    opened = true;
+    level->getSoundManager()->play(openSound);
+    emit openedChanged();
+    return true;
+  }
+  return opened;
+}
+
+bool Doorway::canGoThrough(Character* character) const
+{
+  if (character == Game::get()->getPlayer())
+    return opened;
+  if (!opened)
+  {
+    if (script && script->hasMethod("canGoThrough"))
+    {
+      QJSValue result = script->call("canGoThrough", QJSValueList() << character->asJSValue());
+
+      if (result.isBool())
+        return result.toBool();
+    }
+    return !locked || character->getInventory()->count(keyName) > 0;
+  }
+  return true;
 }
 
 QStringList Doorway::getAvailableInteractions()

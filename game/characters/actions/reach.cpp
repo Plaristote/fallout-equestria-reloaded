@@ -74,7 +74,7 @@ int ReachAction::getApCost() const
   {
     QList<QPoint> path;
 
-    if (grid->findPath(character->getPosition(), *it, path))
+    if (grid->findPath(character->getPosition(), *it, path, character))
       return path.size();
   }
   return -1;
@@ -104,7 +104,7 @@ bool ReachAction::trigger()
     state = Interrupted;
     for (auto it = candidates.begin() ; it != candidates.end() ; ++it)
     {
-      if (grid->findPath(character->getPosition(), *it, character->rcurrentPath()))
+      if (grid->findPath(character->getPosition(), *it, character->rcurrentPath(), character))
       {
         state = InProgress;
         break ;

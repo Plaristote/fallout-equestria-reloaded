@@ -10,12 +10,22 @@ function getEquippedLockpickToolsFor(character) {
   return null;
 }
 
+const racesOpeningDoors = [
+  'diamond-dog', 'earth-pony', 'gator-pony', 'griffon', 'pegasus', 'unicorn'
+];
+
 export class Door {
   constructor(model) {
     this.model = model;
     this.destructible = true;
     if (!this.model.hasVariable("xp"))
       this.model.setVariable("xp", 25);
+  }
+
+  canGoThrough(character) {
+    if (!this.model.locked)
+      return racesOpeningDoors.indexOf(character.statistics.race);
+    return null;
   }
 
   isBroken() {

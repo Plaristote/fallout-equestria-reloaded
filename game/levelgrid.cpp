@@ -3,6 +3,7 @@
 #include "tilemap/tilemap.h"
 #include "dynamicobject.h"
 #include "character.h"
+#include "objects/doorway.h"
 #include "astar.hpp"
 #include <cmath>
 #include <QLineF>
@@ -85,12 +86,96 @@ bool LevelGrid::CaseContent::isBlocked() const
 
 bool LevelGrid::CaseContent::isLinkedTo(QPoint position) const
 {
-  auto iterator = std::find_if(successors.begin(), successors.end(), [position](CaseContent* successor) -> bool
+  auto iterator = std::find_if(connections.begin(), connections.end(), [this, position](const CaseConnection* connection) -> bool
   {
-    return !successor->isBlocked() && successor->position == position;
+    auto* target = connection->getTargetFor(this);
+
+    return target->position == position && !target->isBlocked();
+  });
+  return iterator != connections.end();
+}
+
+LevelGrid::CaseConnection* LevelGrid::CaseContent::connectionWith(CaseContent* other) const
+{
+  auto iterator = std::find_if(connections.begin(), connections.end(), [this, other](const CaseConnection* connection) -> bool
+  {
+    return connection->getTargetFor(this) == other;
   });
 
-  return iterator != successors.end();
+  return iterator != connections.end() ? *iterator : nullptr;
+}
+
+void LevelGrid::CaseContent::connectWith(CaseContent* other)
+{
+  if (other)
+  {
+    CaseConnection* connection = new CaseConnection;
+
+    connection->connect(this, other);
+  }
+}
+
+void LevelGrid::CaseContent::disconnectFrom(CaseContent* other)
+{
+  for (auto* connection : connections)
+  {
+    if (connection->getTargetFor(this) == other)
+    {
+      connection->disconnect();
+      break ;
+    }
+  }
+}
+
+void LevelGrid::CaseContent::clearConnections()
+{
+  while (connections.size())
+    (*connections.begin())->disconnect();
+}
+
+void LevelGrid::CaseConnection::connect(CaseContent* a, CaseContent* b)
+{
+  pair = {a, b};
+  a->disconnectFrom(b);
+  b->disconnectFrom(a);
+  a->connections.push_back(this);
+  b->connections.push_back(this);
+}
+
+template<typename ARRAY, typename VALUE>
+void removeFrom(ARRAY& array, VALUE value)
+{
+  auto it = std::find(array.begin(), array.end(), value);
+
+  if (it != array.end())
+      array.erase(it);
+}
+
+void LevelGrid::CaseConnection::disconnect()
+{
+  removeFrom(pair.first->connections, this);
+  removeFrom(pair.second->connections, this);
+}
+
+float LevelGrid::CaseConnection::getCost() const
+{
+  if (doorway && !doorway->property("opened").toBool())
+    return 3.f;
+  return 1.f;
+}
+
+bool LevelGrid::CaseConnection::canGoThrough(CharacterMovement* character)
+{
+  if (doorway)
+    return doorway->canGoThrough(reinterpret_cast<Character*>(character));
+  return true;
+}
+
+bool LevelGrid::CaseConnection::goThrough(CharacterMovement* character)
+{
+  if (doorway)
+    return doorway->onGoThrough(reinterpret_cast<Character*>(character));
+  return true;
 }
 
 struct PrepareCaseFunctor
@@ -253,30 +338,30 @@ void LevelGrid::initializePathfinding()
     bool leftWalled      = left && left->vwall;
     bool rightWalled     = gridCase.vwall;
 
-    gridCase.successors.clear();
+    gridCase.clearConnections();
     if (!upLeftWalled    && isAvailable(upLeft) && !(!isAvailable(left) && !isAvailable(up)))
-      gridCase.successors.push_back(upLeft);
+      gridCase.connectWith(upLeft);
     if (!upWalled        && isAvailable(up))
-      gridCase.successors.push_back(up);
+      gridCase.connectWith(up);
     if (!upRightWalled   && isAvailable(upRight) && !(!isAvailable(up) && !isAvailable(right)))
-      gridCase.successors.push_back(upRight);
+      gridCase.connectWith(upRight);
     if (!leftWalled      && isAvailable(left))
-      gridCase.successors.push_back(left);
+      gridCase.connectWith(left);
     if (!rightWalled     && isAvailable(right))
-      gridCase.successors.push_back(right);
+      gridCase.connectWith(right);
     if (!downLeftWalled  && isAvailable(downLeft) && !(!isAvailable(left) && !isAvailable(down)))
-      gridCase.successors.push_back(downLeft);
+      gridCase.connectWith(downLeft);
     if (!downWalled      && isAvailable(down))
-      gridCase.successors.push_back(down);
+      gridCase.connectWith(down);
     if (!downRightWalled && isAvailable(downRight) && !(!isAvailable(down) && !isAvailable(right)))
-      gridCase.successors.push_back(downRight);
+      gridCase.connectWith(downRight);
   }
 }
 
-bool LevelGrid::findPath(QPoint from, QPoint to, QList<QPoint>& path)
+bool LevelGrid::findPath(QPoint from, QPoint to, QList<QPoint>& path, CharacterMovement* character)
 {
   typedef AstarPathfinding<LevelGrid::CaseContent> Pathfinder;
-  Pathfinder        astar;
+  Pathfinder        astar(character);
   unsigned short    iterationCount = 0;
   Pathfinder::State state;
   CaseContent*      fromCase = getGridCase(from.x(), from.y());
@@ -309,13 +394,15 @@ bool LevelGrid::findPath(QPoint from, QPoint to, QList<QPoint>& path)
   return false;
 }
 
-std::list<LevelGrid::CaseContent*> LevelGrid::CaseContent::GetSuccessors(const CaseContent* parent) const
+std::list<LevelGrid::CaseContent*> LevelGrid::CaseContent::GetSuccessors(const CaseContent* parent, Actor* actor) const
 {
   std::list<LevelGrid::CaseContent*> results;
 
-  for (auto* node : successors)
+  for (auto* connection : connections)
   {
-    if (node != parent && !node->isBlocked())
+    CaseContent* node = connection->getTargetFor(this);
+
+    if ((!parent || node->position != parent->position) && !node->isBlocked() && connection->canGoThrough(actor))
       results.push_back(node);
   }
   return results;

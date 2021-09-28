@@ -6,7 +6,7 @@ bool MovementAction::trigger()
   auto* level = Game::get()->getLevel();
   auto* grid  = level->getGrid();
 
-  if (grid->findPath(character->getPosition(), target, character->rcurrentPath()))
+  if (grid->findPath(character->getPosition(), target, character->rcurrentPath(), character))
     state = InProgress;
   else
     state = Interrupted;
@@ -38,11 +38,13 @@ void MovementAction::triggerNextMovement()
     QPoint nextPosition = character->rcurrentPath().front();
     auto*  level        = Game::get()->getLevel();
     auto*  grid         = level->getGrid();
-    auto*  nextCase     = grid->getGridCase(nextPosition.x(), nextPosition.y());
+    auto*  currentCase  = grid->getGridCase(character->getPosition());
+    auto*  nextCase     = grid->getGridCase(nextPosition);
+    auto*  connection   = currentCase ? currentCase->connectionWith(nextCase) : nullptr;
 
     if (nextCase && (!nextCase->occupied || nextCase->occupant == character))
     {
-      if (!level->isInCombat(character) || character->useActionPoints(1, "movement"))
+      if (connection->goThrough(character) && character->useActionPoints(1, "movement"))
         character->moveTo(nextPosition.x(), nextPosition.y());
       else
         state = Interrupted;

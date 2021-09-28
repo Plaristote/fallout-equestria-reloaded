@@ -24,9 +24,11 @@ public:
 
   QStringList getAvailableInteractions() override;
   Q_INVOKABLE bool bustOpen(int damage);
-  bool isBlockingPath() const { return !opened; }
+  bool isBlockingPath() const { return false; }
   bool triggerInteraction(Character* character, const QString& interactionType) override;
   bool isDestructible() const;
+  Q_INVOKABLE bool onGoThrough(Character*);
+  Q_INVOKABLE bool canGoThrough(Character*) const;
 
   Q_INVOKABLE bool onUse(Character* character);
 
@@ -38,6 +40,9 @@ signals:
   void lockpickLevelChanged();
   void soundChanged();
 
+public slots:
+  void updateTileConnections();
+  void removeTileConnections();
 private slots:
   void updateAccessPath();
   void updateAnimation();
@@ -49,6 +54,7 @@ private:
   QString   keyName;
   int       lockpickLevel;
   QString   openSound, closeSound, lockedSound;
+  QVector<void*> tileConnections;
 };
 
 #endif // DOORWAY_H

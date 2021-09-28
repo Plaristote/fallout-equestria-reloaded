@@ -137,7 +137,7 @@ int ActionQueue::getMovementApCost(QPoint target) const
   if (from == target)
     return 0;
   grid = Game::get()->getLevel()->getGrid();
-  if (grid->findPath(from, target, path))
+  if (grid->findPath(from, target, path, character))
     return path.size();
   return -1;
 }

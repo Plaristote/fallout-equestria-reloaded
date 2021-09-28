@@ -12,13 +12,13 @@ GridComponent::GridComponent(QObject *parent) : ParentType(parent)
 
 void GridComponent::load(const QJsonObject& data)
 {
-  ParentType::load(data);
   if (tilemap->load(data["name"].toString()))
   {
     for (TileLayer* layer : tilemap->getRoofs())
       connect(layer, &TileLayer::visibleChanged, [this, layer]() { onRoofVisibilityChanged(layer); });
     grid->initializeGrid(tilemap);
     emit tilemapReady();
+    ParentType::load(data);
   }
   else
     throw std::runtime_error("Could not load tilemap");

@@ -345,7 +345,7 @@ QVariantList LevelTask::previewPathTo(int x, int y)
   QList<QPoint> path;
   QVariantList result;
 
-  if (getPlayer() && grid->findPath(getPlayer()->getPosition(), QPoint(x, y), path))
+  if (getPlayer() && grid->findPath(getPlayer()->getPosition(), QPoint(x, y), path, getPlayer()))
   {
     for (const auto& point : qAsConst(path))
       result.push_back(point);
