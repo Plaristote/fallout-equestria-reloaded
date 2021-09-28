@@ -30,10 +30,8 @@ void ObjectGroup::load(const QJsonObject& data)
   {
     DynamicObject* childObject = factory()->loadFromJson(objectData.toObject());
 
-    if (childObject)
-      appendObject(childObject);
-    else
-      qDebug() << "/!\\ ObjectGroup: failed to load object:" << getPath() << objectData["name"].toString();
+    if (!childObject)
+      qDebug() << "/!\\ ObjectGroup: failed to load object:" << getPath() << objectData;
   }
   emit nameChanged();
 }
