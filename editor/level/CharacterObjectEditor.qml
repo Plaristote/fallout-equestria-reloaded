@@ -62,11 +62,13 @@ DynamicObjectEditor {
       }
     },
 
-    TerminalButton {
+    TerminalToolButton {
       Layout.columnSpan: 2
       Layout.fillWidth: true
+      Layout.preferredHeight: 40
       text: "Inventory"
-      onClicked: openInventoryClicked()
+      iconName: "item"
+      onClicked: openInventoryClicked();
       padding: 20
       height: 40
     }

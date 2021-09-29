@@ -31,7 +31,7 @@ Item {
     title: "New faction"
     anchors.centerIn: parent
     onAccepted: {
-      dataEngine.registerFaction(newFactionNameInput.text);
+      dataEngine.registerFaction(newFactionDialog.value);
     }
   }
 

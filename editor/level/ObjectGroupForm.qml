@@ -22,16 +22,22 @@ GridLayout {
     onTextChanged: if (currentGroup.name !== text) { currentGroup.name = text }
   }
 
-  TerminalLabel { text: "Position" }
+  TerminalLabel { text: "Offset" }
   TerminalField {
     id: groupOffsetXInput
     Layout.fillWidth: true
-    onTextChanged: currentGroup.offset = Qt.point(parseInt(groupOffsetXInput.text), parseInt(groupOffsetYInput.text))
+    onTextChanged: {
+      if (parseInt(text) !== currentGroup.offset.x)
+        currentGroup.offset = Qt.point(parseInt(groupOffsetXInput.text), parseInt(groupOffsetYInput.text));
+    }
   }
   TerminalField {
     id: groupOffsetYInput
     Layout.fillWidth: true
-    onTextChanged: currentGroup.offset = Qt.point(parseInt(groupOffsetXInput.text), parseInt(groupOffsetYInput.text))
+    onTextChanged: {
+      if (parseInt(text) !== currentGroup.offset.y)
+        currentGroup.offset = Qt.point(parseInt(groupOffsetXInput.text), parseInt(groupOffsetYInput.text))
+    }
   }
 
   TerminalLabel { text: "Script"; visible: !readOnlyScript }
