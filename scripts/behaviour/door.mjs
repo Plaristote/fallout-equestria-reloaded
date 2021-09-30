@@ -23,8 +23,8 @@ export class Door {
   }
 
   canGoThrough(character) {
-    if (!this.model.locked)
-      return racesOpeningDoors.indexOf(character.statistics.race);
+    if (racesOpeningDoors.indexOf(character.statistics.race) < 0)
+      return false;
     return null;
   }
 
