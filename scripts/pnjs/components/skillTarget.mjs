@@ -1,6 +1,6 @@
 import {DialogComponent} from "./dialog.mjs";
 import {getValueFromRange} from "../../behaviour/random.mjs";
-import {skillCheck} from "../../cmap/helpers/checks.mjs";
+import {stealCheck} from "../../cmap/helpers/checks.mjs";
 
 export class SkillTargetComponent extends DialogComponent {
   constructor(model) {
@@ -34,15 +34,8 @@ export class SkillTargetComponent extends DialogComponent {
 
   onTakeItem(user, item, quantity) {
     console.log("on take item", user, item, quantity);
-    if (this.model.isAlive()) {
-      var target = this.model.statistics.perception * 12;
-      var weight = item.weight / item.quantity * quantity;
-
-      if (this.model.fieldOfView.isDetected(user))
-        target += 40;
-      target += weight;
-      return skillCheck(user, "steal", {
-        target:          target,
+    if (this.model.isAlive() && !this.model.unconscious) {
+      return stealCheck(user, this.model, item, quantity, {
         failure:         this.onStealFailure.bind(this, user, false, item),
         criticalFailure: this.onStealFailure.bind(this, user, true, item)
       });
