@@ -53,3 +53,17 @@ export function modifiedSkillValue(user, skill, target) {
 export function bonusForSkill(user, skill, target) {
   return 0;
 }
+
+export function stealCheck(user, target, item, quantity, callbacks) {
+  var threshold = target.statistics.perception * 12;
+  var weight    = item.weight / item.quantity * quantity;
+
+  if (target.fieldOfView.isDetected(user))
+    threshold += 40;
+  threshold += weight;
+  return skillCheck(user, "steal", {
+    target:          threshold,
+    failure:         callbacks.failure,
+    criticalFailure: callbacks.criticalFailure || callbacks.failure
+  });
+}
