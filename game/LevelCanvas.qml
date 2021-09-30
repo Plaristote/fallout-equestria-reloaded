@@ -127,14 +127,12 @@ Canvas {
     for (i = 0 ; i < levelController.tilemap.textureList.length ; ++i) {
       const texturePath = levelController.tilemap.textureList[i];
       if (images.indexOf(texturePath) === -1) {
-        console.log("LevelCanvas: Preloading image", texturePath, "from Tiled resources");
         loadImage("../" + texturePath);
         images.push(texturePath);
       }
       loadImage("../assets/ui/cursors/move-tile.png");
       loadImage("../assets/ui/cursors/target-tile.png");
     }
-    console.log("LevelCanvas: Preloading tilemap", (preRenderPath + "tilemap.png"));
     unloadImage(preRenderPath + "tilemap.png");
     loadImage(preRenderPath + "tilemap.png");
     for (i = 0 ; i < levelController.tilemap.roofs.length ; ++i) {
@@ -151,7 +149,6 @@ Canvas {
     }
 
     animationLibrary.getSources().forEach(function(texture) {
-      console.log("LevelCanvas: Preloading texture", texture, "from animation library");
       loadImage("../assets/sprites/" + texture);
     });
   }
