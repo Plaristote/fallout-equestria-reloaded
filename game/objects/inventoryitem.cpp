@@ -187,8 +187,13 @@ bool InventoryItem::isCombatItem()
 
 bool InventoryItem::isInRange(DynamicObject *target)
 {
-  if (target && script && script->hasMethod("isInRange"))
-    return script->call("isInRange", QJSValueList() << target->asJSValue()).toBool();
+  if (target)
+  {
+    if (script && script->hasMethod("isInRange"))
+      return script->call("isInRange", QJSValueList() << target->asJSValue()).toBool();
+    else
+      return reinterpret_cast<Character*>(getOwner())->getDistance(target) <= getRange();
+  }
   return true;
 }
 

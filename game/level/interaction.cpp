@@ -255,7 +255,7 @@ void InteractionComponent::useItemOn(Character* user, InventoryItem* item, Dynam
   auto* actions = user->getActionQueue();
 
   actions->reset();
-  if (target && !item->isInRange(target))
+  if (target && (!item->isInRange(target) || !user->hasLineOfSight(target)))
     actions->pushReach(target, item->getRange());
   actions->pushItemUse(target, item);
   if (actions->start())
