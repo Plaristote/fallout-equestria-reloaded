@@ -43,6 +43,7 @@ public:
   Q_INVOKABLE void unequipItem(InventoryItem*, bool dropped = false);
   Q_INVOKABLE InventoryItem* getEquippedItem(const QString& slotName) const;
   QVector<InventoryItem*> getEquippedItems() const;
+  Q_INVOKABLE bool isEquippedItem(InventoryItem*) const;
 
   Q_INVOKABLE int count(const QString& name) const;
 

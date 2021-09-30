@@ -49,7 +49,10 @@ void Inventory::destroyItem(InventoryItem *item, int quantity)
 
   if (amount >= quantity)
   {
-    removeItem(item);
+    if (isEquippedItem(item))
+      unequipItem(item, true);
+    else
+      removeItem(item);
     item->deleteLater();
   }
   else
@@ -262,6 +265,11 @@ InventoryItem* Inventory::getEquippedItem(const QString &slotName) const
   if (itemSlots.contains(slotName))
     return itemSlots[slotName];
   return nullptr;
+}
+
+bool Inventory::isEquippedItem(InventoryItem* item) const
+{
+  return std::find(itemSlots.begin(), itemSlots.end(), item) != itemSlots.end();
 }
 
 QVector<InventoryItem*> Inventory::getEquippedItems() const
