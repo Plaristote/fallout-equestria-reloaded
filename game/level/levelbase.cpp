@@ -22,17 +22,13 @@ QList<Character*> LevelBase::findCharacters(std::function<bool (Character &)> co
 {
   QList<Character*> characters;
 
-  characters.reserve(objects.length());
-  for (DynamicObject* object : objects)
+  characters.reserve(512);
+  findDynamicObjects([compare, &characters](DynamicObject& object)
   {
-    if (object->isCharacter())
-    {
-      Character* character = reinterpret_cast<Character*>(object);
-
-      if (compare(*character))
-        characters << character;
-    }
-  }
+    if (object.isCharacter() && compare(reinterpret_cast<Character&>(object)))
+      characters << reinterpret_cast<Character*>(&object);
+    return false;
+  });
   return characters;
 }
 

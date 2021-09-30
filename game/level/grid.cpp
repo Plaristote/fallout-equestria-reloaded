@@ -149,13 +149,13 @@ QJSValue GridComponent::getDynamicObjectsAt(int x, int y) const
   auto& scriptEngine = Game::get()->getScriptEngine();
   QJSValue result = scriptEngine.newArray();
   QJSValue push = result.property("push");
-  QPoint position(x, y);
+  QPoint   position(x, y);
+  auto     objectList = findDynamicObjects(
+    [position](DynamicObject& object) { return object.getPosition() == position; }
+  );
 
-  for (DynamicObject* object : objects)
-  {
-    if (object->getPosition() == position)
-      push.callWithInstance(result, QJSValueList() << object->asJSValue());
-  }
+  for (DynamicObject* object : objectList)
+    push.callWithInstance(result, QJSValueList() << object->asJSValue());
   return result;
 }
 
