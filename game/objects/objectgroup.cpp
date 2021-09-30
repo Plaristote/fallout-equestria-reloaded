@@ -19,6 +19,8 @@ void ObjectGroup::load(const QJsonObject& data)
 {
   ParentType::load(data);
   name = data["name"].toString();
+  offset.setX(data["ox"].toInt(0));
+  offset.setY(data["oy"].toInt(0));
   for (QJsonValue groupData : data["groups"].toArray())
   {
     ObjectGroup* childGroup = new ObjectGroup(this);
@@ -58,6 +60,8 @@ void ObjectGroup::save(QJsonObject& data) const
   data["name"]    = name;
   data["groups"]  = jsonGroups;
   data["objects"] = jsonObjects;
+  data["ox"] = offset.x();
+  data["oy"] = offset.y();
 }
 
 ObjectFactory* ObjectGroup::factory()
