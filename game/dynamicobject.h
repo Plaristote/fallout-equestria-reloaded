@@ -25,6 +25,7 @@ class DynamicObject : public LightSourceComponent
   Q_PROPERTY(TaskRunner* tasks MEMBER taskManager)
   Q_PROPERTY(bool blocksPath MEMBER blocksPath NOTIFY blocksPathChanged)
   Q_PROPERTY(bool isVisible READ isVisible NOTIFY visibilityChanged)
+  Q_PROPERTY(QPoint spriteOffset READ getSpriteOffset WRITE setSpriteOffset NOTIFY spritePositionChanged)
   Q_PROPERTY(ObjectGroup* parent READ getGroup NOTIFY parentChanged)
 
 public:
@@ -57,6 +58,8 @@ public:
   virtual QStringList getAvailableInteractions();
   void setPosition(QPoint value) { position = value; emit positionChanged(); }
   virtual int getCoverValue() const { return 100; }
+  QPoint getSpriteOffset() const;
+  void   setSpriteOffset(QPoint);
 
   Q_INVOKABLE virtual bool triggerInteraction(Character*, const QString& interactionType);
   Q_INVOKABLE virtual bool triggerSkillUse(Character* user, const QString& skillName);

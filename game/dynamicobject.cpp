@@ -120,6 +120,26 @@ void DynamicObject::onBlocksPathChanged()
   }
 }
 
+QPoint DynamicObject::getSpriteOffset() const
+{
+  GridComponent* level = Game::get()->getLevel();
+
+  if (level)
+    return getSpritePosition() - level->getTilePosition(getPosition());
+  return QPoint(0, 0);
+}
+
+void DynamicObject::setSpriteOffset(QPoint offset)
+{
+  GridComponent* level = Game::get()->getLevel();
+
+  if (level)
+  {
+    setRenderPosition(level->getTilePosition(getPosition()) + offset);
+    emit spritePositionChanged();
+  }
+}
+
 void DynamicObject::load(const QJsonObject& data)
 {
   objectName = data["objectName"].toString();

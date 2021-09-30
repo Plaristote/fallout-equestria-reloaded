@@ -25,6 +25,7 @@ public:
   virtual void     unregisterDynamicObject(DynamicObject*);
 
   void setCharacterPosition(Character*, int x, int y);
+  QPoint getTilePosition(QPoint position) const;
   Q_INVOKABLE void setObjectPosition(DynamicObject*, int x, int y);
   Q_INVOKABLE QPoint getAdjustedOffsetFor(const DynamicObject*) const;
   Q_INVOKABLE TileLayer* getRoofFor(DynamicObject*) const;

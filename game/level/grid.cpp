@@ -83,6 +83,16 @@ void GridComponent::setCharacterPosition(Character* character, int x, int y)
   setObjectPosition(character, x, y);
 }
 
+QPoint GridComponent::getTilePosition(QPoint position) const
+{
+  QSize tileSize = tilemap->getTileSize();
+
+  return QPoint(
+    position.x() * tileSize.width()  / 2 - position.y() * tileSize.width()  / 2,
+    position.y() * tileSize.height() / 2 + position.x() * tileSize.height() / 2
+  );
+}
+
 void GridComponent::setObjectPosition(DynamicObject* object, int x, int y)
 {
   if (object->isBlockingPath())
