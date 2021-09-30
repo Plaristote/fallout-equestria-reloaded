@@ -39,7 +39,8 @@ ColumnLayout {
     const renderX = parseInt(renderXInput.text);
     const renderY = parseInt(renderYInput.text);
 
-    model.setRenderPosition(Qt.point(renderX, renderY));
+    model.spriteOffset = Qt.point(renderX, renderY);
+    //model.setRenderPosition(Qt.point(renderX, renderY));
   }
 
   onModelChanged: {
@@ -47,7 +48,8 @@ ColumnLayout {
     const spriteName          = model.spriteName;
     const animationName       = model.getAnimation();
     const position            = model.getPosition();
-    const renderPosition      = model.getSpritePosition();
+    const renderPosition      = { x: model.spriteOffset.x, y: model.spriteOffset.y };
+    //const renderPosition      = model.getSpritePosition();
     const animationList       = animationLibrary.getAnimationList(model.spriteName);
 
     animationInput.currentIndex   = animationList.indexOf(animationName);
