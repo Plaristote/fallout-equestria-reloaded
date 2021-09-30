@@ -1,5 +1,6 @@
 #include "scripteditorcontroller.h"
 #include <QDir>
+#include <QDirIterator>
 #include <QFile>
 #include <QDebug>
 #include <QJsonDocument>
@@ -20,8 +21,13 @@ ScriptEditorController::ScriptEditorController(QObject *parent) : QObject(parent
 QStringList ScriptEditorController::getScripts(const QString& type)
 {
   QDir dir("scripts/" + type);
+  QStringList extensions{"*.mjs", "*.js"};
+  QDirIterator it(dir.path(), extensions, QDir::Files, QDirIterator::Subdirectories);
+  QStringList output;
 
-  return dir.entryList(QStringList() << "*.mjs" << "*.js", QDir::NoFilter, QDir::Name);
+  while (it.hasNext())
+    output << it.next().replace(dir.path() + '/', "");
+  return output;
 }
 
 QStringList ScriptEditorController::getCharacterSheets()
