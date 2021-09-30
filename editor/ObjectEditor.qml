@@ -64,7 +64,7 @@ Item {
         id: objectForm
         Layout.fillHeight: true
         Layout.fillWidth: true
-        currentObject: itemLibrary.getObject(currentName)
+        currentObject: itemLibrary.getObject(currentName) || ({})
       }
 
       MenuButton {

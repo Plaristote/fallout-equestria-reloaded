@@ -27,12 +27,12 @@ Pane {
       value: parseInt(valueInput.text),
       sprite: spriteInput.currentText,
       icon: iconInput.text,
-      scriptName: scriptInput.currentText,
+      scriptName: currentObject.scriptName,
       isGroupable: groupableInput.checked
     };
     itemLibrary.setObject(currentName, currentObject);
     itemLibrary.save();
-    scriptController.setScript("items", currentObject.script, scriptEditor.text);
+    //scriptController.setScript("items", currentObject.script, scriptEditor.text);
   }
 
   GridLayout {
