@@ -175,6 +175,11 @@ float GridComponent::getDistance(QPoint pa, QPoint pb) const
   return std::sqrt(static_cast<float>(a * a + b * b));
 }
 
+int GridComponent::getVisionQuality(int ax, int ay, int bx, int by) const
+{
+  return getGrid()->getVisionQuality(ax, ay, bx, by);
+}
+
 bool GridComponent::isRenderedBefore(const DynamicObject* a, const DynamicObject* b)
 {
   QPoint posA = a->getPosition();
