@@ -65,8 +65,7 @@ void GameManager::launchNewGame()
 
 void GameManager::loadGame(const QString& path)
 {
-  if (currentGame)
-    endGame();
+  endGame();
   currentGame = new Game(this);
   currentGame->getDataEngine()->loadFromFile(path + ".json");
   currentGame->loadFromDataEngine();
@@ -81,9 +80,12 @@ void GameManager::saveGame(const QString& path)
 
 void GameManager::endGame()
 {
-  currentGame->deleteLater();
-  currentGame = nullptr;
-  emit gameOver();
+  if (currentGame)
+  {
+    currentGame->deleteLater();
+    currentGame = nullptr;
+    emit gameOver();
+  }
 }
 
 int GameManager::getMovementOption() const
