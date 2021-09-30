@@ -1,5 +1,6 @@
 import {ItemBehaviour} from "./item.mjs";
 import {getValueFromRange, randomCheck} from "../behaviour/random.mjs";
+import {areInContact} from "../behaviour/pathfinding.mjs";
 
 export class WeaponBehaviour extends ItemBehaviour {
   constructor(model) {
@@ -21,9 +22,9 @@ export class WeaponBehaviour extends ItemBehaviour {
   }
 
   isInRange(target) {
-    if (this.isRangedWeapon() && this.user)
-      return this.user.getDistance(target) < this.getRange();
-    return super.isInRange(target);
+    if (this.isRangedWeapon())
+      return this.user.getDistance(target) < this.model.getRange();
+    return areInContact(this.user.position, target.position);
   }
 
   getUserSkillValue() {

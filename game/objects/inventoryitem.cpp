@@ -185,6 +185,11 @@ bool InventoryItem::isCombatItem()
   return value.isBool() ? value.toBool() : false;
 }
 
+static int maxDistance(QPoint a, QPoint b)
+{
+  return std::max(std::abs(a.x() - b.x()), std::abs(a.y() - b.y()));
+}
+
 bool InventoryItem::isInRange(DynamicObject *target)
 {
   if (target)
@@ -192,7 +197,13 @@ bool InventoryItem::isInRange(DynamicObject *target)
     if (script && script->hasMethod("isInRange"))
       return script->call("isInRange", QJSValueList() << target->asJSValue()).toBool();
     else
-      return reinterpret_cast<Character*>(getOwner())->getDistance(target) <= getRange();
+    {
+      float range = getRange();
+
+      if (range == 1.f)
+        return maxDistance(getOwner()->getPosition(), target->getPosition()) <= 1;
+      return reinterpret_cast<Character*>(getOwner())->getDistance(target) <= range;
+    }
   }
   return true;
 }

@@ -35,17 +35,6 @@ export class ItemBehaviour {
     return true;
   }
 
-  isInRange(object) {
-    if (this.user) {
-      const pos1  = this.user.position;
-      const pos2  = object.position;
-
-      // TODO implement items with actual range
-      return areInContact(pos1, pos2);
-    }
-    return false;
-  }
-
   getUseAnimation() {
     return [{ type: "Animation", animation: "use", object: this.user }];
   }
