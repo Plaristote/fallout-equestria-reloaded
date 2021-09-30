@@ -67,10 +67,12 @@ export class ItemBehaviour {
     if (!target && !this.requiresTarget)
       return this.attemptToUseActionPointsOn(target);
     else if (target && this.isValidTarget(target)) {
-      if (this.isInRange(target))
-        return this.attemptToUseActionPointsOn(target);
-      else
+      if (!this.user.hasLineOfSight(target))
+        this.logFailure(i18n.t("messages.no-line-of-sight"));
+      else if (!this.model.isInRange(target))
         this.logFailure(i18n.t("messages.out-of-range"));
+      else
+        return this.attemptToUseActionPointsOn(target);
     }
     else
       this.logFailure(i18n.t("messages.invalid-target"));
@@ -98,6 +100,8 @@ export class ItemBehaviour {
   logFailure(message) {
     if (this.user == level.player)
       game.appendToConsole(message);
+    else
+      console.log(this.user, `> using item ${this.model.itemType} >`,  message);
   }
 }
 
