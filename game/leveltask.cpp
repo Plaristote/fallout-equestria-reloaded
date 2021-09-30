@@ -125,12 +125,7 @@ void LevelTask::tileClicked(int x, int y)
   if (getPlayer())
     InteractionComponent::tileClicked(x, y);
   else
-  {
-    DynamicObject* occupant = grid->getOccupant(x, y);
-
     emit clickedOnCase(x, y);
-    emit clickedOnObject(occupant);
-  }
 }
 
 void LevelTask::displayMovementTargetHint(QPoint position)
