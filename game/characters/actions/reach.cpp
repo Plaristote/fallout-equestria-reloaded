@@ -9,10 +9,13 @@ static int rateCase(Game* game, QJSValue callback, QPoint position)
 
 static void filterCases(Game* game, QJSValue callback, QVector<QPoint>& candidates)
 {
-  std::remove_if(candidates.begin(), candidates.end(), [game, callback](QPoint position)
+  for (auto it = candidates.begin() ; it != candidates.end() ;)
   {
-    return rateCase(game, callback, position) < 0;
-  });
+    if (rateCase(game, callback, *it) < 0)
+      it = candidates.erase(it);
+    else
+      it++;
+  }
 }
 
 static bool candidateCompare(Character* character, QPoint a, QPoint b)
