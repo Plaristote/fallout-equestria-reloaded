@@ -53,28 +53,16 @@ export class CharacterBehaviour extends CombatComponent {
     this.model.moveAway(game.player);
   }
 
-  onTalkTo() {
-    if (this.dialog)
-      level.initializeDialog(this.model, this.dialog);
-    else
-      this.displayRandomTextBubble();
-    return true;
-  }
-
-  displayRandomTextBubble() {
-    if (this.textBubbles && this.textBubbles.length > 0) {
-      const it = Math.floor(Math.random() * this.textBubbles.length);
-      const textBubble = this.textBubbles[it];
-
-      level.addTextBubble(this.model, textBubble.content, textBubble.duration, textBubble.color || "white");
-    }
-  }
-
   onMovementEnded() {
   }
 
   onDestinationReached() {
     console.log(this.model, "reached destination", this.model.position.x, this.model.position.y);
+  }
+
+  onCharacterDetected(character) {
+    if (character === level.player && this.dialogDetectionHook())
+      return ;
   }
 }
 

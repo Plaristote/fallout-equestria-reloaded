@@ -16,10 +16,11 @@ export class DialogComponent extends MetabolismComponent {
     return true;
   }
 
-  displayRandomTextBubble() {
-    if (this.textBubbles && this.textBubbles.length > 0) {
-      const it = Math.floor(Math.random() * this.textBubbles.length);
-      const textBubble = this.textBubbles[it];
+  displayRandomTextBubble(options) {
+    if (!options) { options = this.textBubbles; }
+    if (options && options.length > 0) {
+      const it = Math.floor(Math.random() * options.length);
+      const textBubble = options[it];
 
       level.addTextBubble(this.model, textBubble.content, textBubble.duration, textBubble.color || "white");
     }

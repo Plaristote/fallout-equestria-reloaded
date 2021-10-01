@@ -9,6 +9,16 @@ export class CombatComponent extends SkillTargetComponent {
     super(model);
   }
 
+  onTalkTo() {
+    if (this.model.isEnemy(level.player))  {
+      if (this.model.morale > 0)
+        this.displayRandomTextBubble(this.offensiveTextBubbles);
+      this.model.requireJoinCombat();
+      return false;
+    }
+    return super.onTalkTo();
+  }
+
   onDamageTaken(amount, dealer) {
     console.log("on damage taken", amount, dealer);
     this.combatTarget = dealer;
