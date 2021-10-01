@@ -163,6 +163,13 @@ Item {
             model: controller.stateList
             onCurrentTextChanged: controller.entryPoint = currentText
           }
+          RowLayout {
+            TerminalLabel { text: "Script"; Layout.fillWidth: true }
+            TerminalToolButton {
+              iconName: "open"
+              onClicked: Qt.openUrlExternally(scriptPath + "dialogs/" + currentDialog.replace(".json", ".mjs"))
+            }
+          }
         }
       }
 
