@@ -34,3 +34,12 @@ export function getDistance(pos1, pos2) {
 
   return Math.sqrt(distX * distX + distY * distY);
 }
+
+export function getRandomCaseInZone(zone) {
+  if (zone && zone.getPositionCount() > 0) {
+    const positionIt = Math.floor(Math.random() * 100) % zone.getPositionCount();
+
+    return zone.getPositionAt(positionIt);
+  }
+  return {x: 0, y: 0};
+}
