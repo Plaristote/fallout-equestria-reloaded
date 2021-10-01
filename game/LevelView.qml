@@ -67,7 +67,7 @@ Item {
   }
 
   ScreenEdges {
-    enabled: !parent.levelController.paused
+    enabled: !parent.levelController.paused && !debugConsole.enabled
     onMoveTop:    { canvas.translate(0, scrollSpeed); }
     onMoveLeft:   { canvas.translate(scrollSpeed, 0); }
     onMoveRight:  { canvas.translate(-scrollSpeed, 0); }

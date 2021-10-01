@@ -2,10 +2,17 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 import "../../assets/ui" as UiStyle
 import "../../ui"
+import Qt.labs.settings 1.1
 
 Pane {
   property QtObject gameController
   property var commandHistory: []
+  property int historyIt: commandHistory.length
+
+  Settings {
+    id: debugConsoleSettings
+    property alias commandHistory: debugConsole.commandHistory
+  }
 
   id: debugConsole
   background: UiStyle.Pane {}
@@ -20,14 +27,18 @@ Pane {
   }
 
   function runCommand() {
-    var newCommandHistory = commandHistory;
+    const history = commandHistory;
 
-    newCommandHistory.push(`$> ${debugConsoleInput.text}`);
-    newCommandHistory.push(gameController.consoleEval(debugConsoleInput.text));
-    commandHistory = newCommandHistory;
+    if (debugConsoleInput.text !== history[history.length - 1]) {
+      history.push(debugConsoleInput.text);
+      if (history.length > 100)
+        history.splice(0, 1);
+      commandHistory = history;
+    }
+    historyIt = commandHistory.length;
+    consoleDisplay.text += `$> ${debugConsoleInput.text}\n`;
+    consoleDisplay.text += gameController.consoleEval(debugConsoleInput.text) + '\n';
     debugConsoleInput.clear();
-    if (historyColumn.height > historyScrollZone.height)
-      historyScrollZone.contentY = historyColumn.height - historyScrollZone.height - 10;
   }
 
   Pane {
@@ -41,27 +52,19 @@ Pane {
     Flickable {
       id: historyScrollZone
       anchors.fill:  parent
-      contentHeight: historyColumn.height
-      contentWidth:  historyColumn.width
+      contentHeight: consoleDisplay.height
+      contentWidth:  consoleDisplay.width
+      onContentHeightChanged: contentY = contentHeight - height
+      clip: true
 
-      Column {
-        id: historyColumn
-        Repeater {
-          model: commandHistory
-          delegate: TerminalLabel {
-            text: commandHistory[index]
-            MouseArea {
-              enabled: commandHistory[index].indexOf("$> ") >= 0
-              hoverEnabled: enabled
-              onContainsMouseChanged: {
-                parent.color = containsMouse ? "white" : "green"
-              }
-              onClicked: {
-                debugConsoleInput.text = parent.text.substr(3);
-              }
-            }
-          }
-        }
+      TextEdit {
+        id: consoleDisplay
+        readOnly: true
+        font.family: application.consoleFontName
+        font.pointSize: 10
+        font.bold: true
+        color: "green"
+        selectByMouse: true
       }
     }
   }
@@ -76,6 +79,20 @@ Pane {
       anchors.fill: parent
       anchors.margins: 2
       onAccepted: debugConsole.runCommand();
+
+      Keys.onUpPressed: {
+        if (historyIt > 0) {
+          historyIt--;
+          debugConsoleInput.text = commandHistory[historyIt];
+        }
+      }
+
+      Keys.onDownPressed: {
+        if (historyIt < commandHistory.length) {
+          historyIt++;
+          debugConsoleInput.text = historyIt >= commandHistory.length ? "" : commandHistory[historyIt]
+        }
+      }
     }
   }
 }

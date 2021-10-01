@@ -1,10 +1,11 @@
 import QtQuick 2.15
 
 Item {
+  id: root
   anchors.fill: parent
 
   property int scrollBorderSize: application.isMaximized ? 5 : 30
-  property int scrollSpeed: 20
+  property int scrollSpeed: 45
   property bool enabled: true
 
   signal moveTop();
@@ -14,24 +15,28 @@ Item {
 
   Shortcut {
     sequence: "Up"
+    enabled: root.enabled
     autoRepeat: true
     onActivated: moveTop()
   }
 
   Shortcut {
     sequence: "Left"
+    enabled: root.enabled
     autoRepeat: true
     onActivated: moveLeft()
   }
 
   Shortcut {
     sequence: "Right"
+    enabled: root.enabled
     autoRepeat: true
     onActivated: moveRight()
   }
 
   Shortcut {
     sequence: "Down"
+    enabled: root.enabled
     autoRepeat: true
     onActivated: moveBottom()
   }
@@ -44,6 +49,7 @@ Item {
 
     Connections {
       target: gamepad
+      enabled: root.enabled
       function onMoveCameraXAxis(value) {
         gamepadCamera.cumulatedXMovement += value;
         if (gamepadCamera.cumulatedXMovement > gamepadCamera.threshold)
