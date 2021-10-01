@@ -38,8 +38,7 @@ public:
   Q_INVOKABLE bool tryToEndCombat();
   Q_INVOKABLE void passTurn(Character* character);
 
-  // TODO write a real check for that
-  bool isCombatEnabled() const { return combattants.length() > 1 && combat == true; }
+  bool isCombatEnabled() const;
 
 signals:
   void combatChanged();

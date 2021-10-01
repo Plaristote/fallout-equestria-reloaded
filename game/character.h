@@ -6,6 +6,7 @@
 # include "diplomacy.hpp"
 # include "characters/field_of_view.hpp"
 # include "characters/buffs.h"
+# define CHARACTER_MAX_MORALE 100
 
 class ActionQueue;
 
@@ -17,6 +18,7 @@ class Character : public CharacterBuffs
   Q_PROPERTY(ActionQueue* actionQueue READ getActionQueue CONSTANT)
   Q_PROPERTY(int actionPoints MEMBER actionPoints NOTIFY actionPointsChanged)
   Q_PROPERTY(bool unconscious READ isUnconscious NOTIFY unconsciousChanged)
+  Q_PROPERTY(int morale MEMBER morale NOTIFY moraleChanged)
 public:
   explicit Character(QObject *parent = nullptr);
 
@@ -27,6 +29,8 @@ public:
   ActionQueue* getActionQueue() const { return actionQueue; }
   Q_INVOKABLE QString getDialogName();
   unsigned int getXpValue() const;
+  int              getMorale() const { return morale; }
+  bool             shouldJoinFight() const;
   Q_INVOKABLE bool isMoving() const { return Sprite::isMoving() || currentPath.size() > 0; }
   bool         isSpriteMoving() const { return Sprite::isMoving(); }
   int          getZIndex() const override { return isAlive() ? 2 : 1; }
@@ -60,6 +64,7 @@ signals:
   void died();
   void characterKill(Character* victim, Character* killer);
   void unconsciousChanged();
+  void moraleChanged();
 
 private slots:
   void onActionQueueCompleted();
@@ -72,6 +77,7 @@ private:
   ActionQueue* actionQueue;
   bool unconscious = false;
   int actionPoints = 0;
+  int morale = CHARACTER_MAX_MORALE;
   QJSValue jsActionQueue;
 };
 

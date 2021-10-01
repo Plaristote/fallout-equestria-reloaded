@@ -90,15 +90,30 @@ void CombatComponent::leaveCombat(Character* character)
   emit combattantsChanged();
 }
 
-bool CombatComponent::tryToEndCombat()
+bool CombatComponent::isCombatEnabled() const
 {
-  if (isCombatEnabled()) { return false; }
-  combat = false;
-  combatIterator = 0;
-  combattants.clear();
-  emit combatChanged();
-  emit combattantsChanged();
-  return true;
+  if (combattants.size() > 1 && combat == true)
+  {
+    auto check = [](const Character* character) { return character->shouldJoinFight(); };
+    auto it    = std::find_if(combattants.begin(), combattants.end(), check);
+
+    return it != combattants.end();
+  }
+  return false;
+}
+
+bool CombatComponent::tryToEndCombat()
+{  
+  if (!isCombatEnabled())
+  {
+    combat = false;
+    combatIterator = 0;
+    combattants.clear();
+    emit combatChanged();
+    emit combattantsChanged();
+    return true;
+  }
+  return false;
 }
 
 void CombatComponent::sortCombattants()
@@ -132,16 +147,20 @@ void CombatComponent::onNextCombatTurn()
   {
     if (mouseMode != MovementCursor)
       swapMouseMode();
-    if (tryToEndCombat())
-      return ;
   }
+  qDebug() << "CombatComponent::onNextCombatTurn" << combatIterator;
   combatIterator = combatIterator + 1 >= combattants.size() ? 0 : combatIterator  + 1;
   current  = combattants.at(combatIterator);
   if (previous && previous->isAlive())
     finalizeCharacterTurn(previous);
   if (combatIterator == 0)
+  {
+    qDebug() << "CombatComponent::finalizeRound";
     finalizeRound();
-  if (!tryToEndCombat())
+    if (!tryToEndCombat())
+      initializeCharacterTurn(current);
+  }
+  else
     initializeCharacterTurn(current);
   emit currentCombattantChanged();
 }

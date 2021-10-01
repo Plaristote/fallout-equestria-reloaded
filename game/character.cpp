@@ -24,9 +24,14 @@ void Character::update(qint64 delta)
   {
     auto* level = Game::get()->getLevel();
 
-    if (level->getPlayer() != this && hasLivingEnemiesInSight())
+    if (level && shouldJoinFight())
       level->joinCombat(this);
   }
+}
+
+bool Character::shouldJoinFight() const
+{
+  return Game::get()->getPlayer() != this && hasLivingEnemiesInSight() && morale > 0;
 }
 
 void Character::onActionQueueCompleted()
@@ -80,20 +85,9 @@ void Character::attackedBy(Character* dealer)
   if (dealer != nullptr && !isAlly(dealer))
   {
     if (!isEnemy(dealer))
-    {
-      if (hasVariable("surrender"))
-      {
-        qDebug() << "Surrendering";
-        unsetVariable("surrender");
-      }
-      else
-      {
-        qDebug() << "Attacked by is only triggered now...";
-        setAsEnemy(dealer);
-        emit requireJoinCombat();
-      }
-    }
-    dealer->toggleSneaking(false);
+      setAsEnemy(dealer);
+    getFieldOfView()->setEnemyDetected(dealer);
+    emit requireJoinCombat();
   }
 }
 
@@ -142,7 +136,6 @@ void Character::moveAway(Character* target)
 
     actionQueue->pushMovement(destination.x(), destination.y());
     actionQueue->start();
-    return ;
   }
 }
 
@@ -284,6 +277,7 @@ void Character::load(const QJsonObject& data)
 {
   actionPoints = data["ap"].toInt();
   unconscious  = !(data["ko"].toBool(true));
+  morale       = data["morale"].toInt(CHARACTER_MAX_MORALE);
   ParentType::load(data);
 }
 
@@ -292,6 +286,8 @@ void Character::save(QJsonObject& data) const
   data["ap"] = actionPoints;
   if (unconscious)
     data["ko"] = unconscious;
+  if (morale != CHARACTER_MAX_MORALE)
+    data["morale"] = morale;
   ParentType::save(data);
 }
 
