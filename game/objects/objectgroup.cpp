@@ -7,6 +7,7 @@
 ObjectGroup::ObjectGroup(QObject *parent) : ParentType(parent)
 {
   connect(this, &ObjectGroup::offsetChanged, this, &ObjectGroup::positionChanged);
+  connect(this, &ObjectGroup::parentChanged, this, &ObjectGroup::positionChanged);
   connect(this, &ObjectGroup::nameChanged,   this, &ObjectGroup::pathChanged);
   connect(this, &ObjectGroup::parentChanged, this, &ObjectGroup::pathChanged);
   connect(this, &ObjectGroup::objectAdded,   this, &ObjectGroup::objectsChanged);
@@ -228,18 +229,24 @@ ObjectGroup* ObjectGroup::getGroupByName(const QString &name) const
 
 void ObjectGroup::appendGroup(ObjectGroup* group)
 {
-  group->setParent(this);
-  groups.push_back(group);
-  emit groupAdded(group);
-  emit group->parentChanged();
+  if (!groups.contains(group))
+  {
+    group->setParent(this);
+    groups.push_back(group);
+    emit groupAdded(group);
+    emit group->parentChanged();
+  }
 }
 
 void ObjectGroup::appendObject(DynamicObject* object)
 {
-  object->setParent(this);
-  objects.push_back(object);
-  emit objectAdded(object);
-  emit object->parentChanged();
+  if (!objects.contains(object))
+  {
+    object->setParent(this);
+    objects.push_back(object);
+    emit objectAdded(object);
+    emit object->parentChanged();
+  }
 }
 
 template<typename TYPE>
