@@ -119,12 +119,14 @@ QJSValue ZoneComponent::getZoneOccupants(TileZone* zone)
 
   if (zone)
   {
-    for (const QPoint& position : zone->getPositions())
+    for (QPoint position : zone->getPositions())
     {
-      QJSValue concat = result.property("concat");
-      QJSValue objectArray = game->getLevel()->getDynamicObjectsAt(position.x(), position.y());
+      QJSValue concat, objectArray;
 
-      result = concat.callWithInstance(result, QJSValueList() << objectArray);
+      position   += zone->getOffset();
+      concat      = result.property("concat");
+      objectArray = game->getLevel()->getDynamicObjectsAt(position.x(), position.y());
+      result      = concat.callWithInstance(result, QJSValueList() << objectArray);
     }
   }
   return result;
