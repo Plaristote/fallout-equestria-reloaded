@@ -1,6 +1,6 @@
 import {stealCheck} from "../cmap/helpers/checks.mjs";
 
-class ShopShelf {
+export class ShopShelf {
   constructor(model) {
     this.model = model;
   }

@@ -80,6 +80,7 @@ public:
   Q_INVOKABLE bool canSneak(Character*);
   Q_INVOKABLE bool useSneak(Character*);
   Q_INVOKABLE void initializeDialog(Character* npc);
+  Q_INVOKABLE void initializeDialog(Character* npc, const QString& diaogName);
   Q_INVOKABLE void initializeLooting(StorageObject*);
   Q_INVOKABLE void centerCursorOn(DynamicObject* object);
 

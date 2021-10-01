@@ -1,3 +1,5 @@
+import {callGuards, AlarmLevel} from "../pnjs/components/alarm.mjs";
+
 const stealReactions = [
   {text: "Hey ! Put that back !",                  time: 2500, color: "yellow"},
   {text: "Don't test me. Give it back.",           time: 2500, color: "orange"},
@@ -8,6 +10,7 @@ const stealReactions = [
 export class Shop {
   constructor(model) {
     this.model = model;
+    this.maxShopliftAttempts = 3;
   }
   
   get shopOwner() {
@@ -51,26 +54,13 @@ export class Shop {
       var i = this.stealAttemptCount;
 
       this.stealAttemptCount = i + 1;
-      i = Math.min(i, 3);
-      if (i >= 0)
-      {
-        //this.model.setAsEnemy(user);
-        this.callGuards(user);
-      }
+      i = Math.min(i, this.maxShopliftAttempts);
+      if (i >= this.maxShopliftAttempts)
+        callGuards(this.guards, user, AlarmLevel.Arrest);
       level.addTextBubble(this.shopOwner, stealReactions[i].text, stealReactions[i].time, stealReactions[i].color);
       return false;
     }
     return true;
-  }
-
-  callGuards(target) {
-    console.log("Calling guards", this.guards, this.guards.objects.length,
-      "to position", target.position.x, target.position.y, target);
-    for (var i = 0 ; i < this.guards.objects.length ; ++i) {
-      this.guards.objects[i].getScriptObject().receiveAlarmSignal(
-        target.position.x, target.position.y, target
-      );
-    }
   }
 }
 

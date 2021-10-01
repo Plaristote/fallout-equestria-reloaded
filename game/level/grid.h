@@ -24,16 +24,18 @@ public:
   virtual void     registerDynamicObject(DynamicObject*);
   virtual void     unregisterDynamicObject(DynamicObject*);
 
-  void setCharacterPosition(Character*, int x, int y);
-  QPoint getTilePosition(QPoint position) const;
-  Q_INVOKABLE void setObjectPosition(DynamicObject*, int x, int y);
-  Q_INVOKABLE QPoint getAdjustedOffsetFor(const DynamicObject*) const;
+  void                   setCharacterPosition(Character*, int x, int y);
+  QPoint                 getTilePosition(QPoint position) const;
+  Q_INVOKABLE bool       moveCharacterToZone(Character*, const QString& name);
+  Q_INVOKABLE bool       moveCharacterToZone(Character*, TileZone* zone);
+  Q_INVOKABLE void       setObjectPosition(DynamicObject*, int x, int y);
+  Q_INVOKABLE QPoint     getAdjustedOffsetFor(const DynamicObject*) const;
   Q_INVOKABLE TileLayer* getRoofFor(DynamicObject*) const;
-  Q_INVOKABLE QJSValue getDynamicObjectsAt(int x, int y) const;
-  Q_INVOKABLE QPoint getRenderPositionForTile(int x, int y);
-  Q_INVOKABLE float getDistance(QPoint, QPoint) const;
-  Q_INVOKABLE float getDistance(int ax, int ay, int bx, int by) const { return getDistance(QPoint(ax, ay), QPoint(bx, by)); }
-  Q_INVOKABLE int getVisionQuality(int ax, int ay, int bx, int by) const;
+  Q_INVOKABLE QJSValue   getDynamicObjectsAt(int x, int y) const;
+  Q_INVOKABLE QPoint     getRenderPositionForTile(int x, int y);
+  Q_INVOKABLE float      getDistance(QPoint, QPoint) const;
+  Q_INVOKABLE float      getDistance(int ax, int ay, int bx, int by) const { return getDistance(QPoint(ax, ay), QPoint(bx, by)); }
+  Q_INVOKABLE int        getVisionQuality(int ax, int ay, int bx, int by) const;
 
   template<typename LIST>
   static void sortByRenderOrder(LIST& list)

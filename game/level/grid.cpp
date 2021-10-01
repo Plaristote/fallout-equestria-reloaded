@@ -2,6 +2,7 @@
 #include "game/characters/actionqueue.h"
 #include "tilemap/tilemap.h"
 #include "game.h"
+#include "game/dices.hpp"
 #include <cmath>
 
 GridComponent::GridComponent(QObject *parent) : ParentType(parent)
@@ -81,6 +82,34 @@ void GridComponent::setCharacterPosition(Character* character, int x, int y)
 {
   character->rcurrentPath().clear();
   setObjectPosition(character, x, y);
+}
+
+bool GridComponent::moveCharacterToZone(Character* character, const QString& name)
+{
+  return moveCharacterToZone(character, tilemap->getZone(name));
+}
+
+bool GridComponent::moveCharacterToZone(Character* character, TileZone* zone)
+{
+  if (character && zone)
+  {
+    auto candidates = zone->getPositions();
+
+    while (candidates.size() > 0)
+    {
+      const int randomValue = Dices::Throw(static_cast<unsigned int>(candidates.size() - 1));
+      QPoint candidate = candidates.takeAt(randomValue) + zone->getOffset();
+
+      if (!grid->isOccupied(candidate.x(), candidate.y()))
+      {
+        setCharacterPosition(character, candidate.x(), candidate.y());
+        return true;
+      }
+    }
+  }
+  else
+    qDebug() << "GridComponent::moveCharacterToZone: invalid parameters" << character << zone;
+  return false;
 }
 
 QPoint GridComponent::getTilePosition(QPoint position) const

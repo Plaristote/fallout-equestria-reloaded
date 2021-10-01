@@ -1,0 +1,27 @@
+{
+    "answers": {
+        "": {
+            "text": ""
+        },
+        "Fight": {
+            "hook": "onFight",
+            "text": "fight"
+        },
+        "[Surrender]": {
+        },
+        "surrender": {
+            "hook": "onSurrender",
+            "text": "surrender"
+        }
+    },
+    "entryPoint": "arrestation",
+    "states": {
+        "arrestation": {
+            "answers": [
+                "surrender",
+                "Fight"
+            ],
+            "text": "arrest"
+        }
+    }
+}

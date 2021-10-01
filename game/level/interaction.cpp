@@ -292,14 +292,21 @@ void InteractionComponent::useItemAt(Character *user, InventoryItem *item, int x
 
 void InteractionComponent::initializeDialog(Character* npc)
 {
+  initializeDialog(npc, npc->getDialogName());
+}
+
+void InteractionComponent::initializeDialog(Character* npc, const QString& dialogName)
+{
   Character*       player = Game::get()->getPlayer();
   CharacterDialog* dialog = new CharacterDialog(this);
 
-  if (dialog->load(npc->getDialogName(), player, npc))
+  player->getFieldOfView()->setCharacterDetected(npc);
+  if (dialog->load(dialogName, player, npc))
     emit startDialog(dialog);
   else
     delete dialog;
 }
+
 
 void InteractionComponent::initializeLooting(StorageObject* target)
 {
