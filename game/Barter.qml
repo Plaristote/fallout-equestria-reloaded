@@ -33,7 +33,10 @@ Item {
         Layout.fillHeight: true
         Layout.fillWidth: true
         inventory: controller.player.inventory
-        onItemSelected: selectedObject = selectedItem
+        onItemSelected: {
+          playerStash.selectedObject = npcStash.selectedObject = npcInventory.selectedObject = null;
+          selectedObject = selectedItem
+        }
       }
 
       BarterTransferControls {
@@ -49,7 +52,10 @@ Item {
         Layout.fillHeight: true
         Layout.fillWidth: true
         inventory: controller.playerStash
-        onItemSelected: selectedObject = selectedItem
+        onItemSelected: {
+          playerInventory.selectedObject = npcStash.selectedObject = npcInventory.selectedObject = null;
+          selectedObject = selectedItem
+        }
       }
 
       BarterDealPreview {
@@ -63,7 +69,10 @@ Item {
         Layout.fillHeight: true
         Layout.fillWidth: true
         inventory: controller.npcStash
-        onItemSelected: selectedObject = selectedItem
+        onItemSelected: {
+          playerInventory.selectedObject = playerStash.selectedObject = npcInventory.selectedObject = null;
+          selectedObject = selectedItem
+        }
       }
 
       BarterTransferControls {
@@ -79,7 +88,10 @@ Item {
         Layout.fillHeight: true
         Layout.fillWidth: true
         inventory: controller.npc.inventory
-        onItemSelected: selectedObject = selectedItem
+        onItemSelected: {
+          playerInventory.selectedObject = playerStash.selectedObject = npcStash.selectedObject = null;
+          selectedObject = selectedItem
+        }
       }
     }
   }
