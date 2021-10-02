@@ -12,9 +12,9 @@ export class Shop {
     this.model = model;
     this.maxShopliftAttempts = 3;
   }
-  
+
   get shopOwner() {
-    return this.model.findObject("owner");
+    return this.model.findObject("owner") || this.model.parent.findObject("owner");
   }
 
   get stealAttemptCount() {
