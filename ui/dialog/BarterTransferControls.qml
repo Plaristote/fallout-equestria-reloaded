@@ -53,11 +53,11 @@ Pane {
       Layout.alignment: Qt.AlignHCenter
       text: ">"
       onClicked: {
-        if (playerInventory.selectedObject.quantity > 1)
+        if (leftInventory.selectedObject.quantity > 1)
           transferToRightDialog.open();
         else
         {
-          transferToRight(playerInventory.selectedObject, -1)
+          transferToRight(leftInventory.selectedObject, -1)
           leftInventory.selectedObject = null;
         }
       }
