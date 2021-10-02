@@ -108,12 +108,15 @@ void TaskRunner::addTask(const QString &name, qint64 interval, int iterationCoun
 
 bool TaskRunner::removeTask(const QString &name)
 {
-  for (auto it = tasks.begin() ; it != tasks.end() ; ++it)
+  if (!updating)
   {
-    if (it->name == name)
+    for (auto it = tasks.begin() ; it != tasks.end() ; ++it)
     {
-      tasks.erase(it);
-      return true;
+      if (it->name == name)
+      {
+        tasks.erase(it);
+        return true;
+      }
     }
   }
   return false;
