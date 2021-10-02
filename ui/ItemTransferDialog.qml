@@ -4,6 +4,7 @@ import "qrc:/assets/ui" as UiStyle
 
 UiStyle.CustomDialog {
   property QtObject inventoryItem
+  property int maxQuantity: inventoryItem ? inventoryItem.quantity : 1
 
   title: i18n.t("How much ?")
   modal: true
@@ -17,14 +18,14 @@ UiStyle.CustomDialog {
       editable: true
       height: 40
       from: 1
-      to: inventoryItem.quantity
+      to: maxQuantity
       contentItem: CustomTextField {
         text: quantityInputField.value
         onTextChanged: quantityInputField.value = parseInt(text)
       }
     }
     CustomLabel {
-      text: "/" + inventoryItem.quantity
+      text: "/" + maxQuantity
     }
   }
 

@@ -44,7 +44,7 @@ Pane {
           transferToLeftDialog.open();
         else
         {
-          controller.moveToPlayerInventory(rightInventory.selectedObject);
+          transferToLeft(rightInventory.selectedObject, -1);
           rightInventory.selectedObject = null;
         }
       }
@@ -57,8 +57,8 @@ Pane {
           transferToRightDialog.open();
         else
         {
-          controller.moveToPlayerStash(playerInventory.selectedObject)
-          playerInventory.selectedObject = null;
+          transferToRight(playerInventory.selectedObject, -1)
+          leftInventory.selectedObject = null;
         }
       }
     }
