@@ -65,7 +65,6 @@ void LevelTask::load(const QString& levelName, DataEngine* dataEngine)
   levelData["init"]   = true; // Delay level initialization
   qDebug() << "LevelTask::load" << levelName;
   timeManager = Game::get()->getTimeManager();
-  loadTutorial();
   ParentType::load(levelData);
   registerAllDynamicObjects();
   taskRunner->setScriptController(script);
@@ -74,6 +73,7 @@ void LevelTask::load(const QString& levelName, DataEngine* dataEngine)
     passElapsedTime(lastUpdate.toInt());
   if (!initialized)
     ScriptableComponent::initializeIfNeeded();
+  loadTutorial();
 }
 
 void LevelTask::passElapsedTime(int lastUpdate)
