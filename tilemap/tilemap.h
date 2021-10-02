@@ -8,6 +8,7 @@
 # include "tileset.h"
 # include "tilelayer.h"
 # include "tilezone.h"
+# include "floorlayer.h"
 # include <QJsonObject>
 # include <QStringList>
 # include "globals.h"
@@ -23,6 +24,7 @@ class TileMap : public QObject
   Q_PROPERTY(QQmlListProperty<TileLayer> roofs READ getRoofsQml)
   Q_PROPERTY(QQmlListProperty<TileLayer> lights READ getLightsQml)
 
+  friend class FloorLayer;
   typedef void (TileMap::*LayerFolderLoader)(const QJsonObject&);
   static const QMap<QString, LayerFolderLoader> loaders;
 public:
@@ -67,12 +69,14 @@ private:
   void loadLightFolder(const QJsonObject&);
   void loadZoneFolder(const QJsonObject&);
   void loadWallFolder(const QJsonObject&);
+  void loadFloorFolder(const QJsonObject&);
   void loadLightTileset();
 
   QSize                   tileSize;
   QSize                   mapSize;
   QVector<Tileset*>       tilesets;
   QVector<TileLayer*>     layers;
+  QList<FloorLayer*>      floors;
   QList<TileZone*>        zones;
   QList<TileLayer*>       roofs;
   QList<TileLayer*>       lights;

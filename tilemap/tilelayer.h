@@ -33,7 +33,7 @@ public:
   void setVisible(bool value) { visible = value; emit visibleChanged(); }
   bool isVisible() const { return visible; }
   void renderToFile(const QString& file);
-  void renderToImage(QImage& image, QPoint offset);
+  virtual void renderToImage(QImage& image, QPoint offset);
 
   Q_INVOKABLE Tile* getTile(int x, int y) const;
   Q_INVOKABLE QSize getRenderedSize();
@@ -49,7 +49,7 @@ public:
 signals:
   void visibleChanged();
 
-private:
+protected:
   void loadTiles(const QJsonArray&, const QVector<Tileset*>& tilesets);
   void prepareRenderRect();
   void prepareRenderSize();

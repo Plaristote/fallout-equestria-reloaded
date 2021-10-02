@@ -11,6 +11,7 @@ const QMap<QString, TileMap::LayerFolderLoader> TileMap::loaders = {
   {"zones",  &TileMap::loadZoneFolder},
   {"roofs",  &TileMap::loadRoofFolder},
   {"walls",  &TileMap::loadWallFolder},
+  {"floors", &TileMap::loadFloorFolder},
   {"lights", &TileMap::loadLightFolder}
 };
 
@@ -192,6 +193,20 @@ void TileMap::loadWallFolder(const QJsonObject& layerData)
   wallsH->load(hLayer, tilesets);
   layers.push_back(wallsV);
   layers.push_back(wallsH);
+}
+
+void TileMap::loadFloorFolder(const QJsonObject& layerData)
+{
+  const QJsonArray layersData = layerData["layers"].toArray();
+
+  for (const QJsonValue& value : layersData)
+  {
+    FloorLayer* floor = new FloorLayer(this);
+
+    floor->load(value.toObject(), this);
+    floors << floor;
+    roofs << floor;
+  }
 }
 
 Tileset* TileMap::getTileset(const QString &name) const
