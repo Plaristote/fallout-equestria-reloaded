@@ -138,6 +138,7 @@ void CharacterParty::extractFromLevel(LevelTask* level)
     character->getFieldOfView()->reset();
     grid->removeObject(character);
     level->detachObject(character);
+    character->setParent(this);
   }
 }
 
