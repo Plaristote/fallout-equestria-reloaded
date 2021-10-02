@@ -244,3 +244,22 @@ TileZone* TileMap::getZone(const QString& name)
   }
   return nullptr;
 }
+
+QPoint TileMap::getPointFor(int x, int y) const
+{
+  return QPoint(
+    x * tileSize.width()  / 2 - y * tileSize.width()  / 2,
+    y * tileSize.height() / 2 + x * tileSize.height() / 2
+  );
+}
+
+void TileMap::renderToFile(const QString &filename)
+{
+  QRect    renderedRect(0, 0, mapSize.width() * tileSize.width(), mapSize.height() * tileSize.height());
+  QSize    imageSize = renderedRect.size();
+  QImage   image(imageSize, QImage::Format_ARGB32);
+
+  image.fill(Qt::transparent);
+  renderToImage(image);
+  image.save(filename, "png", 9);
+}

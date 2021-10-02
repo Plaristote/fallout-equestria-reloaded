@@ -29,6 +29,8 @@ public:
   explicit TileMap(QObject *parent = nullptr);
 
   bool load(const QString& name);
+  void renderToFile(const QString& filename);
+  void renderToImage(QImage& image);
 
   inline const QSize& getSize() const { return mapSize; }
   inline int getPixelWidth() const { return (mapSize.width() - 1) * tileSize.width();}
@@ -38,6 +40,7 @@ public:
   const QList<TileLayer*>& getLights() const { return lights; }
   const QVector<TileLayer*>& getLayers() const { return layers; }
   Tileset* getTileset(const QString& name) const;
+  Q_INVOKABLE QPoint getPointFor(int x, int y) const;
 
   Q_INVOKABLE TileLayer* getLayer(const QString& name);
   Q_INVOKABLE TileLayer* getRoofLayer(const QString& name);
