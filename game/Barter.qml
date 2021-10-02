@@ -83,14 +83,23 @@ Item {
         onTransferToRight: controller.moveToNpcInventory(item, amount)
       }
 
-      InventoryItemsView {
-        id: npcInventory
-        Layout.fillHeight: true
-        Layout.fillWidth: true
-        inventory: controller.npc.inventory
-        onItemSelected: {
-          playerInventory.selectedObject = playerStash.selectedObject = npcStash.selectedObject = null;
-          selectedObject = selectedItem
+      ColumnLayout {
+        SelectBox {
+          visible: controller.npcInventoryTitles.length > 1
+          model: controller.npcInventoryTitles
+          onCurrentIndexChanged: controller.setCurrentNpcInventory(currentIndex)
+          Layout.fillWidth: true
+        }
+
+        InventoryItemsView {
+          id: npcInventory
+          Layout.fillHeight: true
+          Layout.fillWidth: true
+          inventory: controller.npcInventory
+          onItemSelected: {
+            playerInventory.selectedObject = playerStash.selectedObject = npcStash.selectedObject = null;
+            selectedObject = selectedItem
+          }
         }
       }
     }

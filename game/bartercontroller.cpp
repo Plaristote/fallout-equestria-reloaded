@@ -4,6 +4,7 @@
 
 BarterController::BarterController(QObject* parent) : QObject(parent)
 {
+  currentNpcInventory = nullptr;
   playerStash = new Inventory(this);
   npcStash    = new Inventory(this);
 }
@@ -13,6 +14,7 @@ void BarterController::initialize(ScriptController *script, Character *player, C
   this->script = script;
   this->player = player;
   this->npc    = npc;
+  addInventory(npc->getObjectName(), npc->getInventory());
 }
 
 bool BarterController::tryToBarter()
@@ -25,13 +27,13 @@ bool BarterController::tryToBarter()
 void BarterController::closeBarter()
 {
   playerStash->transferTo(player->getInventory());
-  npcStash->transferTo(npc->getInventory());
+  npcStash->transferTo(getCurrentNpcInventory());
 }
 
 void BarterController::concludeBarter()
 {
   npcStash->transferTo(player->getInventory());
-  playerStash->transferTo(npc->getInventory());
+  playerStash->transferTo(getCurrentNpcInventory());
 }
 
 bool BarterController::agreeToBarter()
@@ -45,6 +47,43 @@ bool BarterController::agreeToBarter()
     return script->call("acceptBarter", params).toBool();
   }
   return playerStash->getTotalValue() >= npcStash->getTotalValue();
+}
+
+void BarterController::addInventory(const QString &title, Inventory* inventory)
+{
+  qDebug() << "Adding inventory" << inventory << "with title" << title;
+  npcInventoryTitles.insert(inventory, title);
+  if (!npcInventories.contains(inventory))
+    npcInventories.push_back(inventory);
+  emit npcInventoriesChanged();
+}
+
+void BarterController::removeInventory(Inventory* inventory)
+{
+  npcInventories.removeOne(inventory);
+  npcInventoryTitles.remove(inventory);
+  emit npcInventoriesChanged();
+}
+
+QString BarterController::inventoryTitle(Inventory* inventory) const
+{
+  auto it = npcInventoryTitles.find(inventory);
+
+  return it != npcInventoryTitles.end() ? it.value() : QString();
+}
+
+Inventory* BarterController::getCurrentNpcInventory() const
+{
+  return currentNpcInventory ? currentNpcInventory : npc->getInventory();
+}
+
+void BarterController::setCurrentNpcInventory(int index)
+{
+  if (npcInventories.size() > index)
+    currentNpcInventory = npcInventories.at(index);
+  else
+    currentNpcInventory = npc->getInventory();
+  emit currentNpcInventoryChanged();
 }
 
 void BarterController::itemTransfer(Inventory *from, Inventory *to, InventoryItem *item, int amount)
@@ -65,17 +104,17 @@ void BarterController::itemTransfer(Inventory *from, Inventory *to, InventoryIte
     }
   }
   else
-    qDebug() << "BarterController::itemTransfer received a null instead of an item";
+    qDebug() << "BarterController::itemTransfer received null instead of an item";
 }
 
 void BarterController::moveToNpcInventory(InventoryItem* item, int amount)
 {
-  itemTransfer(npcStash, npc->getInventory(), item, amount);
+  itemTransfer(npcStash, getCurrentNpcInventory(), item, amount);
 }
 
 void BarterController::moveToNpcStash(InventoryItem* item, int amount)
 {
-  itemTransfer(npc->getInventory(), npcStash, item, amount);
+  itemTransfer(getCurrentNpcInventory(), npcStash, item, amount);
 }
 
 void BarterController::moveToPlayerInventory(InventoryItem* item, int amount)

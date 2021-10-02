@@ -312,7 +312,10 @@ void Inventory::transferTo(Inventory* other)
   const QList<InventoryItem*> list = items;
 
   for (InventoryItem* item : list)
+  {
+    removeItem(item);
     other->addItem(item);
+  }
   items.clear();
   emit itemsChanged();
 }

@@ -35,8 +35,9 @@ public:
   QStringList         getStateList() const;
   QStringList         getAnswerList() const;
   BarterController*   getBarterController() const { return barter; }
+  Q_INVOKABLE bool    tryToBarter();
 
-  QString             t(const QString& name);
+  Q_INVOKABLE QString t(const QString& name);
 
 signals:
   void stateReferenceChanged();
@@ -44,11 +45,16 @@ signals:
   void optionsChanged();
   void moodChanged();
   void ambianceChanged();
+  void barterStarted();
+  void barterEnded();
   void dialogEnded();
   void stateListChanged();
   void answerListChanged();
   void barterControllerChanged();
   void ready();
+
+private slots:
+  void onBarterEnded();
 
 protected:
   void initializeStateHook(QString& text, QStringList& answers);

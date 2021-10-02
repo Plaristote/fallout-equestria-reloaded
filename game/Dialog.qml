@@ -16,6 +16,8 @@ Item {
       application.popView();
       gameManager.currentGame.level.paused = false;
     }
+    function onBarterStarted() { root.state = "barter"; }
+    function onBarterEnded()   { root.state = "dialog"; }
   }
 
   states: [
@@ -110,10 +112,7 @@ Item {
         anchors.topMargin: 20
         anchors.horizontalCenter: parent.horizontalCenter
         text: i18n.t("Barter")
-        onClicked: {
-          if (controller.barter.tryToBarter())
-            root.state = "barter"
-        }
+        onClicked: controller.tryToBarter()
       }
     }
 
@@ -145,6 +144,6 @@ Item {
     y: parent.height
     height: bottomPartHeight
     controller: root.controller.barter
-    onClosed: root.state = "dialog"
+    onClosed: root.controller.barterEnded()
   }
 }

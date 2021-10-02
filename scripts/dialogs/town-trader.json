@@ -1,0 +1,38 @@
+{
+    "answers": {
+        "": {
+            "hook": "",
+            "state": "",
+            "text": ""
+        },
+        "trade-reject": {
+            "text": "trade-reject"
+        },
+        "trade-start": {
+            "hook": "",
+            "state": "trade-show",
+            "text": "trade-start"
+        }
+    },
+    "entryPoint": "trade-trigger",
+    "states": {
+        "after-trade": {
+            "answers": [
+            ],
+            "text": "after-trade"
+        },
+        "trade-show": {
+            "answers": [
+            ],
+            "hook": "startBarter",
+            "text": "trade-show"
+        },
+        "trade-trigger": {
+            "answers": [
+                "trade-start",
+                "trade-reject"
+            ],
+            "text": "trade-trigger"
+        }
+    }
+}

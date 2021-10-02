@@ -10,6 +10,7 @@ CharacterDialog::CharacterDialog(QObject *parent) : QObject(parent)
   barter   = new BarterController(this);
   mood     = "neutral";
   ambiance = "wasteland";
+  connect(this, &CharacterDialog::barterEnded, this, &CharacterDialog::onBarterEnded);
 }
 
 bool CharacterDialog::load(const QString& name, Character* player, Character* npc)
@@ -175,4 +176,20 @@ QStringList CharacterDialog::getStateList() const
 QStringList CharacterDialog::getAnswerList() const
 {
   return data["answers"].toObject().keys();
+}
+
+bool CharacterDialog::tryToBarter()
+{
+  if (barter->tryToBarter())
+  {
+    emit barterStarted();
+    return true;
+  }
+  return false;
+}
+
+void CharacterDialog::onBarterEnded()
+{
+  if (script->hasMethod("onBarterEnded"))
+    script->call("onBarterEnded");
 }
