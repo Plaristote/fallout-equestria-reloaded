@@ -1,4 +1,5 @@
 import {callGuards, AlarmLevel} from "../pnjs/components/alarm.mjs";
+import {RoutineComponent} from "./routine.mjs";
 
 const stealReactions = [
   {text: "Hey ! Put that back !",                  time: 2500, color: "yellow"},
@@ -7,10 +8,26 @@ const stealReactions = [
   {text: "Guards ! We got a shoplifter over here", time: 3500, color: "red"}
 ];
 
+const defaultRoutine = [
+  { hour: "8",  minute: "30", callback: "openShopRoutine"  },
+  { hour: "19", minute: "30", callback: "closeShopRoutine" }
+];
+
 export class Shop {
-  constructor(model) {
+  constructor(model, routine) {
     this.model = model;
     this.maxShopliftAttempts = 3;
+    this.routineComponent =  new RoutineComponent(this, routine || defaultRoutine);
+  }
+
+  get shopDoors() {
+    const doors = [];
+
+    for (var i = 0 ; i < this.model.objects.length ; ++i) {
+      if (this.model.objects[i].getObjectType() == "Doorway")
+        doors.push(this.model.objects[i]);
+    }
+    return doors;
   }
 
   get shopOwner() {
@@ -23,6 +40,20 @@ export class Shop {
   }
   set stealAttemptCount(value) {
     this.model.setVariable("stealAttemptCount", value);
+  }
+  
+  get opened() {
+    return this.routineComponent.getCurrentRoutine().callback === "openShopRoutine";
+  }
+
+  openShopRoutine() {
+    if (this.shopOwner.isAlive() && !this.shopOwner.unconscious)
+      this.shopDoors.forEach(door => door.locked = false);
+  }
+
+  closeShopRoutine() {
+    if (this.shopOwner.isAlive() && !this.shopOwner.unconscious)
+      this.shopDoors.forEach(door => { door.opened = false; door.locked = true });
   }
 
   isUnderSurveillance() {
@@ -41,11 +72,16 @@ export class Shop {
   
   onZoneEntered(object) {
     if (!level.combat && this.isUnderSurveillance())
-      level.addTextBubble(this.shopOwner, "Welcome !", 2000, "white");
+    {
+      if (this.opened)
+        level.addTextBubble(this.shopOwner, "Welcome !", 2000, "white");
+      else
+        level.addTextBubble(this.shopOwner, "Hey ! We're closed ! Get out !", 2000, "orange");
+    }
   }
-  
+
   onZoneExited(object) {
-    if (!level.combat && this.isUnderSurveillance())
+    if (!level.combat && this.isUnderSurveillance() && this.opened)
       level.addTextBubble(this.shopOwner, "Come back soon !", 2000, "white");
   }
 
