@@ -25,6 +25,11 @@ Pane {
     npcEditor.currentCharacter = characterSheet + ".json";
   }
 
+  function goToDialog(dialogName) {
+    header.currentTab = "dialogs";
+    dialogEditor.currentDialog = dialogName + ".json";
+  }
+
   TabRow {
     id: header
     anchors.top: parent.top
@@ -69,6 +74,7 @@ Pane {
     gameController: game
     onRequestCharacterView: goToNpc(characterSheet)
     onRequestSpriteView: goToSprite(group)
+    onRequestDialogView: goToDialog(dialogName)
   }
 
   WorldMapEditor {
@@ -85,6 +91,7 @@ Pane {
   }
 
   DialogEditor {
+    id: dialogEditor
     visible: header.currentTab == "dialogs"
     anchors { top: header.bottom; left: parent.left; right: parent.right; bottom: parent.bottom }
   }

@@ -24,6 +24,7 @@ Pane {
   signal showClicked(QtObject object)
   signal openInventory(QtObject object)
   signal requestCharacterView(string characterSheet)
+  signal requestDialogView(string dialogName)
   signal requestSpriteView(string group)
 
   function goToPath(path) {
@@ -92,6 +93,7 @@ Pane {
         onOpenInventory: root.openInventory(currentObject)
         onRequestCharacterView: root.requestCharacterView(characterSheet)
         onRequestSpriteView: root.requestSpriteView(group)
+        onRequestDialogView: root.requestDialogView(dialogName)
         width: parent.width - 15
       }
     }

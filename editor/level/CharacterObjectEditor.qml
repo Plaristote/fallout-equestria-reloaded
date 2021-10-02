@@ -14,6 +14,7 @@ DynamicObjectEditor {
 
   signal openInventoryClicked()
   signal requestCharacterView(string characterSheet)
+  signal requestDialogView(string dialogName)
 
   fields: [
     TerminalLabel { text: "Character Sheet" },
@@ -34,15 +35,21 @@ DynamicObjectEditor {
     },
 
     TerminalLabel { text: "Dialog" },
-    TerminalButton {
+    RowLayout {
       Layout.fillWidth: true
-      text: {
-        if (characterEditor.model.scriptName.length > 0 && characterEditor.model.getDialogName() != undefined)
-          return characterEditor.model.getDialogName();
-        return "N/A";
+      TerminalButton {
+        Layout.fillWidth: true
+        text: {
+          if (characterEditor.model.scriptName.length > 0 && characterEditor.model.getDialogName() != undefined)
+            return characterEditor.model.getDialogName();
+          return "N/A";
+        }
+        enabled: false
       }
-      enabled: text !== "N/A"
-      onClicked: console.log("TODO: jump to dialog editor", characterEditor.model.getDialogName(), characterEditor.model.scriptName.length);
+      TerminalToolButton {
+        iconName: "open"
+        onClicked: characterEditor.requestDialogView(characterEditor.model.getDialogName())
+      }
     },
 
     TerminalLabel { text: "Faction" },

@@ -9,6 +9,7 @@ Loader {
   signal openInventory(QtObject model)
   signal requestSpriteView(string group)
   signal requestCharacterView(string characterSheet)
+  signal requestDialogView(string dialogName)
   signal previousClicked()
   signal saveTemplateClicked()
 
@@ -55,6 +56,7 @@ Loader {
       gameController: root.gameController
       onOpenInventoryClicked: root.openInventory(selectedObject)
       onRequestCharacterView: root.requestCharacterView(characterSheet)
+      onRequestDialogView:    root.requestDialogView(dialogName)
     }
   }
 

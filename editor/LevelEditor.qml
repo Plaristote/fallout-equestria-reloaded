@@ -14,6 +14,7 @@ Item {
 
   signal requestCharacterView(string characterSheet)
   signal requestSpriteView(string group)
+  signal requestDialogView(string dialogName)
 
   onCurrentLevelNameChanged: {
     console.log("LevelEditor::onCurrentLevelNameChanged")
@@ -68,6 +69,7 @@ Item {
       gameController: root.gameController
       onRequestCharacterView: root.requestCharacterView(characterSheet)
       onRequestSpriteView: root.requestSpriteView(group)
+      onRequestDialogView: root.requestDialogView(dialogName)
     }
   }
 

@@ -14,6 +14,7 @@ Item {
   signal pickedTile(int tileX, int tileY)
   signal requestCharacterView(string characterSheet)
   signal requestSpriteView(string group)
+  signal requestDialogView(string dialogName)
 
   Connections {
     target: gameController.level
@@ -110,6 +111,7 @@ Item {
           }
           onRequestCharacterView: root.requestCharacterView(characterSheet)
           onRequestSpriteView: root.requestSpriteView(group)
+          onRequestDialogView: root.requestDialogView(dialogName)
           onOpenInventory: {
             if (object.getObjectType() === "Character") {
               characterInventory.character = object;
