@@ -19,6 +19,7 @@ class ObjectGroup : public ControlZoneComponent
   Q_PROPERTY(QPoint                          position READ getPosition NOTIFY positionChanged)
   Q_PROPERTY(QQmlListProperty<ObjectGroup>   groups   READ getQmlGroups  NOTIFY groupsChanged)
   Q_PROPERTY(QQmlListProperty<DynamicObject> objects  READ getQmlObjects NOTIFY objectsChanged)
+  Q_PROPERTY(TaskRunner*                     tasks    MEMBER taskRunner CONSTANT)
   Q_PROPERTY(ObjectGroup*                    parent   READ getParent NOTIFY parentChanged)
 public:
   explicit ObjectGroup(QObject *parent = nullptr);
@@ -32,6 +33,7 @@ public:
   int            objectCount() const;
   const QList<ObjectGroup*>&   getGroups() const { return groups; }
   const QList<DynamicObject*>& getObjects() const { return objects; }
+  TaskRunner*                  getTaskManager() const { return taskRunner; }
 
   void           load(const QJsonObject&);
   void           save(QJsonObject&) const;
@@ -42,6 +44,7 @@ public:
   void                       eachObject(std::function<void(DynamicObject*)>) const;
   QVector<DynamicObject*>    findDynamicObjects(std::function<bool (DynamicObject&)> compare) const;
   QVector<DynamicObject*>    allDynamicObjects() const;
+  QList<ObjectGroup*>        allObjectGroups() const;
   void                       collectObjects(QVector<DynamicObject*>&) const;
   void                       collectObjects(std::function<bool (DynamicObject&)> compare, QVector<DynamicObject*>&) const;
   Q_INVOKABLE DynamicObject* findObject(const QString& path) const { return find<DynamicObject>(path, &ObjectGroup::getObjectByName); }
@@ -94,6 +97,7 @@ protected:
   QPoint                offset;
   QList<ObjectGroup*>   groups;
   QList<DynamicObject*> objects;
+  TaskRunner*           taskRunner = nullptr;
   ObjectFactory*        _factory = nullptr;
 };
 

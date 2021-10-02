@@ -27,7 +27,6 @@ class LevelTask : public CombatComponent
 
   Q_PROPERTY(bool       paused  MEMBER paused NOTIFY pausedChanged)
   Q_PROPERTY(SoundManager* sounds READ getSoundManager CONSTANT)
-  Q_PROPERTY(TaskRunner* tasks MEMBER taskRunner CONSTANT)
   Q_PROPERTY(TutorialComponent* tutorial MEMBER tutorial NOTIFY tutorialChanged)
   Q_PROPERTY(bool persistent MEMBER persistent NOTIFY persistentChanged)
 public:  
@@ -94,7 +93,6 @@ protected:
   QElapsedTimer      clock;
   TimeManager*       timeManager = nullptr;
   SoundManager*      soundManager = nullptr;
-  TaskRunner*        taskRunner = nullptr;
   TutorialComponent* tutorial = nullptr;
   bool               paused = true;
   bool               initialized = false;

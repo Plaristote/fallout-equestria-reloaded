@@ -6,6 +6,7 @@
 
 ObjectGroup::ObjectGroup(QObject *parent) : ParentType(parent)
 {
+  taskRunner = new TaskRunner(this);
   connect(this, &ObjectGroup::offsetChanged, this, &ObjectGroup::positionChanged);
   connect(this, &ObjectGroup::parentChanged, this, &ObjectGroup::positionChanged);
   connect(this, &ObjectGroup::nameChanged,   this, &ObjectGroup::pathChanged);
@@ -22,6 +23,8 @@ void ObjectGroup::load(const QJsonObject& data)
   name = data["name"].toString();
   offset.setX(data["ox"].toInt(0));
   offset.setY(data["oy"].toInt(0));
+  taskRunner->setScriptController(script);
+  taskRunner->load(data["tasks"].toObject());
   for (QJsonValue groupData : data["groups"].toArray())
   {
     ObjectGroup* childGroup = new ObjectGroup(this);
@@ -42,8 +45,10 @@ void ObjectGroup::load(const QJsonObject& data)
 void ObjectGroup::save(QJsonObject& data) const
 {
   QJsonArray jsonGroups, jsonObjects;
+  QJsonObject taskData;
 
   ParentType::save(data);
+  taskRunner->save(taskData);
   for (ObjectGroup* group : groups)
   {
     QJsonObject jsonGroup;
@@ -63,7 +68,7 @@ void ObjectGroup::save(QJsonObject& data) const
   data["objects"] = jsonObjects;
   data["ox"] = offset.x();
   data["oy"] = offset.y();
-}
+  data.insert("tasks", taskData);}
 
 ObjectFactory* ObjectGroup::factory()
 {
@@ -169,6 +174,18 @@ QVector<DynamicObject*> ObjectGroup::allDynamicObjects() const
   collectObjects(results);
   return results;
 }
+
+QList<ObjectGroup*> ObjectGroup::allObjectGroups() const
+{
+  QList<ObjectGroup*> results;
+
+  results.reserve(512);
+  results << groups;
+  for (ObjectGroup* group : groups)
+    results << group->allObjectGroups();
+  return results;
+}
+
 
 QVector<DynamicObject*> ObjectGroup::findDynamicObjects(std::function<bool (DynamicObject &)> compare) const
 {

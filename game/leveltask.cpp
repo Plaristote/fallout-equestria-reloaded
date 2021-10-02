@@ -101,19 +101,12 @@ void LevelTask::save(DataEngine* dataEngine)
   {
     Game* game = Game::get();
     QJsonObject levelData = dataEngine->getLevelData(name);
-    QJsonObject taskData;
-    QJsonArray  objectArray;
-    auto*       playerParty = Game::get()->getPlayerParty();
 
     ParentType::save(levelData);
     levelData.remove("name");
     levelData.remove("script");
     if (!isGameEditor())
-    {
       levelData["lastUpdate"] = static_cast<int>(game->getTimeManager()->getDateTime().GetTimestamp());
-      taskRunner->save(taskData);
-      levelData.insert("tasks", taskData);
-    }
     dataEngine->setLevelData(name, levelData);
   }
   else
@@ -214,13 +207,15 @@ void LevelTask::advanceTime(unsigned int minutes)
 {
   qint64 delta = minutes * 60 * 1000;
 
-  for (DynamicObject* object : qAsConst(objects))
+  for (DynamicObject* object : allDynamicObjects())
   {
     object->update(delta);
     object->updateTasks(delta);
     if (object->isCharacter())
       reinterpret_cast<Character*>(object)->getActionQueue()->update();
   }
+  for (ObjectGroup* group : allObjectGroups())
+    group->getTaskManager()->update(delta);
   taskRunner->update(delta);
 }
 
@@ -252,7 +247,8 @@ void LevelTask::update()
 
 void LevelTask::realTimeTask(qint64 delta)
 {
-  const auto objectList = allDynamicObjects();
+  const auto objectList   = allDynamicObjects();
+  const auto objectGroups = allObjectGroups();
 
   timeManager->addElapsedMilliseconds(delta);
   for (DynamicObject* object : objectList)
@@ -267,6 +263,8 @@ void LevelTask::realTimeTask(qint64 delta)
       asCharacter->getActionQueue()->update();
     }
   }
+  for (ObjectGroup* group : objectGroups)
+    group->getTaskManager()->update(delta);
   taskRunner->update(delta);
   Game::get()->getTaskManager()->update(delta);
 }
@@ -323,6 +321,8 @@ void LevelTask::finalizeRound()
       asCharacter->getFieldOfView()->update(WORLDTIME_TURN_DURATION);
       qDebug() << "-> Enemy count" << asCharacter->getFieldOfView()->GetDetectedEnemies().length();
     }
+    for (ObjectGroup* group : allObjectGroups())
+      group->getTaskManager()->update(WORLDTIME_TURN_DURATION);
     taskRunner->update(WORLDTIME_TURN_DURATION);
     Game::get()->getTaskManager()->update(WORLDTIME_TURN_DURATION);
   }
