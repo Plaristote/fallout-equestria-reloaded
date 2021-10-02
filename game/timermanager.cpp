@@ -48,3 +48,19 @@ void TimeManager::addElapsedMinutes(int minutes)
   dateTime = dateTime + DateTime::Minutes(minutes);
   emit dateChanged();
 }
+
+long TimeManager::secondsUntilTime(const QVariantMap &timeData) const
+{
+  DateTime nextTime(
+    dateTime.GetYear(), dateTime.GetMonth(), dateTime.GetDay(),
+    timeData["hour"].toUInt(),
+    timeData.contains("minute") ? timeData["minute"].toUInt() : 0,
+    timeData.contains("second") ? timeData["second"].toUInt() : 0
+  );
+  std::time_t seconds;
+
+  if (nextTime <= dateTime)
+    nextTime = nextTime + DateTime::Days(1);
+  seconds = (nextTime - dateTime).GetTimestamp();
+  return static_cast<long>(seconds);
+}
