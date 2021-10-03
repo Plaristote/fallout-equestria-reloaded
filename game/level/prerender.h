@@ -15,8 +15,9 @@ public:
   void load(const QJsonObject&);
 
 private:
-  void    preRenderTilemap();
-  void    preRenderGround();
+  void    preRenderAllTilemaps();
+  void    preRenderTilemap(TileMap*, const QString& prefix);
+  void    preRenderGround(TileMap*, const QString& prefix);
   void    preRenderLayers(const QList<TileLayer*>&, const QString& prefix);
   QString getPreRenderPath() const;
 };

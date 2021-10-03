@@ -12,8 +12,11 @@ ZoneComponent::ZoneComponent(QObject* parent) : ParentType(parent)
 void ZoneComponent::load(const QJsonObject& data)
 {
   ParentType::load(data);
-  for (auto* zone : tilemap->getZones())
-    registerZone(zone);
+  for (auto* floor : getFloors())
+  {
+    for (auto* zone : floor->getTilemap()->getZones())
+      registerZone(zone);
+  }
 }
 
 void ZoneComponent::registerZoneController(ControlZoneComponent* object)
@@ -54,18 +57,22 @@ void ZoneComponent::unregisterDynamicObject(DynamicObject* object)
 
 void ZoneComponent::registerZone(TileZone* zone)
 {
-  tilemap->addTileZone(zone);
-  grid->registerZone(zone);
+  LevelGrid* floor = getFloors().at(0);
+
+  floor->getTilemap()->addTileZone(zone);
+  floor->registerZone(zone);
   connect(zone, &TileZone::enteredZone, this, &ZoneComponent::onZoneEntered, Qt::QueuedConnection);
   connect(zone, &TileZone::exitedZone,  this, &ZoneComponent::onZoneExited,  Qt::QueuedConnection);
 }
 
 void ZoneComponent::unregisterZone(TileZone* zone)
 {
+  LevelGrid* floor = getFloors().at(0);
+
   disconnect(zone, &TileZone::enteredZone, this, &ZoneComponent::onZoneEntered);
   disconnect(zone, &TileZone::exitedZone,  this, &ZoneComponent::onZoneExited);
-  grid->unregisterZone(zone);
-  tilemap->removeTileZone(zone);
+  floor->unregisterZone(zone);
+  floor->getTilemap()->removeTileZone(zone);
   for (DynamicObject* object : qAsConst(objects))
   {
     if (object->isCharacter())

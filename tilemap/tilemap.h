@@ -41,6 +41,7 @@ public:
   const QList<TileLayer*>& getRoofs() const { return roofs; }
   const QList<TileLayer*>& getLights() const { return lights; }
   const QVector<TileLayer*>& getLayers() const { return layers; }
+  const QList<FloorLayer*>& getFloors() const { return floors; }
   Tileset* getTileset(const QString& name) const;
   Q_INVOKABLE QPoint getPointFor(int x, int y) const;
 
@@ -48,6 +49,7 @@ public:
   Q_INVOKABLE TileLayer* getRoofLayer(const QString& name);
   Q_INVOKABLE TileLayer* getLightLayer(const QString& name);
   Q_INVOKABLE TileZone*  getZone(const QString& name);
+  Q_INVOKABLE TileMap*   getFloor(const QString& name);
 
   QQmlListProperty<TileZone> getZonesQml() { return QML_QLIST_CONSTRUCTOR(TileZone, zones); }
   QQmlListProperty<TileLayer> getRoofsQml() { return QML_QLIST_CONSTRUCTOR(TileLayer, roofs); }

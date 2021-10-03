@@ -12,13 +12,18 @@ class GridComponent : public LevelBase
   Q_OBJECT
   typedef LevelBase ParentType;
 
-  Q_PROPERTY(LevelGrid* grid MEMBER grid CONSTANT)
+  Q_PROPERTY(LevelGrid* grid READ getGrid NOTIFY floorChanged)
+  Q_PROPERTY(TileMap* tilemap READ getTileMap NOTIFY floorChanged)
+  Q_PROPERTY(unsigned int currentFloor READ getCurrentFloor NOTIFY floorChanged)
 public:
   explicit GridComponent(QObject *parent = nullptr);
 
-  LevelGrid*                 getGrid() const { return grid; }
+  LevelGrid*                 getGrid() const { return floors.at(currentFloor); }
+  TileMap*                   getTileMap() const { return grid ? getGrid()->getTilemap() : nullptr; }
+  unsigned int               getCurrentFloor() const { return currentFloor; }
   Q_INVOKABLE DynamicObject* getOccupantAt(int x, int y) { return getOccupantAt(QPoint(x, y)); }
   DynamicObject*             getOccupantAt(QPoint);
+  const QVector<LevelGrid*>& getFloors() const { return floors; }
 
   void             load(const QJsonObject&);
   virtual void     registerDynamicObject(DynamicObject*);
@@ -43,6 +48,9 @@ public:
     std::sort(list.begin(), list.end(), &GridComponent::isRenderedBefore);
   }
 
+signals:
+  void floorChanged();
+
 protected slots:
   virtual void onCharacterDied(Character*);
   void         onRoofVisibilityChanged(TileLayer*);
@@ -54,6 +62,8 @@ protected:
   LevelGrid* grid = nullptr;
 private:
   QMap<Character*, QVector<QMetaObject::Connection>> characterObservers;
+  unsigned char currentFloor = 0;
+  QVector<LevelGrid*> floors;
 };
 
 #endif // GRIDCOMPONENT_H

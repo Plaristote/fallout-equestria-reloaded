@@ -217,10 +217,11 @@ LevelGrid::LevelGrid(QObject *parent) : QObject(parent)
 {
 }
 
-void LevelGrid::initializeGrid(TileMap* tilemap)
+void LevelGrid::initializeGrid(TileMap* tilemap_)
 {
   PrepareCaseFunctor functor;
 
+  tilemap = tilemap_;
   functor.ground = tilemap->getLayer("ground");
   functor.blocks = tilemap->getLayer("blocks");
   functor.wallsV = tilemap->getLayer("walls-v");

@@ -1,7 +1,7 @@
-import {CanvasRenderer} from "./CanvasRenderer.mjs";
+import {TileMapRenderer} from "./TileMap.mjs";
 import {MouseMode, TargetMode} from "../Interaction.mjs";
 
-export class CursorController extends CanvasRenderer {
+export class CursorController extends TileMapRenderer {
   constructor(canvas, params) {
     super(canvas);
     this.level = params.level;

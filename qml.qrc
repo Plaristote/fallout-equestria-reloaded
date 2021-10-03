@@ -288,5 +288,6 @@
         <file>editor/level/ScriptInputField.qml</file>
         <file>editor/level/SpriteInputField.qml</file>
         <file>editor/ScriptInputField.qml</file>
+        <file>game/level/TileMap.mjs</file>
     </qresource>
 </RCC>

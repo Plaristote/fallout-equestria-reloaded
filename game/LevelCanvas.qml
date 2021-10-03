@@ -34,7 +34,7 @@ Canvas {
 
   Connections {
     target: levelController
-    function onTilemapReady() {
+    function onFloorChanged() {
       preloadImages();
       initializeRenderer();
     }

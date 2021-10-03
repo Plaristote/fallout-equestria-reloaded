@@ -37,7 +37,7 @@ void LevelTask::deleteLater()
 
 bool LevelTask::insertPartyIntoZone(CharacterParty* party, const QString& zoneName)
 {
-  for (auto* zone : tilemap->getZones())
+  for (auto* zone : getTileMap()->getZones())
   {
     if (zone->getType() == "entry" && (zone->getName() == zoneName || (zone->getIsDefault() && zoneName == "")))
       return party->insertIntoZone(this, zone);
@@ -139,8 +139,8 @@ void LevelTask::registerDynamicObject(DynamicObject* object)
     addCharacterObserver(character, connect(character, &Character::characterKill, this, &LevelTask::onCharacterKill));
   }
 
-  connect(object, &DynamicObject::lightZoneAdded, tilemap, &TileMap::addLightLayer);
-  connect(object, &DynamicObject::lightZoneRemoved, tilemap, &TileMap::removeLightLayer);
+  connect(object, &DynamicObject::lightZoneAdded, getTileMap(), &TileMap::addLightLayer);
+  connect(object, &DynamicObject::lightZoneRemoved, getTileMap(), &TileMap::removeLightLayer);
   object->reloadLightzone();
 
   ParentType::registerDynamicObject(object);
@@ -158,8 +158,8 @@ void LevelTask::unregisterDynamicObject(DynamicObject* object)
     }
   }
 
-  disconnect(object, &DynamicObject::lightZoneAdded, tilemap, &TileMap::addLightLayer);
-  disconnect(object, &DynamicObject::lightZoneRemoved, tilemap, &TileMap::removeLightLayer);
+  disconnect(object, &DynamicObject::lightZoneAdded, getTileMap(), &TileMap::addLightLayer);
+  disconnect(object, &DynamicObject::lightZoneRemoved, getTileMap(), &TileMap::removeLightLayer);
 
   ParentType::unregisterDynamicObject(object);
 }

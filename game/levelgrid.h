@@ -78,6 +78,7 @@ public:
   Q_INVOKABLE int            getVisionQuality(int x, int y, int toX, int toY);
   Q_INVOKABLE int            getCaseFlags(int x, int y) const;
 
+  TileMap* getTilemap() const { return tilemap; }
   bool findPath(QPoint from, QPoint to, QList<QPoint>& path, CharacterMovement* character);
   bool moveObject(DynamicObject*, int x, int y);
   void removeObject(DynamicObject*);
@@ -98,6 +99,7 @@ private:
   void updateZoneCases(TileZone*);
   void setZoneCases(TileZone*, QVector<QPoint>);
 
+  TileMap*             tilemap = nullptr;
   QSize                size;
   QVector<CaseContent> grid;
   QMap<TileZone*, QVector<CaseContent*>>   zoneCases;

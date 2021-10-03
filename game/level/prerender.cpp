@@ -13,11 +13,14 @@ void PreRenderComponent::load(const QJsonObject& data)
   QList<TileLayer*> layers;
 
   ParentType::load(data);
-  layers << tilemap->getLayer("ground")
-         << tilemap->getRoofs()
-         << tilemap->getLights();
+  for (LevelGrid* grid : getFloors())
+  {
+    layers << grid->getTilemap()->getLayer("ground")
+           << grid->getTilemap()->getRoofs()
+           << grid->getTilemap()->getLights();
+  }
   if (!dir.exists(getPreRenderPath()))
-    preRenderTilemap();
+    preRenderAllTilemaps();
   for (TileLayer* layer : layers)
     layer->setProperty("prerendered", true);
 }
@@ -27,19 +30,30 @@ QString PreRenderComponent::getPreRenderPath() const
   return QDir::currentPath() + "/.prerender/" + name + '/';
 }
 
-void PreRenderComponent::preRenderTilemap()
+void PreRenderComponent::preRenderAllTilemaps()
+{
+  unsigned int i = 0;
+
+  for (LevelGrid* grid : getFloors())
+  {
+    preRenderTilemap(grid->getTilemap(), "floor" + QString::number(i));
+    ++i;
+  }
+}
+
+void PreRenderComponent::preRenderTilemap(TileMap* tilemap, const QString& prefix)
 {
   QDir dir;
 
   dir.mkpath(getPreRenderPath());
-  preRenderGround();
-  preRenderLayers(tilemap->getRoofs(), "roof");
-  preRenderLayers(tilemap->getLights(), "lights");
+  preRenderGround(tilemap, prefix);
+  preRenderLayers(tilemap->getRoofs(), prefix + "_roof");
+  preRenderLayers(tilemap->getLights(), prefix + "_lights");
 }
 
-void PreRenderComponent::preRenderGround()
+void PreRenderComponent::preRenderGround(TileMap* tilemap, const QString& prefix)
 {
-  QString     tilemapFile = getPreRenderPath() + "tilemap.png";
+  QString     tilemapFile = getPreRenderPath() + prefix + "_tilemap.png";
   TileLayer*  ground = tilemap->getLayer("ground");
   QImage      image(ground->getRenderedRect().size(), QImage::Format_ARGB32);
   QPoint      offset(ground->getRenderedRect().x(), 0);

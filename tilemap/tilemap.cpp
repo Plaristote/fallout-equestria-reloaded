@@ -260,6 +260,16 @@ TileZone* TileMap::getZone(const QString& name)
   return nullptr;
 }
 
+TileMap* TileMap::getFloor(const QString& name)
+{
+  for (FloorLayer* floor : qAsConst(floors))
+  {
+    if (floor->getName() == name)
+      return floor->getTileMap();
+  }
+  return nullptr;
+}
+
 QPoint TileMap::getPointFor(int x, int y) const
 {
   return QPoint(

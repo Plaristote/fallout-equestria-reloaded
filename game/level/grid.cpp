@@ -8,17 +8,26 @@
 GridComponent::GridComponent(QObject *parent) : ParentType(parent)
 {
   grid = new LevelGrid(this);
-  tilemap = new TileMap(this);
 }
 
 void GridComponent::load(const QJsonObject& data)
 {
+  auto* tilemap = new TileMap(this);
+
   if (tilemap->load(data["name"].toString()))
   {
     for (TileLayer* layer : tilemap->getRoofs())
       connect(layer, &TileLayer::visibleChanged, [this, layer]() { onRoofVisibilityChanged(layer); });
     grid->initializeGrid(tilemap);
-    emit tilemapReady();
+    floors.push_back(grid);
+    for (FloorLayer* layer : tilemap->getFloors())
+    {
+      LevelGrid* floorGrid = new LevelGrid(this);
+
+      floorGrid->initializeGrid(layer->getTileMap());
+      floors.push_back(floorGrid);
+    }
+    emit floorChanged();
     ParentType::load(data);
   }
   else
@@ -86,7 +95,7 @@ void GridComponent::setCharacterPosition(Character* character, int x, int y)
 
 bool GridComponent::moveCharacterToZone(Character* character, const QString& name)
 {
-  return moveCharacterToZone(character, tilemap->getZone(name));
+  return moveCharacterToZone(character, getTileMap()->getZone(name));
 }
 
 bool GridComponent::moveCharacterToZone(Character* character, TileZone* zone)
@@ -114,12 +123,7 @@ bool GridComponent::moveCharacterToZone(Character* character, TileZone* zone)
 
 QPoint GridComponent::getTilePosition(QPoint position) const
 {
-  QSize tileSize = tilemap->getTileSize();
-
-  return QPoint(
-    position.x() * tileSize.width()  / 2 - position.y() * tileSize.width()  / 2,
-    position.y() * tileSize.height() / 2 + position.x() * tileSize.height() / 2
-  );
+  return getTileMap()->getPointFor(position.x(), position.y());
 }
 
 void GridComponent::setObjectPosition(DynamicObject* object, int x, int y)
@@ -132,7 +136,7 @@ void GridComponent::setObjectPosition(DynamicObject* object, int x, int y)
     QPoint renderPosition = getRenderPositionForTile(x, y);
 
     if (object->isCharacter())
-      renderPosition.ry() -= tilemap->getTileSize().height() / 4;
+      renderPosition.ry() -= getTileMap()->getTileSize().height() / 4;
     object->setRenderPosition(renderPosition);
   }
 }
@@ -141,7 +145,7 @@ QPoint GridComponent::getAdjustedOffsetFor(const DynamicObject* object) const
 {
   if (object)
   {
-    QSize  tileSize = tilemap->getTileSize();
+    QSize  tileSize = getTileMap()->getTileSize();
     QPoint offset   = object->getSpritePosition();
     QRect  rect     = object->getClippedRect();
 
@@ -163,7 +167,7 @@ TileLayer* GridComponent::getRoofFor(DynamicObject* object) const
 {
   QPoint position = object->getPosition();
 
-  for (TileLayer* layer : tilemap->getRoofs())
+  for (TileLayer* layer : getTileMap()->getRoofs())
   {
     Tile* tile = layer->getTile(position.x(), position.y());
 
@@ -190,7 +194,7 @@ QJSValue GridComponent::getDynamicObjectsAt(int x, int y) const
 
 QPoint GridComponent::getRenderPositionForTile(int x, int y)
 {
-  auto* layer = tilemap->getLayer("ground");
+  auto* layer = getTileMap()->getLayer("ground");
   auto* tile  = layer ? layer->getTile(x, y) : nullptr;
 
   return tile ? tile->getRenderPosition() : QPoint();
