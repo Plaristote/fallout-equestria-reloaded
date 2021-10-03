@@ -12,7 +12,7 @@ class InventoryItem : public DynamicObject
   Q_PROPERTY(QString     icon        READ getIcon NOTIFY itemTypeChanged)
   Q_PROPERTY(QString     category    READ getCategory NOTIFY itemTypeChanged)
   Q_PROPERTY(QString     itemType    READ getItemType WRITE setItemType NOTIFY itemTypeChanged)
-  Q_PROPERTY(QString     description READ getDescription)
+  Q_PROPERTY(QString     description READ getDescription NOTIFY itemTypeChanged)
   Q_PROPERTY(int         ammo        MEMBER ammo NOTIFY ammoChanged)
   Q_PROPERTY(int         maxAmmo     MEMBER maxAmmo NOTIFY ammoChanged)
   Q_PROPERTY(int         weight      READ getWeight  NOTIFY weightChanged)

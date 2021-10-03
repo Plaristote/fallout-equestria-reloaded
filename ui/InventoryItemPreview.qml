@@ -5,6 +5,7 @@ import "qrc:/assets/ui" as UiStyle
 
 Pane {
   property QtObject model
+  property bool withValue: false
   id: objectPreview
   background: UiStyle.TerminalPane {}
   height: objectPreviewColumn.height + 50
@@ -63,6 +64,15 @@ Pane {
       font.family: application.consoleFontName
       font.pointSize: 8
       text: i18n.t("Weight") + ": " + objectPreview.model.weight
+      color: "white"
+    }
+
+    Text {
+      Layout.fillWidth: true
+      font.family: application.consoleFontName
+      font.pointSize: 8
+      text: i18n.t("Value") + ": " + objectPreview.model.value
+      visible: withValue
       color: "white"
     }
   }

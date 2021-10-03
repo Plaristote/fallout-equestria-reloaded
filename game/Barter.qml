@@ -41,6 +41,7 @@ Item {
 
       BarterTransferControls {
         Layout.alignment: Qt.AlignHCenter
+        Layout.preferredWidth: 50
         leftInventory:  playerInventory
         rightInventory: playerStash
         onTransferToLeft: controller.moveToPlayerInventory(item, amount)
@@ -59,9 +60,10 @@ Item {
       }
 
       BarterDealPreview {
-        Layout.alignment: Qt.AlignVCenter
-        Layout.preferredWidth: 200
+        Layout.fillHeight: true
+        Layout.preferredWidth: 300
         controller: root.controller
+        currentItem: playerInventory.selectedObject || playerStash.selectedObject || npcStash.selectedObject || npcInventory.selectedObject
       }
 
       InventoryItemsView {
@@ -77,6 +79,7 @@ Item {
 
       BarterTransferControls {
         Layout.alignment: Qt.AlignHCenter
+        Layout.preferredWidth: 50
         leftInventory:  npcStash
         rightInventory: npcInventory
         onTransferToLeft: controller.moveToNpcStash(item, amount)
