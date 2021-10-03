@@ -12,6 +12,8 @@ void FloorLayer::load(const QJsonObject& object, const TileMap* parent)
   QVector<TileLayer*> allLayers;
 
   name = "floor_" + object["name"].toString();
+  offset.setX(object["offsetx"].toInt() - parent->tileSize.width() / 2);
+  offset.setY(object["offsety"].toInt() - parent->tileSize.height() / 2 + 15);
   tilemap              = new TileMap(this);
   tilemap->tilesets    = parent->tilesets;
   tilemap->textureList = parent->textureList;

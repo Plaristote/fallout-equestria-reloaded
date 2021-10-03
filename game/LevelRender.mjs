@@ -84,9 +84,10 @@ export class Controller extends CursorController {
     }
   }
 
-  renderTilemap() {
+  renderGroundLayer(layer, path) {
+    const layerRect  = layer.getRenderedRect();
     const renderRect = this.layers.ground.getRenderedRect();
-    const size       = { width: renderRect.width, height: renderRect.height };
+    const size       = { width: layerRect.width, height: layerRect.height };
     const position   = {x: -this.origin.x, y: -this.origin.y};
     const offset     = {x: -renderRect.x - this.origin.x, y: renderRect.y -this.origin.y};
     var   width      = offset.x + this.canvas.width > size.width   ? size.width  - offset.x : this.canvas.width;
@@ -104,13 +105,23 @@ export class Controller extends CursorController {
       position.y -= offset.y;
       offset.y    = 0;
     }
-    //console.log("Drawing tilemap at", JSON.stringify(position), "rect", this.origin.x, this.origin.y, width, height);
+    offset.x -= layer.offset.x;
+    offset.y -= layer.offset.y;
+    //console.log(`Drawing floor ${layer.name} at`, `{x:${position.x},y:${position.y}}`, "rect", this.origin.x, this.origin.y, width, height);
     //console.log("-> offset", offset.x, '/', offset.y);
-    this.context.drawImage(
-      this.preRenderPath + "tilemap.png",
-      offset.x,   offset.y,   width, height,
-      position.x, position.y, width, height
-    );
+    try {
+      this.context.drawImage(
+        this.preRenderPath + path,
+        offset.x,   offset.y,   width, height,
+        position.x, position.y, width, height
+      );
+    } catch (err) {
+      console.log("renderGroundLayer(", layer, path, "): render error:", err);
+    }
+  }
+
+  renderTilemap() {
+    this.renderGroundLayer(this.layers.ground, "tilemap.png");
   }
 
   renderCoordinates(x, y) {
@@ -167,19 +178,28 @@ export class Controller extends CursorController {
   }
 
   renderRoofLayer(layer) {
-    this.renderLayer(layer, "roof_" + layer.name + ".png");
+    if (layer.name.startsWith("floor_")) {
+      if (this.shouldRenderLayer(layer))
+        this.renderGroundLayer(layer, "roof_" + layer.name + ".png");
+    }
+    else
+      this.renderLayer(layer, "roof_" + layer.name + ".png");
   }
 
   renderLightLayer(layer) {
     this.renderLayer(layer, "lights_" + layer.name + ".png");
   }
 
-  renderLayer(layer, path) {
+  shouldRenderLayer(layer) {
     const renderRect = layer.getRenderedRect();
 
-    if (this.shouldRender(renderRect.x, renderRect.y, renderRect.width, renderRect.height)) {
+    return this.shouldRender(renderRect.x, renderRect.y, renderRect.width, renderRect.height);
+  }
+
+  renderLayer(layer, path) {
+    if (this.shouldRenderLayer(layer)) {
       if (layer.prerendered)
-        this.renderAsPrerenderedLayer(layer, path, renderRect);
+        this.renderAsPrerenderedLayer(layer, path, layer.getRenderedRect());
       else
         this.renderAsDynamicLayer(layer);
     }
