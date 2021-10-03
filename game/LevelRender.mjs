@@ -1,4 +1,5 @@
 import {CursorController} from "./level/Cursor.mjs";
+import {RenderContextManager, RenderContextMode} from "./level/RenderContext.mjs";
 import {initializeRenderQueue, fillRenderQueue} from "./RenderQueue.mjs";
 
 export class Controller extends CursorController {
@@ -25,9 +26,11 @@ export class Controller extends CursorController {
     this.renderTilemap();
     this.renderLights();
     this.renderZones();
+    this.contextManager = new RenderContextManager(this);
     this.eachCase(this.renderCoordinates.bind(this));
     this.renderVisualEffects();
     this.renderRoofs();
+    this.contextManager.finalize();
     super.render();
     this.frameCount++;
   }
@@ -42,11 +45,8 @@ export class Controller extends CursorController {
   eachCase(callback) {
     this.renderAfterPlayer = false;
     for (var x = 0 ; x < this.mapSize.width; ++x) {
-      for (var y = 0 ; y < this.mapSize.height; ++y) {
+      for (var y = 0 ; y < this.mapSize.height; ++y)
         callback(x, y);
-        if (this.playerPosition.x === x && this.playerPosition.y === y)
-          this.renderAfterPlayer = true;
-      }
     }
   }
 
@@ -87,7 +87,7 @@ export class Controller extends CursorController {
       this.renderMisc(x, y);
       this.renderObjects[x][y].forEach(this.renderDynamicObject.bind(this));
       if (this.playerPosition.x === x && this.playerPosition.y === y)
-        this.renderAfterPlayer = true;
+        this.contextManager.playerRendered = true;
       if (vwall)
         this.renderWall(vwall, x, y);
       if (hwall)
@@ -105,44 +105,17 @@ export class Controller extends CursorController {
   }
 
   renderRoofs() {
-    this.startClipAroundPlayer();
+    this.contextManager.requireMode(RenderContextMode.ClipAroundPlayer);
     super.renderRoofs();
-    this.stopClipAroundPlayer();
   }
 
   renderWall(tile, x, y) {
     const offset = this.getPointFor(x, y);
 
     if (this.shouldRender(offset.x, offset.y, this.wallSize.width, this.wallSize.height)) {
-      if (this.renderAfterPlayer)
-        this.startClipAroundPlayer();
+      this.contextManager.requireMode(RenderContextMode.ClipAroundPlayer);
       this.renderImage(this.pathPrefix + tile.image, offset, this.wallSize.width, this.wallSize.height, tile.clippedRect);
-      if (this.renderAfterPlayer)
-        this.stopClipAroundPlayer();
     }
-  }
-
-  startClipAroundPlayer() {
-    const sprite = this.level.player;
-
-    if (sprite)
-    {
-      const offset      = sprite.getSpritePosition();
-      const clippedRect = sprite.getClippedRect();
-      const extraHeight = clippedRect.height - this.tileSize.height;
-
-      offset.y -= extraHeight;
-      offset.x += this.tileSize.width / 2 - clippedRect.width / 2;
-      this.context.save();
-      this.context.beginPath();
-      this.context.arc(offset.x + this.tileSize.width / 2 - clippedRect.width / 4, offset.y + this.tileSize.height / 2, clippedRect.width, 0, Math.PI * 2, false);
-      this.context.rect(-this.canvas.origin.x + this.canvas.width, -this.canvas.origin.y, - this.canvas.width, this.canvas.height);
-      this.context.clip();
-    }
-  }
-
-  stopClipAroundPlayer() {
-    this.context.restore();
   }
 
   getAdjustedOffsetFor(sprite) {
@@ -155,21 +128,12 @@ export class Controller extends CursorController {
 
     try {
       if (this.shouldRender(offset.x, offset.y, clippedRect.width, clippedRect.height)) {
+        this.contextManager.requireMode(RenderContextMode.Normal);
         this.context.drawImage(
           this.pathPrefix + sprite.spriteSource,
           clippedRect.x, clippedRect.y, clippedRect.width, clippedRect.height,
           offset.x, offset.y, clippedRect.width, clippedRect.height
         );
-/*
-                if (sprite.getObjectType() === "Character") {
-                  const vision_score = this.level.grid.getVisionQuality(this.level.player.position.x, this.level.player.position.y, sprite.position.x, sprite.position.y);
-                  this.context.font = "bold 20px sans-serif";
-                  this.context.fillStyle = "#FFFFFF";
-                  this.context.fillText(`${vision_score}%`, offset.x, offset.y);
-                  this.context.strokeStyle = "#000000";
-                  this.context.strokeText(`${vision_score}%`, offset.x, offset.y);
-                }
-*/
         return true;
       }
     } catch (err) {
