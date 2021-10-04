@@ -21,7 +21,6 @@ class DynamicObject : public LightSourceComponent
 
   Q_PROPERTY(QString objectName MEMBER objectName NOTIFY objectNameChanged)
   Q_PROPERTY(QString path READ getPath NOTIFY pathChanged)
-  Q_PROPERTY(QPoint  position    READ getPosition NOTIFY positionChanged)
   Q_PROPERTY(TaskRunner* tasks MEMBER taskManager)
   Q_PROPERTY(bool blocksPath MEMBER blocksPath NOTIFY blocksPathChanged)
   Q_PROPERTY(bool isVisible READ isVisible NOTIFY visibilityChanged)
@@ -51,7 +50,6 @@ public:
   TaskRunner* getTaskManager() { return taskManager; }
 
   Q_INVOKABLE QString getObjectType() const { return metaObject()->className(); }
-  Q_INVOKABLE QPoint getPosition() const { return position; }
   Q_INVOKABLE virtual int getZIndex() const { return 1; }
   Q_INVOKABLE virtual bool hasInteractionOverlay() const { return true; }
   virtual int getInteractionDistance() const { return 1; }
@@ -67,7 +65,6 @@ public:
 signals:
   void objectNameChanged();
   void blocksPathChanged();
-  //void positionChanged();
   void visibilityChanged();
   void parentChanged();
   void pathChanged();
@@ -84,7 +81,7 @@ protected:
 //private:
   QString objectName;
   bool visible = true;
-  QPoint position, nextPosition;
+  QPoint nextPosition;
 };
 
 #endif // DYNAMICOBJECT_H

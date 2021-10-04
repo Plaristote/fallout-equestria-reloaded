@@ -143,7 +143,6 @@ void DynamicObject::setSpriteOffset(QPoint offset)
 void DynamicObject::load(const QJsonObject& data)
 {
   objectName = data["objectName"].toString();
-  position.setX(data["x"].toInt()); position.setY(data["y"].toInt());
   nextPosition.setX(data["nextX"].toInt()); nextPosition.setY(data["nextY"].toInt());
   blocksPath = data["blocksPath"].toBool(true);
   emit blocksPathChanged();
@@ -155,7 +154,6 @@ void DynamicObject::load(const QJsonObject& data)
 void DynamicObject::save(QJsonObject& data) const
 {
   data["objectName"] = objectName;
-  data["x"] = position.x(); data["y"] = position.y();
   data["nextX"] = nextPosition.x(); data["nextY"] = nextPosition.y();
   data["blocksPath"] = blocksPath;
   ParentType::save(data);

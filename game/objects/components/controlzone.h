@@ -1,16 +1,16 @@
 #ifndef  CONTROLZONECOMPONENT_H
 # define CONTROLZONECOMPONENT_H
 
-# include "scriptable.h"
+# include "gridobjectcomponent.h"
 # include <QPoint>
 
 class TileZone;
 class DynamicObject;
 
-class ControlZoneComponent : public ScriptableComponent
+class ControlZoneComponent : public GridObjectComponent
 {
   Q_OBJECT
-  typedef ScriptableComponent ParentType;
+  typedef GridObjectComponent ParentType;
 
   Q_PROPERTY(TileZone* controlZone MEMBER controlZone NOTIFY controlZoneChanged)
   Q_PROPERTY(bool zoneBlocked MEMBER zoneBlocked NOTIFY zoneBlockedChanged)
@@ -20,7 +20,6 @@ public:
   void load(const QJsonObject&);
   void save(QJsonObject&) const;
 
-  virtual QPoint        getPosition() const { return QPoint(); }
   Q_INVOKABLE TileZone* addControlZone();
   Q_INVOKABLE void      removeControlZone();
   Q_INVOKABLE QJSValue  getControlZoneOccupants();

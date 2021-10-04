@@ -183,6 +183,8 @@ set(PROJECT_SOURCES
         game/objects/bloodstain.cpp
         game/objects/components/scriptable.h
         game/objects/components/scriptable.cpp
+        game/objects/components/gridobjectcomponent.h
+        game/objects/components/gridobjectcomponent.cpp
         game/objects/components/sprite.h
         game/objects/components/sprite.cpp
         game/objects/components/orientedsprite.h

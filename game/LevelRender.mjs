@@ -1,6 +1,6 @@
 import {CursorController} from "./level/Cursor.mjs";
 import {RenderContextManager, RenderContextMode} from "./level/RenderContext.mjs";
-import {initializeRenderQueue, fillRenderQueue} from "./RenderQueue.mjs";
+import {initializeRenderQueue, fillRenderQueue} from "./level/RenderQueue.mjs";
 
 export class Controller extends CursorController {
   constructor(canvas, params) {

@@ -120,6 +120,18 @@ QPoint ObjectGroup::getPosition() const
   return parent ? parent->getPosition() + offset : offset;
 }
 
+void ObjectGroup::setPosition(QPoint value)
+{
+  ObjectGroup* parent = getParent();
+  QPoint newOffset = parent ? value - parent->getPosition() : value;
+
+  if (offset != newOffset)
+  {
+    offset = newOffset;
+    emit offsetChanged();
+  }
+}
+
 static void adjustOffsetWithLevel(LevelTask* level, DynamicObject* object, QPoint movement)
 {
   auto newPosition = object->getPosition() + movement;

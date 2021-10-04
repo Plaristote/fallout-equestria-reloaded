@@ -20,8 +20,6 @@ public:
 
   TileLayer* getLightZone() const { return lightZone; }
 
-  virtual QPoint getPosition() const = 0;
-
 signals:
   void lightRadiusChanged();
   void lightTypeChanged();

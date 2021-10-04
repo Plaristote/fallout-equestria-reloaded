@@ -44,8 +44,8 @@ export function fillRenderQueue(renderQueue, level, viewAll) {
 
   for (var i = 0 ; i < objects.length ; ++i) {
     const object    = objects[i];
-    const position  = object.getPosition();
-    const isValid   = position.x >= 0 && position.y >= 0;
+    const position  = object.position;
+    const isValid   = position.x >= 0 && position.y >= 0 && object.floor === level.currentFloor;
     const isVisible = isValid && (viewAll || isObjectVisible(object, detectedCharacters));
     var   array     = renderQueue[position.x][position.y];
 

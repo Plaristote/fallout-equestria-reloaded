@@ -255,7 +255,7 @@
         <file>ui/dialog/BarterTransferControls.qml</file>
         <file>ui/dialog/BarterDealPreview.qml</file>
         <file>game/hud/HudCombatControls.qml</file>
-        <file>game/RenderQueue.mjs</file>
+        <file>game/level/RenderQueue.mjs</file>
         <file>ui/CharacterSpritePreview.qml</file>
         <file>game/hud/TutorialPane.qml</file>
         <file>assets/ui/WarningRectangle.qml</file>
@@ -289,5 +289,6 @@
         <file>editor/level/SpriteInputField.qml</file>
         <file>editor/ScriptInputField.qml</file>
         <file>game/level/TileMap.mjs</file>
+        <file>game/level/RenderContext.mjs</file>
     </qresource>
 </RCC>

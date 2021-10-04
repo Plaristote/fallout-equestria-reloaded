@@ -28,6 +28,7 @@ public:
   const QString& getName() const { return name; }
   ObjectGroup*   getParent() const;
   QPoint         getPosition() const override;
+  void           setPosition(QPoint) override;
   QPoint         getOffset() const { return offset; }
   void           setOffset(QPoint);
   int            objectCount() const;
