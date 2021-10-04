@@ -24,7 +24,7 @@ Item {
       controller:      canvas.controller
       model:           levelController.dynamicObjects
       filter:          function(item) {
-        return !item.hidden && item.hasInteractionOverlay();
+        return !item.hidden && item.floor === levelController.currentFloor && item.hasInteractionOverlay();
       }
     }
   }
@@ -34,7 +34,7 @@ Item {
     InteractionOverlay {
       levelController:  canvas.levelController
       controller:       canvas.controller
-      filter:           function(item) { return item.isAlive(); }
+      filter:           function(item) { return item.floor === levelController.currentFloor && item.isAlive(); }
       model:            levelController.visibleCharacters
       overlayColor:     levelController.targetMode === Interaction.TargetMode.Any ? Qt.rgba(255, 255, 0, 1)   : Qt.rgba(255, 0, 0, 1)
       overlayMaxColor:  levelController.targetMode === Interaction.TargetMode.Any ? Qt.rgba(255, 255, 0, 0.5) : Qt.rgba(255, 0, 0, 0.5)
@@ -46,7 +46,7 @@ Item {
     InteractionOverlay {
       levelController:  canvas.levelController
       controller:       canvas.controller
-      filter:           function(item) { return item.isAlive(); }
+      filter:           function(item) { return item.floor === levelController.currentFloor && item.isAlive(); }
       model:            levelController.visibleCharacters
       withColorOverlay: false
     }

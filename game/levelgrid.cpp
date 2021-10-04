@@ -545,10 +545,10 @@ void LevelGrid::removeObject(DynamicObject* object)
   auto  position = object->getPosition();
   auto* gridCase = getGridCase(position.x(), position.y());
 
-  if (gridCase && gridCase->occupant == object)
+  if (gridCase)
   {
-    setCaseOccupant(*gridCase, nullptr);
-    for (auto* zone : gridCase->zones)
+    extractObject(object);
+    for (auto* zone : qAsConst(gridCase->zones))
     {
       if (object->isCharacter())
         reinterpret_cast<Character*>(object)->onZoneExited(zone);
@@ -557,26 +557,42 @@ void LevelGrid::removeObject(DynamicObject* object)
   }
 }
 
-bool LevelGrid::moveObject(DynamicObject* object, int x, int y)
+void LevelGrid::extractObject(DynamicObject* object)
 {
-  auto* gridCase = getGridCase(x, y);
-
-  if (object->isBlockingPath() && gridCase)
+  if (object->isBlockingPath())
   {
     QPoint currentPosition = object->getPosition();
     auto*  oldCase = getGridCase(currentPosition.x(), currentPosition.y());
 
-    if (oldCase)
+    if (oldCase && oldCase->occupant == object)
       setCaseOccupant(*oldCase, nullptr);
-    setCaseOccupant(*gridCase, object);
   }
+}
+
+bool LevelGrid::insertObject(DynamicObject* object, int x, int y)
+{
+  auto* gridCase = getGridCase(x, y);
+
   if (gridCase)
   {
+    if (object->isBlockingPath())
+    {
+      QPoint currentPosition = object->getPosition();
+
+      setCaseOccupant(*gridCase, object);
+    }
+    object->setCurrentFloor(static_cast<unsigned char>(tilemap->getFloor()));
     object->setPosition(QPoint(x, y));
     updateObjectVisibility(object);
     return true;
   }
   return false;
+}
+
+bool LevelGrid::moveObject(DynamicObject* object, int x, int y)
+{
+  extractObject(object);
+  return insertObject(object, x, y);
 }
 
 void LevelGrid::updateObjectVisibility(DynamicObject* object)

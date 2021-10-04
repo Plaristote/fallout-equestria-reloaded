@@ -133,11 +133,12 @@ void TileMap::loadZoneFolder(const QJsonObject& layerData)
 {
   const QJsonArray layersData = layerData["layers"].toArray();
 
-  for (QJsonValue value : layersData)
+  for (const QJsonValue& value : layersData)
   {
     QJsonObject zoneData = value.toObject();
     auto* zone = new TileZone(this);
 
+    zone->setFloor(floor);
     zone->load(zoneData, mapSize);
     zones.push_back(zone);
   }

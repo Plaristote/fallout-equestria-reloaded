@@ -19,20 +19,23 @@ ObjectGroup::ObjectGroup(QObject *parent) : ParentType(parent)
 
 void ObjectGroup::load(const QJsonObject& data)
 {
+  const QJsonArray groupsData  = data["groups"].toArray();
+  const QJsonArray objectsData = data["objects"].toArray();
+
   ParentType::load(data);
   name = data["name"].toString();
   offset.setX(data["ox"].toInt(0));
   offset.setY(data["oy"].toInt(0));
   taskRunner->setScriptController(script);
   taskRunner->load(data["tasks"].toObject());
-  for (QJsonValue groupData : data["groups"].toArray())
+  for (const QJsonValue& groupData : groupsData)
   {
     ObjectGroup* childGroup = new ObjectGroup(this);
 
     childGroup->load(groupData.toObject());
     appendGroup(childGroup);
   }
-  for (QJsonValue objectData : data["objects"].toArray())
+  for (const QJsonValue& objectData : objectsData)
   {
     DynamicObject* childObject = factory()->loadFromJson(objectData.toObject());
 

@@ -87,15 +87,17 @@ void GridComponent::onCharacterDied(Character*)
 {
 }
 
-void GridComponent::setCharacterPosition(Character* character, int x, int y)
+void GridComponent::setCharacterPosition(Character* character, int x, int y, unsigned char objectFloor)
 {
   character->rcurrentPath().clear();
-  setObjectPosition(character, x, y);
+  setObjectPosition(character, x, y, objectFloor);
 }
 
-bool GridComponent::moveCharacterToZone(Character* character, const QString& name)
+bool GridComponent::moveCharacterToZone(Character* character, const QString& zoneName, unsigned char objectFloor)
 {
-  return moveCharacterToZone(character, getTileMap()->getZone(name));
+  if (objectFloor >= getFloors().size())
+    objectFloor = this->floor;
+  return moveCharacterToZone(character, getFloorGrid(objectFloor)->getTilemap()->getZone(zoneName));
 }
 
 bool GridComponent::moveCharacterToZone(Character* character, TileZone* zone)
@@ -103,15 +105,16 @@ bool GridComponent::moveCharacterToZone(Character* character, TileZone* zone)
   if (character && zone)
   {
     auto candidates = zone->getPositions();
+    LevelGrid* grid = getFloorGrid(static_cast<unsigned char>(zone->getFloor()));
 
-    while (candidates.size() > 0)
+    while (candidates.size() > 0 && grid)
     {
       const int randomValue = Dices::Throw(static_cast<unsigned int>(candidates.size() - 1));
       QPoint candidate = candidates.takeAt(randomValue) + zone->getOffset();
 
       if (!grid->isOccupied(candidate.x(), candidate.y()))
       {
-        setCharacterPosition(character, candidate.x(), candidate.y());
+        setCharacterPosition(character, candidate.x(), candidate.y(), zone->getFloor());
         return true;
       }
     }
@@ -121,24 +124,43 @@ bool GridComponent::moveCharacterToZone(Character* character, TileZone* zone)
   return false;
 }
 
-QPoint GridComponent::getTilePosition(QPoint position) const
+QPoint GridComponent::getTilePosition(QPoint tilePosition) const
 {
-  return getTileMap()->getPointFor(position.x(), position.y());
+  return getTileMap()->getPointFor(tilePosition.x(), tilePosition.y());
 }
 
-void GridComponent::setObjectPosition(DynamicObject* object, int x, int y)
+void GridComponent::setObjectPosition(DynamicObject* object, int x, int y, unsigned char objectFloor)
 {
-  if (object->isBlockingPath())
-    grid->moveObject(object, x, y);
-  object->setPosition(QPoint(x, y));
+  if (objectFloor >= getFloors().size())
+    objectFloor = static_cast<unsigned char>(object->getCurrentFloor());
+  setGridObjectPosition(object, x, y, objectFloor);
   if (!object->isFloating())
-  {
-    QPoint renderPosition = getRenderPositionForTile(x, y);
+    setRenderObjectPosition(object, x, y);
+}
 
-    if (object->isCharacter())
-      renderPosition.ry() -= getTileMap()->getTileSize().height() / 4;
-    object->setRenderPosition(renderPosition);
+void GridComponent::setGridObjectPosition(DynamicObject* object, int x, int y, unsigned char objectFloor)
+{
+  LevelGrid* grid = getFloorGrid(objectFloor);
+  LevelGrid* lastGrid;
+
+  if (object->getCurrentFloor() == objectFloor)
+    grid->moveObject(object, x, y);
+  else
+  {
+    lastGrid = getFloorGrid(object->getCurrentFloor());
+    lastGrid->removeObject(object);
+    grid->insertObject(object, x, y);
   }
+}
+
+void GridComponent::setRenderObjectPosition(DynamicObject* object, int x, int y)
+{
+  LevelGrid *grid = getFloorGrid(object->getCurrentFloor());
+  QPoint renderPosition = getRenderPositionForTile(x, y);
+
+  if (object->isCharacter())
+    renderPosition.ry() -= grid->getTilemap()->getTileSize().height() / 4;
+  object->setRenderPosition(renderPosition);
 }
 
 QPoint GridComponent::getAdjustedOffsetFor(const DynamicObject* object) const

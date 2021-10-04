@@ -13,6 +13,7 @@ MovementHintAnimationPart::MovementHintAnimationPart(QPoint position)
   sprite->setProperty("floating", false);
   sprite->setSpriteName("misc");
   sprite->setAnimation("movement-hint");
-  from = to = tile->getRenderPosition();
+  if (tile)
+    from = to = tile->getRenderPosition();
   connect(sprite, &Sprite::animationFinished, this, &SpriteAnimationPart::onAnimationFinished);
 }

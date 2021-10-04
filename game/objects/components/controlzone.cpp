@@ -73,7 +73,7 @@ void ControlZoneComponent::onZoneExited(DynamicObject* object, TileZone* zone)
 
 void ControlZoneComponent::onPositionChanged()
 {
-  controlZone->setOffset(getPosition());
+  controlZone->setOffset(getPosition(), floor);
 }
 
 void ControlZoneComponent::toggleZoneBlocked(bool value)
@@ -98,7 +98,7 @@ void ControlZoneComponent::load(const QJsonObject& data)
     if (!controlZone)
     {
       controlZone = new TileZone(this);
-      controlZone->setOffset(getPosition());
+      onPositionChanged();
       connect(this, &ControlZoneComponent::positionChanged, this, &ControlZoneComponent::onPositionChanged);
     }
     zoneBlocked = data["zoneBlocked"].toBool();

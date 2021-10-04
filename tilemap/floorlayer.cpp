@@ -19,6 +19,7 @@ void FloorLayer::load(const QJsonObject& object, const TileMap* parent)
   tilemap->textureList = parent->textureList;
   tilemap->tileSize    = parent->tileSize;
   tilemap->mapSize     = parent->mapSize;
+  tilemap->floor       = parent->getFloor() + 1;
   tilemap->loadLayers(object["layers"].toArray());
   allLayers.append(tilemap->getLayers());
   allLayers.append(tilemap->getRoofs().toVector());

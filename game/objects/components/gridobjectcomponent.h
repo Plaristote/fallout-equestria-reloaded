@@ -3,6 +3,9 @@
 
 # include "scriptable.h"
 # include <QPoint>
+# include <climits>
+
+# define NULL_FLOOR UCHAR_MAX
 
 class GridObjectComponent : public ScriptableComponent
 {

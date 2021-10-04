@@ -18,8 +18,9 @@ public:
   void renderToImage(QImage& image, QPoint) override;
 
 private:
-  TileMap* tilemap;
-  Tile     dummyTile;
+  unsigned char floor;
+  TileMap*      tilemap;
+  Tile          dummyTile;
 };
 
 #endif // FLOORLAYER_H

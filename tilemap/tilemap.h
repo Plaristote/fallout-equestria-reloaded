@@ -34,6 +34,7 @@ public:
   void renderToFile(const QString& filename);
   void renderToImage(QImage& image);
 
+  unsigned char getFloor() const { return floor; }
   inline const QSize& getSize() const { return mapSize; }
   inline int getPixelWidth() const { return (mapSize.width() - 1) * tileSize.width();}
   inline const QSize& getTileSize() const { return tileSize; }
@@ -74,15 +75,16 @@ private:
   void loadFloorFolder(const QJsonObject&);
   void loadLightTileset();
 
-  QSize                   tileSize;
-  QSize                   mapSize;
-  QVector<Tileset*>       tilesets;
-  QVector<TileLayer*>     layers;
-  QList<FloorLayer*>      floors;
-  QList<TileZone*>        zones;
-  QList<TileLayer*>       roofs;
-  QList<TileLayer*>       lights;
-  QStringList             textureList;
+  QSize               tileSize;
+  QSize               mapSize;
+  QVector<Tileset*>   tilesets;
+  QVector<TileLayer*> layers;
+  QList<FloorLayer*>  floors;
+  QList<TileZone*>    zones;
+  QList<TileLayer*>   roofs;
+  QList<TileLayer*>   lights;
+  QStringList         textureList;
+  unsigned char       floor = 0;
 };
 
 #endif // LEVELMAP_H

@@ -54,7 +54,6 @@ public:
   Q_INVOKABLE virtual bool hasInteractionOverlay() const { return true; }
   virtual int getInteractionDistance() const { return 1; }
   virtual QStringList getAvailableInteractions();
-  void setPosition(QPoint value) { position = value; emit positionChanged(); }
   virtual int getCoverValue() const { return 100; }
   QPoint getSpriteOffset() const;
   void   setSpriteOffset(QPoint);
