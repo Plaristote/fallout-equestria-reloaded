@@ -2,12 +2,12 @@
 #include "game.h"
 #include <cmath>
 
-static int rateCase(Game* game, QJSValue callback, QPoint position)
+static int rateCase(Game* game, QJSValue callback, Point position)
 {
-  return game->scriptCall(callback, QJSValueList() << position.x() << position.y(), "ReachAction").toInt();
+  return game->scriptCall(callback, QJSValueList() << position.x << position.y << static_cast<int>(position.z), "ReachAction").toInt();
 }
 
-static void filterCases(Game* game, QJSValue callback, QVector<QPoint>& candidates)
+static void filterCases(Game* game, QJSValue callback, QVector<Point>& candidates)
 {
   for (auto it = candidates.begin() ; it != candidates.end() ;)
   {
@@ -23,7 +23,7 @@ static bool candidateCompare(Character* character, QPoint a, QPoint b)
   return character->getDistance(a) < character->getDistance(b);
 }
 
-static bool scriptedCandidateCompare(Character* character, QJSValue callback, QPoint a, QPoint b)
+static bool scriptedCandidateCompare(Character* character, QJSValue callback, Point a, Point b)
 {
   Game* game = Game::get();
   int   rateA = rateCase(game, callback, a);
@@ -34,19 +34,19 @@ static bool scriptedCandidateCompare(Character* character, QJSValue callback, QP
   return candidateCompare(character, a, b);
 }
 
-QVector<QPoint> ReachAction::getCandidates(int caseDistance) const
+QVector<Point> ReachAction::getCandidates(int caseDistance) const
 {
-  QPoint position = getTargetPosition();
-  QVector<QPoint> candidates;
+  Point position = getTargetPosition();
+  QVector<Point> candidates;
   Game* game = Game::get();
-  std::function<bool (QPoint, QPoint)> compare;
+  std::function<bool (Point, Point)> compare;
 
   candidates.reserve(caseDistance * caseDistance);
-  for (int x = position.x() - caseDistance ; x <= position.x() + caseDistance ; ++x)
+  for (int x = position.x - caseDistance ; x <= position.x + caseDistance ; ++x)
   {
-    for (int y = position.y() - caseDistance ; y <= position.y() + caseDistance ; ++y)
+    for (int y = position.y - caseDistance ; y <= position.y + caseDistance ; ++y)
     {
-      QPoint candidatePosition(x, y);
+      Point candidatePosition{x, y, position.z};
 
       if (candidatePosition != position && character->hasSightFrom(position, candidatePosition))
         candidates << candidatePosition;
@@ -65,7 +65,7 @@ QVector<QPoint> ReachAction::getCandidates(int caseDistance) const
 
 int ReachAction::getApCost() const
 {
-  QVector<QPoint> candidates;
+  QVector<Point> candidates;
   auto* level = Game::get()->getLevel();
   auto* grid  = level->getGrid();
 
@@ -77,9 +77,9 @@ int ReachAction::getApCost() const
     candidates = getCandidates(static_cast<int>(std::floor(range)));
   for (auto it = candidates.begin() ; it != candidates.end() ; ++it)
   {
-    QList<QPoint> path;
+    QList<Point> path;
 
-    if (grid->findPath(character->getPosition(), *it, path, character))
+    if (grid->findPath(character->getPoint(), *it, path, character))
       return path.size();
   }
   return -1;
@@ -109,7 +109,7 @@ bool ReachAction::trigger()
     state = Interrupted;
     for (auto it = candidates.begin() ; it != candidates.end() ; ++it)
     {
-      if (grid->findPath(character->getPosition(), *it, character->rcurrentPath(), character))
+      if (grid->findPath(character->getPoint(), *it, character->rcurrentPath(), character))
       {
         state = InProgress;
         break ;

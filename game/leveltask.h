@@ -56,8 +56,8 @@ public:
 
   Q_INVOKABLE QVariantList previewPathTo(int x, int y);
 
-  Q_INVOKABLE void addBloodStainAt(int x, int y) { addBloodStainAt(QPoint(x, y)); }
-  void             addBloodStainAt(QPoint);
+  Q_INVOKABLE void addBloodStainAt(int x, int y, unsigned char z) { addBloodStainAt(QPoint(x, y), z); }
+  void             addBloodStainAt(QPoint, unsigned char floor);
 
   void finalizeRound() override;
 
@@ -81,7 +81,7 @@ private slots:
   void onPauseChanged();
   void onCombatChanged();
   void onCharacterKill(Character* victim, Character* killer);
-  void onItemDropped(InventoryItem* item, QPoint position);
+  void onItemDropped(InventoryItem* item, QPoint position, unsigned char floor = NULL_FLOOR);
   void displayMovementTargetHint(QPoint position);
 
 private:

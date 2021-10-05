@@ -17,7 +17,7 @@ class TileZone : public QObject
   Q_PROPERTY(QString      name MEMBER name)
   Q_PROPERTY(QString      type MEMBER type)
   Q_PROPERTY(QPoint       offset MEMBER offset NOTIFY tilesChanged)
-  Q_PROPERTY(unsigned int floor READ getFloor NOTIFY tilesChanged)
+  Q_PROPERTY(unsigned int floor READ getFloor NOTIFY floorChanged)
   Q_PROPERTY(QRect        clippedRect MEMBER clippedRect)
   Q_PROPERTY(bool         accessBlocked MEMBER accessBlocked)
 public:
@@ -32,14 +32,14 @@ public:
 
   inline bool getAccessBlocked() const { return accessBlocked; }
   inline void setAccessBlocked(bool value) { accessBlocked = value; }
-  Q_INVOKABLE bool isInside(int x, int y) const;
+  Q_INVOKABLE bool isInside(int x, int y, unsigned char z) const;
   const QList<QPoint>& getPositions() const { return positions; }
   QVector<QPoint> getAbsolutePositions() const;
   void setOffset(QPoint value) { offset = value; emit tilesChanged(); }
-  void setOffset(QPoint value, unsigned char newFloor) { offset = value; floor = newFloor; emit tilesChanged(); }
+  void setOffset(QPoint value, unsigned char newFloor) { if (floor != newFloor) { floor = newFloor; emit floorChanged(this); } offset = value; emit tilesChanged();  }
   QPoint getOffset() const { return offset; }
   unsigned int getFloor() const { return static_cast<unsigned int>(floor); }
-  void setFloor(unsigned char value) { floor = value; emit tilesChanged(); }
+  void setFloor(unsigned char value) { floor = value; emit floorChanged(this); }
 
   Q_INVOKABLE int    getPositionCount() const { return positions.size(); }
   Q_INVOKABLE QPoint getPositionAt(int i) const { return offset + positions.at(i); }
@@ -53,6 +53,7 @@ signals:
   void enteredZone(DynamicObject*, TileZone*);
   void exitedZone(DynamicObject*, TileZone*);
   void tilesChanged();
+  void floorChanged(TileZone*);
 
 private:
   QString       name;

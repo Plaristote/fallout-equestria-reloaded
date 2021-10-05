@@ -16,15 +16,15 @@ ColumnLayout {
   property bool readOnlySprite: false
   property bool readOnlyAnimation: false
   property bool readOnlyScript: false
+  property bool withFloor: gameController.level.floorCount > 1
   id: objectEditor
 
   signal requestSpriteView(string group)
 
-  function setTilePosition(tileX, tileY) {
-    if (!model.floating) {
-      gridXInput.text = tileX;
-      gridYInput.text = tileY;
-    }
+  function setTilePosition(tileX, tileY, floor) {
+    gridXInput.text = tileX;
+    gridYInput.text = tileY;
+    floorInput.text = floor;
   }
 
   function positionChanged() {
@@ -47,9 +47,8 @@ ColumnLayout {
     const posMode             = model.floating ? 1 : 0;
     const spriteName          = model.spriteName;
     const animationName       = model.getAnimation();
-    const position            = model.getPosition();
+    const position            = { x: model.position.x,     y: model.position.y };
     const renderPosition      = { x: model.spriteOffset.x, y: model.spriteOffset.y };
-    //const renderPosition      = model.getSpritePosition();
     const animationList       = animationLibrary.getAnimationList(model.spriteName);
 
     animationInput.currentIndex   = animationList.indexOf(animationName);
@@ -59,6 +58,7 @@ ColumnLayout {
     renderXInput.text        = renderPosition.x;
     renderYInput.text        = renderPosition.y;
     nameInput.text           = model.objectName;
+    floorInput.text          = model.floor;
   }
 
   GridLayout {
@@ -96,6 +96,17 @@ ColumnLayout {
         Layout.fillWidth: true
         TerminalField { id: gridXInput; onTextChanged: objectEditor.positionChanged(); width: parent.width / 2 }
         TerminalField { id: gridYInput; onTextChanged: objectEditor.positionChanged(); width: parent.width / 2 }
+      }
+
+      TerminalLabel { text: "Floor"; visible: withFloor }
+      TerminalField {
+        id: floorInput
+        visible: withFloor
+        Layout.fillWidth: true
+        onTextChanged: {
+          if (text != objectEditor.model.floor)
+            objectEditor.model.floor = Math.min(parseInt(text), gameController.level.floorCount - 1);
+        }
       }
 
       TerminalLabel { text: "Script"; visible: !readOnlyScript }

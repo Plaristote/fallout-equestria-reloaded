@@ -26,8 +26,8 @@ void Doorway::removeTileConnections()
 void Doorway::updateTileConnections()
 {
   QPoint                       origin = getPosition();
-  LevelGrid*                   grid = Game::get()->getLevel()->getGrid();
-  LevelGrid::CaseContent*      doorwayCase = grid->getGridCase(origin);
+  LevelGrid*                   grid = Game::get()->getLevel()->getFloorGrid(getCurrentFloor());
+  LevelGrid::CaseContent*      doorwayCase = grid ? grid->getGridCase(origin) : nullptr;
   static const QVector<QPoint> upperTargets {QPoint(-1, -1), QPoint(0, -1), QPoint(1, -1)};
   static const QVector<QPoint> bottomTargets{QPoint(-1,  1), QPoint(0,  1), QPoint(1,  1)};
   static const QVector<QPoint> leftTargets  {QPoint(-1, -1), QPoint(-1, 0), QPoint(-1, 1)};
@@ -60,8 +60,8 @@ void Doorway::updateAccessPath()
     toggleZoneBlocked(!opened);
   else
   {
-    LevelGrid*              grid = Game::get()->getLevel()->getGrid();
-    LevelGrid::CaseContent* doorwayCase = grid->getGridCase(getPosition());
+    LevelGrid*              grid = Game::get()->getLevel()->getFloorGrid(getCurrentFloor());
+    LevelGrid::CaseContent* doorwayCase = grid ? grid->getGridCase(getPosition()) : nullptr;
 
     if (doorwayCase)
       doorwayCase->cover = opened ? 75 : 100;

@@ -30,6 +30,9 @@ Loader {
         case "Doorway":
           component = doorwayEditor;
           break ;
+        case "Elevator":
+          component = elevatorEditor;
+          break ;
         case "InventoryItem":
           component = itemEditor;
           break ;
@@ -43,7 +46,7 @@ Loader {
 
     function onPickedTile(tileX, tileY) {
       if (root.item)
-        root.item.setTilePosition(tileX, tileY);
+        root.item.setTilePosition(tileX, tileY, gameController.level.currentFloor);
     }
   }
 
@@ -73,6 +76,15 @@ Loader {
   Component {
     id: doorwayEditor
     DoorwayObjectEditor {
+      width: parent.width
+      model: selectedObject
+      gameController: root.gameController
+    }
+  }
+
+  Component {
+    id: elevatorEditor
+    ElevatorObjectEditor {
       width: parent.width
       model: selectedObject
       gameController: root.gameController

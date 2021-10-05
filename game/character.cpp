@@ -45,7 +45,7 @@ void Character::afterDeathAnimation()
   if (getAnimation().startsWith("fall") && !isAlive())
   {
     setAnimation("dead");
-    Game::get()->getLevel()->addBloodStainAt(getPosition());
+    Game::get()->getLevel()->addBloodStainAt(getPosition(), getCurrentFloor());
   }
   else if (getAnimation().startsWith("get-up"))
     setAnimation("idle");

@@ -12,7 +12,7 @@ bool SlidingAction::trigger()
 
   if (origin != coordinates)
   {
-    auto* grid = Game::get()->getLevel()->getGrid();
+    auto* grid = Game::get()->getLevel()->getFloorGrid(character->getCurrentFloor());
 
     character->moveToCoordinates(coordinates);
     grid->moveObject(character, target.x(), target.y());
@@ -39,7 +39,7 @@ void SlidingAction::interrupt()
 
 void SlidingAction::onFinished()
 {
-  auto* grid = Game::get()->getLevel()->getGrid();
+  auto* grid = Game::get()->getLevel()->getFloorGrid(character->getCurrentFloor());
 
   if (!character->isUnconscious())
     character->wakeUp();

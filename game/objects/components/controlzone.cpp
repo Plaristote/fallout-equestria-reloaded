@@ -18,7 +18,9 @@ TileZone* ControlZoneComponent::addControlZone()
   if (controlZone == nullptr)
   {
     controlZone = new TileZone(this);
-    connect(this, &ControlZoneComponent::positionChanged,    this, &ControlZoneComponent::onPositionChanged);
+    onPositionChanged();
+    connect(this, &ControlZoneComponent::positionChanged, this, &ControlZoneComponent::onPositionChanged);
+    connect(this, &ControlZoneComponent::floorChanged,    this, &ControlZoneComponent::onPositionChanged);
     emit controlZoneAdded(controlZone);
   }
   return controlZone;
@@ -32,6 +34,7 @@ void ControlZoneComponent::removeControlZone()
 
     controlZone = nullptr;
     disconnect(this, &ControlZoneComponent::positionChanged, this, &ControlZoneComponent::onPositionChanged);
+    disconnect(this, &ControlZoneComponent::floorChanged,    this, &ControlZoneComponent::onPositionChanged);
     emit controlZoneRemoved(backup);
     backup->deleteLater();
   }
@@ -100,6 +103,7 @@ void ControlZoneComponent::load(const QJsonObject& data)
       controlZone = new TileZone(this);
       onPositionChanged();
       connect(this, &ControlZoneComponent::positionChanged, this, &ControlZoneComponent::onPositionChanged);
+      connect(this, &ControlZoneComponent::floorChanged,    this, &ControlZoneComponent::onPositionChanged);
     }
     zoneBlocked = data["zoneBlocked"].toBool();
     for (const QJsonValue posValue : data["zone"].toArray())

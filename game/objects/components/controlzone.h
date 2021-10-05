@@ -28,7 +28,6 @@ public:
   inline bool           hasControlZone() const { return controlZone != nullptr; }
 
 signals:
-  void positionChanged();
   void controlZoneChanged();
   void controlZoneAdded(TileZone*);
   void controlZoneRemoved(TileZone*);

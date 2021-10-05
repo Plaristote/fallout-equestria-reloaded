@@ -7,6 +7,7 @@
 #include <QMap>
 #include <QVector>
 #include <QPair>
+#include "utils/point.h"
 
 class TileMap;
 class TileZone;
@@ -35,7 +36,7 @@ public:
     bool                         hwall = false, vwall = false, block = false;
     bool                         occupied = false;
     DynamicObject*               occupant = nullptr;
-    QPoint                       position;
+    Point                        position;
     std::vector<CaseConnection*> connections;
     QVector<TileZone*>           zones;
 
@@ -79,7 +80,7 @@ public:
   Q_INVOKABLE int            getCaseFlags(int x, int y) const;
 
   TileMap* getTilemap() const { return tilemap; }
-  bool findPath(QPoint from, QPoint to, QList<QPoint>& path, CharacterMovement* character);
+  bool findPath(Point from, Point to, QList<Point>& path, CharacterMovement* character);
   bool moveObject(DynamicObject*, int x, int y);
   bool insertObject(DynamicObject*, int x, int y);
   void extractObject(DynamicObject*);
@@ -92,7 +93,9 @@ public:
   void unregisterDoor(Doorway*);
   void eachCase(std::function<void (int x, int y, CaseContent&)> callback, QPoint from = QPoint(0,0), QPoint to = QPoint(0,0));
   CaseContent* getGridCase(QPoint value) { return getGridCase(value.x(), value.y()); }
+  CaseContent* getGridCase(Point  value) { return getGridCase(value.x, value.y, value.z); }
   CaseContent* getGridCase(int x, int y);
+  CaseContent* getGridCase(int x, int y, unsigned char z);
   QVector<TileZone*> getZonesAt(QPoint);
 
 private:

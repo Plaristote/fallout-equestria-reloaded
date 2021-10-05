@@ -2,6 +2,7 @@
 #define CHARACTERMOVEMENT_H
 
 #include "../objects/storageobject.h"
+#include "utils/point.h"
 
 class CharacterMovement : public StorageObject
 {
@@ -15,16 +16,16 @@ public:
   virtual void load(const QJsonObject&);
   virtual void save(QJsonObject&) const;
 
-  void                      moveTo(int x, int y);
+  void                      moveTo(Point);
   Q_INVOKABLE void          lookTo(int x, int y);
   inline void               lookTo(QPoint target) { lookTo(target.x(), target.y()); }
   const QString&            getMovementMode() const { return movementMode; }
   void                      setMovementMode(const QString&);
-  const QList<QPoint>&      getCurrentPath() const { return currentPath; }
+  const QList<Point>&       getCurrentPath() const { return currentPath; }
   const QVector<TileZone*>& getCurrentZones() const { return currentZones; }
   void                      clearCurrentZones() { currentZones.clear(); }
   void                      setCurrentZones(QVector<TileZone*> value) { currentZones = value; }
-  QList<QPoint>&            rcurrentPath() { return currentPath; }
+  QList<Point>&             rcurrentPath() { return currentPath; }
   Q_INVOKABLE bool          isInZone(TileZone* value) const { return currentZones.indexOf(value) >= 0; }
 
 public slots:
@@ -42,7 +43,7 @@ private slots:
   void onDestinationReached();
 
 protected:
-  QList<QPoint>      currentPath;
+  QList<Point>       currentPath;
   QString            movementMode;
   QVector<TileZone*> currentZones;
 };

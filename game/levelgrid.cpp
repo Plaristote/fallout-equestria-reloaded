@@ -57,7 +57,7 @@ static char getCoverValue(const TileLayer* layer, const LevelGrid::CaseContent& 
 {
   if (layer)
   {
-    Tile* tile = layer->getTile(caseContent.position.x(), caseContent.position.y());
+    Tile* tile = layer->getTile(caseContent.position.x, caseContent.position.y);
 
     if (tile)
     {
@@ -161,6 +161,8 @@ float LevelGrid::CaseConnection::getCost() const
 {
   if (doorway && !doorway->property("opened").toBool())
     return 3.f;
+  if (pair.first->position.z != pair.second->position.z)
+    return 3.f;
   return 1.f;
 }
 
@@ -180,6 +182,7 @@ bool LevelGrid::CaseConnection::goThrough(CharacterMovement* character)
 
 struct PrepareCaseFunctor
 {
+  TileMap*   tilemap;
   TileLayer* ground;
   TileLayer* blocks;
   TileLayer* wallsV;
@@ -197,7 +200,7 @@ private:
     gridCase.occupied = gridCase.block = isWall(blocks, x, y);
     gridCase.hwall    = isWall(wallsH, x, y);
     gridCase.vwall    = isWall(wallsV, x, y);
-    gridCase.position = QPoint(x, y);
+    gridCase.position = Point{x, y, tilemap->getFloor()};
   }
 
   void cover(LevelGrid::CaseContent& gridCase)
@@ -222,10 +225,11 @@ void LevelGrid::initializeGrid(TileMap* tilemap_)
   PrepareCaseFunctor functor;
 
   tilemap = tilemap_;
-  functor.ground = tilemap->getLayer("ground");
-  functor.blocks = tilemap->getLayer("blocks");
-  functor.wallsV = tilemap->getLayer("walls-v");
-  functor.wallsH = tilemap->getLayer("walls-h");
+  functor.tilemap = tilemap_;
+  functor.ground  = tilemap->getLayer("ground");
+  functor.blocks  = tilemap->getLayer("blocks");
+  functor.wallsV  = tilemap->getLayer("walls-v");
+  functor.wallsH  = tilemap->getLayer("walls-h");
   size = tilemap->getSize();
   grid.resize(size.width() * size.height());
   eachCase(std::bind(&PrepareCaseFunctor::run, &functor, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
@@ -310,25 +314,38 @@ void LevelGrid::unregisterZone(TileZone* zone)
   }
 }
 
+static bool hasTile(const TileLayer& ground, const LevelGrid::CaseContent& caseContent)
+{
+  return ground.getTile(caseContent.position.x, caseContent.position.y);
+}
+
+static bool isCaseAvailable(const TileLayer* ground, const LevelGrid::CaseContent* caseContent)
+{
+  return caseContent && !caseContent->occupied && hasTile(*ground, *caseContent);
+}
+
 void LevelGrid::initializePathfinding()
 {
+  auto* ground     = tilemap->getLayer("ground");
+  auto isAvailable = std::bind(isCaseAvailable, ground, std::placeholders::_1);
+
+  if (!ground)
+    return ;
   for (auto& gridCase : grid)
   {
-    bool hasLeft  = gridCase.position.x() - 1 >= 0;
-    bool hasRight = gridCase.position.x() + 1 < size.width();
-    bool hasUp    = gridCase.position.y() - 1 >= 0;
-    bool hasDown  = gridCase.position.y() + 1 < size.height();
+    bool hasLeft  = gridCase.position.x - 1 >= 0;
+    bool hasRight = gridCase.position.x + 1 < size.width();
+    bool hasUp    = gridCase.position.y - 1 >= 0;
+    bool hasDown  = gridCase.position.y + 1 < size.height();
 
-    auto* upLeft    = hasLeft && hasUp    ? getGridCase(gridCase.position.x() - 1, gridCase.position.y() - 1) : nullptr;
-    auto* up        = hasUp               ? getGridCase(gridCase.position.x(),     gridCase.position.y() - 1) : nullptr;
-    auto* upRight   = hasRight && hasUp   ? getGridCase(gridCase.position.x() + 1, gridCase.position.y() - 1) : nullptr;
-    auto* left      = hasLeft             ? getGridCase(gridCase.position.x() - 1, gridCase.position.y())     : nullptr;
-    auto* right     = hasRight            ? getGridCase(gridCase.position.x() + 1, gridCase.position.y())     : nullptr;
-    auto* downLeft  = hasDown && hasLeft  ? getGridCase(gridCase.position.x() - 1, gridCase.position.y() + 1) : nullptr;
-    auto* down      = hasDown             ? getGridCase(gridCase.position.x(),     gridCase.position.y() + 1) : nullptr;
-    auto* downRight = hasDown && hasRight ? getGridCase(gridCase.position.x() + 1, gridCase.position.y() + 1) : nullptr;
-
-    std::function<bool (LevelGrid::CaseContent*)> isAvailable = [](LevelGrid::CaseContent* entry) { return entry && !entry->occupied; };
+    auto* upLeft    = hasLeft && hasUp    ? getGridCase(gridCase.position.x - 1, gridCase.position.y - 1) : nullptr;
+    auto* up        = hasUp               ? getGridCase(gridCase.position.x,     gridCase.position.y - 1) : nullptr;
+    auto* upRight   = hasRight && hasUp   ? getGridCase(gridCase.position.x + 1, gridCase.position.y - 1) : nullptr;
+    auto* left      = hasLeft             ? getGridCase(gridCase.position.x - 1, gridCase.position.y)     : nullptr;
+    auto* right     = hasRight            ? getGridCase(gridCase.position.x + 1, gridCase.position.y)     : nullptr;
+    auto* downLeft  = hasDown && hasLeft  ? getGridCase(gridCase.position.x - 1, gridCase.position.y + 1) : nullptr;
+    auto* down      = hasDown             ? getGridCase(gridCase.position.x,     gridCase.position.y + 1) : nullptr;
+    auto* downRight = hasDown && hasRight ? getGridCase(gridCase.position.x + 1, gridCase.position.y + 1) : nullptr;
 
     bool upWalled        = up && up->hwall;
     bool upLeftWalled    = (upLeft  && (upLeft->hwall || upLeft->vwall)) || (left && left->vwall) || upWalled;
@@ -339,6 +356,7 @@ void LevelGrid::initializePathfinding()
     bool leftWalled      = left && left->vwall;
     bool rightWalled     = gridCase.vwall;
 
+    gridCase.position.z = tilemap->getFloor();
     gridCase.clearConnections();
     if (!upLeftWalled    && isAvailable(upLeft) && !(!isAvailable(left) && !isAvailable(up)))
       gridCase.connectWith(upLeft);
@@ -359,14 +377,14 @@ void LevelGrid::initializePathfinding()
   }
 }
 
-bool LevelGrid::findPath(QPoint from, QPoint to, QList<QPoint>& path, CharacterMovement* character)
+bool LevelGrid::findPath(Point from, Point to, QList<Point>& path, CharacterMovement* character)
 {
   typedef AstarPathfinding<LevelGrid::CaseContent> Pathfinder;
   Pathfinder        astar(character);
   unsigned short    iterationCount = 0;
   Pathfinder::State state;
-  CaseContent*      fromCase = getGridCase(from.x(), from.y());
-  CaseContent*      toCase   = getGridCase(to.x(), to.y());
+  CaseContent*      fromCase = getGridCase(from.x, from.y, from.z);
+  CaseContent*      toCase   = getGridCase(to.x, to.y, to.z);
 
   if (fromCase && toCase)
   {
@@ -411,10 +429,11 @@ std::list<LevelGrid::CaseContent*> LevelGrid::CaseContent::GetSuccessors(const C
 
 float LevelGrid::CaseContent::GoalDistanceEstimate(const CaseContent& other) const
 {
-  int distX = position.x() - other.position.x();
-  int distY = position.y() - other.position.y();
+  int distX = position.x - other.position.x;
+  int distY = position.y - other.position.y;
+  int distFloor = std::abs(position.z - other.position.x);
 
-  return std::sqrt(static_cast<float>(distX * distX + distY * distY));
+  return std::sqrt(static_cast<float>(distX * distX + distY * distY)) + static_cast<float>(distFloor * 10);
 }
 
 LevelGrid::CaseContent* LevelGrid::getGridCase(int x, int y)
@@ -424,6 +443,17 @@ LevelGrid::CaseContent* LevelGrid::getGridCase(int x, int y)
   if (position >= grid.count() || position < 0)
     return nullptr;
   return &(grid[position]);
+}
+
+LevelGrid* getFloorGrid(unsigned char floor);
+
+LevelGrid::CaseContent* LevelGrid::getGridCase(int x, int y, unsigned char z)
+{
+  LevelGrid* targetGrid = this;
+
+  if (z != getTilemap()->getFloor())
+    targetGrid = getFloorGrid(z);
+  return targetGrid ? targetGrid->getGridCase(x, y) : nullptr;
 }
 
 QVector<TileZone*> LevelGrid::getZonesAt(QPoint position)
@@ -576,11 +606,7 @@ bool LevelGrid::insertObject(DynamicObject* object, int x, int y)
   if (gridCase)
   {
     if (object->isBlockingPath())
-    {
-      QPoint currentPosition = object->getPosition();
-
       setCaseOccupant(*gridCase, object);
-    }
     object->setCurrentFloor(static_cast<unsigned char>(tilemap->getFloor()));
     object->setPosition(QPoint(x, y));
     updateObjectVisibility(object);
@@ -616,7 +642,7 @@ void LevelGrid::triggerZone(CharacterMovement* character, int x, int y)
   }
   for (auto* zone : lastZones)
   {
-    if (!(zone->isInside(x, y)))
+    if (!(zone->isInside(x, y, static_cast<unsigned char>(character->getCurrentFloor()))))
       emit zone->exitedZone(character, zone);
   }
 }

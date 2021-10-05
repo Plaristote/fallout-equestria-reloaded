@@ -7,19 +7,19 @@
 class ReachCaseAction : public ReachAction
 {
 public:
-  ReachCaseAction(Character* character, QPoint _target, float range) : ReachAction(character, nullptr, range)
+  ReachCaseAction(Character* character, Point _target, float range) : ReachAction(character, nullptr, range)
   {
     target = _target;
   }
 
-  ReachCaseAction(Character* character, QPoint _target, float range, QJSValue callback) : ReachAction(character, nullptr, range, callback)
+  ReachCaseAction(Character* character, Point _target, float range, QJSValue callback) : ReachAction(character, nullptr, range, callback)
   {
     target = _target;
   }
 
 protected:
   bool alreadyReached() const;
-  QPoint getTargetPosition() const override { return target; }
+  Point getTargetPosition() const override { return target; }
 };
 
 #endif // REACHCASE_H

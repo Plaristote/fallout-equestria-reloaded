@@ -3,7 +3,15 @@
 #include "tilemap/tilemap.h"
 #include "game.h"
 #include "game/dices.hpp"
+#include "game/objects/elevator.h"
 #include <cmath>
+
+LevelGrid* getFloorGrid(unsigned char floor)
+{
+  auto* level = Game::get()->getLevel();
+
+  return level ? level->getFloorGrid(floor) : nullptr;
+}
 
 GridComponent::GridComponent(QObject *parent) : ParentType(parent)
 {
@@ -27,11 +35,29 @@ void GridComponent::load(const QJsonObject& data)
       floorGrid->initializeGrid(layer->getTileMap());
       floors.push_back(floorGrid);
     }
+    currentFloor = static_cast<unsigned char>(data["currentFloor"].toInt(0));
     emit floorChanged();
     ParentType::load(data);
   }
   else
     throw std::runtime_error("Could not load tilemap");
+}
+
+void GridComponent::save(QJsonObject& data) const
+{
+  data["currentFloor"] = static_cast<int>(currentFloor);
+  ParentType::save(data);
+}
+
+void GridComponent::setCurrentFloor(unsigned int value)
+{
+  if (value != static_cast<unsigned int>(currentFloor))
+  {
+    if (value >= getFloorCount())
+      value = getFloorCount() - 1;
+    currentFloor = static_cast<unsigned char>(value);
+    emit floorChanged();
+  }
 }
 
 void GridComponent::onRoofVisibilityChanged(TileLayer* layer)
@@ -55,6 +81,13 @@ void GridComponent::registerDynamicObject(DynamicObject* object)
       connect(character, &Character::died, this, [this, character]() { onCharacterDied(character); })
     });
   }
+  else if (object->getObjectType() == "Elevator")
+  {
+    Elevator* elevator = reinterpret_cast<Elevator*>(object);
+
+    connect(this, &GridComponent::floorChanged, elevator, &Elevator::onLevelFloorChanged);
+    elevator->connectCases();
+  }
   ParentType::registerDynamicObject(object);
 }
 
@@ -70,6 +103,13 @@ void GridComponent::unregisterDynamicObject(DynamicObject* object)
       disconnect(observer);
     characterObservers.remove(character);
   }
+  else if (object->getObjectType() == "Elevator")
+  {
+    Elevator* elevator = reinterpret_cast<Elevator*>(object);
+
+    disconnect(this, &GridComponent::floorChanged, elevator, &Elevator::onLevelFloorChanged);
+    elevator->disconnectCases();
+  }
   ParentType::unregisterDynamicObject(object);
 }
 
@@ -78,9 +118,11 @@ void GridComponent::addCharacterObserver(Character* character, QMetaObject::Conn
   characterObservers[character].push_back(observer);
 }
 
-DynamicObject* GridComponent::getOccupantAt(QPoint position)
+DynamicObject* GridComponent::getOccupantAt(QPoint casePosition, unsigned char caseFloor)
 {
-  return grid->getOccupant(position.x(), position.y());
+  if (caseFloor >= floors.size())
+    caseFloor = currentFloor;
+  return getFloorGrid(caseFloor)->getOccupant(casePosition.x(), casePosition.y());
 }
 
 void GridComponent::onCharacterDied(Character*)
@@ -114,7 +156,7 @@ bool GridComponent::moveCharacterToZone(Character* character, TileZone* zone)
 
       if (!grid->isOccupied(candidate.x(), candidate.y()))
       {
-        setCharacterPosition(character, candidate.x(), candidate.y(), zone->getFloor());
+        setCharacterPosition(character, candidate.x(), candidate.y(), static_cast<unsigned char>(zone->getFloor()));
         return true;
       }
     }
@@ -185,28 +227,33 @@ QPoint GridComponent::getAdjustedOffsetFor(const DynamicObject* object) const
   return QPoint(0, 0);
 }
 
-TileLayer* GridComponent::getRoofFor(DynamicObject* object) const
+TileLayer* GridComponent::getRoofFor(const DynamicObject* object) const
 {
   QPoint position = object->getPosition();
+  LevelGrid* grid = getFloorGrid(object->getCurrentFloor());
 
-  for (TileLayer* layer : getTileMap()->getRoofs())
+  if (grid)
   {
-    Tile* tile = layer->getTile(position.x(), position.y());
+    for (TileLayer* layer : grid->getTilemap()->getRoofs())
+    {
+      Tile* tile = layer->getTile(position.x(), position.y());
 
-    if (tile)
-      return layer;
+      if (tile)
+        return layer;
+    }
   }
   return nullptr;
 }
 
-QJSValue GridComponent::getDynamicObjectsAt(int x, int y) const
+QJSValue GridComponent::getDynamicObjectsAt(int x, int y, unsigned int floor_) const
 {
-  auto& scriptEngine = Game::get()->getScriptEngine();
-  QJSValue result = scriptEngine.newArray();
-  QJSValue push = result.property("push");
-  QPoint   position(x, y);
-  auto     objectList = findDynamicObjects(
-    [position](DynamicObject& object) { return object.getPosition() == position; }
+  auto&         scriptEngine = Game::get()->getScriptEngine();
+  unsigned char objectFloor = static_cast<int>(floor_) < floors.size() ? static_cast<unsigned char>(floor_) : currentFloor;
+  QJSValue      result = scriptEngine.newArray();
+  QJSValue      push = result.property("push");
+  QPoint        position(x, y);
+  const auto    objectList = findDynamicObjects(
+    [position, objectFloor](DynamicObject& object) { return object.getPosition() == position && object.getCurrentFloor() == objectFloor; }
   );
 
   for (DynamicObject* object : objectList)
@@ -244,4 +291,3 @@ bool GridComponent::isRenderedBefore(const DynamicObject* a, const DynamicObject
     return posA.y() > posB.y();
   return posA.x() > posB.x();
 }
-

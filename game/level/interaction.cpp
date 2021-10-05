@@ -336,7 +336,11 @@ DynamicObject* InteractionComponent::getObjectAt(int posX, int posY) const
   QVector<DynamicObject*> list;
 
   list.reserve(objectCount());
-  eachObject([&list](DynamicObject* object) { list.push_back(object); });
+  eachObject([this, &list](DynamicObject* object)
+  {
+    if (object->getCurrentFloor() == getCurrentFloor())
+      list.push_back(object);
+  });
   sortByRenderOrder(list);
   for (DynamicObject* object : qAsConst(list))
   {

@@ -121,11 +121,11 @@ void LevelTask::tileClicked(int x, int y)
     emit clickedOnCase(x, y);
 }
 
-void LevelTask::displayMovementTargetHint(QPoint position)
+void LevelTask::displayMovementTargetHint(QPoint targetPosition)
 {
   AnimationSequence* animation = new AnimationSequence;
 
-  animation->addAnimationPart(new MovementHintAnimationPart(position));
+  animation->addAnimationPart(new MovementHintAnimationPart(targetPosition));
   addAnimationSequence(animation);
 }
 
@@ -135,8 +135,10 @@ void LevelTask::registerDynamicObject(DynamicObject* object)
   {
     Character* character = reinterpret_cast<Character*>(object);
 
-    addCharacterObserver(character, connect(character, &Character::itemDropped, [this, character](InventoryItem* item) { onItemDropped(item, character->getPosition()); }));
+    addCharacterObserver(character, connect(character, &Character::itemDropped, this, [this, character](InventoryItem* item) { onItemDropped(item, character->getPosition()); }));
     addCharacterObserver(character, connect(character, &Character::characterKill, this, &LevelTask::onCharacterKill));
+    if (character == getPlayer())
+      addCharacterObserver(character, connect(character, &Character::floorChanged, this, [this]() { setCurrentFloor(getPlayer()->getCurrentFloor()); }, Qt::QueuedConnection));
   }
 
   connect(object, &DynamicObject::lightZoneAdded, getTileMap(), &TileMap::addLightLayer);
@@ -164,12 +166,11 @@ void LevelTask::unregisterDynamicObject(DynamicObject* object)
   ParentType::unregisterDynamicObject(object);
 }
 
-void LevelTask::onItemDropped(InventoryItem* item, QPoint position)
+void LevelTask::onItemDropped(InventoryItem* item, QPoint itemPosition, unsigned char itemFloor)
 {
   item->setParent(this);
-  item->setPosition(position);
   appendObject(item);
-  setObjectPosition(item, position.x(), position.y());
+  setObjectPosition(item, itemPosition.x(), itemPosition.y(), itemFloor);
 }
 
 void LevelTask::onCharacterKill(Character* victim, Character* killer)
@@ -329,21 +330,22 @@ void LevelTask::finalizeRound()
   ParentType::finalizeRound();
 }
 
-void LevelTask::addBloodStainAt(QPoint position)
+void LevelTask::addBloodStainAt(QPoint position_, unsigned char floor_)
 {
-  factory()->addBloodStainAt(position);
+  factory()->addBloodStainAt(position_, floor_);
 }
 
 QVariantList LevelTask::previewPathTo(int x, int y)
 {
   auto* grid  = getGrid();
-  QList<QPoint> path;
+  QList<Point> path;
   QVariantList result;
+  Point target{x, y, static_cast<unsigned char>(getCurrentFloor())};
 
-  if (getPlayer() && grid->findPath(getPlayer()->getPosition(), QPoint(x, y), path, getPlayer()))
+  if (getPlayer() && grid->findPath(getPlayer()->getPoint(), target, path, getPlayer()))
   {
     for (const auto& point : qAsConst(path))
-      result.push_back(point);
+      result.push_back(QPoint(point));
   }
   return result;
 }

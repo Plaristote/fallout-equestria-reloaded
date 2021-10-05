@@ -27,6 +27,7 @@ protected slots:
   void         unregisterZone(TileZone*);
   void         onZoneEntered(DynamicObject*, TileZone*);
   void         onZoneExited(DynamicObject*, TileZone*);
+  void         onZoneChangedFloor(TileZone*);
 };
 
 #endif // ZONECOMPONENT_H

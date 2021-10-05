@@ -7,7 +7,7 @@
 class MovementAction : public ActionBase
 {
 public:
-  MovementAction(Character* character, QPoint target) : ActionBase(character), target(target)
+  MovementAction(Character* character, Point target) : ActionBase(character), target(target)
   {
   }
 
@@ -20,7 +20,7 @@ protected:
   virtual void triggerNextMovement();
   virtual void onMovementFinished();
 
-  QPoint target;
+  Point target;
 private:
   bool firstRound = true;
 };

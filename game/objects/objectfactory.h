@@ -8,6 +8,7 @@ class Character;
 class StorageObject;
 class InventoryItem;
 class Doorway;
+class Elevator;
 class DynamicObject;
 
 class ObjectFactory : public QObject
@@ -23,8 +24,9 @@ public:
   Q_INVOKABLE StorageObject* generateStorageObject(const QString &name) const;
   Q_INVOKABLE InventoryItem* generateInventoryItem(const QString& name, const QString& type, int quantity) const;
   Q_INVOKABLE Doorway*       generateDoorway(const QString &name) const;
+  Q_INVOKABLE Elevator*      generateElevator(const QString& name) const;
   Q_INVOKABLE DynamicObject* generateDynamicObject(const QString &name) const;
-  Q_INVOKABLE DynamicObject* addBloodStainAt(QPoint position) const;
+  Q_INVOKABLE DynamicObject* addBloodStainAt(QPoint position, unsigned char floor) const;
 
 private:
   ObjectGroup* root;

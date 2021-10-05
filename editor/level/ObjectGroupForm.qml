@@ -4,6 +4,7 @@ import "../../ui"
 
 GridLayout {
   property QtObject currentGroup
+  property bool withFloor: false
 
   columns: 3
 
@@ -11,6 +12,7 @@ GridLayout {
     const offset = currentGroup.offset;
     groupOffsetXInput.text = offset.x;
     groupOffsetYInput.text = offset.y;
+    groupFloorInput.text   = currentGroup.floor;
   }
 
   TerminalLabel { text: "> Group"; Layout.columnSpan: 3; font.pointSize: 13; }
@@ -37,6 +39,17 @@ GridLayout {
     onTextChanged: {
       if (parseInt(text) !== currentGroup.offset.y)
         currentGroup.offset = Qt.point(parseInt(groupOffsetXInput.text), parseInt(groupOffsetYInput.text))
+    }
+  }
+
+  TerminalLabel { text: "Floor"; visible: withFloor }
+  TerminalField {
+    id: groupFloorInput
+    Layout.fillWidth: true
+    Layout.columnSpan: 2
+    onTextChanged: {
+      if (text != currentGroup.floor)
+        currentGroup.floor = parseInt(text)
     }
   }
 

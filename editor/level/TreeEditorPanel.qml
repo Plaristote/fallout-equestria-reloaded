@@ -78,6 +78,7 @@ Pane {
       visible: currentObject === null && currentGroup.parent !== null
       Layout.fillWidth: true
       currentGroup: root.currentGroup
+      withFloor: gameController.level.floorCount > 1
     }
 
     Flickable {

@@ -35,7 +35,7 @@ UiStyle.CustomDialog {
     CustomLabel { text: "Type" }
     SelectBox {
       id: objectTypeInput
-      model: ["character", "storage", "door", "item", "other"]
+      model: ["character", "storage", "door", "elevator", "item", "other"]
       Layout.fillWidth: true
       Layout.preferredHeight: 40
     }
@@ -76,6 +76,8 @@ UiStyle.CustomDialog {
       newObject = factory.generateStorageObject(objectNameInput.text);
     else if (objectTypeInput.currentText == "door")
       newObject = factory.generateDoorway(objectNameInput.text);
+    else if (objectTypeInput.currentText == "elevator")
+      newObject = factory.generateElevator(objectNameInput.text);
     else if (objectTypeInput.currentText == "item")
       newObject = factory.generateInventoryItem(objectNameInput.text, itemTypeInput.currentText);
     else

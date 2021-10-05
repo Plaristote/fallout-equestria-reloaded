@@ -56,9 +56,9 @@ void TileZone::load(const QJsonObject& object, const QSize mapSize)
   emit tilesChanged();
 }
 
-bool TileZone::isInside(int x, int y) const
+bool TileZone::isInside(int x, int y, unsigned char z) const
 {
-  return positions.indexOf(QPoint(x - offset.x(), y - offset.y())) >= 0;
+  return positions.indexOf(QPoint(x - offset.x(), y - offset.y())) >= 0 && z == floor;
 }
 
 QVector<QPoint> TileZone::getAbsolutePositions() const

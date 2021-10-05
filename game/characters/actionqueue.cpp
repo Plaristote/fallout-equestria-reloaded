@@ -125,19 +125,20 @@ void ActionQueue::reset()
 
 void ActionQueue::pushMovement(QPoint target)
 {
-  queue << (new MovementAction(character, target));
+  queue << (new MovementAction(character, {target.x(), target.y(), static_cast<unsigned char>(character->getCurrentFloor())}));
 }
 
 int ActionQueue::getMovementApCost(QPoint target) const
 {
   LevelGrid* grid;
-  QList<QPoint> path;
-  QPoint from = character->getPosition();
+  QList<Point> path;
+  Point from = character->getPoint();
+  Point to{target.x(), target.y(), from.z};
 
-  if (from == target)
+  if (from == to)
     return 0;
   grid = Game::get()->getLevel()->getGrid();
-  if (grid->findPath(from, target, path, character))
+  if (grid->findPath(from, to, path, character))
     return path.size();
   return -1;
 }
@@ -154,12 +155,12 @@ void ActionQueue::pushReach(DynamicObject *target, float range, QJSValue caseCom
 
 void ActionQueue::pushReachCase(int x, int y, float range)
 {
-  queue << (new ReachCaseAction(character, QPoint(x, y), range));
+  queue << (new ReachCaseAction(character, Point{x, y, static_cast<unsigned char>(character->getCurrentFloor())}, range));
 }
 
 void ActionQueue::pushReachCase(int x, int y, float range, QJSValue caseCompare)
 {
-  queue << (new ReachCaseAction(character, QPoint(x, y), range, caseCompare));
+  queue << (new ReachCaseAction(character, Point{x, y, static_cast<unsigned char>(character->getCurrentFloor())}, range, caseCompare));
 }
 
 void ActionQueue::pushReachNear(int x, int y, int range)
@@ -179,8 +180,8 @@ void ActionQueue::pushReachNear(int x, int y, int range)
   }
   while (choices.size() > 0)
   {
-    unsigned int it = Dices::Throw(choices.size() - 1);
-    qDebug() << "Choicez" << choices.size() << ", roll" << it;
+    int it = Dices::Throw(static_cast<unsigned int>(choices.size() - 1));
+    //qDebug() << "Choicez" << choices.size() << ", roll" << it;
     QPoint candidate = choices[it];
 
     if (getMovementApCost(candidate) > 0)
@@ -205,12 +206,12 @@ int ActionQueue::getReachApCost(DynamicObject *target, float range, QJSValue cas
 
 int ActionQueue::getReachCaseApCost(int x, int y, float range) const
 {
-  return (ReachCaseAction(character, QPoint(x, y), range)).getApCost();
+  return (ReachCaseAction(character, Point{x, y, static_cast<unsigned char>(character->getCurrentFloor())}, range)).getApCost();
 }
 
 int ActionQueue::getReachCaseApCost(int x, int y, float range, QJSValue caseCompare)
 {
-  return (ReachCaseAction(character, QPoint(x, y), range, caseCompare)).getApCost();
+  return (ReachCaseAction(character, Point{x, y, static_cast<unsigned char>(character->getCurrentFloor())}, range, caseCompare)).getApCost();
 }
 
 void ActionQueue::pushInteraction(DynamicObject *target, const QString &interactionName)

@@ -72,6 +72,7 @@ signals:
   void parentChanged();
 
 private:
+  void updatePosition();
   QQmlListProperty<ObjectGroup>   getQmlGroups()  { return QML_QLIST_CONSTRUCTOR(ObjectGroup,   groups);  }
   QQmlListProperty<DynamicObject> getQmlObjects() { return QML_QLIST_CONSTRUCTOR(DynamicObject, objects); }
 

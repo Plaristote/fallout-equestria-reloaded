@@ -4,6 +4,7 @@
 #include "inventoryitem.h"
 #include "bloodstain.h"
 #include "doorway.h"
+#include "elevator.h"
 #include "game.h"
 
 #define GAME_OBJECT_CONSTRUCTOR(TYPENAME) \
@@ -14,6 +15,7 @@ static const QMap<QString, std::function<DynamicObject* (QObject*)>> constructor
   GAME_OBJECT_CONSTRUCTOR(Character),
   GAME_OBJECT_CONSTRUCTOR(StorageObject),
   GAME_OBJECT_CONSTRUCTOR(Doorway),
+  GAME_OBJECT_CONSTRUCTOR(Elevator),
   GAME_OBJECT_CONSTRUCTOR(InventoryItem),
   GAME_OBJECT_CONSTRUCTOR(BloodStain)
 };
@@ -99,6 +101,15 @@ Doorway* ObjectFactory::generateDoorway(const QString &name) const
   return object;
 }
 
+Elevator* ObjectFactory::generateElevator(const QString &name) const
+{
+  Elevator* object = new Elevator(root);
+
+  object->setObjectName(name);
+  root->appendObject(object);
+  return object;
+}
+
 DynamicObject* ObjectFactory::generateDynamicObject(const QString &name) const
 {
   DynamicObject* object = new DynamicObject(root);
@@ -108,7 +119,7 @@ DynamicObject* ObjectFactory::generateDynamicObject(const QString &name) const
   return object;
 }
 
-DynamicObject* ObjectFactory::addBloodStainAt(QPoint position) const
+DynamicObject* ObjectFactory::addBloodStainAt(QPoint position, unsigned char floor) const
 {
   BloodStain* object = new BloodStain(root);
   LevelTask* level = Game::get()->getLevel();
@@ -116,7 +127,7 @@ DynamicObject* ObjectFactory::addBloodStainAt(QPoint position) const
 
   root->appendObject(object);
   if (level)
-    level->setObjectPosition(object, offset.x() + position.x(), offset.y() + position.y());
+    level->setObjectPosition(object, offset.x() + position.x(), offset.y() + position.y(), floor);
   object->initialize();
   return object;
 }

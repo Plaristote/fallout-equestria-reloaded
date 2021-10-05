@@ -181,6 +181,8 @@ set(PROJECT_SOURCES
         game/objects/inventoryitem.cpp
         game/objects/bloodstain.h
         game/objects/bloodstain.cpp
+        game/objects/elevator.h
+        game/objects/elevator.cpp
         game/objects/components/scriptable.h
         game/objects/components/scriptable.cpp
         game/objects/components/gridobjectcomponent.h

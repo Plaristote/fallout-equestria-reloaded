@@ -27,23 +27,26 @@ void CharacterMovement::lookTo(int x, int y)
     setOrientation(RightDir);
 }
 
-void CharacterMovement::moveTo(int x, int y)
+void CharacterMovement::moveTo(Point target)
 {
-  auto* level = Game::get()->getLevel();
+  auto* level      = Game::get()->getLevel();
+  auto* originGrid = level ? level->getFloorGrid(getCurrentFloor()) : nullptr;
+  auto* targetGrid = level ? level->getFloorGrid(target.z) : nullptr;
 
-  if (level)
+  if (originGrid && targetGrid)
   {
     QString animationName;
-    QPoint  renderPosition = level->getRenderPositionForTile(x, y);
+    QPoint  renderPosition = level->getRenderPositionForTile(target.x, target.y);
 
-    renderPosition.ry() -= level->getTileMap()->getTileSize().height() / 4;
-    lookTo(x, y);
+    renderPosition.ry() -= targetGrid->getTilemap()->getTileSize().height() / 4;
+    lookTo(target.x, target.y);
     animationName = movementMode + '-' + getOrientationName();
     moveToCoordinates(renderPosition);
     if (getCurrentAnimation() != animationName)
       setAnimation(movementMode);
-    level->getGrid()->moveObject(this, x, y);
-    level->getGrid()->triggerZone(this, x, y);
+    originGrid->extractObject(this);
+    targetGrid->insertObject(this, target.x, target.y);
+    targetGrid->triggerZone(this, target.x, target.y);
     onMovementStart();
   }
 }
@@ -83,10 +86,11 @@ void CharacterMovement::load(const QJsonObject& data)
 
   for (const QJsonValue& pathPointData : jsonPath)
   {
-    QPoint pathPoint;
+    Point pathPoint;
 
-    pathPoint.setX(pathPointData["x"].toInt());
-    pathPoint.setY(pathPointData["y"].toInt());
+    pathPoint.x = pathPointData["x"].toInt();
+    pathPoint.y = pathPointData["y"].toInt();
+    pathPoint.z = pathPointData["z"].toInt();
     currentPath << pathPoint;
   }
   setMovementMode(data["moveMode"].toString("walking"));
@@ -97,12 +101,13 @@ void CharacterMovement::save(QJsonObject& data) const
 {
   QJsonArray currentPathData;
 
-  for (QPoint pathPoint : currentPath)
+  for (Point pathPoint : currentPath)
   {
     QJsonObject pathPointData;
 
-    pathPointData["x"] = pathPoint.x();
-    pathPointData["y"] = pathPoint.y();
+    pathPointData["x"] = pathPoint.x;
+    pathPointData["y"] = pathPoint.y;
+    pathPointData["z"] = pathPoint.z;
     currentPathData << pathPointData;
   }
   data["currentPath"] = currentPathData;

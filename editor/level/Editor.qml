@@ -69,6 +69,22 @@ Item {
         height: parent.height
 
         Row {
+          Label {
+            text: "Floor"
+            color: "white"
+          }
+
+          TextField {
+            id: currentFloorInput
+            background: UiStyle.Label {}
+            onTextChanged: gameController.level.currentFloor = parseInt(text)
+            color: "white"
+            Connections {
+              target: gameController.level
+              function onFloorChanged() { currentFloorInput.text = gameController.level.currentFloor.toString(); }
+            }
+          }
+
           CheckBox {
             id: displayRoofCheckbox
             text: "Display roofs"

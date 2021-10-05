@@ -57,35 +57,63 @@ void ZoneComponent::unregisterDynamicObject(DynamicObject* object)
 
 void ZoneComponent::registerZone(TileZone* zone)
 {
-  LevelGrid* floor = getFloors().at(0);
+  LevelGrid* floor = getFloorGrid(zone->getFloor());
 
-  floor->getTilemap()->addTileZone(zone);
-  floor->registerZone(zone);
-  connect(zone, &TileZone::enteredZone, this, &ZoneComponent::onZoneEntered, Qt::QueuedConnection);
-  connect(zone, &TileZone::exitedZone,  this, &ZoneComponent::onZoneExited,  Qt::QueuedConnection);
+  if (floor)
+  {
+    floor->getTilemap()->addTileZone(zone);
+    floor->registerZone(zone);
+    connect(zone, &TileZone::enteredZone,  this, &ZoneComponent::onZoneEntered, Qt::QueuedConnection);
+    connect(zone, &TileZone::exitedZone,   this, &ZoneComponent::onZoneExited,  Qt::QueuedConnection);
+    connect(zone, &TileZone::floorChanged, this, &ZoneComponent::onZoneChangedFloor);
+  }
 }
 
 void ZoneComponent::unregisterZone(TileZone* zone)
 {
-  LevelGrid* floor = getFloors().at(0);
+  LevelGrid* floor = getFloorGrid(zone->getFloor());
 
-  disconnect(zone, &TileZone::enteredZone, this, &ZoneComponent::onZoneEntered);
-  disconnect(zone, &TileZone::exitedZone,  this, &ZoneComponent::onZoneExited);
-  floor->unregisterZone(zone);
-  floor->getTilemap()->removeTileZone(zone);
-  for (DynamicObject* object : qAsConst(objects))
+  if (floor)
   {
-    if (object->isCharacter())
+    disconnect(zone, &TileZone::enteredZone,  this, &ZoneComponent::onZoneEntered);
+    disconnect(zone, &TileZone::exitedZone,   this, &ZoneComponent::onZoneExited);
+    disconnect(zone, &TileZone::floorChanged, this, &ZoneComponent::onZoneChangedFloor);
+    floor->unregisterZone(zone);
+    floor->getTilemap()->removeTileZone(zone);
+    for (DynamicObject* object : qAsConst(objects))
     {
-      CharacterMovement* character = reinterpret_cast<CharacterMovement*>(object);
-
-      if (character->getCurrentZones().contains(zone))
+      if (object->isCharacter())
       {
-        QVector<TileZone*> zones(character->getCurrentZones());
+        CharacterMovement* character = reinterpret_cast<CharacterMovement*>(object);
 
-        zones.removeAll(zone);
-        character->setCurrentZones(zones);
+        if (character->getCurrentZones().contains(zone))
+        {
+          QVector<TileZone*> zones(character->getCurrentZones());
+
+          zones.removeAll(zone);
+          character->setCurrentZones(zones);
+        }
       }
+    }
+  }
+}
+
+void ZoneComponent::onZoneChangedFloor(TileZone* zone)
+{
+  qDebug() << "onZoneChangedFloor" << zone;
+  for (unsigned char i = 0 ; i < getFloorCount() ; ++i)
+  {
+    LevelGrid* floor = getFloorGrid(i);
+
+    if (zone->getFloor() == i)
+    {
+      floor->getTilemap()->addTileZone(zone);
+      floor->registerZone(zone);
+    }
+    else
+    {
+      floor->unregisterZone(zone);
+      floor->getTilemap()->removeTileZone(zone);
     }
   }
 }

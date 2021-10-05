@@ -7,11 +7,11 @@
 class ReachAction : public MovementAction
 {
 public:
-  ReachAction(Character* character, DynamicObject* object, float range) : MovementAction(character, QPoint(0,0)), object(object), range(range)
+  ReachAction(Character* character, DynamicObject* object, float range) : MovementAction(character, Point{0,0,0}), object(object), range(range)
   {
   }
 
-  ReachAction(Character* character, DynamicObject* object, float range, QJSValue callback) : MovementAction(character, QPoint(0,0)), object(object), range(range), rateCallback(callback)
+  ReachAction(Character* character, DynamicObject* object, float range, QJSValue callback) : MovementAction(character, Point{0,0,0}), object(object), range(range), rateCallback(callback)
   {
   }
 
@@ -20,9 +20,9 @@ public:
 
 protected:
   void triggerNextMovement() override;
-  QVector<QPoint> getCandidates(int caseDistance) const;
+  QVector<Point> getCandidates(int caseDistance) const;
   virtual bool alreadyReached() const;
-  virtual QPoint getTargetPosition() const { return object->getPosition(); }
+  virtual Point getTargetPosition() const { return object->getPoint(); }
 
   DynamicObject* object;
   float range = 1.f;
