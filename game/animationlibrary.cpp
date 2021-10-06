@@ -316,12 +316,15 @@ bool AnimationLibrary::hasSpriteSheetBeenPreRendered(const CharacterSpriteDescri
 void AnimationLibrary::prerenderCharacterSpriteSheet(const CharacterSpriteDescriptor& descriptor)
 {
   const QImage       baseImage(ASSETS_PATH + "sprites/characters/" + descriptor.base + ".png");
+  const QString      shadowPath(ASSETS_PATH + "sprites/characters/" + descriptor.base + "-shadow.png");
   LayeredSpriteSheet spritesheet(baseImage.size());
   const QMap<QString, QString> layers({
     {"sprites/characters/armors",  descriptor.armor},
     {"sprites/characters/weapons", descriptor.weapon}
   });
 
+  if (QFile::exists(shadowPath))
+    spritesheet.addLayer(QImage(shadowPath));
   spritesheet.addLayer(baseImage);
   spritesheet.addColorLayer(descriptor.bodyColor, baseImage);
   if (descriptor.baseStaticColor.length() > 0)
