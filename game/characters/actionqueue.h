@@ -40,9 +40,12 @@ public:
   Q_INVOKABLE void pushMovement(int x, int y) { pushMovement(QPoint(x, y)); }
   Q_INVOKABLE void pushReach(DynamicObject* target, float range = 1);
   Q_INVOKABLE void pushReach(DynamicObject* target, float range, QJSValue caseCompare);
-  Q_INVOKABLE void pushReachCase(int x, int y, float range = 1);
+  Q_INVOKABLE void pushReachCase(int x, int y, float range);
   Q_INVOKABLE void pushReachCase(int x, int y, float range, QJSValue caseCompare);
   Q_INVOKABLE void pushReachNear(int x, int y, int range);
+  Q_INVOKABLE void pushReachCase(int x, int y, int z, float range);
+  Q_INVOKABLE void pushReachCase(int x, int y, int z, float range, QJSValue caseCompare);
+  Q_INVOKABLE void pushReachNear(int x, int y, int z, int range);
   void             pushSliding(QPoint target);
   Q_INVOKABLE bool start();
 

@@ -163,10 +163,20 @@ void ActionQueue::pushReachCase(int x, int y, float range, QJSValue caseCompare)
   queue << (new ReachCaseAction(character, Point{x, y, static_cast<unsigned char>(character->getCurrentFloor())}, range, caseCompare));
 }
 
-void ActionQueue::pushReachNear(int x, int y, int range)
+void ActionQueue::pushReachCase(int x, int y, int z, float range)
+{
+  queue << (new ReachCaseAction(character, Point{x, y, static_cast<unsigned char>(z)}, range));
+}
+
+void ActionQueue::pushReachCase(int x, int y, int z, float range, QJSValue caseCompare)
+{
+  queue << (new ReachCaseAction(character, Point{x, y, static_cast<unsigned char>(z)}, range, caseCompare));
+}
+
+void ActionQueue::pushReachNear(int x, int y, int z, int range)
 {
   QVector<QPoint> choices;
-  LevelGrid*      grid = Game::get()->getLevel()->getGrid();
+  LevelGrid*      grid = Game::get()->getLevel()->getFloorGrid(static_cast<unsigned char>(z));
   QPoint          position = character->getPosition();
 
   choices.reserve((range + 1) * (range + 1) - 1);
@@ -192,6 +202,11 @@ void ActionQueue::pushReachNear(int x, int y, int range)
     else
       choices.removeAt(static_cast<int>(it));
   }
+}
+
+void ActionQueue::pushReachNear(int x, int y, int range)
+{
+  pushReachNear(x, y, static_cast<int>(character->getCurrentFloor()), range);
 }
 
 int ActionQueue::getReachApCost(DynamicObject *target, float range) const

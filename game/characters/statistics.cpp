@@ -98,7 +98,7 @@ void CharacterStatistics::updateSpriteSheet()
       }
       else
         setSpriteName(descriptor.base);
-      moveTo(Point{position.x(), position.y(), static_cast<unsigned char>(getCurrentFloor())});
+      moveTo(getPoint());
       setAnimation("idle");
     }
   }
