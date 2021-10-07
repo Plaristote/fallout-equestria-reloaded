@@ -17,7 +17,7 @@ ColumnLayout {
     const zone = selectedObject.controlZone;
 
     zone.offset = selectedObject.position;
-    if (zone.isInside(tileX, tileY))
+    if (zone.isInside(tileX, tileY, selectedObject.floor))
     {
       console.log("Removing tile", tileX, ",", tileY, "from", selectedObject, selectedObject.position, "control zone");
       zone.removePosition(Qt.point(tileX, tileY));

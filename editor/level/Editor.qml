@@ -68,23 +68,7 @@ Item {
         width: parent.width
         height: parent.height
 
-        Row {
-          Label {
-            text: "Floor"
-            color: "white"
-          }
-
-          TextField {
-            id: currentFloorInput
-            background: UiStyle.Label {}
-            onTextChanged: gameController.level.currentFloor = parseInt(text)
-            color: "white"
-            Connections {
-              target: gameController.level
-              function onFloorChanged() { currentFloorInput.text = gameController.level.currentFloor.toString(); }
-            }
-          }
-
+        RowLayout {
           CheckBox {
             id: displayRoofCheckbox
             text: "Display roofs"
@@ -103,6 +87,22 @@ Item {
               leftPadding: 45
               text: parent.text
               color: "white"
+            }
+          }
+
+          Label {
+            text: "Floor"
+            color: "white"
+          }
+
+          TextField {
+            id: currentFloorInput
+            background: UiStyle.Label {}
+            onTextChanged: gameController.level.currentFloor = parseInt(text)
+            color: "white"
+            Connections {
+              target: gameController.level
+              function onFloorChanged() { currentFloorInput.text = gameController.level.currentFloor.toString(); }
             }
           }
         }

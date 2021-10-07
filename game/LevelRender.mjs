@@ -28,9 +28,9 @@ export class Controller extends CursorController {
     this.renderZones();
     this.contextManager = new RenderContextManager(this);
     this.eachCase(this.renderCoordinates.bind(this));
-    this.renderVisualEffects();
     this.renderRoofs();
     this.contextManager.finalize();
+    this.renderVisualEffects();
     super.render();
     this.frameCount++;
   }

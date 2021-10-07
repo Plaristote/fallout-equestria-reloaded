@@ -185,7 +185,7 @@ QVector<DynamicObject*> ObjectGroup::allDynamicObjects() const
 
   results.reserve(512);
   for (ObjectGroup* group : groups)
-    group->collectObjects(results);
+    results << group->allDynamicObjects();
   collectObjects(results);
   return results;
 }

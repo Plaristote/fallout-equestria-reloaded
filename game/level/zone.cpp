@@ -160,7 +160,7 @@ QJSValue ZoneComponent::getZoneOccupants(TileZone* zone)
 
       position   += zone->getOffset();
       concat      = result.property("concat");
-      objectArray = game->getLevel()->getDynamicObjectsAt(position.x(), position.y());
+      objectArray = game->getLevel()->getDynamicObjectsAt(position.x(), position.y(), zone->getFloor());
       result      = concat.callWithInstance(result, QJSValueList() << objectArray);
     }
   }

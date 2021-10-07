@@ -10,11 +10,9 @@ class Dialog {
   }
   
   get shop() {
-    const container = this.dialog.npc.parent;
+    const container = this.dialog.npc.parent.findGroup("shop");
 
-    if (container.name === "shop")
-      return container;
-    return container.findGroup("shop");
+    return container ? container : this.dialog.npc.parent;
   }
   
   get shopShelfs() {

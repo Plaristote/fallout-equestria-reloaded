@@ -135,11 +135,26 @@ void GridComponent::setCharacterPosition(Character* character, int x, int y, uns
   setObjectPosition(character, x, y, objectFloor);
 }
 
+TileZone* GridComponent::getDefaultEntryZone() const
+{
+  for (auto* zone : floors.at(0)->getTilemap()->getZones())
+  {
+    if (zone->getType() == "entry" && zone->getIsDefault())
+      return zone;
+  }
+  return nullptr;
+}
+
 bool GridComponent::moveCharacterToZone(Character* character, const QString& zoneName, unsigned char objectFloor)
 {
+  TileZone* zone;
+
   if (objectFloor >= getFloors().size())
     objectFloor = this->floor;
-  return moveCharacterToZone(character, getFloorGrid(objectFloor)->getTilemap()->getZone(zoneName));
+  zone = zoneName == ""
+      ? getDefaultEntryZone()
+      : getFloorGrid(objectFloor)->getTilemap()->getZone(zoneName);
+  return moveCharacterToZone(character, zone);
 }
 
 bool GridComponent::moveCharacterToZone(Character* character, TileZone* zone)

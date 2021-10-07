@@ -38,17 +38,22 @@ TextBubble* TextBubblesComponent::getTextBubbleFor(DynamicObject* target) const
 
 void TextBubblesComponent::addTextBubble(DynamicObject* target, const QString& content, qint64 duration, const QString& color)
 {
-  TextBubble* textBubble = getTextBubbleFor(target);
-  bool isNew = !textBubble;
-
-  if (!textBubble)
-    textBubble = new TextBubble(this, target);
-  textBubble->initialize(content, duration, color);
-  if (isNew)
+  if (target)
   {
-    textBubbles << textBubble;
-    emit textBubblesChanged();
+    TextBubble* textBubble = getTextBubbleFor(target);
+    bool isNew = !textBubble;
+
+    if (!textBubble)
+      textBubble = new TextBubble(this, target);
+    textBubble->initialize(content, duration, color);
+    if (isNew)
+    {
+      textBubbles << textBubble;
+      emit textBubblesChanged();
+    }
   }
+  else
+    qDebug() << "TextBubblesComponent::addTextBubble: target is null.";
 }
 
 void TextBubblesComponent::unregisterDynamicObject(DynamicObject* object)

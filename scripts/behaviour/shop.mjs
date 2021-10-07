@@ -46,14 +46,32 @@ export class Shop {
     return this.routineComponent.getCurrentRoutine().callback === "openShopRoutine";
   }
 
+  isShopOwnerConscious() {
+    return this.shopOwner.isAlive() && !this.shopOwner.unconscious;
+  }
+
   openShopRoutine() {
-    if (this.shopOwner.isAlive() && !this.shopOwner.unconscious)
+    if (this.isShopOwnerConscious())
       this.shopDoors.forEach(door => door.locked = false);
   }
 
   closeShopRoutine() {
-    if (this.shopOwner.isAlive() && !this.shopOwner.unconscious)
+    if (this.isShopOwnerConscious()) {
       this.shopDoors.forEach(door => { door.opened = false; door.locked = true });
+      this.chaseCustomers();
+    }
+  }
+  
+  chaseCustomers() {
+    const occupants = this.model.getControlZoneOccupants();
+    
+    for (var i = 0 ; i < occupants.length ; ++i) {
+      if (occupants[i].getObjectType() == "Character" && this.shopOwner.fieldOfView.isDetected(occupants[i])) {
+        level.moveCharacterToZone(occupants[i], "");
+        if (occupants[i] === level.player)
+          level.cameraFocusRequired(level.player);
+      }
+    }
   }
 
   isUnderSurveillance() {

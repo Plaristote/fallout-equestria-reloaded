@@ -70,7 +70,13 @@ Canvas {
     cursorShape: enabled ? Qt.BlankCursor : Qt.ArrowCursor
 
     function onMouseMoved() {
-      hoverTile = controller.getHoveredCase(mouseX - canvas.origin.x, mouseY - canvas.origin.y);
+      const newHoveredTile = controller.getHoveredCase(mouseX - canvas.origin.x, mouseY - canvas.origin.y);
+
+      if (hoverTile[0] !== newHoveredTile[0] || hoverTile[1] !== newHoveredTile[1]) {
+        hoverTile = newHoveredTile;
+        if (mouseArea.containsPress)
+          controller.onMouseClick(mouseArea, mouseX, mouseY);
+      }
       if (hoveredObjectEnabled)
         hoveredObject = levelController.getObjectAt(mouseX - canvas.origin.x, mouseY - canvas.origin.y);
       else

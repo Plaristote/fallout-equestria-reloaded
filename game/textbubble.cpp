@@ -18,8 +18,10 @@ void TextBubble::initialize(const QString& content, qint64 duration, const QStri
 bool TextBubble::update(qint64 delta)
 {
   QPoint newPosition = target->getSpritePosition();
+  QRect  rect        = target->getClippedRect();
 
   timeLeft -= delta;
+  newPosition.ry() -= rect.height() / 2;
   if (newPosition != position)
   {
     position = newPosition;

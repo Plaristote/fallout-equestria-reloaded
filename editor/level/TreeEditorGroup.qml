@@ -20,8 +20,12 @@ ColumnLayout {
     model: objectGroup.groups
     delegate: RowLayout {
       property QtObject model: objectGroup.groups[index]
+      property bool passFilters: filter.length === 0 || model.path.indexOf(filter) >= 0
       spacing: 5
       Layout.fillWidth: true
+      Layout.preferredHeight: passFilters ? 25 : 0
+      Layout.bottomMargin: passFilters ? 5 : 0
+
 
       UiStyle.Icon {
         Layout.preferredHeight: 15
