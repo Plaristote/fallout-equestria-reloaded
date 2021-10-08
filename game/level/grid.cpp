@@ -33,6 +33,8 @@ void GridComponent::load(const QJsonObject& data)
       LevelGrid* floorGrid = new LevelGrid(this);
 
       floorGrid->initializeGrid(layer->getTileMap());
+      if (!floorGrid->getTilemap()->getLayer("ground"))
+        throw std::runtime_error("Missing ground layer in tilemap");
       floors.push_back(floorGrid);
     }
     currentFloor = static_cast<unsigned char>(data["currentFloor"].toInt(0));
