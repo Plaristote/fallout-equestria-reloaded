@@ -3,7 +3,7 @@ class Dialog {
     this.dialog = dialog;
     this.dialog.mood = "angry";
   }
-  
+
   onSurrender() {
     const alarmedCharacters = this.dialog.npc.parent.objects;
     
@@ -13,7 +13,7 @@ class Dialog {
     }
     this.sendPlayerToJail();
   }
-  
+
   sendPlayerToJail() {
     const jail = level.findGroup("police-station.jail");
     const cell = Math.floor(Math.random() * 101) % Math.max(1, jail.groups.length);
@@ -28,6 +28,11 @@ class Dialog {
     this.dialog.npc.setAsEnemy(level.player);
     if (!level.isInCombat(this.dialog.npc))
       level.joinCombat(this.dialog.npc);
+  }
+
+  onBarterStart() {
+    this.dialog.text = i18n.t("messages.wont-barter");
+    return false;
   }
 }
 

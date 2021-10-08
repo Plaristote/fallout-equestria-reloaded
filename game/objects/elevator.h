@@ -12,7 +12,7 @@ class Elevator : public DynamicObject
   Q_PROPERTY(QPoint       positionA MEMBER positionA NOTIFY elevatorChanged)
   Q_PROPERTY(unsigned int floorA    MEMBER floorA    NOTIFY elevatorChanged)
   Q_PROPERTY(QPoint       positionB MEMBER positionB NOTIFY elevatorChanged)
-  Q_PROPERTY(unsigned int floorB    MEMBER floorA    NOTIFY elevatorChanged)
+  Q_PROPERTY(unsigned int floorB    MEMBER floorB    NOTIFY elevatorChanged)
 public:
   explicit Elevator(QObject *parent = nullptr);
 

@@ -18,6 +18,7 @@
 #include "game/dynamicobject.h"
 #include "game/objects/inventoryitem.h"
 #include "game/objects/doorway.h"
+#include "game/objects/elevator.h"
 #include "game/objects/objectfactory.h"
 #include "game/leveltask.h"
 #include "game/characterdialog.h"
@@ -83,6 +84,7 @@ int main(int argc, char *argv[])
   qmlRegisterType<Character>("Game", 1,0, "Character");
   qmlRegisterType<StorageObject>("Game", 1,0, "StorageObject");
   qmlRegisterType<Doorway>("Game", 1,0, "Doorway");
+  qmlRegisterType<Elevator>("Game", 1,0, "Elevator");
   qmlRegisterType<InventoryItem>("Game", 1,0, "InventoryItem");
   qmlRegisterType<Inventory>("Game", 1,0, "Inventory");
   qmlRegisterType<CharacterDialog>("Game", 1,0, "CharacterDialog");

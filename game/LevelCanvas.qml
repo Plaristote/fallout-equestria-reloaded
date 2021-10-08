@@ -28,6 +28,11 @@ Canvas {
     initializeRenderer();
   }
 
+  onHoverTileChanged: {
+    if (mouseArea.containsPress)
+      controller.onMouseClick(mouseArea, mouseX, mouseY);
+  }
+
   Timer {
     id: afterLoadCameraCenter; interval: 100; onTriggered: moveToObject(levelController.player);
   }
@@ -72,11 +77,8 @@ Canvas {
     function onMouseMoved() {
       const newHoveredTile = controller.getHoveredCase(mouseX - canvas.origin.x, mouseY - canvas.origin.y);
 
-      if (hoverTile[0] !== newHoveredTile[0] || hoverTile[1] !== newHoveredTile[1]) {
+      if (hoverTile[0] !== newHoveredTile[0] || hoverTile[1] !== newHoveredTile[1])
         hoverTile = newHoveredTile;
-        if (mouseArea.containsPress)
-          controller.onMouseClick(mouseArea, mouseX, mouseY);
-      }
       if (hoveredObjectEnabled)
         hoveredObject = levelController.getObjectAt(mouseX - canvas.origin.x, mouseY - canvas.origin.y);
       else
