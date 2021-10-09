@@ -2,16 +2,31 @@ import {callGuards, AlarmLevel} from "../pnjs/components/alarm.mjs";
 import {RoutineComponent} from "./routine.mjs";
 
 const stealReactions = [
-  {text: "Hey ! Put that back !",                  time: 2500, color: "yellow"},
-  {text: "Don't test me. Give it back.",           time: 2500, color: "orange"},
-  {text: "Last warning ! Put that back !",         time: 2500, color: "red"},
-  {text: "Guards ! We got a shoplifter over here", time: 3500, color: "red"}
+  {content: i18n.t("bubbles.steal-warning-1"), duration: 2500, color: "yellow"},
+  {content: i18n.t("bubbles.steal-warning-2"), duration: 2500, color: "orange"},
+  {content: i18n.t("bubbles.steal-warning-3"), duration: 4000, color: "red"},
+  {content: i18n.t("bubbles.steal-warning-4"), duration: 3500, color: "red"}
+];
+
+const entryReactions = [
+  {content: i18n.t("bubbles.shop-welcome-1"), duration: 2500},
+  {content: i18n.t("bubbles.shop-welcome-2"), duration: 2500},
+  {content: i18n.t("bubbles.shop-welcome-3"), duration: 2500}
+];
+
+const exitReactions = [
+  {content: i18n.t("bubbles.shop-goodbye-1"), duration: 2500},
+  {content: i18n.t("bubbles.shop-goodbye-2"), duration: 2500}
 ];
 
 const defaultRoutine = [
   { hour: "8",  minute: "30", callback: "openShopRoutine"  },
   { hour: "19", minute: "30", callback: "closeShopRoutine" }
 ];
+        
+function displayRandomTextBubble(character, options) {
+  character.getScriptObject().displayRandomTextBubble(options);
+}
 
 export class Shop {
   constructor(model, routine) {
@@ -92,15 +107,15 @@ export class Shop {
     if (!level.combat && this.isUnderSurveillance())
     {
       if (this.opened)
-        level.addTextBubble(this.shopOwner, "Welcome !", 2000, "white");
+        displayRandomTextBubble(this.shopOwner, entryReactions);
       else
-        level.addTextBubble(this.shopOwner, "Hey ! We're closed ! Get out !", 2000, "orange");
+        level.addTextBubble(this.shopOwner, i18n.t("bubbles.shop-closed"), 2000, "orange");
     }
   }
 
   onZoneExited(object) {
     if (!level.combat && this.isUnderSurveillance() && this.opened)
-      level.addTextBubble(this.shopOwner, "Come back soon !", 2000, "white");
+      displayRandomTextBubble(this.shopOwner, exitReactions);
   }
 
   onShopliftAttempt(user) {
@@ -111,7 +126,7 @@ export class Shop {
       i = Math.min(i, this.maxShopliftAttempts);
       if (i >= this.maxShopliftAttempts)
         callGuards(this.guards, user, AlarmLevel.Arrest);
-      level.addTextBubble(this.shopOwner, stealReactions[i].text, stealReactions[i].time, stealReactions[i].color);
+      level.addTextBubble(this.shopOwner, stealReactions[i].content, stealReactions[i].duration, stealReactions[i].color);
       return false;
     }
     return true;

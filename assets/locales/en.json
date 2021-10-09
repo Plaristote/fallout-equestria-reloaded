@@ -119,7 +119,31 @@
     "health-potion": "An average quality health potion.",
     "power-armor": "A power armor that the Steel Rangers usually wear. Probably the most protective kind of gear you'll ever find in the wastes. It's pretty damn heavy, but the weight is compensated for by increasing the strength of its wearer, while protecting it of magical radiations."
   },
+  "bubbles": {
+    "passerby-1": "I'm busy.",
+    "passerby-2": "No time to talk, sorry !",
+    "passerby-3": "Hi",
+    "guard-1": "Move along, nothing to see here.",
+    "guard-2": "I've got my eye on you.",
+    "guard-3": "Keep calm.",
+    "guard-4": "It's a peaceful town, here. It'll stay that way.",
+    "shop-welcome-1": "Hi",
+    "shop-welcome-2": "Welcome",
+    "shop-welcome-3": "Hello",
+    "shop-goodbye-1": "Bye",
+    "shop-goodbye-2": "Come back soon !",
+    "shop-closed": "Hey ! We're closed ! Get out !",
+    "steal-warning-1": "Hey ! Put that back !",
+    "steal-warning-2": "Don't test me. Give it back.",
+    "steal-warning-3": "Last warning ! Put that back, or else !",
+    "steal-warning-4": "Guards ! We got a shoplifter over here"
+  },
   "dialogs": {
+    "town-guard": {
+      "arrest": "Hands up ! No sudden movements, or I'll shoot to kill.<br/>You've broken the law one too many times pal. You've got some jailtime ahead of you. Follow me nicely and quietly.",
+      "fight": "[Fight]",
+      "surrender": "[Surrender]"
+    },
     "tutoCharIntro": {
       "start": "Wow ! You've arrived ! At long last ! We need to find a way out of this hole !",
       "what-happened": "Wait a moment, what's going on ?",
