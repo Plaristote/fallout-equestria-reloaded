@@ -31,6 +31,7 @@ export class Controller extends CursorController {
     this.renderRoofs();
     this.contextManager.finalize();
     this.renderVisualEffects();
+    //this.eachCase(this.renderInfoBoxes.bind(this));
     super.render();
     this.frameCount++;
   }
@@ -73,6 +74,10 @@ export class Controller extends CursorController {
         }
       }
     }
+  }
+
+  renderInfoBoxes(x, y) {
+    this.renderObjects[x][y].forEach(this.renderDynamicObjectInfoBox.bind(this));
   }
 
   renderCoordinates(x, y) {
@@ -120,6 +125,26 @@ export class Controller extends CursorController {
 
   getAdjustedOffsetFor(sprite) {
     return this.level.getAdjustedOffsetFor(sprite);
+  }
+
+  characterInfoBoxLine(sprite, offset, text, line) {
+    const vision_score = this.level.grid.getVisionQuality(this.level.player.position.x, this.level.player.position.y, sprite.position.x, sprite.position.y);
+    this.context.font = "bold 13px sans-serif";
+    this.context.fillStyle = "#FFFFFF";
+    this.context.fillText(text, offset.x + sprite.clippedRect.width, offset.y + line * 14);
+    this.context.strokeStyle = "#000000";
+    this.context.strokeText(text, offset.x + sprite.clippedRect.width, offset.y + line * 14);
+  }
+
+  renderDynamicObjectInfoBox(object) {
+    if (object.getObjectType() === "Character") {
+      const offset = this.getAdjustedOffsetFor(object);
+      const vision_score = this.level.grid.getVisionQuality(this.level.player.position.x, this.level.player.position.y, object.position.x, object.position.y);
+      this.characterInfoBoxLine(object, offset, `Vis: ${vision_score}%`, 0);
+      this.characterInfoBoxLine(object, offset, `HP:  ${object.statistics.hitPoints}/${object.statistics.maxHitPoints}`, 1);
+      this.characterInfoBoxLine(object, offset, `Flo: ${object.floor}`, 2);
+      this.characterInfoBoxLine(object, offset, `${object.position.x}/${object.position.y}`, 3);
+    }
   }
 
   renderDynamicObject(sprite) {
