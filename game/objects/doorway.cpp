@@ -153,7 +153,7 @@ bool Doorway::onUse(Character* character)
   auto* grid  = level->getGrid();
   QPoint position = getPosition();
 
-  if (script->hasMethod("onUse") && script->call("onUse", QJSValueList() << character->asJSValue()).toBool())
+  if (script && script->hasMethod("onUse") && script->call("onUse", QJSValueList() << character->asJSValue()).toBool())
     return true;
   character->useActionPoints(2, "door");
   if (locked)
