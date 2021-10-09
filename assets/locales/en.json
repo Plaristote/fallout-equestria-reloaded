@@ -58,7 +58,8 @@
   },
   "buffs": {
     "poisoned": "Poisoned",
-    "bleeding": "Bleeding"
+    "bleeding": "Bleeding",
+    "ko": "Unconscious"
   },
   "messages": {
     "weapons": {
