@@ -10,7 +10,7 @@ class HealthPotion extends Item {
   }
 
   get requiresTarget() {
-    return this.user.inventory.isEquippedItem(this.model);
+    return !this.user || this.user.inventory.isEquippedItem(this.model);
   }
 
   getActionPointCost() {
