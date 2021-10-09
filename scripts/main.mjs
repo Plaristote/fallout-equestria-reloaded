@@ -47,9 +47,10 @@ export class Game {
   }
 
   triggerHostileEncounter() {
-    const desertMaps = ["random-desert#1", "random-desert#2", "random-desert-cabin"];
+    const desertMaps = ["random-desert-1", "random-desert-2", "random-desert-cabin"];
     const desertEasyEncounters = [
-      function(difficultyRoll) { return { "name": "Rats", "members": [{"sheet": "mutatedRat", "script": "rat.mjs", "amount": Math.min(3, Math.floor(4 * (difficultyRoll / 40)))}] }; }
+      function(difficultyRoll) { return { "name": "Rats", "members": [{"sheet": "mutatedRat", "script": "rat.mjs", "amount": Math.min(3, Math.floor(4 * (difficultyRoll / 40)))}] }; },
+      function(difficultyRoll) { return { "name": "Scorpions", "members": [{"sheet": "scorpion", "script": "scorpion.mjs", "amount": Math.min(3, Math.floor(4 * (difficultyRoll / 40)))}] }; }
     ];
     const candidateMaps       = desertMaps;
     const candidateEncounters = desertEasyEncounters;

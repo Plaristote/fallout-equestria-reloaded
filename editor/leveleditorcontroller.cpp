@@ -34,7 +34,7 @@ DynamicObject* LevelEditorController::generateFromTemplate(const QString& templa
 QQmlListProperty<Character> LevelEditorController::getQmlVisibleCharacters()
 {
   visibleCharacters.clear();
-  for (auto* object : qAsConst(objects))
+  for (auto* object : qAsConst(attachedObjects))
   {
     if (object->isCharacter())
       visibleCharacters << reinterpret_cast<Character*>(object);

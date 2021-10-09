@@ -20,6 +20,7 @@ Repeater {
     }
 
     Component.onCompleted: updateVisibility()
+    onSourceClipRectChanged: offset = controller.getAdjustedOffsetFor(dynamicObject)
 
     Timer {
       running: root.visible

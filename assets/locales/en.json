@@ -56,12 +56,18 @@
       "mixed": "Run on double-click"
     }
   },
+  "buffs": {
+    "poisoned": "Poisoned",
+    "bleeding": "Bleeding"
+  },
   "messages": {
     "weapons": {
       "use":   "{{user}} used {{item}} on {{target}} for {{damage}} damage.",
       "dodge": "{{target}} dodged an attack from {{user}}.",
       "critical-failure": "{{user}} critically failed to use {{item}}."
     },
+    "poison-damage": "You take {{damage}} points of damage from the poisoning.",
+    "wont-barter": "This person doesn't want to barter with you.",
     "cannot-sneak": "You cannot sneak in plain sight.",
     "damaged": "{{target}} took {{damage}} points of damage.",
     "use": "{{user}} used {{item}}.",
