@@ -35,7 +35,12 @@ QStringList StorageObject::getAvailableInteractions()
   QStringList results = DynamicObject::getAvailableInteractions();
 
   if (metaObject()->className() == QString("StorageObject"))
+  {
+    results.prepend("look");
     results.prepend("use");
+    results.append("use-skill");
+    results.removeDuplicates();
+  }
   return results;
 }
 

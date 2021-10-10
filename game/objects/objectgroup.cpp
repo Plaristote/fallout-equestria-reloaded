@@ -201,7 +201,6 @@ QList<ObjectGroup*> ObjectGroup::allObjectGroups() const
   return results;
 }
 
-
 QVector<DynamicObject*> ObjectGroup::findDynamicObjects(std::function<bool (DynamicObject &)> compare) const
 {
   QVector<DynamicObject*> results;
