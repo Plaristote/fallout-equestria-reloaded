@@ -203,13 +203,13 @@ void TileMap::loadFloorFolder(const QJsonObject& layerData)
   for (const QJsonValue& value : layersData)
   {
     FloorLayer* floor = new FloorLayer(this);
+    TileMap*    previousFloor = this;
 
     floor->load(value.toObject(), this);
     floor->getTileMap()->floor = static_cast<unsigned char>(floors.size() + 1);
-    if (floors.size() == 0)
-      roofs.push_back(floor);
-    else
-      floors.last()->getTileMap()->roofs.push_back(floor);
+    if (floors.size() > 0)
+      previousFloor = floors.last()->getTileMap();
+    previousFloor->roofs.push_back(floor);
     floors.push_back(floor);
   }
 }

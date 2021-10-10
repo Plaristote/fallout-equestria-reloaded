@@ -46,9 +46,9 @@ static void renderTilemapWalls(TileMap& tilemap, QImage& image, QPoint renderOff
   painter.end();
 }
 
-void TileMap::renderToImage(QImage& image)
+void TileMap::renderToImage(QImage& image, QPoint offset)
 {
-  QPoint renderOffset(-image.width() / 2, 0);
+  QPoint renderOffset = QPoint(-image.width() / 2, 0) - offset;
   TileLayer* ground = getLayer("ground");
 
   if (ground)

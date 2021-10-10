@@ -1,5 +1,7 @@
 #include "storableobject.h"
 
+bool shouldSaveVariables();
+
 StorableObject::StorableObject(QObject *parent) : QObject(parent)
 {
 
@@ -12,5 +14,6 @@ void StorableObject::load(const QJsonObject& data)
 
 void StorableObject::save(QJsonObject& data) const
 {
-  data["dataStore"] = dataStore;
+  if (shouldSaveVariables())
+    data["dataStore"] = dataStore;
 }

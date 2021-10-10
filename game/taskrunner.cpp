@@ -5,6 +5,8 @@
 #include <QDebug>
 #include <cmath>
 
+bool shouldSaveTasks();
+
 struct TaskUpdateLock
 {
   TaskUpdateLock(TaskRunner& runner) : runner(runner)
@@ -168,18 +170,21 @@ void TaskRunner::load(const QJsonObject& data)
 
 void TaskRunner::save(QJsonObject& data) const
 {
-  QJsonArray array;
-
-  for (const auto& task : tasks)
+  if (shouldSaveTasks())
   {
-    QJsonObject taskData;
+    QJsonArray array;
 
-    taskData["name"]     = task.name;
-    taskData["count"]    = task.iterationCount;
-    taskData["infinite"] = task.infinite;
-    taskData["interval"] = task.interval;
-    taskData["timeLeft"] = task.timeLeft;
-    array << taskData;
+    for (const auto& task : tasks)
+    {
+      QJsonObject taskData;
+
+      taskData["name"]     = task.name;
+      taskData["count"]    = task.iterationCount;
+      taskData["infinite"] = task.infinite;
+      taskData["interval"] = task.interval;
+      taskData["timeLeft"] = task.timeLeft;
+      array << taskData;
+    }
+    data["tasks"] = array;
   }
-  data["tasks"] = array;
 }

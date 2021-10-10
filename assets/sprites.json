@@ -2205,6 +2205,27 @@
             "width": 110
         }
     },
+    "stairs": {
+        "A": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 150,
+            "offsetX": 0,
+            "offsetY": 0,
+            "repeat": false,
+            "width": 142
+        },
+        "B": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 150,
+            "offsetX": 143,
+            "offsetY": 0,
+            "repeat": false,
+            "width": 142
+        },
+        "defaultSource": "stairs.png"
+    },
     "timberwolf": {
         "cloneOf": "wolf",
         "defaultSource": "critters/timberwolf.png"

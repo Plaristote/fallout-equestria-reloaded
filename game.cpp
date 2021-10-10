@@ -11,6 +11,16 @@
 Game* Game::instance = nullptr;
 const QString nullTargetZone("_load");
 
+bool shouldSaveTasks()
+{
+  return Game::get() && !Game::get()->property("isGameEditor").toBool();
+}
+
+bool shouldSaveVariables()
+{
+  return !Game::get() || !Game::get()->property("isGameEditor").toBool();
+}
+
 Game::Game(QObject *parent) : StorableObject(parent)
 {
   if (instance != nullptr)

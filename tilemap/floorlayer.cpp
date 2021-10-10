@@ -33,8 +33,11 @@ void FloorLayer::load(const QJsonObject& object, const TileMap* parent)
     {
       for (TileLayer* layer : allLayers)
       {
-        if (layer->getTile(x, y) != nullptr)
+        if (layer->getTile(x, y) != nullptr && !layer->getName().startsWith("wall"))
+        {
           tiles[y * size.width() + x] = &dummyTile;
+          break ;
+        }
       }
     }
   }
@@ -42,5 +45,7 @@ void FloorLayer::load(const QJsonObject& object, const TileMap* parent)
 
 void FloorLayer::renderToImage(QImage& image, QPoint)
 {
-  tilemap->renderToImage(image);
+  QPoint floorsOffset(getTileMap()->getTileSize().width() / 2 + 2, getTileMap()->getTileSize().height() * 2 + 2);
+
+  tilemap->renderToImage(image,  this->offset + floorsOffset);
 }

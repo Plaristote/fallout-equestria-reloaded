@@ -1,11 +1,11 @@
 { "columns":4,
  "image":"city-walls.png",
- "imageheight":329,
+ "imageheight":465,
  "imagewidth":292,
  "margin":0,
  "name":"City walls",
  "spacing":1,
- "tilecount":12,
+ "tilecount":16,
  "tiledversion":"1.7.2",
  "tileheight":108,
  "tiles":[
