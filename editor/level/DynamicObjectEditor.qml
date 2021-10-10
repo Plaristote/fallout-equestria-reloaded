@@ -17,6 +17,8 @@ ColumnLayout {
   property bool readOnlyAnimation: false
   property bool readOnlyScript: false
   property bool withFloor: gameController.level.floorCount > 1
+  property bool withOrientation: false
+  property var directions: ["", "left", "up", "right", "down"]
   id: objectEditor
 
   signal requestSpriteView(string group)
@@ -134,6 +136,22 @@ ColumnLayout {
         onCurrentTextChanged: {
           if (!readOnlyAnimation)
             objectEditor.model.setAnimation(currentText);
+        }
+      }
+
+      TerminalLabel { text: "Orientation" }
+      TerminalComboBox {
+        id: orientationInput
+        Layout.fillWidth: true
+        visible: withOrientation
+        model: ["none", "left", "up", "right", "bottom"]
+        currentIndex: {
+          console.log("Updating current index", objectEditor.model.orientation);
+          directions.indexOf(objectEditor.model.orientation)
+        }
+        onCurrentIndexChanged: {
+          console.log("Set orientation on doorway", objectEditor.model, directions[currentIndex]);
+          objectEditor.model.orientation = directions[currentIndex];
         }
       }
     }
