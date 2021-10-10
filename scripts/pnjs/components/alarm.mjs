@@ -45,20 +45,24 @@ export class AlarmComponent {
   
   receiveAlarmSignal(x, y, target, alarmLevel) {
     console.log("Guard", this.model, "received alarm signal", x, y, alarmLevel);
+    this.configureAlarmLevel(target, alarmLevel);
     if (!this.model.fieldOfView.isDetected(target))
     {
       this.model.movementMode = "running";
       this.alarmPosition = { x: x, y: y };
-      if (this.model.hasVariable("alarmLevel"))
-        this.alarmLevel = Math.min(alarmLevel, this.alarmLevel);
-      else
-        this.alarmLevel = alarmLevel;
-      this.targetPath = target ? target.path : level.player.path;
       this.goToAlarmSignal();
       this.model.tasks.addTask("alarmTask", 1500, 0);
     }
     else
       this.onTargetFound();
+  }
+
+  configureAlarmLevel(target, alarmLevel) {
+    if (this.model.hasVariable("alarmLevel"))
+      this.alarmLevel = Math.min(alarmLevel, this.alarmLevel);
+    else
+      this.alarmLevel = alarmLevel;
+    this.targetPath = target ? target.path : level.player.path;
   }
 
   goToAlarmSignal() {
@@ -102,8 +106,11 @@ export class AlarmComponent {
   }
 
   onCharacterDetected(character) {
-    if (character.path === this.targetPath && this.isActive)
+    if (character.path === this.targetPath && this.isActive) {
       this.onTargetFound();
+      return true;
+    }
+    return false;
   }
   
   onTurnStart() {

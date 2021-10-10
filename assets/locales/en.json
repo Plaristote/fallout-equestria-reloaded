@@ -67,6 +67,8 @@
       "dodge": "{{target}} dodged an attack from {{user}}.",
       "critical-failure": "{{user}} critically failed to use {{item}}."
     },
+    "jail-sentence": "You've been sentenced to {{duration}} day(s) in jail.",
+    "jail-sentence": "You've completed your jail sentence.",
     "poison-damage": "You take {{damage}} points of damage from the poisoning.",
     "wont-barter": "This person doesn't want to barter with you.",
     "cannot-sneak": "You cannot sneak in plain sight.",

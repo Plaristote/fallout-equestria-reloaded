@@ -1,11 +1,25 @@
-class Dialog {
+export class GuardDialog {
   constructor(dialog) {
     this.dialog = dialog;
     this.dialog.mood = "angry";
   }
 
+  get npcScript() {
+    return this.dialog.npc.getScriptObject();
+  }
+
+  get jail() {
+    return this.npcScript.jailComponent ? this.npcScript.jailComponent.jail : null;
+  }
+
+  arrestationText() {
+    if (this.jail && this.jail.shouldPlayerBeInJail())
+      return this.dialog.t("back-to-cell");
+    return this.dialog.t("arrest");
+  }
+
   onSurrender() {
-    const alarmedCharacters = this.dialog.npc.parent.objects;
+    const alarmedCharacters = this.npcScript.squad;
     
     for (var i = 0 ; i < alarmedCharacters ; ++i) {
       const character = alarmedCharacters[i].getScriptObject();
@@ -15,13 +29,14 @@ class Dialog {
   }
 
   sendPlayerToJail() {
-    const jail = level.findGroup("police-station.jail");
-    const cell = Math.floor(Math.random() * 101) % Math.max(1, jail.groups.length);
-    
-    if (jail.groups[cell]) {
-      level.moveCharacterToZone(level.player, jail.groups[cell].controlZone);
+    if (this.jail) {
+      this.jail.sendToRandomCell(level.player);
+      this.jail.sentencePlayer(60*60*24*1000);
       level.cameraFocusRequired(level.player);
+      game.appendToConsole(i18n.t("messages.jail-sentence", { duration: 1 }));
     }
+    else
+      console.log("/!\\ cannot send player to cell: jail object not found.");
   }
 
   onFight() {
@@ -37,5 +52,5 @@ class Dialog {
 }
 
 export function create(dialog) {
-  return new Dialog(dialog);
+  return new GuardDialog(dialog);
 }
