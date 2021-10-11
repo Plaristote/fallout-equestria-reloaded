@@ -91,8 +91,7 @@ export class Controller extends CursorController {
 
       this.renderMisc(x, y);
       this.renderObjects[x][y].forEach(this.renderDynamicObject.bind(this));
-      if (this.playerPosition.x === x && this.playerPosition.y === y)
-        this.contextManager.playerRendered = true;
+      this.contextManager.playerRendered = this.playerPosition.x <= x && this.playerPosition.y <= y;
       if (vwall)
         this.renderWall(vwall, x, y);
       if (hwall)

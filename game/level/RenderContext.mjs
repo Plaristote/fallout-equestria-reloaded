@@ -32,13 +32,14 @@ export class RenderContextManager {
   finalize() { this.requireMode(RenderContextMode.Normal); }
 
   requireMode(mode) {
+    if (!this.playerRendered)
+      mode = RenderContextMode.Normal;
     if (mode !== this.mode) {
       this.context.restore();
       switch (mode) {
       case RenderContextMode.Normal:
         break ;
       case RenderContextMode.ClipAroundPlayer:
-        if (!this.playerRendered) { return; }
         startClipAroundPlayer.bind(this.parent)();
         break ;
       }
