@@ -1,4 +1,115 @@
 {
+    "bathroom": {
+        "bathtub1-left": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 77,
+            "offsetX": 81,
+            "offsetY": 22,
+            "repeat": false,
+            "width": 80
+        },
+        "bathtub1-right": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 77,
+            "offsetX": 0,
+            "offsetY": 22,
+            "repeat": false,
+            "width": 80
+        },
+        "bathtub2-left": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 50,
+            "offsetX": 74,
+            "offsetY": 102,
+            "repeat": false,
+            "width": 73
+        },
+        "bathtub2-right": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 50,
+            "offsetX": 0,
+            "offsetY": 102,
+            "repeat": false,
+            "width": 74
+        },
+        "defaultSource": "furnitures/bathroom.png",
+        "sink-bottom-left": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 43,
+            "offsetX": 108,
+            "offsetY": 640,
+            "repeat": false,
+            "width": 33
+        },
+        "sink-bottom-right": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 43,
+            "offsetX": 70,
+            "offsetY": 640,
+            "repeat": false,
+            "width": 33
+        },
+        "sink-up-left": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 43,
+            "offsetX": 36,
+            "offsetY": 640,
+            "repeat": false,
+            "width": 33
+        },
+        "sink-up-right": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 43,
+            "offsetX": 0,
+            "offsetY": 640,
+            "repeat": false,
+            "width": 33
+        },
+        "toilet-bottom-left": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 53,
+            "offsetX": 142,
+            "offsetY": 728,
+            "repeat": false,
+            "width": 42
+        },
+        "toilet-bottom-right": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 53,
+            "offsetX": 91,
+            "offsetY": 731,
+            "repeat": false,
+            "width": 42
+        },
+        "toilet-up-left": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 53,
+            "offsetX": 49,
+            "offsetY": 731,
+            "repeat": false,
+            "width": 42
+        },
+        "toilet-up-right": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 53,
+            "offsetX": 0,
+            "offsetY": 731,
+            "repeat": false,
+            "width": 42
+        }
+    },
     "blood-stain#1": {
         "defaultSource": "blood.png",
         "idle": {
