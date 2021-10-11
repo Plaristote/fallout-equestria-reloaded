@@ -68,6 +68,11 @@ Pane {
           onTextChanged: spriteAnimation.source = text;
         }
 
+        TerminalToolButton {
+          iconName: "open"
+          onClicked: Qt.openUrlExternally(assetPath + 'sprites/' + spriteAnimation.relativeSource)
+        }
+
         TerminalButton {
           text: "Pick"
           onClicked: {
