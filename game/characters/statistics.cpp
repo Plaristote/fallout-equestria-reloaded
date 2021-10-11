@@ -83,6 +83,7 @@ void CharacterStatistics::updateSpriteSheet()
   {
     const Race* raceController = statistics->getRaceController();
     auto* animationLibrary = AnimationLibrary::get();
+    auto  orientationBackup = getOrientation();
 
     if (raceController)
     {
@@ -100,6 +101,7 @@ void CharacterStatistics::updateSpriteSheet()
         setSpriteName(descriptor.base);
       moveTo(getPoint());
       setAnimation("idle");
+      setOrientation(orientationBackup);
     }
   }
 }
