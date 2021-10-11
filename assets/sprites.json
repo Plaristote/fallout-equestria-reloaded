@@ -1474,6 +1474,10 @@
             "width": 49
         }
     },
+    "jail-door": {
+        "cloneOf": "wooden-door",
+        "defaultSource": "cavern/jaildoor.png"
+    },
     "landmine": {
         "defaultSource": "",
         "off": {
