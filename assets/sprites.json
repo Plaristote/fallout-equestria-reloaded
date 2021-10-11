@@ -173,101 +173,47 @@
             "width": 72
         }
     },
-    "cavern-door-left": {
-        "close": {
-            "frameCount": 6,
-            "frameInterval": 100,
-            "height": 108,
-            "offsetX": 0,
-            "offsetY": 218,
-            "repeat": false,
-            "width": 72
-        },
-        "defaultSource": "cavern/door.png",
-        "destroyed": {
+    "caravans": {
+        "1": {
             "frameCount": 1,
             "frameInterval": 0,
-            "height": 108,
+            "height": 110,
             "offsetX": 0,
-            "offsetY": 218,
+            "offsetY": 0,
             "repeat": false,
-            "width": 72
+            "width": 183
         },
-        "idle": {
+        "2": {
             "frameCount": 1,
-            "frameInterval": 10,
-            "height": 108,
-            "offsetX": 0,
-            "offsetY": 327,
+            "frameInterval": 0,
+            "height": 105,
+            "offsetX": 183,
+            "offsetY": 0,
             "repeat": false,
-            "width": 72
+            "width": 154
         },
-        "idle-open": {
-            "frameCount": 1,
-            "frameInterval": 10,
-            "height": 108,
-            "offsetX": 0,
-            "offsetY": 218,
-            "repeat": false,
-            "width": 72
-        },
-        "open": {
-            "frameCount": 6,
-            "frameInterval": 100,
-            "height": 108,
-            "offsetX": 0,
-            "offsetY": 327,
-            "repeat": false,
-            "width": 72
-        }
+        "defaultSource": "furnitures/carts.png"
     },
-    "cavern-door-right": {
-        "close": {
-            "frameCount": 6,
-            "frameInterval": 100,
-            "height": 108,
-            "offsetX": 0,
-            "offsetY": 109,
-            "repeat": false,
-            "width": 72
-        },
-        "defaultSource": "cavern/door.png",
-        "destroyed": {
+    "casino": {
+        "slot-machine": {
             "frameCount": 1,
             "frameInterval": 0,
-            "height": 108,
-            "offsetX": 0,
-            "offsetY": 109,
-            "repeat": false,
-            "width": 72
-        },
-        "idle": {
-            "frameCount": 1,
-            "frameInterval": 10,
-            "height": 108,
+            "height": 37,
             "offsetX": 0,
             "offsetY": 0,
             "repeat": false,
-            "width": 72
+            "source": "furnitures/slot-machine.png",
+            "width": 24
         },
-        "idle-open": {
+        "slot-machine-alt": {
             "frameCount": 1,
-            "frameInterval": 10,
-            "height": 108,
-            "offsetX": 0,
-            "offsetY": 109,
-            "repeat": false,
-            "source": "cavern/door.png",
-            "width": 72
-        },
-        "open": {
-            "frameCount": 6,
-            "frameInterval": 100,
-            "height": 108,
-            "offsetX": 0,
+            "frameInterval": 0,
+            "height": 37,
+            "offsetX": 24,
             "offsetY": 0,
             "repeat": false,
-            "width": 72
+            "source": "furnitures/slot-machine.png",
+            "width": 24
         }
     },
     "cavern-metal-door": {
@@ -300,6 +246,216 @@
             "repeat": false,
             "source": "cavern/metal-door.png",
             "width": 73
+        }
+    },
+    "chairs": {
+        "bar-stool-bottom-left": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 50,
+            "offsetX": 42,
+            "offsetY": 50,
+            "repeat": false,
+            "width": 21
+        },
+        "bar-stool-bottom-right": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 50,
+            "offsetX": 0,
+            "offsetY": 50,
+            "repeat": false,
+            "width": 21
+        },
+        "bar-stool-up-left": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 50,
+            "offsetX": 63,
+            "offsetY": 50,
+            "repeat": false,
+            "width": 21
+        },
+        "bar-stool-up-right": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 50,
+            "offsetX": 22,
+            "offsetY": 50,
+            "repeat": false,
+            "width": 21
+        },
+        "defaultSource": "furnitures/chairs.png",
+        "office-chair-alt-bottom-left": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 42,
+            "offsetX": 85,
+            "offsetY": 176,
+            "repeat": false,
+            "width": 28
+        },
+        "office-chair-alt-bottom-right": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 42,
+            "offsetX": 56,
+            "offsetY": 176,
+            "repeat": false,
+            "width": 28
+        },
+        "office-chair-alt-up-left": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 42,
+            "offsetX": 30,
+            "offsetY": 176,
+            "repeat": false,
+            "width": 28
+        },
+        "office-chair-alt-up-right": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 42,
+            "offsetX": 0,
+            "offsetY": 176,
+            "repeat": false,
+            "width": 28
+        },
+        "office-chair-bottom-left": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 42,
+            "offsetX": 85,
+            "offsetY": 134,
+            "repeat": false,
+            "width": 28
+        },
+        "office-chair-bottom-right": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 42,
+            "offsetX": 56,
+            "offsetY": 134,
+            "repeat": false,
+            "width": 28
+        },
+        "office-chair-up-left": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 42,
+            "offsetX": 28,
+            "offsetY": 134,
+            "repeat": false,
+            "width": 28
+        },
+        "office-chair-up-right": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 42,
+            "offsetX": 0,
+            "offsetY": 134,
+            "repeat": false,
+            "width": 28
+        },
+        "stool-1": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 35,
+            "offsetX": 0,
+            "offsetY": 100,
+            "repeat": false,
+            "width": 18
+        },
+        "stool-2": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 35,
+            "offsetX": 19,
+            "offsetY": 100,
+            "repeat": false,
+            "width": 18
+        },
+        "stool-3": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 35,
+            "offsetX": 38,
+            "offsetY": 100,
+            "repeat": false,
+            "width": 18
+        },
+        "stool-4": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 35,
+            "offsetX": 57,
+            "offsetY": 100,
+            "repeat": false,
+            "width": 18
+        },
+        "stool-5": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 38,
+            "offsetX": 76,
+            "offsetY": 97,
+            "repeat": false,
+            "width": 18
+        },
+        "wooden-chair-alt-bottom-left": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 42,
+            "offsetX": 0,
+            "offsetY": 230,
+            "repeat": false,
+            "width": 27
+        },
+        "wooden-chair-alt-up-right": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 42,
+            "offsetX": 0,
+            "offsetY": 230,
+            "repeat": false,
+            "width": 27
+        },
+        "wooden-chair-bottom-left": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 50,
+            "offsetX": 56,
+            "offsetY": 0,
+            "repeat": false,
+            "width": 27
+        },
+        "wooden-chair-bottom-right": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 50,
+            "offsetX": 0,
+            "offsetY": 0,
+            "repeat": false,
+            "width": 27
+        },
+        "wooden-chair-up-left": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 50,
+            "offsetX": 84,
+            "offsetY": 0,
+            "repeat": false,
+            "width": 27
+        },
+        "wooden-chair-up-right": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 50,
+            "offsetX": 28,
+            "offsetY": 0,
+            "repeat": false,
+            "width": 27
         }
     },
     "diamond-dog": {
