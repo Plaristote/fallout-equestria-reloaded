@@ -16,34 +16,34 @@ CharacterSight::~CharacterSight()
 
 bool CharacterSight::hasLineOfSight(const DynamicObject* other) const
 {
-  return hasSightFrom(other, position);
+  return hasSightFrom(other, getPoint());
 }
 
 bool CharacterSight::hasLineOfSight(DynamicObject *other) const
 {
-  return hasSightFrom(other, position);
+  return hasSightFrom(other, getPoint());
 }
 
-bool CharacterSight::hasSightFrom(const DynamicObject* other, QPoint pos)
+bool CharacterSight::hasSightFrom(const DynamicObject* other, Point pos)
 {
   if (other)
-    return hasSightFrom(other->getPosition(), pos);
+    return hasSightFrom(other->getPoint(), pos);
   return false;
 }
 
-bool CharacterSight::hasLineOfSight(QPoint target) const
+bool CharacterSight::hasLineOfSight(Point target) const
 {
-  return hasSightFrom(target, position);
+  return hasSightFrom(target, getPoint());
 }
 
-bool CharacterSight::hasSightFrom(QPoint target, QPoint pos)
+bool CharacterSight::hasSightFrom(Point target, Point pos)
 {
   auto* level = Game::get()->getLevel();
 
-  if (level)
+  if (target.z == pos.z && level)
   {
-    auto*  grid   = level->getGrid();
-    int    score  = grid->getVisionQuality(pos.x(), pos.y(), target.x(), target.y());
+    auto*  grid   = level->getFloorGrid(target.z);
+    int    score  = grid->getVisionQuality(pos.x, pos.y, target.x, target.y);
 
     return score > 0;
   }

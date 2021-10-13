@@ -69,6 +69,7 @@ Loader {
       width: parent.width
       model: selectedObject
       gameController: root.gameController
+      withCover: true
       onOpenStorageClicked: root.openInventory(selectedObject)
     }
   }
@@ -107,6 +108,7 @@ Loader {
       model: selectedObject
       gameController: root.gameController
       withPathBlocking: true
+      withCover: true
     }
   }
 }

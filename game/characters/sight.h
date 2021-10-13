@@ -16,10 +16,10 @@ public:
 
   Q_INVOKABLE bool  hasLineOfSight(DynamicObject*) const;
   bool              hasLineOfSight(const DynamicObject*) const;
-  bool              hasLineOfSight(QPoint target) const;
+  bool              hasLineOfSight(Point target) const;
 
-  static bool       hasSightFrom(const DynamicObject*, QPoint position);
-  static bool       hasSightFrom(QPoint target, QPoint position);
+  static bool       hasSightFrom(const DynamicObject*, Point position);
+  static bool       hasSightFrom(Point target, Point position);
   float             getDistance(const DynamicObject*) const;
   Q_INVOKABLE float getDistance(DynamicObject* v) const;
   Q_INVOKABLE float getDistance(int x, int y) const { return getDistance(QPoint(x, y)); }

@@ -19,6 +19,7 @@ ColumnLayout {
   property bool withFloor: gameController.level.floorCount > 1
   property bool withOrientation: false
   property bool withPathBlocking: false
+  property bool withCover: false
   property var directions: ["", "left", "up", "right", "down"]
   id: objectEditor
 
@@ -62,6 +63,8 @@ ColumnLayout {
     renderYInput.text        = renderPosition.y;
     nameInput.text           = model.objectName;
     floorInput.text          = model.floor;
+    pathBlockInput.checked   = model.blocksPath;
+    coverInput.text          = model.cover.toString();
   }
 
   GridLayout {
@@ -162,7 +165,14 @@ ColumnLayout {
         visible: withPathBlocking
         Layout.fillWidth: true
         onCheckedChanged: objectEditor.model.blocksPath = checked
-        Component.onCompleted: checked = objectEditor.model.blocksPath
+      }
+
+      TerminalLabel { text: "Cover"; visible: withCover }
+      TerminalField {
+        id: coverInput
+        visible: withCover
+        Layout.fillWidth: true
+        onTextChanged: objectEditor.model.cover = Math.max(0, Math.min(parseInt(text), 100))
       }
     }
 

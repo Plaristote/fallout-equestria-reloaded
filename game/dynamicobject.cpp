@@ -145,6 +145,7 @@ void DynamicObject::load(const QJsonObject& data)
   objectName = data["objectName"].toString();
   nextPosition.setX(data["nextX"].toInt()); nextPosition.setY(data["nextY"].toInt());
   blocksPath = data["blocksPath"].toBool(true);
+  cover = data["cover"].toInt(100);
   emit blocksPathChanged();
   ParentType::load(data);
   taskManager->load(data);
@@ -157,6 +158,8 @@ void DynamicObject::save(QJsonObject& data) const
   data["nextX"] = nextPosition.x(); data["nextY"] = nextPosition.y();
   if (!blocksPath)
     data["blocksPath"] = blocksPath;
+  if (cover != 100)
+    data["cover"] = cover;
   ParentType::save(data);
   taskManager->save(data);
 }
