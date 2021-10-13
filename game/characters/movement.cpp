@@ -54,7 +54,7 @@ void CharacterMovement::moveTo(Point target)
 void CharacterMovement::setMovementMode(const QString& mode)
 {
   movementMode  = mode;
-  movementSpeed = mode == "walking" ? 100 : 170;
+  movementSpeed = mode == "walking" ? 125 : 260;
 }
 
 void CharacterMovement::onIdle()
