@@ -1,6 +1,6 @@
 export function isAvailableFor(characterSheet) {
   if (characterSheet.perks.indexOf("awareness") < 0)
-    return characterSheet.perception > 5 && characterSheet.level > 6;
+    return characterSheet.perception >= 5 && characterSheet.level >= 3;
   return false;
 }
 
