@@ -53,6 +53,7 @@ public:
   Q_INVOKABLE QString getObjectType() const { return metaObject()->className(); }
   Q_INVOKABLE virtual int getZIndex() const { return 1; }
   Q_INVOKABLE virtual bool hasInteractionOverlay() const { return true; }
+  Q_INVOKABLE QString getHint() const;
   virtual int getInteractionDistance() const { return 1; }
   virtual QStringList getAvailableInteractions();
   virtual int getCoverValue() const { return cover; }

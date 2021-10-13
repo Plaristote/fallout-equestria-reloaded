@@ -15,7 +15,7 @@ Canvas {
   property var hoverTile: [];
   property bool hoverTileHintVisible: false
   property QtObject hoveredObject
-  property bool hoveredObjectEnabled: levelController.mouseMode === 2
+  property bool hoveredObjectEnabled: levelController.mouseMode === 1 || levelController.mouseMode === 2
   property alias mouseX: mouseArea.mouseX
   property alias mouseY: mouseArea.mouseY
 

@@ -49,6 +49,13 @@ QString DynamicObject::getBaseName() const
   return QString(objectName).replace(regexp, "");
 }
 
+QString DynamicObject::getHint() const
+{
+  if (script)
+    return script->call("getHint").toString();
+  return QString("");
+}
+
 QStringList DynamicObject::getAvailableInteractions()
 {
   if (script)
