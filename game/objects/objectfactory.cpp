@@ -32,9 +32,11 @@ DynamicObject* ObjectFactory::loadFromJson(const QJsonObject& data) const
   if (constructor != constructors.end())
   {
     DynamicObject* object = constructor.value()(root);
+    auto* level = Game::get()->getLevel();
 
     object->load(data);
-    object->setRenderPosition(object->getSpritePosition()); // isn't this basically self-assign ?
+    if (level)
+      level->setObjectPosition(object, object->getPoint().x, object->getPoint().y, object->getPoint().z);
     root->appendObject(object);
     return object;
   }
