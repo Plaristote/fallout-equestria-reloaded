@@ -58,14 +58,6 @@ void Doorway::updateAccessPath()
 {
   if (hasControlZone())
     toggleZoneBlocked(!opened);
-  else
-  {
-    LevelGrid*              grid = Game::get()->getLevel()->getFloorGrid(getCurrentFloor());
-    LevelGrid::CaseContent* doorwayCase = grid ? grid->getGridCase(getPosition()) : nullptr;
-
-    if (doorwayCase)
-      doorwayCase->cover = opened ? 75 : 100;
-  }
 }
 
 void Doorway::updateAnimation()

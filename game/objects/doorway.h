@@ -27,6 +27,7 @@ public:
   bool isBlockingPath() const { return false; }
   bool triggerInteraction(Character* character, const QString& interactionType) override;
   bool isDestructible() const;
+  int getCoverValue() const override { return opened ? 60 : 100; }
   Q_INVOKABLE bool onGoThrough(Character*);
   Q_INVOKABLE bool canGoThrough(Character*) const;
 
