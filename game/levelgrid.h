@@ -69,6 +69,7 @@ public:
   };
 
   explicit LevelGrid(QObject *parent = nullptr);
+  ~LevelGrid();
 
   void initializeGrid(TileMap*);
   void initializePathfinding();

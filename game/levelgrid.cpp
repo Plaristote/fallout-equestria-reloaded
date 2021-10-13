@@ -128,6 +128,7 @@ void LevelGrid::CaseConnection::disconnect()
 {
   removeFrom(pair.first->connections, this);
   removeFrom(pair.second->connections, this);
+  delete this;
 }
 
 float LevelGrid::CaseConnection::getCost() const
@@ -191,6 +192,12 @@ private:
 
 LevelGrid::LevelGrid(QObject *parent) : QObject(parent)
 {
+}
+
+LevelGrid::~LevelGrid()
+{
+  for (auto& caseContent : grid)
+    caseContent.clearConnections();
 }
 
 void LevelGrid::initializeGrid(TileMap* tilemap_)

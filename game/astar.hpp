@@ -66,6 +66,7 @@ public:
   {
     if (_state == Succeeded)
       FreeSolutionNodes();
+    FreeAllNodes();
   }
 
   void CancelSearch(void)
