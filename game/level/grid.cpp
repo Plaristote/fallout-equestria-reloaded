@@ -215,7 +215,7 @@ void GridComponent::setGridObjectPosition(DynamicObject* object, int x, int y, u
 void GridComponent::setRenderObjectPosition(DynamicObject* object, int x, int y)
 {
   LevelGrid *grid = getFloorGrid(object->getCurrentFloor());
-  QPoint renderPosition = getRenderPositionForTile(x, y);
+  QPoint renderPosition = getRenderPositionForTile(x, y, static_cast<unsigned char>(object->getCurrentFloor()));
 
   if (object->isCharacter())
     renderPosition.ry() -= grid->getTilemap()->getTileSize().height() / 4;
@@ -278,9 +278,10 @@ QJSValue GridComponent::getDynamicObjectsAt(int x, int y, unsigned int floor_) c
   return result;
 }
 
-QPoint GridComponent::getRenderPositionForTile(int x, int y)
+QPoint GridComponent::getRenderPositionForTile(int x, int y, unsigned char z)
 {
-  auto* layer = getTileMap()->getLayer("ground");
+  auto* grid  = z != NULL_FLOOR ? getFloorGrid(z) : getGrid();
+  auto* layer = grid  ? grid->getTilemap()->getLayer("ground") : nullptr;
   auto* tile  = layer ? layer->getTile(x, y) : nullptr;
 
   return tile ? tile->getRenderPosition() : QPoint();

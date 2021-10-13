@@ -44,7 +44,7 @@ public:
   Q_INVOKABLE QPoint     getAdjustedOffsetFor(const DynamicObject*) const;
   Q_INVOKABLE TileLayer* getRoofFor(const DynamicObject*) const;
   Q_INVOKABLE QJSValue   getDynamicObjectsAt(int x, int y, unsigned int floor = NULL_FLOOR) const;
-  Q_INVOKABLE QPoint     getRenderPositionForTile(int x, int y);
+  Q_INVOKABLE QPoint     getRenderPositionForTile(int x, int y, unsigned char z = NULL_FLOOR);
   Q_INVOKABLE float      getDistance(QPoint, QPoint) const;
   Q_INVOKABLE float      getDistance(int ax, int ay, int bx, int by) const { return getDistance(QPoint(ax, ay), QPoint(bx, by)); }
   Q_INVOKABLE int        getVisionQuality(int ax, int ay, int bx, int by) const;

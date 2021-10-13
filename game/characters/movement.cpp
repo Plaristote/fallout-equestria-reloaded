@@ -36,7 +36,7 @@ void CharacterMovement::moveTo(Point target)
   if (originGrid && targetGrid)
   {
     QString animationName;
-    QPoint  renderPosition = level->getRenderPositionForTile(target.x, target.y);
+    QPoint  renderPosition = level->getRenderPositionForTile(target.x, target.y, target.z);
 
     renderPosition.ry() -= targetGrid->getTilemap()->getTileSize().height() / 4;
     lookTo(target.x, target.y);
