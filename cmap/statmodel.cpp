@@ -17,6 +17,7 @@ StatModel::StatModel(QObject *parent) : QObject(parent)
   connect(this, &StatModel::raceChanged,    this, &StatModel::ageClassChanged);
   connect(this, &StatModel::specialChanged, this, &StatModel::updateBaseValues);
   connect(this, &StatModel::traitsChanged,  this, &StatModel::updateBaseValues);
+  connect(this, &StatModel::perksChanged,   this, &StatModel::updateBaseValues);
   connect(this, &StatModel::raceChanged,    this, &StatModel::updateBaseValues);
   connect(this, &StatModel::specialChanged, this, &StatModel::acceptableChanged);
   connect(this, &StatModel::traitsChanged,  this, &StatModel::acceptableChanged);
@@ -318,12 +319,18 @@ void StatModel::updateBaseValues()
   data.gambling     = charisma + 4 * luck;
 
   const auto& allTraits      = Trait::getTraits();
+  const auto& allPerks       = Perk::getPerks();
   auto*       raceController = getRaceController();
 
   for (auto trait : allTraits)
   {
-    if  (traits.contains(trait.name))
+    if (traits.contains(trait.name))
       applyCmapPlugin(this, trait, data);
+  }
+  for (auto perk : allPerks)
+  {
+    for (int i = perks.count(perk.name) ; i > 0 ; --i)
+      applyCmapPlugin(this, perk, data);
   }
   if (raceController)
     applyCmapPlugin(this, *raceController, data);
