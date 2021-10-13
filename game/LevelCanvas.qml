@@ -77,7 +77,7 @@ Canvas {
     function onMouseMoved() {
       const newHoveredTile = controller.getHoveredCase(mouseX - canvas.origin.x, mouseY - canvas.origin.y);
 
-      if (hoverTile[0] !== newHoveredTile[0] || hoverTile[1] !== newHoveredTile[1])
+      if ((!hoverTile && !newHoveredTile) || hoverTile[0] !== newHoveredTile[0] || hoverTile[1] !== newHoveredTile[1])
         hoverTile = newHoveredTile;
       if (hoveredObjectEnabled)
         hoveredObject = levelController.getObjectAt(mouseX - canvas.origin.x, mouseY - canvas.origin.y);
