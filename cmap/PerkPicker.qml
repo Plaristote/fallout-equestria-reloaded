@@ -9,14 +9,15 @@ UiStyle.CustomDialog {
   property QtObject characterSheet
   property var perkList: characterSheet.getAvailablePerks()
   property int currentIndex: 0
+  title: i18n.t("cmap.perk-picker")
   modal: true
   standardButtons: Dialog.Ok | Dialog.Cancel
   anchors.centerIn: parent
-  width: 800
+  width: Math.min(parent.width, 1000)
   height: 600
   onAccepted: {
-    characterSheet.perks.push(perkList[currentIndex]);
-    characterSheet.availablePerks--;
+    characterSheet.togglePerk(perkList[currentIndex], true);
+    perkList = characterSheet.getAvailablePerks();
     if (characterSheet.availablePerks > 0)
       open();
   }
@@ -25,7 +26,7 @@ UiStyle.CustomDialog {
     anchors.fill: parent
     Pane {
       Layout.fillHeight: true
-      Layout.preferredWidth: 230
+      Layout.preferredWidth: 400
       background: UiStyle.TerminalPane {}
       ColumnLayout {
         anchors.fill: parent
@@ -43,7 +44,7 @@ UiStyle.CustomDialog {
           ColumnLayout {
             id: perkColumn
             spacing: 5
-            width: parent.width
+            width: parent.width - 15
 
             Repeater {
               model: root.perkList.length
