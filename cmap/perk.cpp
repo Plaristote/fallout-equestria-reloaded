@@ -25,7 +25,7 @@ QStringList Perk::getAvailablePerks(StatModel* statistics)
     {
       auto& scriptEngine = game->getScriptEngine();
 
-      available = game->scriptCall(callback, QJSValueList() << scriptEngine.newQObject(statistics), "Race::isAvailableFor").toBool();
+      available = game->scriptCall(callback, QJSValueList() << scriptEngine.newQObject(statistics), "Perk::isAvailableFor").toBool();
     }
     if (available)
       results << it->name;

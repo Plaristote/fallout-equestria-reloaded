@@ -238,6 +238,8 @@
       "sequence": "Sequence",
       "healingRate": "Healing rate",
       "criticalChance": "Critical chance",
+      "perkRate": "Perk rate",
+      "skillRate": "Skill rate",
       "smallGuns": "Small guns",
       "bigGuns": "Big guns",
       "energyGuns": "Energy guns",

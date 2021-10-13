@@ -16,7 +16,9 @@ Pane {
     "radiationResistance",
     "sequence",
     "healingRate",
-    "criticalChance"
+    "criticalChance",
+    "skillRate",
+    "perkRate"
   ]
 
   id: root

@@ -25,6 +25,7 @@ Pane {
     anchors.top: descriptionTitle.bottom
     anchors.left: parent.left
     anchors.bottom: parent.bottom
+    width: descriptionPanel.width / 4
     fillMode: Image.PreserveAspectFit
   }
 

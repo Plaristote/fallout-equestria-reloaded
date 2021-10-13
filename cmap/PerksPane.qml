@@ -30,7 +30,7 @@ Pane {
     Repeater {
       model: characterSheet.perks
       delegate: Text {
-        text: i18n.t("cmap." + root.characterSheet.traits[index]); color: "lightgreen"
+        text: i18n.t("cmap." + root.characterSheet.perks[index]); color: "lightgreen"
         font.family: application.consoleFontName
         font.pointSize: 8
         MouseArea { anchors.fill: parent; onClicked: selectProperty(root.characterSheet.perks[index]) }

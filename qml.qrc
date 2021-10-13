@@ -291,5 +291,6 @@
         <file>game/level/TileMap.mjs</file>
         <file>game/level/RenderContext.mjs</file>
         <file>editor/level/ElevatorObjectEditor.qml</file>
+        <file>cmap/PerkPicker.qml</file>
     </qresource>
 </RCC>

@@ -22,6 +22,11 @@ Pane {
   signal accepted()
   signal canceled()
 
+  Component.onCompleted: {
+    if (characterSheet.availablePerks > 0)
+      perkDialog.open()
+  }
+
   BackAction {
     id: cancelAction
     onTriggered: canceled()
@@ -219,6 +224,12 @@ Pane {
   ConfirmDialog {
     id: cancelConfirmDialog
     onAccepted: cancelAction.trigger()
+    anchors.centerIn: parent
+  }
+
+  CMAP.PerkPicker {
+    id: perkDialog
+    characterSheet: root.characterSheet
     anchors.centerIn: parent
   }
 
