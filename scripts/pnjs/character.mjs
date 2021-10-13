@@ -1,10 +1,17 @@
 import {CombatComponent} from "./components/combat.mjs";
+import {awarenessHint} from "../cmap/perks/awareness.mjs";
 
 export class CharacterBehaviour extends CombatComponent {
   constructor(model) {
     super(model);
     this.xpValue = 25;
     this.canPush = true;
+  }
+
+  getHint() {
+    if (game.player.statistics.perks.indexOf("awareness") >= 0)
+      return awarenessHint(this.model);
+    return this.model.statistics.name;
   }
 
   getAvailableInteractions() {
