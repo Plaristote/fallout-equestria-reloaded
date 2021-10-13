@@ -38,7 +38,7 @@ public:
   virtual void setScript(const QString& name);
 
   inline bool isCharacter() const { return getObjectType() == "Character"; }
-  virtual bool isBlockingPath() const { return true; }
+  virtual bool isBlockingPath() const { return blocksPath; }
   inline bool isVisible() const { return visible && !isHidden(); }
   void setVisible(bool value);
 

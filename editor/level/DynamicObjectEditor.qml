@@ -18,6 +18,7 @@ ColumnLayout {
   property bool readOnlyScript: false
   property bool withFloor: gameController.level.floorCount > 1
   property bool withOrientation: false
+  property bool withPathBlocking: false
   property var directions: ["", "left", "up", "right", "down"]
   id: objectEditor
 
@@ -139,7 +140,7 @@ ColumnLayout {
         }
       }
 
-      TerminalLabel { text: "Orientation" }
+      TerminalLabel { text: "Orientation"; visible: withOrientation }
       TerminalComboBox {
         id: orientationInput
         Layout.fillWidth: true
@@ -153,6 +154,15 @@ ColumnLayout {
           console.log("Set orientation on doorway", objectEditor.model, directions[currentIndex]);
           objectEditor.model.orientation = directions[currentIndex];
         }
+      }
+
+      TerminalLabel { text: "Blocks path"; visible: withPathBlocking }
+      TerminalCheckBox {
+        id: pathBlockInput
+        visible: withPathBlocking
+        Layout.fillWidth: true
+        onCheckedChanged: objectEditor.model.blocksPath = checked
+        Component.onCompleted: checked = objectEditor.model.blocksPath
       }
     }
 

@@ -106,6 +106,7 @@ Loader {
       width: parent.width
       model: selectedObject
       gameController: root.gameController
+      withPathBlocking: true
     }
   }
 }

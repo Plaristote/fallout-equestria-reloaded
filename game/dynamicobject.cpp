@@ -155,7 +155,8 @@ void DynamicObject::save(QJsonObject& data) const
 {
   data["objectName"] = objectName;
   data["nextX"] = nextPosition.x(); data["nextY"] = nextPosition.y();
-  data["blocksPath"] = blocksPath;
+  if (!blocksPath)
+    data["blocksPath"] = blocksPath;
   ParentType::save(data);
   taskManager->save(data);
 }
