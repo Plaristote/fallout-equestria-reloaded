@@ -1,5 +1,6 @@
 function soonerFirst(a, b) { return a.nextTrigger < b.nextTrigger ? -1 : 1; }
 function latestFirst(a, b) { return a.nextTrigger > b.nextTrigger ? -1 : 1; }
+function randomInterval() { return Math.ceil(Math.random() * 3000); }
 
 export class RoutineComponent {
   constructor(parent, routine) {
@@ -8,9 +9,9 @@ export class RoutineComponent {
     this.routine = routine;
     this.parent.updateRoutine = this.updateRoutine.bind(this);
     if (!this.model.tasks.hasTask("updateRoutine"))
-      this.model.tasks.addTask("updateRoutine", Math.ceil(Math.random() * 3000), 1);
+      this.model.tasks.addTask("updateRoutine", randomInterval(), 1);
   }
-  
+
   getRoutines() {
     const options = [];
 
@@ -21,7 +22,7 @@ export class RoutineComponent {
     }
     return options;
   }
-  
+
   getCurrentRoutine() {
     const options = this.getRoutines().sort(latestFirst);
     return options[0].routine;

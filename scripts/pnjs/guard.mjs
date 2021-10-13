@@ -1,6 +1,6 @@
 import {CharacterBehaviour} from "./character.mjs";
 import {AlarmComponent} from "./components/alarm.mjs";
-import {JailComponent} from "../behaviour/sample-city/jail.mjs";
+import {JailComponent} from "../behaviour/jail.mjs";
 
 export class GuardBehaviour extends CharacterBehaviour {
   constructor(model) {
