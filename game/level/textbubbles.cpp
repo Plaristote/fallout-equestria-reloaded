@@ -18,7 +18,7 @@ void TextBubblesComponent::update(qint64 delta)
     else
     {
       it = textBubbles.erase(it);
-      delete textBubble;
+      textBubble->deleteLater();
     }
   }
   if (oldLength != textBubbles.size())
