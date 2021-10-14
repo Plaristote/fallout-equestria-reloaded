@@ -294,7 +294,7 @@ void LevelTask::combatTask(qint64 delta)
 
 void LevelTask::onCombatChanged()
 {
-  for (auto* object : qAsConst(objects))
+  for (auto* object : allDynamicObjects())
   {
     if (object->isCharacter())
     {
@@ -310,7 +310,7 @@ void LevelTask::onCombatChanged()
 
 void LevelTask::finalizeRound()
 {
-  for (DynamicObject* object : qAsConst(objects))
+  for (DynamicObject* object : allDynamicObjects())
   {
     Character* asCharacter = reinterpret_cast<Character*>(object);
 
@@ -322,11 +322,11 @@ void LevelTask::finalizeRound()
       asCharacter->getFieldOfView()->update(WORLDTIME_TURN_DURATION);
       qDebug() << "-> Enemy count" << asCharacter->getFieldOfView()->GetDetectedEnemies().length();
     }
-    for (ObjectGroup* group : allObjectGroups())
-      group->getTaskManager()->update(WORLDTIME_TURN_DURATION);
-    taskRunner->update(WORLDTIME_TURN_DURATION);
-    Game::get()->getTaskManager()->update(WORLDTIME_TURN_DURATION);
   }
+  for (ObjectGroup* group : allObjectGroups())
+    group->getTaskManager()->update(WORLDTIME_TURN_DURATION);
+  taskRunner->update(WORLDTIME_TURN_DURATION);
+  Game::get()->getTaskManager()->update(WORLDTIME_TURN_DURATION);
   ParentType::finalizeRound();
 }
 
