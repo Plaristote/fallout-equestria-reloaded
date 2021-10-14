@@ -133,8 +133,17 @@ void GridComponent::onCharacterDied(Character*)
 
 void GridComponent::setCharacterPosition(Character* character, int x, int y, unsigned char objectFloor)
 {
-  character->rcurrentPath().clear();
-  setObjectPosition(character, x, y, objectFloor);
+  LevelGrid* grid;
+
+  if (objectFloor == NULL_FLOOR)
+    objectFloor = static_cast<unsigned char>(character->getCurrentFloor());
+  grid = getFloorGrid(objectFloor);
+  if (grid)
+  {
+    character->rcurrentPath().clear();
+    setObjectPosition(character, x, y, objectFloor);
+    grid->triggerZone(character, x, y);
+  }
 }
 
 TileZone* GridComponent::getDefaultEntryZone() const
