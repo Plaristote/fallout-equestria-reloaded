@@ -51,7 +51,7 @@ QString DynamicObject::getBaseName() const
 
 QString DynamicObject::getHint() const
 {
-  if (script)
+  if (script && script->hasMethod("getHint"))
     return script->call("getHint").toString();
   return QString("");
 }
