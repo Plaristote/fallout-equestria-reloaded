@@ -8,6 +8,7 @@
 #include <QSharedPointer>
 
 class QSoundEffect;
+class DynamicObject;
 
 class SoundManager : public QObject
 {
@@ -19,6 +20,7 @@ public:
   void update();
 
   Q_INVOKABLE void play(const QString&, qreal volume = 1.f);
+  Q_INVOKABLE void play(const DynamicObject*, const QString&, qreal volume = 1.f);
 
 private:
   QMap<QString, QUrl> soundLibrary;

@@ -62,6 +62,7 @@ public:
 
   Q_INVOKABLE virtual bool triggerInteraction(Character*, const QString& interactionType);
   Q_INVOKABLE virtual bool triggerSkillUse(Character* user, const QString& skillName);
+  Q_INVOKABLE void playSound(const QString&, qreal volume = 1.f) const;
 
 signals:
   void objectNameChanged();

@@ -95,11 +95,9 @@ bool Doorway::onGoThrough(Character* character)
 {
   if (!opened && canGoThrough(character))
   {
-    auto* level = Game::get()->getLevel();
-
     character->useActionPoints(2, "doorway");
     opened = true;
-    level->getSoundManager()->play(openSound);
+    playSound(openSound);
     emit openedChanged();
     return true;
   }
@@ -152,7 +150,7 @@ bool Doorway::onUse(Character* character)
   {
     if (character == level->getPlayer())
       game->appendToConsole(I18n::get()->t("messages.door-is-locked"));
-    level->getSoundManager()->play(lockedSound);
+    playSound(lockedSound);
     return false;
   }
   if (opened)
@@ -160,19 +158,19 @@ bool Doorway::onUse(Character* character)
     if (!grid->isOccupied(position.x(), position.y()))
     {
       opened = false;
-      level->getSoundManager()->play(closeSound);
+      playSound(closeSound);
       emit openedChanged();
       return true;
     }
     else if (character == level->getPlayer())
       game->appendToConsole(I18n::get()->t("messages.door-is-blocked"));
-    level->getSoundManager()->play(lockedSound);
+    playSound(lockedSound);
     return false;
   }
   else
   {
     opened = true;
-    level->getSoundManager()->play(openSound);
+    playSound(openSound);
   }
   emit openedChanged();
   return true;

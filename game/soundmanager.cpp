@@ -1,9 +1,12 @@
 #include "soundmanager.h"
 #include "globals.h"
+#include "game.h"
 #include <QFile>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QSoundEffect>
+#include <QSettings>
+#include <cmath>
 
 SoundManager::SoundManager(QObject *parent) : QObject(parent)
 {
@@ -37,12 +40,28 @@ void SoundManager::play(const QString& name, qreal volume)
 {
   if (soundLibrary.contains(name))
   {
+    auto volumeLevel = QSettings().value("audio/volume", 100).toInt();
     auto sound = QSharedPointer<QSoundEffect>(new QSoundEffect);
 
     sound->setSource(soundLibrary[name]);
     sound->setLoopCount(1);
-    sound->setVolume(volume);
+    sound->setVolume(volume * volumeLevel / 100);
     sound->play();
     sounds.push_back(sound);
+  }
+}
+
+void SoundManager::play(const DynamicObject* object, const QString& name, qreal volume)
+{
+  const Character* player = Game::get()->getPlayer();
+
+  if (player->getCurrentFloor() == object->getCurrentFloor())
+  {
+    const float distance = player->getDistance(object);
+    const int   factor   = static_cast<int>(std::floor(distance)) / 6;
+
+    if (factor > 1)
+      volume /= factor;
+    play(name, volume);
   }
 }
