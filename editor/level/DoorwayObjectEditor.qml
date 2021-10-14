@@ -9,6 +9,7 @@ import Game 1.0
 DynamicObjectEditor {
   id: doorwayEditor
   withOrientation: true
+  withCover: true
   readOnlyAnimation: true
 
   fields: [
