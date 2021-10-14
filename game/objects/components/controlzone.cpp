@@ -11,6 +11,8 @@ ControlZoneComponent::ControlZoneComponent(QObject *parent) : ParentType(parent)
   connect(this, &ControlZoneComponent::controlZoneRemoved, this, &ControlZoneComponent::stopListeningControlZone);
   connect(this, &ControlZoneComponent::controlZoneRemoved, this, &ControlZoneComponent::controlZoneChanged);
   connect(this, &ControlZoneComponent::zoneBlockedChanged, this, &ControlZoneComponent::updateZoneBlock);
+  connect(this, &ControlZoneComponent::zoneBlockedChanged, this, &ControlZoneComponent::updateCover);
+  connect(this, &GridObjectComponent::coverChanged,        this, &ControlZoneComponent::updateCover);
 }
 
 TileZone* ControlZoneComponent::addControlZone()
@@ -94,8 +96,25 @@ void ControlZoneComponent::updateZoneBlock()
     controlZone->setAccessBlocked(zoneBlocked);
 }
 
+void ControlZoneComponent::updateCover()
+{
+  if (controlZone && Game::get()->getLevel())
+  {
+    LevelGrid* grid = Game::get()->getLevel()->getFloorGrid(getCurrentFloor());
+
+    for (QPoint position : controlZone->getPositions())
+    {
+      auto* gridCase = grid->getGridCase(position + controlZone->getOffset());
+
+      if (gridCase)
+        gridCase->cover = zoneBlocked ? static_cast<char>(getCoverValue()) : 0;
+    }
+  }
+}
+
 void ControlZoneComponent::load(const QJsonObject& data)
 {
+  ParentType::load(data);
   if (data["zone"].isArray())
   {
     if (!controlZone)
@@ -115,7 +134,6 @@ void ControlZoneComponent::load(const QJsonObject& data)
     emit zoneBlockedChanged();
     emit controlZoneAdded(controlZone);
   }
-  ParentType::load(data);
 }
 
 void ControlZoneComponent::save(QJsonObject& data) const

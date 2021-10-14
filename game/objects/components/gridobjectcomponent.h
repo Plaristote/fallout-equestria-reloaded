@@ -13,6 +13,7 @@ class GridObjectComponent : public ScriptableComponent
 
   Q_PROPERTY(QPoint position READ getPosition WRITE setPosition NOTIFY positionChanged)
   Q_PROPERTY(unsigned int floor READ getCurrentFloor WRITE setCurrentFloor NOTIFY floorChanged)
+  Q_PROPERTY(int cover MEMBER cover NOTIFY coverChanged)
 public:
   explicit GridObjectComponent(QObject *parent = nullptr);
 
@@ -21,6 +22,7 @@ public:
   virtual void   setPosition(QPoint value) { position = value; emit positionChanged(); }
   unsigned int   getCurrentFloor() const { return floor; }
   virtual void   setCurrentFloor(unsigned int value) { floor = static_cast<unsigned short>(value); emit floorChanged(); }
+  virtual int    getCoverValue() const { return cover; }
 
   void load(const QJsonObject&);
   void save(QJsonObject&) const;
@@ -28,10 +30,12 @@ public:
 signals:
   void positionChanged();
   void floorChanged();
+  void coverChanged();
 
 protected:
   QPoint        position;
   unsigned char floor = 0;
+  char          cover = 100;
 };
 
 #endif // GRIDOBJECTCOMPONENT_H

@@ -26,7 +26,6 @@ class DynamicObject : public LightSourceComponent
   Q_PROPERTY(bool isVisible READ isVisible NOTIFY visibilityChanged)
   Q_PROPERTY(QPoint spriteOffset READ getSpriteOffset WRITE setSpriteOffset NOTIFY spritePositionChanged)
   Q_PROPERTY(ObjectGroup* parent READ getGroup NOTIFY parentChanged)
-  Q_PROPERTY(int cover MEMBER cover NOTIFY coverChanged)
 
 public:
   explicit DynamicObject(QObject *parent = nullptr);
@@ -56,7 +55,6 @@ public:
   Q_INVOKABLE QString getHint() const;
   virtual int getInteractionDistance() const { return 1; }
   virtual QStringList getAvailableInteractions();
-  virtual int getCoverValue() const { return cover; }
   QPoint getSpriteOffset() const;
   void   setSpriteOffset(QPoint);
 
@@ -84,7 +82,6 @@ protected:
 //private:
   QString objectName;
   bool visible = true;
-  int cover = 100;
   QPoint nextPosition;
 };
 

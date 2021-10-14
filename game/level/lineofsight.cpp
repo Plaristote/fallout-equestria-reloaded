@@ -80,7 +80,7 @@ static QPair<char, char> getCoverThroughCase(const LevelGrid::CaseContent* gridC
 
 static bool ignoreCover(int fromX, int fromY, int caseX, int caseY)
 {
-  return std::abs(fromX - caseX) <= 1 || std::abs(fromY - caseY) <= 1;
+  return std::abs(fromX - caseX) <= 1 && std::abs(fromY - caseY) <= 1;
 }
 
 int LevelGrid::getVisionQuality(int fromX, int fromY, int toX, int toY)
@@ -122,5 +122,5 @@ int LevelGrid::getVisionQuality(int fromX, int fromY, int toX, int toY)
       }
     }
   }
-  return std::max(0, 100 - cover - obstacleCount);
+  return std::max(0, 100 - (cover + obstacleCount));
 }

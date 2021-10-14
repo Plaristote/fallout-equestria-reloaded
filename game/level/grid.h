@@ -28,7 +28,7 @@ public:
   DynamicObject*             getOccupantAt(QPoint, unsigned char floor);
   const QVector<LevelGrid*>& getFloors() const { return floors; }
   LevelGrid*                 getFloorGrid(unsigned char i) const { return i < floors.size() ? floors.at(i) : nullptr; }
-  LevelGrid*                 getFloorGrid(unsigned int i) const { return getFloorGrid(static_cast<unsigned char>(i)); }
+  Q_INVOKABLE LevelGrid*     getFloorGrid(unsigned int i) const { return getFloorGrid(static_cast<unsigned char>(i)); }
   TileZone*                  getDefaultEntryZone() const;
 
   void             load(const QJsonObject&);

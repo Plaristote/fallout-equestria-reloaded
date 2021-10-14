@@ -18,7 +18,9 @@ Doorway::Doorway(QObject* parent) : DynamicObject(parent)
 
 int Doorway::getCoverValue() const
 {
-  return opened ? cover / 2 : cover;
+  int base = DynamicObject::getCoverValue();
+
+  return opened ? base / 2 : base;
 }
 
 void Doorway::removeTileConnections()

@@ -472,6 +472,17 @@ int LevelGrid::getCaseFlags(int x, int y) const
   return flag;
 }
 
+int LevelGrid::getCoverValue(int x, int y) const
+{
+  int position = y * size.width() + x;
+  const CaseContent* gridCase;
+
+  if (position >= grid.count() || position < 0)
+    return 0;
+  gridCase = &(grid[position]);
+  return gridCase->cover;
+}
+
 void LevelGrid::setCaseOccupant(CaseContent& _case, DynamicObject* occupant)
 {
   if (occupant && occupant->isBlockingPath())
