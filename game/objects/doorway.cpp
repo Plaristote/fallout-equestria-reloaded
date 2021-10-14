@@ -16,6 +16,11 @@ Doorway::Doorway(QObject* parent) : DynamicObject(parent)
   tileConnections.reserve(8);
 }
 
+int Doorway::getCoverValue() const
+{
+  return opened ? 60 : 100;
+}
+
 void Doorway::removeTileConnections()
 {
   for (void* caseContent : qAsConst(tileConnections))
@@ -58,6 +63,14 @@ void Doorway::updateAccessPath()
 {
   if (hasControlZone())
     toggleZoneBlocked(!opened);
+  else
+  {
+    LevelGrid*              grid = Game::get()->getLevel()->getFloorGrid(getCurrentFloor());
+    LevelGrid::CaseContent* doorwayCase = grid ? grid->getGridCase(getPosition()) : nullptr;
+
+    if (doorwayCase)
+      doorwayCase->cover = static_cast<char>(getCoverValue());
+  }
 }
 
 void Doorway::updateAnimation()
