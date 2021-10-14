@@ -7,6 +7,7 @@ CharacterSight::CharacterSight(QObject *parent) : ParentType(parent)
   fieldOfView = new FieldOfView(reinterpret_cast<Character&>(*this));
   connect(this, &CharacterDiplomacy::diplomacyUpdated, this, &CharacterSight::refreshFieldOfView);
   connect(fieldOfView, &FieldOfView::characterDetected, this, &CharacterSight::onCharacterDetected, Qt::QueuedConnection);
+  connect(fieldOfView, &FieldOfView::refreshed, this, &CharacterSight::onRefreshed);
 }
 
 CharacterSight::~CharacterSight()
@@ -76,6 +77,12 @@ void CharacterSight::refreshFieldOfView()
     fieldOfView->reset();
     fieldOfView->runTask();
   }
+}
+
+void CharacterSight::onRefreshed()
+{
+  if (script && script->hasMethod("onObservationTriggered"))
+    script->call("onObservationTriggered");
 }
 
 void CharacterSight::onCharacterDetected(Character* character)

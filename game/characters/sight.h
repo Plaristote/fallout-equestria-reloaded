@@ -28,6 +28,7 @@ public:
 
 private slots:
   void refreshFieldOfView();
+  void onRefreshed();
   void onCharacterDetected(Character*);
 
 protected:
