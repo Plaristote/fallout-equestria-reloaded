@@ -31,7 +31,8 @@ export class Controller extends CursorController {
     this.renderRoofs();
     this.contextManager.finalize();
     this.renderVisualEffects();
-    //this.eachCase(this.renderInfoBoxes.bind(this));
+    if (this.level.debugMode)
+      this.eachCase(this.renderInfoBoxes.bind(this));
     super.render();
     this.frameCount++;
   }

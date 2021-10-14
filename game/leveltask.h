@@ -28,6 +28,7 @@ class LevelTask : public CombatComponent
   Q_PROPERTY(bool       paused  MEMBER paused NOTIFY pausedChanged)
   Q_PROPERTY(SoundManager* sounds READ getSoundManager CONSTANT)
   Q_PROPERTY(TutorialComponent* tutorial MEMBER tutorial NOTIFY tutorialChanged)
+  Q_PROPERTY(bool debugMode MEMBER debugMode NOTIFY debugModeChanged)
   Q_PROPERTY(bool persistent MEMBER persistent NOTIFY persistentChanged)
 public:  
   explicit LevelTask(QObject *parent = nullptr);
@@ -64,6 +65,7 @@ public:
 signals:
   void updated();
   void pausedChanged();
+  void debugModeChanged();
   void objectsChanged();
   void tutorialChanged();
   void persistentChanged();
@@ -97,6 +99,7 @@ protected:
   bool               paused = true;
   bool               initialized = false;
   bool               persistent = true;
+  bool               debugMode = false;
 };
 
 #endif // LEVELTASK_H
