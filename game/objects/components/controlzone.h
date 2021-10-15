@@ -40,6 +40,7 @@ private slots:
   void onZoneExited(DynamicObject*, TileZone*);
   void onPositionChanged();
   void updateZoneBlock();
+  void updateCover();
 
 private:
   TileZone* controlZone = nullptr;
