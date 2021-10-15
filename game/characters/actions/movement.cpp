@@ -26,9 +26,44 @@ void MovementAction::update()
   }
 }
 
+int MovementAction::pathApCost(const QList<Point>& path) const
+{
+  int ap = 0;
+  auto lastFloor = static_cast<unsigned char>(character->getCurrentFloor());
+
+  for (const Point& point : path)
+  {
+    ap += (point.z == lastFloor ? 1 : 3);
+    lastFloor = point.z;
+  }
+  return ap;
+}
+
 int MovementAction::getApCost() const
 {
-  return character->getCurrentPath().size();
+  return pathApCost(character->getCurrentPath());
+}
+
+bool MovementAction::canMakeNextMovement() const
+{
+  if (character->getCurrentPath().length() > 0)
+  {
+    auto*  level        = Game::get()->getLevel();
+
+    if (level->isInCombat(character))
+    {
+      Point  nextPosition = character->rcurrentPath().front();
+      auto*  grid         = level->getFloorGrid(character->getCurrentFloor());
+      auto*  currentCase  = grid->getGridCase(character->getPoint());
+      int    ap = 1;
+
+      if (currentCase->position.z != nextPosition.z)
+        ap = 3;
+      return character->getActionPoints() >= ap;
+    }
+    return true;
+  }
+  return false;
 }
 
 void MovementAction::triggerNextMovement()

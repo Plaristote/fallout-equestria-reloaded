@@ -19,6 +19,8 @@ public:
 protected:
   virtual void triggerNextMovement();
   virtual void onMovementFinished();
+  int pathApCost(const QList<Point>&) const;
+  bool canMakeNextMovement() const;
 
   Point target;
 private:
