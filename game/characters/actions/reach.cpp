@@ -2,7 +2,7 @@
 #include "game.h"
 #include <cmath>
 
-static int rateCase(Game* game, QJSValue callback, Point position)
+static int rateCase(Game* game, QJSValue callback, const Point position)
 {
   return game->scriptCall(callback, QJSValueList() << position.x << position.y << static_cast<int>(position.z), "ReachAction").toInt();
 }
@@ -59,7 +59,13 @@ QVector<Point> ReachAction::getCandidates(int caseDistance) const
   }
   else
     compare = std::bind(&candidateCompare, character, std::placeholders::_1, std::placeholders::_2);
-  std::sort(candidates.begin(), candidates.end(), compare);
+  // Long story short: using std::sort with scriptedCandidateCompare ends up corrupting memory.
+  // for some weird ass reason, this doesn't happen with std::stable_sort. What the fuck.
+  // It is quite possible that different implementations of sort/stable_sort will exhibit different behaviours
+  // in that regard. The vector returned by this function will probably cause issues on platforms other than Linux.
+  std::stable_sort(candidates.begin(), candidates.end(), compare);
+  if (candidates.size() > 0)
+    qDebug() << "-> " << candidates.begin()->x;
   return candidates;
 }
 
