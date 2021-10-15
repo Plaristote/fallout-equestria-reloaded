@@ -299,6 +299,7 @@ void StatModel::updateBaseValues()
   data.poisonResistance    = endurance * 5;
   data.radiationResistance = (endurance - 1) * 2;
   data.skillRate           = 5 + intelligence * 2;
+  data.sequence            = 2 * perception;
 
   data.smallGuns    = 5 + 4 * agility;
   data.bigGuns      = strength + 2 * agility;

@@ -39,13 +39,18 @@ Row {
         hoverEnabled: true
       }
 
-      CustomLabel {
-        text: character.statistics.name
+      Column {
         visible: mouseArea.containsMouse
         anchors {
           bottom: parent.top
           bottomMargin: 10
           horizontalCenter: parent.horizontalCenter
+        }
+        CustomLabel {
+          text: character.statistics.name
+        }
+        CustomLabel {
+          text:  `Sequence: ${character.statistics.sequence}`
         }
       }
     }

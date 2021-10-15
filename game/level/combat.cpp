@@ -120,7 +120,7 @@ void CombatComponent::sortCombattants()
 {
   std::sort(combattants.begin(), combattants.end(), [](Character* a, Character* b) -> bool
   {
-    return a->getStatistics()->get_sequence() < b->getStatistics()->get_sequence();
+    return a->getStatistics()->get_sequence() > b->getStatistics()->get_sequence();
   });
 }
 
