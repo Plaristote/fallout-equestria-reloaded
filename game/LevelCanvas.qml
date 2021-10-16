@@ -118,6 +118,13 @@ Canvas {
     }
   }
 
+  Text {
+    anchors.top: parent.top; anchors.left: parent.left
+    color: "white"
+    text: hoverTile !== null ? hoverTile[0] + '/' + hoverTile[1] : ''
+    visible: levelController.debugMode
+  }
+
   function initializeRenderer() {
     controller = new LevelRender.Controller(canvas, {
       level: levelController,
