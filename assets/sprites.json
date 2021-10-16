@@ -1066,6 +1066,54 @@
             "width": 85
         }
     },
+    "gem-ore": {
+        "blue": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 48,
+            "offsetX": 288,
+            "offsetY": 48,
+            "repeat": false,
+            "width": 48
+        },
+        "defaultSource": "cavern/crystals.png",
+        "purple": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 48,
+            "offsetX": 240,
+            "offsetY": 48,
+            "repeat": false,
+            "width": 48
+        },
+        "red": {
+            "frameCount": 1,
+            "frameInterval": 250,
+            "height": 48,
+            "offsetX": 144,
+            "offsetY": 48,
+            "repeat": false,
+            "width": 48
+        },
+        "rock": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 48,
+            "offsetX": 528,
+            "offsetY": 48,
+            "repeat": false,
+            "width": 48
+        },
+        "silver": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 48,
+            "offsetX": 0,
+            "offsetY": 48,
+            "repeat": false,
+            "width": 48
+        }
+    },
     "giant-rat": {
         "cloneOf": "griffon",
         "defaultSource": "critters/giant-mutated-rat.png"
@@ -1472,11 +1520,124 @@
             "repeat": false,
             "source": "items/stable-suit.png",
             "width": 49
+        },
+        "surgeon-coat": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 33,
+            "offsetX": 0,
+            "offsetY": 0,
+            "repeat": false,
+            "source": "items/metal-armor.png",
+            "width": 49
+        },
+        "tuxedo": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 33,
+            "offsetX": 0,
+            "offsetY": 0,
+            "repeat": false,
+            "source": "items/metal-armor.png",
+            "width": 49
         }
     },
     "jail-door": {
         "cloneOf": "wooden-door",
         "defaultSource": "cavern/jaildoor.png"
+    },
+    "kitchen": {
+        "defaultSource": "furnitures/kitchen.png",
+        "fireplace-left": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 58,
+            "offsetX": 103,
+            "offsetY": 150,
+            "repeat": false,
+            "width": 44
+        },
+        "fireplace-right": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 58,
+            "offsetX": 55,
+            "offsetY": 150,
+            "repeat": false,
+            "width": 47
+        },
+        "table-2-left": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 45,
+            "offsetX": 0,
+            "offsetY": 58,
+            "repeat": false,
+            "width": 48
+        },
+        "table-2-right": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 45,
+            "offsetX": 49,
+            "offsetY": 58,
+            "repeat": false,
+            "width": 48
+        },
+        "table-3-left": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 46,
+            "offsetX": 0,
+            "offsetY": 102,
+            "repeat": false,
+            "width": 60
+        },
+        "table-3-right": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 46,
+            "offsetX": 61,
+            "offsetY": 102,
+            "repeat": false,
+            "width": 60
+        },
+        "table-left": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 57,
+            "offsetX": 0,
+            "offsetY": 0,
+            "repeat": false,
+            "width": 60
+        },
+        "table-right": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 57,
+            "offsetX": 65,
+            "offsetY": 0,
+            "repeat": false,
+            "width": 60
+        },
+        "well-left": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 98,
+            "offsetX": 65,
+            "offsetY": 210,
+            "repeat": false,
+            "width": 60
+        },
+        "well-right": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 98,
+            "offsetX": 0,
+            "offsetY": 210,
+            "repeat": false,
+            "width": 65
+        }
     },
     "landmine": {
         "defaultSource": "",
@@ -1894,6 +2055,45 @@
             "width": 47
         }
     },
+    "pool-table": {
+        "defaultSource": "furnitures/pool-table.png",
+        "left-empty": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 76,
+            "offsetX": 0,
+            "offsetY": 0,
+            "repeat": false,
+            "width": 106
+        },
+        "left-ingame": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 76,
+            "offsetX": 0,
+            "offsetY": 77,
+            "repeat": false,
+            "width": 106
+        },
+        "right-empty": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 76,
+            "offsetX": 107,
+            "offsetY": 0,
+            "repeat": false,
+            "width": 106
+        },
+        "right-ingame": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 76,
+            "offsetX": 107,
+            "offsetY": 77,
+            "repeat": false,
+            "width": 106
+        }
+    },
     "rat": {
         "damaged-down": {
             "frameCount": 3,
@@ -2153,9 +2353,8 @@
             "frameInterval": 150,
             "height": 40,
             "offsetX": 0,
-            "offsetY": 80,
+            "offsetY": 0,
             "repeat": true,
-            "source": "critters/rats.png",
             "width": 40
         },
         "walking-left": {
@@ -2792,6 +2991,138 @@
             "width": 72
         }
     },
+    "wooden-bed": {
+        "bottom-left": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 66,
+            "offsetX": 0,
+            "offsetY": 0,
+            "repeat": false,
+            "width": 105
+        },
+        "bottom-right": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 66,
+            "offsetX": 106,
+            "offsetY": 0,
+            "repeat": false,
+            "width": 105
+        },
+        "defaultSource": "furnitures/bed.png",
+        "up-left": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 70,
+            "offsetX": 106,
+            "offsetY": 67,
+            "repeat": false,
+            "width": 100
+        },
+        "up-right": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 70,
+            "offsetX": 0,
+            "offsetY": 67,
+            "repeat": false,
+            "width": 105
+        }
+    },
+    "wooden-door": {
+        "close-down": {
+            "frameCount": 6,
+            "frameInterval": 100,
+            "height": 108,
+            "offsetX": 0,
+            "offsetY": 218,
+            "repeat": false,
+            "width": 72
+        },
+        "close-right": {
+            "frameCount": 6,
+            "frameInterval": 100,
+            "height": 108,
+            "offsetX": 0,
+            "offsetY": 109,
+            "repeat": false,
+            "width": 72
+        },
+        "defaultSource": "cavern/door.png",
+        "destroyed-down": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 108,
+            "offsetX": 0,
+            "offsetY": 218,
+            "repeat": false,
+            "width": 72
+        },
+        "destroyed-right": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 108,
+            "offsetX": 0,
+            "offsetY": 109,
+            "repeat": false,
+            "width": 72
+        },
+        "idle-down": {
+            "frameCount": 1,
+            "frameInterval": 10,
+            "height": 108,
+            "offsetX": 0,
+            "offsetY": 327,
+            "repeat": false,
+            "width": 72
+        },
+        "idle-open-down": {
+            "frameCount": 1,
+            "frameInterval": 10,
+            "height": 108,
+            "offsetX": 0,
+            "offsetY": 218,
+            "repeat": false,
+            "width": 72
+        },
+        "idle-open-right": {
+            "frameCount": 1,
+            "frameInterval": 10,
+            "height": 108,
+            "offsetX": 0,
+            "offsetY": 109,
+            "repeat": false,
+            "width": 72
+        },
+        "idle-right": {
+            "frameCount": 1,
+            "frameInterval": 10,
+            "height": 108,
+            "offsetX": 0,
+            "offsetY": 0,
+            "repeat": false,
+            "width": 72
+        },
+        "open-down": {
+            "frameCount": 6,
+            "frameInterval": 100,
+            "height": 108,
+            "offsetX": 0,
+            "offsetY": 327,
+            "repeat": false,
+            "width": 72
+        },
+        "open-right": {
+            "frameCount": 6,
+            "frameInterval": 100,
+            "height": 108,
+            "offsetX": 0,
+            "offsetY": 0,
+            "repeat": false,
+            "width": 72
+        }
+    },
     "wooden-fence-door-left": {
         "close": {
             "frameCount": 8,
@@ -2886,6 +3217,141 @@
             "offsetY": 0,
             "repeat": false,
             "width": 72
+        }
+    },
+    "wooden-library": {
+        "books": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 92,
+            "offsetX": 0,
+            "offsetY": 92,
+            "repeat": false,
+            "width": 94
+        },
+        "books-right": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 92,
+            "offsetX": 94,
+            "offsetY": 92,
+            "repeat": false,
+            "width": 94
+        },
+        "defaultSource": "furnitures/library-large-wood.png",
+        "empty": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 92,
+            "offsetX": 0,
+            "offsetY": 0,
+            "repeat": false,
+            "width": 94
+        },
+        "empty-right": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 92,
+            "offsetX": 94,
+            "offsetY": 0,
+            "repeat": false,
+            "width": 94
+        }
+    },
+    "wooden-shelf": {
+        "defaultSource": "furnitures/shelf.png",
+        "left": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 41,
+            "offsetX": 0,
+            "offsetY": 0,
+            "repeat": false,
+            "width": 56
+        },
+        "right": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 41,
+            "offsetX": 57,
+            "offsetY": 0,
+            "repeat": false,
+            "width": 56
+        }
+    },
+    "wooden-table": {
+        "books": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 79,
+            "offsetX": 0,
+            "offsetY": 238,
+            "repeat": false,
+            "width": 105
+        },
+        "books-alt": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 79,
+            "offsetX": 108,
+            "offsetY": 238,
+            "repeat": false,
+            "width": 105
+        },
+        "boxes": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 79,
+            "offsetX": 0,
+            "offsetY": 80,
+            "repeat": false,
+            "width": 105
+        },
+        "boxes-alt": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 79,
+            "offsetX": 108,
+            "offsetY": 80,
+            "repeat": false,
+            "width": 105
+        },
+        "defaultSource": "furnitures/table-wood.png",
+        "empty": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 79,
+            "offsetX": 0,
+            "offsetY": 0,
+            "repeat": false,
+            "width": 105
+        },
+        "empty-alt": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 79,
+            "offsetX": 108,
+            "offsetY": 0,
+            "repeat": false,
+            "width": 105
+        },
+        "junk": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 79,
+            "offsetX": 0,
+            "offsetY": 159,
+            "repeat": false,
+            "width": 105
+        },
+        "junk-alt": {
+            "frameCount": 1,
+            "frameInterval": 0,
+            "height": 79,
+            "offsetX": 108,
+            "offsetY": 159,
+            "repeat": false,
+            "width": 105
         }
     }
 }
