@@ -36,7 +36,7 @@ public:
   virtual void     registerDynamicObject(DynamicObject*);
   virtual void     unregisterDynamicObject(DynamicObject*);
 
-  void                   setCharacterPosition(Character*, int x, int y, unsigned char floor = NULL_FLOOR);
+  Q_INVOKABLE void       setCharacterPosition(Character*, int x, int y, unsigned char floor = NULL_FLOOR);
   QPoint                 getTilePosition(QPoint position) const;
   Q_INVOKABLE bool       moveCharacterToZone(Character*, const QString& name, unsigned char floor = NULL_FLOOR);
   Q_INVOKABLE bool       moveCharacterToZone(Character*, TileZone* zone);
