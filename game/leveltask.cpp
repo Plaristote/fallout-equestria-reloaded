@@ -61,7 +61,7 @@ void LevelTask::load(const QString& levelName, DataEngine* dataEngine)
   bool        initialized = levelData["init"].toBool(false);
 
   levelData["name"]   = levelName;
-  levelData["script"] = levelName;
+  levelData["script"] = levelName + ".mjs";
   levelData["init"]   = true; // Delay level initialization
   qDebug() << "LevelTask::load" << levelName;
   timeManager = Game::get()->getTimeManager();

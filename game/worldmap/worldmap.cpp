@@ -222,7 +222,6 @@ void WorldMap::getIntoCity(WorldMapCity* city)
 {
   QString levelSource = city->getLevel();
 
-  levelSource.resize(levelSource.length() - 5);
   if (discoveredCities.indexOf(city->getName()) < 0)
   {
     discoveredCities << city->getName();

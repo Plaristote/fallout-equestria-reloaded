@@ -17,15 +17,6 @@ Item {
     });
   }
 
-  onGameControllerChanged: {
-    if (gameController) {
-      if (gameController.level)
-        deferredLevelLoading.running = true;
-    }
-    else
-      deferredGameEnding.running = true;
-  }
-
   // Level control
   Timer {
     id: deferredLevelLoading
@@ -64,15 +55,6 @@ Item {
   }
 
   Timer {
-    id: deferredGameEnding
-    interval: gameController.level ? 3500 : 100
-    onTriggered: {
-      application.popView();
-      gameController.level.paused = true;
-    }
-  }
-
-  Timer {
     id: deferredGameOverScreen
     interval: 1000
     onTriggered: {
@@ -91,6 +73,17 @@ Item {
 
     function onNewGameStarted() {
       deferredCharacterCreate.running = true;
+    }
+
+    function onGameLoaded() {
+      if (gameManager.currentGame.level)
+        deferredLevelLoading.running = true;
+      else
+        deferredWorldmapDisplay.running = true;
+    }
+
+    function onGameOver() {
+      application.popView();
     }
   }
 
