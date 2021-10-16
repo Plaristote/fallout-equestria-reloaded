@@ -1,5 +1,5 @@
 export function isAvailableFor(characterSheet) {
-  if (charaterSheet.level >= 3 && characterSheet.perks.indexOf("fasterHealing") < 0)
+  if (characterSheet.level >= 3 && characterSheet.perks.indexOf("fasterHealing") < 0)
     return characterSheet.endurance >= 6;
   return false;
 }
