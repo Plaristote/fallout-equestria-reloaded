@@ -18,7 +18,7 @@ void QuestManager::addQuest(const QString& name)
   }
 }
 
-Quest* QuestManager::getQuest(const QString& name)
+Quest* QuestManager::getQuest(const QString& name) const
 {
   for (Quest* quest : qAsConst(list))
   {
