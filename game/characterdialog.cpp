@@ -142,9 +142,9 @@ QString CharacterDialog::getNextState(const QString& answer)
   return optionData["state"].toString();
 }
 
-QString CharacterDialog::t(const QString &name)
+QString CharacterDialog::t(const QString &name, const QVariantMap& options)
 {
-  return I18n::get()->t(translationGroup + '.' + name);
+  return I18n::get()->t(translationGroup + '.' + name, options);
 }
 
 QString CharacterDialog::getOptionText(const QString& key)

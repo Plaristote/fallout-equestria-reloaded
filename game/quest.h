@@ -33,7 +33,7 @@ public:
 
   Q_INVOKABLE QVariantList getObjectives() const;
   Q_INVOKABLE QJSValue getScriptObject() const;
-  Q_INVOKABLE QString tr(const QString& key, const QVariantMap& options = {});
+  Q_INVOKABLE QString tr(const QString& key, const QVariantMap& options = {}) const;
   QString getDescription() const;
 
 public slots:

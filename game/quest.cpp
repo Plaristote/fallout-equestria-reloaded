@@ -102,7 +102,7 @@ QString Quest::getDescription() const
   return tr("description");
 }
 
-QString Quest::tr(const QString& key, const QVariantMap& options)
+QString Quest::tr(const QString& key, const QVariantMap& options) const
 {
   return I18n::get()->t("quests." + name + '.' + key, options);
 }

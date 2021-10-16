@@ -37,7 +37,7 @@ public:
   BarterController*   getBarterController() const { return barter; }
   Q_INVOKABLE bool    tryToBarter();
 
-  Q_INVOKABLE QString t(const QString& name);
+  Q_INVOKABLE QString t(const QString& name, const QVariantMap& = {});
 
 signals:
   void stateReferenceChanged();
