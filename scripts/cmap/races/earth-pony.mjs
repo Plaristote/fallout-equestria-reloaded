@@ -21,3 +21,11 @@ export function onToggled(statistics, toggled) {
   statistics.endurance += 1 * modifier;
   statistics.strength  += 1 * modifier;
 }
+
+export function modifyBaseSkill(characterSheet, name, value) {
+  switch (name) {
+  case "outdoorsman":
+    return value + 25;
+  }
+  return value;
+}
