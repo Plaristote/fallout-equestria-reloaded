@@ -162,7 +162,7 @@ export class Controller extends CursorController {
         return true;
       }
     } catch (err) {
-      console.log("LevelRender: cannot render", sprite.getObjectType(), ':', sprite.objectName, ": src=", this.pathPrefix + sprite.spriteSource, ", animation=" + sprite.getAnimation(), "at", offset);
+      console.log("LevelRender: cannot render", sprite.getObjectType(), ':', sprite.objectName, ": src=", this.pathPrefix + sprite.spriteSource, ", animation=" + sprite.getAnimation(), "at", offset, ": ", err);
     }
     return false;
   }
