@@ -21,13 +21,13 @@ Item {
   Shortcut {
     enabled: root.visible && nextButton.visible
     sequence: StandardKey.MoveToNextChar
-    onActivated: currentIndex++
+    onActivated: currentIndex < templates.length - 1 ? currentIndex++ : null
   }
 
   Shortcut {
     enabled: root.visible && previousButton.visible
     sequence: StandardKey.MoveToPreviousChar
-    onActivated: currentIndex--
+    onActivated: currentIndex > 0 ? currentIndex-- : null
   }
 
   Shortcut {
@@ -135,7 +135,7 @@ Item {
     anchors.left: parent.left
     text: i18n.t("tutorial.previous")
     visible: currentIndex > 0
-    onClicked: currentIndex--
+    onClicked: currentIndex > 0 ? currentIndex-- : null
   }
 
   MenuButton {
@@ -144,7 +144,7 @@ Item {
     anchors.right: parent.right
     text: i18n.t("tutorial.next")
     visible: currentIndex < templates.length - 1
-    onClicked: currentIndex++
+    onClicked: currentIndex < templates.length - 1 ? currentIndex++ : null
   }
 
   RowLayout {
