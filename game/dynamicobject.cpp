@@ -58,7 +58,7 @@ QString DynamicObject::getHint() const
 
 QStringList DynamicObject::getAvailableInteractions()
 {
-  if (script)
+  if (script && script->hasMethod("getAvailableInteractions"))
     return script->call("getAvailableInteractions").toVariant().toStringList();
   return QStringList() << "look";
 }

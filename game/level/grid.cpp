@@ -90,6 +90,9 @@ void GridComponent::registerDynamicObject(DynamicObject* object)
     connect(this, &GridComponent::floorChanged, elevator, &Elevator::onLevelFloorChanged);
     elevator->connectCases();
   }
+  objectObservers.insert(object, {
+    connect(object, &DynamicObject::blocksPathChanged, this, std::bind(&GridComponent::onPathBlockedChanged, this, object))
+  });
   ParentType::registerDynamicObject(object);
 }
 
@@ -112,6 +115,8 @@ void GridComponent::unregisterDynamicObject(DynamicObject* object)
     disconnect(this, &GridComponent::floorChanged, elevator, &Elevator::onLevelFloorChanged);
     elevator->disconnectCases();
   }
+  for (auto observer : objectObservers.value(object))
+    disconnect(observer);
   ParentType::unregisterDynamicObject(object);
 }
 
@@ -129,6 +134,20 @@ DynamicObject* GridComponent::getOccupantAt(QPoint casePosition, unsigned char c
 
 void GridComponent::onCharacterDied(Character*)
 {
+}
+
+void GridComponent::onPathBlockedChanged(DynamicObject* object)
+{
+  Point point = object->getPoint();
+  auto* grid = getFloorGrid(point.z);
+
+  if (grid)
+  {
+    if (object->isBlockingPath())
+      grid->insertObject(object, point.x, point.y);
+    else
+      grid->removeObject(object);
+  }
 }
 
 void GridComponent::setCharacterPosition(Character* character, int x, int y, unsigned char objectFloor)

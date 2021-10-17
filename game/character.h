@@ -42,8 +42,7 @@ public:
   bool isBlockingPath() const override { return isAlive(); }
 
   Q_INVOKABLE QJSValue getActions();
-  Q_INVOKABLE bool isAlive() const { return getStatistics()->getHitPoints() > 0; }
-  Q_INVOKABLE bool isUnconscious() const { return unconscious; }
+  bool             isUnconscious() const override { return unconscious; }
   bool             hasInteractionOverlay() const override { return !isAlive(); }
 
   Q_INVOKABLE void  takeDamage(int damage, Character* dealer);

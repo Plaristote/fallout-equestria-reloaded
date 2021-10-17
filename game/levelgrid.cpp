@@ -525,14 +525,11 @@ void LevelGrid::removeObject(DynamicObject* object)
 
 void LevelGrid::extractObject(DynamicObject* object)
 {
-  if (object->isBlockingPath())
-  {
-    QPoint currentPosition = object->getPosition();
-    auto*  oldCase = getGridCase(currentPosition.x(), currentPosition.y());
+  QPoint currentPosition = object->getPosition();
+  auto*  oldCase = getGridCase(currentPosition.x(), currentPosition.y());
 
-    if (oldCase && oldCase->occupant == object)
-      setCaseOccupant(*oldCase, nullptr);
-  }
+  if (oldCase && oldCase->occupant == object)
+    setCaseOccupant(*oldCase, nullptr);
 }
 
 bool LevelGrid::insertObject(DynamicObject* object, int x, int y)

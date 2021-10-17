@@ -61,6 +61,7 @@ signals:
 protected slots:
   virtual void onCharacterDied(Character*);
   void         onRoofVisibilityChanged(TileLayer*);
+  void         onPathBlockedChanged(DynamicObject*);
 
 protected:
   void addCharacterObserver(Character*, QMetaObject::Connection);
@@ -71,6 +72,7 @@ protected:
   LevelGrid* grid = nullptr;
 private:
   QMap<Character*, QVector<QMetaObject::Connection>> characterObservers;
+  QMap<DynamicObject*, QVector<QMetaObject::Connection>> objectObservers;
   unsigned char currentFloor = 0;
   QVector<LevelGrid*> floors;
 };
