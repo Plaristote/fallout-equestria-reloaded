@@ -100,7 +100,10 @@ void CharacterStatistics::updateSpriteSheet()
       else
         setSpriteName(descriptor.base);
       moveTo(getPoint());
-      setAnimation("idle");
+      if (isUnconscious() || !isAlive())
+        setAnimation("dead");
+      else
+        setAnimation("idle");
       setOrientation(orientationBackup);
     }
   }

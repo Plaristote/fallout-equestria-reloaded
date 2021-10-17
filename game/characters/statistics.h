@@ -18,7 +18,7 @@ public:
   void load(const QJsonObject&);
   void save(QJsonObject&) const;
 
-  Q_INVOKABLE bool isAlive() const { return statistics->getHitPoints() > 0; }
+  Q_INVOKABLE bool isAlive() const { return statistics ? statistics->getHitPoints() > 0 : true; }
   virtual bool isUnconscious() const { return isAlive(); }
 
   StatModel* getStatistics() const { return statistics; }

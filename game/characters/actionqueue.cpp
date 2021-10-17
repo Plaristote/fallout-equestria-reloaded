@@ -16,10 +16,8 @@ ActionQueue::ActionQueue(QObject *parent) : QObject(parent), character(reinterpr
 
 ActionQueue::~ActionQueue()
 {
-  for (auto* entry : queue)
-    delete entry;
-  for (auto* entry : stash)
-    delete entry;
+  clearStack();
+  clearStash();
 }
 
 void ActionQueue::update()
@@ -34,6 +32,12 @@ void ActionQueue::runQueue()
 {
   auto* action = queue.first();
 
+  if (character->isUnconscious() || !character->isAlive())
+  {
+    clearStack();
+    emit queueCompleted();
+    return ;
+  }
   resetFlag = false;
   action->update();
   if (!resetFlag)
@@ -53,6 +57,13 @@ void ActionQueue::runQueue()
       break ;
     }
   }
+}
+
+void ActionQueue::clearStack()
+{
+  for (auto* entry : queue)
+    delete entry;
+  queue.clear();
 }
 
 void ActionQueue::clearStash()

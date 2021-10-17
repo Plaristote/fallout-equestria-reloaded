@@ -53,6 +53,7 @@ signals:
   void queueCompleted();
 
 private:
+  void clearStack();
   void clearStash();
   void runQueue();
   void onActionOver();

@@ -21,5 +21,6 @@ void BloodStain::initialize()
 
 void BloodStain::onAnimationEnded()
 {
-  setAnimation("idle");
+  if (getAnimationBaseName() != "idle")
+    setAnimation("idle");
 }
