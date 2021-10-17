@@ -6,6 +6,13 @@ Elevator::Elevator(QObject *parent) : DynamicObject(parent)
   floorA = floorB = NULL_FLOOR;
 }
 
+QStringList Elevator::getAvailableInteractions()
+{
+  if (script && script->hasMethod("getAvailableInteractions"))
+    return script->call("getAvailableInteractions").toVariant().toStringList();
+  return QStringList() << "use" << "look";
+}
+
 void Elevator::setPositionA(QPoint position_, unsigned char floor_)
 {
   disconnectCases();
@@ -64,6 +71,23 @@ void Elevator::onLevelFloorChanged()
     setCurrentFloor(activeFloor);
     setAnimation(activeFloor == floorA ? "A" : "B");
   }
+}
+
+bool Elevator::triggerInteraction(Character* character, const QString& interactionType)
+{
+  bool handled = DynamicObject::triggerInteraction(character, interactionType);
+
+  if (!handled && interactionType == "use")
+  {
+    LevelTask* level = Game::get()->getLevel();
+
+    if (character->getCurrentFloor() == floorA)
+      level->setCharacterPosition(character, positionB.x(), positionB.y(), floorB);
+    else
+      level->setCharacterPosition(character, positionA.x(), positionA.y(), floorA);
+    return true;
+  }
+  return handled;
 }
 
 void Elevator::load(const QJsonObject& data)

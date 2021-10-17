@@ -19,6 +19,7 @@ public:
   void load(const QJsonObject&);
   void save(QJsonObject&) const;
 
+  QStringList getAvailableInteractions() override;
   Q_INVOKABLE void setPositionA(int x, int y, unsigned int z) { setPositionA({x,y}, static_cast<unsigned char>(z)); }
   Q_INVOKABLE void setPositionB(int x, int y, unsigned int z) { setPositionB({x,y}, static_cast<unsigned char>(z)); }
   void setPositionA(QPoint, unsigned char);
@@ -27,6 +28,7 @@ public:
   bool isValid() const { return floorA != NULL_FLOOR && floorB != NULL_FLOOR; }
   void connectCases();
   void disconnectCases();
+  bool triggerInteraction(Character*, const QString& interactionType) override;
 
 signals:
   void elevatorChanged();
