@@ -122,6 +122,10 @@
     "health-potion": "An average quality health potion.",
     "power-armor": "A power armor that the Steel Rangers usually wear. Probably the most protective kind of gear you'll ever find in the wastes. It's pretty damn heavy, but the weight is compensated for by increasing the strength of its wearer, while protecting it of magical radiations."
   },
+  "locations": {
+    "tutorial": "Cavern of Trials",
+    "city-sample": "Sample Town"
+  },
   "quests": {
         "description": "Description",
         "fetchGemstones": {

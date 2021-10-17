@@ -38,7 +38,7 @@ Pane {
             }
             Label {
               height: cityButton.height
-              text: city.name
+              text: i18n.t(`locations.${city.name}`)
               color: "white"
               padding: 5
               background: UiStyle.Label {}

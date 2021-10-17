@@ -3,6 +3,7 @@ import {QuestHelper} from "./helpers.mjs";
 class TutorialQuest extends QuestHelper {
   initialize() {
     console.log("TutorialQuest: on quest start");
+    this.model.location = "tutorial";
   }
 
   getDescription() {

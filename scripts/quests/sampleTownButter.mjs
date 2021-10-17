@@ -1,6 +1,10 @@
 import {QuestHelper} from "./helpers.mjs";
 
-export class Quest extends QuestHelper { 
+export class Quest extends QuestHelper {
+  initialize() {
+    this.model.location = "city-sample";
+  }
+	
   getObjectives() {
     const array = [
       {label: this.tr("find-butter"), success: this.isObjectiveCompleted("butter")}

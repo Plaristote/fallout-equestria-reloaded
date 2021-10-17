@@ -29,6 +29,7 @@ void Quest::load(const QJsonObject& data)
 {
   StorableObject::load(data);
   name = data["name"].toString();
+  location = data["location"].toString();
   completed = data["over"].toBool(false);
   failed = data["failed"].isBool();
   script = new ScriptController(SCRIPTS_PATH + "/quests/" + name + ".mjs");
@@ -41,6 +42,7 @@ QJsonObject Quest::save() const
 
   data.insert("name", name);
   data.insert("over", completed);
+  data.insert("location", location);
   if (failed)
     data.insert("failed", true);
   StorableObject::save(data);
@@ -111,4 +113,21 @@ void Quest::onCompletedChanged()
 {
   if (completed && script && script->hasMethod("onCompleted"))
     script->call("onCompleted");
+}
+
+int Quest::getObjectiveCount() const
+{
+  return getObjectives().size();
+}
+
+int Quest::getCompleteCount() const
+{
+  int count = 0;
+
+  for (auto it : getObjectives())
+  {
+    if (it.toMap()["success"].toBool())
+      ++count;
+  }
+  return count;
 }

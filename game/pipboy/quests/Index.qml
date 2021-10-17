@@ -77,7 +77,7 @@ ColumnLayout {
               switch (column) {
               case 0: return questColumn1;
               case 1: return questColumn2;
-              case 2: return questColumn2;
+              case 2: return questColumn3;
               }
             }
           }
@@ -93,7 +93,15 @@ ColumnLayout {
           Component {
             id: questColumn2
             TerminalLabel {
-              text: "Placeholder"
+              text: i18n.t(`locations.${quest.location}`)
+              color: questColor
+            }
+          }
+
+          Component {
+            id: questColumn3
+            TerminalLabel {
+              text: `${quest.completeCount} / ${quest.objectiveCount}`
               color: questColor
             }
           }

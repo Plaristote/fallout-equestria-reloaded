@@ -2,6 +2,7 @@ import {QuestHelper} from "./helpers.mjs";
 
 class GemstoneQuest extends QuestHelper {
   initialize() {
+    this.model.location = "tutorial";
   }
 
   onCharacterKilled(victim, killer) {
