@@ -97,7 +97,6 @@ export class CombatComponent extends SkillTargetComponent {
   }
 
   onActionQueueCompleted() {
-    console.log("action queue completed", level.combat);
     if (level.combat)
        this.onCombatActionQueueCompleted();
   }

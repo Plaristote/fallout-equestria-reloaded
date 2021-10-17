@@ -1,8 +1,21 @@
 class Dialog {
   constructor(dialog) {
     this.dialog = dialog;
-    this.dialog.mood = "smile";
+    this.dialog.mood = "neutral";
     this.dialog.npc.setVariable("startRoutine", 2);
+  }
+
+  getEntryPoint() {
+    var state = 0;
+    var entryPoints = ["entry", "reentry", "victory"];
+
+    if (this.dialog.npc.hasVariable("entryPoint"))
+      state = this.dialog.npc.getVariable("entryPoint");
+    return entryPoints[state];
+  }
+
+  onEntryPoint() {
+    this.dialog.npc.setVariable("entryPoint", 1);
   }
 
   onHelpAsked() {

@@ -1,14 +1,15 @@
 const tutorialByZone = {
-  tutorialLockpick:     1,
-  tutorialFindStuff:    6,
-  tutorialDynamite:     7,
-  tutorialFieldOfViews: 8,
-  tutorialTraps:        9
+  tutorialLockpick:    2,
+  tutorialFindStuff:   7,
+  tutorialDynamite:    8,
+  tutorialFieldOfView: 9,
+  tutorialTraps:       10
 };
 
 export class Level {
   constructor(model) {
     model.tasks.addTask("onGameStarted", 1000, 1);
+    this.ambiance = "cavern";
   }
 
   onGameStarted() {
@@ -16,8 +17,18 @@ export class Level {
   }
 
   onZoneEntered(zoneName, object) {
-    if (tutorialByZone[zoneName] != undefined)
+    if (tutorialByZone[zoneName] != undefined && object === level.player)
       this.displayTutorialPage(tutorialByZone[zoneName]);
+    if (object === level.player) {
+      switch (zoneName) {
+      case "objective-leave-first-room":
+        game.quests.getQuest("tutorial").completeObjective("leave-first-room");
+        break ;
+      case "exit-zone":
+        game.quests.getQuest("tutorial").completeObjective("exit-cavern");
+        break ;
+      }
+    }
   }
 
   displayTutorialPage(page) {
@@ -29,13 +40,15 @@ export class Level {
   }
 
   onCombatStarted() {
-    this.displayTutorialPage(3);
+    if (!level.isPlayerTurn)
+      this.displayTutorialPage(4);
   }
   
   onCombatEnded() {
     if (!level.hasVariable("tutorialCombatEnd")) {
+      game.quests.getQuest("tutorial").completeObjective("win-first-fight");
       level.player.statistics.addExperience(level.player.statistics.xpNextLevel);
-      this.displayTutorialPage(5);
+      this.displayTutorialPage(6);
       level.setVariable("tutorialCombatEnd", 1);
     }
   }

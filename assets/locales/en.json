@@ -122,6 +122,36 @@
     "health-potion": "An average quality health potion.",
     "power-armor": "A power armor that the Steel Rangers usually wear. Probably the most protective kind of gear you'll ever find in the wastes. It's pretty damn heavy, but the weight is compensated for by increasing the strength of its wearer, while protecting it of magical radiations."
   },
+  "quests": {
+        "fetchGemstones": {
+            "objective-give": "Bring gemstones to your new diamond dog buddy.",
+            "objective-mine": "Use a pickaxe to mine gemstones in the cavern.",
+            "title": "Gemstones to diamond dog"
+        },
+        "objectives": "Objectives",
+        "ongoing": "Ongoing",
+        "tutorial": {
+            "description": "<p>You find yourself lost and trapped in the depth of a dark cavern. Resisting the pain of a considerable headache, you have no recollection of how you've gotten here.</p><p>The cold and damp air displeases you greatly... how about looking for an exit, and get back to the gracious sky of Equestria ?</p>",
+            "description-completed": "<p>You defeated Trial Blister, one way or another, and access to the outside world was granted to you.</p>",
+            "description-with-trial": "<p>In you search for an exit, you've met Trial Blister. It seems like you were dumped in this cavern as a trial to check your abilities to survive in the desolated land of Equestria. Trial Blister is the last challenge you must overcome to reach the outside world.",
+            "exit-cavern": "Leave the cavern.",
+            "exit-cavern-success": "For completing tutorial, you gained {{xp}} experience points.",
+            "last-trial-success": "For surviving all the trials of the tutorial, you gained {{xp}} experience points.",
+            "leave-first-room": "Find a way to go through the first door.",
+            "leave-first-room-success": "For successfully exiting the first room, you've gained {{xp}} experience points.",
+            "pass-last-trial": "Pass the last trial.",
+            "title": "Tutorial",
+            "win-first-fight": "Win you first fight.",
+            "win-first-fight-success": "For winning your first fight, you've gained {{xp}} experience points."
+        },
+	"sampleTownButter": {
+		"title": "Help the baker bake",
+		"find-butter": "Find butter for the baker.",
+		"give-butter": "You gave butter to the baker.",
+		"got-reward": "You received a tasty reward.",
+		"description": "The baker needs butter to bake cakes. It seems like the hostel's kitchen hoards a lot of the available ingredients around town."
+	}
+  },
   "bubbles": {
     "passerby-1": "I'm busy.",
     "passerby-2": "No time to talk, sorry !",
@@ -139,7 +169,8 @@
     "steal-warning-1": "Hey ! Put that back !",
     "steal-warning-2": "Don't test me. Give it back.",
     "steal-warning-3": "Last warning ! Put that back, or else !",
-    "steal-warning-4": "Guards ! We got a shoplifter over here"
+    "steal-warning-4": "Guards ! We got a shoplifter over here",
+    "chase-from-kitchen": "Get ouf of my kitchen !"
   },
   "dialogs": {
     "town-guard": {
@@ -147,6 +178,23 @@
       "fight": "[Fight]",
       "surrender": "[Surrender]"
     },
+        "town-trader": {
+            "": "[Leave]",
+            "after-trade": "Great, come back soon !",
+            "ask-quest": "I'm a bit disappointed. I was expecting to find some sweets. Don't you bake any ?",
+            "butter-quest-accept": "I might be able to help you with that. Let me see what I can do.",
+            "butter-quest-completed": "Why, you're such a sweetheart ! I'll make a batch of croissants right away ! Just stay still and you'll get to taste those right out o the oven !<br/><i>[he disappears in the backroom]</i>",
+            "butter-quest-not-interested": "That's too bad. Well, I'll get going then.",
+            "butter-quest-offer": "[sighs heavily] I would love to bake sweeter things. I have some ideas, but ingredients are hard to come by, and the hostel's kitchen hoards pretty much all the available goods around here... if I could get my hands on a good deal of butter, I would be a made pony.",
+            "croissant-done": "I wasn't too long I hope ? Here, take these <i>[hands you a handful of croissants]</i><br/>Come back anytime, buddy !",
+            "give-butter": "Here, I found some butter for you ! Can you make some delicacies out of it ?",
+            "leave": "[Give up and go away]",
+            "trade-reject": "I don't need anything right now. Goodbye !",
+            "trade-show": "Here's what I have in store for you.",
+            "trade-start": "Show me what you're selling.",
+            "trade-trigger": "Welcome, estimed customer ! What are we trading today ?",
+            "wait": "[You wait for him]"
+        },
     "tutoCharIntro": {
       "start": "Wow ! You've arrived ! At long last ! We need to find a way out of this hole !",
       "what-happened": "Wait a moment, what's going on ?",
@@ -340,5 +388,23 @@
     "genders": {
       "male": "Male",
       "female": "Female"
+    },
+    "tutorial": {
+      "previous": "Previous",
+      "next":     "Next",
+      "open":     "Show tutorial",
+      "enabled":  "Enabled",
+      "disabled": "Disabled",
+      "1":  "PipBuck",
+      "2":  "Movement",
+      "3":  "Interaction",
+      "4":  "Lockpick",
+      "5":  "Combat",
+      "6":  "Actions",
+      "7":  "Level up",
+      "8":  "Looking around",
+      "9":  "Explosives",
+      "10": "Field of View",
+      "11": "Traps"
     }
 }

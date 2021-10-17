@@ -1,0 +1,133 @@
+{
+    "answers": {
+        "": {
+            "availableHook": "",
+            "hook": "",
+            "state": "",
+            "text": ""
+        },
+        "askPayment": {
+            "state": "workPaymentAsked",
+            "text": "askPayment"
+        },
+        "completedWork": {
+            "availableHook": "hasGemstones",
+            "state": "workComplete",
+            "text": "completedWork"
+        },
+        "lookingForExit": {
+            "hook": "",
+            "state": "wayOut",
+            "text": "lookingForExit"
+        },
+        "negotiatePayment": {
+            "availableHook": "canNegotiate",
+            "hook": "tryToNegotiate",
+            "state": "",
+            "text": "negotiatePayment"
+        },
+        "paymentAccept": {
+            "availableHook": "",
+            "hook": "",
+            "state": "workAccepted",
+            "text": "paymentAccept"
+        },
+        "quickExit": {
+            "hook": "onAboutToExit",
+            "text": "quickExit"
+        },
+        "refusePayment": {
+            "state": "",
+            "text": "refusePayment"
+        },
+        "rejectProposalQuick": {
+            "state": "",
+            "text": "quickReject"
+        },
+        "wayOutMehThanks": {
+            "hook": "onAboutToExit",
+            "text": "mehThanks"
+        },
+        "wayOutThanks": {
+            "hook": "onAboutToExit",
+            "text": "wayOutThanks"
+        },
+        "workAccept": {
+            "state": "workAccepted",
+            "text": "workAccept"
+        },
+        "workComplete": {
+            "availableHook": "",
+            "state": "workComplete",
+            "text": "completedWork"
+        },
+        "workNotComplete": {
+            "availableHook": "",
+            "state": "workUncomplete",
+            "text": "workNotComplete"
+        }
+    },
+    "entryPoint": "intro",
+    "states": {
+        "intro": {
+            "answers": [
+                "lookingForExit",
+                "quickExit"
+            ],
+            "hook": "intro",
+            "text": "intro"
+        },
+        "introWithWork": {
+            "answers": [
+                "completedWork",
+                "workNotComplete"
+            ],
+            "hook": "",
+            "text": "introWithWork"
+        },
+        "wayOut": {
+            "answers": [
+                "wayOutMehThanks",
+                "wayOutThanks"
+            ],
+            "hook": "",
+            "text": "wayOut"
+        },
+        "workAccepted": {
+            "answers": [
+            ],
+            "hook": "onWorkAccepted",
+            "text": "workAccepted"
+        },
+        "workComplete": {
+            "answers": [
+            ],
+            "hook": "onWorkComplete",
+            "text": "workComplete"
+        },
+        "workPaymentAsked": {
+            "answers": [
+                "paymentAccept",
+                "negotiatePayment",
+                "refusePayment"
+            ],
+            "hook": "",
+            "text": "workPaymentAsked"
+        },
+        "workProposal": {
+            "answers": [
+                "workAccept",
+                "askPayment",
+                "rejectProposalQuick"
+            ],
+            "hook": "",
+            "text": "workProposal"
+        },
+        "workUncomplete": {
+            "answers": [
+            ],
+            "hook": "workUncomplete",
+            "text": "workUncomplete"
+        }
+    }
+}
