@@ -47,6 +47,7 @@ GridLayout {
     id: groupFloorInput
     Layout.fillWidth: true
     Layout.columnSpan: 2
+    visible: withFloor
     onTextChanged: {
       if (text != currentGroup.floor)
         currentGroup.floor = parseInt(text)
