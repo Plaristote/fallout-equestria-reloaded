@@ -62,8 +62,6 @@ void CombatComponent::joinCombat(Character* character)
     combattants << character;
     if (combat == false)
       startCombat(character);
-    else
-      sortCombattants();
     emit combattantsChanged();
     for (auto* playerPartyMember : playerParty->getCharacters())
       joinCombat(playerPartyMember);
@@ -122,6 +120,7 @@ void CombatComponent::sortCombattants()
   {
     return a->getStatistics()->get_sequence() > b->getStatistics()->get_sequence();
   });
+  emit combattantsChanged();
 }
 
 void CombatComponent::removeDeadCombattants()
