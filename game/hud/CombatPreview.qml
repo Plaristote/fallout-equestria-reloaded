@@ -37,6 +37,7 @@ Row {
         id: mouseArea
         anchors.fill: parent
         hoverEnabled: true
+        onClicked: levelController.cameraFocusRequired(character)
       }
 
       Column {
