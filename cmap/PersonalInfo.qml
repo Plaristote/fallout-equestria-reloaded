@@ -60,6 +60,7 @@ RowLayout {
     Layout.fillHeight: true
     enabled: root.editable
     model: characterSheet.getGendersLabels()
+    currentIndex: characterSheet.getGenders().indexOf(characterSheet.gender)
     Component.onCompleted: currentIndex = characterSheet.getGenders().indexOf(characterSheet.gender)
     onCurrentIndexChanged: characterSheet.gender = characterSheet.getGenders()[currentIndex]
   }
@@ -70,6 +71,7 @@ RowLayout {
     Layout.fillHeight: true
     enabled: root.editable
     model: characterSheet.getAvailableRacesLabels()
+    currentIndex: characterSheet.getAvailableRaces().indexOf(characterSheet.race)
     Component.onCompleted: currentIndex = characterSheet.getAvailableRaces().indexOf(characterSheet.race)
     onCurrentIndexChanged: characterSheet.race = characterSheet.getAvailableRaces()[currentIndex]
   }
