@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <title>FoE Engine: Game Editor tutorial</title>
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+  <link href="css/blog-home.css" rel="stylesheet">
+  
+  <style>
+    .folder-list-table {
+      width: 100%;
+    }
+    .folder-list-table tr {
+      border: 1px lightgray solid;
+    }
+    .folder-list-table td {
+      padding: 2px;
+    }
+    .folder-list-table td:first-of-type {
+      font-family: monospace;
+      padding-right: 10px;
+    }  
+  
+    .end-chapter { height: 50px; }
+    .mono-span { font-family: monospace; display: inline-block; background-color: lightgray; padding: 1px; }
+    .code {
+      padding: 15px 10px;
+      margin: 0 -5px 20px;
+      background-color: lightgray;
+    }
+    .code-header {
+      background-color: lightgray;
+      border-bottom: 1px solid black;
+      padding: 2px 10px;
+      margin: 0 -5px;
+      font-family: monospace;
+      color: gray;
+    }
+    video {
+      margin: 10px 0 15px;
+    }
+    
+    .card-text.card-hint, .card-text.warning {
+      position: relative;
+      display: block;
+      border-radius: 15px;
+      background-color: rgba(255, 150, 0, 0.5);
+      padding: 10px;
+      margin: 10px;
+      padding-left: 60px;
+      margin-bottom: 20px;
+    }
+
+    .card-text.card-hint::before {
+      position: absolute;
+      left: 10px;
+      top: calc(50% - 20px);
+      content: "?";
+      display: block;
+      background-color: blue;
+      color: white;
+      width: 40px;
+      height: 40px;
+      text-align: center;
+      border-radius: 40px;
+      font-weight: bold;
+      padding-top: 2px;
+      font-size: 22px;
+      border: 2px solid white;
+    }
+    
+    .card-text.warning::before {
+      position: absolute;
+      left: 10px;
+      top: calc(50% - 20px);
+      content: "!";
+      display: block;
+      background-color: yellow;
+      color: black;
+      width: 40px;
+      height: 40px;
+      text-align: center;
+      border-radius: 40px;
+      font-weight: bold;
+      padding-top: 2px;
+      font-size: 22px;
+      border: 2px solid black;
+    }
+
+  </style>
+</head>
+
+<body style="padding-top:0">
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+      <a class="navbar-brand" href="/"><h3>Fallout Equestria Engine</h3>Game Editor tutorial</a>
+    </div>
+  </nav>
+
+  <!-- Page Content -->
+  <div class="container">
+    <div class="row">
+      <!-- Blog Entries Column -->
+      <div class="col-md-8" id="getting-started">
+        <h2 class="my-4" id="c1">
+          1. Inventory, items and equipment
+        </h2>
+        <div class="card mb-4">
+          <div class="card-body">
+            <h4 class="card-title" id="c1-1">1.1 Introduction</h4>
+          
+            <p class="card-text">
+              We will now direct our attention towards the item management system. Items are game objects as well, but unlike other game objects, they can be extracted from the tilemap and stored in an inventory. Moreover, they can be equiped in inventory slots (armor, primary item, secondary item).
+            </p>
+            
+            <p class="card-text">
+              An item's behaviour is determined by his <span class="mono-span">itemType</span> property. Item types can be defined in the Game Editor, in the Items tab. Let's have a look at the interface:
+            </p>
+            
+            <a href="pictures/itemEditor.png" target="_blank">
+              <img class="card-img-top" src="pictures/itemEditor.png" />
+            </a>
+            
+            <p class="card-text">
+              <table class="dialog-hook-table">
+                <tr>
+                  <td>Type</td>
+                  <td>A property meant as a way to filter items by category in inventories.</td>
+                </tr>
+                <tr>
+                  <td>Weight</td>
+                  <td>The item weight, used for carry weight checks.</td>
+                </tr>
+                <tr>
+                  <td>Value</td>
+                  <td>A value of reference to use for barter. The actual barter value will be calculated using this value and the barter skill value of the player's character and the NPC.</td>
+                </tr>
+                <tr>
+                  <td>Groupable</td>
+                  <td>Groupable items can merge together, and have an <span class="mono-span">amount</span> property. It is useful anytime the item's behaviour doesn't require the game object to have a persistent state, as a mean of avoiding cluttered inventories. Note that the groupable property can be overriden by the item's script, and relative to each instance of a given item type.</td>
+                </tr>
+                <tr>
+                  <td>Sprite</td>
+                  <td>The sprite is used to represent the object when it is on a tilemap. Item sprites are defined in the Sprite Editor, using the <i>items</i> sprite group. The sprite's size should be 72x36.</td>
+                </tr>
+                <tr>
+                  <td>Icon</td>
+                  <td>The icon is used to represent the object when it is in an inventory. Item icons should be stored in <span class="mono-span">assets/icons</span>.</td>
+                </tr>
+                <tr>
+                  <td>Script</td>
+                  <td>The scripts for items are located at <span class="mono-span">scripts/items</span>. They're game object scripts, as we've already seen many times so far, but can implement a few more properties and methods related to inventory, equipment and targeting.</td>
+                </tr>
+              </table>
+            </p>
+            
+            <div class="end-chapter"></div>
+            
+            <h4 class="card-title" id="c1-2">1.2 Storage Objects</h4>
+            
+            <p class="card-text">
+              Storage objects are game objects featuring an Inventory. Characters, for instance, are a sub-class of Storage objects. In this section, we will create a Storage object to demonstrate how inventories are managed in the game editor.
+            </p>
+            
+            <p class="card-text">
+              Open the LevelEditor and create a Storage object, using the <i>locker</i> sprite:
+            </p>
+            
+            <video class="card-img-top" src="videos/18-create-storage.webm" autoplay loop controls muted>
+            </video>
+            
+            <p class="card-text">
+              As you can see, and just like for character objects, storage objects have an <i>Inventory</i> button. It's pretty straightforward to use:
+            </p>
+
+            <video class="card-img-top" src="videos/19-looting-editor.webm" autoplay loop controls muted>
+            </video>
+            
+            <p class="card-text">
+              Plain storage objects don't need a script: our locker is ready to use with just these few steps.<br />
+              But what if we want to implement more complex behaviours ? For instance, let's say our NPC owns the locker, and doesn't want us to touch his precious wares ?
+            </p>
+            
+            <p class="card-text">
+              Let us write a script that will allow us to do that. We will use <span class="mono-span">onTakeItem</span> and <span class="mono-span">onPutItem</span> to prevent the user to take or put items in our locker, if our NPC sees him do it:
+            </p>
+            
+<div class="code-header">scripts/behaviour/myLocker.mjs</div>
+<pre class="code"><code>class MyLocker {
+  constructor(model) {
+    this.model = model;
+  }
+  
+  onTakeItem(character, item, quantity) {
+    return this.preventStealing(character);
+  }
+  
+  onPutItem(character, item, quantity) {
+    return this.preventStealing(character);
+  }
+  
+  preventStealing(character) {
+    const npc = level.getObjectByName("MyNPC");
+
+    if (npc && npc.isAlive() && npc.hasLineOfSight(character)) {
+      level.addTextBubble(npc, "Hey ! Don't touch that !", 4000, "red");
+      return false;
+    }
+    return true;
+  }
+}
+
+export function create(model) {
+  return new MyLocker(model);
+}</code></pre>
+
+            <p class="card-text">
+              In this code, we overladed both methods and implemented our own method to interrupt the player's attempt to loot on certain condition.<br />
+              If the NPC exists and can see the player looting, then we return <span class="mono-span">false</span>, which will prevent the player from taking/putting an item in the inventory, and close the looting interface.
+            </p>
+            
+            <p class="card-text card-hint">
+              As characters extend on storage objects, they also feature a <span class="mono-span">onTakeItem</span> and <span class="mono-span">onPutItem</span> methods, which you can use to implement <i>stealing</i> behaviours.
+            </p>
+            
+            <p class="card-text">
+              In the Game Editor, configure our storage object to use the <i>myLocker.mjs</i> script we just created. Here's what the result should look like:
+            </p>
+            
+            <video class="card-img-top" src="videos/20-looting-example.webm" autoplay loop controls muted>
+            </video>
+            
+            <div class="end-chapter"></div>
+            
+            <h4 class="card-title" id="c1-3">1.3 Creating usable items</h4>
+            
+            <p class="card-text">
+              We will now deep further in the item and inventory scripting tools by creating a consommable item that will temporarily increase a character's Agility.<br/>
+              First, we will prepare our item in the item editor, as shown in the video below:
+            </p>
+            
+            <video class="card-img-top" src="videos/21-create-item.webm" autoplay loop controls muted>
+            </video>
+            
+            <p class="card-text">
+              Now, we will write the script for our item:
+            </p>
+            
+<div class="code-header">scripts/items/agilityPotion.mjs</div>
+<pre class="code"><code>import {ItemBehaviour} from "./item.mjs";
+
+class AgilityPotion extends ItemBehaviour {
+  constructor(model) {
+    super(model);
+    this.requiresTarget = false;
+    this.triggersCombat = false;
+    this.useModes = ["use"];
+  }
+  
+  isValidTarget(object) {
+    return object.getObjectType() == "Character";
+  }
+  
+  getActionPointCost() {
+    return 2;
+  }
+}
+
+export function create(model) {
+  return new AgilityPotion(model);
+}</code></pre>
+
+            <p class="card-text card-hint">
+              <span class="mono-span">ItemBehaviour</span>, similarly to <span class="mono-span">CharacterBehaviour</span>, implements default behaviours for all the methods that the game engine might call on Item objects.
+            </p>
+
+            <p class="card-text">
+              Let's have a look at the properties and methods we've set up, and what they're useful for:
+              
+              <ul>
+                <li><span class="mono-span">requiresTarget</span> is a property you can set on your script to hint that your item does not need a target. Such items can be used directly from inventory.</li>
+                <li><span class="mono-span">triggersCombat</span> hints that your item shouldn't be usable outside of combat: activating the item will start combat.</li>
+                <li><span class="mono-span">isValidTarget</span> is a method you can implement so the targeting system knows whether a hovered object can be picked as a target or not.</li>
+                <li><span class="mono-span">getActionPointCost</span> defines the amount of action point the item will consume if it is used during combat.</li>
+              </ul>
+            </p>
+            
+            <p class="card-text">
+              Now that we have a usable item, we will overload the default behaviour for the method <span class="mono-span">useOn</span>, to tell the engine what's supposed to happen when the item is used:
+            </p>
+            
+<pre class="code"><code>useOn(target) {
+  if (!target)
+    target = this.user;
+  target.statistics.agility += 1;
+}
+</code></pre>
+
+            <p class="card-text">
+              Since our item doesn't require a target, <span class="mono-span">useOn</span> might be called without a target. For our agility potion, we want the default target to be the one who's using the item: we can fetch this character using <span class="mono-span">this.user</span>, which provided by <span class="mono-span">ItemBehaviour</span>.
+            </p>
+            
+            <p class="card-text">
+              Our method then increases the target's agility by one. The change is permanent: if we wanted it to be temporary, we should use a <i>Buff</i>. We'll go over those later.
+            </p>
+            
+            <div class="end-chapter"></div>
+            
+            <h4 class="card-title" id="c1-4">1.4 Inventory</h4>
+            
+            <p class="card-text">
+              We will now give the player our new item as a starting item. We've seen how to manage inventories from the game editor in <a href="#c6-2">5.2 Storage objects</a>. We will now learn how to use inventories from our scripts. Here's the new version of our initialize.mjs file:
+            </p>
+            
+            <div class="code-header">scripts/initialize.mjs</div>
+            <pre class="code javascript"><code>function preparePlayerInventory() {
+  game.player.inventory.addItemOfType("agility-potion", 2);
+}
+            
+export function initialize() {
+  preparePlayerInventory();
+  game.onCityEntered("stable-cavern", "demo-begin");
+  game.worldmap.setPosition(150, 250);
+  game.transitionRequired("intro.mp4", 1);
+}</code></pre>
+
+            <p class="card-text">
+              We've added a function that accesses the player inventory, and adds two of our new items using <span class="mono-span">addItemOfType</span>.
+            </p>
+            
+            <p class="card-text">
+              If you start a new game now, your character will start with two agility potions. But if you use them, you'll notice that they don't get removed from inventory. To fix that behaviour, we'll edit the <span class="mono-span">useOn</span> method from our item script:
+            </p>
+
+<div class="code-header">scripts/items/agilityPotion.mjs</div>
+<pre class="code"><code>useOn(target) {
+  if (!target)
+    target = this.user;
+  target.statistics.agility += 1;
+  this.user.inventory.removeItemOfType(this.model.itemType, 1); // this.model.itemType -> "agility-potion"
+}
+</code></pre>
+
+            <p class="card-text">
+              It is also possible to add or remove items to an inventory using the item's game object, such as <span class="mono-span">this.user.inventory.addItem(this.model)</span> or <span class="mono-span">this.user.inventory.destroyItem(this.model)</span>. Note that, as quantity of items is a property of the game object, using these methods will add or remove all of the items that are grouped together.
+            </p>
+            
+            <p class="card-text">
+              We'll go over the remaining features of inventories by adding the possibility of failure to the uses of our potion. The following snippet makes a random check against the user's luck, and drop the bottle on failure:
+            </p>
+            
+ <pre class="code"><code>useOn(target) {
+  const dice = Math.random() * this.user.statistics.luck;
+  
+  if (dice &lt; Math.min(5, this.user.statistics.luck)) {
+    this.user.inventory.dropItem(this.model, 1);
+    if (this.user.inventory.count("agility-potion") > 0)
+      game.appendToConsole("Oh no ! You dropped a potion !");
+    else
+      game.appendToConsole("Oh no ! You dropped the last potion !");
+    return;
+  }
+  
+  if (!target)
+    target = this.user;
+  target.statistics.agility += 1;
+  this.user.inventory.removeItemOfType(this.model.itemType, 1); // this.model.itemType -&gt; "agility-potion"
+}</code></pre>
+
+            <p class="card-text">
+              With the following code, unless the playing character has maxed his luck statistic, the potion should drop most of the time.<br/>
+              The <span class="mono-span">dropItem</span> method doesn't destroy the item: it drops it on the ground, at the inventory's owner position.
+            </p>
+            
+            <p class="card-text">
+              We then use the <span class="mono-span">count</span> method, to figure out whether there are potion left or not, and display a message on the HUD console accordingly.
+            </p>
+            
+            <div class="end-chapter"></div>
+            
+            <h4 class="card-title" id="c1-5">1.5 Equipment</h4>
+
+            <p class="card-text">
+              Inventories for characters also include <i>item slots</i>. Items can be moved to an inventory to its item slots, and are then considered equiped.<br />
+              The item slots available depend on the character race, but they will always include the two quick-use slots: <span class="mono-span">use-1</span> and <span class="mono-span">use-2</span>.
+            </p>
+            
+            <p class="card-text">
+              We will explore the realm of equipment by creating an armor. Create a new item called <i>power-armor</i>, using the following icon and script:
+            </p>
+            
+            <img src="pictures/powerarmor.png" title="Art from Setharu"/>
+            
+<div class="code-header">scripts/items/powerArmor.mjs</div>
+<pre class="code"><code>import {ItemBehaviour} from "./item.mjs";
+
+class PowerArmor extends ItemBehaviour {
+  constructor(model) {
+    super(model);
+    this.triggersCombat = false;
+    this.useModes = ["use"];
+  }
+  
+  canEquipInSlotType(slotType) {
+    return slotType == "armor";
+  }
+  
+  onEquipped(user, on) {
+    if (on) {
+      user.statistics.strength += 2;
+      user.statistics.armorClass += 25;
+    }
+    else {
+      user.statistics.strength -= 2;
+      user.statistics.armorClass -= 25;
+    }
+  }
+}
+
+export function create(model) {
+  return new PowerArmor(model);
+}</code></pre>
+
+            <p class="card-text">
+              By default, items can be equiped on the <span class="mono-span">use-1</span> and <span class="mono-span">use-2</span> slots, which are of <span class="mono-span">any</span> type. To change the kind of slots our item can be equipped on, we implemented the <span class="mono-span">canEquipSlotInType</span> method.
+            </p>
+            
+            <p class="card-text">
+              The <span class="mono-span">onEquipped</span> method is called on items when they are equipped or unequipped. We used this callback to provide the bonuses of power-armor to its wearer. 
+            </p>
+
+            <p class="card-text">
+              If you edit <span class="mono-span">initialize.mjs</span> to add our new armor to the player inventory, you should be able to equip it like this:
+            </p>
+
+            <video class="card-img-top" src="videos/22-armor-test.webm" autoplay loop controls muted>
+            </video>
+          </div>
+        </div>
+        
+        <h2 class="my-5" id="c2">
+          2. Weapons
+        </h2>
+        
+        <div class="card mb-4">
+          <div class="card-body">
+            <h4 class="card-title" id="c2-1">2.1 Creating a weapon</h4>
+            
+            <p class="card-text">
+              Now that we have been initiated to item and equipment, we will explore more complex behaviour for items, by developing our first weapon. Create the <i>mouthgun</i> item in the Item Editor, with the following icon and script:
+            </p>
+            
+            <img src="pictures/littlemacintosh.png" alt="Art by Vector-Brony" />
+
+<div class="code-header">scripts/items/mouthGun.mjs</div>
+<pre class="code"><code>import {WeaponBehaviour} from "./weapon.mjs";
+
+class MouthGun extends WeaponBehaviour {
+  constructor(model) {
+    super(model);
+    this.useModes = ["shoot", "reload"];
+    this.skill = "smallGuns";
+  }
+  
+  get triggersCombat() {
+    return this.model.useMode == "shoot";
+  }
+  
+  get requiresTarget() {
+    return this.model.useMode == "shoot";
+  }
+  
+  getActionPointCost() {
+    if (this.model.userMode == "shoot")
+      return 5;
+    return 2;
+  }
+  
+  getDamageRange() {
+    return [9, 18];
+  }
+  
+  getRange() {
+    return 5;
+  }
+}
+
+export function create(model) {
+  return new MouthGun(model);
+}</code></pre>
+
+            <p class="card-text">
+              Note that we are no longer extending on <span class="mono-span">ItemBehaviour</span>, but on <span class="mono-span">WeaponBehaviour</span>. The latter extends on the former, so all of the item features we learned in the previous chapter are still applicable here.
+            </p>
+            
+            <p class="card-text">
+              This time, we set a different value for <span class="mono-span">useModes</span>. Items that can be equiped in <span class="mono-span">use</span> slots can have several use modes that the user can loop through. The current mode of an item is stored in the item game's object, accessible here as <span class="mono-span">this.model.useMode</span>.
+            </p>
+            
+            <p class="card-text">
+              Different use modes means different behaviours, which is why we created getters for the <span class="mono-span">requiresTarget</span> and <span class="mono-span">triggersCombat</span> properties, as shooting requires a target and triggers combat, but reloading does not.
+            </p>
+            
+            <p class="card-text">
+              In the constructor, we also set the <span class="mono-span">skill</span> property on our script: this is used by <span class="mono-span">WeaponBehaviour</span> to figure out which skill value to use when computing the <i>success rate</i>. Alternatively, it is also used to determine whether the weapon is close-combat or ranged (if set to <i>unarmed</i> and <i>meleeWeapons</i>, the weapon will be considered close-combat).
+            </p>
+            
+            <p class="card-text">
+              Weapons have to implement a <span class="mono-span">getDamageRange</span> method, returning an array containing the minimum and maximum amount of damage the weapon can cause.
+            </p>
+            
+            <p class="card-text">
+              Lastly, we also implemented <span class="mono-span">getRange</span>, to determine the maximum range of the weapon. A value of 1 is roughly equal to the distance between one tile and another.
+            </p>
+            
+            <div class="end-chapter"></div>
+            
+            <h4 class="card-title" id="c2-2">2.2 Custom use animations</h4>
+            
+            <p class="card-text">
+              Thanks to the default behaviours implemented by <span class="mono-span">WeaponBehaviour</span>, our mouthgun is already usable. But the animation it triggers is the default animation for all interactions, and it doesn't really look like much. We will now see how to implement custom animations for item uses.
+            </p>
+            
+            <p class="card-text">
+              Interactions actually happen in two parts: first, an <i>AnimationSequence</i> runs, then a callback from the Item gets triggered. The animation sequence is described by the item script, by the <span class="mono-span">getAnimationSteps</span>: for reference, you can check out the default animation sequence described in <span class="mono-span">scripts/items/item.mjs</span>.
+            </p>
+            
+            <p class="card-text">
+              There are two types of animations, and we will use both for our shooting animation:
+            </p>
+            
+            <h5 class="card-title" id="c2-2-1">2.2.1 Object animation</h5>
+            
+            <p class="card-text">
+              Object animations are animations applied on objects, usually on characters. The default animation for all interactions is an Object animation, described as following:
+            </p>
+            
+<pre class="code"><code>{ type: "Animation", animation: "use", object: this.user }</code></pre>
+
+            <p class="card-text">
+              The following will result in the item user running the animation <i>use</i> from his sprite group.<br/>
+              You might notice that the animation <i>use</i> doesn't exist in the sprite group of your character: instead, you there are several animations called <i>use-up, use-left, use-down, use-right</i>. That's because characters are <i>oriented</i> objects, and their animations are suffixed with the direction to which they are looking.
+            </p>
+
+            <p class="card-text card-hint">
+              Note that you can manually change the direction a character is looking at, using <span class="mono-span">lookTo(x, y)</span> on the character's game object.
+            </p>
+            
+            <div class="end-chapter"></div>
+            
+            <h5 class="card-title" id="c2-2-2">2.2.2 Sprite animation</h5>
+            
+            <p class="card-text">
+              The second type of animation are Sprite animations. These will pop a new sprite, which will travel from a beginning to a target position. Here's an example of sprite animation:
+            </p>
+            
+<pre class="code"><code>{
+  type: "Sprite",
+  name: "effects",
+  animation: "explosion",
+  fromX: this.user.spritePosition.x,
+  fromY: this.user.spritePosition.y,
+  toX: target.spritePosition.x,
+  toY: target.spritePosition.y
+}</code></pre>
+
+            <div class="end-chapter"></div>
+
+            <h5 class="card-title" id="c2-2-3">2.2.3 Setting up an AnimationSequence</h5>
+
+            <p class="card-text">
+              Let's now define our own animation sequence, by implementing our own <span class="mono-span">getAnimationSteps</span> for our item:
+            </p>
+            
+<div class="code-header">scripts/items/mouthgun.mjs</div>
+<pre class="code"><code>getAnimationSteps(target) {
+  if (this.model.useMode == "shoot") {
+    return [
+      { type: "Animation", animation: "use", object: this.user },
+      { type: "Sprite", name: "effects", animation: "explosion", fromX: this.user.spritePosition.x, fromY: this.user.spritePosition.y, toX: target.spritePosition.x, toY: target.spritePosition.y }
+    ];
+  }
+  return super.getAnimationSteps(target);
+}</code></pre>
+
+            <div class="end-chapter"></div>
+
+            <h4 class="card-title" id="c2-3">2.3 Dodge and critical failures</h4>
+            
+            <p class="card-text">
+              Dodging and critical failures are handled by <span class="mono-span">WeaponBehaviour</span>, but you can overload these behaviours by implementing the <span class="mono-span">triggerDodgeUse</span> or <span class="mono-span">triggerCriticalFailure</span> methods. Here's an example of dodge implementation:
+            </p>
+            
+<div class="code-header">scripts/items/mouthgun.mjs</div>
+<pre class="code"><code>triggerDodgeUse(target) {
+  return {
+    steps: [
+      { type: "Animation", animation: "use", object: this.user },
+      { type: "Sprite", name: "effects", animation: "explosion", fromX: this.user.spritePosition.x, fromY: this.user.spritePosition.y, toX: target.spritePosition.x, toY: target.spritePosition.y },
+      { type: "Animation", animation: "dodge", object: target }
+    ],
+    callback: this.onDodged.bind(this, target)
+  };
+}</code></pre>
+
+            <div class="end-chapter"></div>
+            
+            <h4 class="card-title" id="c2-4">2.4 Reloding weapons</h4>
+            
+            <p class="card-text">
+              We will now see how to implement alternative use modes, by implementing reloading into our weapon. The first thing to do is to create an ammuniton item. We will use the following icon and script:
+            </p>
+            
+            <img src="pictures/9mm-bullets.png" />
+            
+<div class="code-header">scripts/items/ammo.mjs</div>
+<pre class="code"><code>export {ItemBehaviour} from "./item.mjs";
+
+class Ammo extends ItemBehaviour {
+}
+
+export function create(model) {
+  return new Ammo(model);
+}</code></pre>
+
+            <p class="card-text">
+              Create the <i>9mm-ammo</i> item in the Item Editor. Make sure the <i>groupable</i> checkbox is checked.
+            </p>
+            
+            <p class="card-text">
+              Let's now go back to our <i>mouthgun</i> item. First thing is to set the charger capacity in the item constructor:
+            </p>
+
+<div class="code-header">scripts/items/mouthgun.mjs</div>
+<pre class="code"><code>constructor(model) {
+  super(model);
+  this.model.maxAmmo = 6; // &lt;-- here we go
+  this.useModes = ["shoot", "reload"];
+  this.skill = "smallGuns";
+}</code></pre>
+            </p>
+
+            <p class="card-text">
+              Now, let's add a method that will look for available ammunitions in the inventory, and use it to load the weapon:
+            </p>
+
+<div class="code-header">scripts/items/mouthgun.mjs</div>
+<pre class="code"><code>onReloaded() {
+  const availableAmmo = this.user.inventory.count("9mm-ammo");
+
+  if (availableAmmo > 0) {
+    const requiredAmmo = this.model.maxAmmo - this.model.ammo;
+    const amount = Math.min(requiredAmmo, availableAmmo);
+      
+    this.user.inventory.removeItemOfType("9mm-ammo", amount);
+    this.model.ammo += amount;
+    this.model.useMode = "shoot";
+    return true;
+  }
+  else {
+    game.appendToConsole("Out of ammo !");
+    this.user.actionPoints += this.getActionPointCost();
+  }
+  return false;
+}</code></pre>
+
+            <p class="card-text">
+              We're already familiar with everything used here, except for the <span class="mono-span">this.model.ammo</span> property. It represents the amount of ammunition currently loaded in the weapon.
+            </p>
+            
+            <p class="card-text">
+              Note that we restore the user's action point if there was no ammo to load. If ammo has been loaded, we also manually set the item's use mode back to the <span class="mono-span">shoot</span> mode.
+            </p>
+            
+            <p class="card-text">
+              We will now implement our new use mode, by overloading the <span class="mono-span">triggerUseOn</span> method: it is called by <span class="mono-span">ItemBehaviour</span>, when preparing the use of an item, and allows us to change the default animation and behaviour. Let's see how to make this work:
+            </p>
+
+<div class="code-header">scripts/items/mouthgun.mjs</div>
+<pre class="code"><code>triggerUseOn(target) {
+  if (this.model.useMode == "reload")
+    return { steps: [], callback: this.onReloaded.bind(this) };
+  return super.triggerUseOn(target);
+}</code></pre>
+
+            <p class="card-text">
+              Our <span class="mono-span">triggerUseOn</span> overload can now handle several use modes: for the <span class="mono-span">reload</span> use mode, we make our own <i>AnimationSequence</i> descriptor, and define a custom callback. The <i>AnimationSequence</i> here is empty, which will result in the action being executed immediately. By setting the <span class="mono-span">callback</span> attribute, we're hinting the game engine not to call the default <span class="mono-span">useOn</span> method, after the animation is completed, but our own <span class="mono-span">onReloaded</span> method we implemented earlier.
+            </p>
+            
+            <p class="card-text">
+              Now, the last step before we've fully implemented ammo management for our weapon. We need ammo to get used when the weapon is used to shoot. Let's edit <span class="mono-span">triggerUseOn</span> one last time:
+            </p>
+            
+<div class="code-header">scripts/items/mouthgun.mjs</div>
+<pre class="code"><code>triggerUseOn(target) {
+  if (this.model.useMode == "reload")
+    return { steps: [], callback: this.onReloaded.bind(this) };
+  if (this.modal.ammo > 0) {
+    this.model.ammo -= 1;
+    return super.triggerUseOn(target);
+  }
+  else {
+    game.appendToConsole("Out of ammo !");
+    this.user.actionPoints += this.getActionPointCost();
+  }
+  return false;
+}</code></pre> 
+
+            <p class="card-text">
+              Note that we also check that our charger already has ammo, before using it. If it doesn't, we return <span class="mono-span">false</span>, which will interrupt the item use attempt. We also restore the user action points: indeed, by default, a failed action still consumes action point. If we want the action point to remain, we must restore them.
+            </p>
+            
+            <p class="card-text">
+              We've also made sure that using the weapon while it still has ammo will consume 1 ammunition.
+            </p>
+            
+            <div class="end-chapter"></div>
+            
+            <h4 class="card-title" id="c2-5">2.5 Playing sounds</h4>
+            
+            <p class="card-text">
+              Now, our weapon is functional, but it doesn't make any noises. We will learn here how to punctually play sounds. Let's start by adding a reloading sound to our <span class="mono-span">onReloaded</span> method:
+            </p>
+            
+<div class="code-header">scripts/items/mouthgun.mjs</div>
+<pre class="code"><code>onReloaded() {
+  const availableAmmo = this.user.inventory.count("9mm-ammo");
+
+  if (availableAmmo > 0) {
+    const requiredAmmo = this.model.maxAmmo - this.model.ammo;
+    const amount = Math.min(requiredAmmo, availableAmmo);
+      
+    this.user.inventory.removeItemOfType("9mm-ammo", amount);
+    this.model.ammo += amount;
+    this.model.useMode = "shoot";
+    level.sounds.play("reload");
+    return true;
+  }
+  else {
+    game.appendToConsole("Out of ammo !");
+    this.user.actionPoints += this.getActionPointCost();
+    level.sounds.play("out-of-ammo");
+  }
+  return false;
+}</code></pre> 
+
+            <p class="card-text">
+              Here, we call <span class="mono-span">level.sounds.play</span> to play a sound when the weapon reloads, and a different sound when it fails to reload. The parameter should be a key registered in the file <span class="mono-span">assets/audio.json</span>, and refers to a file in the <span class="mono-span">assets/audio</span> folder.
+            </p>
+            
+            <p class="card-text">
+              <span class="mono-span">WeaponBehaviour</span> also implement handlers for two sounds, used when a weapon triggers, and when a wepaon hits. Usually, these sounds shound be initialized in the weapon's constructor, such as:
+            </p>
+
+<div class="code-header">scripts/items/mouthgun.mjs</div>
+<pre class="code"><code>constructor(model) {
+  super(model);
+  this.model.maxAmmo = 6;
+  this.useModes = ["shoot", "reload"];
+  this.skill = "smallGuns";
+  // Initializing weapon sounds below
+  this.fireSound = "weapons/gunshot";
+  this.hitSound = null;
+}</code></pre>
+
+            <p class="card-text">
+              The <span class="mono-span">fireSound</span> and <span class="mono-span">hitSound</span> are respectively used when a weapon fires, and when it hits its target.
+            </p>
+            
+            <p class="card-text">
+              Our weapon is now ready. Edit <span class="mono-span">scripts/initialize.mjs</span> to add a <i>mouthgun</i> and several <i>9mm-ammo</i> to the player's inventory, and take it for a test run. Here's what it should look like:
+            </p>
+            
+            <video class="card-img-top" src="videos/23-weapon-test.webm" autoplay loop controls muted>
+            </video>
+
+            <div class="end-chapter"></div>
+            
+          </div>
+        </div>
+      </div>
+
+      <!-- Sidebar Widgets Column -->
+      <div class="col-md-4">
+      
+      <style>
+      .card-body.card-index a {
+        display: block;
+      }
+      
+      .card-body.card-index .chapter {
+        padding-left: 10px;
+        padding-bottom: 5px;
+      }
+      
+      .card-body.card-index .section {
+        padding-left: 20px;
+      }
+      </style>
+
+        <!-- Index Widget -->
+        <div class="card my-4">
+          <h5 class="card-header">Index</h5>
+          <div class="card-body card-index">
+            <a href="#c1">1. Inventory, items and equipment</a>
+            <div class="chapter">
+              <a href="#c1-1">1.1 Introduction</a>
+              <a href="#c1-2">1.2 Storage Objects</a>
+              <a href="#c1-3">1.3 Creating usable items</a>
+              <a href="#c1-4">1.4 Inventory</a>
+              <a href="#c1-5">1.5 Equipment</a>
+            </div>
+            <a href="#c2">2. Weapons</a>
+            <div class="chapter">
+              <a href="#c2-1">2.1 Creating a weapon</a>
+              <a href="#c2-2">2.2 Custom animations</a>
+              <a href="#c2-3">2.3 Dodging and critical failures</a>
+              <a href="#c2-4">2.4 Reloading weapons</a>
+              <a href="#c2-5">2.5 Playing sounds</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <!-- /.row -->
+
+  </div>
+  <!-- /.container -->
+
+  <!-- Footer -->
+  <footer class="py-5 bg-dark">
+    <div class="container">
+      <p class="m-0 text-center text-white">Copyleft &copy; FoE Engine</p>
+    </div>
+    <!-- /.container -->
+  </footer>
+
+</body>
+
+</html>

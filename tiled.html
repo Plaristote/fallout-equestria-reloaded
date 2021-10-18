@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <title>FoE Engine: Level design tutorial</title>
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+  <link href="css/blog-home.css" rel="stylesheet">
+  
+  <style>
+    .folder-list-table {
+      width: 100%;
+    }
+    .folder-list-table tr {
+      border: 1px lightgray solid;
+    }
+    .folder-list-table td {
+      padding: 2px;
+    }
+    .folder-list-table td:first-of-type {
+      font-family: monospace;
+      padding-right: 10px;
+    }  
+  
+    .end-chapter { height: 50px; }
+    .mono-span { font-family: monospace; display: inline-block; background-color: lightgray; padding: 1px; }
+    .code {
+      padding: 15px 10px;
+      margin: 0 -5px 20px;
+      background-color: lightgray;
+    }
+    .code-header {
+      background-color: lightgray;
+      border-bottom: 1px solid black;
+      padding: 2px 10px;
+      margin: 0 -5px;
+      font-family: monospace;
+      color: gray;
+    }
+    video {
+      margin: 10px 0 15px;
+    }
+    
+    .card-text.card-hint, .card-text.warning {
+      position: relative;
+      display: block;
+      border-radius: 15px;
+      background-color: rgba(255, 150, 0, 0.5);
+      padding: 10px;
+      margin: 10px;
+      padding-left: 60px;
+      margin-bottom: 20px;
+    }
+
+    .card-text.card-hint::before {
+      position: absolute;
+      left: 10px;
+      top: calc(50% - 20px);
+      content: "?";
+      display: block;
+      background-color: blue;
+      color: white;
+      width: 40px;
+      height: 40px;
+      text-align: center;
+      border-radius: 40px;
+      font-weight: bold;
+      padding-top: 2px;
+      font-size: 22px;
+      border: 2px solid white;
+    }
+    
+    .card-text.warning::before {
+      position: absolute;
+      left: 10px;
+      top: calc(50% - 20px);
+      content: "!";
+      display: block;
+      background-color: yellow;
+      color: black;
+      width: 40px;
+      height: 40px;
+      text-align: center;
+      border-radius: 40px;
+      font-weight: bold;
+      padding-top: 2px;
+      font-size: 22px;
+      border: 2px solid black;
+    }
+
+  </style>
+</head>
+
+<body style="padding-top:0">
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+      <a class="navbar-brand" href="/index.html"><h3>Fallout Equestria Engine</h3>Game Editor tutorial</a>
+    </div>
+  </nav>
+
+  <!-- Page Content -->
+  <div class="container">
+    <div class="row">
+      <!-- Blog Entries Column -->
+        <h2 class="my-4" id="c1">1. Level design</h2>
+
+        <div class="card mb-4">
+          <div class="card-body">
+            <div class="chapter">
+            
+              <p class="card-text">
+                Designing level starts with Tiled, building tilemaps, and ends in the Game editor, adding interactive objects and NPCs. In this chapter, we will go over how to build tilemaps suitable for our game engine.<br/>
+                Download and install <a href="https://thorbjorn.itch.io/tiled">Tiled</a>, if you haven't already done so, and let's get started:
+              </p>
+            
+              <h4 class="card-title" id="c1-1">1.1 Creating a new tilemap</h4>
+
+              <p class="card-text">
+                Go to <span class="mono-span">File -> New -> New map</span> to open the new tilemap dialog:
+              </p>
+              
+              <p class="card-text">
+                <img src="pictures/tiled-new-map.png" />
+              </p>
+              
+              <p class="card-text">
+                The tile size must be 72x36, orientation must be isometric, and tile order should be left-down.<br/>
+                Click the "Save as", and save your tilemap in <span class="mono-span">assets/tilemaps</span> as <span class="mono-span">stable-cavern.json</span>.
+              </p>
+              
+              <p class="card-text">
+                We will now import a tileset to paint our tilemap. Click the "Open" button:
+              </p>
+
+              <p class="card-text">
+                <img src="pictures/tiled-open-tileset.png" />
+              </p>
+              
+              <p class="card-text">
+                Go to the <span class="mono-span">assets/tilesets</span> folder and open the three following files:
+                
+                <ul>
+                  <li><span class="mono-span">tileset-1.json</span>, a tileset for ground and roof tiles.</li>
+                  <li><span class="mono-span">walls-1.json</span>, a tileset for walls.</li>
+                  <li><span class="mono-span">zones.json</span>, a tileset of semi-transparent tiles for tile zones.</li>
+                </ul>
+              </p>
+              
+              <p class="card-text">
+                One last thing before you can start painting your tilemap: rename the tile layer to <i>ground</i>.
+              </p>
+              
+              <p class="card-text">
+                <img src="pictures/tiled-ground-layer.png" />
+              </p>
+              
+              <p class="card-text">
+                Everything's ready to go, you can start painting the ground layer of your tilemap. The result might end up a bit like this:
+              </p>
+              
+              <p class="card-text">
+                <img class="card-img-top" src="pictures/tiled-ground-painted.png" />
+              </p>
+
+              <p class="card-text warning">
+                One important thing to know is that the ground and roof layers from your tilemaps get pre-rendered and cached in the <span class="mono-span">.prerender</span> folder. If you want to update those layers, don't forget to remove that folder, which will force the game engine to render your tilemap again, with your changes included.
+              </p>
+
+              <div class="end-chapter"></div>
+
+              <h4 class="card-title" id="c1-2">1.2 Blocks</h4>
+              
+              <p class="card-text">
+                Now that we know how to paint the ground, let's move on to the blocks. Blocks are bigger tiles of 72x108 pixels, which block the path and line of sight of characters. We will need to create a new layer of tiles, called <i>blocks</i>:
+              </p>
+              
+              <p class="card-text">
+                <img src="pictures/tiled-blocks-layer.png" />
+              </p>
+              
+              <p class="card-text">
+                You can pick blocks from the <i>blocks.json</i> tileset we opened earlier, and start painting your blocks now.
+              </p>
+             
+              <h4 class="card-title" id="c1-3">1.3 Walls</h4>
+              
+              <p class="card-text">
+                Walls have the same function as blocks, but instead of blocking a whole tile, they merely block the path on a tile's border, horizontally or vertically.
+              </p>
+              
+              <p class="card-text">
+                To handle rendering order and direction of walls, we will make a single layer for each orientation of wall (north, east, south, west). These layers will be part of a layer group that must be called `walls`.
+              </p>
+              
+              <img src="pictures/tiled-wall-layer.png" />
+              
+              <p class="card-text">
+                <br />
+                Here's a representation of which walls should belong to which layer when drawing a room:
+              </p>
+              
+              <img src="pictures/tiled-walls-orientation.png" width="100%" />
+              
+              <div class="end-chapter"></div>
+
+              <h4 class="card-title" id="c1-4">1.4 Doorways</h4>
+              
+              <p class="card-text">
+                Doorways are special tiles from the `blocks` or `walls` layers which don't block the characters movement. They are typically used as frame for door objects, although those aren't created within Tiled, but within the Game Editor.
+              </p>
+              
+              <p class="card-text">
+                To differentiate doorways from regular walls, we use Tiled "custom properties". Try opening the `junk-walls.json` tileset, and check out the custom properties on a doorway tile:
+              </p>
+              
+              <img src="pictures/tiled-tileset-doorway.png" />
+              
+              <p class="card-text">
+                In the corresponding custom properties, we added a custom property of boolean type called `doorway`, and set the value to true.
+              </p>
+
+              <div class="end-chapter"></div>
+
+              <h4 class="card-title" id="c1-5">1.5 Cover</h4>
+              
+              <p class="card-text">
+                Walls and blocks break line of sights from characters, but you might not always want those to. You wall might feature a window, for instance, or your block might just be a short obstacle, providing cover. In those case, similarly to doorways, you must set a custom property on the corresponding tile, as such:
+              </p>
+              
+              <img src="pictures/tiled-tileset-cover.png" />
+              
+              <p class="card-text">
+                The cover property is of `int` type, and won't block line of sights as soon as the value is above zero.
+              </p>
+              
+              <p class="card-text">
+                The cover value will also be used to lower the chances of success of any attack that would go through the tile. It will also decrease the chances of detecting a character that's sneaking. The higher the value, the harder it will be for someone to aim or see through the tile.
+              </p>
+              
+              <p class="card-text card-hint">
+                When a line of sight crosses several tiles which have a cover value, the highest cover value will be used to determine the chances of success of the attack.<br/>Cover values are ignored on cases adjacent to the attacker's.
+              </p>
+
+              <div class="end-chapter"></div>
+              
+              <h4 class="card-title" id="c1-6">1.6 Roofs</h4>
+              
+              <p class="card-text">
+                We'll now put roofs over those walls. Roofs are stored in multiple layers: that is because when the player character is under a roof tile, the whole layer disappears, while the other roof layers remain visible.
+              </p>
+              
+              <p class="card-text">
+                The first step is to create a layer group named <i>roofs</i>. In this folder, you can then add any number of tile layer, named however you want:
+              </p>
+              
+              <p class="card-text">
+                <img src="pictures/tiled-roof-layer.png" />
+              </p>
+              
+              <p class="card-text">
+                Roof layers also have another particularity: they are rendered at a diffrent offset than other layers. The roof group layer must have its "Vertical offset" property set to -72:
+              </p>
+              
+              <p class="card-text">
+                <img src="pictures/tiled-roof-properties.png" />
+              </p>
+              
+              <p class="card-text">
+                You may now start painting your roof layers. <i>tileset-1</i> includes some roof tiles you can use at your leisure.
+              </p>
+
+              <div class="end-chapter"></div>
+
+              <h4 class="card-title" id="c1-7">1.7 Zones</h4>
+              
+              <p class="card-text">
+                The last thing you will have to do in Tiled will be drawing tile zone. Tile zones can serve the following purposes:
+                
+                <ul>
+                  <li>Entry zones can be used to insert a party of characters. It is mostly used when the map is entered by the player, to insert him along with his party.</li>
+                  <li>Exit zones can be used by the player character to exit a map. These zones can redirect either to another map or to the worldmap.</li>
+                  <li>Other zones can be used by scripts, to get a list of the objects in a zone (characters included), or to monitor what enters or exits the zone.</li>
+                </ul>
+              </p>
+              
+              <p class="card-text">
+                Note that exit zones are the only ones visible to the player. The tiles used when rendering the exit zones depend on whether the exit zone will send the player to another tilemap, or to the worldmap: it does not matter which kind of tile you use in Tiled to define your zone.
+              </p>
+              
+              <p class="card-text">
+                Let us create an exit and an entry zone for our tilemap. Like roofs, zones are grouped in a layer group: create the <i>zones</i> layer group, and add two new tile layers, called <i>exit-zone</i> and <i>demo-begin</i>:
+              </p>
+              
+              <p class="card-text">
+                <img src="pictures/tiled-zone-layer.png" />
+              </p>
+              
+              <p class="card-text">
+                We will start by creating the entry zone. We will have to set some custom property on our zone's tile layer, before drawing the zone, as shown in the following video:
+              </p>
+              
+              <video class="card-img-top" src="videos/24-create-entry-zone.webm" autoplay loop controls muted>
+              </video>
+              
+              <p class="card-text">
+                We first created the <span class="mono-span">type</span> property, which will indicate the game engine our zone type. Authorized values are <i>entry</i>, <i>exit</i>, or an empty string. 
+              </p>
+              
+              <p class="card-text">
+                As we are creating an entry-zone, we can also set the <span class="mono-span">default</span> property: when no entry zone name is explicitely found, or none match the zone name provided, characters will be inserted in this zone instead. As such, it is also the zone in which the player arrives when coming from the worldmap.
+              </p>
+              
+              <p class="card-text">
+                Creating our exit zone is very similar, but we may provide other custom properties:
+                <ul>
+                  <li><span class="mono-span">target</span> can be set to the name of the tilemap you wish to redirect to.</li>
+                  <li><span class="mono-span">toZone</span> should be set to the name of the entry zone you wish the player to be redirected to.</li>
+                </ul>
+              </p>
+
+              <p class="card-text card-hint">
+                If both <span class="mono-span">target</span> and <span class="mono-span">toZone</span> are left empty, the exit zone will send the player to the worldmap.<br/>
+                If only <span class="mono-span">target</span> is empty, the exit zone will look for an entry zone corresponding to <span class="mono-span">toZone</span> in the current tilemap.
+              </p>
+
+              <div class="end-chapter"></div>
+              
+              <h4 class="card-title" id="c1-8">1.8 Light zones</h4>
+              
+              <p class="card-text">
+                There is also one last special type of zone: light zones are used to draw light effects on the tilemap, while allowing bonuses for perception related tests on objects affected by a light zone. Light zones can also be turned on and off by scripts.
+              </p>
+              
+              <p class="card-text">
+                Light zones are located in the <span class="mono-span">lights</span> layer group. Create a new tile layer as such:
+              </p>
+              
+              <p class="card-text">
+                <img src="pictures/tiled-light-layer.png" />
+              </p>
+              
+              <p class="card-text">
+                Open the tileset located at <span class="mono-span">assets/tilesets/lights.json</span>, and you can now start drawing light zones:
+              </p>
+              
+              <video class="card-img-top" src="videos/25-draw-light-zone.webm" autoplay loop controls muted>
+              </video>
+
+              <div class="end-chapter"></div>
+              
+              <h4 class="card-title" id="c1-9">1.9 Floors</h4>
+              
+              <p class="card-text">
+                Your tilemap may also include several floors. The floors are grouped within a layer group, and each o them can include
+                the same layers we've introduced earlier: ground, roofs, walls, blocks, lights and zones. The result looks like this:
+              </p>
+              
+              <img style="padding-bottom:25px" src="pictures/tiled-floors-layers.png" />
+              
+              <p class="card-text">
+                Note that the floors are sorted from upper to lower.
+              </p>
+              
+              <p class="card-text">
+                You must also set a vertical offset to each floor folder.
+              </p>
+
+              <p class="card-text">
+                Within the game, each floor will render all their upper floors as if they were a roof layer.
+              </p>
+              
+              <div class="end-chapter"></div>
+            </div>
+          </div>
+          
+          <h2 class="my-" id="c2">
+            2. Level editor
+          </h2>
+          
+          <div class="card-body">
+            <h4 class="card-title" id="c2-1">2.1 Adding a game object</h4>
+            
+            <p class="card-text">
+              Download the game editor, launch the game, and click "Game Editor" on the main menu. You will be greeted by the Worldmap editor. But we'll first get into the level editor, by clicking on the "Levels" tab on the top of the screen.
+            </p>
+            
+            <p class="card-text">
+              On the left side of the screen, you will see a list of the tilemaps stored in <span class="mono-span">assets/tilemaps</span>. Click on "stable-cavern" to load it in the level editor.
+            </p>
+            
+            <p class="card-text">
+              The game object manager appears on the right side of the screen:
+            </p>
+            
+            <img src="pictures/level-editor-game-object-manager.png" />
+            
+            <p class="card-text">
+              Click on the + button to add open the following dialog:
+            </p>
+            
+            <img src="pictures/level-editor-game-object-create.png" />
+            
+            <p class="card-text">
+              Our first Game Object will be a puddle of acid. We will use this example to learn how to position objects, before introducing how scripting game objects works.
+            </p>
+
+            <p class="card-text">
+              Select the <span class="mono-span">Other</span> object type, and call it "acid-puddle".
+            </p>
+          
+            <h4 class="card-title" id="c2-2">2.2 Game object</h4>
+          
+            <p class="card-text">
+              Game Objects are the objects populating the world: characters, doors, items, and anything that the player can interact with. All of them can be controlled by a script, and they all share a set of tools to help you program their behaviour:
+            </p>
+            
+            <table class="dialog-hook-table">
+              <tr>
+                <td>Sprite</td>
+                <td>The visual representation of a game object on the tilemap.</td>
+              </tr>
+              <tr>
+                <td>Script</td>
+                <td>Scripts are attached to their game objects, and can be interacted with by other scripts.</td>
+              </tr>
+              <tr>
+                <td>Detectability</td>
+                <td>By default, objects are visible. But they can be hidden, and revealed through script or detection.</td>
+              </tr>
+              <tr>
+                <td>DataStore</td>
+                <td>Persistent data are written in DataStore, as seen in <a href="/scripts.html#c1-4">scripting 1.4</a>.</td>
+              </tr>
+              <tr>
+                <td>ControlZone</td>
+                <td>Objects can optionally feature a control zone, defined in the Game Editor. Control zones can signal the script when characters enter the zone. They can also block or release access to the zone.</td>
+              </tr>
+              <tr>
+                <td>TaskManager</td>
+                <td>Allows you to schedule calls to your scripts. It is based on game-time, rather than real-time.<br/>The <span class="mono-span">game</span> and <span class="mono-span">level</span> global objects also feature a TaskManager, and we've experimented with it in section <a href="#c1-4">1.4</a> and <a href="#c3-6">2.6</a>.</td>
+              </tr>
+            </table>
+
+            <p class="card-text" style="margin-top:20px">
+              In our journey to discover game objects, we will start with the simplest of them all: we call it the DynamicObject, and it serves as a basis for all interactive objects.
+            </p>
+            
+            <div class="end-chapter"></div>
+            
+            <h4 class="card-title" id="c2-3">2.3 Sprite and positionning</h4>
+
+            <p class="card-text">
+              We need to create a Sprite for our object to be displayed in a level. We will use the following picture to represent our puddle:
+            </p>
+            
+            <img src="pictures/acid.png" />
+            
+            <p class="card-text">
+              Download this file to your <span class="mono-span">assets/sprites</span> folder. Then, open up the Game Editor, go to the Sprite tab, and create our new sprite as following:
+            </p>
+            
+            <video class="card-img-top" src="videos/13-create-sprite.webm" autoplay loop controls muted></video>
+            
+            <p class="card-text">
+              Sprites are organized in groups. Objects usually use sprites from a single group. Here, we created a sprite group named <i>acid-puddle</i>, and added the <i>normal</i> animation to it.
+            </p>
+            
+            <p class="card-text">
+              Now that our sprite has been created, let's create a generic object in the level editor. When creating an object, we will select the "Other" category, to tell the level editor we're creating a custom DynamicObject.
+            </p>
+            
+            <p class="card-text">
+              Then, we will set a position on the map, and select the sprite we created. See the following video for reference:
+            </p>
+            
+            <video class="card-img-top" src="videos/14-create-acid-puddle-01.webm" autoplay loop controls muted></video>
+            
+            <p class="card-text">
+              Our acid puddle is now rendered in the level. But it's not exactly properly positionned. Characters are going to walk on that puddle, and we want it to be properly rendered below the characters, and not above.
+            </p>
+            
+            <p class="card-text">
+              For these kind of situations, we will use the Floating positionning mode, as opposed to the Tile-based one. A tile position will still be required, as it is necessary to determine render order. But we will set the position manually, as following:
+            </p>
+            
+            <video class="card-img-top" src="videos/15-create-acid-puddle-02.webm" autoplay loop controls muted></video>
+            
+            <p class="card-text card-hint">
+              Since the rendering order starts with objects from the top and right positions, you should ensure the tile position of your floating objects is set to the upper right tile overlapped by your object.
+            </p>
+            
+            <p class="card-text">
+              We also uncheck the <span class="mono-span">Blocks path</span> checkbox, because we want characters to be able to move over the object.
+            </p>
+            
+            <p class="card-text">
+              And lastly, we set the <span class="mono-span">Cover value</span> to zero, because we want characters to see through the object. An object with a cover value of 100 cannot be seen through.<br />
+              The cover value is applied on an object's case. When the objects contains a ControlZone with the <span class="mono-span">Blocks path</span> property enabled, the cover value is extended to all the tiles included in the zone.
+            </p>
+            
+            <div class="end-chapter"></div>
+            
+            <h4 class="card-title" id="c2-4">2.4 Scripts</h4>
+            
+            <p class="card-text">
+              In the following steps, our Game Object will need to implement scripted behaviours. Create a script and bind it to your game object as shown below:
+            </p>
+
+            <video class="card-img-top" src="videos/27-create-script.webm" autoplay loop controls muted></video>
+            
+            <p class="card-text">
+              The <span class="mono-span">acid-puddle.mjs</span> file has been created in the <span class="mono-span">scripts/behaviours</span> folder. You can open using your system's default application for JavaScript, by clicking on the button at the right of the script picker.
+            </p>
+            
+            <p class="card-text">
+              The generated file already contains the skeleton for any script, which looks like this:
+            </p>
+            
+            <pre class="code javascript"><code>class AcidPuddle {
+  constructor(model) {
+    this.model = model;
+  }
+}
+
+export function create(model) {
+  return new AcidPuddle(model);
+}</code></pre>
+
+            <p class="card-text">
+              Within the constructor, we set <span class="mono-span">this.model</span> on our script object. This will allow us to interact with the game object that our script will manage.
+            </p>
+            
+            <h4 class="card-title" id="c2-5">2.5 Control zones</h4>
+            
+            <p class="card-text">
+              We will need a way for it to know when characters are moving around in it. To that end, we will need two things: a script, which we have prepared earlier, and a control zone. 
+            </p>
+            
+            <p class="card-text">
+              Let's configure our control zone first. Create a control zone for the puddle, like this:
+            </p>
+            
+            <video class="card-img-top" src="videos/16-create-acid-puddle-03.webm" autoplay loop controls muted></video>
+            
+            <p class="card-text">
+              The first thing we did here was unchecking the <i>Blocks path</i> checkbox: by default, control zones block access to the zone cases. But we want characters to walk on our puddle, so our zone must be accessible.
+            </p>
+            
+            <p class="card-text">
+              Then, we toggled the zone edit mode: when the zone edit mode is enabled, clicking on tiles will add them to the control zone.
+            </p>
+            
+            <p>
+              Alright: now that our control zone is ready, let's see how to leverage it using scripts to inflict damage on characters as they enter or exit the zone. To achieve that, our script object can implement the hooks <span class="mono-span">onZoneEntered</span> and <span class="mono-span">onZoneExited</span>, like this:
+            </p>
+            
+            <pre class="code javascript"><code>class AcidPuddle {
+  constructor(model) {
+    this.model = model;
+  }
+  
+  onZoneEntered(character) {
+    this.inflictBurn(character);
+  }
+   
+  onZoneExited(character) {
+    this.inflictBurn(character);
+  }
+   
+  inflictBurn(character) {
+    if (character == game.player)
+      game.appendToConsole("The acid is slowly disolving you !");
+    character.takeDamage(10);
+  }
+}
+
+export function create(model) {
+  return new AcidPuddle(model);
+}</pre></code>
+
+            <p class="card-text">
+              With that example, we know how to make our object react to characters entering or leaving its control zone. But what if we want to inflict damage over time to the characters that are already within the zone ?
+            </p>
+            
+            <p class="card-text">
+              We will update our acid puddle script to inflict damage to the residents of its control zone over time. For that, we will use the <span class="mono-span">getControlZoneOccupants</span> method from our game object, conjointly with its <i>Task Manager</i>:
+            </p>
+            
+            <pre class="code javascript"><code>class AcidPuddle {
+  constructor(model) {
+    this.model = model;
+  }
+  
+  // The initialize hook only gets called the first time the script object is instanciated
+  // for this specific game object
+  initialize() {
+    this.model.tasks.addTask("inflictBurn", 3500, 0);
+  }
+ 
+  inflictBurn() {
+    const occupants = this.model.getControlZoneOccupants();
+    const characters = occupants.filter(object => object.getObjectType() == "Character");
+
+    characters.forEach(character => character.takeDamage(10, null));
+  }
+}
+
+export function create(model) {
+  return new AcidPuddle(model);
+}</pre></code>
+<ul class="card-text">
+            <li>
+              We use <span class="mono-span">this.model.tasks.addTask</span> to schedule a call to a method in the game object's script. The parameters are respectively: the name of the script method to call, the time interval expressed in milliseconds, and how much time will the cycle repeat. If that last number is zero, the task repeats indefinitely.<br/>
+              In this example, we scheduled a call to <span class="mono-span">inflictBurn</span> every 3.5 seconds.
+            </li>
+
+            <li>
+              The <span class="mono-span">getControlZoneOccupants</span> method returns a list of all the objects in a zone: but we only care about characters, which is why we filtered out the non-character objects using <span class="mono-span">getObjectType</span>.<br />
+              Then, we iterate over each character and inflict damage to them by calling <span class="mono-span">takeDamage</span>.
+            </li>
+            
+            <li>
+              <span class="mono-span">takeDamage</span> takes two parameters: the first one for the amount of damage inflicted, while the second one is meant to indicate which other character inflicted the damage. When damage hasn't been inflicted by any character in particular, you can just pass <span class="mono-span">null</span> instead.
+            </li>
+            </ul>
+            
+            <div class="end-chapter"></div>
+            
+            <h4 class="card-title" id="c2-6">2.6 Detectability</h4>
+            
+            <p class="card-text">
+              Sometimes, objects should be concealed to the player. Concealed objects can be revealed through script, or through detection by the player. Detection is based on the player's Perception and the distance between the player and the object.
+            </p>
+            
+            <p class="card-text">
+              If we edit the <span class="mono-span">initialize</span> method of our script as below, we will make our object invisible to the player until we manually reveal it later. We do this by setting the <span class="mono-span">this.model.hidden</span> property:
+            </p>
+            
+<pre class="code"><code>
+  initialize() {
+    this.model.hidden = true;
+    this.model.tasks.addTask("inflictBurn", 3500, 0);
+  }
+</code></pre>
+
+            <p class="card-text">
+              What if we want to enable detectability for the player ? To do that, we'll use <i>sneaking</i>, as following:
+            </p>
+
+<pre class="code"><code>
+  initialize() {
+    this.model.toggleSneaking(true);
+    this.model.interruptOnDetection = true;
+    this.model.tasks.addTask("inflictBurn", 3500, 0);
+  }
+  
+  onDetected() {
+    game.appendToConsole("You detected a puddle of acid");
+  }
+</code></pre>
+
+            <p class="card-text">
+              Note that we also set <span class="mono-span">interruptOnDetection</span> to <span class="mono-span">true</span>: this will cause the detection to interrupt whatever the player is currently doing. It is useful to prevent the player from trigerring a trap that he just detected.
+            </p>
+            
+            <p class="card-text">
+              We also added the <span class="mono-span">onDetected</span> method, which is called whenever concealed objects are detected.
+            </p>
+            
+            <p class="card-text">
+              Well then ! We've worked hard on that puddle of acid. Let's see it in action:
+            </p>
+            
+            <video class="card-img-top" src="videos/17-acid-puddle-demo.webm" autoplay loop controls muted>
+            </video>
+            
+            <div class="end-chapter"></div>
+            
+            <h4 class="card-title" id="c2-7">2.7 Object groups</h4>
+            
+            <p class="card-text">
+              Object groups are a special kind of game objects. They have two main uses:
+              <ul>
+                <li>
+                  They can contain game objects, as well as other object groups, allowing you to organize your game objects in a tree.
+                </li>
+                <li>
+                  Much like game objects, they can also include a script, a control zone and a task manager. This is useful when you need an object to manage a bunch of other objects, or when you need to add scripted behaviours that aren't bound to a game object.
+                </li>
+              </ul>
+            </p>
+
+            <p class="card-text">
+              To add an object group, click on the following button in the game object manager:
+            </p>
+            
+            <img src="pictures/level-editor-add-group-button.png" style="margin-bottom:25px"/>
+            
+            <p class="card-text">
+              Object groups appear on top of the game object list. Click on your new group to open the group view:
+            </p>
+            
+            <img src="pictures/level-editor-group-view.png" style="margin-bottom:25px"/>
+            
+            <h4 class="card-title" id="c2-8">2.8 Copy/Paste</h4>
+
+            <p class="card-text">
+              In the game object manager views, there's a set of buttons visible on the top-right corner.<br/>
+              When opening a game object or an object group, you should see the <i>Copy</i> button appear right on the left of the trashbin button.
+            </p>
+            
+            <p class="card-text">
+              You can use the Copy button on any object group or game object to save it in the clipper. When something is in the clipper, the <i>Paste</i> button will appear on group views. Click on the paste button to duplicate the object as many time as needed.
+            </p>
+            
+            <div class="end-chapter"></div>
+
+          </div>
+          
+        </div>
+      </div>
+
+      <!-- Sidebar Widgets Column -->
+      <div class="col-md-4">
+      
+      <style>
+      .card-body.card-index a {
+        display: block;
+      }
+      
+      .card-body.card-index .chapter {
+        padding-left: 10px;
+        padding-bottom: 5px;
+      }
+      
+      .card-body.card-index .section {
+        padding-left: 20px;
+      }
+      </style>
+
+        <!-- Index Widget -->
+        <div class="card my-4">
+          <h5 class="card-header">Level design</h5>
+          <div class="card-body card-index">
+            <a href="#c1">1. Tilemap</a>
+            <div class="chapter">
+              <a href="#c1-1">1.1 Creating a new tilemap</a>
+              <a href="#c1-2">1.2 Blocks</a>
+              <a href="#c1-3">1.3 Walls</a>
+              <a href="#c1-4">1.4 Doorways</a>
+              <a href="#c1-5">1.5 Cover</a>
+              <a href="#c1-6">1.6 Roofs</a>
+              <a href="#c1-7">1.7 Zones</a>
+              <a href="#c1-8">1.8 Light zones</a>
+              <a href="#c1-9">1.9 Floors</a>
+            </div>
+            <a href="#c2">2. Level editor</a>
+            <div class="chapter">
+              <a href="#c2-1">2.1 Adding a game object</a>
+              <a href="#c2-2">2.2 Game object</a>
+              <a href="#c2-3">2.3 Sprites and positionning</a>
+              <a href="#c2-4">2.4 Scripts</a>
+              <a href="#c2-5">2.5 Control zones</a>
+              <a href="#c2-6">2.6 Detectability</a>
+              <a href="#c2-7">2.7 Object groups</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <!-- /.row -->
+
+  </div>
+  <!-- /.container -->
+
+  <!-- Footer -->
+  <footer class="py-5 bg-dark">
+    <div class="container">
+      <p class="m-0 text-center text-white">Copyleft &copy; FoE Engine</p>
+    </div>
+    <!-- /.container -->
+  </footer>
+
+</body>
+
+</html>

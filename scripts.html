@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <title>FoE Engine: Scripting tutorial</title>
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+  <link href="css/blog-home.css" rel="stylesheet">
+  
+  <style>
+    .folder-list-table {
+      width: 100%;
+    }
+    .folder-list-table tr {
+      border: 1px lightgray solid;
+    }
+    .folder-list-table td {
+      padding: 2px;
+    }
+    .folder-list-table td:first-of-type {
+      font-family: monospace;
+      padding-right: 10px;
+    }  
+  
+    .end-chapter { height: 50px; }
+    .mono-span { font-family: monospace; display: inline-block; background-color: lightgray; padding: 1px; }
+    .code {
+      padding: 15px 10px;
+      margin: 0 -5px 20px;
+      background-color: lightgray;
+    }
+    .code-header {
+      background-color: lightgray;
+      border-bottom: 1px solid black;
+      padding: 2px 10px;
+      margin: 0 -5px;
+      font-family: monospace;
+      color: gray;
+    }
+    video {
+      margin: 10px 0 15px;
+    }
+    
+    .card-text.card-hint, .card-text.warning {
+      position: relative;
+      display: block;
+      border-radius: 15px;
+      background-color: rgba(255, 150, 0, 0.5);
+      padding: 10px;
+      margin: 10px;
+      padding-left: 60px;
+      margin-bottom: 20px;
+    }
+
+    .card-text.card-hint::before {
+      position: absolute;
+      left: 10px;
+      top: calc(50% - 20px);
+      content: "?";
+      display: block;
+      background-color: blue;
+      color: white;
+      width: 40px;
+      height: 40px;
+      text-align: center;
+      border-radius: 40px;
+      font-weight: bold;
+      padding-top: 2px;
+      font-size: 22px;
+      border: 2px solid white;
+    }
+    
+    .card-text.warning::before {
+      position: absolute;
+      left: 10px;
+      top: calc(50% - 20px);
+      content: "!";
+      display: block;
+      background-color: yellow;
+      color: black;
+      width: 40px;
+      height: 40px;
+      text-align: center;
+      border-radius: 40px;
+      font-weight: bold;
+      padding-top: 2px;
+      font-size: 22px;
+      border: 2px solid black;
+    }
+
+  </style>
+</head>
+
+<body style="padding-top:0">
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+      <a class="navbar-brand" href="/index.html"><h3>Fallout Equestria Engine</h3>Game Editor tutorial</a>
+    </div>
+  </nav>
+
+  <!-- Page Content -->
+  <div class="container">
+    <div class="row">
+      <!-- Blog Entries Column -->
+      <div class="col-md-8" id="getting-started">
+        <h1 class="my-4">
+          Scripting
+        </h1>
+
+        <h2 class="my-4" id="c1">1. Introduction</h2>
+        
+        <div class="card mb-4">
+          <div class="card-body">
+            <h4 class="card-title" id="c1-1">1.1 Folder structure</h4>
+            <p class="card-text">
+              Before writing any scripts, let's have a look at the folder structure you'll be working with. There are quite a lot of places for various types of files, so just remember this is here and use it as a reference.
+              
+              <table class="folder-list-table">
+                <tr>
+                  <th>Path</th>
+                  <th>Role</th>
+                </tr>
+                <tr>
+                  <td>assets/tilemaps</td>
+                  <td> the target folder for your Tiled tilemaps</td>
+                </tr>
+                <tr>
+                  <td>assets/tilesets</td>
+                  <td> the target folder for your Tiled tilesets</td>
+                </tr>
+                <tr>
+                  <td>assets/locales</td>
+                  <td> translations files are located there</td>
+                </tr>
+                <tr>
+                  <td>assets/videos</td>
+                  <td> root folder for video files</td>
+                </tr>
+                <tr>
+                  <td>assets/audio</td>
+                  <td> root folder for audio files</td>
+                </tr>
+                <tr>
+                  <td>assets/sprites</td>
+                  <td> root folder for spritesheets</td>
+                </tr>
+                <tr>
+                  <td>scripts/cmap/traits</td>
+                  <td> CMAP traits plugins folder</td>
+                </tr>
+                <tr>
+                  <td>scripts/cmap/races</td>
+                  <td> CMAP races plugins folder</td>
+                </tr>
+                <tr>
+                  <td>scripts/cmap/perks</td>
+                  <td> CMAP perks plugins folder</td>
+                </tr>
+                <tr>
+                  <td>scripts/quests</td>
+                  <td> Quest folder</td>
+                </tr>
+                <tr>
+                  <td>scripts/dialogs</td>
+                  <td> Dialog folder</td>
+                </tr>
+                <tr>
+                  <td>scripts/levels</td>
+                  <td> Level-context scripts (each level can implement one)</td>
+                </tr>
+                <tr>
+                  <td>scripts/pnjs</td>
+                  <td> Characters scripts</td>
+                </tr>
+                <tr>
+                  <td>scripts/items</td>
+                  <td> InventoryItems scripts</td>
+                </tr>
+                <tr>
+                  <td>scripts/behaviour</td>
+                  <td> All other DynamicObjects scripts</td>
+                </tr>
+              </table>
+            </p>
+            <p class="card-text">
+              Let's also have a look at a series of useful files:
+              <table class="folder-list-table">
+                <tr>
+                  <th>Path</th>
+                  <th>Role</th>
+                </tr>
+                <tr>
+                  <td>assets/audio.json</td>
+                  <td> maps audio files to nicknames</td>
+                </tr>
+                <tr>
+                  <td>assets/musics.json</td>
+                  <td> set of playlists prepared for certain contexts (specific level, worldmap, main menu)</td>
+                </tr>
+                <tr>
+                  <td>assets/sprites.json</td>
+                  <td> library of animation and animations groups (should be edited using the Game Editor)</td>
+                </tr>
+                <tr>
+                  <td>assets/objects.json</td>
+                  <td> library of available InventoryItems' item types.</td>
+                </tr>
+                <tr>
+                  <td>assets/worldmap.png</td>
+                  <td> Worldmap source</td>
+                </tr>
+                <tr>
+                  <td>scripts/main.mjs</td>
+                  <td> Game-context script</td>
+                </tr>
+                <tr>
+                  <td>scripts/initialize.mjs</td>
+                  <td> A simple script that initializes the Game context once a new game starts.</td>
+                </tr>
+              </table>
+            </p>
+            <div class="end-chapter"></div>
+            <h4 class="card-title" id="c1-2">1.2 Initializing a new game</h4>
+            <p class="card-text">
+The first thing you want to do is to take control of the entry point of the game. You want the player to start at a specific place in the WorldMap, and possibly to start directly inside a Level.
+            </p>
+
+            <p class="card-text">
+To achieve such results, we will use the <span class="mono-span">scripts/initialize.mjs</span> file. It gets triggered once the players finishes character creation, allowing you to insert any sort of transition and set up the beginning of the game.
+            </p>
+
+            <p class="card-text">
+The <span class="mono-span">initialize.mjs</span> is a very simple script, and must only export a single <span class="mono-span">initialize</span> function, as such:
+            </p>
+            
+            <div class="code-header">scripts/initialize.mjs</div>
+            <pre class="code javascript"><code>export function initialize() {
+  game.onCityEntered("stable-cavern", "demo-begin");
+  game.worldmap.setPosition(150, 250);
+  game.transitionRequired("intro.mp4", 1);
+}</code></pre>
+
+            <p class="card-text">
+This scripts does three things:
+<ul>
+  <li>The first line uses <span class="mono-span">game.onCityEntered</span> to load the <span class="mono-span">stable-cavern</span> level (corresponding to the tilemap stored in <span class="mono-span">assets/tilemaps/stable-cavern.json</span>). The second parameter <span class="mono-span">demo-begin</span> defines the zone in which to insert the player.</li>
+  
+
+  <li>The second lines instantly move the character to a specific position on the worldmap.</li>
+
+  <li>The third lines starts a transition using <span class="mono-span">game.transitionRequired</span>. Transitions can be started at anytime during the game: the first paremeter specifies which video file to play (the path is relative to the <span class="mono-span">assets/videos</span> folder), and the second parameter defines how much game-world seconds should pass during the transition (in this case, only one second will pass in the game world while the player watches the video).</li>
+</ul>
+            </p>
+            
+            <p class="card-text card-hint">
+              <span class="mono-span">game</span> is a global variable pointing to the main game object. It is available everywhere, and can be used at any time by scripts to move the player to another area, move ahead in time, or start playing a video.
+            </p>
+            
+            <div class="end-chapter"></div>
+            
+            <h4 class="card-title" id="c1-3">1.3 Customizing the Game script</h4>
+            <p class="card-text">
+The Game script is located at <span class="mono-span">scripts/main.mjs</span>. It is bounded to the Game context, and as such, gets loaded whenever a game starts, and keeps running until the game is exited or over.
+            </p>
+            
+            <p class="card-text">
+The following is the basic structure for all the Game, Level and DynamicObject scripts:
+            </p>
+            
+            <div class="code-header">scripts/main.mjs</div>
+            <pre class="code javascript"><code>class Game {
+   constructor(model) {
+   }
+   
+   initialize() {
+   }
+}
+
+export function create(model) {
+  return Game(model);
+}</code></pre>
+
+            <p class="card-text">
+              All game-related scripts must export a <span class="mono-span">create</span> function. The create function takes a model parameter, representing the instance of the managed object. The function must return an instance to a JavaScript object.
+            </p>
+            
+            <p class="card-text">
+              All game-related scripts may implement an <span class="mono-span">initialize</span> method. While the constructor will be called everytime an object is instantiated, the <span class="mono-span">initialize</span> method will only be called once, after the first instantiation. Since game objects properties are automatically saved by the game engine, it is best to set their initial value here, if needed.
+            </p>
+            
+            <p class="card-text card-hint hint">
+              Note that the managed object (<span class="mono-span">model</span>) for the Game script is the main game object itself, meaning that in this context, <span class="mono-span">model</span> is equal to the <span class="mono-span">game</span> global variable.
+            </p>
+            
+            <div class="end-chapter"></div>
+            
+            <h4 class="card-title" id="c1-4">1.4 Persisting data</h4>
+            
+            <p class="card-text">
+              Often, you will need to save data that will remain accessible as the player exits a level, save and load a game, and so on...<br/>
+              And the thing is, while properties on game objects<i>*</i> are always saved by the game engine, the properties that you set on your scripts aren't saved between multiple loads of your script.
+            </p>
+            
+            <p class="card-text card-hint">
+              <i>Game objects</i> are the native objects provided by the game engine itself. The parameter received by in the <span class="mono-span">export function create(model)</span> function is an example of game object.
+            </p>
+            
+            <p class="card-text">
+              To answer all your data saving needs, all game objects come with their own data store, meaning that you can save data globally, using the <span class="mono-span">game</span> global property. You can also save data on a specific level, using the <span class="mono-span">level</span> global property. And you can also save data on specific characters, items, objects of all kinds.
+            </p>
+            
+            <p class="card-text">
+              Using the data storage features is pretty easy: there are only three method names you need to memorize. We will present the three of those in the following snippet:
+            </p>
+ 
+            <div class="code-header">scripts/main.mjs</div>
+            <pre class="code javascript"><code>class Game {
+   constructor(model) {
+     this.model = model;
+     if (this.model.hasVariable("loadCount")) {
+       const loadCount = this.model.getVariable("loadCount");
+
+       this.model.setVariable("loadCount", loadCount + 1);
+       console.log(model, "load count is", loadCount);
+     }
+   }
+
+   initialize() {
+     this.model.setVariable("loadCount", 1);
+   }
+}
+
+export function create(model) {
+  return Game(model);
+}</code></pre>
+
+            <ul class="card-text">
+              <li><span class="mono-span">hasVariable</span> allow you to check whether a variable has been saved before</li>
+              <li><span class="mono-span">getVariable</span> returns the value stored in a variable</li>
+              <li><span class="mono-span">setVariable</span> set the value of a variable</li>
+            </ul>
+
+            <div class="end-chapter"></div>
+            
+            <h4 class="card-title" id="c1-5">1.5 Scheduling a task</h4>
+
+            <p class="card-text">
+              Let us add some action in that Game script: we will use the TaskManager to create a task that gets called every 5 seconds, and have the light zone we created earlier switch on and off:
+            </p>
+            
+            <pre class="code javascript"><code>export class Game {
+  initialize() {
+    game.tasks.addTask("myTask", 5000, 0);
+  }
+
+  myTask() {
+    if (game.level) {
+      const myLight = level.tilemap.getLightLayer("my-light");
+
+      if (myLight) {
+        myLight.visible = !myLight.visible;
+        game.appendToConsole(myLight.visible ? "Lights on !" : "Lights off");
+      }
+    }
+  }
+}
+
+export function create(model) {
+  return new Game(model);
+}</code></pre>
+
+            <p class="card-text">
+In this snippet, we use the game global object <span class="mono-span">tasks</span> property to access the object's TaskManager, and call <span class="mono-span">addTask</span> to schedule a new task.
+
+<ul>
+  <li>The first parameter is the name of the game object script method I want to call in 5 seconds.</li>
+  <li>The second parameter is the time delay between each calls: it is in milliseconds, which means that for a 5 seconds delay, I need to pass a value of 5000</li>
+  <li>Finally, the third parameter is the amount of times the task should be triggered. A value of zero means the task will run indefinitely, or until it gets exlicitely removed.</li>
+</ul>
+
+In the <span class="mono-span">myTask</span> method, we then check that a level is currently running, we get a hold of our <span class="mono-span">my-light</span> light zone, created in <a href="#c1-5">section 1.5</a>, and we toggle the light on and off.</p>
+
+            <p class="card-text card-hint">
+              Keep in mind that the TaskManager does not necessarily call a method from the script that calls <span class="mono-span">addTask</span>: it will try to call that method on the script of the object that owns the TaskManager.
+            </p>
+
+            <p class="card-text">
+              Lastly, we call <span class="mono-span">game.appendToConsole</span> to display a message on the player's HUD console.
+            </p>
+
+            <p class="card-text">
+              Now, here's the result of our new <span class="mono-span">initialize.mjs</span> and <span class="mono-span">main.mjs</span> scripts:
+            </p>
+            
+            <video class="card-img-top" src="videos/26-flicker-light-zone.webm" autoplay loop controls muted>
+            </video>
+          </div>
+        </div>
+        
+        <h2 class="my-4" id="c2">
+          2. Cutie Mark Acquisition Program
+        </h2>
+        <div class="card mb-4">
+          <div class="card-body">
+            <h4 class="card-title" id="c2-1">2.1 Introduction to CMAP</h4>
+          
+            <p class="card-text">
+              CMAP is a sub-system of the game engine that handles character sheets. Each character includes a CMAP powered character sheet, accessible through the <span class="mono-span">statistics</span> property on Character game objects. It features a set of different values for:
+            </p>
+            
+            <p class="card-text">
+              <ul>
+                <li><b>Face</b>, a set of informations used to draw the face of the character.</li>
+                <li><b>Characteristics</b>, the strength, perception, endurance, charisma, intelligence, agility, luck values.</li>
+                <li><b>Statistics</b>, a set of values computed from characteristics and other modifiers.</li>
+                <li><b>Skills</b>, the level of mastery for each skills.</li>
+                <li><b>Perks</b>, bonuses that can be gained sometimes after gaining a level.</li>
+                <li><b>Traits</b>, which provide both bonuses and maluses, and can be selected during character creation</li>
+                <li><b>Race</b>, which can be used to customize other values, and define which <i>sprite group</i> will be used to render the character.</li>
+              </ul>
+            </p>
+            
+            <p class="card-text">
+              All of these values can be consulted and modified by scripts. Additionally, traits, races and perks are script-based, and entirely customizable.
+            </p>
+            
+            <p class="card-text">
+              All the values can be directly read or overwritten from the character sheet object, accessing them using their full name in lower camelcase, such as:
+            </p>
+            
+<pre class="code"><code>character.statistics.agility
+character.statistics.lockpick
+character.statistics.armorClass
+...
+</code></pre>
+            
+            <div class="end-chapter"></div>
+            
+            <h4 class="card-title" id="c2-2">2.2 Experience and levels</h4>
+
+            <p class="card-text">
+              Among other things, CMAP handles the experience and level of a character. You may manually grant experience to a character with the following code:
+            </p>
+            
+<pre class="code"><code>character.statistics.addExperience(25);</code></pre>
+
+            <p class="card-text">
+              You can also read the current experience, and the experience left until the next level, using the following properties:
+            </p>
+
+<pre class="code"><code>character.statistics.experience
+character.statistics.xpNextLevel</code></pre>
+
+            <p class="card-text">
+              When the next level is reached, the player gains skill points, and sometimes a perk, according to <span class="mono-span">statistics.skillRate</span> and <span class="mono-span">statistics.perkRate</span>, respectively, the amount of skill points gained by level, and the amount of level to pass before gaining a perk.
+            </p>
+            
+            <p class="card-text">
+              The current amount of skill points and perks available to a player can also be directly edited using the following properties:
+            </p>
+
+<pre class="code"><code>character.statistics.skillPoints
+character.statistics.availablePerks</code></pre>
+
+            <div class="end-chapter"></div>
+
+            <h4 class="card-title" id="c2-3">2.3 Scripting traits</h4>
+            
+            <p class="card-text">
+              Traits scripts are located in <span class="mono-span">scripts/cmap/traits</span>. To add a new custom trait, let's create a new file in there:
+            </p>
+
+<div class="code-header">scripts/cmap/traits/fast-learner.mjs</div>
+<pre class="code"><code>export function onToggled(characterSheet, toggled) {
+  if (toggled)
+    characterSheet.strength -= 3;
+  else
+    characterSheet.strength += 3;
+}
+
+export function modifyBaseStatistics(characterSheet, name, value) {
+  if (name == "skillRate")
+    return value + 10;
+  return value;
+}
+
+export function modifyBaseSkill(characterSheet, name, value) {
+  return value + 25;
+}</code></pre>
+
+            <p class="card-text">
+              In this script, we exported all the functions available to traits:
+            </p>
+            
+            <ul>
+              <li><span class="mono-span">onToggled</span> is called when the trait is added or removed</li>
+              <li><span class="mono-span">modifyBaseStatistics</span> is called for each statistic value when the base values are being re-computed</li>
+              <li><span class="mono-span">modifyBaseSkill</span> is called for each skill value when the base values are being re-computed</li>
+            </ul>
+            
+            <p class="card-text card-hint">
+              Base values are computed using SPECIAL points, traits and race. Base values get updated everytime SPECIAL, traits or race are modified.
+            </p>
+
+            <p class="card-text">
+              In our <span class="mono-span">onToggled</span> function, we decrease the character's strength on activation, and increase it on deactivation.
+            </p>
+            
+            <p class="card-text">
+              Our <span class="mono-span">modifyBaseStatistics</span> function increase the character's skillRate by ten, and leave other statistics as is.
+            </p>
+            
+            <p class="card-text">
+              And our <span class="mono-span">modifyBaseSkill</span> function increases each of the character's skill by 25 points.
+            </p>
+            
+            <div class="end-chapter"></div>
+            
+            <h4 class="card-title" id="c2-4">2.4 Scripting perks</h4>
+            
+            <p class="card-text">
+              Perk scripts are located in <span class="mono-span">scripts/cmap/perks</span>. We will now create a simple perk with the following code:
+            </p>
+
+<div class="code-header">scripts/cmap/perks/too-cool-for-school.mjs</div>
+<pre class="code"><code>export function onToggled(characterSheet, toggled) {
+  const modifier = toggled ? 1 : -1;
+
+  characterSheet.charisma += (1 * modifier);
+  characterSheet.speech   += (10 * modifier);
+}
+
+export function isAvailableFor(characterSheet) {
+  return characterSheet.level > 2;
+}</code></pre>
+
+            <p class="card-text">
+              You already know the <span class="mono-span">onToggled</span> function, as it is the same as for Traits scripts. In this perk example, we use it to modify the character's charisma characteristic and speech skill.
+              Note that <span class="mono-span">modifyBaseSkill</span> and <span class="mono-span">modifyBaseStatistics</span> are also available in perks.
+            </p>
+            
+            <p class="card-text">
+              The important part here is <span class="mono-span">isAvailableFor</span>. Perks can only be picked if certain conditions are met, and this function will be called everytime the perk picking screen appears to figure out if your perk will be part of the options available to the player. In this script, we ensured that the perk wouldn't be available until the player reaches level 3.
+            </p>
+            
+            <div class="end-chapter"></div>
+            
+            <h4 class="card-title" id="c2-5">2.5 Scripting races</h4>
+            
+            <p class="card-text">
+              Races scripts are located in <span class="mono-span">scripts/cmap/races</span>. Let's create a new race script:
+            </p>
+            
+<div class="code-header">scripts/cmap/races/ghoul.mjs</div>
+<pre class="code"><code>export const isPlayable = false;
+
+export const spriteSheet = "earthpony-green";
+
+export function onToggled(characterSheet, toggled) {
+  const modifier = toggled ? 1 : -1;
+
+  characterSheet.endurance -= (1 * modifier);
+  characterSheet.strength  -= (1 * modifier);
+}
+</code></pre>
+
+            <p class="card-text">
+              Let's go over the exported values from that script:
+            </p>
+            
+            <ul>
+              <li><span class="mono-span">isPlayable</span> defines whether the race can be selected by a player on character creation.</li>
+              <li><span class="mono-span">spriteSheet</span> defines the <a href="#c5-2">sprite group</a> containing the character's animation.</li>
+              <li><span class="mono-span">onToggled</span>, as with other CMAP scripts, allows you to make changes to the character sheet when a character race changes.</li>
+            </ul>
+            
+            <p class="card-text">
+              What if a same race should use several sprite groups ? Neverfear, you can also export <span class="mono-span">spriteSheet</span> as a function, such as:
+            </p>
+            
+<pre class="code"><code>export function spriteSheet(characterSheet) {
+  if (characterSheet.gender == "male")
+    return "ghoul-male";
+  return "ghoul-female";
+}
+</code></pre>
+            
+            <div class="end-chapter"></div>
+          </div>
+        </div>
+        
+        <h2 class="my-4" id="c3">
+          3. Quests
+        </h2>
+        <div class="card mb-4">
+          <div class="card-body">
+            <h4 class="card-title" id="c3-1">3.1 Creating a quest</h4>
+          
+            <p class="card-text">
+              Quests are basically a set of objective that the player can achieve or fail to achieve. Quest scripts are located in the <span class="mono-span">scripts/quests</span> folder. Let's create our own quest:
+            </p>
+            
+<div class="code-header">scripts/quests/myQuest.mjs</div>
+<pre class="code"><code>class MyQuest {
+  constructor(model) {
+    this.model = model;
+  }
+  
+  initialize() {
+    game.appendToConsole("You picked up a new quest !");
+  }
+  
+  getObjectives() {
+    return [
+      {label: "Objectif lune", success: false},
+      {label: "Failed objective", failed: true },
+      {label: "Completed objective", success: true }
+    ];
+  }
+}
+
+export function create(model) {
+  return new MyQuest(model);
+}</code></pre>
+
+            <p class="card-text">
+              Quest scripts are similar to other game object scripts. We added the <span class="mono-span">getObjectives</span> method to return a list of objectives to be displayed to the user. Objectives have three possible state: pending, failure or success (presented in the same order in our method).
+            </p>
+            
+            <div class="end-chapter"></div>
+            
+            <h4 class="card-title" id="c3-2">3.2 Managing player quests</h4>
+            
+            <p class="card-text">
+              Now that we can create our own quests, we should know how to add these quests to the player's quest log. We will see how to add a quest, using the <span class="mono-span">initialize.mjs</span> script as an example:
+            </p>
+
+            <div class="code-header">scripts/initialize.mjs</div>
+            <pre class="code javascript"><code>export function initialize() {
+  game.quests.addQuest("myQuest"); // &lt;-- here we go
+  game.onCityEntered("stable-cavern", "demo-begin");
+  game.worldmap.setPosition(150, 250);
+  game.transitionRequired("intro.mp4", 1);
+}</code></pre>
+
+            <p class="card-text">
+              Here, we use the QuestManager, accessbile using <span class="mono-span">game.quests</span> to add our <i>myQuest</i> quest to the player's active quests. The quest manager can also be used to fetch a specific quest object, or iterate over all active quests, using respectively <span class="mono-span">game.quests.getQuest("myQuest")</span> and <span class="mono-span">game.quests.list</span>.
+            </p>
+            
+            <div class="end-chapter"></div>
+            
+            <h4 class="card-title" id="c9-3">9.3 Completing objectives</h4>
+            
+            <p class="card-text">
+              Now, how would we go around completing our objectives ? Well, this is mainly left to the script to decide. First, we must implement the <span class="mono-span">completeObjective</span> method:
+            </p>
+            
+            <div class="code-header">scripts/quests/myQuest.mjs</div>
+            <pre class="code javascript"><code>class MyQuest {
+  constructor(model) {
+    this.model = model;
+  }
+  
+  completeObjective(objectiveName) {
+    this.model.setVariable(objectiveName, 1);
+    this.model.completed = true;
+  }
+  
+  getObjectives() {
+    return [
+      {label: "Objectif lune", success: this.model.getVariable("myObjective") == 1}
+    ]
+  }
+  
+  onCompleted() {
+    game.player.statistics.addExperience(1000);
+    game.appendToConsole("You gained 1000 experience points for completing MyQuest");
+  }
+}</code></pre>
+
+            <p class="card-text">
+              In our <span class="mono-span">completeObjective</span>, we persist the state of our objective using <span class="mono-span">setVariable</span> on the quest object. Since our quest only includes one objective, we also set the <span class="mono-span">completed</span> property to true on the quest object.
+            </p>
+            
+            <p class="card-text">
+              We also added the <span class="mono-span">onCompleted</span> method, which gets called whenever <span class="mono-span">this.model.completed</span> goes from false to true.
+            </p>
+            
+            <p class="card-text">
+              We know how to react to an objective getting completed. Now, here's how you can trigger an objective completion from scripts:
+            </p>
+            
+            <pre class="code javascript"><code>game.quests.getQuest("myQuest").completeObjective("myObjective")</code></pre>
+            
+            <div class="end-chapter"></div>
+            
+            <h4 class="card-title" id="c3-4">3.4 Watchers</h4>
+            
+            <p class="card-text">
+              We know how to complete a quest objective from another script. But sometimes, it's not most convenient way to monitor quest objectives. Quest scripts can also implement watchers, to be warned when some events happen in the game.
+            </p>
+            
+            <h5 class="card-title" id="3-4-1">3.4.1 Item picking watcher</h5>
+            
+            <p class="card-text">This watcher gets triggered whenever the player picks an item up. Here's an example:</p>
+            
+<pre class="code javascript"><code>class MyQuest {
+  ...
+  
+  onItemPicked(item) {
+    if (item.itemType == "someQuestItem") {
+      this.model.setVariable("itemPicked", 1);
+      this.model.completed = true;
+    }
+  }
+}</code></pre>
+
+            <h5 class="card-title" id="3-4-2">3.4.2 Character killed watcher</h5>
+            
+            <p class="card-text">This watcher gets triggered whenver a character gets killed, including if the killer wasn't the player, or the character didn't die in combat. Here's an example:</p>
+
+<pre class="code javascript"><code>class MyQuest {
+  ...
+  
+  onCharacterKilled(victim, killed) {
+    if (victim.race == "mutated-rat") {
+      const killCount = (this.model.getVariable("ratKilled") || 0) + 1;
+      
+      this.model.getVariable("ratKilled", killCount);
+      if (killCount > 10)
+        this.model.completed = true;
+    }
+  }
+}</code></pre>
+
+            <div class="end-chapter"></div>
+          </div>
+        </div>
+        
+        <h2 class="my-4" id="c4">
+          4. Buffs
+        </h2>
+        <div class="card mb-4">
+          <div class="card-body">
+            <h4 class="card-title" id="c4-1">4.1 Introduction</h4>
+          
+            <p class="card-text">
+              Buffs are bonuses or maluses that can be added to a Character. Buffs themselves are game objects, and the scripts are located at <span class="mono-span">scripts/buffs</span>. They feature a TaskManager, allowing for functions methods to be called regularly, and eventually remove the buff once it has expired.
+            </p>
+            
+            <p class="card-text">
+              Buffs on a character are visible in the status panel in the character sheet view, below the Hit points display:
+            </p>
+
+            <p class="card-text">
+              <img src="pictures/buff-view.png" />
+            </p>
+            
+            <div class="end-chapter"></div>
+            
+            <h4 class="card-title" id="c4-2">4.2 Adding and removing buffs</h4>
+
+            <p class="card-text">
+              Adding a buff on a character is fairly easy. The name of a buff is defined by the name of it scripts. To add the buff defined in <span class="mono-span">scripts/buffs/bleeding.mjs</span>, we would do the following:
+            </p>
+            
+<pre class="code"><code>characters.addBuff("bleeding");</code></pre>
+
+            <p class="card-text">
+              The bleeding buff is a tick-based buff, meaning that once it runs off of ticks, the buff will remove itself. But what if we wanted to remove it, for another reason ? We will first need to fetch the buff game object, before removing it:
+            </p>
+            
+<pre class="code"><code>const buff = characters.getBuff("bleeding");
+
+if (buff)
+  buff.remove();</code></pre>
+
+            <div class="end-chapter"></div>
+            
+            <h4 class="card-title" id="c4-3">4.3 Creating a buff</h4>
+            
+            <p class="card-text">
+              Now that we know how to apply or remove buffs from a character, let's see how to create our own custom buffs. Let's make a blinded buff, reducing the character's perception:
+            </p>
+            
+<div class="code-header">scripts/buffs/blinded.mjs</div>
+<pre class="code"><code>class Blinded {
+  constructor(model) {
+    this.model = model;
+  }
+  
+  initialize() {
+    this.model.target.statistics.perception -= 5;
+  }
+  
+  finalize() {
+    this.model.target.statistics.perception += 5;
+  }
+}
+
+export function create(model) {
+  return new Blinded(model);
+}</code></pre>
+
+            <p class="card-text">
+              As you can see, like other game objects, buffs have an <span class="mono-span">initialize</span> method, whcih gets executed when the buff is applied on the player. But buffs also have a <span class="mono-span">finalize</span> method, which gets called as the buff gets removed from the character.
+            </p>
+            
+            <p class="card-text">
+              Currently, our buff will remain on the character indefinitely, until another script manually removes it. If we want our buff to expire, we can leverage the TaskManager:
+            </p>
+            
+<div class="code-header">scripts/buffs/blinded.mjs</div>
+<pre class="code"><code>class Blinded {
+  constructor(model) {
+    this.model = model;
+  }
+  
+  initialize() {
+    this.model.target.statistics.perception -= 5;
+    this.tasks.addTask("expire", 86400000, 1);
+  }
+  
+  finalize() {
+    this.model.target.statistics.perception += 5;
+  }
+  
+  expire() {
+    this.model.remove();
+  }
+}
+
+export function create(model) {
+  return new Blinded(model);
+}</code></pre>
+
+            <p class="card-text">
+              We now schedule a call to our <span class="mono-span">expire</span> method, one day after the buff gets applied. Then, in the <span class="mono-span">expire</span> method, we call our game object's <span class="mono-span">remove</span> method, which will in turn call the <span class="mono-span">finalize</span> method and remove the buff from the character.
+            </p>
+            
+            <div class="end-chapter"></div>
+            
+            <h4 class="card-title" id="c4-4">4.4 Cumulating buffs</h4>
+            
+            <p class="card-text">
+              There is one important fact to know about buffs: there cannot be several instance of a same buff on the same player at a given time. However, it is possible to cumulate buffs using a single buff game object. We will now see what happens when you add a buff to a character, when an instance of the same buff is already being applied on a character.
+            </p>
+            
+            <p class="card-text">
+              If you were to call <span class="mono-span">character.addBuff("blinded")</span> twice, it's <span class="mono-span">initialize</span> method will only be called once. However, if you provide a <span class="mono-span">repeat</span> method, it will get called instead. Let's see how this might be implemented:
+            </p>
+            
+<div class="code-header">scripts/buffs/blinded.mjs</div>
+<pre class="code"><code>  repeat() {
+    this.tasks.removeTask("expire");
+    this.tasks.addTask("expire", 86400000, 1);
+  }</code></pre>
+
+            <p class="card-text">
+              In our <span class="mono-span">repeat</span> method, we first unschedule the call to our <span class="mono-span">expire</span> method, and re-schedule it to one day in the future. This means applying the buff two times on a character doesn't change anything, but ensure that the buff won't expire until one day after the last addition, rather than one day after the first addition.
+            </p>
+            
+            <div class="end-chapter"></div>
+          </div>
+          
+        </div>
+
+      </div>
+
+      <!-- Sidebar Widgets Column -->
+      <div class="col-md-4">
+      
+      <style>
+      .card-body.card-index a {
+        display: block;
+      }
+      
+      .card-body.card-index .chapter {
+        padding-left: 10px;
+        padding-bottom: 5px;
+      }
+      
+      .card-body.card-index .section {
+        padding-left: 20px;
+      }
+      </style>
+
+        <!-- Index Widget -->
+        <div class="card my-4">
+          <h5 class="card-header">Scripting</h5>
+          <div class="card-body card-index">
+            <a href="#c1">1. Introduction</a>
+            <div class="chapter">
+              <a href="#c1-1">1.1 Folder structure</a>
+              <a href="#c1-2">1.2 Initializing a new game</a>
+              <a href="#c1-3">1.3 Customizing the Game script</a>
+              <a href="#c1-4">1.4 Persisting data</a>
+              <a href="#c1-5">1.5 Scheduling a task</a>
+            </div>
+            <a href="#c2">2. Cutie Mark Acquisition Program</a>
+            <div class="chapter">
+              <a href="#c2-1">2.1 Introduction to CMAP</a>
+              <a href="#c2-2">2.2 Experience and levels</a>
+              <a href="#c2-3">2.3 Scripting traits</a>
+              <a href="#c2-4">2.4 Scripting perks</a>
+              <a href="#c2-5">2.5 Scripting races</a>
+            </div>
+            <a href="#c3">3. Quests</a>
+            <div class="chapter">
+              <a href="#c3-1">3.1 Creating a quest</a>
+              <a href="#c3-2">3.2 Managing player quests</a>
+              <a href="#c3-3">3.3 Completing objectives</a>
+              <a href="#c3-4">3.4 Watchers</a>
+            </div>
+            <a href="#c4">4. Buffs</a>
+            <div class="chapter">
+              <a href="#c4-1">4.1 Introduction</a>
+              <a href="#c4-2">4.2 Adding and removing buffs</a>
+              <a href="#c4-3">4.3 Creating a buff</a>
+              <a href="#c4-4">4.4 Cumulating buffs</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <!-- /.row -->
+
+  </div>
+  <!-- /.container -->
+
+  <!-- Footer -->
+  <footer class="py-5 bg-dark">
+    <div class="container">
+      <p class="m-0 text-center text-white">Copyleft &copy; FoE Engine</p>
+    </div>
+    <!-- /.container -->
+  </footer>
+
+</body>
+
+</html>
