@@ -174,7 +174,7 @@ void WorldMap::update()
     currentPosition.setY(axisMovement(currentPosition.y(), targetPosition.y(), static_cast<int>(movementSpeedY)));
     emit currentPositionChanged();
     if (currentPosition == targetPosition)
-      emit onTargetPositionReached();
+      onTargetPositionReached();
     Game::get()->advanceTime(14);
   }
 }
@@ -196,6 +196,17 @@ void WorldMap::onTargetPositionReached()
   qDebug() << "Stopping update timer";
   updateTimer.stop();
   emit movingChanged();
+}
+
+void WorldMap::restart()
+{
+  if (paused)
+  {
+    paused = false;
+    emit pausedChanged();
+  }
+  if (currentPosition != targetPosition)
+    onTargetPositionChanged();
 }
 
 WorldMapCity* WorldMap::getCity(const QString &name) const
@@ -273,6 +284,7 @@ void WorldMap::revealCity(WorldMapCity* city)
 void WorldMap::setPosition(int x, int y)
 {
   currentPosition = QPoint(x, y);
+  targetPosition = currentPosition;
   emit currentPositionChanged();
 }
 

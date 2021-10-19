@@ -15,6 +15,8 @@ Item {
   state: "default"
   //onHasOverlayChanged: controller.paused = hasOverlay || root.state != "default";
 
+  Component.onCompleted: controller.restart()
+
   Connections {
     target: controller
 
@@ -35,7 +37,7 @@ Item {
     onAccepted: gameManager.currentGame.randomEncounters.triggerScheduledEncounter()
     onRejected: {
       root.state = "default";
-      root.controller.paused = false;
+      root.controller.restart();
     }
   }
 
