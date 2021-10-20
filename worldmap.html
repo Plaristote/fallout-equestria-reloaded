@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <title>FoE Engine: Worldmap tutorial</title>
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+  <link href="css/blog-home.css" rel="stylesheet">
+  
+  <style>
+    .folder-list-table {
+      width: 100%;
+    }
+    .folder-list-table tr {
+      border: 1px lightgray solid;
+    }
+    .folder-list-table td {
+      padding: 2px;
+    }
+    .folder-list-table td:first-of-type {
+      font-family: monospace;
+      padding-right: 10px;
+    }  
+  
+    .end-chapter { height: 50px; }
+    .mono-span { font-family: monospace; display: inline-block; background-color: lightgray; padding: 1px; }
+    .code {
+      padding: 15px 10px;
+      margin: 0 -5px 20px;
+      background-color: lightgray;
+    }
+    .code-header {
+      background-color: lightgray;
+      border-bottom: 1px solid black;
+      padding: 2px 10px;
+      margin: 0 -5px;
+      font-family: monospace;
+      color: gray;
+    }
+    video {
+      margin: 10px 0 15px;
+    }
+    
+    .card-text.card-hint, .card-text.warning {
+      position: relative;
+      display: block;
+      border-radius: 15px;
+      background-color: rgba(255, 150, 0, 0.5);
+      padding: 10px;
+      margin: 10px;
+      padding-left: 60px;
+      margin-bottom: 20px;
+    }
+
+    .card-text.card-hint::before {
+      position: absolute;
+      left: 10px;
+      top: calc(50% - 20px);
+      content: "?";
+      display: block;
+      background-color: blue;
+      color: white;
+      width: 40px;
+      height: 40px;
+      text-align: center;
+      border-radius: 40px;
+      font-weight: bold;
+      padding-top: 2px;
+      font-size: 22px;
+      border: 2px solid white;
+    }
+    
+    .card-text.warning::before {
+      position: absolute;
+      left: 10px;
+      top: calc(50% - 20px);
+      content: "!";
+      display: block;
+      background-color: yellow;
+      color: black;
+      width: 40px;
+      height: 40px;
+      text-align: center;
+      border-radius: 40px;
+      font-weight: bold;
+      padding-top: 2px;
+      font-size: 22px;
+      border: 2px solid black;
+    }
+
+  </style>
+</head>
+
+<body style="padding-top:0">
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+      <a class="navbar-brand" href="./index.html"><h3>Fallout Equestria Engine</h3>Game Editor tutorial</a>
+    </div>
+  </nav>
+
+  <!-- Page Content -->
+  <div class="container">
+    <div class="row">
+      <!-- Blog Entries Column -->
+      <div class="col-md-8" id="getting-started">
+        <h2 class="my-4" id="c1">
+          1. Locations
+        </h2>
+        <div class="card mb-4">
+          <div class="card-body">
+
+            <h4 class="card-title" id="c1-1">1.1 Worldmap editor</h4>
+          
+            <p class="card-text">
+	      Let's customize the worldmap. First things first, we will need to change the texture for the worldmap.<br />
+              The path for the worldmap picture is <span class="mono-span">assets/worldmap.png</span>. Overwrite it with your own map before opening the Game Editor to the Worldmap tab:
+            </p>
+
+	    <img class="card-img-top" src="pictures/worldmap-editor.png" /><br /><br />
+
+	    <p class="card-text">
+	    On the top left hand, you can now use the inputs on the <i>Worldmap Dimensions</i> panel to change the size of the worldmap and the cases.
+	    </p>
+
+	    <p class="card-text card-hint">
+	      When picking a size for the cases, keep in mind that they are used for two purposes: hiding the parts of the map the player hasn't visited yet, and defining worldmap zones, which you can then use to grossly localize the player with scripts.
+	    </p>
+
+	    <div class="end-chapter"></div>
+
+            <h4 class="card-title" id="c1-2">1.2 Location editor</h4>
+          
+            <p class="card-text">
+	      The next thing we're going to do is to create visible locations that the player will be able to get into. Below the dimensions input, click on the <i>Add</i> button to start adding a new location:
+            </p>
+
+            <video class="card-img-top" src="videos/worldmap-create-city.webm" autoplay loop controls muted>
+            </video>
+
+            <p class="card-text">
+	      The location editor form provides you the following inputs:
+	      <table>
+                <tr>
+	          <th>Name</th>
+	          <td>The displayable name of your location. If the value is "mytown", the translation key for the location's name will be "locations.mytown"</td>
+               </tr>
+                <tr>
+                  <th>Level</th>
+		  <td>The tilemap which we be loaded once the player enters the location. By default, the player's party will be inserted in the first entry zone that's marked as default, as seen in <a href="./tiled.html#c1-7">level design 1.7</a>.</td>
+                </tr>
+		<tr>
+                  <th>Position</th>
+		  <td>The position of the center of the location in the worldmap</td>
+		</tr>
+		<tr>
+                  <th>Size</th>
+                  <td>The diameter of the location on the worldmap</td>
+		</tr>
+	      </table>
+            </p>
+
+	    <p class="card-text warning">
+	      Don't forget to click on the <i>Save</i> button to save your changes.
+	    </p>
+
+            
+            <div class="end-chapter"></div>
+
+            <h4 class="card-title" id="c1-3">1.3 Scripting worldmap locations</h4>
+            
+            <p class="card-text">
+	      But wait ! We're not quite done. Locations can also be added or modified dynamically through scripts by using the <span class="mono-span">game.worldmap</span> global object.
+            </p>
+
+<div class="code-header">scripts/initialize.mjs</div>
+<pre class="code"><code>export function initialize() {
+  const location = game.worldmap.createCity("mytown");
+
+  location.position.x = 250;
+  location.position.y = 250;
+  location.size = 100;
+  location.level = "sample-city";
+  game.worldmap.revealCity("mytown");
+}</code></pre>
+
+<p class="card-text">
+  In this game bootstrap script, we create a location called <i>mytown</i> (the translation key for the location name is thus <span class="mono-span">locations.mytown</span>), set a position and size, and define that it will send the player to a tilemap called <i>sample-city</i>.
+</p>
+
+<p class="card-text">
+The last line of the script calls <span class="mono-span">revealCity</span>, which will reveal the location within the player's worldmap: the case on which the city resides will become visible to the player, even if he didn't explore it beforehand, and a button will appear on the sidebar for the player to quickly start traveling towards the location.
+</p>
+
+<p class="card-text">
+  You can also edit or remove the location later by calling <span class="mono-span">game.worldmap.getCity("mytown")</span> or <span class="mono-span">game.worldmap.removeCity("mytown")</span>.
+</p>
+
+            <div class="end-chapter"></div>
+          </div>
+        </div>
+            
+        <h2 class="my-5" id="c2">
+          2. Zones
+        </h2>
+        
+        <div class="card mb-4">
+          <div class="card-body">
+            <h4 class="card-title" id="c2-1">2.1 Zone editor</h4>
+            
+            <p class="card-text">
+            </p>
+            
+            <div class="end-chapter"></div>
+
+            <h4 class="card-title" id="c2-1">2.2 Zones in scripts</h4>
+            
+            <p class="card-text">
+            </p>
+            
+            <div class="end-chapter"></div>
+          </div>
+        </div>
+
+        <h2 class="my-5" id="c3">
+          3. Encounters
+        </h2>
+        
+        <div class="card mb-4">
+          <div class="card-body">
+            <h4 class="card-title" id="c3-1">3.1 The outdoors tick</h4>
+            
+            <p class="card-text">
+            </p>
+            
+            <div class="end-chapter"></div>
+	    
+            <h4 class="card-title" id="c3-2">3.2 Setting up an encounter</h4>
+            
+            <p class="card-text">
+            </p>
+            
+            <div class="end-chapter"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sidebar Widgets Column -->
+      <div class="col-md-4">
+      
+      <style>
+      .card-body.card-index a {
+        display: block;
+      }
+      
+      .card-body.card-index .chapter {
+        padding-left: 10px;
+        padding-bottom: 5px;
+      }
+      
+      .card-body.card-index .section {
+        padding-left: 20px;
+      }
+      </style>
+
+        <!-- Index Widget -->
+        <div class="card my-4">
+          <h5 class="card-header">Index</h5>
+          <div class="card-body card-index">
+            <a href="#c1">1. Locations</a>
+            <div class="chapter">
+              <a href="#c1-1">1.1 Worldmap editor</a>
+              <a href="#c1-2">1.2 Location editor</a>
+              <a href="#c1-3">1.3 Scripting worldmap locations</a>
+            </div>
+            <a href="#c2">2. Zones</a>
+            <div class="chapter">
+              <a href="#c2-1">2.1 Zone editor</a>
+              <a href="#c2-2">2.2 Zones in scripts</a>
+            </div>
+            <a href="#c3">3. Random encounters</a>
+            <div class="chapter">
+              <a href="#c3-1">3.1 The outdoors tick</a>
+              <a href="#c3-2">3.2 Setting up an encounter</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <!-- /.row -->
+
+  </div>
+  <!-- /.container -->
+
+  <!-- Footer -->
+  <footer class="py-5 bg-dark">
+    <div class="container">
+      <p class="m-0 text-center text-white">Copyleft &copy; FoE Engine</p>
+    </div>
+    <!-- /.container -->
+  </footer>
+</body>
+</html>
