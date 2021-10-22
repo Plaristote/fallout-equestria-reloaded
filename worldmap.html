@@ -211,14 +211,50 @@ The last line of the script calls <span class="mono-span">revealCity</span>, whi
             <h4 class="card-title" id="c2-1">2.1 Zone editor</h4>
             
             <p class="card-text">
+              Worldmap zones are used to categorize parts of the map, and handle things like movement speed on the worldmap, or scripted worldmap behaviours, such as random encounters type.
             </p>
+
+	    <p class="card-text">
+	      To start adding a zone, go to the <i>Zones</i> tab below the dimension inputs, and click the <i>Add</i> button:
+	    </p>
+
+            <video class="card-img-top" src="videos/worldmap-create-zone.webm" autoplay loop controls muted>
+            </video>
+
+	    <p class="card-text">
+	      When the zone editor is opened, you can click on cases to add or remove those from the current zone.
+	    </p>
+
+	    <p class="card-text">
+              The <i>mov.speed</i> input allows you to control the player's speed when he's traveling. The default movement speed is 5. When multiple zones overlap, the lowest movement speed will be used.
+	    </p>
             
             <div class="end-chapter"></div>
 
             <h4 class="card-title" id="c2-1">2.2 Zones in scripts</h4>
             
             <p class="card-text">
+	      Worldmap zones can also be used for other purposes: that's all up to you. One useful thing you'll probably want to do is figuring out which zones the player is currently in. This can be achieved using <span class="mono-span">game.worldmap.getCurrentZones</span>. This method will return the names of all the zones the player is in.
             </p>
+
+	    <p class="card-text">
+	      It is also possible to create new zones from script by calling <span class="mono-span">createZone</span> and adding cases to the zone by using <span class="mono-span">addCase</span> on the returned object.
+
+<div class="code-header">scripts/initialize.mjs</div>
+<pre class="code"><code>export function initialize() {
+  const zone = game.worldmap.createZone("myzone");
+
+  zone.movementSpeed = 3;
+  for (var x = 5 ; x &lt; 10 ; ++x) {
+    for (var y = 2 ; x &lt; 5 ; ++y)
+      zone.addCase(x, y);
+  }
+  zone.removeCase(6, 3);
+}</code></pre>
+
+	    <p class="card-text">
+	      Note that you can also do these actions on existing zones, by getting a handle on the zone using <span class="mono-span">game.worldmap.getZone("myzone")</span>. You may also remove the zone later by calling <span class="mono-span">game.worldmap.removeZone("myzone")</span>.
+	    </p>
             
             <div class="end-chapter"></div>
           </div>
@@ -233,7 +269,21 @@ The last line of the script calls <span class="mono-span">revealCity</span>, whi
             <h4 class="card-title" id="c3-1">3.1 The outdoors tick</h4>
             
             <p class="card-text">
+	      The outdoors tick is a callback in the Game script object that is regularly called when the player travels. Keep in mind that in real time, it is called every 50ms. In the worldmap, it corresponds to 14 minutes of game time. 
             </p>
+
+<div class="code-header">scripts/main.mjs</div>
+<pre class="code"><code>export class Game {
+  outdoorsTick() {
+    game.appendToConsole("14 minutes have passed");
+  }
+}
+
+export function create() { return new Game; }</code></pre>
+
+	    <p class="card-text">
+	      This doesn't do much yet, but we can use that to implement more complex behaviours, such as random encounters, or any type of event that should happen while the player is moving on the worldmap.
+	    </p>
             
             <div class="end-chapter"></div>
 	    
