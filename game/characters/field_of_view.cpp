@@ -210,7 +210,7 @@ bool FieldOfView::IsCharacterInList(const Character* character_to_check, const s
   return (find(list.begin(), list.end(), character_to_check) != list.end());
 }
 
-void FieldOfView::DetectCharacters()
+void FieldOfView::detectCharacters()
 {
   CharacterList characters_in_range = GetCharactersInRange();
   auto          iterator            = characters_in_range.begin();
