@@ -35,7 +35,8 @@ WorldmapListEditor {
 
   addDialog:  TextPromptDialog {
     title: "Add zone"
-    anchors.centerIn: parent.parent.parent.parent
+    parent: Overlay
+    anchors.centerIn: application
     onAccepted: {
       worldMap.createZone(value);
       selectedName = value;
