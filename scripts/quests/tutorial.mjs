@@ -12,7 +12,7 @@ class TutorialQuest extends QuestHelper {
     if (this.lastTrialTriggered())
       html += this.tr("description-with-trial");
     if (this.model.completed)
-      html += this.tr("descriptoin-completed");
+      html += this.tr("description-completed");
     return html;
   }
 
