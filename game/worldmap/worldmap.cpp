@@ -293,6 +293,7 @@ WorldMapCity* WorldMap::createCity(const QString &name)
   WorldMapCity* city = new WorldMapCity(this);
 
   city->setName(name);
+  city->setSize(caseSize.width());
   cities << city;
   emit citiesChanged();
   return city;
