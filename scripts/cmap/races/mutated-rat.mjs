@@ -24,7 +24,7 @@ export function onToggled(statistics, toggled) {
 
 export function modifyBaseStatistic(statistics, name, value) {
   if (name === "maxHitPoints")
-    return value - 10;
+    return value - 20;
   if (name === "carryWeight")
     return 5;
   return value;
