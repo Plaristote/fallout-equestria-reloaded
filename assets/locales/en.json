@@ -36,7 +36,11 @@
     "Clock":    "Clock",
     "Quests":   "Quests",
     "Archives": "Archives",
-    "Automap":  "Automap"
+    "Automap":  "Automap",
+    "clock-title":       "Take a rest",
+    "clock-wait-minute": "Wait {{time}} minutes",
+    "clock-wait-hour":   "Wait {{time}} hours",
+    "clock-wait-day":    "Wait {{time}} days"
   },
   "item-slots": {
     "armor": "Armor",

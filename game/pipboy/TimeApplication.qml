@@ -6,21 +6,24 @@ Column {
   readonly property QtObject timeManager: gameController.timeManager
   property int remainingMinutes: 0
 
+  Component.onDestruction: game.player.setVariable("resting", false)
+
   function getIntervals() {
     return [
-      {label: "Wait 1 minute",   interval: 1},
-      {label: "Wait 10 minutes", interval: 10},
-      {label: "Wait 30 minutes", interval: 30},
-      {label: "Wait 1 hour",     interval: 60},
-      {label: "Wait 2 hours",    interval: 120},
-      {label: "Wait 6 hours",    interval: 360},
-      {label: "Wait 12 hours",   interval: 720},
-      {label: "Wait 1 day",      interval: 1440},
-      {label: "Wait until fully healed", interval: 0}
+      {label: i18n.t("pipboy.clock-wait-minute", {time:  1}), interval: 1},
+      {label: i18n.t("pipboy.clock-wait-minute", {time: 10}), interval: 10},
+      {label: i18n.t("pipboy.clock-wait-minute", {time: 30}), interval: 30},
+      {label: i18n.t("pipboy.clock-wait-hour",   {time:  1}), interval: 60},
+      {label: i18n.t("pipboy.clock-wait-hour",   {time:  2}), interval: 120},
+      {label: i18n.t("pipboy.clock-wait-hour",   {time:  6}), interval: 360},
+      {label: i18n.t("pipboy.clock-wait-hour",   {time: 12}), interval: 720},
+      {label: i18n.t("pipboy.clock-wait-day",    {time:  1}), interval: 1440},
+      {label: i18n.t("pipboy.clock-wait-heal"), interval: 0}
     ];
   }
 
   function triggerWaitFor(minutes) {
+    gameController.player.setVariable("resting", true);
     if (minutes !== 0)
       remainingMinutes = minutes;
     else
@@ -28,7 +31,12 @@ Column {
   }
 
   function triggerWaitUntilHealed() {
+    if (!isFullyHealed())
+      waitHealTimer.running = true;
+  }
 
+  function isFullyHealed() {
+    return gameController.player.statistics.hitPoints >= gameController.player.statistics.maxHitPoints;
   }
 
   Timer {
@@ -46,18 +54,27 @@ Column {
         value = 68;
       gameController.advanceTime(value);
       remainingMinutes -= value;
-      //
-      if (waitingHint.text.length > 2)
-        waitingHint.text = ".";
-      else
-        waitingHint.text += ".";
+      waitingHint.text = waitingHint.text.length > 2 ? "." : waitingHint.text + ".";
+    }
+  }
+
+  Timer {
+    id: waitHealTimer
+    interval: 100
+    repeat: true
+    onTriggered: {
+      gameController.advanceTime(60);
+      if (isFullyHealed())
+        running = false;
     }
   }
 
   Text {
     anchors.horizontalCenter: parent.horizontalCenter
-    text: "Take a rest"
+    text: i18n.t("pipboy.clock-title")
     color: "white"
+    font.family: application.consoleFont.name
+    font.pointSize: application.consoleFont.bigSize
     Text {
       id: waitingHint
       visible: waitTimer.running
