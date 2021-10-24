@@ -355,7 +355,7 @@ QStringList StatModel::getAvailableTraits()
   QStringList results;
   const auto& traits = Trait::getTraits();
 
-  for (auto trait : traits)
+  for (const auto& trait : traits)
     results << trait.name;
   return results;
 }
@@ -364,8 +364,9 @@ QStringList StatModel::getAvailableTraitsLabels()
 {
   QStringList retval;
   I18n* i18n = I18n::get();
+  const auto list = getAvailableTraits();
 
-  for (const auto& trait : getAvailableTraits())
+  for (const auto& trait : list)
     retval << i18n->t("cmap." + trait);
   return retval;
 }
