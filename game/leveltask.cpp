@@ -204,12 +204,15 @@ void LevelTask::onPauseChanged()
   }
 }
 
+
 void LevelTask::advanceTime(unsigned int minutes)
 {
   qint64 delta = minutes * 60 * 1000;
 
   for (DynamicObject* object : allDynamicObjects())
   {
+    ObjectPerformanceClock clock(performanceMetrics.object(object));
+
     object->update(delta);
     object->updateTasks(delta);
     if (object->isCharacter())
@@ -257,6 +260,7 @@ void LevelTask::realTimeTask(qint64 delta)
   timeManager->addElapsedMilliseconds(delta);
   for (DynamicObject* object : objectList)
   {
+    ObjectPerformanceClock clock(performanceMetrics.object(object));
     Character* asCharacter = reinterpret_cast<Character*>(object);
 
     object->update(delta);
@@ -278,10 +282,15 @@ void LevelTask::combatTask(qint64 delta)
   const auto objectList = allDynamicObjects();
 
   for (DynamicObject* object : objectList)
+  {
+    ObjectPerformanceClock clock(performanceMetrics.object(object));
+
     object->update(delta);
+  }
   if (combattants.size() > combatIterator && combatIterator >= 0)
   {
     auto* combattant = combattants.at(combatIterator);
+    ObjectPerformanceClock clock(performanceMetrics.object(combattant));
     bool hasActionPoints  = combattant->getActionPoints() > 0;
     bool hasRunningAction = !combattant->getActionQueue()->isEmpty();
     bool isIdle           = combattant == getPlayer() && hasActionPoints;
@@ -304,9 +313,10 @@ void LevelTask::endTurnTask(qint64 delta)
   {
     Character* asCharacter = reinterpret_cast<Character*>(object);
 
-    object->update(delta);
     if (object->isCharacter() && combattants.indexOf(asCharacter) < 0 && asCharacter->isAlive())
     {
+      ObjectPerformanceClock clock(performanceMetrics.object(object));
+
       asCharacter->getActionQueue()->update();
       if (!asCharacter->getActionQueue()->isEmpty())
         ++affectedCharacters;

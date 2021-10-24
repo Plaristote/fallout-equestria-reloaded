@@ -14,6 +14,7 @@
 
 # include "level/combat.h"
 # include "level/tutorialcomponent.h"
+# include "level/metrics.h"
 
 class Doorway;
 class CharacterParty;
@@ -62,6 +63,9 @@ public:
 
   void finalizeRound() override;
 
+  Q_INVOKABLE QString metricsHtml() { return performanceMetrics.html();}
+  Q_INVOKABLE void resetMetrics() { performanceMetrics.reset(); }
+
 signals:
   void updated();
   void pausedChanged();
@@ -102,6 +106,7 @@ protected:
   bool               persistent = true;
   bool               debugMode = false;
   qint64             finalizeTurnRemainingTime = 0;
+  PerformanceReport  performanceMetrics;
 };
 
 #endif // LEVELTASK_H

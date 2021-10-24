@@ -73,6 +73,8 @@ set(PROJECT_SOURCES
         game/dataengine.cpp
         game/level/levelbase.cpp
         game/level/levelbase.h
+	game/level/metrics.h
+	game/level/metrics.cpp
         game/leveltask.h
         game/leveltask.cpp
         game/levelgrid.h

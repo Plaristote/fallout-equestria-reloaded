@@ -75,8 +75,16 @@ Item {
   }
 
   LevelFrameRate {
+    id: frameRate
+    visible: levelController.debugMode
     target: canvas
     anchors { top: parent.top; right: parent.right }
+  }
+
+  DynamicObjectMetrics {
+    levelController: root.levelController
+    anchors.right: frameRate.right
+    anchors.top: frameRate.bottom
   }
 
   LevelTextBubbles {
