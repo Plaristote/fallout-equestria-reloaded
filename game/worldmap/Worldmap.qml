@@ -15,7 +15,10 @@ Item {
   state: "default"
   //onHasOverlayChanged: controller.paused = hasOverlay || root.state != "default";
 
-  Component.onCompleted: controller.restart()
+  Component.onCompleted: {
+    controller.restart();
+    musicManager.play("worldmap");
+  }
 
   Connections {
     target: controller
