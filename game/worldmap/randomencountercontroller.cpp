@@ -50,6 +50,9 @@ void RandomEncounterController::initializeEncounter()
     const QVariantMap partyData(entry.toMap());
     CharacterParty*   party = CharacterParty::factory(partyData, game->getLevel());
 
-    party->insertIntoZone(game->getLevel(), partyData.value("zone").toString());
+    if (party->getCharacters().size() > 0)
+      party->insertIntoZone(game->getLevel(), partyData.value("zone").toString());
+    else
+      qDebug() << "RandomEncounterController::initializeEncounter: generated an empty CharacterParty";
   }
 }
