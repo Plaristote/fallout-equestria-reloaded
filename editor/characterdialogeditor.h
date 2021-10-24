@@ -45,6 +45,9 @@ public:
   Q_INVOKABLE void removeState();
   Q_INVOKABLE void removeAnswer();
 
+  Q_INVOKABLE void moveOptionUp(int index);
+  Q_INVOKABLE void moveOptionDown(int index);
+
 signals:
   void entryPointChanged();
   void stateHookChanged();

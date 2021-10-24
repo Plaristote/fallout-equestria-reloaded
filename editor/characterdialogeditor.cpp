@@ -197,3 +197,42 @@ void CharacterDialogEditor::loadOption(const QString& value)
 {
   options.push_back(value);
 }
+
+void CharacterDialogEditor::moveOptionUp(int index)
+{
+  if (index > 0)
+  {
+    QJsonObject states       = data["states"].toObject();
+    QJsonObject state        = states[stateReference].toObject();
+    QJsonArray  stateAnswers = state["answers"].toArray();
+    QJsonValue  a = stateAnswers.at(index - 1);
+    QJsonValue  b = stateAnswers.at(index);
+
+    stateAnswers[index - 1] = b;
+    stateAnswers[index]     = a;
+    state .insert("answers",      stateAnswers);
+    states.insert(stateReference, state);
+    data  .insert("states",       states);
+    loadState(stateReference);
+  }
+}
+
+void CharacterDialogEditor::moveOptionDown(int index)
+{
+  QJsonObject states       = data["states"].toObject();
+  QJsonObject state        = states[stateReference].toObject();
+  QJsonArray  stateAnswers = state["answers"].toArray();
+
+  if (index + 1 < stateAnswers.size())
+  {
+    QJsonValue  a = stateAnswers.at(index + 1);
+    QJsonValue  b = stateAnswers.at(index);
+
+    stateAnswers[index + 1] = b;
+    stateAnswers[index]     = a;
+    state .insert("answers",      stateAnswers);
+    states.insert(stateReference, state);
+    data  .insert("states",       states);
+    loadState(stateReference);
+  }
+}

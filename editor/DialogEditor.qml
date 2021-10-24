@@ -370,6 +370,23 @@ Item {
               background: Rectangle { color: "transparent" }
               onClicked: controller.currentOption = controller.options[index]
               width: answersList.width - 10
+
+              Column {
+                visible: controller.currentOption === controller.options[index]
+                anchors.right: parent.right
+                anchors.verticalCenter: parent.verticalCenter
+                TerminalButton {
+                  text: "^"
+                  visible: index > 0
+                  onClicked: controller.moveOptionUp(index)
+                }
+                TerminalButton {
+                  text: "^"
+                  visible: index + 1 < controller.options.length
+                  rotation: 180
+                  onClicked: controller.moveOptionDown(index)
+                }
+              }
             }
           }
         } // END Column
