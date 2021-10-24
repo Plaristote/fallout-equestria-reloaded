@@ -398,7 +398,7 @@ void InteractionComponent::centerCursorOn(DynamicObject *object)
 
 void InteractionComponent::movePlayerTo(int x, int y)
 {
-  DynamicObject* occupant = grid->getOccupant(x, y);
+  DynamicObject* occupant = getFloorGrid(getPlayer()->getCurrentFloor())->getOccupant(x, y);
   auto* actions = getPlayer()->getActionQueue();
   QPoint oldTarget(-1, -1);
 
