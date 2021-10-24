@@ -99,7 +99,7 @@ void FieldOfView::runTask()
   SetIntervalDurationFromStatistics();
   LoseTrackOfCharacters(detected_enemies);
   LoseTrackOfCharacters(detected_characters);
-  DetectCharacters();
+  detectCharacters();
   timeLeft = interval;
   emit refreshed();
 }
