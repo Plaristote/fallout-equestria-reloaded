@@ -24,6 +24,7 @@ Column {
 
   function triggerWaitFor(minutes) {
     gameController.player.setVariable("resting", true);
+    waitHealTimer.running = false;
     if (minutes !== 0)
       remainingMinutes = minutes;
     else
@@ -77,7 +78,7 @@ Column {
     font.pointSize: application.consoleFont.bigSize
     Text {
       id: waitingHint
-      visible: waitTimer.running
+      visible: waitTimer.running || waitHealTimer.running
       anchors.left: parent.right
       text: "..."
       color: "white"
