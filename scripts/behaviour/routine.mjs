@@ -34,7 +34,10 @@ export class RoutineComponent {
   }
 
   updateRoutine() {
+    const callback = this.getCurrentRoutine().callback;
+
     this.scheduleNextRoutineAction();
-    this.parent[this.getCurrentRoutine().callback]();
+    if (callback)
+      this.parent[callback]();
   }
 }
