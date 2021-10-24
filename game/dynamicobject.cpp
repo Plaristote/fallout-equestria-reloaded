@@ -29,7 +29,7 @@ QString DynamicObject::getPath() const
 {
   ObjectGroup* group = getGroup();
 
-  return group ? group->getName() + '.' + getObjectName() : getObjectName();
+  return group ? group->getPath() + '.' + getObjectName() : getObjectName();
 }
 
 void DynamicObject::setScript(const QString& name)
