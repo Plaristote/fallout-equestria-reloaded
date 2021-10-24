@@ -88,6 +88,7 @@ private slots:
 
 private:
   void combatTask(qint64);
+  void endTurnTask(qint64);
   void realTimeTask(qint64);
 
 protected:
@@ -100,6 +101,7 @@ protected:
   bool               initialized = false;
   bool               persistent = true;
   bool               debugMode = false;
+  qint64             finalizeTurnRemainingTime = 0;
 };
 
 #endif // LEVELTASK_H

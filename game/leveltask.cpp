@@ -236,9 +236,12 @@ void LevelTask::update()
     realTimeTask(delta);
   else
   {
-    if (!isCharacterTurn(getPlayer()))
+    if (!isCharacterTurn(getPlayer()) || finalizeTurnRemainingTime <= 0)
       delta *= static_cast<int>(combatSpeedOption);
-    combatTask(delta);
+    if (finalizeTurnRemainingTime <= 0)
+      combatTask(delta);
+    else
+      endTurnTask(delta);
   }
   updateVisualEffects(delta);
   soundManager->update();
@@ -292,6 +295,29 @@ void LevelTask::combatTask(qint64 delta)
     throw std::runtime_error("combattants.size() > combatIterator");
 }
 
+void LevelTask::endTurnTask(qint64 delta)
+{
+  const auto objectList = allDynamicObjects();
+  unsigned short affectedCharacters = 0;
+
+  for (DynamicObject* object : objectList)
+  {
+    Character* asCharacter = reinterpret_cast<Character*>(object);
+
+    object->update(delta);
+    if (object->isCharacter() && combattants.indexOf(asCharacter) < 0 && asCharacter->isAlive())
+    {
+      asCharacter->getActionQueue()->update();
+      if (!asCharacter->getActionQueue()->isEmpty())
+        ++affectedCharacters;
+    }
+  }
+  if (affectedCharacters > 0)
+    finalizeTurnRemainingTime -= delta;
+  else
+    finalizeTurnRemainingTime = 0;
+}
+
 void LevelTask::onCombatChanged()
 {
   for (auto* object : allDynamicObjects())
@@ -310,6 +336,7 @@ void LevelTask::onCombatChanged()
 
 void LevelTask::finalizeRound()
 {
+  finalizeTurnRemainingTime = WORLDTIME_TURN_DURATION;
   for (DynamicObject* object : allDynamicObjects())
   {
     Character* asCharacter = reinterpret_cast<Character*>(object);
