@@ -1,7 +1,9 @@
 export class DialogHelper {
   constructor(dialog) {
+    const levelScript = level ? level.getScriptObject() : null;
+
     this.dialog = dialog;
-    if (level && level.getScriptObject().ambiance)
+    if (levelScript && levelScript.ambiance)
       this.dialog.ambiance = level.getScriptObject().ambiance;
     //this.updateMood();
   }
