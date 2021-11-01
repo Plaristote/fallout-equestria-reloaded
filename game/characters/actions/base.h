@@ -22,7 +22,7 @@ public:
   virtual bool trigger() = 0;
   virtual bool canInterrupt() const { return true; }
   virtual void interrupt() {}
-  State        getState() { return state; }
+  State        getState() const { return state; }
 
 protected:
   Character* character;

@@ -8,6 +8,7 @@
 #include "actions/reach.h"
 #include "actions/reachcase.h"
 #include "actions/sliding.h"
+#include "actions/waitaction.h"
 
 ActionQueue::ActionQueue(QObject *parent) : QObject(parent), character(reinterpret_cast<Character*>(parent))
 {
@@ -288,4 +289,9 @@ int ActionQueue::getSkillUseApCost(DynamicObject* target, const QString& skillNa
 void ActionQueue::pushSliding(QPoint target)
 {
   queue << (new SlidingAction(character, target));
+}
+
+void ActionQueue::pushWait(unsigned int seconds)
+{
+  queue << (new WaitAction(character, seconds));
 }

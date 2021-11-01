@@ -46,6 +46,7 @@ public:
   Q_INVOKABLE void pushReachCase(int x, int y, int z, float range);
   Q_INVOKABLE void pushReachCase(int x, int y, int z, float range, QJSValue caseCompare);
   Q_INVOKABLE void pushReachNear(int x, int y, int z, int range);
+  Q_INVOKABLE void pushWait(unsigned int seconds);
   void             pushSliding(QPoint target);
   Q_INVOKABLE bool start();
 
