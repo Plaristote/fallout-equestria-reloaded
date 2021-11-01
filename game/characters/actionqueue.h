@@ -48,6 +48,8 @@ public:
   Q_INVOKABLE void pushReachNear(int x, int y, int z, int range);
   Q_INVOKABLE void pushWait(unsigned int seconds);
   Q_INVOKABLE void pushSpeak(const QString& content, unsigned int interval, const QString& color);
+  Q_INVOKABLE void pushLookAt(const DynamicObject* target);
+  Q_INVOKABLE void pushLookAt(int x, int y);
   void             pushSliding(QPoint target);
   Q_INVOKABLE bool start();
 

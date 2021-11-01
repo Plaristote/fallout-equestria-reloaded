@@ -10,6 +10,7 @@
 #include "actions/sliding.h"
 #include "actions/waitaction.h"
 #include "actions/speak.h"
+#include "actions/look.h"
 
 ActionQueue::ActionQueue(QObject *parent) : QObject(parent), character(reinterpret_cast<Character*>(parent))
 {
@@ -300,4 +301,14 @@ void ActionQueue::pushWait(unsigned int seconds)
 void ActionQueue::pushSpeak(const QString& content, unsigned int duration, const QString& color)
 {
   queue << (new SpeakAction(character, content, duration, color));
+}
+
+void ActionQueue::pushLookAt(const DynamicObject* target)
+{
+  queue << (new LookAction(character, target->getPosition()));
+}
+
+void ActionQueue::pushLookAt(int x, int y)
+{
+  queue << (new LookAction(character, QPoint(x, y)));
 }
