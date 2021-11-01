@@ -9,6 +9,7 @@
 #include "actions/reachcase.h"
 #include "actions/sliding.h"
 #include "actions/waitaction.h"
+#include "actions/speak.h"
 
 ActionQueue::ActionQueue(QObject *parent) : QObject(parent), character(reinterpret_cast<Character*>(parent))
 {
@@ -294,4 +295,9 @@ void ActionQueue::pushSliding(QPoint target)
 void ActionQueue::pushWait(unsigned int seconds)
 {
   queue << (new WaitAction(character, seconds));
+}
+
+void ActionQueue::pushSpeak(const QString& content, unsigned int duration, const QString& color)
+{
+  queue << (new SpeakAction(character, content, duration, color));
 }

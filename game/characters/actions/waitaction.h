@@ -10,7 +10,7 @@ public:
   WaitAction(Character* character, unsigned int interval);
 
   int getApCost() const { return 0; }
-  void update();
+  void update() override;
   bool trigger() override;
 
 private:

@@ -124,6 +124,8 @@ set(PROJECT_SOURCES
         game/characters/actions/sliding.cpp
         game/characters/actions/waitaction.h
         game/characters/actions/waitaction.cpp
+        game/characters/actions/speak.h
+        game/characters/actions/speak.cpp
         game/lootingcontroller.h
         game/lootingcontroller.cpp
         game/animationlibrary.h
