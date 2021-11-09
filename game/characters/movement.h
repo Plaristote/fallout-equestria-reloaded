@@ -17,6 +17,7 @@ public:
   virtual void save(QJsonObject&) const;
 
   void                      moveTo(Point);
+  Q_INVOKABLE void          lookAt(const DynamicObject* object) { if (object) { lookTo(object->getPosition()); } }
   Q_INVOKABLE void          lookTo(int x, int y);
   inline void               lookTo(QPoint target) { lookTo(target.x(), target.y()); }
   const QString&            getMovementMode() const { return movementMode; }

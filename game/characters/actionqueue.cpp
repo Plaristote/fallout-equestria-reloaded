@@ -11,6 +11,7 @@
 #include "actions/waitaction.h"
 #include "actions/speak.h"
 #include "actions/look.h"
+#include "actions/script.h"
 
 ActionQueue::ActionQueue(QObject *parent) : QObject(parent), character(reinterpret_cast<Character*>(parent))
 {
@@ -311,4 +312,9 @@ void ActionQueue::pushLookAt(const DynamicObject* target)
 void ActionQueue::pushLookAt(int x, int y)
 {
   queue << (new LookAction(character, QPoint(x, y)));
+}
+
+void ActionQueue::pushScript(QJSValue callback)
+{
+  queue << (new ScriptAction(character, callback));
 }

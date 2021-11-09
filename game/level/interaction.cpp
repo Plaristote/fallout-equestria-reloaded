@@ -300,6 +300,8 @@ void InteractionComponent::initializeDialog(Character* npc, const QString& dialo
   Character*       player = Game::get()->getPlayer();
   CharacterDialog* dialog = new CharacterDialog(this);
 
+  player->lookAt(npc);
+  npc->lookAt(player);
   player->getFieldOfView()->setCharacterDetected(npc);
   if (dialog->load(dialogName, player, npc))
     emit startDialog(dialog);

@@ -50,6 +50,7 @@ public:
   Q_INVOKABLE void pushSpeak(const QString& content, unsigned int interval, const QString& color);
   Q_INVOKABLE void pushLookAt(const DynamicObject* target);
   Q_INVOKABLE void pushLookAt(int x, int y);
+  Q_INVOKABLE void pushScript(QJSValue callback);
   void             pushSliding(QPoint target);
   Q_INVOKABLE bool start();
 
