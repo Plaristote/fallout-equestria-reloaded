@@ -292,5 +292,6 @@
         <file>game/level/RenderContext.mjs</file>
         <file>editor/level/ElevatorObjectEditor.qml</file>
         <file>cmap/PerkPicker.qml</file>
+        <file>ui/DynamicObjectMetrics.qml</file>
     </qresource>
 </RCC>
