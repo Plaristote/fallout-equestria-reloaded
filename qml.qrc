@@ -34,8 +34,6 @@
         <file>assets/ui/play-panel-left.png</file>
         <file>assets/ui/play-panel-center.png</file>
         <file>assets/ui/play-panel-right.png</file>
-        <file>assets/tilesets/metal.png</file>
-        <file>assets/tilesets/metal-walls.png</file>
         <file>game/ScreenEdges.qml</file>
         <file>game/LevelCanvas.qml</file>
         <file>game/LevelRender.mjs</file>
@@ -61,7 +59,7 @@
         <file>scripts/cmap/traits/small-frame.mjs</file>
         <file>assets/sprites/ZEkA10000-green.png</file>
         <file>scripts/pnjs/dummy.mjs</file>
-        <file>assets/backgrounds/ministry-of-peace.png</file>
+        <file>assets/backgrounds/loading-screen.png</file>
         <file>ui/FaceDisplay.qml</file>
         <file>assets/faces/backgrounds/wasteland.png</file>
         <file>assets/faces/mare-basic/eyes/angry.png</file>
