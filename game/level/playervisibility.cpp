@@ -2,7 +2,8 @@
 
 PlayerVisibilityComponent::PlayerVisibilityComponent(QObject* parent) : ParentType(parent)
 {
-  connect(this, &GridComponent::floorChanged, this, &PlayerVisibilityComponent::visibleObjectsChanged, Qt::QueuedConnection);
+  connect(this, &GridComponent::floorChanged, this, &PlayerVisibilityComponent::visibleObjectsChanged,    Qt::QueuedConnection);
+  connect(this, &GridComponent::floorChanged, this, &PlayerVisibilityComponent::visibleCharactersChanged, Qt::QueuedConnection);
 };
 
 void PlayerVisibilityComponent::unregisterDynamicObject(DynamicObject* object)

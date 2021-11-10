@@ -1,29 +1,19 @@
 import QtQuick 2.15
-import "../../game" as GameComponents
-import "EditorRender.mjs" as LevelRender
+import "../../game/level" as LevelComponents
 
-GameComponents.LevelCanvas {
+LevelComponents.LevelDisplay {
   property QtObject editorObject
   property bool showHoverCoordinates: false
   property bool renderRoofs: true
   property bool renderWalls: true
   property bool editingZone: false
+  property var hoverTile: renderTarget.hoverTile
 
-  signal pickedObject(QtObject dynamicObject)
-  signal pickedTile(int tileX, int tileY)
-  signal toggleZoneTile(int tileX, int tileY)
-
-  function initializeRenderer() {
-    if (levelController) {
-      controller = new LevelRender.EditorController(canvas, {
-        level: levelController,
-        tilemap: levelController.tilemap,
-        pathPrefix: fileProtocol,
-        rootPath: rootPath
-      });
-    }
+  onEditorObjectChanged: {
+    if (editorObject && editorObject.controlZone)
+      renderTarget.visibleZones = [editorObject.controlZone];
     else
-      console.log("LevelEditorCanvas: called initializeRenderer with unset levelController");
+      renderTarget.visibleZones = [];
   }
 
   Text {

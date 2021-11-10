@@ -113,14 +113,6 @@ void LevelTask::save(DataEngine* dataEngine)
     qDebug() << "(!) Level is not persistent and it's current state has been discarded.";
 }
 
-void LevelTask::tileClicked(int x, int y)
-{
-  if (getPlayer())
-    InteractionComponent::tileClicked(x, y);
-  else
-    emit clickedOnCase(x, y);
-}
-
 void LevelTask::displayMovementTargetHint(QPoint targetPosition)
 {
   AnimationSequence* animation = new AnimationSequence;

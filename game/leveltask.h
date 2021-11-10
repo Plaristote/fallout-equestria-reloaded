@@ -47,7 +47,6 @@ public:
   SoundManager* getSoundManager() const { return soundManager; }
 
   Q_INVOKABLE bool insertPartyIntoZone(CharacterParty*, const QString& zoneName = "");
-  Q_INVOKABLE void tileClicked(int x, int y);
 
   void registerDynamicObject(DynamicObject*) override;
   void unregisterDynamicObject(DynamicObject*) override;
@@ -76,8 +75,6 @@ signals:
   void displayConsoleMessage(const QString&);
   void cameraFocusRequired(DynamicObject*);
   void visibleCharactersChanged();
-  void clickedOnCase(int x, int y);
-  void clickedOnObject(DynamicObject*);
 
 public slots:
   void deleteLater();

@@ -48,7 +48,7 @@ MouseArea {
 
   function onTileClick() {
     if (hoverTile) {
-      levelController.tileClicked(...hoverTile);
+      mouseArea.parent.pickedTile(...hoverTile);
       return true;
     }
     return false;
@@ -58,7 +58,7 @@ MouseArea {
     const object = levelController.getObjectAt(...getCursorCoordinates());
 
     if (object)
-      levelController.objectClicked(object);
+      mouseArea.parent.pickedObject(object);
     return object != null;
   }
 

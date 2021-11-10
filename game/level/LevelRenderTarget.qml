@@ -15,6 +15,9 @@ Rectangle {
   property var      hoverTile
   property point    origin:     Qt.point(x + width / 2, y)
   property real     wallHeight: tileSize.height * 2
+  property bool     renderWalls: true
+  property bool     renderRoofs: true
+  property var      visibleZones: []
 
   id: renderTarget
   color: "yellow"
@@ -42,6 +45,7 @@ Rectangle {
       model: levelController.tilemap.zones
       delegate: Item {
         property QtObject zone: levelController.tilemap.zones[index]
+        visible: zone.type === "exit" || visibleZones.indexOf(zone) >= 0
         Repeater {
           model: zone.positionCount
           delegate: Image {
@@ -52,7 +56,6 @@ Rectangle {
             sourceClipRect: zone.clippedRect
             x: renderPosition.x
             y: renderPosition.y
-            visible: zone.type === "exit"
           }
         }
       }
@@ -67,6 +70,7 @@ Rectangle {
     }
 
     Repeater {
+      id: wallsRenderer
       model: renderTarget.mapSize.width * renderTarget.mapSize.height
       delegate: Item {
         property int tx: index % renderTarget.mapSize.width
@@ -106,6 +110,7 @@ Rectangle {
         property bool isFloor: roof.name.startsWith("floor_")
 
         source: `file:///${levelController.preRenderPath}floor${renderTarget.levelController.floor}_roof_${roof.name}.png`
+        visible: renderTarget.renderRoofs
         opacity: roof.visible ? 1 : 0
         x:       renderRect.x + (isFloor ? -width / 2 : 0)
         y:       renderRect.y + (isFloor ? -renderTarget.wallHeight : 0)
@@ -128,6 +133,7 @@ Rectangle {
     Image {
       source: fileProtocol + wall.image
       sourceClipRect: wall.clippedRect
+      visible: renderTarget.renderWalls
     }
   }
 }

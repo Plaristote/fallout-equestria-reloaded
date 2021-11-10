@@ -5,13 +5,10 @@ import "../ui"
 import "./hud" as Hud
 import "./level"
 
-Item {
+LevelDisplay {
   id: root
-  property QtObject gameController
-  property QtObject levelController
   property bool hasOverlay: interactionMenu.visible || inventoryViewContainer.visible || itemPickerContainer.visible || skilldex.visible || countdownDialog.visible || mainMenu.visible
   anchors.fill: parent
-  clip: true
 
   function openMenu() {
     levelController.paused = !mainMenu.visible;
@@ -21,6 +18,8 @@ Item {
   }
 
   onHasOverlayChanged: if (application.currentView === root) { levelController.paused = hasOverlay }
+  onPickedObject: levelController.objectClicked(dynamicObject)
+  onPickedTile:   levelController.tileClicked(tileX, tileY)
 
   Hud.Actions {
     id: actions
@@ -52,27 +51,6 @@ Item {
     }
   }
 
-  LevelRenderTarget {
-    id: renderTarget
-    hoverTile: levelMouseArea.hoverTile
-  }
-
-  LevelMouseArea {
-    id: levelMouseArea
-    onHoverTileChanged: levelController.hoveredTile = hoverTile ? Qt.point(...hoverTile) : Qt.point(-1, -1)
-  }
-
-  LevelCamera {
-    id: camera
-    anchors.fill: parent
-  }
-
-  Hud.InteractionOverlays {
-    levelController: parent.levelController
-    offsetX: renderTarget.origin.x
-    offsetY: renderTarget.origin.y
-  }
-
   Loader {
     anchors {
       top: parent.top; topMargin: 50
@@ -81,14 +59,6 @@ Item {
     visible: root.levelController.tutorial
     sourceComponent: visible ? tutorialPane : null
     width:  350
-  }
-
-  ScreenEdges {
-    enabled: !parent.levelController.paused && !debugConsole.enabled
-    onMoveTop:    { camera.translate(0, scrollSpeed); }
-    onMoveLeft:   { camera.translate(scrollSpeed, 0); }
-    onMoveRight:  { camera.translate(-scrollSpeed, 0); }
-    onMoveBottom: { camera.translate(0, -scrollSpeed); }
   }
 
   Item {

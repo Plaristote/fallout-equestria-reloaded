@@ -21,6 +21,11 @@ Item {
     gameController.switchToLevel(currentLevelName, "");
   }
 
+  onVisibleChanged: {
+    if (gameController.level)
+      gameController.level.paused = !visible;
+  }
+
   Connections {
     target: gameController
 

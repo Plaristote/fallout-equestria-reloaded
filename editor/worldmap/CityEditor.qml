@@ -23,7 +23,7 @@ WorldmapListEditor {
 
   addDialog: TextPromptDialog {
     title: "Add city"
-    parent: Overlay
+    parent: Overlay.overlay
     anchors.centerIn: parent
     onAccepted: {
       worldMap.createCity(value);

@@ -8,6 +8,7 @@ CharacterDialogEditor::CharacterDialogEditor(QObject *parent) : CharacterDialog(
   connect(this, &CharacterDialog::stateReferenceChanged, this, &CharacterDialogEditor::stateTextChanged);
   connect(this, &CharacterDialogEditor::currentOptionChanged, this, &CharacterDialogEditor::optionHookChanged);
   connect(this, &CharacterDialogEditor::currentOptionChanged, this, &CharacterDialogEditor::optionTextChanged);
+  connect(this, &CharacterDialogEditor::currentOptionChanged, this, &CharacterDialogEditor::optionTextHookChanged);
   connect(this, &CharacterDialogEditor::currentOptionChanged, this, &CharacterDialogEditor::optionAvailableHookChanged);
   connect(this, &CharacterDialogEditor::currentOptionChanged, this, &CharacterDialogEditor::optionStateChanged);
 }

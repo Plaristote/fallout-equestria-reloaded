@@ -31,12 +31,23 @@ DynamicObject* LevelEditorController::generateFromTemplate(const QString& templa
   return object;
 }
 
+QQmlListProperty<DynamicObject> LevelEditorController::getQmlVisibleObjects()
+{
+  visibleObjects.clear();
+  for (auto* object : qAsConst(attachedObjects))
+  {
+    if (!object->isCharacter() && object->getCurrentFloor() == getCurrentFloor())
+      visibleObjects << reinterpret_cast<Character*>(object);
+  }
+  return QML_QLIST_CONSTRUCTOR(DynamicObject, visibleObjects);
+}
+
 QQmlListProperty<Character> LevelEditorController::getQmlVisibleCharacters()
 {
   visibleCharacters.clear();
   for (auto* object : qAsConst(attachedObjects))
   {
-    if (object->isCharacter())
+    if (object->isCharacter() && object->getCurrentFloor() == getCurrentFloor())
       visibleCharacters << reinterpret_cast<Character*>(object);
   }
   return QML_QLIST_CONSTRUCTOR(Character, visibleCharacters);

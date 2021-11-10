@@ -16,15 +16,6 @@ Item {
   signal requestSpriteView(string group)
   signal requestDialogView(string dialogName)
 
-  Connections {
-    target: gameController.level
-    function onClickedOnObject(value) {
-      selectedObject = value;
-    }
-  }
-
-  Component.onCompleted: canvas.translate(-canvas.origin.x, -canvas.origin.y);
-
   RowLayout {
     anchors.fill: parent
 
@@ -35,26 +26,21 @@ Item {
 
       EditorCanvas {
         id: canvas
-        levelController: gameController.level
-        renderRoofs: displayRoofCheckbox.checked
-        renderWalls: displayWallsCheckbox.checked
+        anchors.fill: parent
+        levelController: root.gameController.level
         showHoverCoordinates: true
-        editorObject:     selectedObject || selectedGroup
-        editingZone:      childrenView.controlZone.editingZone
-        onToggleZoneTile: childrenView.controlZone.toggleTile(tileX, tileY)
-        onPickedTile: root.pickedTile(tileX, tileY)
+        editorObject: selectedObject || selectedGroup
+        editingZone:  childrenView.controlZone.editingZone
+        onPickedTile: {
+          if (editingZone)
+            childrenView.controlZone.toggleTile(tileX, tileY)
+          else
+            root.pickedTile(tileX, tileY)
+        }
         onPickedObject: {
           root.selectedGroup  = dynamicObject.parent;
           root.selectedObject = dynamicObject;
         }
-      }
-
-      GameComponents.ScreenEdges {
-        enabled: characterInventory.visible == false
-        onMoveTop:    { canvas.translate(0, scrollSpeed); }
-        onMoveLeft:   { canvas.translate(scrollSpeed, 0); }
-        onMoveRight:  { canvas.translate(-scrollSpeed, 0); }
-        onMoveBottom: { canvas.translate(0, -scrollSpeed); }
       }
     }
 
@@ -72,6 +58,8 @@ Item {
           CheckBox {
             id: displayRoofCheckbox
             text: "Display roofs"
+            checked: true
+            onCheckedChanged: canvas.renderTarget.renderRoofs = checked
             contentItem: Text {
               leftPadding: 45
               text: parent.text
@@ -81,8 +69,9 @@ Item {
 
           CheckBox {
             id: displayWallsCheckbox
-            checked: true
             text: "Display walls"
+            checked: true
+            onCheckStateChanged: canvas.renderTarget.renderWalls = checked
             contentItem: Text {
               leftPadding: 45
               text: parent.text
@@ -113,10 +102,9 @@ Item {
           currentGroup: root.gameController.level
           Layout.fillWidth: true
           Layout.fillHeight: true
-          //visible: currentObject == null
           onNewObjectClicked: dialogAddObject.openWithGroup(currentGroup)
           onNewGroupClicked:  dialogAddGroup.openWithGroup(currentGroup)
-          onShowClicked:      canvas.moveToObject(object)
+          onShowClicked:      canvas.camera.moveToObject(object)
           onRemoveObjectClicked: {
             currentGroup = object.parent;
             gameController.level.deleteObject(object);
