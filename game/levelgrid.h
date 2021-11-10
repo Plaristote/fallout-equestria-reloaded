@@ -80,8 +80,8 @@ public:
   Q_INVOKABLE int            getVisionQuality(int x, int y, int toX, int toY);
   Q_INVOKABLE int            getCaseFlags(int x, int y) const;
   Q_INVOKABLE int            getCoverValue(int x, int y) const;
+  Q_INVOKABLE TileMap*       getTilemap() const { return tilemap; }
 
-  TileMap* getTilemap() const { return tilemap; }
   bool findPath(Point from, Point to, QList<Point>& path, CharacterMovement* character);
   bool moveObject(DynamicObject*, int x, int y);
   bool insertObject(DynamicObject*, int x, int y);

@@ -302,5 +302,10 @@
         <file>editor/level/ElevatorObjectEditor.qml</file>
         <file>cmap/PerkPicker.qml</file>
         <file>ui/DynamicObjectMetrics.qml</file>
+        <file>game/level/LevelRenderTarget.qml</file>
+        <file>game/level/LevelMouseArea.qml</file>
+        <file>game/level/LevelCamera.qml</file>
+        <file>game/level/ObjectListRenderer.qml</file>
+        <file>game/level/CursorRenderer.qml</file>
     </qresource>
 </RCC>

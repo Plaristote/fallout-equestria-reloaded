@@ -10,8 +10,9 @@ int InteractionComponent::movementModeOption = InteractionComponent::MixedMoveme
 
 InteractionComponent::InteractionComponent(QObject *parent) : ParentType(parent)
 {
-  connect(this, &InteractionComponent::mouseModeChanged, this, &InteractionComponent::mouseStateChanged);
-  connect(this, &InteractionComponent::mouseStateChanged, MouseCursor::get(), &MouseCursor::updatePointerType);
+  connect(this, &InteractionComponent::mouseModeChanged,   this, &InteractionComponent::mouseStateChanged);
+  connect(this, &InteractionComponent::mouseStateChanged,  MouseCursor::get(), &MouseCursor::updatePointerType);
+  connect(this, &InteractionComponent::hoveredTileChanged, MouseCursor::get(), &MouseCursor::updatePointerType);
 }
 
 void InteractionComponent::registerDynamicObject(DynamicObject* object)

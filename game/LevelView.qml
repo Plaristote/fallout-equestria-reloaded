@@ -3,6 +3,7 @@ import QtQuick.Controls 2.15
 import "qrc:/assets/ui" as UiStyle
 import "../ui"
 import "./hud" as Hud
+import "./level"
 
 Item {
   id: root
@@ -10,6 +11,7 @@ Item {
   property QtObject levelController
   property bool hasOverlay: interactionMenu.visible || inventoryViewContainer.visible || itemPickerContainer.visible || skilldex.visible || countdownDialog.visible || mainMenu.visible
   anchors.fill: parent
+  clip: true
 
   function openMenu() {
     levelController.paused = !mainMenu.visible;
@@ -50,10 +52,25 @@ Item {
     }
   }
 
-  LevelCanvas {
-    id: canvas
+  LevelRenderTarget {
+    id: renderTarget
+    hoverTile: levelMouseArea.hoverTile
+  }
+
+  LevelMouseArea {
+    id: levelMouseArea
+    onHoverTileChanged: levelController.hoveredTile = hoverTile ? Qt.point(...hoverTile) : Qt.point(-1, -1)
+  }
+
+  LevelCamera {
+    id: camera
+    anchors.fill: parent
+  }
+
+  Hud.InteractionOverlays {
     levelController: parent.levelController
-    onOriginChanged: levelController.canvasOffset = origin
+    offsetX: renderTarget.origin.x
+    offsetY: renderTarget.origin.y
   }
 
   Loader {
@@ -68,17 +85,22 @@ Item {
 
   ScreenEdges {
     enabled: !parent.levelController.paused && !debugConsole.enabled
-    onMoveTop:    { canvas.translate(0, scrollSpeed); }
-    onMoveLeft:   { canvas.translate(scrollSpeed, 0); }
-    onMoveRight:  { canvas.translate(-scrollSpeed, 0); }
-    onMoveBottom: { canvas.translate(0, -scrollSpeed); }
+    onMoveTop:    { camera.translate(0, scrollSpeed); }
+    onMoveLeft:   { camera.translate(scrollSpeed, 0); }
+    onMoveRight:  { camera.translate(-scrollSpeed, 0); }
+    onMoveBottom: { camera.translate(0, -scrollSpeed); }
   }
 
-  LevelFrameRate {
-    id: frameRate
-    visible: levelController.debugMode
-    target: canvas
-    anchors { top: parent.top; right: parent.right }
+  Item {
+    id: levelCursor
+    property real mouseX: levelMouseArea.mouseX
+    property real mouseY: levelMouseArea.mouseY
+
+    UsageSuccessHint {
+      levelController: root.levelController
+      target: levelMouseArea.hoveredObject
+      targetTile: renderTarget.hoverTile
+    }
   }
 
   DynamicObjectMetrics {
@@ -88,13 +110,13 @@ Item {
   }
 
   LevelTextBubbles {
-    origin: canvas.origin
+    origin: renderTarget.origin
   }
 
   Hud.InteractionMenu {
     id: interactionMenu
     levelController: root.levelController
-    levelCanvas: canvas
+    mouseArea: levelMouseArea
     bottomLimit: root.height - levelHud.height
   }
 

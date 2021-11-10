@@ -15,7 +15,7 @@ LevelTask::LevelTask(QObject *parent) : ParentType(parent)
 {
   soundManager = new SoundManager(this);
   taskRunner = new TaskRunner(this);
-  updateTimer.setInterval(15);
+  updateTimer.setInterval(30);
   updateTimer.setSingleShot(false);
   connect(&updateTimer, &QTimer::timeout, this, &LevelTask::update);
   connect(this, &LevelTask::pausedChanged, this, &LevelTask::onPauseChanged);
@@ -233,6 +233,12 @@ void LevelTask::update()
     bool busyMode = !getPlayer()->getActionQueue()->canInterrupt();
 
     enableWaitingMode(koMode || busyMode);
+  }
+
+  for (TileLayer* roof : getTileMap()->getRoofs())
+  {
+    auto point = getPlayer()->getPoint();
+    roof->setVisible(!roof->isInside(point.x, point.y));
   }
 
   if (!combat)

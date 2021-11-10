@@ -18,19 +18,19 @@ class TileLayer : public QObject
 {
   Q_OBJECT
 
-  Q_PROPERTY(QString name    MEMBER name)
+  Q_PROPERTY(QString name    MEMBER name CONSTANT)
   Q_PROPERTY(QSize   size    MEMBER size)
   Q_PROPERTY(QPoint  offset  MEMBER offset)
   Q_PROPERTY(QColor  color   MEMBER color)
   Q_PROPERTY(bool    visible MEMBER visible NOTIFY visibleChanged)
-  Q_PROPERTY(bool    prerendered MEMBER prerendered)
+  Q_PROPERTY(bool    prerendered MEMBER prerendered CONSTANT)
 public:
   explicit TileLayer(QObject *parent = nullptr);
 
   void load(const QJsonObject&, const QVector<Tileset*>& tilesets);
   const QString& getName() const { return name; }
   const QSize& getSize() const { return size; }
-  void setVisible(bool value) { visible = value; emit visibleChanged(); }
+  void setVisible(bool value) { if (visible != value) { visible = value; emit visibleChanged(); } }
   bool isVisible() const { return visible; }
   void renderToFile(const QString& file);
   virtual void renderToImage(QImage& image, QPoint offset);

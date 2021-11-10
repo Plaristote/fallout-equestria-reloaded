@@ -5,7 +5,7 @@ Item {
   anchors.fill: parent
 
   property int scrollBorderSize: application.isMaximized ? 5 : 30
-  property int scrollSpeed: 45
+  property int scrollSpeed: 100
   property bool enabled: true
 
   signal moveTop();

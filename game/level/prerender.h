@@ -8,7 +8,7 @@ class PreRenderComponent : public ZoneComponent
   Q_OBJECT
   typedef ZoneComponent ParentType;
 
-  Q_PROPERTY(QString preRenderPath READ getPreRenderPath)
+  Q_PROPERTY(QString preRenderPath READ getPreRenderPath CONSTANT)
 public:
   PreRenderComponent(QObject* parent = nullptr);
 

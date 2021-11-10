@@ -19,6 +19,42 @@ TileMap::TileMap(QObject *parent) : QObject(parent)
 {
 }
 
+void TileMap::addTileZone(TileZone* zone)
+{
+  if (zones.indexOf(zone) < 0)
+  {
+    zones << zone;
+    emit zonesChanged();
+  }
+}
+
+void TileMap::removeTileZone(TileZone* zone)
+{
+  if (zones.indexOf(zone) >= 0)
+  {
+    zones.removeAll(zone);
+    emit zonesChanged();
+  }
+}
+
+void TileMap::addLightLayer(TileLayer* zone)
+{
+  if (lights.indexOf(zone) < 0)
+  {
+    lights << zone;
+    emit lightsChanged();
+  }
+}
+
+void TileMap::removeLightLayer(TileLayer* zone)
+{
+  if (lights.indexOf(zone) >= 0)
+  {
+    lights.removeAll(zone);
+    emit lightsChanged();
+  }
+}
+
 bool TileMap::load(const QString& name)
 {
   QFile sourceFile(tilemapsPath + name + ".json");

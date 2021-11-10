@@ -10,10 +10,10 @@ class Tile : public QObject
 {
   Q_OBJECT
 
-  Q_PROPERTY(QString image          READ getImage)
-  Q_PROPERTY(QRect   clippedRect    MEMBER rect)
-  Q_PROPERTY(QPoint  position       MEMBER position)
-  Q_PROPERTY(QPoint  renderPosition MEMBER renderPosition)
+  Q_PROPERTY(QString image          READ getImage         CONSTANT)
+  Q_PROPERTY(QRect   clippedRect    MEMBER rect           CONSTANT)
+  Q_PROPERTY(QPoint  position       MEMBER position       CONSTANT)
+  Q_PROPERTY(QPoint  renderPosition MEMBER renderPosition CONSTANT)
 public:
   explicit Tile(QObject* parent = nullptr);
 

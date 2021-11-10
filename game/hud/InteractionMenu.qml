@@ -5,7 +5,7 @@ import "qrc:/assets/ui" as UiStyle
 Item {
   property QtObject levelController
   property QtObject interactionTarget
-  property var levelCanvas
+  property var mouseArea
   property var interactionTypes: []
   property point interactionPosition
   property int bottomLimit: 0
@@ -59,7 +59,7 @@ Item {
       {
         interactionMenu.interactionTarget = interactionTarget;
         interactionMenu.interactionTypes  = interactionList;
-        interactionMenu.interactionPosition = Qt.point(levelCanvas.mouseX, levelCanvas.mouseY)
+        interactionMenu.interactionPosition = Qt.point(mouseArea.mouseX, mouseArea.mouseY)
       }
       else
         interactionMenu.interactionTarget = null;

@@ -2,7 +2,7 @@
 
 PlayerVisibilityComponent::PlayerVisibilityComponent(QObject* parent) : ParentType(parent)
 {
-
+  connect(this, &GridComponent::floorChanged, this, &PlayerVisibilityComponent::visibleObjectsChanged, Qt::QueuedConnection);
 };
 
 void PlayerVisibilityComponent::unregisterDynamicObject(DynamicObject* object)
@@ -27,15 +27,37 @@ void PlayerVisibilityComponent::load(const QJsonObject& data)
 
 QQmlListProperty<Character> PlayerVisibilityComponent::getQmlVisibleCharacters()
 {
-  visibleCharacters = getPlayer()->getFieldOfView()->GetDetectedCharacters();
+  const auto list = getPlayer()->getFieldOfView()->GetDetectedCharacters();
+
+  visibleCharacters.clear();
+  visibleCharacters.reserve(list.size());
+  for (Character* character : list)
+  {
+    if (character->getCurrentFloor() == getCurrentFloor())
+      visibleCharacters << character;
+  }
   visibleCharacters << getPlayer();
   sortByRenderOrder(visibleCharacters);
   std::reverse(visibleCharacters.begin(), visibleCharacters.end());
   return QML_QLIST_CONSTRUCTOR(Character, visibleCharacters);
 }
 
+QQmlListProperty<DynamicObject> PlayerVisibilityComponent::getQmlVisibleObjects()
+{
+  visibleObjects.clear();
+  eachObject([this](DynamicObject* object)
+  {
+    if (!object->isCharacter() && object->getCurrentFloor() == getCurrentFloor() && !object->isHidden())
+      visibleObjects << object;
+  });
+  sortByRenderOrder(visibleObjects);
+  std::reverse(visibleObjects.begin(), visibleObjects.end());
+  return QML_QLIST_CONSTRUCTOR(DynamicObject, visibleObjects);
+}
+
 void PlayerVisibilityComponent::refreshHiddenObjectsDetection()
 {
+  bool       withDetection = false;
   Character* player = getPlayer();
   float      radius = player->getFieldOfView()->GetRadius();
   const auto hiddenObjects = findDynamicObjects([player, radius](DynamicObject& candidate) -> bool
@@ -47,5 +69,7 @@ void PlayerVisibilityComponent::refreshHiddenObjectsDetection()
         && player->hasLineOfSight(&candidate);
   });
   for (auto* hiddenObject : hiddenObjects)
-    hiddenObject->tryDetection(player);
+    withDetection = hiddenObject->tryDetection(player) || withDetection;
+  if (withDetection)
+    emit visibleObjectsChanged();
 }

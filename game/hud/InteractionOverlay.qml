@@ -4,23 +4,24 @@ import QtGraphicalEffects 1.15
 Repeater {
   id: root
   property QtObject levelController
-  property var      controller
   property var      filter: function() { return true; }
   property bool     withColorOverlay: true
   property color    overlayColor:    Qt.rgba(255, 255, 0, 1)
   property color    overlayMaxColor: Qt.rgba(255, 255, 0, 0.5)
+  property int      offsetX
+  property int      offsetY
 
   delegate: Image {
     id: dynamicObjectLayer
     property QtObject dynamicObject: root.model[index]
-    property point offset: controller.getAdjustedOffsetFor(dynamicObject)
+    property point offset: levelController.getAdjustedOffsetFor(dynamicObject)
 
     function updateVisibility() {
       dynamicObjectLayer.visible = root.filter(dynamicObject);
     }
 
     Component.onCompleted: updateVisibility()
-    onSourceClipRectChanged: offset = controller.getAdjustedOffsetFor(dynamicObject)
+    onSourceClipRectChanged: offset = levelController.getAdjustedOffsetFor(dynamicObject)
 
     Timer {
       running: root.visible
@@ -46,13 +47,13 @@ Repeater {
     enabled: visible
     source: "file:" + dynamicObject.spriteSource
     sourceClipRect: dynamicObject.clippedRect
-    x: offset.x + origin.x
-    y: offset.y + origin.y
+    x: offset.x + root.offsetX
+    y: offset.y + root.offsetY
 
     Connections {
       target: dynamicObject
       function onSpritePositionChanged() {
-        dynamicObjectLayer.offset = controller.getAdjustedOffsetFor(dynamicObject);
+        dynamicObjectLayer.offset = levelController.getAdjustedOffsetFor(dynamicObject);
       }
     }
   }

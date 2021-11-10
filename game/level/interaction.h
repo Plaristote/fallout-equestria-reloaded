@@ -19,6 +19,7 @@ class InteractionComponent : public PlayerVisibilityComponent
   Q_PROPERTY(int targetMode READ getTargetMode NOTIFY mouseModeChanged)
   Q_PROPERTY(InventoryItem* activeItem READ getActiveItem NOTIFY activeItemChanged)
   Q_PROPERTY(bool mouseInMap MEMBER mouseInMap NOTIFY mouseStateChanged)
+  Q_PROPERTY(QPoint hoveredTile MEMBER hoveredTile NOTIFY hoveredTileChanged)
   Q_PROPERTY(InteractionTargetList* targetList READ getTargetList CONSTANT)
 public:
   static int movementModeOption;
@@ -63,6 +64,7 @@ public:
   Q_INVOKABLE void movePlayerTo(int x, int y);
   Q_INVOKABLE void tileClicked(int x, int y);
   MouseMode        getMouseMode() const { return static_cast<MouseMode>(mouseMode); }
+  QPoint           getHoveredTilePosition() const { return hoveredTile; }
   int              getTargetMode() const;
   bool             mapIncludesMouse() const { return mouseInMap; }
   void             setDefaultMovementMode();
@@ -93,6 +95,7 @@ signals:
   void startLooting(LootingController*);
   void activeItemChanged();
   void playerMovingTo(QPoint);
+  void hoveredTileChanged();
 
 private slots:
   void onActiveItemChanged();
@@ -103,11 +106,12 @@ private:
   QPoint getClickableOffsetFor(const DynamicObject* target) const;
 
 protected:
-  QString        activeItemSlot, activeSkill;
-  InventoryItem* activeItem = nullptr;
-  int            mouseMode = MovementCursor;
-  bool           mouseInMap = false;
+  QString               activeItemSlot, activeSkill;
+  InventoryItem*        activeItem = nullptr;
+  int                   mouseMode = MovementCursor;
+  bool                  mouseInMap = false;
   InteractionTargetList targetList;
+  QPoint                hoveredTile = QPoint(-1, -1);
 };
 
 #endif // INTERACTIONCOMPONENT_H

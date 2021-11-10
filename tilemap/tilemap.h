@@ -17,12 +17,12 @@ class TileMap : public QObject
 {
   Q_OBJECT
 
-  Q_PROPERTY(QSize tileSize MEMBER tileSize)
-  Q_PROPERTY(QSize mapSize MEMBER mapSize)
+  Q_PROPERTY(QSize tileSize MEMBER tileSize CONSTANT)
+  Q_PROPERTY(QSize mapSize MEMBER mapSize CONSTANT)
   Q_PROPERTY(QStringList textureList MEMBER textureList NOTIFY onTextureListChanged)
-  Q_PROPERTY(QQmlListProperty<TileZone> zones READ getZonesQml)
-  Q_PROPERTY(QQmlListProperty<TileLayer> roofs READ getRoofsQml)
-  Q_PROPERTY(QQmlListProperty<TileLayer> lights READ getLightsQml)
+  Q_PROPERTY(QQmlListProperty<TileZone> zones READ getZonesQml NOTIFY zonesChanged)
+  Q_PROPERTY(QQmlListProperty<TileLayer> roofs READ getRoofsQml CONSTANT)
+  Q_PROPERTY(QQmlListProperty<TileLayer> lights READ getLightsQml NOTIFY lightsChanged)
 
   friend class FloorLayer;
   typedef void (TileMap::*LayerFolderLoader)(const QJsonObject&);
@@ -57,13 +57,15 @@ public:
   QQmlListProperty<TileLayer> getLightsQml() { return QML_QLIST_CONSTRUCTOR(TileLayer, lights); }
 
 public slots:
-  void addTileZone(TileZone* zone)     { if (zones.indexOf(zone) < 0) { zones << zone; } }
-  void removeTileZone(TileZone* zone)  { zones.removeAll(zone); }
-  void addLightLayer(TileLayer* zone)    { if (lights.indexOf(zone) < 0) { lights << zone; } }
-  void removeLightLayer(TileLayer* zone) { lights.removeAll(zone); }
+  void addTileZone(TileZone* zone);
+  void removeTileZone(TileZone* zone);
+  void addLightLayer(TileLayer* zone);
+  void removeLightLayer(TileLayer* zone);
 
 signals:
   void onTextureListChanged();
+  void zonesChanged();
+  void lightsChanged();
 
 private:
   void loadTilesets(const QJsonArray&);

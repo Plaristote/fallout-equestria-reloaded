@@ -52,7 +52,10 @@ void MouseCursor::updatePointerType()
     switch (level->getMouseMode())
     {
     case InteractionComponent::MovementCursor:
-      setCurrentPointer(EmptyPointer);
+      if (level->getHoveredTilePosition() == QPoint(-1, -1))
+        setCurrentPointer(NormalPointer);
+      else
+        setCurrentPointer(EmptyPointer);
       break ;
     case InteractionComponent::InteractionCursor:
       setCurrentPointer(NormalPointer);

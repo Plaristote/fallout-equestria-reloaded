@@ -14,12 +14,13 @@ class TileZone : public QObject
 {
   Q_OBJECT
 
-  Q_PROPERTY(QString      name MEMBER name)
-  Q_PROPERTY(QString      type MEMBER type)
+  Q_PROPERTY(QString      name MEMBER name CONSTANT)
+  Q_PROPERTY(QString      type MEMBER type CONSTANT)
   Q_PROPERTY(QPoint       offset MEMBER offset NOTIFY tilesChanged)
   Q_PROPERTY(unsigned int floor READ getFloor NOTIFY floorChanged)
-  Q_PROPERTY(QRect        clippedRect MEMBER clippedRect)
+  Q_PROPERTY(QRect        clippedRect MEMBER clippedRect CONSTANT)
   Q_PROPERTY(bool         accessBlocked MEMBER accessBlocked)
+  Q_PROPERTY(int          positionCount READ getPositionCount NOTIFY tilesChanged)
 public:
   explicit TileZone(QObject *parent = nullptr);
 
