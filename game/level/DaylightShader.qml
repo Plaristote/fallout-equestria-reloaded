@@ -5,6 +5,7 @@ ShaderEffect {
   property color color
 
   enabled: gameManager.currentGame.level.useAmbientLight
+  visible: enabled
   anchors.fill: parent
   vertexShader: "
       uniform highp mat4 qt_Matrix;

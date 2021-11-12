@@ -87,7 +87,7 @@ Rectangle {
         property rect renderRect: roof.getRenderedRect()
         property bool isFloor: roof.name.startsWith("floor_")
 
-        source: `file:///${levelController.preRenderPath}floor${renderTarget.levelController.floor}_roof_${roof.name}.png`
+        source: `file:///${levelController.preRenderPath}floor${renderTarget.levelController.currentFloor}_roof_${roof.name}.png`
         visible: renderTarget.renderRoofs
         opacity: roof.visible ? 1 : 0
         x:       renderRect.x + (isFloor ? -width / 2 : 0)

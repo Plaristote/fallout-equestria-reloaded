@@ -180,6 +180,8 @@ set(PROJECT_SOURCES
         game/level/interactiontargetlist.h
         game/level/interactiontargetlist.cpp
         game/level/lineofsight.cpp
+        game/level/ambientlightcomponent.h
+        game/level/ambientlightcomponent.cpp
         game/objects/objectgroup.h
         game/objects/objectgroup.cpp
         game/objects/objectfactory.h

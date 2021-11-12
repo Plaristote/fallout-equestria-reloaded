@@ -20,10 +20,6 @@ MouseArea {
     else if (pressedButtons & Qt.RightButton)
       onRightButtonClick();
   }
-  Component.onCompleted: {
-    if (mouseX !== 0 && mouseY !== 0)
-      levelController.mouseInMap = true;
-  }
 
   Timer {
     interval: 1500
