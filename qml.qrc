@@ -25,6 +25,17 @@
         <file>cmap/Status.qml</file>
         <file>cmap/Statistics.qml</file>
         <file>cmap/Skills.qml</file>
+        <file>cmap/AvailableSkillPoints.qml</file>
+        <file>cmap/CharacterData.qml</file>
+        <file>cmap/PerkPicker.qml</file>
+        <file>cmap/PersonalInfo.qml</file>
+        <file>cmap/SpecialCounter.qml</file>
+        <file>cmap/TraitsPicker.qml</file>
+        <file>cmap/AvailableSkillProficiencies.qml</file>
+        <file>cmap/DescriptionPane.qml</file>
+        <file>cmap/KillsPane.qml</file>
+        <file>cmap/PerksPane.qml</file>
+        <file>cmap/Special.qml</file>
         <file>assets/ui/TerminalButton.qml</file>
         <file>assets/ui/tab.png</file>
         <file>assets/ui/Tab.qml</file>
