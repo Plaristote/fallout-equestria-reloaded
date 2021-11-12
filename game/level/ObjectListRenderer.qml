@@ -21,5 +21,10 @@ Repeater {
         dynamicObjectRenderer.offset = root.levelController.getAdjustedOffsetFor(dynamicObject);
       }
     }
+
+    DaylightShader {
+      source: parent
+      color: renderTarget.levelController.ambientColor
+    }
   }
 }

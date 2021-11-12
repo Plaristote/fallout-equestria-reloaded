@@ -3,6 +3,9 @@
         <file>main.qml</file>
         <file>assets/backgrounds/default.png</file>
         <file>MainMenu.qml</file>
+        <file>game/level/ZoneRenderer.qml</file>
+        <file>game/level/WallRenderer.qml</file>
+        <file>game/level/DaylightShader.qml</file>
         <file>assets/ui/menuButton/active.png</file>
         <file>assets/ui/menuButton/normal.png</file>
         <file>assets/ui/menuButton/pressed.png</file>
@@ -19,7 +22,6 @@
         <file>assets/ui/terminal.png</file>
         <file>ui/MenuButton.qml</file>
         <file>assets/ui/TerminalScrollbar.qml</file>
-        <file>cmap/Special.qml</file>
         <file>assets/ui/TinyButton.qml</file>
         <file>cmap/Experience.qml</file>
         <file>cmap/Status.qml</file>
@@ -45,7 +47,7 @@
         <file>assets/ui/play-panel-left.png</file>
         <file>assets/ui/play-panel-center.png</file>
         <file>assets/ui/play-panel-right.png</file>
-        <file>game/ScreenEdges.qml</file>
+        <file>game/level/ScreenEdges.qml</file>
         <file>game/LevelCanvas.qml</file>
         <file>game/LevelRender.mjs</file>
         <file>game/level/CanvasRenderer.mjs</file>
@@ -307,5 +309,6 @@
         <file>game/level/LevelCamera.qml</file>
         <file>game/level/ObjectListRenderer.qml</file>
         <file>game/level/CursorRenderer.qml</file>
+        <file>game/level/LevelDisplay.qml</file>
     </qresource>
 </RCC>

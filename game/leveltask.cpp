@@ -233,6 +233,9 @@ void LevelTask::update()
     roof->setVisible(!roof->isInside(point.x, point.y));
   }
 
+  if (usesDaylight())
+    updateDaylight();
+
   if (!combat)
     realTimeTask(delta);
   else

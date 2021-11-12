@@ -20,10 +20,23 @@ MouseArea {
     else if (pressedButtons & Qt.RightButton)
       onRightButtonClick();
   }
+  Component.onCompleted: {
+    if (mouseX !== 0 && mouseY !== 0)
+      levelController.mouseInMap = true;
+  }
+
+  Timer {
+    interval: 1500
+    running: true
+    onTriggered: {
+      if (mouseX !== 0 && mouseY !== 0)
+        levelController.mouseInMap = true;
+    }
+  }
 
   Timer {
     id: mouseRefreshTimer
-    interval: 105
+    interval: 53
     repeat: false
     onTriggered: mouseArea.onMouseMoved()
   }
@@ -96,17 +109,17 @@ MouseArea {
   }
 
   function getHoveredCase(posX, posY) {
-    for (var x = 0 ; x < renderTarget.mapSize.width; ++x) {
+    const x = Math.floor(posX / renderTarget.tileSize.width) + Math.floor(posY / renderTarget.tileSize.height);
+
+    //for (var x = 0 ; x < renderTarget.mapSize.width; ++x) {
       for (var y = 0 ; y < renderTarget.mapSize.height; ++y) {
         const pos = renderTarget.tilemap.getPointFor(x, y);
 
         if (posX >= pos.x && posX <= pos.x + renderTarget.tileSize.width &&
             posY >= pos.y && posY <= pos.y + renderTarget.tileSize.height)
-        {
           return [x, y];
-        }
       }
-    }
+    //}
     return null;
   }
 }

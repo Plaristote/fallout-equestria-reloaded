@@ -18,6 +18,7 @@ Rectangle {
   property bool     renderWalls: true
   property bool     renderRoofs: true
   property var      visibleZones: []
+  property alias    groundLayer: groundLayer_
 
   id: renderTarget
   color: "yellow"
@@ -33,31 +34,24 @@ Rectangle {
     x: parent.width / 2
 
     Image {
-      id: groundLayer
+      id: groundLayer_
       source: `file:///${levelController.preRenderPath}floor${levelController.currentFloor}_tilemap.png`
       x:      groundRect.x
       y:      groundRect.y
       width:  groundRect.width
       height: groundRect.height
+
+      DaylightShader {
+        source: groundLayer
+        color: renderTarget.levelController.ambientColor
+      }
     }
 
     Repeater {
       model: levelController.tilemap.zones
-      delegate: Item {
-        property QtObject zone: levelController.tilemap.zones[index]
-        visible: zone.type === "exit" || visibleZones.indexOf(zone) >= 0
-        Repeater {
-          model: zone.positionCount
-          delegate: Image {
-            property point    position: zone.getPositionAt(index)
-            property QtObject tile: ground.getTile(position.x, position.y)
-            property point    renderPosition: tile ? tile.renderPosition : Qt.point(0, 0)
-            source: "qrc:/assets/tilesets/zones.png"
-            sourceClipRect: zone.clippedRect
-            x: renderPosition.x
-            y: renderPosition.y
-          }
-        }
+      delegate: ZoneRenderer {
+        zone: levelController.tilemap.zones[index]
+        tilesetSource: "qrc:/assets/tilesets/zones.png"
       }
     }
 
@@ -72,23 +66,7 @@ Rectangle {
     Repeater {
       id: wallsRenderer
       model: renderTarget.mapSize.width * renderTarget.mapSize.height
-      delegate: Item {
-        property int tx: index % renderTarget.mapSize.width
-        property int ty: Math.round(index / renderTarget.mapSize.width)
-        property point renderPosition: levelController.getRenderPositionForTile(tx, ty)
-        property var block: renderTarget.blocks ? renderTarget.blocks.getTile(tx, ty) : null
-        property var vwall: renderTarget.vwalls ? renderTarget.vwalls.getTile(tx, ty) : null
-        property var hwall: renderTarget.hwalls ? renderTarget.hwalls.getTile(tx, ty) : null
-
-        x: renderPosition.x
-        y: renderPosition.y
-        z: tx + ty * renderTarget.mapSize.width
-
-        //Text { color: "white"; font.bold: true; text: parent.z }
-        Loader { property var wall: block; sourceComponent: wall ? wallComponent : null; y: -renderTarget.wallHeight }
-        Loader { property var wall: vwall; sourceComponent: wall ? wallComponent : null; y: -renderTarget.wallHeight }
-        Loader { property var wall: hwall; sourceComponent: wall ? wallComponent : null; y: -renderTarget.wallHeight }
-      }
+      delegate: WallRenderer {}
     }
 
     Repeater {
@@ -119,6 +97,11 @@ Rectangle {
         height:  renderRect.height
 
         Behavior on opacity { NumberAnimation { duration: 300 } }
+
+        DaylightShader {
+          source: parent
+          color: renderTarget.levelController.ambientColor
+        }
       }
     }
 
@@ -127,13 +110,4 @@ Rectangle {
       levelController: root.levelController
     }
   } // RenderItems
-
-  Component {
-    id: wallComponent
-    Image {
-      source: fileProtocol + wall.image
-      sourceClipRect: wall.clippedRect
-      visible: renderTarget.renderWalls
-    }
-  }
 }

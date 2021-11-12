@@ -1,12 +1,12 @@
 #ifndef  PLAYERVISIBILITYCOMPONENT_H
 # define PLAYERVISIBILITYCOMPONENT_H
 
-# include "prerender.h"
+# include "ambientlightcomponent.h"
 
-class PlayerVisibilityComponent : public PreRenderComponent
+class PlayerVisibilityComponent : public AmbientLightComponent
 {
   Q_OBJECT
-  typedef PreRenderComponent ParentType;
+  typedef AmbientLightComponent ParentType;
 
   Q_PROPERTY(QQmlListProperty<Character>     visibleCharacters READ getQmlVisibleCharacters NOTIFY visibleCharactersChanged)
   Q_PROPERTY(QQmlListProperty<DynamicObject> visibleObjects    READ getQmlVisibleObjects    NOTIFY visibleObjectsChanged)

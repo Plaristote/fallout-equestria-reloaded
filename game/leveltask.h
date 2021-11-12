@@ -74,7 +74,7 @@ signals:
   void persistentChanged();
   void displayConsoleMessage(const QString&);
   void cameraFocusRequired(DynamicObject*);
-  void visibleCharactersChanged();
+  void daylightColorChanged();
 
 public slots:
   void deleteLater();
