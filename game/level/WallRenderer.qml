@@ -10,7 +10,7 @@ Item {
 
   x: renderPosition.x
   y: renderPosition.y
-  z: tx + ty * renderTarget.mapSize.width
+  z: (tx + ty * renderTarget.mapSize.width) * 3 + (vwall || hwall ? 2 : 0)
 
   //Text { color: "white"; font.bold: true; text: parent.z }
   Loader { property var wall: block; sourceComponent: wall ? wallComponent : null; y: -renderTarget.wallHeight }

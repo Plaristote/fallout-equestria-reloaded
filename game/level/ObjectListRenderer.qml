@@ -12,7 +12,7 @@ Repeater {
     sourceClipRect: dynamicObject.clippedRect
     x: offset.x
     y: offset.y
-    z: (dynamicObject.position.x + dynamicObject.position.y * renderTarget.mapSize.width)
+    z: (dynamicObject.position.x + dynamicObject.position.y * renderTarget.mapSize.width) * 3 + 1
     //Text { color: "yellow"; text: parent.z }
 
     Connections {
