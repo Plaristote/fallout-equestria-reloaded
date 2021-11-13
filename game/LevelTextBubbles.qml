@@ -6,7 +6,7 @@ Repeater {
   model: gameManager.currentGame.level.textBubbles
   delegate: Rectangle {
     property QtObject textBubble: gameManager.currentGame.level.textBubbles[index]
-    color: Qt.rgba(0, 0, 0, 0.5)
+    color: Qt.rgba(0, 0, 0, 0.6)
     border.color: "white"
     border.width: 1
     radius: 10
@@ -25,6 +25,11 @@ Repeater {
       wrapMode: Text.WordWrap
       text: textBubble.content
       color: textBubble.color
+      font.pointSize: application.consoleFont.normalSize
+      font.family:    application.consoleFont.name
+      anchors.left:   parent.left
+      anchors.right:  parent.right
+      horizontalAlignment: Text.AlignHCenter
     }
   }
 }
