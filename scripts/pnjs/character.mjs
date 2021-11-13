@@ -1,7 +1,7 @@
-import {CombatComponent} from "./components/combat.mjs";
+import {SceneActorComponent} from "./components/sceneActor.mjs";
 import {awarenessHint} from "../cmap/perks/awareness.mjs";
 
-export class CharacterBehaviour extends CombatComponent {
+export class CharacterBehaviour extends SceneActorComponent {
   constructor(model) {
     super(model);
     this.xpValue = 25;
@@ -47,7 +47,7 @@ export class CharacterBehaviour extends CombatComponent {
         if (states[key](hpPercentage)) {
           message += i18n.t(`inspection.character-state-${gender}`, {state: i18n.t(`inspection.character-states.${key}`)});
           break ;
-	}
+        }
       }
     }
     else
