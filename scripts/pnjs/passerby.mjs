@@ -1,16 +1,18 @@
 import {CharacterBehaviour} from "./character.mjs";
 import {getRandomCaseInZone} from "../behaviour/pathfinding.mjs";
 
+export const textBubbles = [
+  {content: i18n.t("bubbles.passerby-1"), duration: 5000 },
+  {content: i18n.t("bubbles.passerby-2"), duration: 5000 },
+  {content: i18n.t("bubbles.passerby-3"), duration: 5000 }
+];
+
 export class PasserbyBehaviour extends CharacterBehaviour {
   constructor(model, locations) {
     super(model);
     this.passerbyLocations = locations;
     this.scheduleNextTravel();
-    this.textBubbles = [
-      {content: i18n.t("bubbles.passerby-1"), duration: 5000 },
-      {content: i18n.t("bubbles.passerby-2"), duration: 5000 },
-      {content: i18n.t("bubbles.passerby-3"), duration: 5000 }
-    ];
+    this.textBubbles = textBubbles;
   }
 
   goToNextLocation() {
