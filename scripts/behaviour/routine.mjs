@@ -2,6 +2,17 @@ function soonerFirst(a, b) { return a.nextTrigger < b.nextTrigger ? -1 : 1; }
 function latestFirst(a, b) { return a.nextTrigger > b.nextTrigger ? -1 : 1; }
 function randomInterval() { return Math.ceil(Math.random() * 3000); }
 
+export function toggleRoutine(character, value) {
+  const script = character ? character.getScriptObject() : null;
+  
+  if (script && script.routineComponent) {
+    if (value === undefined)
+      script.routineComponent.interrupted = !script.routineComponent.interrupted;
+    else
+      script.routineComponent.interrupted = !value;
+  }
+}
+
 export class RoutineComponent {
   constructor(parent, routine) {
     this.parent = parent;
@@ -34,6 +45,13 @@ export class RoutineComponent {
   }
 
   updateRoutine() {
+    if (this.interrupted)
+      this.model.tasks.addTask("updateRoutine", 1234, 1);
+    else
+      this.triggerRoutine();
+  }
+  
+  triggerRoutine() {
     const callback = this.getCurrentRoutine().callback;
 
     this.scheduleNextRoutineAction();
