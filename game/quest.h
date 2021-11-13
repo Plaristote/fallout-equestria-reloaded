@@ -44,6 +44,7 @@ public:
 public slots:
   void onCharacterKilled(Character* victim, Character* killed);
   void onItemPicked(InventoryItem*);
+  void onLevelChanged();
 
 signals:
   void nameChanged();

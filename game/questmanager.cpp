@@ -1,9 +1,10 @@
 #include "questmanager.h"
+#include "game.h"
 #include <QJsonArray>
 
 QuestManager::QuestManager(QObject *parent) : QObject(parent)
 {
-
+  connect(Game::get(), &Game::levelChanged, this, &QuestManager::onLevelChanged);
 }
 
 void QuestManager::addQuest(const QString& name)
@@ -63,4 +64,10 @@ void QuestManager::onItemPicked(InventoryItem* item)
 {
   for (Quest* quest : qAsConst(list))
     quest->onItemPicked(item);
+}
+
+void QuestManager::onLevelChanged()
+{
+  for (Quest* quest : qAsConst(list))
+    quest->onLevelChanged();
 }

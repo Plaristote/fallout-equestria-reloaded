@@ -81,6 +81,12 @@ void Quest::onItemPicked(InventoryItem* item)
     script->call("onItemPicked", QJSValueList() << item->asJSValue());
 }
 
+void Quest::onLevelChanged()
+{
+  if (!completed && script->hasMethod("onLevelChanged"))
+    script->call("onLevelChanged");
+}
+
 QVariantList Quest::getObjectives() const
 {
   if (script->hasMethod("getObjectives"))

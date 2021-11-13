@@ -30,6 +30,8 @@ signals:
 public slots:
   void onCharacterKilled(Character* victim, Character* killer);
   void onItemPicked(InventoryItem* item);
+private slots:
+  void onLevelChanged();
 
 private:
   QList<Quest*> list;
