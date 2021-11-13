@@ -33,6 +33,8 @@ void CombatComponent::registerDynamicObject(DynamicObject* object)
 
 void CombatComponent::unregisterDynamicObject(DynamicObject* object)
 {
+  if (combat && object->isCharacter())
+    leaveCombat(reinterpret_cast<Character*>(object));
   TextBubblesComponent::unregisterDynamicObject(object);
 }
 
@@ -54,7 +56,7 @@ void CombatComponent::onActiveItemChanged()
 
 void CombatComponent::joinCombat(Character* character)
 {
-  if (!isInCombat(character))
+  if (character && !isInCombat(character) && character->isAlive())
   {
     auto* playerParty = Game::get()->getPlayerParty();
 
@@ -80,12 +82,15 @@ void CombatComponent::leaveCombat(Character* character)
 {
   auto index = combattants.indexOf(character);
 
-  if (index == combatIterator)
-    onNextCombatTurn();
-  if (index <= combatIterator)
-    combatIterator--;
-  combattants.removeAll(character);
-  emit combattantsChanged();
+  if (index >= 0)
+  {
+    if (index == combatIterator)
+      onNextCombatTurn();
+    if (index <= combatIterator)
+      combatIterator--;
+    combattants.removeAll(character);
+    emit combattantsChanged();
+  }
 }
 
 bool CombatComponent::isCombatEnabled() const
