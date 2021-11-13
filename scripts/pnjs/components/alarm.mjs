@@ -6,6 +6,8 @@ export const AlarmLevel = {
 export function callGuards(guards, target, alarmLevel) {
   console.log("Calling guards", guards, guards.objects.length,
     "to position", target.position.x, target.position.y, target);
+  for (var i = 0 ; i < guards.groups.length ; ++i)
+    callGuards(guards.groups[i], target, alarmLevel);
   for (var i = 0 ; i < guards.objects.length ; ++i) {
     guards.objects[i].getScriptObject().receiveAlarmSignal(
       target.position.x, target.position.y, target, alarmLevel
@@ -122,7 +124,9 @@ export class AlarmComponent {
   }
   
   onActionQueueCompleted() {
-    if (this.isAlarmSignalReached())
+    if (this.isAlarmSignalReached()) {
+      this.model.fieldOfView.detectCharacters();
       this.onAlarmSignalReached();
+    }
   }
 }
