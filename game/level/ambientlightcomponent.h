@@ -14,13 +14,15 @@ class AmbientLightComponent : public PreRenderComponent
 public:
   explicit AmbientLightComponent(QObject *parent = nullptr);
 
-  void updateDaylight();
   inline bool usesDaylight() const { return useAmbientLight && useDaylight; }
 
 signals:
   void ambientColorChanged();
-
+protected:
+  void update(qint64);
 private:
+  void updateDaylight();
+
   QColor ambientColor;
   bool   useDaylight = false;
   bool   useAmbientLight = false;

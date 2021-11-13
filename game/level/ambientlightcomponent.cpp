@@ -17,6 +17,13 @@ AmbientLightComponent::AmbientLightComponent(QObject *parent) : ParentType(paren
   ambientColor = QColor(255, 255, 255, 0);
 }
 
+void AmbientLightComponent::update(qint64 delta)
+{
+  if (usesDaylight())
+    updateDaylight();
+  ParentType::update(delta);
+}
+
 void AmbientLightComponent::updateDaylight()
 {
   TimeManager* timeManager = Game::get()->getTimeManager();

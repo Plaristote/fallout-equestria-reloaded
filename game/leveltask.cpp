@@ -233,9 +233,7 @@ void LevelTask::update()
     roof->setVisible(!roof->isInside(point.x, point.y));
   }
 
-  if (usesDaylight())
-    updateDaylight();
-
+  ParentType::update(delta);
   if (!combat)
     realTimeTask(delta);
   else
@@ -249,7 +247,6 @@ void LevelTask::update()
   }
   updateVisualEffects(delta);
   soundManager->update();
-  ParentType::update(delta);
   emit updated();
 }
 
