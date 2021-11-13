@@ -1,6 +1,6 @@
 import {toggleRoutine} from "./routine.mjs";
 
-class SceneManager {
+export class SceneManager {
   constructor(parent, id) {
     this.parent = parent;
     this.model = parent.model;
