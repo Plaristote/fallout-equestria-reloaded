@@ -11,8 +11,11 @@ public:
   int getApCost() const { return 0; }
   void update() override;
   bool trigger() override;
+  void canceled() override;
 
 private:
+  bool call(bool param);
+
   QJSValue callback;
 };
 

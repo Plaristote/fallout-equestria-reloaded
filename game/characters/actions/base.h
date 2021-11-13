@@ -22,6 +22,7 @@ public:
   virtual bool trigger() = 0;
   virtual bool canInterrupt() const { return true; }
   virtual void interrupt() {}
+  virtual void canceled() {}
   State        getState() const { return state; }
 
 protected:

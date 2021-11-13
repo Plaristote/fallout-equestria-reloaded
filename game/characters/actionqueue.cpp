@@ -129,8 +129,13 @@ bool ActionQueue::start()
 
 void ActionQueue::reset()
 {
-  if (queue.length() > 0)
-    queue.front()->interrupt();
+  auto it = queue.begin();
+
+  if (it != queue.end())
+  {
+    (*it)->interrupt();
+    std::for_each(++it, queue.end(), [](ActionBase* action) { action->canceled(); });
+  }
   stash.reserve(queue.size());
   for (auto* entry : qAsConst(queue))
     stash << entry;

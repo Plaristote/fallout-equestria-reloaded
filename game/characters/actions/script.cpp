@@ -11,9 +11,19 @@ void ScriptAction::update()
 
 bool ScriptAction::trigger()
 {
+  return call(true);
+}
+
+void ScriptAction::canceled()
+{
+  call(false);
+}
+
+bool ScriptAction::call(bool param)
+{
   if (callback.isCallable())
   {
-    QJSValue retval = callback.call();
+    QJSValue retval = callback.call(QJSValueList() << param);
 
     return retval.isBool() ? retval.toBool() : true;
   }
