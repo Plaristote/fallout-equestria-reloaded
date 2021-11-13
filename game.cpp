@@ -46,6 +46,7 @@ Game::Game(QObject *parent) : StorableObject(parent)
 
   connect(worldmap, &WorldMap::cityEntered, this, &Game::onCityEntered);
   connect(this, &Game::gameOver, this, &Game::onGameOver);
+  connect(this, &Game::levelChanged, this, &Game::onLevelChanged);
 }
 
 Game::~Game()
@@ -91,6 +92,12 @@ void Game::newPlayerParty(StatModel* statistics)
   initializeScript();
   if (script && script->hasMethod("initialize"))
     script->call("initialize");
+}
+
+void Game::onLevelChanged()
+{
+  if (script && script->hasMethod("onLevelChanged"))
+    script->call("onLevelChanged");
 }
 
 void Game::onGameOver()

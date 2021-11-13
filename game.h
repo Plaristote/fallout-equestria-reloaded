@@ -88,6 +88,7 @@ public slots:
   void loadLevel(const QString& name, const QString& targetZone = "");
 
 private slots:
+  void onLevelChanged();
   void onGameOver();
 
 private:
