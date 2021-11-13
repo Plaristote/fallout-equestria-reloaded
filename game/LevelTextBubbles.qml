@@ -13,6 +13,7 @@ Repeater {
     width: 150
     height: textBubbleContentView.height
     opacity: textBubble.opacity
+    visible: textBubble.floor === gameManager.currentGame.level.currentFloor
 
     x: textBubble.position.x + origin.x + (72 / 2) - width / 2
     y: textBubble.position.y + origin.y - height

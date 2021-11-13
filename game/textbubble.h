@@ -14,6 +14,7 @@ class TextBubble : public QObject
   Q_PROPERTY(QString content  MEMBER content  NOTIFY contentChanged)
   Q_PROPERTY(QString color    MEMBER color    NOTIFY colorChanged)
   Q_PROPERTY(QPoint  position MEMBER position NOTIFY positionChanged)
+  Q_PROPERTY(int     floor    MEMBER floor    NOTIFY positionChanged)
   Q_PROPERTY(float   opacity  READ getOpacity NOTIFY opacityChanged)
 public:
   TextBubble(QObject* parent = nullptr) : QObject(parent), target(nullptr) {}
@@ -34,6 +35,7 @@ signals:
 private:
   QString        content, color;
   QPoint         position;
+  unsigned int   floor;
   DynamicObject* target;
   qint64         timeLeft;
 };

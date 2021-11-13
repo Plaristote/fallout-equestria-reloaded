@@ -22,6 +22,7 @@ bool TextBubble::update(qint64 delta)
 
   timeLeft -= delta;
   newPosition.ry() -= rect.height() / 2;
+  floor = target->getCurrentFloor();
   if (newPosition != position)
   {
     position = newPosition;
