@@ -63,4 +63,13 @@ Item {
     target: gamepad
     function onCameraAxisClicked() { moveToObject(levelController.player) }
   }
+
+  Connections {
+    target: levelController
+    function onCameraFocusRequired(object) { moveToObject(object) }
+  }
+
+  Timer {
+    id: afterLoadCameraCenter; running: true; interval: 100; onTriggered: camera.moveToObject(camera.levelController.player);
+  }
 }
