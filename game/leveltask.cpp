@@ -239,7 +239,7 @@ void LevelTask::update()
     realTimeTask(delta);
   else
   {
-    if (!isCharacterTurn(getPlayer()) || finalizeTurnRemainingTime <= 0)
+    if (!isCharacterTurn(getPlayer()) || finalizeTurnRemainingTime > 0)
       delta *= static_cast<int>(combatSpeedOption);
     if (finalizeTurnRemainingTime <= 0)
       combatTask(delta);
@@ -326,6 +326,7 @@ void LevelTask::endTurnTask(qint64 delta)
     finalizeTurnRemainingTime -= delta;
   else
     finalizeTurnRemainingTime = 0;
+  enableWaitingMode(finalizeTurnRemainingTime > 0);
 }
 
 void LevelTask::onCombatChanged()
