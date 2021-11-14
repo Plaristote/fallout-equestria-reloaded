@@ -107,10 +107,10 @@ QString Quest::getDescription() const
 {
   if (script && script->hasMethod("getDescription"))
     return script->call("getDescription").toString();
-  return tr("description");
+  return translate("description");
 }
 
-QString Quest::tr(const QString& key, const QVariantMap& options) const
+QString Quest::translate(const QString& key, const QVariantMap& options) const
 {
   return I18n::get()->t("quests." + name + '.' + key, options);
 }

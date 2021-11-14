@@ -36,7 +36,8 @@ public:
 
   Q_INVOKABLE QVariantList getObjectives() const;
   Q_INVOKABLE QJSValue getScriptObject() const;
-  Q_INVOKABLE QString tr(const QString& key, const QVariantMap& options = {}) const;
+  Q_INVOKABLE QString tr(const QString& key, const QVariantMap& options = {}) const { return translate(key, options); }
+  QString translate(const QString& key, const QVariantMap& options = {}) const;
   QString getDescription() const;
   int getObjectiveCount() const;
   int getCompleteCount() const;
