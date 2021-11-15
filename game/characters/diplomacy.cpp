@@ -25,6 +25,8 @@ void CharacterDiplomacy::initializeFaction()
 
   if (characterSheet && diplomacy)
     faction = diplomacy->getFaction(characterSheet->getFaction());
+  else
+    faction = nullptr;
 }
 
 bool CharacterDiplomacy::isAlly(const CharacterDiplomacy* other) const
