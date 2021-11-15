@@ -47,7 +47,7 @@ void Inventory::destroyItem(InventoryItem *item, int quantity)
 {
   int amount = item->getQuantity();
 
-  if (amount >= quantity)
+  if (quantity >= amount)
   {
     if (isEquippedItem(item))
       unequipItem(item, true);
