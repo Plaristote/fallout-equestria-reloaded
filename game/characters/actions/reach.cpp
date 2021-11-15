@@ -93,7 +93,7 @@ int ReachAction::getApCost() const
 
 bool ReachAction::alreadyReached() const
 {
-  return character->getDistance(object) <= range && character->hasLineOfSight(object);
+  return std::floor(character->getDistance(object)) <= range && character->hasLineOfSight(object);
 }
 
 bool ReachAction::trigger()
