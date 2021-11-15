@@ -53,6 +53,10 @@ export class ItemBehaviour {
 
   attemptToUseOn(target) {
     console.log("attemptToUseOn", target);
+    if (this.disableCombatUse && game.level && game.level.combat) {
+      this.logFailure(i18n.t("messages.cannot-use-in-combat"));
+      return false;
+    }
     if (!target && !this.requiresTarget)
       return this.attemptToUseActionPointsOn(target);
     else if (target && this.isValidTarget(target)) {

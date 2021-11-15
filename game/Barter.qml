@@ -129,7 +129,7 @@ Item {
 
       UiStyle.PushButton {
         text: i18n.t("Close")
-        onClicked: root.closed()
+        onClicked: root.abortBarter()
       }
     }
   }
