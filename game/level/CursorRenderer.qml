@@ -13,7 +13,7 @@ Loader {
   z: 99999999
   sourceComponent: {
     if (levelController.mouseMode === 0)
-      return tileCursorComponent;
+      return levelController.isPlayerTurn ? combatPathComponent : tileCursorComponent;
     else if (levelController.mouseMode === 2 && levelController.targetMode === 2)
       return tileZoneComponent;
     return null;
@@ -45,6 +45,57 @@ Loader {
           y: cursorRenderer.y - renderPosition.y
           source: "qrc:/assets/ui/cursors/target-tile.png"
         }
+      }
+    }
+  }
+
+  Component {
+    id: combatPathComponent
+    Item {
+      id: combatPathElement
+      property var path: getPath()
+      property int length: Math.min(levelController.player.actionPoints, path.length)
+
+      function getPath() {
+        return levelController.previewPathTo(...renderTarget.hoverTile);
+      }
+
+      Connections {
+        target: levelController.player
+        function onActionPointsChanged() { combatPathElement.path = combatPathElement.getPath(); }
+      }
+
+      Connections {
+        target: renderTarget
+        function onHoverTileChanged() { combatPathElement.path = combatPathElement.getPath(); }
+      }
+
+      Repeater {
+        model: combatPathElement.length
+        delegate: Image {
+          property var   tile: [
+            combatPathElement.path[index].x,
+            combatPathElement.path[index].y
+          ]
+          property bool lastTile: index === (combatPathElement.length - 1)
+          property point renderPosition: levelController.getRenderPositionForTile(...tile)
+          x: renderPosition.x - cursorRenderer.x
+          y: renderPosition.y - cursorRenderer.y
+          source: "qrc:/assets/ui/cursors/move-tile" + (lastTile ? "" : "-unavailable") + ".png"
+          Text {
+            anchors.centerIn: parent
+            text:             (index + 1).toString()
+            font.pointSize:   application.consoleFont.bigSize
+            font.family:      application.consoleFont.name
+            style:            Text.Outline
+            styleColor:       "black"
+            color:            "white"
+          }
+        }
+      }
+
+      Loader {
+        sourceComponent: path.length > length || path.length === 0 ? tileCursorComponent : null
       }
     }
   }
