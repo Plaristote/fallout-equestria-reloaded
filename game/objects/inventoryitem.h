@@ -54,6 +54,7 @@ public:
   Q_INVOKABLE bool canEquipInSlot(const QString&);
   void onEquippedBy(Character*, bool on);
 
+  Q_INVOKABLE int            evaluateValue(Character* buyer, Character* seller);
   Q_INVOKABLE int            getActionPointCost();
   Q_INVOKABLE bool           isCombatItem();
   Q_INVOKABLE bool           isInRange(DynamicObject* target);

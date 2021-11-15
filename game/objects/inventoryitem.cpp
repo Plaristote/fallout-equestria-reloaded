@@ -77,6 +77,18 @@ int InventoryItem::getValue() const
   return 1;
 }
 
+int InventoryItem::evaluateValue(Character* buyer, Character* seller)
+{
+  if (script && script->hasMethod("evaluateValue"))
+  {
+    auto result = script->call("evaluateValue", QJSValueList() << buyer->asJSValue() << seller->asJSValue());
+
+    if (result.isNumber())
+      return result.toInt();
+  }
+  return getValue();
+}
+
 bool InventoryItem::isGroupable(InventoryItem* other)
 {
   auto itemData = InventoryItemLibrary::get()->getObject(itemType);

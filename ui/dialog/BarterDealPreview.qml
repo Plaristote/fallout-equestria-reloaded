@@ -4,7 +4,9 @@ import ".."
 
 Item {
   property QtObject controller
-  property QtObject currentItem
+  property QtObject playerItem
+  property QtObject npcItem
+  property QtObject currentItem: playerItem || npcItem
 
   GridLayout {
     anchors.fill: parent
@@ -17,7 +19,11 @@ Item {
       font.pixelSize: 20
     }
     Text {
-      text: controller.playerStash.totalValue
+      text: {
+        return controller.playerStash.totalValue > 0
+          ? controller.playerStash.evaluateValue(controller.npc, controller.player)
+          : 0;
+      }
       color: "yellow"
       font.family: application.titleFontName
       font.pixelSize: 20
@@ -29,7 +35,11 @@ Item {
       font.pixelSize: 20
     }
     Text {
-      text: controller.npcStash.totalValue
+      text: {
+        return controller.npcStash.totalValue > 0
+          ? controller.npcStash.evaluateValue(controller.player, controller.npc)
+          : 0;
+      }
       color: "yellow"
       font.family: application.titleFontName
       font.pixelSize: 20
@@ -54,6 +64,11 @@ Item {
       InventoryItemPreview {
         model: currentItem
         withValue: true
+        evaluateValue: item => {
+          if (item === playerItem)
+            return item.evaluateValue(controller.npc, controller.player);
+          return item.evaluateValue(controller.player, controller.npc);
+        }
         Layout.fillWidth: true
         Layout.fillHeight: true
       }

@@ -92,6 +92,15 @@ export class ItemBehaviour {
     else
       console.log(this.user, `> using item ${this.model.itemType} >`,  message);
   }
+
+  evaluateValue(buyer, seller) {
+    const sellerStat = seller.statistics.barter;
+    const buyerStat  = buyer.statistics.barter;
+    const advantage  = Math.max(sellerStat, buyerStat) - Math.min(sellerStat, buyerStat);
+    const ratio      = Math.max(sellerStat + (sellerStat > buyerStat ? advantage : -advantage), 10);
+
+    return Math.floor(this.model.value * (ratio / 100));
+  }
 }
 
 export const Item = ItemBehaviour;

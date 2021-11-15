@@ -49,6 +49,7 @@ public:
 
   int getTotalWeight() const;
   int getTotalValue() const;
+  Q_INVOKABLE int evaluateValue(Character* buyer, Character* seller) const;
 
   void setSlots(const QMap<QString, QString>&);
   void transferTo(Inventory*);

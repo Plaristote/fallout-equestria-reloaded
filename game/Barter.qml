@@ -63,7 +63,8 @@ Item {
         Layout.fillHeight: true
         Layout.preferredWidth: 300
         controller: root.controller
-        currentItem: playerInventory.selectedObject || playerStash.selectedObject || npcStash.selectedObject || npcInventory.selectedObject
+        playerItem: playerInventory.selectedObject || playerStash.selectedObject
+        npcItem:    npcStash.selectedObject || npcInventory.selectedObject
       }
 
       InventoryItemsView {

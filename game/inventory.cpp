@@ -180,8 +180,18 @@ int Inventory::getTotalValue() const
   int total = 0;
 
   for (auto* inventoryItem : items)
-    total += inventoryItem->getValue();
+    total += inventoryItem->getQuantity() * inventoryItem->getValue();
   return total;
+}
+
+int Inventory::evaluateValue(Character* buyer, Character* seller) const
+{
+  int total = 0;
+
+  for (auto* inventoryItem : items)
+    total += inventoryItem->getQuantity() * inventoryItem->evaluateValue(buyer, seller);
+  return total;
+
 }
 
 QStringList Inventory::getCategoryList() const

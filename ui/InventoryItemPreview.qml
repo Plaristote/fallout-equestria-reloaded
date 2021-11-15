@@ -5,6 +5,7 @@ import "qrc:/assets/ui" as UiStyle
 
 Pane {
   property QtObject model
+  property var evaluateValue: null
   property bool withValue: false
   id: objectPreview
   background: UiStyle.TerminalPane {}
@@ -71,7 +72,13 @@ Pane {
       Layout.fillWidth: true
       font.family: application.consoleFontName
       font.pointSize: 8
-      text: i18n.t("Value") + ": " + objectPreview.model.value
+      text: {
+        const value = evaluateValue
+          ? evaluateValue(objectPreview.model)
+          : objectPreview.model.value;
+
+        return i18n.t("Value") + ": " + value;
+      }
       visible: withValue
       color: "white"
     }

@@ -46,7 +46,7 @@ bool BarterController::agreeToBarter()
     params << Game::get()->getScriptEngine().newQObject(npcStash);
     return script->call("acceptBarter", params).toBool();
   }
-  return playerStash->getTotalValue() >= npcStash->getTotalValue();
+  return playerStash->evaluateValue(npc, player) >= npcStash->evaluateValue(player, npc);
 }
 
 void BarterController::addInventory(const QString &title, Inventory* inventory)
