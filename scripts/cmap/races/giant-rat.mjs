@@ -2,6 +2,10 @@ export const spriteSheet = "giant-rat";
 
 export const faces = ["giant-rat"];
 
+export function getDefaultItem(model, slot) {
+  return "melee-bite";
+}
+
 export function onToggled(statistics, toggled) {
   if (toggled) {
     statistics.traits.push("rat");

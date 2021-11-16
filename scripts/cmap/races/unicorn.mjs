@@ -12,3 +12,7 @@ export function spriteSheet(model) {
   pony.overlay = "unicorn";
   return pony;
 }
+
+export const itemSlots = Pony.itemSlots;
+
+export const getDefaultItem = Pony.getDefaultItem;

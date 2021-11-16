@@ -15,6 +15,23 @@ export function spriteSheet(model) {
   };
 }
 
+export const itemSlots = {
+  "armor":  "armor",
+  "saddle": "saddle",
+  "use-1":  "any",
+  "use-2":  "any"
+};
+
+export function getDefaultItem(model, slot) {
+  switch (slot) {
+  case "use-1":
+    return "melee-hoofercut";
+  case "use-2":
+    return "melee-bucking";
+  }
+  return "";
+}
+
 export function onToggled(statistics, toggled) {
   var modifier = toggled ? 1 : -1;
 

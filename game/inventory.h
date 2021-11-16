@@ -51,7 +51,8 @@ public:
   int getTotalValue() const;
   Q_INVOKABLE int evaluateValue(Character* buyer, Character* seller) const;
 
-  void setSlots(const QMap<QString, QString>&);
+  void                   setSlots(const QMap<QString, QString>&);
+  QMap<QString, QString> getSlots() const { return slotTypes; }
   void transferTo(Inventory*);
 
 signals:

@@ -13,6 +13,10 @@ export function spriteSheet(model) {
   return pony;
 }
 
+export const itemSlots = Pony.itemSlots;
+
+export const getDefaultItem = Pony.getDefaultItem;
+
 export function onToggled(statistics, toggled) {
   var modifier = toggled ? 1 : -1;
 

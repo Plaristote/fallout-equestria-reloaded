@@ -1,5 +1,9 @@
 export const spriteSheet = "scorpion";
 
+export function getDefaultItem(model, slot) {
+  return "melee-stinger";
+}
+
 export function onToggled(statistics, toggled) {
   if (toggled) {
     statistics.traits.push("scorpion");
