@@ -21,7 +21,7 @@ bool shouldSaveVariables()
   return !Game::get() || !Game::get()->property("isGameEditor").toBool();
 }
 
-Game::Game(QObject *parent) : StorableObject(parent)
+Game::Game(QObject *parent) : StorableObject(parent), timePasser(this)
 {
   if (instance != nullptr)
     throw std::runtime_error("can't have two Game instances at once");
@@ -45,6 +45,7 @@ Game::Game(QObject *parent) : StorableObject(parent)
   scriptEngine.evaluate("level.displayConsoleMessage(\"Coucou Script Engine\")");
 
   connect(worldmap, &WorldMap::cityEntered, this, &Game::onCityEntered);
+  connect(&timePasser, &TimePasser::stateChanged, this, &Game::fastPassingChanged);
   connect(this, &Game::gameOver, this, &Game::onGameOver);
   connect(this, &Game::levelChanged, this, &Game::onLevelChanged);
 }
@@ -314,4 +315,14 @@ void Game::advanceTime(unsigned int minutes)
     if (script)
       script->call("outdoorsTick");
   }
+}
+
+void Game::asyncAdvanceTime(unsigned int minutes)
+{
+  timePasser.advanceTime(minutes);
+}
+
+void Game::asyncAdvanceTime(unsigned int minutes, QJSValue callback)
+{
+  timePasser.advanceTime(minutes, callback);
 }

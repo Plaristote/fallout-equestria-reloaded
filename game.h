@@ -14,6 +14,7 @@
 # include <QJSEngine>
 # include "cmap/trait.h"
 # include "cmap/race.h"
+# include "game/timepasser.h"
 
 class Game : public StorableObject
 {
@@ -29,10 +30,10 @@ class Game : public StorableObject
   Q_PROPERTY(TaskRunner*     tasks       MEMBER taskManager CONSTANT)
   Q_PROPERTY(QuestManager*   quests      MEMBER quests CONSTANT)
   Q_PROPERTY(RandomEncounterController* randomEncounters MEMBER randomEncounters CONSTANT)
+  Q_PROPERTY(bool fastPassTime READ isFastPassingTime NOTIFY fastPassingChanged)
   Q_PROPERTY(bool isGameEditor MEMBER isGameEditor NOTIFY gameEditorEnabled)
 
   static Game* instance;
-
 public:
   explicit Game(QObject *parent = nullptr);
   ~Game();
@@ -68,6 +69,9 @@ public:
   Q_INVOKABLE Character* getPlayer() { return player; }
   Q_INVOKABLE StatModel* getPlayerStatistics() { return getPlayer()->getStatistics(); }
   Q_INVOKABLE void       advanceTime(unsigned int minutes);
+  Q_INVOKABLE void       asyncAdvanceTime(unsigned int minutes);
+  Q_INVOKABLE void       asyncAdvanceTime(unsigned int minutes, QJSValue callback);
+  bool                   isFastPassingTime() const { return timePasser.isActive(); }
 
 signals:
   void gameEditorEnabled();
@@ -79,6 +83,7 @@ signals:
   void encounterTriggered(const QString& encounterTitle);
   void encounterNotify(const QString& encounterName, const QVariantMap& parameter);
   void loadError(const QString&);
+  void fastPassingChanged();
 
 public slots:
   void onCityEntered(QString name);
@@ -109,6 +114,7 @@ private:
   QJSEngine   scriptEngine;
   ScriptController* script = nullptr;
   TaskRunner* taskManager = nullptr;
+  TimePasser timePasser;
 
   QMap<QString, Trait> cmapTraits;
   QMap<QString, Race>  cmapRaces;
