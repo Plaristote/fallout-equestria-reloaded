@@ -9,6 +9,7 @@ LevelDisplay {
   id: root
   property bool hasOverlay: interactionMenu.visible || inventoryViewContainer.visible || itemPickerContainer.visible || skilldex.visible || countdownDialog.visible || mainMenu.visible
   anchors.fill: parent
+  enabled: !gameController.fastPassTime
 
   function openMenu() {
     levelController.paused = !mainMenu.visible;
@@ -187,6 +188,8 @@ LevelDisplay {
     id: countdownDialog
     visible: false
   }
+
+  FastTimePassView {}
 
   Hud.DebugConsole {
     id: debugConsole

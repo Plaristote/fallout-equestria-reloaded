@@ -160,6 +160,8 @@ set(PROJECT_SOURCES
         game/quest.cpp
         game/textbubble.h
         game/textbubble.cpp
+        game/timepasser.h
+        game/timepasser.cpp
         game/level/grid.h
         game/level/grid.cpp
         game/level/interaction.h

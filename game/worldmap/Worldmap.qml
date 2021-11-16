@@ -13,6 +13,7 @@ Item {
   property bool hasOverlay: inventoryViewContainer.visible || mainMenu.visible
   id: root
   state: "default"
+  enabled: !gameManager.currentGame.fastPassTime
   //onHasOverlayChanged: controller.paused = hasOverlay || root.state != "default";
 
   Component.onCompleted: {
@@ -174,6 +175,8 @@ Item {
     visible: false
     anchors.fill: parent
   }
+
+  FastTimePassView {}
 
   LevelHud.Menu {
     id: mainMenu

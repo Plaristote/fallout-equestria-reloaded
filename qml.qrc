@@ -310,5 +310,6 @@
         <file>game/level/ObjectListRenderer.qml</file>
         <file>game/level/CursorRenderer.qml</file>
         <file>game/level/LevelDisplay.qml</file>
+        <file>ui/FastTimePassView.qml</file>
     </qresource>
 </RCC>
