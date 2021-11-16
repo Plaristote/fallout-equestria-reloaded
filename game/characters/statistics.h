@@ -37,6 +37,7 @@ private slots:
 signals:
   void statisticsChanged();
   void characterSheetChanged();
+  void raceChanged();
   void uniqueChanged();
 
 protected:

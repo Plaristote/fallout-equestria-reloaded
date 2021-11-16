@@ -7,10 +7,6 @@ export class Rat extends CharacterBehaviour {
     injectRoamTask(this);
     this.prepareRoamTask(3);
   }
-
-  getDefaultItem(slot) {
-    return "melee-bite";
-  }
 }
 
 export function create(model) {

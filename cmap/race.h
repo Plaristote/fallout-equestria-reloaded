@@ -19,6 +19,8 @@ public:
   QStringList               getFaces() const;
   QStringList               getHairs(QString face = "") const;
   CharacterSpriteDescriptor getSpriteSheet(StatModel*) const;
+  QMap<QString, QString>    getItemSlots() const;
+  QString                   getDefaultItemForSlot(StatModel*, const QString&) const;
 
   static void initialize();
   static const QMap<QString, Race>& getRaces() { return races; }

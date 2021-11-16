@@ -1,5 +1,11 @@
 export const spriteSheet = "rat";
 
+export const itemSlots = {"use-1":  "any"};
+
+export function getDefaultItem(model, slot) {
+  return "melee-bite";
+}
+
 export function onToggled(statistics, toggled) {
   if (toggled) {
     statistics.traits.push("rat");

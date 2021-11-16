@@ -1,5 +1,7 @@
 export const spriteSheet = "scorpion";
 
+export const itemSlots = {"use-1":  "any"};
+
 export function getDefaultItem(model, slot) {
   return "melee-stinger";
 }

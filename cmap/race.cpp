@@ -123,6 +123,38 @@ CharacterSpriteDescriptor Race::getSpriteSheet(StatModel* model) const
   return descriptor;
 }
 
+QMap<QString, QString> Race::getItemSlots() const
+{
+  QMap<QString, QString> map{{"armor", "armor"}, {"use-1","any"},{"use-2","any"}};
+  QJSValue               variable = script.property("itemSlots");
+
+  if (!variable.isUndefined())
+  {
+    QVariantMap variants = variable.toVariant().toMap();
+
+    map.clear();
+    for (auto it = variants.begin() ; it != variants.end() ; ++it)
+      map.insert(it.key(), it.value().toString());
+  }
+  return map;
+}
+
+QString Race::getDefaultItemForSlot(StatModel* model, const QString& slotName) const
+{
+  QJSValue hook = script.property("getDefaultItem");
+
+  if (hook.isCallable())
+  {
+    auto&        scriptEngine = Game::get()->getScriptEngine();
+    QJSValueList params{scriptEngine.newQObject(model), slotName};
+    QJSValue     retval = hook.call(params);
+
+    if (retval.isString())
+      return retval.toString();
+  }
+  return "melee";
+}
+
 void Race::initialize()
 {
   races.clear();

@@ -6,6 +6,7 @@ CharacterStatistics::CharacterStatistics(QObject *parent) : ParentType(parent)
 {
   connect(this, &CharacterStatistics::characterSheetChanged, this, &CharacterStatistics::onCharacterSheetChanged);
   connect(this, &CharacterStatistics::characterSheetChanged, this, &CharacterStatistics::updateSpriteSheet);
+  connect(this, &CharacterStatistics::statisticsChanged,     this, &CharacterStatistics::raceChanged);
   connect(inventory, &Inventory::equippedItemsChanged,       this, &CharacterStatistics::updateSpriteSheet);
 }
 
@@ -51,12 +52,14 @@ void CharacterStatistics::setStatistics(StatModel* value)
   if (statistics)
   {
     disconnect(statistics, &StatModel::factionChanged, this, &CharacterStatistics::initializeFaction);
+    disconnect(statistics, &StatModel::raceChanged,    this, &CharacterStatistics::raceChanged);
     statistics->deleteLater();
   }
   statistics = value;
   if (value)
   {
     connect(statistics, &StatModel::factionChanged, this, &CharacterStatistics::initializeFaction);
+    connect(statistics, &StatModel::raceChanged,    this, &CharacterStatistics::raceChanged);
     initializeFaction();
     emit statisticsChanged();
   }

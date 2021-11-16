@@ -1,8 +1,11 @@
 #include "inventory.h"
+#include "cmap/race.h"
 
 CharacterInventory::CharacterInventory(QObject *parent) : ParentType(parent)
 {
   connect(inventory, &Inventory::unequippedItem, this, &CharacterInventory::initializeEmptySlot);
+  connect(this, &CharacterStatistics::raceChanged, this, &CharacterInventory::updateInventorySlots);
+  connect(this, &CharacterStatistics::raceChanged, this, &CharacterInventory::initializeEmptySlots);
   connect(this, &DynamicObject::scriptNameChanged, this, &CharacterInventory::updateInventorySlots);
   connect(this, &DynamicObject::scriptNameChanged, this, &CharacterInventory::initializeEmptySlots);
 }
@@ -20,7 +23,9 @@ void CharacterInventory::initializeEmptySlots()
 
 void CharacterInventory::initializeEmptySlot(const QString& slotName)
 {
-  if (inventory->getEquippedItem(slotName) == nullptr)
+  InventoryItem* currentItem = inventory->getEquippedItem(slotName);
+
+  if (currentItem == nullptr || currentItem->isVirtual())
   {
     InventoryItem* item = new InventoryItem(this);
 
@@ -35,12 +40,18 @@ QString CharacterInventory::getDefaultItemForSlot(const QString& name)
 {
   if (script && script->hasMethod("getDefaultItem"))
     return script->call("getDefaultItem", QJSValueList() << name).toString();
+  if (statistics && statistics->getRaceController())
+    return statistics->getRaceController()->getDefaultItemForSlot(statistics, name);
   return "melee";
 }
 
 void CharacterInventory::updateInventorySlots()
 {
-  QMap<QString, QString> slotTypes({{"armor", "armor"},{"saddle","saddle"},{"use-1","any"},{"use-2","any"}});
+  QMap<QString, QString> slotTypes;
 
+  if (statistics && statistics->getRaceController())
+    slotTypes = statistics->getRaceController()->getItemSlots();
+  else
+    slotTypes = Race().getItemSlots();
   inventory->setSlots(slotTypes);
 }
