@@ -1,5 +1,6 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+import QtQuick.Layouts 1.15
 import "qrc:/assets/ui" as UiStyle
 import "../../ui"
 
@@ -58,7 +59,7 @@ Rectangle {
     background: UiStyle.Pane {}
     anchors.centerIn: parent
     width: 550
-    height: 150
+    height: 200
 
     Text {
       id: title
@@ -79,8 +80,9 @@ Rectangle {
         horizontalCenter: parent.horizontalCenter
       }
 
-      Row {
+      RowLayout {
         spacing: 5
+        anchors.centerIn: parent
 
         TerminalField {
           text: minutes.toString()
