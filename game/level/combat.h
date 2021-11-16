@@ -46,6 +46,8 @@ signals:
   void currentCombattantChanged();
 
 private slots:
+  void onCurrentCombattantChanged();
+  void onCombattantsChanged();
   void onCombatStateChanged();
   void onActiveItemChanged();
   void updateWaitingMode();

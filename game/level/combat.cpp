@@ -10,6 +10,8 @@ CombatComponent::CombatComponent(QObject *parent) : VisualEffectsComponent(paren
   connect(this, &CombatComponent::currentCombattantChanged, this, &CombatComponent::updateWaitingMode);
   connect(this, &CombatComponent::combatChanged,            this, &CombatComponent::updateWaitingMode);
   connect(this, &CombatComponent::combatChanged,            this, &CombatComponent::onCombatStateChanged);
+  connect(this, &CombatComponent::combattantsChanged,       this, &CombatComponent::onCombattantsChanged);
+  connect(this, &CombatComponent::currentCombattantChanged, this, &CombatComponent::onCurrentCombattantChanged);
 }
 
 void CombatComponent::updateWaitingMode()
@@ -272,5 +274,23 @@ void CombatComponent::onCombatStateChanged()
       script->call("onCombatStarted");
     else if (!combat && script->hasMethod("onCombatEnded"))
       script->call("onCombatEnded");
+  }
+}
+
+void CombatComponent::onCurrentCombattantChanged()
+{
+  if (script && combat)
+  {
+    if (script->hasMethod("onCurrentCombattantChanged"))
+      script->call("onCurrentCombattantChanged");
+  }
+}
+
+void CombatComponent::onCombattantsChanged()
+{
+  if (script && combat)
+  {
+    if (script->hasMethod("onCombattantsChanged"))
+      script->call("onCombattantsChanged");
   }
 }
