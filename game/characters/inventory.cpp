@@ -9,8 +9,13 @@ CharacterInventory::CharacterInventory(QObject *parent) : ParentType(parent)
 
 void CharacterInventory::initializeEmptySlots()
 {
-  initializeEmptySlot("use-1");
-  initializeEmptySlot("use-2");
+  const auto itemSlots = inventory->getSlots();
+
+  for (auto it = itemSlots.begin() ; it != itemSlots.end() ; ++it)
+  {
+    if (it.value() == "any")
+      initializeEmptySlot(it.key());
+  }
 }
 
 void CharacterInventory::initializeEmptySlot(const QString& slotName)
