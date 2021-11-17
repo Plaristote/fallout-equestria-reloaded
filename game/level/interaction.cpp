@@ -247,7 +247,6 @@ void InteractionComponent::useItemOn(InventoryItem *item, DynamicObject *target,
 {
   DynamicObject* owner = item->getOwner();
 
-  qDebug() << "uzeItemOn" << item << target << useMode;
   if (owner && owner->isCharacter())
     useItemOn(reinterpret_cast<Character*>(owner), item, target, useMode);
 }
@@ -256,7 +255,6 @@ void InteractionComponent::useItemOn(Character* user, InventoryItem* item, Dynam
 {
   auto* actions = user->getActionQueue();
 
-  qDebug() << "uzeItemOn" << user << item << target << useMode;
   actions->reset();
   if (target && (!item->isInRange(target) || !user->hasLineOfSight(target)))
     actions->pushReach(target, item->getRange());
@@ -343,7 +341,7 @@ DynamicObject* InteractionComponent::getObjectAt(int posX, int posY) const
   list.reserve(objectCount());
   eachObject([this, &list](DynamicObject* object)
   {
-    if (object->getCurrentFloor() == getCurrentFloor())
+    if (object->getCurrentFloor() == getCurrentFloor() && (object->isCharacter() || object->hasInteractionOverlay()))
       list.push_back(object);
   });
   sortByRenderOrder(list);

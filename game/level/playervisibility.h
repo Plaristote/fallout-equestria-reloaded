@@ -14,6 +14,7 @@ public:
   PlayerVisibilityComponent(QObject* parent = nullptr);
 
   void load(const QJsonObject&);
+  virtual void registerDynamicObject(DynamicObject*);
   virtual void unregisterDynamicObject(DynamicObject*);
 
 signals:

@@ -15,6 +15,12 @@ Repeater {
     z: (dynamicObject.position.x + dynamicObject.position.y * renderTarget.mapSize.width) * 3 + 1
     //Text { color: "yellow"; text: parent.z }
 
+    Timer {
+      interval: 50
+      running: true
+      onTriggered: offset = root.levelController.getAdjustedOffsetFor(dynamicObject)
+    }
+
     Connections {
       target: dynamicObject
       function onSpritePositionChanged() {
