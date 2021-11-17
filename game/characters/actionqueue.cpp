@@ -264,9 +264,9 @@ void ActionQueue::pushItemUse(DynamicObject *target, const QString &itemSlot)
   queue << (new ItemAction(character, target, itemSlot));
 }
 
-void ActionQueue::pushItemUse(DynamicObject *target, InventoryItem* item)
+void ActionQueue::pushItemUse(DynamicObject *target, InventoryItem* item, const QString& useMode)
 {
-  queue << (new ItemAction(character, target, item));
+  queue << (new ItemAction(character, target, item, useMode));
 }
 
 void ActionQueue::pushItemUseAt(int x, int y, const QString &itemSlot)

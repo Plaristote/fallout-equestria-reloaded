@@ -256,11 +256,11 @@ QPoint GridComponent::getAdjustedOffsetFor(const DynamicObject* object) const
   {
     QSize  tileSize = getTileMap()->getTileSize();
     QPoint offset   = object->getSpritePosition();
-    QRect  rect     = object->getClippedRect();
 
     if (!object->isFloating())
     {
-      const auto extraHeight = rect.height() - tileSize.height();
+      const QRect rect        = object->getClippedRect();
+      const auto  extraHeight = rect.height() - tileSize.height();
 
       return QPoint(
         offset.x() + (tileSize.width() / 2 - rect.width() / 2),

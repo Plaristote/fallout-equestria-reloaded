@@ -243,22 +243,24 @@ void InteractionComponent::useItemOn(DynamicObject* target)
     qDebug() << "InteractionComponent::useItemOn: activeItem is null";
 }
 
-void InteractionComponent::useItemOn(InventoryItem *item, DynamicObject *target)
+void InteractionComponent::useItemOn(InventoryItem *item, DynamicObject *target, const QString& useMode)
 {
   DynamicObject* owner = item->getOwner();
 
+  qDebug() << "uzeItemOn" << item << target << useMode;
   if (owner && owner->isCharacter())
-    useItemOn(reinterpret_cast<Character*>(owner), item, target);
+    useItemOn(reinterpret_cast<Character*>(owner), item, target, useMode);
 }
 
-void InteractionComponent::useItemOn(Character* user, InventoryItem* item, DynamicObject* target)
+void InteractionComponent::useItemOn(Character* user, InventoryItem* item, DynamicObject* target, const QString& useMode)
 {
   auto* actions = user->getActionQueue();
 
+  qDebug() << "uzeItemOn" << user << item << target << useMode;
   actions->reset();
   if (target && (!item->isInRange(target) || !user->hasLineOfSight(target)))
     actions->pushReach(target, item->getRange());
-  actions->pushItemUse(target, item);
+  actions->pushItemUse(target, item, useMode);
   if (actions->start())
     swapMouseMode();
 }

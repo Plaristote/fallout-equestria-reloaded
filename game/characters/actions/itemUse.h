@@ -12,7 +12,7 @@ public:
     item = character->getInventory()->getEquippedItem(itemSlot);
   }
 
-  ItemAction(Character* character, DynamicObject* target, InventoryItem* item) : ActionBase(character), target(target), item(item)
+  ItemAction(Character* character, DynamicObject* target, InventoryItem* item, QString useMode) : ActionBase(character), target(target), item(item), useMode(useMode)
   {
   }
 
@@ -31,6 +31,7 @@ protected:
   InventoryItem*    item;
   QJSValue          callback;
   AnimationSequence animation;
+  QString           useMode;
 };
 
 class ItemZoneAction : public ItemAction
@@ -40,7 +41,7 @@ public:
   {
   }
 
-  ItemZoneAction(Character* character, QPoint target, InventoryItem* item) : ItemAction(character, nullptr, item), target(target)
+  ItemZoneAction(Character* character, QPoint target, InventoryItem* item) : ItemAction(character, nullptr, item, QString()), target(target)
   {
   }
 

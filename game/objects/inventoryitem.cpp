@@ -40,6 +40,15 @@ QString InventoryItem::getDescription() const
   return I18n::get()->t("item-descriptions." + itemType);
 }
 
+QString InventoryItem::getDefaultMode() const
+{
+  QJSValue defaultMode = script ? script->property("defaultUseMode") : QJSValue();
+
+  if (defaultMode.isString())
+    return defaultMode.toString();
+  return useMode;
+}
+
 bool InventoryItem::defaultLookInteraction()
 {
   const I18n* i18n = I18n::get();
@@ -324,6 +333,12 @@ void InventoryItem::resetUseMode()
   QStringList useModes = getUseModes();
 
   useMode = useModes.length() > 0 ? useModes.first() : "use";
+  emit useModeChanged();
+}
+
+void InventoryItem::setUseMode(const QString& mode)
+{
+  useMode = mode;
   emit useModeChanged();
 }
 

@@ -21,6 +21,7 @@ class InventoryItem : public DynamicObject
   Q_PROPERTY(bool        isVirtual   READ isVirtual NOTIFY virtualChanged)
   Q_PROPERTY(QStringList useModes    READ getUseModes NOTIFY useModesChanged)
   Q_PROPERTY(QString     useMode     MEMBER useMode NOTIFY useModeChanged)
+  Q_PROPERTY(QString     defaultUseMode READ getDefaultMode NOTIFY itemTypeChanged)
   Q_PROPERTY(bool        requiresTarget READ requiresTarget NOTIFY useModeChanged)
   Q_PROPERTY(bool        zoneTarget     READ usesZoneTarget NOTIFY useModeChanged)
   Q_PROPERTY(int         zoneSize       READ getZoneTargetSize NOTIFY useModeChanged)
@@ -42,6 +43,7 @@ public:
   QString     getCategory() const;
   QString     getIcon() const;
   QString     getDescription() const;
+  QString     getDefaultMode() const;
   bool        isGroupable(InventoryItem* = nullptr);
   bool        isBlockingPath() const override { return false; }
   bool        isVirtual() const { return virtualItem; }
@@ -69,6 +71,8 @@ public:
   Q_INVOKABLE void           setCountdown(int value);
   Q_INVOKABLE void           swapUseMode();
   void                       resetUseMode();
+  void                       setUseMode(const QString&);
+  const QString&             getUseMode() const { return useMode; }
 
   Q_INVOKABLE void useReload(bool refill = true);
   Q_INVOKABLE void useUnload() { useReload(false); }

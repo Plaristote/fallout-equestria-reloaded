@@ -1,6 +1,7 @@
 #include "itemUse.h"
 #include "game/animationSequence/objectanimationpart.h"
 #include "game.h"
+#include "i18n.h"
 #include <QDebug>
 
 QJSValue ItemAction::callItemUseOn()
@@ -28,8 +29,15 @@ bool ItemAction::trigger()
 {
   if (item)
   {
-    QJSValue result = callItemUseOn();
+    QString backupMode;
+    QJSValue result;
 
+    if (useMode != item->getUseMode() && !useMode.isEmpty())
+    {
+      backupMode = item->getUseMode();
+      item->setUseMode(useMode);
+    }
+    result = callItemUseOn();
     lookAtTarget();
     if (result.isObject())
     {
@@ -51,7 +59,12 @@ bool ItemAction::trigger()
       state = InProgress;
     }
     else
+    {
+      Game::get()->appendToConsole(I18n::get()->t("messages.invalid-target"));
       state = Interrupted;
+    }
+    if (!backupMode.isEmpty())
+      item->setUseMode(backupMode);
   }
   else
   {

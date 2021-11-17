@@ -32,7 +32,7 @@ public:
   Q_INVOKABLE int getReachCaseApCost(int x, int y, float range, QJSValue caseCompare);
   Q_INVOKABLE void pushInteraction(DynamicObject* target, const QString& interactionName);
   Q_INVOKABLE void pushItemUse(DynamicObject* target, const QString& itemSlot);
-  Q_INVOKABLE void pushItemUse(DynamicObject* target, InventoryItem* item);
+  Q_INVOKABLE void pushItemUse(DynamicObject* target, InventoryItem* item, const QString& useMode);
   Q_INVOKABLE void pushItemUseAt(int x, int y, const QString& itemSlot);
   Q_INVOKABLE void pushItemUseAt(int x, int y, InventoryItem* item);
   Q_INVOKABLE void pushSkillUse(DynamicObject* target, const QString& name);

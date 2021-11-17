@@ -171,7 +171,7 @@ LevelDisplay {
       }
       onAccepted: {
         itemPickerContainer.visible = false;
-        levelController.useItemOn(itemPicker.selectedObject, itemPicker.target);
+        levelController.useItemOn(itemPicker.selectedObject, itemPicker.target, itemPicker.selectedObject.defaultUseMode);
         target = selectedObject = null;
       }
     }

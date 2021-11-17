@@ -73,8 +73,8 @@ public:
   DynamicObject*               getObjectAt(QPoint point) const { return getObjectAt(point.x(), point.y()); }
 
   void             useItemOn(DynamicObject* object);
-  Q_INVOKABLE void useItemOn(InventoryItem* item, DynamicObject* target);
-  void             useItemOn(Character* user, InventoryItem* item, DynamicObject* target);
+  Q_INVOKABLE void useItemOn(InventoryItem* item, DynamicObject* target, const QString& mode = "");
+  void             useItemOn(Character* user, InventoryItem* item, DynamicObject* target, const QString& mode = "");
   void             useItemAt(int x, int y);
   Q_INVOKABLE void useItemAt(InventoryItem* item, int x, int y);
   void             useItemAt(Character* user, InventoryItem* item, int x, int y);
