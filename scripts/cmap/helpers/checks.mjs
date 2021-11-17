@@ -9,14 +9,13 @@ export function skillContest(attacker, defender, skills, diceType = 100) {
     defender = { character: defender, bonus: 0 };
   if (typeof skills == "string")
     skill1 = skill2 = skills;
-  else {
+  else
     skill1 = skills[0]; skill2 = skills[1];
-  }
   skill1 = modifiedSkillValue(attacker.character, skill1, defender.character);
   skill2 = modifiedSkillValue(defender.character, skill2, attacker.character);
   roll1  = diceType > 0 ? getValueFromRange(0, diceType) : 0;
   roll2  = diceType > 0 ? getValueFromRange(0, diceType) : 0;
-  if (roll1 + skill1 + attacker.bonus > roll2 + skill2 + defender.bonus)
+  if (roll1 + skill1 + attacker.bonus >= roll2 + skill2 + defender.bonus)
     return attacker.character;
   return defender.character;
 }
