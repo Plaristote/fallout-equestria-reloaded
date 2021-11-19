@@ -11,7 +11,7 @@ export class Door {
     this.destructible = true;
     this.lockedComponent = new LockedComponent(this, {
       xp: 25,
-      lockpickLevel: 1,
+      lockpickLevel: this.model.lockpickLevel,
       breakable: true,
       onSuccess: this.onLockpickSuccess.bind(this),
       onFailure: this.onLockpickFailure.bind(this),

@@ -1,4 +1,5 @@
 import {getValueFromRange} from "./random.mjs";
+import {skillCheck} from "../cmap/helpers/checks.mjs";
 
 function getEquippedLockpickToolsFor(character) {
   for (var slotI = 1 ; slotI <= 2 ; ++slotI) {
@@ -38,32 +39,47 @@ export class LockedComponent {
       const roll            = getValueFromRange(0, 100);
       const success         = lockpick - difficultyMalus >= roll;
 
-      if (success) {
-        const xp = this.model.getVariable("xp");
-
-        this.toggleLocked();
-        if (user === level.player) {
-          this.onSuccess(user);
-          if (xp > 0)
-            game.appendToConsole(i18n.t("messages.xp-gain", {xp: xp}));
-        }
-        if (xp > 0) {
-          this.model.setVariable("xp", 0);
-          user.statistics.addExperience(xp);
-        }
-      }
-      else if (user === level.player) {
-        if (this.breakable && roll >= 95 && getValueFromRange(0, 10) > user.statistics.luck) {
-          this.model.setVariable("broken", true);
-          this.onCriticalFailure(user);
-        }
-        else
-          this.onFailure(user);
-      }
-      return success;
+      return skillCheck(user, 'lockpick', {
+        target: 65 + this.lockpickLevel * 25,
+        success: this.onLockpickSuccess.bind(this, user),
+        failure: this.onLockpickFailure.bind(this, user),
+        criticalFailure: this.onLockpickCriticalFailure.bind(this, user)
+      });
     }
     else if (user === level.player)
       game.appendToConsole(i18n.t("messages.lock-is-broken"));
     return false;
+  }
+
+  onLockpickSuccess(user) {
+    const xp = this.model.getVariable("xp");
+
+    this.toggleLocked();
+    if (user === level.player) {
+      this.onSuccess(user);
+      if (xp > 0)
+        game.appendToConsole(i18n.t("messages.xp-gain", {xp: xp}));
+    }
+    if (xp > 0) {
+      this.model.setVariable("xp", 0);
+      user.statistics.addExperience(xp);
+    }
+  }
+
+  onLockpickCriticalFailure(user) {
+    const breakable = user === level.player
+		   && this.breakable
+		   && getValueFromRange(0, 10) > user.statistics.luck;
+
+    if (breakable) {
+      this.model.setVariable("broken", true);
+      this.onCriticalFailure(user);
+    }
+    else
+      this.onLockpickFailure(user);
+  }
+
+  onLockpickFailure(user) {
+    this.onFailure(user);
   }
 }
