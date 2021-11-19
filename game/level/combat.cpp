@@ -88,7 +88,7 @@ void CombatComponent::leaveCombat(Character* character)
   {
     if (index == combatIterator)
       onNextCombatTurn();
-    if (index <= combatIterator)
+    if (index <= combatIterator && combatIterator > 0)
       combatIterator--;
     combattants.removeAll(character);
     emit combattantsChanged();
@@ -131,13 +131,13 @@ void CombatComponent::sortCombattants()
 }
 
 void CombatComponent::removeDeadCombattants()
-{
-  for (auto it = combattants.begin() ; it != combattants.end() ;)
+{ 
+  for (auto it = 0 ; it < combattants.size() ;)
   {
-    Character* character = *it;
+    Character* character = combattants.at(it);
 
     if (!character->isAlive())
-      it = combattants.erase(it);
+      leaveCombat(character);
     else
       ++it;
   }
@@ -173,28 +173,8 @@ void CombatComponent::onNextCombatTurn()
 
 void CombatComponent::onCharacterDied(Character* character)
 {
-  int characterIt = combattants.indexOf(character);
-
   finalizeArmorClassBonus(character);
-  if (characterIt >= 0)
-  {
-    if (combattants.size() == 1)
-      tryToEndCombat();
-    else if (isCharacterTurn(character))
-    {
-      onNextCombatTurn();
-      combattants.removeAll(character);
-      combatIterator--;
-    }
-    else if (characterIt < combatIterator)
-    {
-      combattants.removeAll(character);
-      combatIterator--;
-    }
-    else
-      combattants.removeAll(character);
-    emit combattantsChanged();
-  }
+  leaveCombat(character);
   TextBubblesComponent::onCharacterDied(character);
 }
 
