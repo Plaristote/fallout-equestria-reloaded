@@ -67,6 +67,7 @@ protected:
   void addCharacterObserver(Character*, QMetaObject::Connection);
   void setGridObjectPosition(DynamicObject*, int x, int y, unsigned char floor);
   void setRenderObjectPosition(DynamicObject*, int x, int y);
+  void setBlockPathBeahviour(DynamicObject*, bool blockPath);
   static bool isRenderedBefore(const DynamicObject*, const DynamicObject*);
 
   LevelGrid* grid = nullptr;

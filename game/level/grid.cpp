@@ -117,6 +117,7 @@ void GridComponent::unregisterDynamicObject(DynamicObject* object)
   }
   for (auto observer : objectObservers.value(object))
     disconnect(observer);
+  setBlockPathBeahviour(object, false);
   ParentType::unregisterDynamicObject(object);
 }
 
@@ -138,12 +139,17 @@ void GridComponent::onCharacterDied(Character*)
 
 void GridComponent::onPathBlockedChanged(DynamicObject* object)
 {
+  setBlockPathBeahviour(object, object->isBlockingPath());
+}
+
+void GridComponent::setBlockPathBeahviour(DynamicObject* object, bool blockPath)
+{
   Point point = object->getPoint();
   auto* grid = getFloorGrid(point.z);
 
   if (grid)
   {
-    if (object->isBlockingPath())
+    if (blockPath)
       grid->insertObject(object, point.x, point.y);
     else
       grid->removeObject(object);
