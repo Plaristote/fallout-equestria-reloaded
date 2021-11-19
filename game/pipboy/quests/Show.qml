@@ -17,7 +17,7 @@ Flickable {
   ColumnLayout {
     id: questContent
     spacing: 5
-    anchors { left: parent.left; right: parent.right }
+    width: parent.width
 
     RowLayout {
       Layout.fillWidth: true
@@ -78,16 +78,13 @@ Flickable {
           model: questObjectives
           delegate: TerminalLabel {
             property var objective: questObjectives[index]
-            text: "- " + objective.label
-            color: objective.failed === true ? "red" : "white"
+            property bool stroke: objective.success || objective.failed
+            property string label: stroke ? `<s>${objective.label}</s>` : objective.label
 
-            Rectangle {
-              width: parent.width
-              color: parent.color
-              height: 2
-              anchors.verticalCenter: parent.verticalCenter
-              visible: objective.success === true || objective.failed === true
-            }
+            text: "- " + label
+            color: objective.failed === true ? "red" : "white"
+            wrapMode: Text.WordWrap
+            Layout.preferredWidth: (root.width / 2) - 50
           }
         }
 
