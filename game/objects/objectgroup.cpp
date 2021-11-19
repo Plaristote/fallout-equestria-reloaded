@@ -47,8 +47,9 @@ void ObjectGroup::load(const QJsonObject& data)
 
 void ObjectGroup::save(QJsonObject& data) const
 {
-  QJsonArray jsonGroups, jsonObjects;
+  QJsonArray  jsonGroups, jsonObjects;
   QJsonObject taskData;
+  auto*       party = Game::get()->getPlayerParty();
 
   ParentType::save(data);
   taskRunner->save(taskData);
@@ -63,6 +64,8 @@ void ObjectGroup::save(QJsonObject& data) const
   {
     QJsonObject jsonObject{{"type", object->metaObject()->className()}};
 
+    if (object->isCharacter() && party->containsCharacter(reinterpret_cast<Character*>(object)))
+      continue ;
     object->save(jsonObject);
     jsonObjects << jsonObject;
   }
