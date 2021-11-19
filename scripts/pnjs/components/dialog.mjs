@@ -27,11 +27,17 @@ export class DialogComponent extends MetabolismComponent {
   }
 
   dialogDetectionHook() {
-    if (this.speakOnDetection) {
-      game.player.fieldOfView.setCharacterDetected(this.model);
-      game.player.toggleSneaking(false);
-      this.onTalkTo();
-      return true;
+    if (this.speakOnDetection && this.model.fieldOfView.isDetected(game.player)) {
+      if (level.combat) {
+        this.model.tasks.addTask("dialogDetectionHook", 1000, 1);
+        return false;
+      }
+      else {
+        game.player.fieldOfView.setCharacterDetected(this.model);
+        game.player.toggleSneaking(false);
+        this.onTalkTo();
+        return true;
+      }
     }
     return false;
   }
