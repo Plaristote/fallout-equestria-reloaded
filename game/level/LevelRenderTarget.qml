@@ -82,12 +82,11 @@ Rectangle {
 
     Repeater {
       model: renderTarget.levelController.tilemap.roofs
-      delegate: Image {
+      delegate: Rectangle {
         property QtObject roof: renderTarget.levelController.tilemap.roofs[index]
         property rect renderRect: roof.getRenderedRect()
         property bool isFloor: roof.name.startsWith("floor_")
 
-        source: `file:///${levelController.preRenderPath}floor${renderTarget.levelController.currentFloor}_roof_${roof.name}.png`
         visible: renderTarget.renderRoofs
         opacity: roof.visible ? 1 : 0
         x:       renderRect.x + (isFloor ? -width / 2 : 0)
@@ -95,12 +94,18 @@ Rectangle {
         z:       99999999
         width:   renderRect.width
         height:  renderRect.height
+        color: "transparent"
 
         Behavior on opacity { NumberAnimation { duration: 300 } }
 
-        DaylightShader {
-          source: parent
-          color: renderTarget.levelController.ambientColor
+        Image {
+          id: mypic
+          source: `file:///${levelController.preRenderPath}floor${renderTarget.levelController.currentFloor}_roof_${roof.name}.png`
+          visible: false
+        }
+
+        PlayerCropCircle {
+          source: mypic
         }
       }
     }
