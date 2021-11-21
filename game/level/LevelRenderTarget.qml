@@ -42,8 +42,9 @@ Rectangle {
       height: groundRect.height
 
       DaylightShader {
-        source: groundLayer
-        color: renderTarget.levelController.ambientColor
+        source:  groundLayer
+        color:   renderTarget.levelController.ambientColor
+        enabled: renderTarget.levelController.useAmbientLight
       }
     }
 
@@ -66,7 +67,9 @@ Rectangle {
     Repeater {
       id: wallsRenderer
       model: renderTarget.mapSize.width * renderTarget.mapSize.height
-      delegate: WallRenderer {}
+      delegate: WallRenderer {
+        levelController: renderTarget.levelController
+      }
     }
 
     Repeater {
@@ -94,7 +97,7 @@ Rectangle {
         z:       99999999
         width:   renderRect.width
         height:  renderRect.height
-        color: "transparent"
+        color:   "transparent"
 
         Behavior on opacity { NumberAnimation { duration: 300 } }
 
@@ -106,6 +109,7 @@ Rectangle {
 
         PlayerCropCircle {
           source: mypic
+          levelController: renderTarget.levelController
         }
       }
     }

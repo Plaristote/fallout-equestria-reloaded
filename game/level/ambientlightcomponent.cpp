@@ -1,5 +1,9 @@
 #include "ambientlightcomponent.h"
 #include "game.h"
+#include <QJsonArray>
+
+QColor     jsonToColor(QJsonValue value);
+QJsonArray colorToJson(QColor color);
 
 static QMap<int, QColor> daylightColors = {
   {0,  QColor("#00004F")},
@@ -39,4 +43,21 @@ void AmbientLightComponent::updateDaylight()
     ambientColor = newColor;
     emit ambientColorChanged();
   }
+}
+
+void AmbientLightComponent::load(const QJsonObject& data)
+{
+  ParentType::load(data);
+  useAmbientLight = data["useAmbientLight"].toBool(false);
+  useDaylight     = data["useDaylight"].toBool(false);
+  ambientColor    = jsonToColor(data["ambientColor"]);
+  emit ambientColorChanged();
+}
+
+void AmbientLightComponent::save(QJsonObject& data) const
+{
+  ParentType::save(data);
+  data["useAmbientLight"] = useAmbientLight;
+  data["useDaylight"]     = useDaylight;
+  data["ambientColor"]    = colorToJson(ambientColor);
 }

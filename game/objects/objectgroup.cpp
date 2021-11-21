@@ -74,7 +74,8 @@ void ObjectGroup::save(QJsonObject& data) const
   data["objects"] = jsonObjects;
   data["ox"] = offset.x();
   data["oy"] = offset.y();
-  data.insert("tasks", taskData);}
+  data.insert("tasks", taskData);
+}
 
 ObjectFactory* ObjectGroup::factory()
 {

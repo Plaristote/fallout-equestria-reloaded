@@ -89,10 +89,20 @@ Item {
             background: UiStyle.Label {}
             onTextChanged: gameController.level.currentFloor = parseInt(text)
             color: "white"
+            Layout.preferredWidth: 40
             Connections {
               target: gameController.level
               function onFloorChanged() { currentFloorInput.text = gameController.level.currentFloor.toString(); }
             }
+          }
+
+          Button {
+            background: UiStyle.Label { style: parent.down ? "dark" : "base" }
+            contentItem: Text {
+              color: "white"
+              text: "Ambient Light"
+            }
+            onClicked: ambientLightDialog.open();
           }
         }
 
@@ -129,6 +139,11 @@ Item {
         }
       }
     }
+  }
+
+  AmbientLightDialog {
+    id: ambientLightDialog
+    levelController: gameController.level
   }
 
   SaveTemplateDialog {

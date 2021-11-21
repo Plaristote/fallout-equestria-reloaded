@@ -2,16 +2,17 @@ import QtQuick 2.15
 
 ShaderEffect {
   property variant source
-  property QtObject player:   gameManager.currentGame.player
-  property point    position: player.spritePosition
+  property QtObject levelController
+  property QtObject player:   levelController.player
+  property point    position: player ? player.spritePosition : Qt.point(0, 0)
   property real     diameter: 90
   property real     offzetX: parent.x
   property real     offzetY: parent.y
   property real     centerX: position.x - offzetX + 35
   property real     centerY: position.y - offzetY + 10
-  property bool     withClipping: true
-  property bool     withAmbientColor: gameManager.currentGame.level.useAmbientLight
-  property color    ambientColor:     gameManager.currentGame.level.ambientColor
+  property bool     withClipping:     player
+  property bool     withAmbientColor: levelController.useAmbientLight
+  property color    ambientColor:     levelController.ambientColor
 
   anchors.fill: parent
   vertexShader: "

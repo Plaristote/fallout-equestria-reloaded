@@ -16,6 +16,9 @@ public:
 
   inline bool usesDaylight() const { return useAmbientLight && useDaylight; }
 
+  void load(const QJsonObject&);
+  void save(QJsonObject&) const;
+
 signals:
   void ambientColorChanged();
 protected:

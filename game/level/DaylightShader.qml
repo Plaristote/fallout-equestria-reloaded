@@ -4,7 +4,6 @@ ShaderEffect {
   property variant source
   property color color
 
-  enabled: gameManager.currentGame.level.useAmbientLight
   visible: enabled
   anchors.fill: parent
   vertexShader: "

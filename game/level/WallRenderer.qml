@@ -2,6 +2,7 @@ import QtQuick 2.15
 
 Item {
   id: wallRenderer
+  property QtObject levelController
   property int tx: index % renderTarget.mapSize.width
   property int ty: Math.round(index / renderTarget.mapSize.width)
   property point renderPosition: levelController.getRenderPositionForTile(tx, ty)
@@ -25,20 +26,24 @@ Item {
       height: image.height
       color: "transparent"
       visible: renderTarget.renderWalls
+
       Image {
         id: image
         source: fileProtocol + wall.image
         sourceClipRect: wall.clippedRect
         visible: false
       }
+
       PlayerCropCircle {
         source: image
+        levelController: wallRenderer.levelController
         offzetX: wallRenderer.x
         offzetY: wallRenderer.y - renderTarget.wallHeight
         withClipping: {
-          (tx >= levelController.player.position.x && ty >= levelController.player.position.y) ||
-          (wall === hwall && tx === levelController.player.position.x - 1 && ty === levelController.player.position.y) ||
-          (wall === vwall && ty === levelController.player.position.y - 1 && tx === levelController.player.position.x)
+          levelController.player &&
+          ((tx >= levelController.player.position.x && ty >= levelController.player.position.y) ||
+           (wall === hwall && tx === levelController.player.position.x - 1 && ty === levelController.player.position.y) ||
+           (wall === vwall && ty === levelController.player.position.y - 1 && tx === levelController.player.position.x))
         }
       }
     }
