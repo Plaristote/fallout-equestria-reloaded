@@ -34,30 +34,6 @@ UiStyle.CustomDialog {
     */
   }
 
-  WindowDialogs.ColorDialog {
-    id: faceColorDialog
-    title: "Color"
-    onAccepted: {
-      characterSheet.faceColor = Qt.rgba(color.r, color.g, color.b, 0.5);
-    }
-  }
-
-  WindowDialogs.ColorDialog {
-    id: eyeColorDialog
-    title: "Eye color"
-    onAccepted: {
-      characterSheet.eyeColor = Qt.rgba(color.r, color.g, color.b, 0.5);
-    }
-  }
-
-  WindowDialogs.ColorDialog {
-    id: hairColorDialog
-    title: "Hair color"
-    onAccepted: {
-      characterSheet.hairColor = Qt.rgba(color.r, color.g, color.b, 1);
-    }
-  }
-
   Loader {
     anchors.left: fieldsPanel.right
     width: parent.width - fieldsPanel.width
@@ -107,26 +83,20 @@ UiStyle.CustomDialog {
       }
 
       TerminalLabel { text: "Color"; visible: characterSheet.withFaceColor }
-      TerminalButton {
+      TerminalColorButton {
+        value: characterSheet.faceColor
+        onValueChanged: characterSheet.faceColor = Qt.rgba(value.r, value.g, value.b, 0.5)
         Layout.fillWidth: true
         Layout.preferredHeight: 40
         visible: characterSheet.withFaceColor
-        contentItem: Rectangle {
-          anchors.fill: parent
-          color: characterSheet.faceColor
-        }
-        onClicked: faceColorDialog.open()
       }
 
       TerminalLabel { text: "Eye color" }
-      TerminalButton {
+      TerminalColorButton {
+        value: characterSheet.eyeColor
+        onValueChanged: characterSheet.eyeColor = Qt.rgba(value.r, value.g, value.b, 0.5)
         Layout.fillWidth: true
         Layout.preferredHeight: 40
-        contentItem: Rectangle {
-          anchors.fill: parent
-          color: characterSheet.eyeColor
-        }
-        onClicked: eyeColorDialog.open()
       }
 
       TerminalLabel { text: "Hair style" }
@@ -145,15 +115,12 @@ UiStyle.CustomDialog {
       }
 
       TerminalLabel { text: "Hair color"; visible: characterSheet.withFaceColor }
-      TerminalButton {
+      TerminalColorButton {
+        value: characterSheet.hairColor
+        onValueChanged: characterSheet.hairColor = Qt.rgba(value.r, value.g, value.b, 1)
         Layout.fillWidth: true
         Layout.preferredHeight: 40
         visible: characterSheet.withFaceColor
-        contentItem: Rectangle {
-          anchors.fill: parent
-          color: characterSheet.hairColor
-        }
-        onClicked: hairColorDialog.open()
       }
 
       TerminalLabel { text: "Accessories"; Layout.alignment: Qt.AlignTop }
