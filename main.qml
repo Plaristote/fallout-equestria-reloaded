@@ -89,8 +89,11 @@ Window {
     bigSize:   12
   }
 
-  FontLoader {
+  property var titleFont: FontStyle {
     id: titleFont
     source: "./assets/fonts/fallout.ttf"
+    pointSize: 18
+    tinySize:  24
+    bigSize:   32
   }
 }

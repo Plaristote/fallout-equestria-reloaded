@@ -5,6 +5,7 @@
 
 #include "globals.h"
 #include "i18n.h"
+#include "credits.h"
 #include "game/animationlibrary.h"
 #include "game/inventoryitemlibrary.h"
 
@@ -104,6 +105,8 @@ int main(int argc, char *argv[])
   qmlRegisterType<InteractionTargetList>("Game", 1,0, "InteractionTargetList");
   qmlRegisterType<LevelGrid>("Game", 1,0, "LevelGrid");
   qmlRegisterType<ObjectGroup>("Game", 1,0, "ObjectGroup");
+  qmlRegisterType<Credits>("Game", 1,0, "Credits");
+  qmlRegisterType<CreditPerson>("Game", 1,0, "Person");
 
   qRegisterMetaType<Character*>("const Character*");
   qRegisterMetaType<CharacterDiplomacy*>("const CharacterDiplomacy*");
