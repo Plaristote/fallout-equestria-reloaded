@@ -307,7 +307,7 @@ void StatModel::updateBaseValues()
   data.explosives   = 10 + perception + agility;
   data.unarmed      = 30 + (2 * (agility + strength));
   data.meleeWeapons = 20 + (2 * (agility + strength));
-  data.lockpick     = 20 + (5 * perception) + (5 * agility);
+  data.lockpick     = 15 + perception + agility;
   data.medicine     = 15 + perception + intelligence;
   data.repair       = perception + (3 * intelligence);
   data.science      = 4 * intelligence;
@@ -538,7 +538,7 @@ void StatModel::fromJson(const QJsonObject& json)
   race           = json["race"].toString();
   gender         = json["gender"].toString();
   hitPoints      = json["hp"].toInt(1);
-  level          = json["lvl"].toInt();
+  level          = json["lvl"].toInt(1);
   experience     = json["xp"].toInt();
   hasLeveledUp   = json["lvlup"].toBool(false);
   skillPoints    = json["skill-points"].toInt(0);
