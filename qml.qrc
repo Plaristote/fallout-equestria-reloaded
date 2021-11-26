@@ -12,6 +12,7 @@
         <file>assets/ui/MenuButton.qml</file>
         <file>NewGame.qml</file>
         <file>ui/CharacterSheet.qml</file>
+        <file>ui/FpsWidget.qml</file>
         <file>assets/ui/hud.png</file>
         <file>assets/ui/Label.qml</file>
         <file>assets/ui/Pane.qml</file>
@@ -311,5 +312,9 @@
         <file>game/level/CursorRenderer.qml</file>
         <file>game/level/LevelDisplay.qml</file>
         <file>ui/FastTimePassView.qml</file>
+        <file>game/level/PlayerCropCircle.qml</file>
+        <file>editor/level/AmbientLightDialog.qml</file>
+        <file>ui/TerminalColorButton.qml</file>
+        <file>Credits.qml</file>
     </qresource>
 </RCC>
