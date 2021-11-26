@@ -482,7 +482,7 @@ QStringList StatModel::getSkillList()
   };
 }
 
-static QColor jsonToColor(QJsonValue value)
+QColor jsonToColor(QJsonValue value)
 {
   QColor result = Qt::transparent;
 
@@ -498,7 +498,7 @@ static QColor jsonToColor(QJsonValue value)
   return result;
 }
 
-static QJsonArray colorToJson(QColor color)
+QJsonArray colorToJson(QColor color)
 {
   QVariantList list;
 
