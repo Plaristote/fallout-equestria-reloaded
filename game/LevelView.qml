@@ -191,6 +191,12 @@ LevelDisplay {
 
   FastTimePassView {}
 
+  FpsWidget {
+    anchors.top:   parent.top
+    anchors.right: parent.right
+    visible: levelController.debugMode
+  }
+
   Hud.DebugConsole {
     id: debugConsole
     visible: false
