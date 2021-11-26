@@ -8,6 +8,7 @@
 //# include "globals.hpp"
 # include <list>
 # include <vector>
+# include <map>
 # include <algorithm>
 # include <iostream>
 # include <assert.h>
@@ -48,6 +49,9 @@ public:
   };
   typedef std::vector<Node*>                    NodeList;
   typedef typename std::vector<Node*>::iterator NodeListIterator;
+  typedef std::list<UserState>                  Solution;
+  typedef std::list<UserState>                  CandidateList;
+  typedef std::map<UserState, Solution>         SolutionList;
 
   struct FunctorCompareNode
   {
@@ -75,7 +79,7 @@ public:
   }
 
   // Set Start and goal states
-  void SetStartAndGoalStates( UserState &Start, UserState &Goal )
+  void SetStartAndGoalStates(UserState& Start, const CandidateList& Candidates)
   {
     FreeSolutionNodes();
     
@@ -84,10 +88,12 @@ public:
     _start = new Node;
     _goal  = new Node;
 
-    assert((_start != NULL && _goal != NULL));
+    assert(_start != NULL && _goal != NULL && Candidates.size() > 0);
 
     _start->userNode = Start;
-    _goal->userNode  = Goal;
+    _goal->userNode  = *Candidates.begin();
+
+    std::copy(++Candidates.begin(), Candidates.end(), std::back_inserter(_secondaryGoals));
 
     _state = Searching;
 
@@ -132,14 +138,40 @@ public:
     _state = Succeeded;
   }
 
+  void StoreSecondarySolution(Node* node)
+  {
+    Solution solution = GetSolution();
+    typename SolutionList::iterator currentSecondarySolution = _secondarySolutions.find(node->userNode);
+
+    if (currentSecondarySolution == _secondarySolutions.end() && currentSecondarySolution->second.size() > solution.size())
+      _secondarySolutions.emplace(node->userNode, solution);
+  }
+
+  Solution* GetBestSolution()
+  {
+    if (_state == Succeeded)
+    {
+      _secondarySolutions.emplace(_goal->userNode, GetSolution());
+      return &_secondarySolutions.at(_goal->userNode);
+    }
+    for (const UserState& candidate : _secondaryGoals)
+    {
+      typename SolutionList::iterator solution = _secondarySolutions.find(candidate);
+
+      if (solution != _secondarySolutions.end())
+        return &(solution->second);
+    }
+    return nullptr;
+  }
+
   State SearchStep()
   {
-    if(_openList.empty() || _cancelRequest || _state == NotInitialized)
+    if (_openList.empty() || _cancelRequest || _state == NotInitialized)
     {
       FreeAllNodes();
       _state = Failed;
     }
-    else if(_state != Succeeded && _state != Failed)
+    else if (_state != Succeeded && _state != Failed)
     {
       _nSteps++;
 
@@ -156,6 +188,11 @@ public:
 
         typename std::list<UserState*>::iterator successorIt  = userSuccessors.begin();
         typename std::list<UserState*>::iterator successorEnd = userSuccessors.end();
+
+        // store secondary goal
+        if (std::find(_secondaryGoals.begin(), _secondaryGoals.end(), node->userNode) != _secondaryGoals.end())
+          StoreSecondarySolution(node);
+        // END secondary goal
 
         for (; successorIt != successorEnd; ++successorIt)
         {
@@ -328,15 +365,17 @@ private:
     delete node;
     _allocateNodeIt--;
   }
-  
+
   NodeList _openList;
   NodeList _closedList;
   State    _state;
   bool     _cancelRequest;
   int      _nSteps;
 
-  Node*    _start;
-  Node*    _goal;
+  Node*         _start;
+  Node*         _goal;
+  CandidateList _secondaryGoals;
+  SolutionList  _secondarySolutions;
 
   unsigned int _allocateNodeIt;
   typename UserState::Actor* _actor = nullptr;

@@ -6,7 +6,9 @@ bool MovementAction::trigger()
   auto* level = Game::get()->getLevel();
   auto* grid  = level->getFloorGrid(character->getCurrentFloor());
 
-  if (grid->findPath(character->getPoint(), target, character->rcurrentPath(), character))
+  if (character->getPoint() == target)
+    state = Done;
+  else if (grid->findPath(character->getPoint(), target, character->rcurrentPath(), character))
     state = InProgress;
   else
     state = Interrupted;

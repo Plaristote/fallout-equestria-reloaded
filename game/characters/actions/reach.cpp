@@ -47,8 +47,9 @@ QVector<Point> ReachAction::getCandidates(int caseDistance) const
     for (int y = position.y - caseDistance ; y <= position.y + caseDistance ; ++y)
     {
       Point candidatePosition{x, y, position.z};
+      LevelGrid* grid = game->getLevel()->getFloorGrid(candidatePosition.z);
 
-      if (candidatePosition != position && character->hasSightFrom(position, candidatePosition))
+      if (candidatePosition != position && !grid->isOccupied(candidatePosition.x, candidatePosition.y) && character->hasSightFrom(position, candidatePosition))
         candidates << candidatePosition;
     }
   }
@@ -64,8 +65,6 @@ QVector<Point> ReachAction::getCandidates(int caseDistance) const
   // It is quite possible that different implementations of sort/stable_sort will exhibit different behaviours
   // in that regard. The vector returned by this function will probably cause issues on platforms other than Linux.
   std::stable_sort(candidates.begin(), candidates.end(), compare);
-  if (candidates.size() > 0)
-    qDebug() << "-> " << candidates.begin()->x;
   return candidates;
 }
 
@@ -81,13 +80,13 @@ int ReachAction::getApCost() const
     candidates.push_back(getTargetPosition());
   else
     candidates = getCandidates(static_cast<int>(std::floor(range)));
-  for (auto it = candidates.begin() ; it != candidates.end() ; ++it)
-  {
-    QList<Point> path;
+  //for (auto it = candidates.begin() ; it != candidates.end() ; ++it)
+  //{
+  QList<Point> path;
 
-    if (grid->findPath(character->getPoint(), *it, path, character))
-      return pathApCost(path);
-  }
+  if (grid->findPath(character->getPoint(), candidates, path, character))
+    return pathApCost(path);
+  //}
   return -1;
 }
 
@@ -113,14 +112,8 @@ bool ReachAction::trigger()
     auto candidates = getCandidates(caseDistance);
 
     state = Interrupted;
-    for (auto it = candidates.begin() ; it != candidates.end() ; ++it)
-    {
-      if (grid->findPath(character->getPoint(), *it, character->rcurrentPath(), character))
-      {
-        state = canMakeNextMovement() ? InProgress : Interrupted;
-        break ;
-      }
-    }
+    if (grid->findPath(character->getPoint(), candidates, character->rcurrentPath(), character))
+      state = canMakeNextMovement() ? InProgress : Interrupted;
   }
   return state == Done || state == InProgress;
 }

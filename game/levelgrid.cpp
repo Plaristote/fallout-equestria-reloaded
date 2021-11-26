@@ -359,34 +359,45 @@ void LevelGrid::initializePathfinding()
 
 bool LevelGrid::findPath(Point from, Point to, QList<Point>& path, CharacterMovement* character)
 {
+  return findPath(from, QVector<Point>{to}, path, character);
+}
+
+bool LevelGrid::findPath(Point from, const QVector<Point> &to, QList<Point> &path, CharacterMovement *character)
+{
   typedef AstarPathfinding<LevelGrid::CaseContent> Pathfinder;
   Pathfinder        astar(character);
   unsigned short    iterationCount = 0;
   Pathfinder::State state;
   CaseContent*      fromCase = getGridCase(from.x, from.y, from.z);
-  CaseContent*      toCase   = getGridCase(to.x, to.y, to.z);
+  std::list<CaseContent> toCases;
 
-  if (fromCase && toCase)
+  for (const Point& candidate : to)
+  {
+    CaseContent* toCase = getGridCase(candidate.x, candidate.y, candidate.z);
+
+    if (toCase)
+      toCases.push_back(*toCase);
+  }
+  if (fromCase && toCases.size() > 0)
   {
     bool fromOccupiedBackup = fromCase->occupied;
-    bool toOccupiedBackup = toCase->occupied;
 
     fromCase->occupied = false;
-    //toCase->occupied = false;
     path.clear();
-    astar.SetStartAndGoalStates(*fromCase, *toCase);
-    while ((state = astar.SearchStep()) == Pathfinder::Searching && ++iterationCount < 1250);
-    if (state == Pathfinder::Succeeded)
+    astar.SetStartAndGoalStates(*fromCase, toCases);
+    while ((state = astar.SearchStep()) == Pathfinder::Searching && ++iterationCount < 2500);
+    if (iterationCount >= 2500)
+      qDebug() << "-> Pathfinding failed due too many iterations" << character->getPath() << static_cast<QPoint>(from) << static_cast<QPoint>(to.first());
+    auto* solution = astar.GetBestSolution();
+    if (solution)
     {
-      for (auto& gridCase : astar.GetSolution())
+      for (auto& gridCase : *solution)
         path << gridCase.position;
       path.pop_front(); // first case is the starting point
       fromCase->occupied = fromOccupiedBackup;
-      toCase->occupied = toOccupiedBackup;
       return true;
     }
     fromCase->occupied = fromOccupiedBackup;
-    toCase->occupied = toOccupiedBackup;
   }
   else
     qDebug() << "Pathfinding: invalid coordinates" << from << to;

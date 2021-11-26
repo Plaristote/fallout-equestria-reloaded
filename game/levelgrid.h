@@ -42,8 +42,9 @@ public:
 
     bool  isBlocked() const;
     bool  isLinkedTo(QPoint) const;
-    bool  operator==(const CaseContent& other) { return position == other.position; }
-    bool  operator==(const CaseContent* other) { return position == other->position; }
+    bool  operator==(const CaseContent& other) const { return position == other.position; }
+    bool  operator==(const CaseContent* other) const { return position == other->position; }
+    bool  operator< (const CaseContent& other) const { return position < other.position; }
     float GetCost(const CaseContent&, const Actor*) const { return 1.f; }
     float GoalDistanceEstimate(const CaseContent&) const;
     std::list<CaseContent*> GetSuccessors(const CaseContent* parent, Actor*) const;
@@ -82,6 +83,7 @@ public:
   Q_INVOKABLE int            getCoverValue(int x, int y) const;
   Q_INVOKABLE TileMap*       getTilemap() const { return tilemap; }
 
+  bool findPath(Point from, const QVector<Point>& to, QList<Point>& path, CharacterMovement* character);
   bool findPath(Point from, Point to, QList<Point>& path, CharacterMovement* character);
   bool moveObject(DynamicObject*, int x, int y);
   bool insertObject(DynamicObject*, int x, int y);
