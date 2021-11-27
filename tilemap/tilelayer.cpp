@@ -159,6 +159,21 @@ bool TileLayer::isInside(int x, int y) const
   return getTile(x, y) != nullptr;
 }
 
+int TileLayer::tilePropertyListCount(QQmlListProperty<Tile>* source)
+{
+  return reinterpret_cast<TileLayer*>(source->object)->tiles.size();
+}
+
+Tile* TileLayer::tilePropertyListAt(QQmlListProperty<Tile>* source, int index)
+{
+  return reinterpret_cast<TileLayer*>(source->object)->tiles.at(index);
+}
+
+QQmlListProperty<Tile> TileLayer::getQmlTiles()
+{
+  return QQmlListProperty<Tile>(this, this, &TileLayer::tilePropertyListCount, &TileLayer::tilePropertyListAt);
+}
+
 QRect TileLayer::getRenderedRect()
 {
   if (dirtyRenderRect)

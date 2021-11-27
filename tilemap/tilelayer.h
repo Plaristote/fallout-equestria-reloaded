@@ -7,6 +7,7 @@
 # include <QPoint>
 # include <QColor>
 # include <QVector>
+# include <QQmlListProperty>
 # include "tile.h"
 
 class QJsonObject;
@@ -24,6 +25,7 @@ class TileLayer : public QObject
   Q_PROPERTY(QColor  color   MEMBER color)
   Q_PROPERTY(bool    visible MEMBER visible NOTIFY visibleChanged)
   Q_PROPERTY(bool    prerendered MEMBER prerendered CONSTANT)
+  Q_PROPERTY(QQmlListProperty<Tile> tiles READ getQmlTiles NOTIFY tilesChanged)
 public:
   explicit TileLayer(QObject *parent = nullptr);
 
@@ -48,11 +50,15 @@ public:
 
 signals:
   void visibleChanged();
+  void tilesChanged();
 
 protected:
   void loadTiles(const QJsonArray&, const QVector<Tileset*>& tilesets);
   void prepareRenderRect();
   void prepareRenderSize();
+  QQmlListProperty<Tile> getQmlTiles();
+  static int             tilePropertyListCount(QQmlListProperty<Tile>*);
+  static Tile*           tilePropertyListAt(QQmlListProperty<Tile>*, int);
 
   QString        name;
   QSize          size;
