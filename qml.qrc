@@ -316,5 +316,6 @@
         <file>editor/level/AmbientLightDialog.qml</file>
         <file>ui/TerminalColorButton.qml</file>
         <file>Credits.qml</file>
+        <file>game/level/LayerRenderer.qml</file>
     </qresource>
 </RCC>
