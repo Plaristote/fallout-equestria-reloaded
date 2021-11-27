@@ -85,7 +85,7 @@ UiStyle.CustomDialog {
       TerminalLabel { text: "Color"; visible: characterSheet.withFaceColor }
       TerminalColorButton {
         value: characterSheet.faceColor
-        onValueChanged: characterSheet.faceColor = Qt.rgba(value.r, value.g, value.b, 0.5)
+        onUpdated: characterSheet.faceColor = value
         Layout.fillWidth: true
         Layout.preferredHeight: 40
         visible: characterSheet.withFaceColor
@@ -94,7 +94,7 @@ UiStyle.CustomDialog {
       TerminalLabel { text: "Eye color" }
       TerminalColorButton {
         value: characterSheet.eyeColor
-        onValueChanged: characterSheet.eyeColor = Qt.rgba(value.r, value.g, value.b, 0.5)
+        onUpdated: characterSheet.eyeColor = value
         Layout.fillWidth: true
         Layout.preferredHeight: 40
       }
@@ -117,7 +117,7 @@ UiStyle.CustomDialog {
       TerminalLabel { text: "Hair color"; visible: characterSheet.withFaceColor }
       TerminalColorButton {
         value: characterSheet.hairColor
-        onValueChanged: characterSheet.hairColor = Qt.rgba(value.r, value.g, value.b, 1)
+        onUpdated: characterSheet.hairColor = value
         Layout.fillWidth: true
         Layout.preferredHeight: 40
         visible: characterSheet.withFaceColor

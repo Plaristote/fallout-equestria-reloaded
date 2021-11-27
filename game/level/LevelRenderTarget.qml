@@ -21,9 +21,9 @@ Rectangle {
   property alias    groundLayer: groundLayer_
 
   id: renderTarget
-  color: "yellow"
-  width:  groundLevelLayer.getRenderedRect().width
-  height: groundLevelLayer.getRenderedRect().height
+  color: "black"
+  width:  groundRect.width
+  height: groundRect.height
   x: levelController.canvasOffset.x - width / 2
   y: levelController.canvasOffset.y
 
@@ -82,7 +82,7 @@ Rectangle {
     Repeater {
       model: renderTarget.levelController.visualEffects
       delegate: Image {
-        property QtObject sprite: renderTarget.levelController.visualEffects[index]
+        readonly property QtObject sprite: renderTarget.levelController.visualEffects[index]
         x: sprite.spritePosition.x
         y: sprite.spritePosition.y
         source: fileProtocol + sprite.spriteSource
@@ -93,9 +93,9 @@ Rectangle {
     Repeater {
       model: renderTarget.levelController.tilemap.roofs
       delegate: Rectangle {
-        property QtObject roof: renderTarget.levelController.tilemap.roofs[index]
-        property rect renderRect: roof.getRenderedRect()
-        property bool isFloor: roof.name.startsWith("floor_")
+        readonly property QtObject roof: renderTarget.levelController.tilemap.roofs[index]
+        readonly property rect renderRect: roof.getRenderedRect()
+        readonly property bool isFloor: roof.name.startsWith("floor_")
 
         visible: renderTarget.renderRoofs
         opacity: roof.visible ? 1 : 0

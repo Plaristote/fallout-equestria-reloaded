@@ -8,7 +8,6 @@ import "./level"
 LevelDisplay {
   id: root
   property bool hasOverlay: interactionMenu.visible || inventoryViewContainer.visible || itemPickerContainer.visible || skilldex.visible || countdownDialog.visible || mainMenu.visible
-  anchors.fill: parent
   enabled: !gameController.fastPassTime
 
   function openMenu() {
@@ -76,8 +75,8 @@ LevelDisplay {
 
   DynamicObjectMetrics {
     levelController: root.levelController
-    anchors.right: frameRate.right
-    anchors.top: frameRate.bottom
+    anchors.left: parent.left
+    anchors.top: parent.top
   }
 
   LevelTextBubbles {

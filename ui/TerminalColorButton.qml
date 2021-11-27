@@ -7,7 +7,10 @@ import QtQuick.Dialogs 1.2 as WindowDialogs
 TerminalButton {
   id: colorButton
   property alias title: dialog.title
+  property alias showAlphaChannel: dialog.showAlphaChannel
   property color value
+
+  signal updated();
 
   contentItem: Rectangle {
     anchors.fill: parent
@@ -17,6 +20,10 @@ TerminalButton {
 
   WindowDialogs.ColorDialog {
     id: dialog
-    onAccepted: colorButton.value = Qt.rgba(color.r, color.g, color.b);
+    showAlphaChannel: true
+    onAccepted: {
+      colorButton.value = color;
+      colorButton.updated();
+    }
   }
 }

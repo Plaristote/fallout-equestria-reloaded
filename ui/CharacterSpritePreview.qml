@@ -51,7 +51,7 @@ Item {
 
   Image {
     anchors.centerIn: parent
-    source: "file://" + model.spriteSource
+    source: model.spriteSource.length > 0 ? "file://" + model.spriteSource : ""
     height: model.clippedRect.height
     width:  model.clippedRect.width
     sourceClipRect: model.clippedRect

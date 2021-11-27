@@ -9,6 +9,7 @@ UiStyle.CustomDialog {
   property QtObject characterSheet
   property var perkList: characterSheet.getAvailablePerks()
   property int currentIndex: 0
+  property var currentPerk: perkList[currentIndex]
   title: i18n.t("cmap.perk-picker")
   modal: true
   standardButtons: Dialog.Ok | Dialog.Cancel
@@ -62,7 +63,7 @@ UiStyle.CustomDialog {
 
     DescriptionPane {
       id: dialogPanel
-      selectedProperty: root.perkList[root.currentIndex]
+      selectedProperty: root.currentPerk ? root.currentPerk : ""
       Layout.fillWidth: true
       Layout.fillHeight: true
     }
