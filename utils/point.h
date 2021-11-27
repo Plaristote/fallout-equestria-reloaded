@@ -11,6 +11,7 @@ struct Point
   operator QPoint() const { return QPoint{x,y}; }
   bool operator==(const QPoint& other) const { return x == other.x() && y == other.y(); }
   bool operator==(const Point& other) const { return x == other.x && y == other.y && z == other.z; }
+  bool operator< (const Point& other) const { return z < other.z || y < other.y || x < other.x; }
 };
 
 #endif
