@@ -33,6 +33,12 @@ Image {
   }
 
   Action {
+    id: creditsAction
+    text: i18n.t("Credits")
+    onTriggered: application.pushView("Credits.qml")
+  }
+
+  Action {
     id: exitAction
     text: i18n.t("Exit")
     onTriggered: application.close();
@@ -51,7 +57,7 @@ Image {
     spacing: 10
 
     Repeater {
-      model: [continueAction, newGameAction, loadGameAction, optionsAction, gameEditorAction, exitAction]
+      model: [continueAction, newGameAction, loadGameAction, optionsAction, creditsAction, gameEditorAction, exitAction]
       delegate: MenuButton { action: modelData }
     }
   }

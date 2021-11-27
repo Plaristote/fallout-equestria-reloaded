@@ -1,4 +1,22 @@
+import QtQuick 2.15
+import QtQuick.Layouts 1.12
+import QtQuick.Controls 2.15
+import Game 1.0 as Game
+import "./ui"
 
+Rectangle {
+  id: root
+  color: "black"
+
+  Game.Credits { id: credits }
+
+  CustomFlickable {
+    anchors.fill: parent
+    anchors.margins: 50
+    contentHeight: creditColumn.height
+
+    Timer {
+      running: true
       repeat: true
       interval: 75
       onTriggered: parent.contentY = Math.min(parent.contentY + 1, parent.contentHeight - parent.height)
@@ -51,7 +69,7 @@
       Label {
         text: person.name
         font.family:    application.titleFont.name
-        font.pointSize: application.titleFont.pointSize
+        font.pointSize: application.titleFont.pointSize + 6
         color:          "white"
         Layout.alignment: Qt.AlignCenter
       }
