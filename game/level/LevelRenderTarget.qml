@@ -56,6 +56,13 @@ Rectangle {
       }
     }
 
+    Repeater {
+      model: levelController.tilemap.lights
+      delegate: LayerRenderer {
+        tileLayer: levelController.tilemap.lights[index]
+      }
+    }
+
     ObjectListRenderer {
       model: renderTarget.levelController.visibleObjects
     }
