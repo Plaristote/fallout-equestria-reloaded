@@ -1,35 +1,23 @@
-class Ko {
-  construct(model) {
-    this.model = model;
-  }
+import {StackableBuff} from "./helpers/stackable.mjs";
 
-  get charges() {
-    return this.model.getVariable("charges");
-  }
-
-  set charges(value) {
-    this.model.setVariable("charges", value);
-  }
-
+class Ko extends StackableBuff {
   initialize() {
     this.charges = 1;
     this.model.target.fallUnconscious();
     game.appendToConsole(i18n.t("messages.ko", {
       target: this.model.target.statistics.name
     }));
-    this.model.tasks.addTask("wakeUp", 10000, 0);
-  }
-
-  repeat() {
-    this.charges = this.charges + 1;
+    this.model.tasks.addTask("trigger", 10000, 0);
   }
 
   trigger() {
-    this.charges = this.charges - 1;
-    if (this.charges <= 0) {
+    this.charges--;
+    if (this.charges <= 0)
       this.model.remove();
-      this.model.target.wakeUp();
-    }
+  }
+  
+  finalize() {
+    this.model.target.wakeUp();
   }
 }
 

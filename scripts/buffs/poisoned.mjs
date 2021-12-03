@@ -1,4 +1,5 @@
 import {getValueFromRange} from "../behaviour/random.mjs";
+import {StackableBuff} from "./helpers/stackable.mjs";
 
 const delay = 1800000;
 const damageRanges = [
@@ -9,20 +10,7 @@ const damageRanges = [
   [9,12]
 ];
 
-class Poisoned {
-  constructor(model) {
-    console.log("Bleeding buff constructed");
-    this.model = model;
-  }
-
-  get charges() {
-    return this.model.hasVariable("charges") ? this.model.getVariable("charges") : 0;
-  }
-
-  set charges(value) {
-    this.model.setVariable("charges", value);
-  }
-
+class Poisoned extends StackableBuff {
   get poisonLevel() {
     return this.model.target.hasVariable("poisonLevel") ? this.model.target.getVariable("poisonLevel") : 1;
   }
