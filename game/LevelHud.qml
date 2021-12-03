@@ -32,6 +32,11 @@ Pane {
     }
 
     UiStyle.WarningRectangle {
+      visible: levelController.player.unconscious
+      label: i18n.t("cmap.buffs.ko")
+    }
+
+    UiStyle.WarningRectangle {
       visible: levelController.player.sneaking
       label: i18n.t("cmap.sneak")
     }
