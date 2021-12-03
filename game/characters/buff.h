@@ -25,6 +25,7 @@ public:
   void update(qint64);
 
   Q_INVOKABLE void remove();
+  Q_INVOKABLE QJSValue getScriptObject() const;
 
   inline const QString& getName() const { return name; }
 

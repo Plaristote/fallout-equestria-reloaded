@@ -55,3 +55,10 @@ void Buff::remove()
   finalize();
   emit finish(this);
 }
+
+QJSValue Buff::getScriptObject() const
+{
+  if (script)
+    return script->getObject();
+  return QJSValue();
+}
