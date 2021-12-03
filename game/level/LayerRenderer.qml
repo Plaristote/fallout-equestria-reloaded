@@ -17,8 +17,7 @@ Item {
   }
 
   Loader {
-    //sourceComponent: tileLayer.prerendered ? prerenderedRenderer : dynamicRenderer
-    sourceComponent: dynamicRenderer
+    sourceComponent: tileLayer.prerendered ? prerenderedRenderer : dynamicRenderer
   }
 
   Component {
