@@ -40,7 +40,8 @@
     "clock-title":       "Take a rest",
     "clock-wait-minute": "Wait {{time}} minutes",
     "clock-wait-hour":   "Wait {{time}} hours",
-    "clock-wait-day":    "Wait {{time}} days"
+    "clock-wait-day":    "Wait {{time}} days",
+    "clock-wait-heal":   "Wait until fully healed"
   },
   "item-slots": {
     "armor": "Armor",
@@ -60,22 +61,22 @@
       "mixed": "Run on double-click"
     }
   },
-  "buffs": {
-    "poisoned": "Poisoned",
-    "bleeding": "Bleeding",
-    "ko": "Unconscious"
-  },
   "messages": {
     "weapons": {
       "use":   "{{user}} used {{item}} on {{target}} for {{damage}} damage.",
       "dodge": "{{target}} dodged an attack from {{user}}.",
       "critical-failure": "{{user}} critically failed to use {{item}}."
     },
+    "ko": "You passed out.",
+    "drunk": "You are now drunk.",
+    "drunk-pass-out": "You've had too much alcohol and passed out like a wreck.",
     "jail-sentence": "You've been sentenced to {{duration}} day(s) in jail.",
     "jail-sentence": "You've completed your jail sentence.",
     "poison-damage": "You take {{damage}} points of damage from the poisoning.",
     "wont-barter": "This person doesn't want to barter with you.",
     "cannot-sneak": "You cannot sneak in plain sight.",
+    "cannot-use-in-combat": "Cannot be used during combat.",
+    "read-skillbook": "You learned more about {{skillName}} and gained {{points}} skill points.",
     "damaged": "{{target}} took {{damage}} points of damage.",
     "use": "{{user}} used {{item}}.",
     "healed": "{{target}} was healed for {{hp}} hit points",
@@ -104,7 +105,12 @@
     "radiation-over": "You are no longer irradiated.",
     "radiation-begin": "You've been irradiated by magical waste.",
     "encounter-title": "You've stumbled upon {{title}}.",
-    "encounter-prompt": "Do you wish to check it out ?"
+    "encounter-prompt": "Do you wish to check it out ?",
+    "read-book": "You read a book.",
+    "read-long-book": "You get really absorbed into this book. You lost track of time, but damn was it worth it !",
+    "read-old-book": "You skim through this book you're already familiar with.",
+    "collected-ore": "You mined some ore.",
+    "collected-ore-failure": "There's nothing left to mine."
   },
   "use-modes": {
     "use": "Use",
@@ -139,6 +145,8 @@
 	    "description": "You've crossed path with a diamond dog. He asked you to help him gather gemstones, and you accepted. He also lent you the tools you'll need to do the deed. Let's pick up that pickaxe and start mining !"
         },
         "objectives": "Objectives",
+	"completed": "Completed",
+	"failed": "Failed",
         "ongoing": "Ongoing",
         "tutorial": {
             "description": "<p>You find yourself lost and trapped in the depth of a dark cavern. Resisting the pain of a considerable headache, you have no recollection of how you've gotten here.</p><p>The cold and damp air displeases you greatly... how about looking for an exit, and get back to the gracious sky of Equestria ?</p>",
@@ -245,7 +253,9 @@
         }
     },
     "inspection": {
+        "character": "You see {{target}}.",
         "character-male": "You see {{target}}.",
+        "character-female": "You see {{target}}.",
 	"character-dead-male": "He's dead.",
 	"character-dead-female": "She's dead.",
 	"character-state-male": "He looks {{state}}.",
@@ -267,6 +277,12 @@
         "used-on": "{{user}} used medicine on {{target}} and healed it for {{hp}} hit points."
     },
     "cmap": {
+      "buffs": {
+        "poisoned": "Poisoned",
+        "bleeding": "Bleeding",
+        "ko": "Unconscious",
+        "drunk": "Drunk"
+      },
       "name-placeholder": "Your name",
       "traits": "Traits",
       "perks": "Perks",
@@ -387,7 +403,12 @@
         "lockpick": "The skill of opening locks without the proper key. The use of lockpicks or electronic lockpicks will greatly enhance this skill.",
         "medicine": "Medical knowledge. The ability to treat wounds, cure diseases, and apply first aid.",
         "gambling": "The knowledge and practical skills related to wagering. The skill at cards, dice and other games.",
-        "spellcasting": "Knowledge of spells and magic. Ability to cast spells (if relevant) and affinity with your inner magic."
+        "spellcasting": "Knowledge of spells and magic. Ability to cast spells (if relevant) and affinity with your inner magic.",
+        "buffs": {
+          "poisoned": "You've been poisoned ! You will periodically take damage until the poison is drained from your body (unless you die before that happens). You may want to find an antidote.",
+          "drunk": "You have succumbed to Bacchus' call. You don't feel as sharp as usual. Actually, you don't feel much of anything, right now.",
+          "ko": "You lost consciousness, possibly due to a shock or an intoxication. Depending on the cause and on your own constitution, you may wake up in a matter of seconds... or hours. The waiting game begins."
+        }
       }
     },
     "races": {

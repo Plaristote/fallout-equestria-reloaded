@@ -53,7 +53,7 @@ Pane {
           property string propertyName: "buffs." + characterSheet.buffs[index]
           property color textColor: selectedProperty == propertyName ? "green" : "white"
 
-          text: i18n.t(propertyName)
+          text: i18n.t("cmap." + propertyName)
           color: textColor
           font.family: application.consoleFont.name
           font.pointSize: application.consoleFont.tinySize
