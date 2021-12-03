@@ -49,10 +49,6 @@
         <file>assets/ui/play-panel-center.png</file>
         <file>assets/ui/play-panel-right.png</file>
         <file>game/level/ScreenEdges.qml</file>
-        <file>game/LevelCanvas.qml</file>
-        <file>game/LevelRender.mjs</file>
-        <file>game/level/CanvasRenderer.mjs</file>
-        <file>game/level/Cursor.mjs</file>
         <file>game/LevelView.qml</file>
         <file>cmap/PersonalInfo.qml</file>
         <file>cmap/SpecialCounter.qml</file>
@@ -267,7 +263,6 @@
         <file>ui/dialog/BarterTransferControls.qml</file>
         <file>ui/dialog/BarterDealPreview.qml</file>
         <file>game/hud/HudCombatControls.qml</file>
-        <file>game/level/RenderQueue.mjs</file>
         <file>ui/CharacterSpritePreview.qml</file>
         <file>game/hud/TutorialPane.qml</file>
         <file>assets/ui/WarningRectangle.qml</file>
@@ -300,8 +295,6 @@
         <file>editor/level/ScriptInputField.qml</file>
         <file>editor/level/SpriteInputField.qml</file>
         <file>editor/ScriptInputField.qml</file>
-        <file>game/level/TileMap.mjs</file>
-        <file>game/level/RenderContext.mjs</file>
         <file>editor/level/ElevatorObjectEditor.qml</file>
         <file>cmap/PerkPicker.qml</file>
         <file>ui/DynamicObjectMetrics.qml</file>
