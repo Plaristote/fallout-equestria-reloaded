@@ -84,13 +84,15 @@ void TileMap::loadTilesets(const QJsonArray& tilesetsData)
   {
     QJsonObject tilesetData = value.toObject();
     auto sourcePath = tilesetData["source"].toString();
-    auto firstGid = tilesetData["firstgid"].toInt(1);
-    auto source   = tilemapsPath + sourcePath;
-    auto* tileset  = new Tileset(this);
+    auto firstGid   = tilesetData["firstgid"].toInt(1);
+    auto source     = tilemapsPath + sourcePath;
+    auto* tileset   = new Tileset(this);
 
-    tilesets.push_back(tileset);
     if (tileset->load(source, firstGid))
       textureList << tileset->getSource();
+    if (tilesets.count() > 0)
+      tilesets.last()->overrideLastGid(firstGid - 1);
+    tilesets.push_back(tileset);
     if (tileset->getName() == "lights")
       hasLightLayer = true;
   }

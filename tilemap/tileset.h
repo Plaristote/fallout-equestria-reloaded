@@ -28,6 +28,7 @@ public:
   int getFirstGid() const { return firstGid; }
   int getLastGid() const { return firstGid + tileCount - 1; }
   int getTileCount() const { return tileCount; }
+  void overrideLastGid(int value) { tileCount = value - firstGid; }
   const QImage& getImage() const { return image; }
   bool isInRange(int tileId) { return tileId >= firstGid && tileId < firstGid + tileCount; }
   inline int getGidAt(int i) const { return firstGid + i; }
