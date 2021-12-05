@@ -33,6 +33,8 @@ set(QT_USE_QTMULTIMEDIA TRUE)
 
 set(PROJECT_SOURCES
         main.cpp
+        credits.h
+        credits.cpp
         utils/storableobject.h
         utils/storableobject.cpp
         utils/datetime.hpp
