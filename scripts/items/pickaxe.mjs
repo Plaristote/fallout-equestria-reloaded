@@ -5,10 +5,17 @@ export class Pickaxe extends MeleeAttack {
     super(model);
     this.useModes.push("mine");
     this.skill = "meleeWeapons";
+    this.defaultUseMode = "mine";
   }
 
   get triggersCombat() {
     return this.model.useMode === "hit";
+  }
+
+  getAnimationSteps() {
+    if (this.model.useMode === "hit")
+      return this.getUseAnimation();
+    return [{ type: "Animation", animation: "use", object: this.user }];
   }
 
   isValidTarget(object) {
@@ -25,29 +32,15 @@ export class Pickaxe extends MeleeAttack {
   }
 
   triggerUseOn(target) {
+    const targetScript = target.getScriptObject();
+
     switch (this.model.useMode) {
     case "hit":
       return super.triggerUseOn(target);
     case "mine":
-      return { steps: this.getUseAnimation(), callback: this.onMine.bind(this, target) };
+      return { steps: this.getAnimationSteps(target), callback: targetScript.onMine.bind(targetScript, this.user) };
     }
     return false;
-  }
-
-  onMine(target) {
-    const quantity = Math.ceil(Math.random() * 5);
-    var mineCount = 0;
-
-    if (target.hasVariable("mineCount"))
-      mineCount = target.getVariable("mineCount");
-    if (mineCount < 3)
-    {
-      game.appendToConsole(i18n.t("messages.collected-ore", { quantity: quantity }));
-      this.user.inventory.addItemOfType("gemstone", quantity);
-      target.setVariable("mineCount", mineCount + 1);
-    }
-    else
-      game.appendToConsole(i18n.t("messages.collected-ore-failure"));
   }
 }
 
