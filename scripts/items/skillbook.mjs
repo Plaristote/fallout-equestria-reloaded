@@ -10,11 +10,7 @@ class Skillbook extends Consumable {
   get skill() {
     return this.model.itemType.replace("skill-book-", "");
   }
-/*
-  getActionPointCost() {
-    return 99;
-  }
-*/
+
   isValidTarget(object) {
     return object === game.player;
   }
@@ -33,9 +29,7 @@ class Skillbook extends Consumable {
     base += Math.max(0, Math.floor((stats.intelligence - 2) / (points < 80 ? 1 : 2)));
     if (stats.perks.indexOf("bookworm") >= 0)
       base += 2;
-    console.log("ZKILLBOOK CONZUMED BY", target);
     game.asyncAdvanceTime(180, () => {
-      console.log("ZKILLBOOK CALLBACK WAZ CALLED");
       stats[this.skill] = points + base;
       game.appendToConsole(i18n.t("messages.read-skillbook", {
         skillName: i18n.t("cmap." + this.skill),
