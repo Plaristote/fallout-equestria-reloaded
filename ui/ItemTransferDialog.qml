@@ -1,6 +1,7 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
-import "qrc:/assets/ui" as UiStyle
+import QtQuick.Layouts 1.15
+import "../assets/ui" as UiStyle
 
 UiStyle.CustomDialog {
   property QtObject inventoryItem
@@ -12,20 +13,63 @@ UiStyle.CustomDialog {
 
   signal pickedValue(int amount)
 
-  Row {
-    SpinBox {
-      id: quantityInputField
-      editable: true
-      height: 40
-      from: 1
-      to: maxQuantity
-      contentItem: CustomTextField {
-        text: quantityInputField.value
-        onTextChanged: quantityInputField.value = parseInt(text)
+  RowLayout {
+    anchors.centerIn: parent
+
+    UiStyle.TinyButton {
+      text: "-"
+      enabled: quantityInputField.value > 1
+
+      Timer {
+        interval: 500
+        running: parent.down
+        onTriggered: quantityInputField.text = (quantityInputField.value - 1).toString()
       }
     }
-    CustomLabel {
-      text: "/" + maxQuantity
+
+    UiStyle.TerminalPane {
+      Layout.preferredWidth:  200
+      Layout.preferredHeight: 100
+
+      RowLayout {
+        id: inputLayout
+        anchors.centerIn: parent
+        TerminalField {
+          property int value: 1
+          id: quantityInputField
+          validator: IntValidator { bottom: 1; top: maxQuantity }
+          text: "1"
+          font.pixelSize: 17
+          onTextChanged: {
+            const number = parseInt(text);
+
+            if (number > maxQuantity) { text = maxQuantity.toString(); }
+            else if (number < 1)      { text = "1"; }
+            value = parseInt(text);
+          }
+        }
+
+        TerminalLabel {
+          text: "/" + maxQuantity
+          font.pixelSize: 17
+        }
+      }
+    }
+
+    UiStyle.TinyButton {
+      text: "+"
+      enabled: quantityInputField.value < maxQuantity
+      Timer {
+        id: repeatTimer
+        interval: 500
+        running: parent.down
+        onTriggered: quantityInputField.text = (quantityInputField.value + 1).toString()
+      }
+    }
+
+    UiStyle.TinyButton {
+      text: i18n.t("All")
+      onClicked: quantityInputField.text = maxQuantity
     }
   }
 
