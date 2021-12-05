@@ -19,11 +19,11 @@ UiStyle.CustomDialog {
     UiStyle.TinyButton {
       text: "-"
       enabled: quantityInputField.value > 1
+      onClicked: quantityInputField.text = (quantityInputField.value - 1).toString()
 
-      Timer {
-        interval: 500
+      RepeatTimer {
         running: parent.down
-        onTriggered: quantityInputField.text = (quantityInputField.value - 1).toString()
+        onRepeat: quantityInputField.text = (quantityInputField.value - 1).toString()
       }
     }
 
@@ -59,11 +59,10 @@ UiStyle.CustomDialog {
     UiStyle.TinyButton {
       text: "+"
       enabled: quantityInputField.value < maxQuantity
-      Timer {
-        id: repeatTimer
-        interval: 500
+      onClicked: quantityInputField.text = (quantityInputField.value + 1).toString()
+      RepeatTimer {
         running: parent.down
-        onTriggered: quantityInputField.text = (quantityInputField.value + 1).toString()
+        onRepeat: quantityInputField.text = (quantityInputField.value + 1).toString()
       }
     }
 

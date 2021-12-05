@@ -310,5 +310,6 @@
         <file>ui/TerminalColorButton.qml</file>
         <file>Credits.qml</file>
         <file>game/level/LayerRenderer.qml</file>
+        <file>ui/RepeatTimer.qml</file>
     </qresource>
 </RCC>
