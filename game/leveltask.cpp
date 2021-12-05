@@ -152,6 +152,7 @@ void LevelTask::unregisterDynamicObject(DynamicObject* object)
     }
   }
 
+  performanceMetrics.removeObject(object);
   disconnect(object, &DynamicObject::lightZoneAdded, getTileMap(), &TileMap::addLightLayer);
   disconnect(object, &DynamicObject::lightZoneRemoved, getTileMap(), &TileMap::removeLightLayer);
 

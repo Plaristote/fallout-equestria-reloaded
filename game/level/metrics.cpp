@@ -28,6 +28,14 @@ ObjectPerformanceReport& PerformanceReport::object(const DynamicObject* object)
   return *it;
 }
 
+void PerformanceReport::removeObject(const DynamicObject* object)
+{
+  auto it = std::find(objects.begin(), objects.end(), object);
+
+  if (it != objects.end())
+    objects.erase(it);
+}
+
 void PerformanceReport::reset()
 {
   for (auto it = objects.begin() ; it != objects.end() ; ++it)

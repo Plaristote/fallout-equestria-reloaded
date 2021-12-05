@@ -38,6 +38,7 @@ struct PerformanceReport
   QString                  html();
   ObjectPerformanceReport& object(const DynamicObject* object);
   void                     reset();
+  void                     removeObject(const DynamicObject* object);
 
   QVector<ObjectPerformanceReport> objects;
 };
