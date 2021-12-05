@@ -58,7 +58,7 @@ public:
       bool operator() ( const Node *x, const Node *y ) const { return (x->f > y->f); }
   };
 
-  AstarPathfinding(typename UserState::Actor* actor = nullptr) : _state(NotInitialized), _cancelRequest(false)
+  AstarPathfinding(typename UserState::Actor* actor = nullptr) : _state(NotInitialized), _cancelRequest(false), _acceptAnyCandidate(false)
   {
     _actor          = actor;
     _allocateNodeIt = 0;
@@ -76,6 +76,11 @@ public:
   void CancelSearch(void)
   {
     _cancelRequest = true;
+  }
+
+  void AcceptAnyCandidate(void)
+  {
+    _acceptAnyCandidate = true;
   }
 
   // Set Start and goal states
@@ -140,10 +145,17 @@ public:
 
   void StoreSecondarySolution(Node* node)
   {
-    Solution solution = GetSolution();
     typename SolutionList::iterator currentSecondarySolution = _secondarySolutions.find(node->userNode);
+    std::list<UserState> solution;
+    Node*                current = node;
 
-    if (currentSecondarySolution == _secondarySolutions.end() && currentSecondarySolution->second.size() > solution.size())
+    while (current != _start)
+    {
+      solution.insert(solution.begin(), current->userNode);
+      current = current->parent;
+    }
+    solution.insert(solution.begin(), _start->userNode);
+    if (currentSecondarySolution == _secondarySolutions.end() || currentSecondarySolution->second.size() > solution.size())
       _secondarySolutions.emplace(node->userNode, solution);
   }
 
@@ -189,10 +201,15 @@ public:
         typename std::list<UserState*>::iterator successorIt  = userSuccessors.begin();
         typename std::list<UserState*>::iterator successorEnd = userSuccessors.end();
 
-        // store secondary goal
         if (std::find(_secondaryGoals.begin(), _secondaryGoals.end(), node->userNode) != _secondaryGoals.end())
+        {
           StoreSecondarySolution(node);
-        // END secondary goal
+          if (_acceptAnyCandidate)
+          {
+            CancelSearch();
+            return _state;
+          }
+        }
 
         for (; successorIt != successorEnd; ++successorIt)
         {
@@ -353,7 +370,6 @@ private:
     _closedList.clear();
   }
 
-private:
   inline Node* PedirNode(void)
   {
     _allocateNodeIt++;
@@ -370,6 +386,7 @@ private:
   NodeList _closedList;
   State    _state;
   bool     _cancelRequest;
+  bool     _acceptAnyCandidate;
   int      _nSteps;
 
   Node*         _start;

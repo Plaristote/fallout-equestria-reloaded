@@ -73,8 +73,8 @@ set(PROJECT_SOURCES
         game/dataengine.cpp
         game/level/levelbase.cpp
         game/level/levelbase.h
-	game/level/metrics.h
-	game/level/metrics.cpp
+        game/level/metrics.h
+        game/level/metrics.cpp
         game/leveltask.h
         game/leveltask.cpp
         game/levelgrid.h
@@ -120,6 +120,8 @@ set(PROJECT_SOURCES
         game/characters/actions/reach.cpp
         game/characters/actions/reachcase.h
         game/characters/actions/reachcase.cpp
+        game/characters/actions/reachdoor.h
+        game/characters/actions/reachdoor.cpp
         game/characters/actions/sliding.h
         game/characters/actions/sliding.cpp
         game/characters/actions/waitaction.h

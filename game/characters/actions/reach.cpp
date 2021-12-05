@@ -71,8 +71,6 @@ QVector<Point> ReachAction::getCandidates(int caseDistance) const
 int ReachAction::getApCost() const
 {
   QVector<Point> candidates;
-  auto* level = Game::get()->getLevel();
-  auto* grid  = level->getGrid();
 
   if (alreadyReached())
     return 0;
@@ -80,13 +78,17 @@ int ReachAction::getApCost() const
     candidates.push_back(getTargetPosition());
   else
     candidates = getCandidates(static_cast<int>(std::floor(range)));
-  //for (auto it = candidates.begin() ; it != candidates.end() ; ++it)
-  //{
-  QList<Point> path;
+  return getApCostForCandidates(candidates);
+}
 
-  if (grid->findPath(character->getPoint(), candidates, path, character))
+int ReachAction::getApCostForCandidates(const QVector<Point> &candidates, bool quickMode) const
+{
+  QList<Point> path;
+  auto* level = Game::get()->getLevel();
+  auto* grid  = level->getGrid();
+
+  if (grid->findPath(character->getPoint(), candidates, path, character, quickMode))
     return pathApCost(path);
-  //}
   return -1;
 }
 

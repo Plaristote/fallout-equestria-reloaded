@@ -16,6 +16,33 @@ Doorway::Doorway(QObject* parent) : DynamicObject(parent)
   tileConnections.reserve(8);
 }
 
+QVector<Point> Doorway::getInteractionPositions() const
+{
+  Point          point = getPoint();
+  Point          altPoint(point);
+  QVector<Point> results{point};
+
+  switch (getOrientation())
+  {
+  case BottomDir:
+    altPoint.y++;
+    break ;
+  case UpperDir:
+    altPoint.y--;
+    break ;
+  case RightDir:
+    altPoint.x++;
+    break ;
+  case LeftDir:
+    altPoint.x--;
+    break ;
+  default:
+    return results;
+  }
+  results.push_back(altPoint);
+  return results;
+}
+
 int Doorway::getCoverValue() const
 {
   int base = DynamicObject::getCoverValue();
@@ -170,17 +197,10 @@ bool Doorway::onUse(Character* character)
   }
   if (opened)
   {
-    if (!grid->isOccupied(position.x(), position.y()))
-    {
-      opened = false;
-      playSound(closeSound);
-      emit openedChanged();
-      return true;
-    }
-    else if (character == level->getPlayer())
-      game->appendToConsole(I18n::get()->t("messages.door-is-blocked"));
-    playSound(lockedSound);
-    return false;
+    opened = false;
+    playSound(closeSound);
+    emit openedChanged();
+    return true;
   }
   else
   {

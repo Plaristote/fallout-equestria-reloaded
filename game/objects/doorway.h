@@ -22,6 +22,8 @@ public:
   void save(QJsonObject&) const;
   void load(const QJsonObject&);
 
+  QVector<Point> getInteractionPositions() const;
+  int getInteractionDistance() const override { return 0; }
   QStringList getAvailableInteractions() override;
   Q_INVOKABLE bool bustOpen(int damage);
   bool isBlockingPath() const { return false; }

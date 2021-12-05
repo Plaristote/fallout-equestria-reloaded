@@ -362,7 +362,7 @@ bool LevelGrid::findPath(Point from, Point to, QList<Point>& path, CharacterMove
   return findPath(from, QVector<Point>{to}, path, character);
 }
 
-bool LevelGrid::findPath(Point from, const QVector<Point> &to, QList<Point> &path, CharacterMovement *character)
+bool LevelGrid::findPath(Point from, const QVector<Point> &to, QList<Point> &path, CharacterMovement *character, bool quickMode)
 {
   typedef AstarPathfinding<LevelGrid::CaseContent> Pathfinder;
   Pathfinder        astar(character);
@@ -385,9 +385,11 @@ bool LevelGrid::findPath(Point from, const QVector<Point> &to, QList<Point> &pat
     fromCase->occupied = false;
     path.clear();
     astar.SetStartAndGoalStates(*fromCase, toCases);
+    if (quickMode)
+      astar.AcceptAnyCandidate();
     while ((state = astar.SearchStep()) == Pathfinder::Searching && ++iterationCount < 2500);
     if (iterationCount >= 2500)
-      qDebug() << "-> Pathfinding failed due too many iterations" << character->getPath() << static_cast<QPoint>(from) << static_cast<QPoint>(to.first());
+      qDebug() << "-> Pathfinding failed due too many iterations" << character->getPath() << static_cast<QPoint>(from);
     auto* solution = astar.GetBestSolution();
     if (solution)
     {

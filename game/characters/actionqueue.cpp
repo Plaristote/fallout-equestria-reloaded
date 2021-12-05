@@ -7,6 +7,7 @@
 #include "actions/movement.h"
 #include "actions/reach.h"
 #include "actions/reachcase.h"
+#include "actions/reachdoor.h"
 #include "actions/sliding.h"
 #include "actions/waitaction.h"
 #include "actions/speak.h"
@@ -165,12 +166,18 @@ int ActionQueue::getMovementApCost(QPoint target) const
 
 void ActionQueue::pushReach(DynamicObject *target, float range)
 {
-  queue << (new ReachAction(character, target, range));
+  if (!target->isDoorway())
+    queue << (new ReachAction(character, target, range));
+  else
+    queue << (new ReachDoorAction(character, reinterpret_cast<Doorway*>(target), range));
 }
 
 void ActionQueue::pushReach(DynamicObject *target, float range, QJSValue caseCompare)
 {
-  queue << (new ReachAction(character, target, range, caseCompare));
+  if (!target->isDoorway())
+    queue << (new ReachAction(character, target, range, caseCompare));
+  else
+    queue << (new ReachDoorAction(character, reinterpret_cast<Doorway*>(target), range, caseCompare));
 }
 
 void ActionQueue::pushReachCase(int x, int y, float range)
@@ -211,7 +218,6 @@ void ActionQueue::pushReachNear(int x, int y, int z, int range)
   while (choices.size() > 0)
   {
     int it = Dices::Throw(static_cast<unsigned int>(choices.size() - 1));
-    //qDebug() << "Choicez" << choices.size() << ", roll" << it;
     QPoint candidate = choices[it];
 
     if (getMovementApCost(candidate) > 0)
@@ -231,11 +237,15 @@ void ActionQueue::pushReachNear(int x, int y, int range)
 
 int ActionQueue::getReachApCost(DynamicObject *target, float range) const
 {
+  if (target->isDoorway())
+    return ReachAction(character, reinterpret_cast<Doorway*>(target), range).getApCost();
   return ReachAction(character, target, range).getApCost();
 }
 
 int ActionQueue::getReachApCost(DynamicObject *target, float range, QJSValue caseCompare)
 {
+  if (target->isDoorway())
+    return ReachAction(character, reinterpret_cast<Doorway*>(target), range, caseCompare).getApCost();
   return ReachAction(character, target, range, caseCompare).getApCost();
 }
 

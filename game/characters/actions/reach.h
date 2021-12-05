@@ -15,14 +15,15 @@ public:
   {
   }
 
-  bool trigger() override;
-  int getApCost() const override;
+  virtual bool trigger() override;
+  virtual int getApCost() const override;
 
 protected:
   void triggerNextMovement() override;
   QVector<Point> getCandidates(int caseDistance) const;
   virtual bool alreadyReached() const;
   virtual Point getTargetPosition() const { return object->getPoint(); }
+  int getApCostForCandidates(const QVector<Point>& candidates, bool quickMode = false) const;
 
   DynamicObject* object;
   float range = 1.f;
