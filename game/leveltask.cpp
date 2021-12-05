@@ -145,11 +145,12 @@ void LevelTask::unregisterDynamicObject(DynamicObject* object)
   if (object->isCharacter())
   {
     auto* character = reinterpret_cast<Character*>(object);
-    for (auto* entry : objects)
+
+    eachObject([character](DynamicObject* entry)
     {
       if (entry->isCharacter())
         reinterpret_cast<Character*>(entry)->getFieldOfView()->removeCharacter(character);
-    }
+    });
   }
 
   performanceMetrics.removeObject(object);
