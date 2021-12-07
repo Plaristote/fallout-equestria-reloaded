@@ -7,6 +7,7 @@ import "./ui"
 SaveGameUi {
   id: root
   title: i18n.t("Save")
+  currentSave: selectedIndex > 0 ? savedGameList[selectedIndex - 1] : null
 
   slots: [
     SavedGameListItem {

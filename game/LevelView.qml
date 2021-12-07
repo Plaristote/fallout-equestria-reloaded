@@ -91,6 +91,20 @@ LevelDisplay {
   }
 
   Connections {
+    target: gameController
+
+    function onRequireScreenshot(path) {
+      const withVisibleMenu = mainMenu.visible;
+      mainMenu.visible = levelHud.visible = false;
+      root.grabToImage(result => {
+        mainMenu.visible = withVisibleMenu;
+        levelHud.visible = true;
+        result.saveToFile(path);
+      });
+    }
+  }
+
+  Connections {
     target: levelController
 
     function onStartDialog(dialogController) {

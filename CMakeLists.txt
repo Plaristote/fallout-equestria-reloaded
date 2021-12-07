@@ -65,6 +65,8 @@ set(PROJECT_SOURCES
         cmap/race.cpp
         cmap/perk.h
         cmap/perk.cpp
+        game/savepreview.h
+        game/savepreview.cpp
         game/mousecursor.h
         game/mousecursor.cpp
         game/gamepadcontroller.h
