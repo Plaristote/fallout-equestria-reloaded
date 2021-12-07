@@ -3,12 +3,11 @@
 
 bool MovementAction::trigger()
 {
-  auto* level = Game::get()->getLevel();
-  auto* grid  = level->getFloorGrid(character->getCurrentFloor());
+  ZoneGrid& grid = Game::get()->getLevel()->getPathfinder();
 
   if (character->getPoint() == target)
     state = Done;
-  else if (grid->findPath(character->getPoint(), target, character->rcurrentPath(), character))
+  else if (grid.findPath(character->getPoint(), target, character->rcurrentPath(), character))
     state = InProgress;
   else
     state = Interrupted;

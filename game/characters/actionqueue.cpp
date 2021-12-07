@@ -151,15 +151,14 @@ void ActionQueue::pushMovement(QPoint target)
 
 int ActionQueue::getMovementApCost(QPoint target) const
 {
-  LevelGrid* grid;
+  ZoneGrid& grid = Game::get()->getLevel()->getPathfinder();
   QList<Point> path;
   Point from = character->getPoint();
   Point to{target.x(), target.y(), from.z};
 
   if (from == to)
     return 0;
-  grid = Game::get()->getLevel()->getGrid();
-  if (grid->findPath(from, to, path, character))
+  if (grid.findPath(from, to, path, character))
     return path.size();
   return -1;
 }

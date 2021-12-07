@@ -34,18 +34,21 @@ public:
     Failed
   };
 
+  // A lambda defining the limits of the search
+  std::function<bool (const UserState&)> scope;
+
   // A node represents a possible state in the search
   // The user provided state type is included inside this type
   struct Node
   {
-      Node() : parent(0), child(0), g(0.f), h(0.f), f(0.f) {}
+    Node() : parent(0), child(0), g(0.f), h(0.f), f(0.f) {}
 
-      Node*     parent; // used during the search to record the parent of successor nodes
-      Node*     child; // used after the search for the application to view the search in reverse
-      float     g; // cost of this node + it's predecessors
-      float     h; // heuristic estimate of distance to goal
-      float     f; // sum of cumulative cost of predecessors and self and heuristic
-      UserState userNode;
+    Node*     parent; // used during the search to record the parent of successor nodes
+    Node*     child; // used after the search for the application to view the search in reverse
+    float     g; // cost of this node + it's predecessors
+    float     h; // heuristic estimate of distance to goal
+    float     f; // sum of cumulative cost of predecessors and self and heuristic
+    UserState userNode;
   };
   typedef std::vector<Node*>                    NodeList;
   typedef typename std::vector<Node*>::iterator NodeListIterator;
@@ -55,7 +58,7 @@ public:
 
   struct FunctorCompareNode
   {
-      bool operator() ( const Node *x, const Node *y ) const { return (x->f > y->f); }
+    bool operator() ( const Node *x, const Node *y ) const { return (x->f > y->f); }
   };
 
   AstarPathfinding(typename UserState::Actor* actor = nullptr) : _state(NotInitialized), _cancelRequest(false), _acceptAnyCandidate(false)
@@ -87,7 +90,7 @@ public:
   void SetStartAndGoalStates(UserState& Start, const CandidateList& Candidates)
   {
     FreeSolutionNodes();
-    
+
     _cancelRequest = false;
 
     _start = new Node;
@@ -164,7 +167,9 @@ public:
     if (_state == Succeeded)
     {
       _secondarySolutions.emplace(_goal->userNode, GetSolution());
-      return &_secondarySolutions.at(_goal->userNode);
+      auto it = _secondarySolutions.find(_goal->userNode);
+      if (it != _secondarySolutions.end())
+        return &(it->second);
     }
     for (const UserState& candidate : _secondaryGoals)
     {
@@ -213,6 +218,10 @@ public:
 
         for (; successorIt != successorEnd; ++successorIt)
         {
+          // Skip the successor unless it's part of the scope or goals
+          if (scope && !scope(**successorIt) && !(_goal->userNode == **successorIt))
+            continue ;
+
           Node* successor = new Node();
 
           successor->userNode = *(*successorIt);

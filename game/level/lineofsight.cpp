@@ -1,4 +1,4 @@
-#include "../levelgrid.h"
+#include "../pathfinding/levelgrid.h"
 #include "../dynamicobject.h"
 #include <cmath>
 #include <QLineF>

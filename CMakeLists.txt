@@ -79,8 +79,6 @@ set(PROJECT_SOURCES
         game/level/metrics.cpp
         game/leveltask.h
         game/leveltask.cpp
-        game/levelgrid.h
-        game/levelgrid.cpp
         game/dynamicobject.h
         game/dynamicobject.cpp
         game/character.h
@@ -225,6 +223,18 @@ set(PROJECT_SOURCES
         game/animationSequence/animationsequence.cpp
         game/animationSequence/movementhintanimationpart.h
         game/animationSequence/movementhintanimationpart.cpp
+        game/pathfinding/caselocker.h
+        game/pathfinding/astar.hpp
+        game/pathfinding/levelgrid.h
+        game/pathfinding/levelgrid.cpp
+        game/pathfinding/zonegrid.h
+        game/pathfinding/zonegrid.cpp
+        game/pathfinding/zonegrid_prepare.cpp
+        game/pathfinding/zonegrid_findpath.cpp
+        game/pathfinding/pathzone.h
+        game/pathfinding/pathzone.cpp
+        game/pathfinding/candidatesolution.h
+        game/pathfinding/candidatesolution.cpp
         editor/scripteditorcontroller.h
         editor/scripteditorcontroller.cpp
         editor/characterdialogeditor.h

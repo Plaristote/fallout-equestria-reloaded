@@ -5,7 +5,6 @@
 # include <QElapsedTimer>
 # include <QQmlListProperty>
 # include "tilemap/tilemap.h"
-# include "levelgrid.h"
 # include "timermanager.h"
 # include "soundmanager.h"
 

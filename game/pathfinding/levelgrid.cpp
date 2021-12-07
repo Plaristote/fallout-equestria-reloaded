@@ -1,10 +1,9 @@
 #include "levelgrid.h"
-#include "level/grid.h"
+#include "../level/grid.h"
 #include "tilemap/tilemap.h"
-#include "dynamicobject.h"
-#include "character.h"
-#include "objects/doorway.h"
-#include "astar.hpp"
+#include "../dynamicobject.h"
+#include "../character.h"
+#include "../objects/doorway.h"
 #include <cmath>
 #include <QLineF>
 #include <QRectF>
@@ -313,6 +312,11 @@ void LevelGrid::initializePathfinding()
     return ;
   for (auto& gridCase : grid)
   {
+    gridCase.position.z = tilemap->getFloor();
+    gridCase.clearConnections();
+    if (!isAvailable(&gridCase))
+      continue ;
+
     bool hasLeft  = gridCase.position.x - 1 >= 0;
     bool hasRight = gridCase.position.x + 1 < size.width();
     bool hasUp    = gridCase.position.y - 1 >= 0;
@@ -336,8 +340,6 @@ void LevelGrid::initializePathfinding()
     bool leftWalled      = left && left->vwall;
     bool rightWalled     = gridCase.vwall;
 
-    gridCase.position.z = tilemap->getFloor();
-    gridCase.clearConnections();
     if (!upLeftWalled    && isAvailable(upLeft) && !(!isAvailable(left) && !isAvailable(up)))
       gridCase.connectWith(upLeft);
     if (!upWalled        && isAvailable(up))
@@ -355,55 +357,6 @@ void LevelGrid::initializePathfinding()
     if (!downRightWalled && isAvailable(downRight) && !(!isAvailable(down) && !isAvailable(right)))
       gridCase.connectWith(downRight);
   }
-}
-
-bool LevelGrid::findPath(Point from, Point to, QList<Point>& path, CharacterMovement* character)
-{
-  return findPath(from, QVector<Point>{to}, path, character);
-}
-
-bool LevelGrid::findPath(Point from, const QVector<Point> &to, QList<Point> &path, CharacterMovement *character, bool quickMode)
-{
-  typedef AstarPathfinding<LevelGrid::CaseContent> Pathfinder;
-  Pathfinder        astar(character);
-  unsigned short    iterationCount = 0;
-  Pathfinder::State state;
-  CaseContent*      fromCase = getGridCase(from.x, from.y, from.z);
-  std::list<CaseContent> toCases;
-
-  for (const Point& candidate : to)
-  {
-    CaseContent* toCase = getGridCase(candidate.x, candidate.y, candidate.z);
-
-    if (toCase)
-      toCases.push_back(*toCase);
-  }
-  if (fromCase && toCases.size() > 0)
-  {
-    bool fromOccupiedBackup = fromCase->occupied;
-
-    fromCase->occupied = false;
-    path.clear();
-    astar.SetStartAndGoalStates(*fromCase, toCases);
-    if (quickMode)
-      astar.AcceptAnyCandidate();
-    while ((state = astar.SearchStep()) == Pathfinder::Searching && ++iterationCount < 2500);
-    if (iterationCount >= 2500)
-      qDebug() << "-> Pathfinding failed due too many iterations" << character->getPath() << static_cast<QPoint>(from);
-    auto* solution = astar.GetBestSolution();
-    if (solution)
-    {
-      for (auto& gridCase : *solution)
-        path << gridCase.position;
-      path.pop_front(); // first case is the starting point
-      fromCase->occupied = fromOccupiedBackup;
-      return true;
-    }
-    fromCase->occupied = fromOccupiedBackup;
-  }
-  else
-    qDebug() << "Pathfinding: invalid coordinates" << from << to;
-  return false;
 }
 
 std::list<LevelGrid::CaseContent*> LevelGrid::CaseContent::GetSuccessors(const CaseContent* parent, Actor* actor) const

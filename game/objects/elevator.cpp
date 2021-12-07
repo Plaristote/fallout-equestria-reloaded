@@ -31,22 +31,16 @@ void Elevator::setPositionB(QPoint position_, unsigned char floor_)
   emit elevatorChanged();
 }
 
-static LevelGrid::CaseContent* getGridCase(QPoint position, unsigned char floor)
-{
-  LevelGrid* grid = Game::get()->getLevel()->getFloorGrid(floor);
-
-  return grid ? grid->getGridCase(position) : nullptr;
-}
-
 void Elevator::disconnectCases()
 {
   if (isValid())
   {
-    auto* gridCaseA = getGridCase(positionA, floorA);
-    auto* gridCaseB = getGridCase(positionB, floorB);
+    auto& pathfinder = Game::get()->getLevel()->getPathfinder();
 
-    if (gridCaseA && gridCaseB)
-      gridCaseA->disconnectFrom(gridCaseB);
+    pathfinder.disconnectCases(
+      {positionA.x(), positionA.y(), floorA},
+      {positionB.x(), positionB.y(), floorB}
+    );
   }
 }
 
@@ -54,11 +48,12 @@ void Elevator::connectCases()
 {
   if (isValid())
   {
-    auto* gridCaseA = getGridCase(positionA, floorA);
-    auto* gridCaseB = getGridCase(positionB, floorB);
+    auto& pathfinder = Game::get()->getLevel()->getPathfinder();
 
-    if (gridCaseA && gridCaseB)
-      gridCaseA->connectWith(gridCaseB);
+    pathfinder.connectCases(
+      {positionA.x(), positionA.y(), floorA},
+      {positionB.x(), positionB.y(), floorB}
+    );
   }
 }
 

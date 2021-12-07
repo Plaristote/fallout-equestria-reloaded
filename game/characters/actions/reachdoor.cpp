@@ -9,12 +9,11 @@ bool ReachDoorAction::trigger()
       state = Done;
     else
     {
-      auto* level = Game::get()->getLevel();
-      auto* grid  = level->getGrid();
+      auto& grid = Game::get()->getLevel()->getPathfinder();
       auto candidates = doorway->getInteractionPositions();
 
       state = Interrupted;
-      if (grid->findPath(character->getPoint(), candidates, character->rcurrentPath(), character, true))
+      if (grid.findPath(character->getPoint(), candidates, character->rcurrentPath(), character, true))
         state = canMakeNextMovement() ? InProgress : Interrupted;
     }
     return state == Done || state == InProgress;

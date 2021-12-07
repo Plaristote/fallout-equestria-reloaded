@@ -70,7 +70,7 @@ public:
   };
 
   explicit LevelGrid(QObject *parent = nullptr);
-  ~LevelGrid();
+  ~LevelGrid() override;
 
   void initializeGrid(TileMap*);
   void initializePathfinding();
@@ -83,8 +83,6 @@ public:
   Q_INVOKABLE int            getCoverValue(int x, int y) const;
   Q_INVOKABLE TileMap*       getTilemap() const { return tilemap; }
 
-  bool findPath(Point from, const QVector<Point>& to, QList<Point>& path, CharacterMovement* character, bool quickMode = false);
-  bool findPath(Point from, Point to, QList<Point>& path, CharacterMovement* character);
   bool moveObject(DynamicObject*, int x, int y);
   bool insertObject(DynamicObject*, int x, int y);
   void extractObject(DynamicObject*);

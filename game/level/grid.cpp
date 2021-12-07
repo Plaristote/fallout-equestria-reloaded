@@ -43,6 +43,7 @@ void GridComponent::load(const QJsonObject& data)
   }
   else
     throw std::runtime_error("Could not load tilemap");
+  pathfinding.prepareZoneGrid(floors);
 }
 
 void GridComponent::save(QJsonObject& data) const

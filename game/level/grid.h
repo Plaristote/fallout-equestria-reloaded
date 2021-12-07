@@ -3,7 +3,8 @@
 
 # include <QObject>
 # include "levelbase.h"
-# include "../levelgrid.h"
+# include "../pathfinding/levelgrid.h"
+# include "../pathfinding/zonegrid.h"
 
 class TileLayer;
 
@@ -55,6 +56,8 @@ public:
     std::sort(list.begin(), list.end(), &GridComponent::isRenderedBefore);
   }
 
+  ZoneGrid& getPathfinder() { return pathfinding; }
+
 signals:
   void floorChanged();
 
@@ -76,6 +79,7 @@ private:
   QMap<DynamicObject*, QVector<QMetaObject::Connection>> objectObservers;
   unsigned char currentFloor = 0;
   QVector<LevelGrid*> floors;
+  ZoneGrid pathfinding;
 };
 
 #endif // GRIDCOMPONENT_H

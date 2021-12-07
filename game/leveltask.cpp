@@ -375,12 +375,12 @@ void LevelTask::addBloodStainAt(QPoint position_, unsigned char floor_)
 
 QVariantList LevelTask::previewPathTo(int x, int y)
 {
-  auto* grid  = getGrid();
+  auto& grid = getPathfinder();
   QList<Point> path;
   QVariantList result;
   Point target{x, y, static_cast<unsigned char>(getCurrentFloor())};
 
-  if (getPlayer() && grid->findPath(getPlayer()->getPoint(), target, path, getPlayer()))
+  if (getPlayer() && grid.findPath(getPlayer()->getPoint(), target, path, getPlayer()))
   {
     for (const auto& point : qAsConst(path))
       result.push_back(QPoint(point));
