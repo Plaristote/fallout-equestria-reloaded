@@ -55,12 +55,7 @@ static bool findPathToZone(
       return true;
     }
     else
-    {
       qDebug() << "-> findPathToZone found an exit towards target zone, but couldn't reach it.";
-      qDebug() << "--> Candidate lizt";
-      for (auto& i : candidates)
-        qDebug() << "---->" << i.position.x << i.position.y;
-    }
   }
   else
     qDebug() << "-> findPathToZone found no available exits towards target zone";
@@ -148,7 +143,7 @@ bool ZoneGrid::findPath(Point from, const QVector<Point> &to, QList<Point> &path
         LevelGrid::CaseContent*   stepCase = currentPath.size() ? getGridCase(currentPath.last()) : fromCase;
         unsigned short            iterationCount = 0;
 
-        astar.scope = [candidate](const LevelGrid::CaseContent& gridCase) { return candidate->zone->contains(gridCase.position); };
+        astar.scope = [candidate](const LevelGrid::CaseContent& gridCase) { return candidate->zone->contains(gridCase.position) || candidate->zone->neighbors(gridCase.position); };
         astar.SetStartAndGoalStates(*stepCase, candidates.candidateList(candidate->zone));
         if (quickMode)
           astar.AcceptAnyCandidate();

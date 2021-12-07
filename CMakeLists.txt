@@ -225,8 +225,12 @@ set(PROJECT_SOURCES
         game/animationSequence/movementhintanimationpart.cpp
         game/pathfinding/caselocker.h
         game/pathfinding/astar.hpp
+        game/pathfinding/preparecase.h
+        game/pathfinding/preparecase.cpp
         game/pathfinding/levelgrid.h
         game/pathfinding/levelgrid.cpp
+        game/pathfinding/levelgrid_prepare.cpp
+        game/pathfinding/levelgrid_casecontent.cpp
         game/pathfinding/zonegrid.h
         game/pathfinding/zonegrid.cpp
         game/pathfinding/zonegrid_prepare.cpp
