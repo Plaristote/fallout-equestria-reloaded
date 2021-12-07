@@ -7,7 +7,7 @@ Column {
   readonly property QtObject timeManager: gameController.timeManager
   property int remainingMinutes: 0
 
-  Component.onDestruction: game.player.setVariable("resting", false)
+  Component.onDestruction: gameController.player.setVariable("resting", false)
 
   function getIntervals() {
     return [
