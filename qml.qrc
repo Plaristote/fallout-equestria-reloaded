@@ -311,5 +311,6 @@
         <file>Credits.qml</file>
         <file>game/level/LayerRenderer.qml</file>
         <file>ui/RepeatTimer.qml</file>
+        <file>game/GameLoadManager.qml</file>
     </qresource>
 </RCC>

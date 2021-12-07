@@ -6,11 +6,13 @@ Button {
   property string name
   property bool   isNewSlot: false
   property bool   selected: false
-  property color  currentColor: selected ? "white" : "lightgreen"
+  property color  currentColor: selected ? "white" : "green"
 
   contentItem: Text {
     text: root.name
     color: root.currentColor
+    font.family: application.consoleFont.name
+    font.pointSize: 16
   }
 
   background: Rectangle {

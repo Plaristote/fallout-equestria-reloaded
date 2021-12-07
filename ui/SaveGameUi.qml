@@ -17,6 +17,7 @@ Pane {
     id: viewTitle
     text: title
     color: "white"
+    font.family: application.titleFont.name
     font.pointSize: 25
     anchors.topMargin: 10
     anchors.leftMargin: 10

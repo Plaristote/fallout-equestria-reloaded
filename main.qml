@@ -3,6 +3,7 @@ import QtQuick.Window 2.15
 import QtQuick.Controls 2.15
 import Qt.labs.settings 1.1
 import "ui"
+import "game"
 
 Window {
   id: application
@@ -14,7 +15,7 @@ Window {
 
   property bool isFullScreen: false
   property bool hasSavedGame: false // TODO
-  property string gameLoading
+  property alias gameLoading: gameLoadManager.gameLoading
   property alias currentView: mainView.currentItem
 
   Settings {
@@ -68,15 +69,7 @@ Window {
     }
   }
 
-  Timer {
-    interval: 500
-    running: gameLoading.length > 0
-    onTriggered: {
-      pushView("Game.qml");
-      gameManager.loadGame(gameLoading);
-      gameLoading = "";
-    }
-  }
+  GameLoadManager { id: gameLoadManager }
 
   property alias consoleFontName: consoleFont.name
   property alias titleFontName: titleFont.name

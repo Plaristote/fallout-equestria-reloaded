@@ -10,7 +10,7 @@ SaveGameUi {
 
   slots: [
     SavedGameListItem {
-      name: i18n.t("New save game")
+      name: i18n.t("New save")
       isNewSlot: true
       selected: root.selectedIndex == 0
       onClicked: root.selectedIndex = 0
@@ -45,16 +45,22 @@ SaveGameUi {
     }
   ]
 
-  Dialog {
+  ConfirmDialog {
     id: newSaveDialog
     title: i18n.t("New save")
     modal: true
     anchors.centerIn: parent
     standardButtons: Dialog.Ok | Dialog.Cancel
 
-    Row {
-      Text { text: i18n.t("Name") }
-      TextField { id: newSaveNameInput }
+    UiStyle.TerminalPane {
+      width: parent.width
+      height: 75
+      RowLayout {
+        anchors.fill: parent
+        anchors.margins: 10
+        TerminalLabel { text: i18n.t("Name") }
+        TerminalField { id: newSaveNameInput; Layout.fillWidth: true }
+      }
     }
 
     onAccepted: {
@@ -63,7 +69,7 @@ SaveGameUi {
     }
   }
 
-  Dialog {
+  ConfirmDialog {
     id: overwriteDialog
     title: i18n.t("Are you sure ?")
     anchors.centerIn: parent
