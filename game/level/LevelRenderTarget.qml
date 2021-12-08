@@ -100,7 +100,7 @@ Rectangle {
         visible: renderTarget.renderRoofs
         opacity: roof.visible ? 1 : 0
         x:       renderRect.x + (isFloor ? -width / 2 : 0)
-        y:       renderRect.y + (isFloor ? -renderTarget.wallHeight : 0)
+        y:       renderRect.y + (isFloor ? -renderTarget.wallHeight + renderTarget.wallHeight * renderTarget.levelController.currentFloor : 0)
         z:       99999999
         width:   renderRect.width
         height:  renderRect.height
