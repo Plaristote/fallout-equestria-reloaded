@@ -10,7 +10,9 @@
   "Weight": "Weight",
   "Drop": "Drop",
   "Inspect": "Inspect",
+  "no-path": "You can't go there.",
   "worldmap": {
+    "title": "wasteland",
     "places": {
       "random-desert-cabin": "a shack in the middle of the desert"
     }
@@ -111,6 +113,18 @@
     "read-old-book": "You skim through this book you're already familiar with.",
     "collected-ore": "You mined some ore.",
     "collected-ore-failure": "There's nothing left to mine."
+  },
+  "objects": {
+    "stool": "a stool",
+    "door": "a door",
+    "slot-machine": "a slot machine",
+    "chair": "a chair",
+    "stairs": "stairs",
+    "stairs-groundlevel": "stairs",
+    "stairs-toplevel": "stairs",
+    "bed": "a bed",
+    "shelf": "a shelf",
+    "pool-table": "a pool table"
   },
   "use-modes": {
     "use": "Use",
