@@ -13,7 +13,7 @@ CharacterDialog::CharacterDialog(QObject *parent) : QObject(parent)
   connect(this, &CharacterDialog::barterEnded, this, &CharacterDialog::onBarterEnded);
 }
 
-bool CharacterDialog::load(const QString& name, Character* player, Character* npc)
+bool CharacterDialog::load(const QString& name, Character* player, DynamicObject* npc)
 {
   QFile file(SCRIPTS_PATH + "/dialogs/" + name + ".json");
 
@@ -24,7 +24,8 @@ bool CharacterDialog::load(const QString& name, Character* player, Character* np
     translationGroup = "dialogs." + name;
     data             = QJsonDocument::fromJson(file.readAll()).object();
     script = new ScriptController(SCRIPTS_PATH + "dialogs/" + name + ".mjs");
-    barter->initialize(script, player, npc);
+    if (npc->isCharacter())
+      barter->initialize(script, player, reinterpret_cast<Character*>(npc));
     script->initialize(this);
     loadState(getEntryPoint());
     emit ready();
@@ -180,7 +181,7 @@ QStringList CharacterDialog::getAnswerList() const
 
 bool CharacterDialog::tryToBarter()
 {
-  if (barter->tryToBarter())
+  if (npc->isCharacter() && barter->tryToBarter())
   {
     emit barterStarted();
     return true;

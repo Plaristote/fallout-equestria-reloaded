@@ -12,20 +12,20 @@ class CharacterDialog : public QObject
 {
   Q_OBJECT
 
-  Q_PROPERTY(Character*  player         MEMBER player CONSTANT)
-  Q_PROPERTY(Character*  npc            MEMBER npc CONSTANT)
-  Q_PROPERTY(QString     stateReference MEMBER stateReference NOTIFY stateReferenceChanged)
-  Q_PROPERTY(QString     text           MEMBER text NOTIFY textChanged)
-  Q_PROPERTY(QStringList options        MEMBER options NOTIFY optionsChanged)
-  Q_PROPERTY(QString     mood           MEMBER mood NOTIFY moodChanged);
-  Q_PROPERTY(QString     ambiance       MEMBER ambiance NOTIFY ambianceChanged)
-  Q_PROPERTY(QStringList stateList      READ   getStateList NOTIFY stateListChanged)
-  Q_PROPERTY(QStringList answerList     READ   getAnswerList NOTIFY answerListChanged)
+  Q_PROPERTY(Character*     player         MEMBER player CONSTANT)
+  Q_PROPERTY(DynamicObject* npc            MEMBER npc CONSTANT)
+  Q_PROPERTY(QString        stateReference MEMBER stateReference NOTIFY stateReferenceChanged)
+  Q_PROPERTY(QString        text           MEMBER text NOTIFY textChanged)
+  Q_PROPERTY(QStringList    options        MEMBER options NOTIFY optionsChanged)
+  Q_PROPERTY(QString        mood           MEMBER mood NOTIFY moodChanged);
+  Q_PROPERTY(QString        ambiance       MEMBER ambiance NOTIFY ambianceChanged)
+  Q_PROPERTY(QStringList    stateList      READ   getStateList NOTIFY stateListChanged)
+  Q_PROPERTY(QStringList    answerList     READ   getAnswerList NOTIFY answerListChanged)
   Q_PROPERTY(BarterController* barter   READ   getBarterController NOTIFY barterControllerChanged)
 public:
   explicit CharacterDialog(QObject *parent = nullptr);
 
-  Q_INVOKABLE bool load(const QString& name, Character* player, Character* npc);
+  Q_INVOKABLE bool load(const QString& name, Character* player, DynamicObject* npc);
   Q_INVOKABLE void loadState(const QString& reference);
   void setAmbiance(const QString& value) { ambiance = value; emit ambianceChanged(); }
 
@@ -66,7 +66,7 @@ protected:
   BarterController* barter = nullptr;
   QJsonObject       data;
   Character*        player;
-  Character*        npc;
+  DynamicObject*    npc;
   QString           stateReference;
   QString           text;
   QStringList       options;

@@ -296,18 +296,28 @@ void InteractionComponent::initializeDialog(Character* npc)
   initializeDialog(npc, npc->getDialogName());
 }
 
-void InteractionComponent::initializeDialog(Character* npc, const QString& dialogName)
+void InteractionComponent::initializeDialog(DynamicObject* object, const QString& dialogName)
 {
-  Character*       player = Game::get()->getPlayer();
-  CharacterDialog* dialog = new CharacterDialog(this);
+  if (object)
+  {
+    Character*       player = Game::get()->getPlayer();
+    CharacterDialog* dialog = new CharacterDialog(this);
 
-  player->lookAt(npc);
-  npc->lookAt(player);
-  player->getFieldOfView()->setCharacterDetected(npc);
-  if (dialog->load(dialogName, player, npc))
-    emit startDialog(dialog);
+    player->lookAt(object);
+    if (object->isCharacter())
+    {
+      Character* npc = reinterpret_cast<Character*>(object);
+
+      npc->lookAt(player);
+      player->getFieldOfView()->setCharacterDetected(npc);
+    }
+    if (dialog->load(dialogName, player, object))
+      emit startDialog(dialog);
+    else
+      delete dialog;
+  }
   else
-    delete dialog;
+    qDebug() << "/!\\ Called level.initializeDialog with invalid parameters.";
 }
 
 

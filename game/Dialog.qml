@@ -54,20 +54,27 @@ Item {
     }
   ]
 
-  FaceDisplay {
-    mood:        controller.mood
-    ambiance:    controller.ambiance
-    theme:       controller.npc.statistics.faceTheme
-    hairStyle:   controller.npc.statistics.hairTheme
-    accessories: controller.npc.statistics.faceAccessories
-    color:       controller.npc.statistics.faceColor
-    coloured:    controller.npc.statistics.withFaceColor
-    hairColor:   controller.npc.statistics.hairColor
+  Loader {
     anchors.fill: faceForeground
     anchors.topMargin: 12
     anchors.leftMargin: 287
     anchors.rightMargin: 220
     anchors.bottomMargin: 6
+    sourceComponent: controller.npc.getObjectType() == "Character" ? faceDisplay : null
+  }
+
+  Component {
+    id: faceDisplay
+    FaceDisplay {
+      mood:        controller.mood
+      ambiance:    controller.ambiance
+      theme:       controller.npc.statistics.faceTheme
+      hairStyle:   controller.npc.statistics.hairTheme
+      accessories: controller.npc.statistics.faceAccessories
+      color:       controller.npc.statistics.faceColor
+      coloured:    controller.npc.statistics.withFaceColor
+      hairColor:   controller.npc.statistics.hairColor
+    }
   }
 
   BorderImage {
@@ -138,12 +145,19 @@ Item {
     }
   }
 
-  Barter {
+  Loader {
     id: barterMode
     anchors { left: parent.left; right: parent.right }
     y: parent.height
     height: bottomPartHeight
-    controller: root.controller.barter
-    onClosed: root.controller.barterEnded()
+    sourceComponent: controller.npc.getObjectType() === "Character" ? barterComponent : null
+  }
+
+  Component {
+    id: barterComponent
+    Barter {
+      controller: root.controller.barter
+      onClosed: root.controller.barterEnded()
+    }
   }
 }
