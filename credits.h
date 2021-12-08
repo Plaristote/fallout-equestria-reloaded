@@ -17,6 +17,7 @@ public:
   CreditPerson(QObject* parent = nullptr);
 
   void initialize(const QJsonObject&);
+  bool hasAssets() const { return assets.size() > 0; }
 
 private:
   QString     name, url;
@@ -32,6 +33,7 @@ public:
 
   Q_INVOKABLE unsigned short categoryCount(const QString&) const;
   Q_INVOKABLE CreditPerson*  person(const QString&, unsigned short index) const;
+  Q_INVOKABLE bool           categoryHasArtwork(const QString&) const;
 
 private:
   QStringList                           categories;

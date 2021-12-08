@@ -41,6 +41,16 @@ CreditPerson* Credits::person(const QString& category, unsigned short index) con
   return persons[category][index];
 }
 
+bool Credits::categoryHasArtwork(const QString& category) const
+{
+  for (auto* person : persons[category])
+  {
+    if (person->hasAssets())
+      return true;
+  }
+  return false;
+}
+
 CreditPerson::CreditPerson(QObject* parent) : QObject(parent)
 {
 }

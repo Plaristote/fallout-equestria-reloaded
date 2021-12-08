@@ -35,9 +35,12 @@ Rectangle {
 
   Component {
     id: categoryComponent
-    ColumnLayout {
+    GridLayout {
       property string  category: credits.categories[index]
       Layout.alignment: Qt.AlignCenter
+      columns:       2
+      columnSpacing: 5
+      rowSpacing:    5
 
       Text {
         text:                category
@@ -46,6 +49,7 @@ Rectangle {
         font.capitalization: Font.Capitalize
         color:               "orange"
         Layout.alignment:    Qt.AlignCenter
+        Layout.columnSpan:   2
       }
 
       Repeater {
@@ -54,24 +58,37 @@ Rectangle {
       }
 
       Item {
-        Layout.fillWidth: true
-        height: 40
+        Layout.preferredWidth:  40
+        Layout.preferredHeight: 40
+        Layout.columnSpan: 2
       }
     }
   }
 
   Component {
     id: personComponent
-    ColumnLayout {
-      property QtObject person: credits.person(parent.category, index)
+    Repeater {
+      property QtObject person_: credits.person(parent.category, index)
       Layout.alignment: Qt.AlignCenter
+      model: credits.categoryHasArtwork(parent.category) ? 2 : 1
+      delegate: Loader {
+        property QtObject person: person_
+        sourceComponent: index === 0 ? identityComponent : artworkComponent
+      }
+    }
+  }
+
+  Component {
+    id: identityComponent
+    ColumnLayout {
+      Layout.columnSpan: person.assets.length ? 1 : 2
 
       Label {
         text: person.name
         font.family:    application.titleFont.name
         font.pointSize: application.titleFont.pointSize + 6
         color:          "white"
-        Layout.alignment: Qt.AlignCenter
+        Layout.alignment: Qt.AlignLeft
       }
 
       TerminalToolButton {
@@ -79,25 +96,28 @@ Rectangle {
         text: "Homepage"
         visible: person.url.length > 0
         onClicked: Qt.openUrlExternally(person.url)
-        Layout.alignment: Qt.AlignCenter
-      }
-
-      RowLayout {
-        Layout.alignment: Qt.AlignCenter
-        Repeater {
-          model: Math.min(3, person.assets.length)
-          delegate: Image {
-            source: person.assets[index]
-            Layout.preferredWidth: Math.min(150, sourceSize.width)
-            Layout.preferredHeight: width
-            fillMode: Image.PreserveAspectFit
-          }
-        }
+        Layout.alignment: Qt.AlignLeft
       }
 
       Item {
-        Layout.fillWidth: true
-        height: 20
+        Layout.preferredHeight: 20
+        Layout.preferredWidth:  20
+      }
+    }
+  }
+
+  Component {
+    id: artworkComponent
+    RowLayout {
+      Layout.alignment: Qt.AlignCenter
+      Repeater {
+        model: Math.min(3, person.assets.length)
+        delegate: Image {
+          source: person.assets[index]
+          Layout.preferredWidth: Math.min(150, sourceSize.width)
+          Layout.preferredHeight: width
+          fillMode: Image.PreserveAspectFit
+        }
       }
     }
   }
