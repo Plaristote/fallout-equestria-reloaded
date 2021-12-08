@@ -20,11 +20,6 @@ bool CharacterSight::hasLineOfSight(const DynamicObject* other) const
   return hasSightFrom(other, getPoint());
 }
 
-bool CharacterSight::hasLineOfSight(DynamicObject *other) const
-{
-  return hasSightFrom(other, getPoint());
-}
-
 bool CharacterSight::hasSightFrom(const DynamicObject* other, Point pos)
 {
   if (other)

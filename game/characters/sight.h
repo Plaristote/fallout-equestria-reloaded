@@ -14,8 +14,7 @@ public:
   explicit CharacterSight(QObject *parent = nullptr);
   virtual ~CharacterSight();
 
-  Q_INVOKABLE bool  hasLineOfSight(DynamicObject*) const;
-  bool              hasLineOfSight(const DynamicObject*) const;
+  Q_INVOKABLE bool  hasLineOfSight(const DynamicObject*) const;
   bool              hasLineOfSight(Point target) const;
 
   static bool       hasSightFrom(const DynamicObject*, Point position);
