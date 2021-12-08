@@ -45,7 +45,7 @@ Item {
     id: gamepadCamera
     property real cumulatedXMovement: 0
     property real cumulatedYMovement: 0
-    property real threshold: 2
+    property real threshold: 1
 
     Connections {
       target: gamepad

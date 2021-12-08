@@ -31,6 +31,8 @@ Item {
     function onStartClicked() { openMenuAction.trigger() }
     function onLeftClicked() { previousTargetAction.trigger() }
     function onRightClicked() { nextTargetAction.trigger() }
+    function onBottomClicked() { openPipboyAction.trigger() }
+    function onUpClicked() { openCharacterSheetAction.trigger() }
   }
 
   Action {

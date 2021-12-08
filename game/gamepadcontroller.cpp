@@ -63,8 +63,8 @@ void GamepadController::CursorTimer::updateState()
 void GamepadController::updateCameraPosition()
 {
   long ticks = cameraTimer.ticks();
-  auto x = (cameraTimer.x * 25) * static_cast<double>(ticks);
-  auto y = (cameraTimer.y * 25) * static_cast<double>(ticks);
+  auto x = (cameraTimer.x / 25) * static_cast<double>(ticks);
+  auto y = (cameraTimer.y / 25) * static_cast<double>(ticks);
 
   if (x != 0.0)
     emit moveCameraXAxis(x);
