@@ -22,14 +22,12 @@ ShaderEffect {
       uniform lowp float qt_Opacity;
       void main() {
           lowp vec4 tex = texture2D(source, coord);
-          if (tex.a != 0.0) {
-            lowp float r = color.r + tex.r + tex.r;
-            lowp float g = color.g + tex.g + tex.g;
-            lowp float b = color.b + tex.b + tex.b;
-            gl_FragColor = vec4(r * 0.3, g * 0.3, b * 0.3, tex.a) * qt_Opacity;
-          }
-          else {
-            gl_FragColor = tex * qt_Opacity;
-          }
+          lowp float withAmbientColor = tex.a != 0.0 ? 1.0 : 0.0;
+          gl_FragColor = vec4(
+            tex.r + withAmbientColor * (color.r + tex.r + tex.r) * 0.3,
+            tex.g + withAmbientColor * (color.g + tex.g + tex.g) * 0.3,
+            tex.b + withAmbientColor * (color.b + tex.b + tex.b) * 0.3,
+            tex.a
+          ) * qt_Opacity;
       }"
 }

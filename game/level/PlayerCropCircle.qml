@@ -43,18 +43,14 @@ ShaderEffect {
           lowp float a = pow(x - centerX, 2.0);
           lowp float b = pow(y - centerY, 2.0);
           lowp float radius = diameter / 2.0;
+          lowp float pixelClipped     = withClipping && tex.a != 0.0 && a + b < pow(radius, 2.0) ? 0.0 : 1.0;
+          lowp float withAmbientColor = withAmbientColor && tex.a != 0.0 ? 1.0 : 0.0;
 
-          if (withClipping && tex.a != 0.0 && a + b < pow(radius, 2.0)) {
-            gl_FragColor = vec4(0.0, 0.0, 0.0, 0.0);
-          }
-          else if (withAmbientColor && tex.a != 0.0) {
-            lowp float r = ambientColor.r + tex.r + tex.r;
-            lowp float g = ambientColor.g + tex.g + tex.g;
-            lowp float b = ambientColor.b + tex.b + tex.b;
-            gl_FragColor = vec4(r * 0.3, g * 0.3, b * 0.3, tex.a) * qt_Opacity;
-          }
-          else {
-            gl_FragColor = tex * qt_Opacity;
-          }
+          gl_FragColor = vec4(
+            pixelClipped * (tex.r + withAmbientColor * (ambientColor.r + tex.r + tex.r) * 0.3),
+            pixelClipped * (tex.g + withAmbientColor * (ambientColor.g + tex.g + tex.g) * 0.3),
+            pixelClipped * (tex.b + withAmbientColor * (ambientColor.b + tex.b + tex.b) * 0.3),
+            pixelClipped * tex.a
+          ) * qt_Opacity;
       }"
 }
