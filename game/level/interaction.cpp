@@ -105,7 +105,7 @@ void InteractionComponent::swapMouseMode()
       mouseMode = MovementCursor;
       break ;
     default:
-      targetList.findNearbyTargets(objects);
+      targetList.findNearbyTargets(allDynamicObjects());
       mouseMode = InteractionCursor;
       break ;
   }
@@ -144,7 +144,7 @@ void InteractionComponent::onActiveItemChanged()
   if (activeItem && !activeItem->requiresTarget())
     useItemOn(nullptr);
   else if (activeItem)
-    targetList.findItemTargets(activeItem, objects, visibleCharacters);
+    targetList.findItemTargets(activeItem, visibleObjects, visibleCharacters);
 }
 
 int InteractionComponent::getTargetMode() const
@@ -189,7 +189,7 @@ void InteractionComponent::useSkill(const QString &skill)
     activeSkill = skill;
     mouseMode = TargetCursor;
     activeItem = nullptr;
-    targetList.findNearbyTargets(objects);
+    targetList.findNearbyTargets(allDynamicObjects());
     emit activeItemChanged();
     emit mouseModeChanged();
   }
@@ -377,13 +377,10 @@ QPoint InteractionComponent::getClickableOffsetFor(const DynamicObject *target) 
   {
     for (int y = 0 ; y < image.height() ; ++y)
     {
-      if (image.pixelColor(x, y) != Qt::transparent)
-      {
-        QPoint pixelPosition = position + QPoint(x, y);
+      QPoint pixelPosition = position + QPoint(x, y);
 
-        if (getObjectAt(pixelPosition) == target)
-          return pixelPosition;
-      }
+      if (image.pixelColor(x, y) != Qt::transparent && getObjectAt(pixelPosition) == target)
+        return pixelPosition;
     }
   }
   return position;

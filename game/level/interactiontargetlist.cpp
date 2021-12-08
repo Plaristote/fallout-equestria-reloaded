@@ -62,14 +62,18 @@ void InteractionTargetList::findItemTargets(InventoryItem* item, const QList<Dyn
     afterTargetUpdate();
 }
 
-void InteractionTargetList::findNearbyTargets(const QList<DynamicObject*>& objects)
+void InteractionTargetList::findNearbyTargets(const QVector<DynamicObject*> objects)
 {
   Character* player = Game::get()->getPlayer();
 
   reset();
   for (DynamicObject* object : objects)
   {
-    if (object->isVisible() && (player->getDistance(object) < 20))
+    bool isHiddenLevel     = object->getCurrentFloor() != player->getCurrentFloor();
+    bool isHiddenCharacter = isHiddenLevel || (object->isCharacter() && !player->getFieldOfView()->isDetected(reinterpret_cast<Character*>(object)));
+    bool isHiddenObject    = isHiddenCharacter || object->isHidden();
+
+    if (!isHiddenObject && player->getDistance(object) < 20)
       targets.push_back(object);
   }
   if (targets.size() > 0)

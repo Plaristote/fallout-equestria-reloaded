@@ -19,7 +19,7 @@ public:
   virtual void unregisterDynamicObject(DynamicObject* object);
   void reset();
   void findItemTargets(InventoryItem* item, const QList<DynamicObject*>& objects, const QList<Character*>& visibleCharacters);
-  void findNearbyTargets(const QList<DynamicObject*>& objects);
+  void findNearbyTargets(const QVector<DynamicObject*> objects);
 signals:
   void targetsUpdated();
   void cursorChanged();
