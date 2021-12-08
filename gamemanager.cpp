@@ -74,6 +74,7 @@ void GameManager::loadGame(const QString& path)
 
 void GameManager::saveGame(const QString& path)
 {
+  emit currentGame->requireScreenshot("./saves/" + path + ".png");
   currentGame->save();
   currentGame->getDataEngine()->saveToFile(path + ".json");
 }
