@@ -30,6 +30,7 @@
 #include "game/characters/actionqueue.h"
 #include "game/mousecursor.h"
 #include "game/gamepadcontroller.h"
+#include "game/savepreview.h"
 
 #include "cmap/statmodel.h"
 
@@ -79,6 +80,7 @@ int main(int argc, char *argv[])
 
   qmlRegisterType<I18n>("I18n", 1,0, "I18n");
   qmlRegisterType<Game>("Game", 1,0, "Controller");
+  qmlRegisterType<SavePreview>("Game", 1,0, "SavePreview");
   qmlRegisterType<StatModel>("Game", 1,0, "StatModel");
   qmlRegisterType<Sprite>("Game", 1,0, "Sprite");
   qmlRegisterType<DynamicObject>("Game", 1,0, "DynamicObject");
