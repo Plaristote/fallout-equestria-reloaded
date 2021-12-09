@@ -5,9 +5,8 @@ export class GuardComponent {
     this.taskName = "guardingTask";
     if (!this.model.hasVariable("guardX"))
       this.initialize();
+    this.enable();
     parent[this.taskName] = this.task.bind(this);
-    if (!this.model.tasks.hasTask(this.taskName))
-      this.model.tasks.addTask(this.taskName, 15000, 0);
   }
 
   initialize() {
@@ -15,7 +14,7 @@ export class GuardComponent {
     this.model.setVariable("guardY", this.model.position.y);
     this.model.setVariable("guardZ", this.model.floor);
   }
-  
+
   isAtGuardPosition() {
     return this.model.getVariable("guardX") === this.model.position.x
         && this.model.getVariable("guardY") === this.model.position.y
@@ -39,5 +38,14 @@ export class GuardComponent {
       );
       this.model.actionQueue.start();
     }
+  }
+
+  enable() {
+    if (!this.model.tasks.hasTask(this.taskName))
+      this.model.tasks.addTask(this.taskName, 15000, 0);
+  }
+
+  disable() {
+    this.model.tasks.removeTask(this.taskName);
   }
 }

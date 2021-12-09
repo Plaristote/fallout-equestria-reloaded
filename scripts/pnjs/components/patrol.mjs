@@ -9,9 +9,8 @@ export class PatrolComponent {
     this.model    = parent.model;
     this.taskName = "patrolTask";
     this.mode     = PatrolMode.Linear;
+    this.enable();
     parent[this.taskName] = this.task.bind(this);
-    if (!this.model.tasks.hasTask(this.taskName))
-      this.model.tasks.addTask(this.taskName, 15000, 0);
   }
 
   get patrolStep() {
@@ -38,5 +37,14 @@ export class PatrolComponent {
       this.model.actionQueue.pushReachNear(this.patrolSpots[i].x, this.patrolSpots[i].y, 3);
       this.model.actionQueue.start();
     }
+  }
+
+  enable() {
+    if (!this.model.tasks.hasTask(this.taskName))
+      this.model.tasks.addTask(this.taskName, 15000, 0);
+  }
+
+  disable() {
+    this.model.tasks.removeTask(this.taskName);
   }
 }
