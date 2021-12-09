@@ -51,11 +51,6 @@ float CharacterSight::getDistance(const DynamicObject* target) const
   return getDistance(target->getPosition());
 }
 
-float CharacterSight::getDistance(DynamicObject* target) const
-{
-  return getDistance(target->getPosition());
-}
-
 float CharacterSight::getDistance(QPoint other) const
 {
   auto self  = getPosition();
