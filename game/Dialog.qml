@@ -60,7 +60,7 @@ Item {
     anchors.leftMargin: 287
     anchors.rightMargin: 220
     anchors.bottomMargin: 6
-    sourceComponent: controller.npc.getObjectType() == "Character" ? faceDisplay : null
+    sourceComponent: controller.npc.getObjectType() == "Character" ? faceDisplay : objectDisplay
   }
 
   Component {
@@ -74,6 +74,19 @@ Item {
       color:       controller.npc.statistics.faceColor
       coloured:    controller.npc.statistics.withFaceColor
       hairColor:   controller.npc.statistics.hairColor
+    }
+  }
+
+  Component {
+    id: objectDisplay
+    Item {
+      Image {
+        anchors.centerIn: parent
+        source: controller.npc.spriteSource.length > 0 ? "file://" + controller.npc.spriteSource : ""
+        height: controller.npc.clippedRect.height
+        width:  controller.npc.clippedRect.width
+        sourceClipRect: controller.npc.clippedRect
+      }
     }
   }
 
