@@ -28,7 +28,6 @@ find_package(QT NAMES Qt6 Qt5 COMPONENTS Core Quick LinguistTools Gui Gamepad RE
 find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Quick LinguistTools Gui Gamepad REQUIRED)
 find_package(Qt5Multimedia REQUIRED)
 
-#set(TS_FILES falloutequestria_en_US.ts)
 set(QT_USE_QTMULTIMEDIA TRUE)
 
 set(PROJECT_SOURCES
@@ -258,27 +257,18 @@ set(PROJECT_SOURCES
         game.h
         game.cpp
         qml.qrc
-        ${TS_FILES}
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
-    qt_add_executable(falloutequestria
-        ${PROJECT_SOURCES}
-    )
-
-    qt_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES})
+  qt_add_executable(falloutequestria ${PROJECT_SOURCES})
 else()
-    if(ANDROID)
-        add_library(falloutequestria SHARED
-            ${PROJECT_SOURCES}
-        )
-    else()
-        add_executable(falloutequestria
-          ${PROJECT_SOURCES}
-        )
-    endif()
-
-    qt5_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES})
+  if(ANDROID)
+    add_library(falloutequestria SHARED ${PROJECT_SOURCES})
+  elseif(WIN32)
+    add_executable(falloutequestria WIN32 ${MercaFront_SRCS} ${PROJECT_SOURCES} resources.qrc)
+  else()
+    add_executable(falloutequestria ${PROJECT_SOURCES})
+  endif()
 endif()
 
 target_compile_definitions(falloutequestria
