@@ -90,22 +90,28 @@ bool TaskRunner::hasTask(const QString &name)
 
 void TaskRunner::addTask(const QString &name, qint64 interval, int iterationCount)
 {
-  Task task;
-
-  task.name = name;
-  task.interval = interval;
-  task.timeLeft = interval;
-  if (iterationCount < 1)
+  if (interval > 0)
   {
-    task.infinite = true;
-    task.iterationCount = 1;
+    Task task;
+
+    task.name = name;
+    task.interval = interval;
+    task.timeLeft = interval;
+    if (iterationCount < 1)
+    {
+      task.infinite = true;
+      task.iterationCount = 1;
+    }
+    else
+      task.iterationCount = iterationCount;
+    if (!updating)
+      tasks << task;
+    else
+      pendingAdditions << task;
   }
   else
-    task.iterationCount = iterationCount;
-  if (!updating)
-    tasks << task;
-  else
-    pendingAdditions << task;
+    qDebug() << "/!\\ Tried to add task" << name << "with interval=0";
+
 }
 
 bool TaskRunner::removeTask(const QString &name)
