@@ -1,11 +1,13 @@
 #ifndef  DIPLOMACY_HPP
 # define DIPLOMACY_HPP
 
+# include <QObject>
 # include <QString>
 # include "dataengine.h"
 
-class WorldDiplomacy
+class WorldDiplomacy : public QObject
 {
+  Q_OBJECT
 public:
   struct Faction
   {
@@ -23,7 +25,6 @@ public:
   typedef std::list<Faction> Factions;
 
   WorldDiplomacy(DataEngine&);
-  ~WorldDiplomacy(void);
 
   void     addFaction(const QString& name);
   Faction* getFaction(const QString& name);
@@ -33,6 +34,9 @@ public:
   void     setAsEnemy(bool set, unsigned int flag1, unsigned int flag2);
 
   void     initialize(void);
+
+signals:
+  void     update(const QStringList& factions, bool enemy);
 
 private:
   void     setAsEnemy(bool set, Faction& first, Faction& second);

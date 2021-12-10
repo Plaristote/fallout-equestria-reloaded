@@ -9,10 +9,6 @@ WorldDiplomacy::WorldDiplomacy(DataEngine& de) : _data_engine(de)
   _next_flag = 1;
 }
 
-WorldDiplomacy::~WorldDiplomacy()
-{
-}
-
 void WorldDiplomacy::initialize(void)
 {
   QJsonObject factions = _data_engine.getWorldDiplomacy();
@@ -25,9 +21,7 @@ void WorldDiplomacy::initialize(void)
     auto enemies = faction->toObject()["enemies"].toObject();
 
     for (auto enemy = enemies.begin() ; enemy != enemies.end() ; ++enemy)
-    {
       setAsEnemy(enemy.value().toBool(), enemy.key(), faction.key());
-    }
   }
 }
 
@@ -100,5 +94,5 @@ void WorldDiplomacy::setAsEnemy(bool set, Faction& first, Faction& second)
   firstData["enemies"].toObject().insert(second.name, set);
   secondData["enemies"].toObject().insert(first.name, set);
   _data_engine.setWorldDiplomacy(factions);
+  emit update({first.name, second.name}, set);
 }
-

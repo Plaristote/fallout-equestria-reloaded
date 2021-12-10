@@ -212,7 +212,7 @@ LevelDisplay {
     Text {
       anchors.top: parent.bottom; anchors.right: parent.right
       color: "white"
-      text: renderTarget.hoverTile !== null ? renderTarget.hoverTile[0] + '/' + renderTarget.hoverTile[1] : ''
+      text: renderTarget.hoverTile != null ? renderTarget.hoverTile[0] + '/' + renderTarget.hoverTile[1] : ''
     }
   }
 

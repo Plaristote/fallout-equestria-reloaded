@@ -1,4 +1,4 @@
-import QtQuick 2.12
+import QtQuick 2.15
 import "../ui"
 
 Item {
@@ -20,6 +20,13 @@ Item {
     onSelectProperty: root.selectProperty(selectedName)
     anchors { top: tabList.bottom; left: parent.left; bottom: parent.bottom; right: parent.right }
     visible: tabList.currentTab === "perks"
+  }
+
+  ReputationPane {
+    id: reputationPane
+    onSelectProperty: root.selectProperty(selectedName)
+    anchors { top: tabList.bottom; left: parent.left; bottom: parent.bottom; right: parent.right }
+    visible: tabList.currentTab === "reputation"
   }
 
   KillsPane {

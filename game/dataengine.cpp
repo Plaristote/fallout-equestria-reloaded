@@ -99,6 +99,8 @@ void DataEngine::setFactionReputationEnabled(const QString &faction, bool set)
 {
   QJsonObject factionData = diplomacy[faction].toObject();
 
+  if (hasReputation(faction))
+    factionData.insert("withReputation", false);
   factionData.insert("reputation", set);
   diplomacy.insert(faction, factionData);
   emit diplomacyUpdated();
@@ -107,6 +109,27 @@ void DataEngine::setFactionReputationEnabled(const QString &faction, bool set)
 bool DataEngine::hasFactionReputationEnabled(const QString &faction) const
 {
   return diplomacy[faction]["reputation"].toBool(false);
+}
+
+void DataEngine::addReputation(const QString &faction, int reputation)
+{
+  QJsonObject factionData = diplomacy[faction].toObject();
+
+  if (hasFactionReputationEnabled(faction))
+    factionData.insert("withReputation", true);
+  factionData.insert("reputationValue", factionData["reputationValue"].toInt() + reputation);
+  diplomacy.insert(faction, factionData);
+  emit diplomacyUpdated();
+}
+
+int DataEngine::getReputation(const QString& faction) const
+{
+  return diplomacy[faction]["reputationValue"].toInt(0);
+}
+
+bool DataEngine::hasReputation(const QString& faction) const
+{
+  return diplomacy[faction]["withReputation"].toBool(false);
 }
 
 QJsonObject DataEngine::getQuests() const

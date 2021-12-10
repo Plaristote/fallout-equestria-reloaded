@@ -17,6 +17,24 @@
       "random-desert-cabin": "a shack in the middle of the desert"
     }
   },
+  "factions": {
+    "diamond-dogs": { "name": "Diamond dogs" },
+    "sample-city": { "name": "Sample Town" },
+    "mordino": { "name": "Mordino Family " }
+  },
+  "reputation": {
+    "neutral": "neutral",
+    "liked": "accepted",
+    "liked+": "liked",
+    "liked++": "loved",
+    "liked+++": "adored",
+    "max": "idolatred",
+    "disliked": "mistrustful",
+    "disliked+": "disliked",
+    "disliked++": "hated",
+    "disliked+++": "abhored",
+    "min": "villified"
+  },
   "templates": {
 	  "title": "Pick your character",
 	  "create": "New character",
