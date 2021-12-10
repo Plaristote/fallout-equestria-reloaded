@@ -4,6 +4,7 @@ import "../ui"
 Item {
   id: root
   property QtObject characterSheet
+  property string selectedProperty
 
   signal selectProperty(string selectedName)
 
@@ -17,6 +18,7 @@ Item {
   PerksPane {
     id: perksPane
     characterSheet: root.characterSheet
+    selectedProperty: root.selectedProperty
     onSelectProperty: root.selectProperty(selectedName)
     anchors { top: tabList.bottom; left: parent.left; bottom: parent.bottom; right: parent.right }
     visible: tabList.currentTab === "perks"
@@ -24,6 +26,7 @@ Item {
 
   ReputationPane {
     id: reputationPane
+    selectedProperty: root.selectedProperty
     onSelectProperty: root.selectProperty(selectedName)
     anchors { top: tabList.bottom; left: parent.left; bottom: parent.bottom; right: parent.right }
     visible: tabList.currentTab === "reputation"
@@ -32,6 +35,7 @@ Item {
   KillsPane {
     id: killsPane
     characterSheet: root.characterSheet
+    selectedProperty: root.selectedProperty
     anchors { top: tabList.bottom; left: parent.left; bottom: parent.bottom; right: parent.right }
     visible: tabList.currentTab === "kills"
   }

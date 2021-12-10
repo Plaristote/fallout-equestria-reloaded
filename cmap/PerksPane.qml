@@ -4,6 +4,7 @@ import "qrc:/assets/ui" as UiStyle
 
 Pane {
   property QtObject characterSheet
+  property string selectedProperty
 
   id: perksPane
   background: UiStyle.TerminalPane {}

@@ -8,9 +8,25 @@ Pane {
   id: descriptionPanel
   background: UiStyle.PaperPane {}
 
+  function getName(name) {
+    switch (name.split('.')[0]) {
+    case "factions":
+      return i18n.t(name + '.name');
+    }
+    return i18n.t("cmap." + name);
+  }
+
+  function getDescription(name) {
+    switch (name.split('.')[0]) {
+    case "factions":
+      return i18n.t(name + '.description');
+    }
+    return i18n.t("cmap.descriptions." + name)
+  }
+
   Text {
     id: descriptionTitle
-    text: selectedProperty ? i18n.t("cmap." + selectedProperty) : i18n.t("Cutie Mark Acquisition Program")
+    text: selectedProperty ? getName(selectedProperty) : i18n.t("Cutie Mark Acquisition Program")
     font.family: application.titleFontName
     font.pointSize: 15
     font.letterSpacing: 2
@@ -43,7 +59,7 @@ Pane {
 
     Text {
       id: descriptionContent
-      text: i18n.t("cmap.descriptions." + selectedProperty)
+      text: getDescription(selectedProperty)
       wrapMode: Text.WordWrap
       width: parent.width
       horizontalAlignment: Text.AlignJustify

@@ -86,3 +86,13 @@ void CharacterDiplomacy::setAsFriendly(CharacterDiplomacy* other)
     emit diplomacyUpdated();
   }
 }
+
+int CharacterDiplomacy::getReputation() const
+{
+  Game::get()->getDataEngine()->getReputation(getFactionName());
+}
+
+void CharacterDiplomacy::addReputation(int value) const
+{
+  Game::get()->getDataEngine()->addReputation(getFactionName(), value);
+}

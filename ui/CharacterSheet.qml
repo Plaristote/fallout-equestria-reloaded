@@ -208,6 +208,7 @@ Pane {
     id: characterDataWidget
     CMAP.CharacterData {
       characterSheet: root.characterSheet
+      selectedProperty: root.selectedProperty
       onSelectProperty: root.selectedProperty = selectedName
     }
   }

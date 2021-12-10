@@ -40,6 +40,7 @@ public:
   Q_INVOKABLE void setFactionAsEnemy(const QString& faction, const QString& enemyFaction, bool set = true);
   Q_INVOKABLE void setFactionReputationEnabled(const QString& faction, bool set);
   Q_INVOKABLE bool hasFactionReputationEnabled(const QString& faction) const;
+  Q_INVOKABLE void showReputation(const QString& faction);
   Q_INVOKABLE bool hasReputation(const QString& faction) const;
   Q_INVOKABLE void addReputation(const QString& faction, int reputation);
   Q_INVOKABLE int  getReputation(const QString& faction) const;

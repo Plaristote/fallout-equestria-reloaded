@@ -6,6 +6,7 @@ import "qrc:/assets/ui" as UiStyle
 Pane {
   property QtObject dataEngine: gameManager.currentGame.dataEngine
   property var factions: dataEngine.getFactionList()
+  property string selectedProperty
 
   signal selectProperty(string selectedName)
 
@@ -43,13 +44,18 @@ Pane {
         property int label: !(index % 2)
         property int reputation: dataEngine.getReputation(faction)
         property string category: reputationCategory(reputation)
+        property string propertyName: `factions.${faction}`
 
         text: label ? i18n.t(`factions.${faction}.name`) : i18n.t(`reputation.${category}`)
         visible: reputation !== 0 && dataEngine.hasReputation(faction)
         font.family: application.consoleFont.name
         font.pointSize: application.consoleFont.tinySize
-        color: "white"
+        color: selectedProperty === propertyName ? "green" : "white"
         Layout.fillWidth: label
+        MouseArea {
+          anchors.fill: parent
+          onClicked: selectProperty(propertyName)
+        }
       }
     }
   }

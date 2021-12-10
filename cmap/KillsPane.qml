@@ -6,6 +6,7 @@ import "qrc:/assets/ui" as UiStyle
 Pane {
   property QtObject characterSheet
   property var killedRaces: characterSheet.getKilledRaces()
+  property string selectedProperty
 
   id: killsPane
   background: UiStyle.TerminalPane {}

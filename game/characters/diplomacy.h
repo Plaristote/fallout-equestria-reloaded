@@ -12,12 +12,14 @@ class CharacterDiplomacy : public CharacterStatistics
 public:
   explicit CharacterDiplomacy(QObject *parent = nullptr);
 
-  QString      getFactionName() const { return faction ? faction->name : QString(); }
+  Q_INVOKABLE QString getFactionName() const { return faction ? faction->name : QString(); }
   unsigned int getFactionFlag() const { return faction ? faction->flag : 0; }
   Q_INVOKABLE bool isAlly(const CharacterDiplomacy*) const;
   Q_INVOKABLE bool isEnemy(const CharacterDiplomacy*) const;
   Q_INVOKABLE void setAsEnemy(CharacterDiplomacy*);
   Q_INVOKABLE void setAsFriendly(CharacterDiplomacy*);
+  Q_INVOKABLE int getReputation() const;
+  Q_INVOKABLE void addReputation(int) const;
 
   void load(const QJsonObject&) override;
   void save(QJsonObject&) const override;
