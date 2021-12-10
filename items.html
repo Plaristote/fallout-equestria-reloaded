@@ -206,7 +206,7 @@
   preventStealing(character) {
     const npc = level.getObjectByName("MyNPC");
 
-    if (npc && npc.isAlive() && npc.hasLineOfSight(character)) {
+    if (npc &amp;&amp; npc.isAlive() &amp;&amp; npc.hasLineOfSight(character)) {
       level.addTextBubble(npc, "Hey ! Don't touch that !", 4000, "red");
       return false;
     }

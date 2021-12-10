@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <title>FoE Engine: Level design tutorial</title>
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+  <link href="css/blog-home.css" rel="stylesheet">
+  
+  <style>
+    .folder-list-table {
+      width: 100%;
+    }
+    .folder-list-table tr {
+      border: 1px lightgray solid;
+    }
+    .folder-list-table td {
+      padding: 2px;
+    }
+    .folder-list-table td:first-of-type {
+      font-family: monospace;
+      padding-right: 10px;
+    }  
+  
+    .end-chapter { height: 50px; }
+    .mono-span { font-family: monospace; display: inline-block; background-color: lightgray; padding: 1px; }
+    .code {
+      padding: 15px 10px;
+      margin: 0 -5px 20px;
+      background-color: lightgray;
+    }
+    .code-header {
+      background-color: lightgray;
+      border-bottom: 1px solid black;
+      padding: 2px 10px;
+      margin: 0 -5px;
+      font-family: monospace;
+      color: gray;
+    }
+    video {
+      margin: 10px 0 15px;
+    }
+    
+    .card-text.card-hint, .card-text.warning {
+      position: relative;
+      display: block;
+      border-radius: 15px;
+      background-color: rgba(255, 150, 0, 0.5);
+      padding: 10px;
+      margin: 10px;
+      padding-left: 60px;
+      margin-bottom: 20px;
+    }
+
+    .card-text.card-hint::before {
+      position: absolute;
+      left: 10px;
+      top: calc(50% - 20px);
+      content: "?";
+      display: block;
+      background-color: blue;
+      color: white;
+      width: 40px;
+      height: 40px;
+      text-align: center;
+      border-radius: 40px;
+      font-weight: bold;
+      padding-top: 2px;
+      font-size: 22px;
+      border: 2px solid white;
+    }
+    
+    .card-text.warning::before {
+      position: absolute;
+      left: 10px;
+      top: calc(50% - 20px);
+      content: "!";
+      display: block;
+      background-color: yellow;
+      color: black;
+      width: 40px;
+      height: 40px;
+      text-align: center;
+      border-radius: 40px;
+      font-weight: bold;
+      padding-top: 2px;
+      font-size: 22px;
+      border: 2px solid black;
+    }
+
+  </style>
+</head>
+
+<body style="padding-top:0">
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+      <a class="navbar-brand" href="./index.html"><h3>Fallout Equestria Engine</h3>Game Editor tutorial</a>
+    </div>
+  </nav>
+
+  <!-- Page Content -->
+  <div class="container">
+    <div class="row">
+      <!-- Blog Entries Column -->
+      <div class="col-md-8" id="getting-started">
+        <h1 class="my-4">
+          Advanced NPC scripting
+        </h1>
+
+        <h2 class="my-4" id="c1">
+          1. Factions, diplomacy
+        </h2>
+        <div class="card mb-4">
+          <div class="card-body">
+
+            <h4 class="card-title" id="c1-1">Introduction</h4>
+            <p class="card-text">
+	      Factions are a tool to determine NPC behaviour towards the player character, or towards other NPCs.
+	      The most important use for factions is to determine whether NPCs are considered hostile or friendly:
+	      NPC from hostile factions will shoot each other on sight.
+	    </p>
+
+	    <p class="card-text">
+	      You may also use faction to gauge the level of general appreciation from NPC towards the player
+	      using the Reputation system. It is only an indicative value by default, but you may increase,
+	      decrease and use it in scripts to implement specific behaviours depending on whether the player
+	      is liked or disliked by a NPC's faction.
+	    </p>
+
+            <h4 class="card-title" id="c1-2">Faction management</h4>
+            <p class="card-text">
+	      Factions can be managed in the Game Editor by going into the <i>Diplomacy</i>. Here's an example
+	      of how to create a new faction:
+	    </p>
+
+            <video class="card-img-top" src="videos/diplomacy.webm" autoplay loop controls muted>
+            </video>
+
+	    <p class="card-text">
+	      What are all those controls about:
+	      <ul>
+                <li><b>Name and description</b> are displayed to the player when he checks out the reputation
+		       view in his character sheet.</li>
+		<li><b>Enable reputation</b> allows you to specify whether the faction uses the reputation
+		       system. If not enabled, the faction won't appear in the player's reputation view, no
+		       matter what happens. Otherwise, it will appear as soon as there's a reputation change,
+		       or whenver you manually make it appear through script.</li>
+		<li><b>Enemy list</b> allows you to define the factions that are hostile with the current
+			faction. Note that the relation is always be-directional: setting one faction hostile
+			towards another automatically sets the other faction hostile towards the first one.</li>
+	      </ul>
+	    </p>
+
+            <div class="end-chapter"></div>
+
+	    <h4 class="card-title" id="c1-3">Changing relationships</h4>
+	    <p class="card-text">
+              During the game, you may also update the relationships between factions. There are two ways of doing that:
+	    </p>
+
+	    <p class="card-text">
+	      Directly from an NPC object, using the <span class="mono-span">setAsEnemy</span> or
+	      <span class="mono-span">setAsFriendly</span>. For instance:
+	      <pre class="code"><code>game.player.setAsEnemy(npc)</code></pre>
+	      or
+	      <pre class="code"><code>game.player.setAsFriendly(npc)</code></pre>
+	    </p>
+
+	    <p class="card-text">
+              Using the <span class="mono-span">dataEngine</span> object and specifying the two factions' names:
+	      <pre class="code"><code>game.dataEngine.setFactionAsEnemy("player", "diamond-dogs", true)</code></pre>
+	    </p>
+
+            <div class="end-chapter"></div>
+
+	    <h4 class="card-title" id="c1-4">Scripted behaviours on relation changes</h4>
+	    <p class="card-text">
+	      As you may not always control the moment when a faction changes its relationship towards another,
+	      there is also a hook in the <span class="mono-span">main.mjs</span> script that you can use to react
+	      to such changes:
+	    </p>
+
+	    <div class="code-header">scripts/main.mjs</div>
+	    <pre class="code"><code>class Game {
+  diplomacyUpdate(factions, hostility) {
+    const includesPlayer = factions.indexOf("player") &gt;= 0;
+    const includesCitysample = factions.indexOf("city-sample") &gt;= 0;
+
+    if (hostility &amp;&amp; includesPlayer &amp;&amp; includesCitysample) {
+      game.dataEngine.setFactionAsEnemy("player", "mordino", true);
+    }
+  }
+}
+
+export function create(model) {
+  return new Game(model);
+}
+	    </code></pre>
+
+	    <p class="card-text">
+	      In this example, the <i>mordino</i> faction is a sub-set of the <i>city-sample</i> one:
+	      we want the player to be able
+	      to start a fight with <i>mordino</i> without declaring war to the whole town of <i>city-sample</i>.
+	      However, when the player becomes an enemy of the town, then the <i>mordino</i> faction will join in
+	      against the player.
+	    </p>
+
+            <div class="end-chapter"></div>
+
+	    <h4 class="card-title" id="c1-5">Reputation</h4>
+	    <p class="card-text">
+	      There are three useful method you need to know to manage the player's reputation towards
+	      other factions:
+	      <ul>
+                <li><span class="mono-span">game.dataEngine.addReputation(faction, value)</span> allows you to
+			add or remove reputation with the corresponding faction.</li>
+		<li><span class="mono-span">game.dataEngine.getReputation(faction)</span> will return the
+			current player's reputation towards a faction.</li>
+		<li><span class="mono-span">game.dataEngine.showReputation(faction)</span> will have the faction's
+			reputation shown in the player's character sheet. This is useful to let the player know
+			that he discovered a faction, even if he doesn't have a reputation yet towards them.</li>
+	      </ul>
+	    </p>
+
+            <div class="end-chapter"></div>
+	  </div>
+	</div>
+
+        <h2 class="my-4" id="c2">
+          2. NPCs Routines
+        </h2>
+        <div class="card mb-4">
+          <div class="card-body">
+	  </div>
+	</div>
+
+        <h2 class="my-4" id="c3">
+          3. Commonalities
+        </h2>
+        <div class="card mb-4">
+          <div class="card-body">
+
+            <h4 class="card-title" id="c3-1">How to start a specific dialog from script</h4>
+            <p class="card-text">
+              Sometimes, you may want an NPC to initiate a dialog themselves. This can be done easily by calling
+              <span class="mono-span">level.initializeDialog(character)</span>, which will immediately open a
+              dialog with the character specified as a parameter.
+            </p>
+
+            <p class="card-text">
+              Additionally, you may want to use a different dialog, rather than the character's regular dialog.
+              You can do this by specifying the dialog as a second parameter: <span class="mono-span">level.initializeDialog(object, dialog)</span>.<br/>
+              This alternative can also be used with non-character objects, which can be useful to use the dialog interface in situations that don't
+              actually involved a NPC.
+            </p>
+
+            <div class="end-chapter"></div>
+
+            <h4 class="card-title" id="c3-2">Trigger a behaviour when a character is detected</h4>
+            <p class="card-text">
+              Your NPC can also react to character detection using the <span class="mono-span">onCharacterDetected</span> hook,
+              such as:
+            </p>
+
+            <pre class="code"><code>class MyNPC extends CharacterBehaviour {
+  onCharacterDetected(character) {
+    level.addTextBubble(this.model, `I see you ${character.statistics.name} !`, 5000);
+  }
+}</code></pre>
+
+            <p class="card-text">
+              Alternatively, you may want to trigger an action when a character is around, but not directly
+              on detection. For instance, when a character needs to be in close range before your behaviour triggers.
+            </p>
+
+            <p class="card-text">
+              In that case, what you need is <span class="mono-span">onObservationTriggered</span>, such as:
+            </p>
+
+            <pre class="code"><code>class MyNPC extends CharacterBehaviour {
+  initialize() {
+    this.autoTalkEnabled = true;
+  }
+
+  onObservationTriggered() {
+    bool isPlayerInRange = this.model.fieldOfView.isDetected(game.player) &amp;&amp; this.model.getDistance(game.player) &lt; 6;
+  
+    if (isPlayerInRange &amp;&amp; this.autoTalkEnabled) {
+      this.autoTalkEnabled = false;
+      level.initializeDialog(this.model);
+    }
+  }
+
+  get autoTalkEnabled() {
+    return this.model.hasVariable("autotalk");
+  }
+  
+  set autoTalkEnabled(value) {
+    value ? this.model.setVariable("autotalk", 1) : this.model.unsetVariable("autotalk");
+  }
+}</code></pre>
+
+            <p class="card-text">
+              This script ensures the player is detected and in range, then initiates a dialog with him. To avoid the dialog
+              initiating again and again, we also defined the <i>autotalk</i> variable on the NPC.
+            </p>
+
+            <div class="end-chapter"></div>
+
+            <h4 class="card-title" id="c3-3">How to know if a character sees another character</h4>
+            <p class="card-text">
+              There are several way a character can be aware o other characters: for instance, they may have a direct line o sight on those,
+              or they may just know that they're around (because they saw them earlier).
+            </p>
+
+            <p class="card-text">
+              <span class="mono-span">character.fieldOfView.isDetected(target)</span> can be used to know if a character knows that another one is around.<br/>
+              <span class="mono-span">character.hasLineOfSight(target)</span> can be used to know if a character can see another one.
+            </p>
+
+            <p class="card card-hint">
+              Note that merely having a line of sight doesn't mean a character is actually aware of another one's presence:
+              the other character might be sneaking.
+            </p>
+
+            <p class="card card-hint">
+              <span class="mono-span">hasLineOfSight</span> can be used on any object, even non-character ones.
+            </p>
+
+            <div class="end-chapter"></div>
+
+            <h4 class="card-title" id="c3-4">Having a NPC prevent certain player actions</h4>
+            <p class="card-text">
+              Some common scenario for this would be preventing a character from opening a door when an NPC is guarding it.
+              While you could create a script for the door, it sometimes make more sense to implement this behaviour directly
+              in the NPC script.<br/>
+              We do that by using the <span class="mono-span">overrideBehaviour</span> helper, such as this:
+            </p>
+
+            <pre class="code javascript"><code>import {CharacterBehaviour} from "./character.mjs";
+import {overrideBehaviour} from "../behaviour/override.mjs";
+
+class Guard extends CharacterBehaviour {
+  constructor(model) {
+    super(model);
+    this.model.tasks.addTask("initializeDoorGuarding", 100, 1); // It is important to do this in a task, as constructors
+                                                                // are called while objects are loading, and the door might
+                                                                // not have been loaded yet.
+  }
+  
+  initializeDoorGuarding() {
+    const door = level.findObject("path.to.my.door").getScriptObject(); // retrieve the door's script controller
+    
+    overrideBehaviour(door, "onUse", this.onUseDoor.bind(this));
+  }
+  
+  onUseDoor(user) {
+    const canSee = this.model.isAlive() &amp;&amp; this.model.hasLineOfSight(user) &amp;&amp; this.model.fieldOfView.isDetected(user);
+
+    if (canSee &amp;&amp; user === player) {
+      level.addTextBubble(this.model, "I'm guarding this door, don't open it !", 4000);
+      return true; // we return true to prevent the default behaviour from running
+    }
+    return false; // when we return false, the default behaviour will take over
+  }
+}</code></pre>
+
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+      
+      <style>
+      .card-body.card-index a {
+        display: block;
+      }
+      
+      .card-body.card-index .chapter {
+        padding-left: 10px;
+        padding-bottom: 5px;
+      }
+      
+      .card-body.card-index .section {
+        padding-left: 20px;
+      }
+      </style>
+      
+        <div class="card my-4">
+          <h5 class="card-header">Advanced NPC Scripting</h5>
+          <div class="card-body card-index">
+            <a href="#c1">1. Factions, diplomacy</a>
+            <div class="chapter">
+              <a href="#c1-1">1.1 Introduction</a>
+              <a href="#c1-2">1.2 Faction management</a>
+              <a href="#c1-3">1.3 Changing relationships</a>
+              <a href="#c1-4">1.4 Scripted relation changes</a>
+              <a href="#c1-5">1.5 Reputation</a>
+            </div>
+            <a href="#c2">2. NPCs Routines</a>
+            <div class="chapter">
+              <a href="#c2-1">2.1 TODO</a>
+            </div>
+            <a href="#c3">3. Commonalities</a>
+            <div class="chapter">
+              <a href="#c3-1">3.1 Start dialog from script</a>
+              <a href="#c3-2">3.2 Trigger behaviour on detection</a>
+              <a href="#c3-3">3.3 Character awareness</a>
+              <a href="#c3-4">3.4 NPC guarding objects</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Footer -->
+  <footer class="py-5 bg-dark">
+    <div class="container">
+      <p class="m-0 text-center text-white">Copyleft &copy; FoE Engine</p>
+    </div>
+    <!-- /.container -->
+  </footer>
+</body>
+</html>

@@ -357,7 +357,7 @@ export function create(model) {
     const distance = this.model.getDistance(game.player);
     
     if (distance > requiredDistance) {
-      const actions = this.model.getActions();
+      const actions = this.model.actionQueue;
 
       actions.reset();
       actions.pushReach(game.player, requiredDistance);
@@ -375,7 +375,7 @@ export function create(model) {
             </p>
             
             <p class="card-text">
-            In the <span class="mono-span">followPlayer</span> method, we order our NPC to ensure that the distance between him and the player is less than 3. When the distance goes over the limit, we fetch the action queue using <span class="mono-span">this.model.getActions()</span>, and set up a <span class="mono-span">Reach</span> action.
+            In the <span class="mono-span">followPlayer</span> method, we order our NPC to ensure that the distance between him and the player is less than 3. When the distance goes over the limit, we fetch the action queue using <span class="mono-span">this.model.actionQueue</span>, and set up a <span class="mono-span">Reach</span> action.
             </p>
             
             <p class="card-text">
@@ -471,7 +471,7 @@ export function create(model) {
     if (isThreatened) {
       this.model.movementMode = "running";
       this.model.moveAway(this.fleeingCharacter);
-      if (this.model.getActions().isEmpty())
+      if (this.model.actionQueue.isEmpty())
         level.passTurn(this.model);
     }
     else
@@ -486,7 +486,7 @@ export function create(model) {
             
             <p class="card-text">
               This new code also handles another scenario: what if our NPC is stuck and cannot move away ? Then, the action queue won't be able to start, it will be empty, even after calling <span class="mono-span">moveAway</span>... and our NPC won't ever pass his turn.<br/>
-              To prevent that from happening, we check that the action queue is active by calling <span class="mono-span">this.model.getActions().isEmpty()</span>. If the action queue is empty, we pass our NPC turn by calling <span class="mono-span">level.passTurn(this.model)</span>.
+              To prevent that from happening, we check that the action queue is active by calling <span class="mono-span">this.model.actionQueue.isEmpty()</span>. If the action queue is empty, we pass our NPC turn by calling <span class="mono-span">level.passTurn(this.model)</span>.
             </p>
             
             <h5 class="card-title" id="c1-7-2">1.7.2 Diplomacy</h5>
@@ -542,7 +542,7 @@ export function create(model) {
     if (isThreatened) {
       this.model.movementMode = "running";
       this.model.moveAway(this.fleeingCharacter);
-      if (this.model.getActions().isEmpty())
+      if (this.model.actionQueue.isEmpty())
         level.passTurn(this.model);
     }
     else
