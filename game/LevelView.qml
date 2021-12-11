@@ -97,7 +97,7 @@ LevelDisplay {
       const withVisibleMenu = mainMenu.visible;
       mainMenu.visible = levelHud.visible = false;
       root.grabToImage(result => {
-        mainMenu.visible = withVisibleMenu;
+        mainMenu.visible = true;
         levelHud.visible = true;
         result.saveToFile(path);
       });
