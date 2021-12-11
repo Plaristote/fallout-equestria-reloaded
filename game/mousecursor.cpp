@@ -10,6 +10,15 @@
 
 static const QString cursorPath = ASSETS_PATH + "ui/cursors/";
 
+static bool hasHoveredTile(LevelTask* level)
+{
+  const TileLayer* layer = level->getGrid()->getTilemap()->getLayer("ground");
+  const QSize      size  = layer ? layer->getSize() : QSize();
+  const QRect      rect(0, 0, size.width(), size.height());
+
+  return rect.contains(level->getHoveredTilePosition());
+}
+
 MouseCursor* MouseCursor::instance = nullptr;
 
 MouseCursor::MouseCursor(QGuiApplication* parent) : QObject(parent)
@@ -52,7 +61,7 @@ void MouseCursor::updatePointerType()
     switch (level->getMouseMode())
     {
     case InteractionComponent::MovementCursor:
-      if (level->getHoveredTilePosition() == QPoint(-1, -1))
+      if (!hasHoveredTile(level))
         setCurrentPointer(NormalPointer);
       else
         setCurrentPointer(EmptyPointer);
