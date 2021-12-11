@@ -64,7 +64,7 @@ void ZoneComponent::registerZone(TileZone* zone)
     floor->getTilemap()->addTileZone(zone);
     floor->registerZone(zone);
     connect(zone, &TileZone::enteredZone,  this, &ZoneComponent::onZoneEntered, Qt::QueuedConnection);
-    connect(zone, &TileZone::exitedZone,   this, &ZoneComponent::onZoneExited,  Qt::QueuedConnection);
+    connect(zone, &TileZone::exitedZone,   this, &ZoneComponent::onZoneExited);
     connect(zone, &TileZone::floorChanged, this, &ZoneComponent::onZoneChangedFloor);
   }
 }
@@ -144,7 +144,6 @@ void ZoneComponent::onZoneExited(DynamicObject* object, TileZone* zone)
       script->call("onZoneExited", QJSValueList() << zone->getName() << object->asJSValue());
   }
 }
-
 
 QJSValue ZoneComponent::getZoneOccupants(TileZone* zone)
 {
