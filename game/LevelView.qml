@@ -11,10 +11,10 @@ LevelDisplay {
   enabled: !gameController.fastPassTime
 
   function openMenu() {
-    levelController.paused = !mainMenu.visible;
+    levelController.paused = !mainMenu.activated;
     if (interactionMenu.visible)
       interactionMenu.interactionTarget = null;
-    mainMenu.visible = !mainMenu.visible;
+    mainMenu.activated = !mainMenu.activated;
   }
 
   onHasOverlayChanged: if (application.currentView === root) { levelController.paused = hasOverlay }
@@ -32,8 +32,8 @@ LevelDisplay {
     onSkilldexTriggered:       skilldex.visible = !skilldex.visible
     onDebugModeTriggered:      debugConsole.visible = !debugConsole.visible
     onBackTriggered: {
-      if  (mainMenu.visible)
-        mainMenu.visible = false;
+      if  (mainMenu.activated)
+        mainMenu.activated = false;
       else if (interactionMenu.visible)
         interactionMenu.interactionTarget = null;
       else if (countdownDialog.visible)
@@ -94,10 +94,9 @@ LevelDisplay {
     target: gameController
 
     function onRequireScreenshot(path) {
-      const withVisibleMenu = mainMenu.visible;
       mainMenu.visible = levelHud.visible = false;
       root.grabToImage(result => {
-        mainMenu.visible = true;
+        mainMenu.visible = mainMenu.activated;
         levelHud.visible = true;
         result.saveToFile(path);
       });
@@ -229,7 +228,7 @@ LevelDisplay {
   Hud.Menu {
     id: mainMenu
     anchors.centerIn: parent
-    visible: false
+    activated: false
   }
 
   Component {

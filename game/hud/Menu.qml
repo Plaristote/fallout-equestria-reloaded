@@ -5,9 +5,12 @@ import "../../ui"
 
 Pane {
   id: mainMenu
+  property bool activated: false
   width: 280
   height: 300
   background: UiStyle.Pane {}
+  onActivatedChanged: visible = activated
+  visible: activated
 
   Column {
     anchors.fill: parent
