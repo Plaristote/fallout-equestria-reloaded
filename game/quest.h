@@ -24,7 +24,7 @@ public:
   enum ObjectiveState { InProgress = 0, Done, Failed };
 
   explicit Quest(QObject *parent = nullptr);
-  ~Quest();
+  ~Quest() override;
 
   void initialize(const QString& name);
   void load(const QJsonObject&);

@@ -57,17 +57,26 @@ QJsonObject QuestManager::save() const
 void QuestManager::onCharacterKilled(Character* victim, Character* killer)
 {
   for (Quest* quest : qAsConst(list))
-    quest->onCharacterKilled(victim, killer);
+  {
+    if (quest->inProgress())
+      quest->onCharacterKilled(victim, killer);
+  }
 }
 
 void QuestManager::onItemPicked(InventoryItem* item)
 {
   for (Quest* quest : qAsConst(list))
-    quest->onItemPicked(item);
+  {
+    if (quest->inProgress())
+      quest->onItemPicked(item);
+  }
 }
 
 void QuestManager::onLevelChanged()
 {
   for (Quest* quest : qAsConst(list))
-    quest->onLevelChanged();
+  {
+    if (quest->inProgress())
+      quest->onLevelChanged();
+  }
 }

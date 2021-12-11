@@ -36,7 +36,7 @@ class Game : public StorableObject
   static Game* instance;
 public:
   explicit Game(QObject *parent = nullptr);
-  ~Game();
+  ~Game() override;
 
   Q_INVOKABLE QStringList getCharacterTemplateList() const;
   Q_INVOKABLE void prepareEditor();

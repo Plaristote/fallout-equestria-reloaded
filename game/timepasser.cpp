@@ -3,8 +3,11 @@
 
 TimePasser::TimePasser(Game* game) : game(game)
 {
+  initializationTimer.setInterval(700);
+  initializationTimer.setSingleShot(true);
   timer.setInterval(30);
   timer.setSingleShot(true);
+  connect(&initializationTimer, &QTimer::timeout, this, &TimePasser::startTimePassing);
   connect(&timer, &QTimer::timeout, this, &TimePasser::tick);
 }
 
@@ -14,15 +17,20 @@ void TimePasser::advanceTime(unsigned int minutes)
     remainingMinutes = remainingMinutes + (minutes - remainingMinutes);
   if (!timer.isActive() && remainingMinutes > 0)
   {
-    timer.start();
+    initializationTimer.start();
     emit stateChanged();
   }
+}
+
+void TimePasser::startTimePassing()
+{
+  timer.start();
 }
 
 void TimePasser::advanceTime(unsigned int minutes, QJSValue callback)
 {
   advanceTime(minutes);
-  if (timer.isActive() && callback.isCallable())
+  if (isActive() && callback.isCallable())
     callbacks << callback;
 }
 

@@ -14,7 +14,7 @@ class TimePasser : public QObject
 public:
   TimePasser(Game* game);
 
-  bool isActive() const { return timer.isActive(); }
+  bool isActive() const { return timer.isActive() || initializationTimer.isActive(); }
   void advanceTime(unsigned int minutes);
   void advanceTime(unsigned int minutes, QJSValue callback);
 
@@ -22,6 +22,7 @@ signals:
   void stateChanged();
 
 private slots:
+  void startTimePassing();
   void tick();
 
 private:
@@ -29,6 +30,7 @@ private:
 
   Game*        game;
   QTimer       timer;
+  QTimer       initializationTimer;
   unsigned int remainingMinutes = 0;
   QList<QJSValue> callbacks;
 };
