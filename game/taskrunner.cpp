@@ -118,14 +118,14 @@ bool TaskRunner::removeTask(const QString &name)
 {
   if (!updating)
   {
-    for (auto it = tasks.begin() ; it != tasks.end() ; ++it)
+    for (auto it = tasks.begin() ; it != tasks.end() ;)
     {
       if (it->name == name)
-      {
-        tasks.erase(it);
-        return true;
-      }
+        it = tasks.erase(it);
+      else
+        ++it;
     }
+    return true;
   }
   return false;
 }
