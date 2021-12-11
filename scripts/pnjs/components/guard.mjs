@@ -5,7 +5,6 @@ export class GuardComponent {
     this.taskName = "guardingTask";
     if (!this.model.hasVariable("guardX"))
       this.initialize();
-    this.enable();
     parent[this.taskName] = this.task.bind(this);
   }
 
@@ -13,6 +12,7 @@ export class GuardComponent {
     this.model.setVariable("guardX", this.model.position.x);
     this.model.setVariable("guardY", this.model.position.y);
     this.model.setVariable("guardZ", this.model.floor);
+    this.enable();
   }
 
   isAtGuardPosition() {
