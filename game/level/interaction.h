@@ -48,8 +48,8 @@ public:
 
   explicit InteractionComponent(QObject *parent = nullptr);
 
-  virtual void registerDynamicObject(DynamicObject*);
-  virtual void unregisterDynamicObject(DynamicObject*);
+  virtual void registerDynamicObject(DynamicObject*) override;
+  virtual void unregisterDynamicObject(DynamicObject*) override;
 
   bool             openInteractionMenu(DynamicObject* target);
   Q_INVOKABLE void openCountdownDialog(InventoryItem* item);
