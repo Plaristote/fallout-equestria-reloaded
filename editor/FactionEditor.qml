@@ -16,6 +16,12 @@ Pane {
     reputationCheckbox.checked = dataEngine.hasFactionReputationEnabled(currentFaction);
   }
 
+  function save() {
+    dataEngine.saveToFile("./assets/game.json")
+    scriptController.setTranslation(`factions.${currentFaction}.name`, descriptionTitle.text)
+    scriptController.setTranslation(`factions.${currentFaction}.description`, descriptionContent.text)
+  }
+
   UiStyle.CustomDialog {
     id: newEnemyDialog
     title: "Add enemy"
@@ -49,7 +55,7 @@ Pane {
         width: parent.width
         spacing: 10
 
-        Text {
+        TextArea {
           width: parent.width
           id: descriptionTitle
           text: i18n.t(`factions.${currentFaction}.name`)
@@ -57,6 +63,7 @@ Pane {
           font.pointSize: 15
           font.letterSpacing: 2
           wrapMode: Text.WordWrap
+          color: "black"
         }
 
         Flickable {
@@ -64,13 +71,14 @@ Pane {
           contentHeight: descriptionContent.height
           clip: true
           height: 200
-          Text {
+          TextArea {
             width: parent.width
             id: descriptionContent
             text: i18n.t(`factions.${currentFaction}.description`)
             wrapMode: Text.WordWrap
             font.family: application.consoleFontName
             font.pointSize: 8
+            color: "black"
           }
         }
       }

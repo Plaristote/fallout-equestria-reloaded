@@ -232,7 +232,6 @@ void ScriptEditorController::setTranslation(const QString &key, const QString &t
 
   if (file.open(QIODevice::ReadOnly))
   {
-    qDebug() << "UPDATING TRANsLATION FILE, key=" << key << ", text" << text;
     QJsonObject data = QJsonDocument::fromJson(file.readAll()).object();
     QStringList parts = key.split('.');
     std::function<void(QJsonObject&, QStringList)> recursive;

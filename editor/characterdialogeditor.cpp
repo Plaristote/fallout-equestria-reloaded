@@ -125,7 +125,7 @@ void CharacterDialogEditor::newState(const QString &name)
   QJsonObject state;
 
   state.insert("answers", QJsonArray());
-  state.insert("text", "");
+  state.insert("text", name);
   states.insert(name, state);
   data.insert("states", states);
   loadState(name);
@@ -141,7 +141,7 @@ void CharacterDialogEditor::newAnswer(const QString &name)
 
   if (!answers[name].isObject())
   {
-    QJsonObject answer;
+    QJsonObject answer{{"text", name}};
 
     answers.insert(name, answer);
     data.insert("answers", answers);

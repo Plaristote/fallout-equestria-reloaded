@@ -56,8 +56,13 @@ Item {
   Component {
     id: factionViewComponent
     FactionEditor {
+      id: factionEditor
       dataEngine: root.dataEngine
       currentFaction: root.currentFaction
+      Connections {
+        target: saveButton
+        function onClicked() { factionEditor.save() }
+      }
     }
   }
 
@@ -66,6 +71,5 @@ Item {
     anchors.bottom: parent.bottom
     anchors.right: parent.right
     text: "Save"
-    onClicked: dataEngine.saveToFile("./assets/game.json")
   }
 }

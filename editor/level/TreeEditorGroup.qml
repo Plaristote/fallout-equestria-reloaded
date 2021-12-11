@@ -8,6 +8,8 @@ ColumnLayout {
   id: column
   property string filter: ""
   property QtObject objectGroup
+  property var sortedGroups:  objectGroup ? getSortedList(objectGroup.groups, "name")        : []
+  property var sortedObjects: objectGroup ? getSortedList(objectGroup.objects, "objectName") : []
 
   spacing: 5
 
@@ -15,11 +17,18 @@ ColumnLayout {
   signal objectClicked(QtObject object)
   signal groupClicked(QtObject object)
 
+  function getSortedList(source, compareProperty) {
+    var array = [];
+    for (var i = 0 ; i < source.length ; ++i)
+      array.push(source[i]);
+    return array.sort((a, b) => a[compareProperty] < b[compareProperty] ? -1 : 1);
+  }
+
   Repeater {
     id: groupRepeater
-    model: objectGroup.groups
+    model: sortedGroups
     delegate: RowLayout {
-      property QtObject model: objectGroup.groups[index]
+      property QtObject model: sortedGroups[index]
       property bool passFilters: filter.length === 0 || model.path.indexOf(filter) >= 0
       spacing: 5
       Layout.fillWidth: true
@@ -43,9 +52,9 @@ ColumnLayout {
 
   Repeater {
     id: objectRepeater
-    model: objectGroup.objects
+    model: sortedObjects
     delegate: RowLayout {
-      property QtObject model: objectGroup.objects[index]
+      property QtObject model: sortedObjects[index]
       property bool passFilters: filter.length === 0 || model.path.indexOf(filter) >= 0
       spacing: 5
       Layout.fillWidth: true
