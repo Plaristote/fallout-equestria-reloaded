@@ -116,7 +116,10 @@ Item {
       enabled: openCharacterSheetAction.enabled
       onActivated: openCharacterSheetAction.trigger()
     }
-    onTriggered: application.pushView("game/CharacterView.qml", {gameController: gameManager.currentGame})
+    onTriggered: {
+      levelController.mouseMode = 0;
+      application.pushView("game/CharacterView.qml", {gameController: gameManager.currentGame})
+    }
   }
 
   Action {
@@ -127,6 +130,9 @@ Item {
       enabled: openPipboyAction.enabled
       onActivated: openPipboyAction.trigger()
     }
-    onTriggered: application.pushView("game/PipBoy.qml")
+    onTriggered: {
+      levelController.mouseMode = 0;
+      application.pushView("game/PipBoy.qml");
+    }
   }
 }
