@@ -72,6 +72,7 @@ public:
   Q_INVOKABLE void       asyncAdvanceTime(unsigned int minutes);
   Q_INVOKABLE void       asyncAdvanceTime(unsigned int minutes, QJSValue callback);
   bool                   isFastPassingTime() const { return timePasser.isActive(); }
+  Q_INVOKABLE void       setFactionAsEnemy(const QString &faction, const QString &enemyFaction, bool set);
 
 signals:
   void gameEditorEnabled();
@@ -84,6 +85,7 @@ signals:
   void encounterNotify(const QString& encounterName, const QVariantMap& parameter);
   void loadError(const QString&);
   void fastPassingChanged();
+  void requireScreenshot(QString);
 
 public slots:
   void onCityEntered(QString name);
@@ -91,6 +93,7 @@ public slots:
   void changeZone(TileZone*);
   void deleteLater();
   void loadLevel(const QString& name, const QString& targetZone = "");
+  void onDiplomacyUpdate(const QStringList& factions, bool enemy);
 
 private slots:
   void onLevelChanged();

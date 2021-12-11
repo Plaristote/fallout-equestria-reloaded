@@ -105,6 +105,7 @@ void Game::onGameOver()
 {
   if (player)
     disconnect(player, &Character::died, this, &Game::gameOver);
+  disconnect(diplomacy, &WorldDiplomacy::update, this, &Game::onDiplomacyUpdate);
 }
 
 void Game::loadFromDataEngine()
@@ -118,6 +119,7 @@ void Game::loadFromDataEngine()
   quests->load(dataEngine->getQuests());
   quests->addQuest("quest-test");
   player = playerParty->getCharacters().first();
+  connect(diplomacy, &WorldDiplomacy::update, this, &Game::onDiplomacyUpdate);
   connect(player, &Character::died, this, &Game::gameOver);
   if (currentLevelName != "")
     loadLevel(currentLevelName, nullTargetZone);
@@ -278,6 +280,23 @@ void Game::save()
   dataEngine->setVariables(dataStore);
 }
 
+void Game::setFactionAsEnemy(const QString& a, const QString& b, bool set)
+{
+  diplomacy->setAsEnemy(set, a, b);
+}
+
+void Game::onDiplomacyUpdate(const QStringList& factions, bool enemy)
+{
+  if (script->hasMethod("diplomacyUpdate"))
+  {
+    QJSValue array = scriptEngine.newArray();
+
+    for (const auto& faction : factions)
+      array.property("push").callWithInstance(array, QJSValueList() << faction);
+    script->call("diplomacyUpdate", QJSValueList() << array << enemy);
+  }
+}
+
 QJSValue Game::scriptCall(QJSValue callable, const QJSValueList& args, const QString& scriptName)
 {
   QJSValue retval = callable.call(args);
@@ -302,7 +321,7 @@ void Game::appendToConsole(const QString& message)
 
 void Game::advanceTime(unsigned int minutes)
 {
-  timeManager->addElapsedMinutes(minutes);
+  timeManager->addElapsedMinutes(static_cast<int>(minutes));
   if (currentLevel)
     currentLevel->advanceTime(minutes);
   else
