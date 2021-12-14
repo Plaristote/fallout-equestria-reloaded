@@ -89,7 +89,7 @@ void CharacterDiplomacy::setAsFriendly(CharacterDiplomacy* other)
 
 int CharacterDiplomacy::getReputation() const
 {
-  Game::get()->getDataEngine()->getReputation(getFactionName());
+  return Game::get()->getDataEngine()->getReputation(getFactionName());
 }
 
 void CharacterDiplomacy::addReputation(int value) const
