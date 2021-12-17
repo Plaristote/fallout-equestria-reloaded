@@ -737,19 +737,19 @@ export function create(model) {
     this.user.inventory.removeItemOfType("9mm-ammo", amount);
     this.model.ammo += amount;
     this.model.useMode = "shoot";
-    level.sounds.play("reload");
+    game.sounds.play("reload");
     return true;
   }
   else {
     game.appendToConsole("Out of ammo !");
     this.user.actionPoints += this.getActionPointCost();
-    level.sounds.play("out-of-ammo");
+    game.sounds.play("out-of-ammo");
   }
   return false;
 }</code></pre> 
 
             <p class="card-text">
-              Here, we call <span class="mono-span">level.sounds.play</span> to play a sound when the weapon reloads, and a different sound when it fails to reload. The parameter should be a key registered in the file <span class="mono-span">assets/audio.json</span>, and refers to a file in the <span class="mono-span">assets/audio</span> folder.
+              Here, we call <span class="mono-span">game.sounds.play</span> to play a sound when the weapon reloads, and a different sound when it fails to reload. The parameter should be a key registered in the file <span class="mono-span">assets/audio.json</span>, and refers to a file in the <span class="mono-span">assets/audio</span> folder.
             </p>
             
             <p class="card-text">
