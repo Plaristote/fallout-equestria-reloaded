@@ -2,6 +2,12 @@
     <qresource prefix="/">
         <file>main.qml</file>
         <file>MainMenu.qml</file>
+        <file>Game.qml</file>
+        <file>NewGame.qml</file>
+        <file>SaveGame.qml</file>
+        <file>LoadGame.qml</file>
+        <file>Options.qml</file>
+        <file>Credits.qml</file>
         <file>assets/icon.ico</file>
         <file>assets/fonts/fallout.ttf</file>
         <file>assets/fonts/JH_FALLOUT.TTF</file>
@@ -117,10 +123,6 @@
         <file>ui/FpsWidget.qml</file>
         <file>ui/MenuButton.qml</file>
         <file>ui/TabRow.qml</file>
-        <file>game/level/ZoneRenderer.qml</file>
-        <file>game/level/WallRenderer.qml</file>
-        <file>game/level/DaylightShader.qml</file>
-        <file>NewGame.qml</file>
         <file>cmap/Experience.qml</file>
         <file>cmap/Status.qml</file>
         <file>cmap/Statistics.qml</file>
@@ -140,40 +142,31 @@
         <file>cmap/PersonalInfo.qml</file>
         <file>cmap/SpecialCounter.qml</file>
         <file>cmap/DescriptionPane.qml</file>
-        <file>Game.qml</file>
-        <file>game/level/ScreenEdges.qml</file>
-        <file>game/LevelView.qml</file>
+        <file>cmap/KillsPane.qml</file>
+        <file>cmap/AvailableSkillPoints.qml</file>
+        <file>cmap/AvailableSkillProficiencies.qml</file>
+        <file>cmap/CharacterData.qml</file>
+        <file>cmap/PerkPicker.qml</file>
         <file>cmap/TraitsPicker.qml</file>
-        <file>game/Dialog.qml</file>
-        <file>SaveGame.qml</file>
-        <file>LoadGame.qml</file>
-        <file>game/worldmap/Worldmap.qml</file>
-        <file>game/worldmap/WorldmapView.qml</file>
-        <file>game/worldmap/WorldmapCities.qml</file>
-        <file>game/CharacterView.qml</file>
         <file>cmap/PerksPane.qml</file>
-        <file>game/Looting.qml</file>
-        <file>game/InventoryItemsView.qml</file>
+        <file>game/level/ZoneRenderer.qml</file>
+        <file>game/level/WallRenderer.qml</file>
+        <file>game/level/DaylightShader.qml</file>
+        <file>game/level/ScreenEdges.qml</file>
+        <file>game/level/LevelRenderTarget.qml</file>
+        <file>game/level/LevelMouseArea.qml</file>
+        <file>game/level/LevelCamera.qml</file>
+        <file>game/level/ObjectListRenderer.qml</file>
+        <file>game/level/CursorRenderer.qml</file>
+        <file>game/level/LevelDisplay.qml</file>
+        <file>game/level/PlayerCropCircle.qml</file>
+        <file>game/level/LayerRenderer.qml</file>
         <file>game/hud/Menu.qml</file>
-        <file>game/LevelHud.qml</file>
-        <file>game/LevelFrameRate.qml</file>
         <file>game/hud/HudItemSlots.qml</file>
         <file>game/hud/HudActionPoints.qml</file>
         <file>game/hud/HudConsole.qml</file>
         <file>game/hud/HudMenu.qml</file>
         <file>game/hud/HudCounter.qml</file>
-        <file>game/LevelCursor.qml</file>
-        <file>game/Skilldex.qml</file>
-        <file>game/slideshows/LoadingScreen.qml</file>
-        <file>game/slideshows/GameOverScreen.qml</file>
-        <file>game/UsageSuccessHint.qml</file>
-        <file>cmap/KillsPane.qml</file>
-        <file>game/PipBoy.qml</file>
-        <file>game/pipboy/TimeApplication.qml</file>
-        <file>game/pipboy/QuestsApplication.qml</file>
-        <file>game/slideshows/TransitionScreen.qml</file>
-        <file>Options.qml</file>
-        <file>game/LevelLightOverlay.qml</file>
         <file>game/hud/CountdownDialog.qml</file>
         <file>game/hud/ItemPicker.qml</file>
         <file>game/hud/InteractionMenu.qml</file>
@@ -182,33 +175,40 @@
         <file>game/hud/InteractionOverlay.qml</file>
         <file>game/hud/InteractionOverlays.qml</file>
         <file>game/hud/CombatPreview.qml</file>
-        <file>game/Interaction.mjs</file>
-        <file>game/hud/DebugConsole.qml</file>
-        <file>game/Barter.qml</file>
         <file>game/hud/HudCombatControls.qml</file>
         <file>game/hud/TutorialPane.qml</file>
+        <file>game/hud/Actions.qml</file>
+        <file>game/hud/PlayerInventory.qml</file>
+        <file>game/hud/DebugConsole.qml</file>
+        <file>game/worldmap/Worldmap.qml</file>
+        <file>game/worldmap/WorldmapView.qml</file>
+        <file>game/worldmap/WorldmapCities.qml</file>
+        <file>game/worldmap/WorldmapSidebar.qml</file>
+        <file>game/slideshows/LoadingScreen.qml</file>
+        <file>game/slideshows/GameOverScreen.qml</file>
+        <file>game/slideshows/TransitionScreen.qml</file>
+        <file>game/pipboy/TimeApplication.qml</file>
+        <file>game/pipboy/QuestsApplication.qml</file>
         <file>game/pipboy/quests/Index.qml</file>
         <file>game/pipboy/quests/Show.qml</file>
         <file>game/pipboy/AutomapApplication.qml</file>
         <file>game/pipboy/Actions.qml</file>
-        <file>cmap/AvailableSkillPoints.qml</file>
-        <file>cmap/AvailableSkillProficiencies.qml</file>
-        <file>cmap/CharacterData.qml</file>
-        <file>game/hud/Actions.qml</file>
-        <file>game/hud/PlayerInventory.qml</file>
-        <file>game/worldmap/WorldmapSidebar.qml</file>
+        <file>game/PipBoy.qml</file>
+        <file>game/CharacterView.qml</file>
+        <file>game/LevelView.qml</file>
+        <file>game/Dialog.qml</file>
+        <file>game/Looting.qml</file>
+        <file>game/InventoryItemsView.qml</file>
+        <file>game/LevelHud.qml</file>
+        <file>game/LevelFrameRate.qml</file>
+        <file>game/LevelCursor.qml</file>
+        <file>game/Skilldex.qml</file>
+        <file>game/UsageSuccessHint.qml</file>
+        <file>game/LevelLightOverlay.qml</file>
+        <file>game/Interaction.mjs</file>
+        <file>game/Barter.qml</file>
         <file>game/LevelTextBubbles.qml</file>
         <file>game/PauseController.qml</file>
-        <file>cmap/PerkPicker.qml</file>
-        <file>game/level/LevelRenderTarget.qml</file>
-        <file>game/level/LevelMouseArea.qml</file>
-        <file>game/level/LevelCamera.qml</file>
-        <file>game/level/ObjectListRenderer.qml</file>
-        <file>game/level/CursorRenderer.qml</file>
-        <file>game/level/LevelDisplay.qml</file>
-        <file>game/level/PlayerCropCircle.qml</file>
-        <file>Credits.qml</file>
-        <file>game/level/LayerRenderer.qml</file>
         <file>game/GameLoadManager.qml</file>
         <file>editor/Index.qml</file>
         <file>editor/SpriteEditor.qml</file>
