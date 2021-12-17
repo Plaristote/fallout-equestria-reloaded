@@ -12,6 +12,7 @@
 class CombatComponent : public VisualEffectsComponent
 {
   Q_OBJECT
+  typedef VisualEffectsComponent ParentType;
 
   Q_PROPERTY(bool combat MEMBER combat NOTIFY combatChanged)
   Q_PROPERTY(QQmlListProperty<Character> combattants READ getQmlCombattants NOTIFY combattantsChanged)
@@ -24,8 +25,8 @@ public:
 
   QQmlListProperty<Character> getQmlCombattants() { return QML_QLIST_CONSTRUCTOR(Character, combattants); }
 
-  virtual void registerDynamicObject(DynamicObject*);
-  virtual void unregisterDynamicObject(DynamicObject*);
+  virtual void registerDynamicObject(DynamicObject*) override;
+  virtual void unregisterDynamicObject(DynamicObject*) override;
 
   void startCombat(Character* character);
   void onNextCombatTurn();

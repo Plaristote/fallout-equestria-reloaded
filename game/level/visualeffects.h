@@ -12,7 +12,7 @@ class VisualEffectsComponent : public TextBubblesComponent
   Q_PROPERTY(QQmlListProperty<Sprite> visualEffects READ getQmlVisualEffects NOTIFY visualEffectsChanged)
 public:
   explicit VisualEffectsComponent(QObject* parent = nullptr);
-  virtual ~VisualEffectsComponent();
+  virtual ~VisualEffectsComponent() override;
 
   virtual void registerVisualEffect(Sprite*);
   virtual void unregisterVisualEffect(Sprite*);

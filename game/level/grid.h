@@ -2,16 +2,16 @@
 # define GRIDCOMPONENT_H
 
 # include <QObject>
-# include "levelbase.h"
+# include "debug.h"
 # include "../pathfinding/levelgrid.h"
 # include "../pathfinding/zonegrid.h"
 
 class TileLayer;
 
-class GridComponent : public LevelBase
+class GridComponent : public DebugComponent
 {
   Q_OBJECT
-  typedef LevelBase ParentType;
+  typedef DebugComponent ParentType;
 
   Q_PROPERTY(LevelGrid* grid READ getGrid NOTIFY floorChanged)
   Q_PROPERTY(TileMap* tilemap READ getTileMap NOTIFY floorChanged)

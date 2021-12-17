@@ -11,7 +11,7 @@
 # include "character.h"
 # include "dynamicobject.h"
 
-# include "level/combat.h"
+# include "level/save.h"
 # include "level/tutorialcomponent.h"
 # include "level/metrics.h"
 
@@ -20,25 +20,18 @@ class CharacterParty;
 class CharacterDialog;
 class DataEngine;
 
-class LevelTask : public CombatComponent
+class LevelTask : public SaveComponent
 {
   Q_OBJECT
-  typedef CombatComponent ParentType;
+  typedef SaveComponent ParentType;
 
   Q_PROPERTY(bool       paused  MEMBER paused NOTIFY pausedChanged)
   Q_PROPERTY(SoundManager* sounds READ getSoundManager CONSTANT)
   Q_PROPERTY(TutorialComponent* tutorial MEMBER tutorial NOTIFY tutorialChanged)
-  Q_PROPERTY(bool debugMode MEMBER debugMode NOTIFY debugModeChanged)
-  Q_PROPERTY(bool persistent MEMBER persistent NOTIFY persistentChanged)
 public:  
   explicit LevelTask(QObject *parent = nullptr);
-  virtual ~LevelTask();
+  virtual ~LevelTask() override;
 
-  void load(const QString& levelName, DataEngine*);
-  void passElapsedTime(int lastUpdate);
-  void loadObjectsFromDataEngine(DataEngine*);
-  void loadTutorial();
-  void save(DataEngine*);
   void setPaused(bool value) { paused = value; emit pausedChanged(); }
   bool isPaused() const { return paused; }
 
@@ -50,10 +43,6 @@ public:
   void registerDynamicObject(DynamicObject*) override;
   void unregisterDynamicObject(DynamicObject*) override;
 
-  Q_INVOKABLE void persist();
-
-  Q_INVOKABLE void advanceTime(unsigned int minutes);
-
   Q_INVOKABLE QVariantList previewPathTo(int x, int y);
 
   Q_INVOKABLE void addBloodStainAt(int x, int y, unsigned char z) { addBloodStainAt(QPoint(x, y), z); }
@@ -61,16 +50,9 @@ public:
 
   void finalizeRound() override;
 
-  Q_INVOKABLE QString metricsHtml() { return performanceMetrics.html();}
-  Q_INVOKABLE void resetMetrics() { performanceMetrics.reset(); }
-
 signals:
   void updated();
   void pausedChanged();
-  void debugModeChanged();
-  void objectsChanged();
-  void tutorialChanged();
-  void persistentChanged();
   void displayConsoleMessage(const QString&);
   void cameraFocusRequired(DynamicObject*);
   void daylightColorChanged();
@@ -92,17 +74,12 @@ private:
   void realTimeTask(qint64);
 
 protected:
-  QTimer             updateTimer;
-  QElapsedTimer      clock;
-  TimeManager*       timeManager = nullptr;
-  SoundManager*      soundManager = nullptr;
-  TutorialComponent* tutorial = nullptr;
-  bool               paused = true;
-  bool               initialized = false;
-  bool               persistent = true;
-  bool               debugMode = false;
-  qint64             finalizeTurnRemainingTime = 0;
-  PerformanceReport  performanceMetrics;
+  QTimer         updateTimer;
+  QElapsedTimer  clock;
+  SoundManager*  soundManager = nullptr;
+  bool           paused = true;
+  bool           initialized = false;
+  qint64         finalizeTurnRemainingTime = 0;
 };
 
 #endif // LEVELTASK_H

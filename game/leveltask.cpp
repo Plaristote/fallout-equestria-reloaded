@@ -45,74 +45,6 @@ bool LevelTask::insertPartyIntoZone(CharacterParty* party, const QString& zoneNa
   return false;
 }
 
-void LevelTask::loadTutorial()
-{
-  if (TutorialComponent::hasTutorialForLevel(name))
-  {
-    tutorial = new TutorialComponent(this);
-    emit tutorialChanged();
-  }
-}
-
-void LevelTask::load(const QString& levelName, DataEngine* dataEngine)
-{
-  QJsonObject levelData   = dataEngine->getLevelData(levelName);
-  QJsonValue  lastUpdate  = levelData["lastUpdate"];
-  bool        initialized = levelData["init"].toBool(false);
-
-  levelData["name"]   = levelName;
-  levelData["script"] = levelName + ".mjs";
-  levelData["init"]   = true; // Delay level initialization
-  qDebug() << "LevelTask::load" << levelName;
-  timeManager = Game::get()->getTimeManager();
-  ParentType::load(levelData);
-  registerAllDynamicObjects();
-  taskRunner->setScriptController(script);
-  taskRunner->load(levelData["tasks"].toObject());
-  if (!lastUpdate.isUndefined() && !lastUpdate.isNull())
-    passElapsedTime(lastUpdate.toInt());
-  if (!initialized)
-    ScriptableComponent::initializeIfNeeded();
-  loadTutorial();
-}
-
-void LevelTask::passElapsedTime(int lastUpdate)
-{
-  std::time_t timestamp    = static_cast<std::time_t>(lastUpdate);
-  std::time_t newTimestamp = Game::get()->getTimeManager()->getDateTime().GetTimestamp();
-  std::time_t elapsedTime  = newTimestamp - timestamp;
-
-  qDebug() << "ADVANCING TIME IN LEVEL" << timestamp << newTimestamp << elapsedTime;
-  eachObject([elapsedTime](DynamicObject* object)
-  {
-    object->getTaskManager()->update(elapsedTime * 1000);
-  });
-  taskRunner->update(elapsedTime *  1000);
-}
-
-void LevelTask::persist()
-{
-  save(Game::get()->getDataEngine());
-}
-
-void LevelTask::save(DataEngine* dataEngine)
-{
-  if (persistent || isGameEditor())
-  {
-    Game* game = Game::get();
-    QJsonObject levelData = dataEngine->getLevelData(name);
-
-    ParentType::save(levelData);
-    levelData.remove("name");
-    levelData.remove("script");
-    if (!isGameEditor())
-      levelData["lastUpdate"] = static_cast<int>(game->getTimeManager()->getDateTime().GetTimestamp());
-    dataEngine->setLevelData(name, levelData);
-  }
-  else
-    qDebug() << "(!) Level is not persistent and it's current state has been discarded.";
-}
-
 void LevelTask::displayMovementTargetHint(QPoint targetPosition)
 {
   AnimationSequence* animation = new AnimationSequence;
@@ -196,25 +128,6 @@ void LevelTask::onPauseChanged()
     updateTimer.start();
     clock.restart();
   }
-}
-
-
-void LevelTask::advanceTime(unsigned int minutes)
-{
-  qint64 delta = minutes * 60 * 1000;
-
-  for (DynamicObject* object : allDynamicObjects())
-  {
-    ObjectPerformanceClock clock(performanceMetrics.object(object));
-
-    object->update(delta);
-    object->updateTasks(delta);
-    if (object->isCharacter())
-      reinterpret_cast<Character*>(object)->getActionQueue()->update();
-  }
-  for (ObjectGroup* group : allObjectGroups())
-    group->getTaskManager()->update(delta);
-  taskRunner->update(delta);
 }
 
 void LevelTask::update()
