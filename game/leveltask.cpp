@@ -35,16 +35,6 @@ void LevelTask::deleteLater()
   ParentType::deleteLater();
 }
 
-bool LevelTask::insertPartyIntoZone(CharacterParty* party, const QString& zoneName)
-{
-  for (auto* zone : getTileMap()->getZones())
-  {
-    if (zone->getType() == "entry" && (zone->getName() == zoneName || (zone->getIsDefault() && zoneName == "")))
-      return party->insertIntoZone(this, zone);
-  }
-  return false;
-}
-
 void LevelTask::displayMovementTargetHint(QPoint targetPosition)
 {
   AnimationSequence* animation = new AnimationSequence;

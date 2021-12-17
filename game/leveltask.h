@@ -38,8 +38,6 @@ public:
   const QString& getName() const { return name; }
   SoundManager* getSoundManager() const { return soundManager; }
 
-  Q_INVOKABLE bool insertPartyIntoZone(CharacterParty*, const QString& zoneName = "");
-
   void registerDynamicObject(DynamicObject*) override;
   void unregisterDynamicObject(DynamicObject*) override;
 

@@ -5,7 +5,7 @@
 # include <QQmlListProperty>
 # include "character.h"
 
-class LevelTask;
+class GridComponent;
 class TileZone;
 
 class CharacterParty : public QObject
@@ -20,9 +20,9 @@ public:
   static CharacterParty* factory(const QVariantMap& parameters, QObject* parent = nullptr);
 
   const QString& getName() const { return name; }
-  void loadIntoLevel(LevelTask*);
+  void loadIntoLevel(GridComponent*);
   void load(const QJsonObject&);
-  void save(QJsonObject&);
+  void save(QJsonObject&) const;
 
   Q_INVOKABLE void createCharacter(const QString &name, const QVariantMap& parameters);
   Q_INVOKABLE void addCharacter(Character*);
@@ -33,9 +33,9 @@ public:
   const QList<Character*>& getCharacters() const { return list; }
   Q_INVOKABLE void grantXp(unsigned int value);
 
-  bool insertIntoZone(LevelTask*, TileZone*);
-  Q_INVOKABLE bool insertIntoZone(LevelTask*, const QString& zoneName);
-  Q_INVOKABLE void extractFromLevel(LevelTask*);
+  bool insertIntoZone(GridComponent*, TileZone*) const;
+  Q_INVOKABLE bool insertIntoZone(GridComponent*, const QString& zoneName) const;
+  Q_INVOKABLE void extractFromLevel(GridComponent*);
 
   QQmlListProperty<Character> getQmlCharacters() { return QML_QLIST_CONSTRUCTOR(Character, list); }
 

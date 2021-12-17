@@ -94,7 +94,7 @@ void CharacterParty::grantXp(unsigned int value)
     character->getStatistics()->addExperience(static_cast<int>(value));
 }
 
-bool CharacterParty::insertIntoZone(LevelTask* level, TileZone* zone)
+bool CharacterParty::insertIntoZone(GridComponent* level, TileZone* zone) const
 {
   auto* grid = level->getGrid();
   int characterIt = 0;
@@ -112,11 +112,11 @@ bool CharacterParty::insertIntoZone(LevelTask* level, TileZone* zone)
     }
   }
   if (characterIt > 0)
-    emit level->cameraFocusRequired(list.at(0));
+    emit reinterpret_cast<LevelTask*>(level)->cameraFocusRequired(list.at(0));
   return characterIt == list.length();
 }
 
-bool CharacterParty::insertIntoZone(LevelTask* level, const QString &zoneName)
+bool CharacterParty::insertIntoZone(GridComponent* level, const QString &zoneName) const
 {
   auto* tileMap = level->getTileMap();
 
@@ -128,7 +128,7 @@ bool CharacterParty::insertIntoZone(LevelTask* level, const QString &zoneName)
   return false;
 }
 
-void CharacterParty::extractFromLevel(LevelTask* level)
+void CharacterParty::extractFromLevel(GridComponent* level)
 {
   auto* grid = level->getGrid();
 
@@ -142,7 +142,7 @@ void CharacterParty::extractFromLevel(LevelTask* level)
   }
 }
 
-void CharacterParty::save(QJsonObject& data)
+void CharacterParty::save(QJsonObject& data) const
 {
   QJsonArray charactersData;
 
@@ -172,7 +172,7 @@ void CharacterParty::load(const QJsonObject& data)
     qDebug() << "Fatal error: saved data did not contain any player character";
 }
 
-void CharacterParty::loadIntoLevel(LevelTask* level)
+void CharacterParty::loadIntoLevel(GridComponent* level)
 {
   auto* grid = level->getGrid();
 

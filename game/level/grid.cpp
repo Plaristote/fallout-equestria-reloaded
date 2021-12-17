@@ -212,9 +212,20 @@ bool GridComponent::moveCharacterToZone(Character* character, TileZone* zone)
         return true;
       }
     }
+    qDebug() << "GridComponent::moveCharacterToZone: could not find teleport" << character->getPath() << ": no cases available in zone | candidate count:" << zone->getPositionCount();
   }
   else
     qDebug() << "GridComponent::moveCharacterToZone: invalid parameters" << character << zone;
+  return false;
+}
+
+bool GridComponent::insertPartyIntoZone(CharacterParty* party, const QString& zoneName)
+{
+  for (auto* zone : getTileMap()->getZones())
+  {
+    if (zone->getType() == "entry" && (zone->getName() == zoneName || (zone->getIsDefault() && zoneName == "")))
+      return party->insertIntoZone(this, zone);
+  }
   return false;
 }
 

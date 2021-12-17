@@ -7,6 +7,7 @@
 # include "../pathfinding/zonegrid.h"
 
 class TileLayer;
+class CharacterParty;
 
 class GridComponent : public DebugComponent
 {
@@ -42,6 +43,7 @@ public:
   Q_INVOKABLE bool       moveCharacterToZone(Character*, const QString& name, unsigned char floor = NULL_FLOOR);
   Q_INVOKABLE bool       moveCharacterToZone(Character*, TileZone* zone);
   Q_INVOKABLE void       setObjectPosition(DynamicObject*, int x, int y, unsigned char floor = NULL_FLOOR);
+  Q_INVOKABLE bool       insertPartyIntoZone(CharacterParty*, const QString& zoneName = "");
   Q_INVOKABLE QPoint     getAdjustedOffsetFor(const DynamicObject*) const;
   Q_INVOKABLE TileLayer* getRoofFor(const DynamicObject*) const;
   Q_INVOKABLE QJSValue   getDynamicObjectsAt(int x, int y, unsigned int floor = NULL_FLOOR) const;
