@@ -26,6 +26,7 @@ Item {
 
     function onEncounterTriggered(title) { application.popView(); }
     function onEncounterNotify(name, params) {
+      gameManager.currentGame.sounds.play("notification");
       root.state = "randomEncounter";
       if (params.optional) {
         encounterConfirmDialog.text = i18n.t("messages.encounter-title", params) + ' ' + i18n.t("messages.encounter-prompt");
