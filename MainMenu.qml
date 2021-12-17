@@ -3,7 +3,7 @@ import QtQuick.Controls 2.15
 import "qrc:/ui"
 
 Image {
-  source: "qrc:/assets/backgrounds/default.png"
+  source: assetPath + "backgrounds/default.png"
   fillMode: Image.PreserveAspectCrop
 
   Action {

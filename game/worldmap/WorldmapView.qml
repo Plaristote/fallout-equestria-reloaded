@@ -19,7 +19,7 @@ CustomFlickable {
 
   Image {
     id: mapImage
-    source: "qrc:/assets/worldmap.png"
+    source: assetPath + "worldmap.png"
     height: controller.mapSize.height
     width: controller.mapSize.width
 

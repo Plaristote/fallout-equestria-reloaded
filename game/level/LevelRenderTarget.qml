@@ -52,7 +52,7 @@ Rectangle {
       model: levelController.tilemap.zones
       delegate: ZoneRenderer {
         zone: levelController.tilemap.zones[index]
-        tilesetSource: "qrc:/assets/tilesets/zones.png"
+        tilesetSource: assetPath + "tilesets/zones.png"
       }
     }
 

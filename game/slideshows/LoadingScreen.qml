@@ -1,7 +1,7 @@
 import QtQuick 2.15
 
 Image {
-  source: "qrc:/assets/backgrounds/loading-screen.png"
+  source: assetPath + "backgrounds/loading-screen.png"
   anchors.fill: parent
   fillMode: Image.PreserveAspectCrop
 

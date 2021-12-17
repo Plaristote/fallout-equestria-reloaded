@@ -3,7 +3,7 @@ import QtQuick 2.15
 Image {
   signal clicked()
 
-  source: "qrc:/assets/backgrounds/game-over.png"; // by LimreiArt
+  source: assetPath + "backgrounds/game-over.png"
   anchors.fill: parent
   fillMode: Image.PreserveAspectCrop
   visible: false
@@ -26,7 +26,7 @@ Image {
     Text {
       id: gameOverText
       padding: 5
-      text: qsTr("Ç'en est fini de toi. Ton village est perdu et mourra de faim.")
+      text: i18n.t("game-over-message")
       color: "white"
     }
   }

@@ -1,18 +1,14 @@
 <RCC>
     <qresource prefix="/">
         <file>main.qml</file>
-        <file>assets/backgrounds/default.png</file>
         <file>MainMenu.qml</file>
-        <file>game/level/ZoneRenderer.qml</file>
-        <file>game/level/WallRenderer.qml</file>
-        <file>game/level/DaylightShader.qml</file>
+        <file>assets/icon.ico</file>
+        <file>assets/fonts/fallout.ttf</file>
+        <file>assets/fonts/JH_FALLOUT.TTF</file>
         <file>assets/ui/menuButton/active.png</file>
         <file>assets/ui/menuButton/normal.png</file>
         <file>assets/ui/menuButton/pressed.png</file>
         <file>assets/ui/MenuButton.qml</file>
-        <file>NewGame.qml</file>
-        <file>ui/CharacterSheet.qml</file>
-        <file>ui/FpsWidget.qml</file>
         <file>assets/ui/hud.png</file>
         <file>assets/ui/Label.qml</file>
         <file>assets/ui/Pane.qml</file>
@@ -21,70 +17,16 @@
         <file>assets/ui/PaperPane.qml</file>
         <file>assets/ui/TerminalPane.qml</file>
         <file>assets/ui/terminal.png</file>
-        <file>ui/MenuButton.qml</file>
         <file>assets/ui/TerminalScrollbar.qml</file>
         <file>assets/ui/TinyButton.qml</file>
-        <file>cmap/Experience.qml</file>
-        <file>cmap/Status.qml</file>
-        <file>cmap/Statistics.qml</file>
-        <file>cmap/Skills.qml</file>
-        <file>cmap/AvailableSkillPoints.qml</file>
-        <file>cmap/CharacterData.qml</file>
-        <file>cmap/PerkPicker.qml</file>
-        <file>cmap/PersonalInfo.qml</file>
-        <file>cmap/SpecialCounter.qml</file>
-        <file>cmap/TraitsPicker.qml</file>
-        <file>cmap/AvailableSkillProficiencies.qml</file>
-        <file>cmap/DescriptionPane.qml</file>
-        <file>cmap/KillsPane.qml</file>
-        <file>cmap/PerksPane.qml</file>
-        <file>cmap/Special.qml</file>
         <file>assets/ui/TerminalButton.qml</file>
         <file>assets/ui/tab.png</file>
         <file>assets/ui/Tab.qml</file>
-        <file>Game.qml</file>
         <file>assets/ui/PlayPanel.qml</file>
         <file>assets/ui/play-panel.png</file>
         <file>assets/ui/play-panel-left.png</file>
         <file>assets/ui/play-panel-center.png</file>
         <file>assets/ui/play-panel-right.png</file>
-        <file>game/level/ScreenEdges.qml</file>
-        <file>game/LevelView.qml</file>
-        <file>cmap/PersonalInfo.qml</file>
-        <file>cmap/SpecialCounter.qml</file>
-        <file>cmap/DescriptionPane.qml</file>
-        <file>ui/TabRow.qml</file>
-        <file>cmap/TraitsPicker.qml</file>
-        <file>assets/sprites.json</file>
-        <file>assets/sprites/ZEkA10000.png</file>
-        <file>assets/sprites/pony-shadow.png</file>
-        <file>assets/tilesets/zones.png</file>
-        <file>scripts/cmap/traits/bloody-mess.mjs</file>
-        <file>scripts/cmap/traits/gifted.mjs</file>
-        <file>scripts/cmap/traits/heavy-handed.mjs</file>
-        <file>scripts/cmap/traits/bruiser.mjs</file>
-        <file>scripts/cmap/traits/finesse.mjs</file>
-        <file>scripts/cmap/traits/kamikaze.mjs</file>
-        <file>scripts/cmap/traits/skilled.mjs</file>
-        <file>scripts/cmap/traits/small-frame.mjs</file>
-        <file>assets/sprites/ZEkA10000-green.png</file>
-        <file>scripts/pnjs/dummy.mjs</file>
-        <file>assets/backgrounds/loading-screen.png</file>
-        <file>ui/FaceDisplay.qml</file>
-        <file>assets/faces/backgrounds/wasteland.png</file>
-        <file>assets/faces/mare-basic/eyes/angry.png</file>
-        <file>assets/faces/mare-basic/eyes/neutral.png</file>
-        <file>assets/faces/mare-basic/eyes/sad.png</file>
-        <file>assets/faces/mare-basic/eyes/smile.png</file>
-        <file>assets/faces/mare-basic/mouthes/angry.png</file>
-        <file>assets/faces/mare-basic/mouthes/neutral.png</file>
-        <file>assets/faces/mare-basic/mouthes/sad.png</file>
-        <file>assets/faces/mare-basic/mouthes/smile.png</file>
-        <file>assets/faces/mare-basic/base.png</file>
-        <file>assets/faces/mare-basic/accessories/eye-patch.png</file>
-        <file>assets/faces/mare-basic/accessories/eye-scar.png</file>
-        <file>assets/faces/mare-basic/accessories/fancypants.png</file>
-        <file>assets/faces/mare-basic/accessories/square-glasses.png</file>
         <file>assets/ui/interactions/look-active.png</file>
         <file>assets/ui/interactions/look-normal.png</file>
         <file>assets/ui/interactions/look-pressed.png</file>
@@ -108,37 +50,169 @@
         <file>assets/ui/interactions/use-skill-pressed.png</file>
         <file>assets/ui/ap-active.png</file>
         <file>assets/ui/ap-inactive.png</file>
-        <file>game/Dialog.qml</file>
         <file>assets/ui/dialog/center.png</file>
         <file>assets/ui/dialog/left.png</file>
         <file>assets/ui/dialog/right.png</file>
         <file>assets/ui/dialog/top.png</file>
         <file>assets/ui/dialog/text.png</file>
-        <file>SaveGame.qml</file>
-        <file>ui/SavedGameListItem.qml</file>
-        <file>LoadGame.qml</file>
-        <file>ui/SaveGameUi.qml</file>
-        <file>game/worldmap/Worldmap.qml</file>
-        <file>game/worldmap/WorldmapView.qml</file>
-        <file>game/worldmap/WorldmapCities.qml</file>
-        <file>assets/worldmap.png</file>
         <file>assets/ui/HudScrollbar.qml</file>
         <file>assets/ui/scrollbars/background.png</file>
         <file>assets/ui/scrollbars/content.png</file>
         <file>assets/ui/clock.png</file>
         <file>assets/ui/clock-overlay.png</file>
-        <file>assets/cmap/no-icon.png</file>
+        <file>assets/ui/itemSlot.png</file>
+        <file>assets/ui/cursors/interaction-available.png</file>
+        <file>assets/ui/cursors/interaction.png</file>
+        <file>assets/ui/cursors/target.png</file>
+        <file>assets/ui/cursors/target-tile.png</file>
+        <file>assets/ui/cursors/move-tile.png</file>
+        <file>assets/ui/cursors/move-tile-unavailable.png</file>
+        <file>assets/ui/cursors/wait.png</file>
+        <file>assets/ui/CustomDialog.qml</file>
+        <file>assets/ui/Icon.qml</file>
+        <file>assets/ui/button-pressed.png</file>
+        <file>assets/ui/button.png</file>
+        <file>assets/ui/PushButton.qml</file>
+        <file>assets/ui/WarningRectangle.qml</file>
+        <file>assets/ui/equipment/pony.png</file>
+        <file>assets/ui/equipment/settings.mjs</file>
+        <file>ui/FaceDisplay.qml</file>
+        <file>ui/FaceEditor.qml</file>
+        <file>ui/SavedGameListItem.qml</file>
+        <file>ui/SaveGameUi.qml</file>
+        <file>ui/TerminalField.qml</file>
+        <file>ui/TerminalButton.qml</file>
+        <file>ui/TerminalComboBox.qml</file>
+        <file>ui/InventoryItemPreview.qml</file>
+        <file>ui/TerminalLabel.qml</file>
+        <file>ui/TerminalCheckBox.qml</file>
+        <file>ui/TerminalToolButton.qml</file>
+        <file>ui/TerminalColorButton.qml</file>
+        <file>ui/CharacterInventory.qml</file>
+        <file>ui/CharacterInventorySlots.qml</file>
+        <file>ui/ItemIcon.qml</file>
+        <file>ui/SelectBox.qml</file>
+        <file>ui/TimeDisplay.qml</file>
+        <file>ui/dialog/DialogTextDisplay.qml</file>
+        <file>ui/dialog/DialogAnswersDisplay.qml</file>
+        <file>ui/TextPromptDialog.qml</file>
+        <file>ui/ConfirmDialog.qml</file>
+        <file>ui/CustomTextField.qml</file>
+        <file>ui/CustomLabel.qml</file>
+        <file>ui/ItemTransferDialog.qml</file>
+        <file>ui/dialog/BarterTransferControls.qml</file>
+        <file>ui/dialog/BarterDealPreview.qml</file>
+        <file>ui/CharacterSpritePreview.qml</file>
+        <file>ui/GridInventorySlots.qml</file>
+        <file>ui/InventorySlot.qml</file>
+        <file>ui/CharacterTemplatePicker.qml</file>
+        <file>ui/CustomFlickable.qml</file>
+        <file>ui/FontStyle.qml</file>
+        <file>ui/ClockWidget.qml</file>
+        <file>ui/BackAction.qml</file>
+        <file>ui/DynamicObjectMetrics.qml</file>
+        <file>ui/FastTimePassView.qml</file>
+        <file>ui/RepeatTimer.qml</file>
+        <file>ui/CharacterSheet.qml</file>
+        <file>ui/FpsWidget.qml</file>
+        <file>ui/MenuButton.qml</file>
+        <file>ui/TabRow.qml</file>
+        <file>game/level/ZoneRenderer.qml</file>
+        <file>game/level/WallRenderer.qml</file>
+        <file>game/level/DaylightShader.qml</file>
+        <file>NewGame.qml</file>
+        <file>cmap/Experience.qml</file>
+        <file>cmap/Status.qml</file>
+        <file>cmap/Statistics.qml</file>
+        <file>cmap/Skills.qml</file>
+        <file>cmap/AvailableSkillPoints.qml</file>
+        <file>cmap/CharacterData.qml</file>
+        <file>cmap/PerkPicker.qml</file>
+        <file>cmap/PersonalInfo.qml</file>
+        <file>cmap/SpecialCounter.qml</file>
+        <file>cmap/TraitsPicker.qml</file>
+        <file>cmap/AvailableSkillProficiencies.qml</file>
+        <file>cmap/DescriptionPane.qml</file>
+        <file>cmap/KillsPane.qml</file>
+        <file>cmap/PerksPane.qml</file>
+        <file>cmap/Special.qml</file>
+        <file>cmap/ReputationPane.qml</file>
+        <file>cmap/PersonalInfo.qml</file>
+        <file>cmap/SpecialCounter.qml</file>
+        <file>cmap/DescriptionPane.qml</file>
+        <file>Game.qml</file>
+        <file>game/level/ScreenEdges.qml</file>
+        <file>game/LevelView.qml</file>
+        <file>cmap/TraitsPicker.qml</file>
+        <file>game/Dialog.qml</file>
+        <file>SaveGame.qml</file>
+        <file>LoadGame.qml</file>
+        <file>game/worldmap/Worldmap.qml</file>
+        <file>game/worldmap/WorldmapView.qml</file>
+        <file>game/worldmap/WorldmapCities.qml</file>
         <file>game/CharacterView.qml</file>
         <file>cmap/PerksPane.qml</file>
         <file>game/Looting.qml</file>
         <file>game/InventoryItemsView.qml</file>
-        <file>assets/sprites/medikit.png</file>
+        <file>game/hud/Menu.qml</file>
+        <file>game/LevelHud.qml</file>
+        <file>game/LevelFrameRate.qml</file>
+        <file>game/hud/HudItemSlots.qml</file>
+        <file>game/hud/HudActionPoints.qml</file>
+        <file>game/hud/HudConsole.qml</file>
+        <file>game/hud/HudMenu.qml</file>
+        <file>game/hud/HudCounter.qml</file>
+        <file>game/LevelCursor.qml</file>
+        <file>game/Skilldex.qml</file>
+        <file>game/slideshows/LoadingScreen.qml</file>
+        <file>game/slideshows/GameOverScreen.qml</file>
+        <file>game/UsageSuccessHint.qml</file>
+        <file>cmap/KillsPane.qml</file>
+        <file>game/PipBoy.qml</file>
+        <file>game/pipboy/TimeApplication.qml</file>
+        <file>game/pipboy/QuestsApplication.qml</file>
+        <file>game/slideshows/TransitionScreen.qml</file>
+        <file>Options.qml</file>
+        <file>game/LevelLightOverlay.qml</file>
+        <file>game/hud/CountdownDialog.qml</file>
+        <file>game/hud/ItemPicker.qml</file>
+        <file>game/hud/InteractionMenu.qml</file>
+        <file>game/hud/InteractionOverlay.qml</file>
+        <file>game/hud/InteractionColorOverlay.qml</file>
+        <file>game/hud/InteractionOverlay.qml</file>
+        <file>game/hud/InteractionOverlays.qml</file>
+        <file>game/hud/CombatPreview.qml</file>
+        <file>game/Interaction.mjs</file>
+        <file>game/hud/DebugConsole.qml</file>
+        <file>game/Barter.qml</file>
+        <file>game/hud/HudCombatControls.qml</file>
+        <file>game/hud/TutorialPane.qml</file>
+        <file>game/pipboy/quests/Index.qml</file>
+        <file>game/pipboy/quests/Show.qml</file>
+        <file>game/pipboy/AutomapApplication.qml</file>
+        <file>game/pipboy/Actions.qml</file>
+        <file>cmap/AvailableSkillPoints.qml</file>
+        <file>cmap/AvailableSkillProficiencies.qml</file>
+        <file>cmap/CharacterData.qml</file>
+        <file>game/hud/Actions.qml</file>
+        <file>game/hud/PlayerInventory.qml</file>
+        <file>game/worldmap/WorldmapSidebar.qml</file>
+        <file>game/LevelTextBubbles.qml</file>
+        <file>game/PauseController.qml</file>
+        <file>cmap/PerkPicker.qml</file>
+        <file>game/level/LevelRenderTarget.qml</file>
+        <file>game/level/LevelMouseArea.qml</file>
+        <file>game/level/LevelCamera.qml</file>
+        <file>game/level/ObjectListRenderer.qml</file>
+        <file>game/level/CursorRenderer.qml</file>
+        <file>game/level/LevelDisplay.qml</file>
+        <file>game/level/PlayerCropCircle.qml</file>
+        <file>Credits.qml</file>
+        <file>game/level/LayerRenderer.qml</file>
+        <file>game/GameLoadManager.qml</file>
         <file>editor/Index.qml</file>
-        <file>ui/TerminalField.qml</file>
-        <file>ui/TerminalButton.qml</file>
         <file>editor/SpriteEditor.qml</file>
         <file>editor/ObjectEditor.qml</file>
-        <file>ui/TerminalComboBox.qml</file>
         <file>editor/NpcEditor.qml</file>
         <file>editor/EditorSelectPanel.qml</file>
         <file>editor/LevelEditor.qml</file>
@@ -159,63 +233,9 @@
         <file>editor/level/RemoveItemDialog.qml</file>
         <file>editor/level/CharacterInventoryEditor.qml</file>
         <file>editor/level/Editor.qml</file>
-        <file>assets/fonts/fallout.ttf</file>
-        <file>assets/fonts/JH_FALLOUT.TTF</file>
-        <file>ui/CharacterInventory.qml</file>
-        <file>ui/InventoryItemPreview.qml</file>
-        <file>ui/TerminalLabel.qml</file>
         <file>editor/level/ControlZoneEditor.qml</file>
-        <file>ui/TerminalCheckBox.qml</file>
         <file>editor/level/EditorCanvas.qml</file>
         <file>editor/level/EditorRender.mjs</file>
-        <file>game/hud/Menu.qml</file>
-        <file>game/LevelHud.qml</file>
-        <file>game/LevelFrameRate.qml</file>
-        <file>ui/FaceEditor.qml</file>
-        <file>ui/CharacterInventorySlots.qml</file>
-        <file>assets/ui/itemSlot.png</file>
-        <file>ui/ItemIcon.qml</file>
-        <file>assets/ui/cursors/interaction-available.png</file>
-        <file>assets/ui/cursors/interaction.png</file>
-        <file>assets/ui/cursors/target.png</file>
-        <file>assets/ui/cursors/target-tile.png</file>
-        <file>assets/ui/cursors/move-tile.png</file>
-        <file>assets/ui/cursors/move-tile-unavailable.png</file>
-        <file>assets/ui/cursors/wait.png</file>
-        <file>ui/SelectBox.qml</file>
-        <file>game/hud/HudItemSlots.qml</file>
-        <file>game/hud/HudActionPoints.qml</file>
-        <file>game/hud/HudConsole.qml</file>
-        <file>game/hud/HudMenu.qml</file>
-        <file>game/hud/HudCounter.qml</file>
-        <file>game/LevelCursor.qml</file>
-        <file>game/Skilldex.qml</file>
-        <file>assets/backgrounds/game-over.png</file>
-        <file>game/slideshows/LoadingScreen.qml</file>
-        <file>game/slideshows/GameOverScreen.qml</file>
-        <file>assets/musics.json</file>
-        <file>assets/audio.json</file>
-        <file>assets/faces/stallion-basic/accessories/eye-patch.png</file>
-        <file>assets/faces/stallion-basic/accessories/eye-scar.png</file>
-        <file>assets/faces/stallion-basic/accessories/fancypants.png</file>
-        <file>assets/faces/stallion-basic/accessories/square-glasses.png</file>
-        <file>assets/faces/stallion-basic/eyes/angry.png</file>
-        <file>assets/faces/stallion-basic/eyes/cocky.png</file>
-        <file>assets/faces/stallion-basic/eyes/neutral.png</file>
-        <file>assets/faces/stallion-basic/eyes/sad.png</file>
-        <file>assets/faces/stallion-basic/eyes/smile.png</file>
-        <file>assets/faces/stallion-basic/mouthes/angry.png</file>
-        <file>assets/faces/stallion-basic/mouthes/cocky.png</file>
-        <file>assets/faces/stallion-basic/mouthes/neutral.png</file>
-        <file>assets/faces/stallion-basic/mouthes/sad.png</file>
-        <file>assets/faces/stallion-basic/mouthes/smile.png</file>
-        <file>assets/faces/stallion-basic/base.png</file>
-        <file>game/UsageSuccessHint.qml</file>
-        <file>cmap/KillsPane.qml</file>
-        <file>game/PipBoy.qml</file>
-        <file>ui/TimeDisplay.qml</file>
-        <file>game/pipboy/TimeApplication.qml</file>
-        <file>game/pipboy/QuestsApplication.qml</file>
         <file>editor/WorldMapEditor.qml</file>
         <file>editor/worldmap/MapSizePane.qml</file>
         <file>editor/worldmap/CityEditor.qml</file>
@@ -225,69 +245,17 @@
         <file>editor/worldmap/ZonePreview.qml</file>
         <file>editor/worldmap/WorldmapListEditor.qml</file>
         <file>editor/DiplomacyEditor.qml</file>
-        <file>game/slideshows/TransitionScreen.qml</file>
         <file>editor/DialogEditor.qml</file>
-        <file>ui/dialog/DialogTextDisplay.qml</file>
-        <file>ui/dialog/DialogAnswersDisplay.qml</file>
-        <file>Options.qml</file>
-        <file>game/LevelLightOverlay.qml</file>
-        <file>game/hud/CountdownDialog.qml</file>
-        <file>game/hud/ItemPicker.qml</file>
-        <file>game/hud/InteractionMenu.qml</file>
-        <file>game/hud/InteractionOverlay.qml</file>
-        <file>ui/TextPromptDialog.qml</file>
-        <file>assets/ui/CustomDialog.qml</file>
-        <file>ui/ConfirmDialog.qml</file>
         <file>editor/SpriteForm.qml</file>
         <file>editor/SpriteGroup.qml</file>
         <file>editor/ObjectForm.qml</file>
         <file>editor/FactionEditor.qml</file>
-        <file>ui/CustomTextField.qml</file>
-        <file>ui/CustomLabel.qml</file>
-        <file>game/hud/InteractionColorOverlay.qml</file>
-        <file>game/hud/InteractionOverlay.qml</file>
-        <file>game/hud/InteractionOverlays.qml</file>
-        <file>assets/ui/Icon.qml</file>
-        <file>ui/TerminalToolButton.qml</file>
         <file>editor/level/ObjectSelectPanel.qml</file>
         <file>editor/level/SaveTemplateDialog.qml</file>
         <file>editor/level/AddTemplateDialog.qml</file>
-        <file>game/hud/CombatPreview.qml</file>
-        <file>game/Interaction.mjs</file>
-        <file>game/hud/DebugConsole.qml</file>
-        <file>assets/ui/button-pressed.png</file>
-        <file>assets/ui/button.png</file>
-        <file>assets/ui/PushButton.qml</file>
-        <file>game/Barter.qml</file>
-        <file>ui/ItemTransferDialog.qml</file>
-        <file>ui/dialog/BarterTransferControls.qml</file>
-        <file>ui/dialog/BarterDealPreview.qml</file>
-        <file>game/hud/HudCombatControls.qml</file>
-        <file>ui/CharacterSpritePreview.qml</file>
-        <file>game/hud/TutorialPane.qml</file>
-        <file>assets/ui/WarningRectangle.qml</file>
-        <file>assets/ui/equipment/pony.png</file>
-        <file>assets/ui/equipment/settings.mjs</file>
-        <file>ui/GridInventorySlots.qml</file>
-        <file>ui/InventorySlot.qml</file>
-        <file>assets/icon.ico</file>
-        <file>ui/CharacterTemplatePicker.qml</file>
-        <file>game/pipboy/quests/Index.qml</file>
-        <file>game/pipboy/quests/Show.qml</file>
-        <file>game/pipboy/AutomapApplication.qml</file>
-        <file>game/pipboy/Actions.qml</file>
-        <file>ui/CustomFlickable.qml</file>
-        <file>cmap/AvailableSkillPoints.qml</file>
-        <file>cmap/AvailableSkillProficiencies.qml</file>
-        <file>cmap/CharacterData.qml</file>
-        <file>ui/FontStyle.qml</file>
-        <file>game/hud/Actions.qml</file>
-        <file>game/hud/PlayerInventory.qml</file>
-        <file>game/worldmap/WorldmapSidebar.qml</file>
-        <file>ui/ClockWidget.qml</file>
-        <file>game/LevelTextBubbles.qml</file>
-        <file>game/PauseController.qml</file>
-        <file>ui/BackAction.qml</file>
+        <file>editor/level/AmbientLightDialog.qml</file>
+        <file>editor/level/addObjectDialog/TemplatePicker.qml</file>
+        <file>editor/level/addObjectDialog/ObjectForm.qml</file>
         <file>editor/level/ObjectGroupForm.qml</file>
         <file>editor/level/ScriptPicker.qml</file>
         <file>editor/level/SpritePicker.qml</file>
@@ -296,22 +264,5 @@
         <file>editor/level/SpriteInputField.qml</file>
         <file>editor/ScriptInputField.qml</file>
         <file>editor/level/ElevatorObjectEditor.qml</file>
-        <file>cmap/PerkPicker.qml</file>
-        <file>ui/DynamicObjectMetrics.qml</file>
-        <file>game/level/LevelRenderTarget.qml</file>
-        <file>game/level/LevelMouseArea.qml</file>
-        <file>game/level/LevelCamera.qml</file>
-        <file>game/level/ObjectListRenderer.qml</file>
-        <file>game/level/CursorRenderer.qml</file>
-        <file>game/level/LevelDisplay.qml</file>
-        <file>ui/FastTimePassView.qml</file>
-        <file>game/level/PlayerCropCircle.qml</file>
-        <file>editor/level/AmbientLightDialog.qml</file>
-        <file>ui/TerminalColorButton.qml</file>
-        <file>Credits.qml</file>
-        <file>game/level/LayerRenderer.qml</file>
-        <file>ui/RepeatTimer.qml</file>
-        <file>game/GameLoadManager.qml</file>
-        <file>cmap/ReputationPane.qml</file>
     </qresource>
 </RCC>
