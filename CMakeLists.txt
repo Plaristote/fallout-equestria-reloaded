@@ -78,6 +78,12 @@ set(PROJECT_SOURCES
         game/level/levelbase.h
         game/level/metrics.h
         game/level/metrics.cpp
+        game/level/clock.h
+        game/level/clock.cpp
+        game/level/debug.h
+        game/level/debug.cpp
+        game/level/save.h
+        game/level/save.cpp
         game/leveltask.h
         game/leveltask.cpp
         game/dynamicobject.h
@@ -265,7 +271,7 @@ else()
   if(ANDROID)
     add_library(falloutequestria SHARED ${PROJECT_SOURCES})
   elseif(WIN32)
-    add_executable(falloutequestria WIN32 ${MercaFront_SRCS} ${PROJECT_SOURCES} qml.qrc)
+    add_executable(falloutequestria WIN32 ${PROJECT_SOURCES})
   else()
     add_executable(falloutequestria ${PROJECT_SOURCES})
   endif()
