@@ -34,6 +34,7 @@ public:
 
   Q_INVOKABLE bool hasTask(const QString& name);
   Q_INVOKABLE void addTask(const QString& name, qint64 interval, int iterationCount = 1);
+  Q_INVOKABLE void addUniqueTask(const QString& name, qint64 interval, int iterationCount = 1);
   Q_INVOKABLE bool removeTask(const QString& name);
   Q_INVOKABLE void decreaseIterationsFor(const QString& name, int iteractionCount);
 

@@ -114,6 +114,12 @@ void TaskRunner::addTask(const QString &name, qint64 interval, int iterationCoun
 
 }
 
+void TaskRunner::addUniqueTask(const QString &name, qint64 interval, int iterationCount)
+{
+  if (!hasTask(name))
+    addTask(name, interval, iterationCount);
+}
+
 bool TaskRunner::removeTask(const QString &name)
 {
   if (!updating)
