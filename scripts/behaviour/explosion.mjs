@@ -42,7 +42,7 @@ export class Explosion {
         objects.forEach(this.triggeredOnObject.bind(this));
       }
     }
-    level.sounds.play(this.sound);
+    game.sounds.play(this.sound);
   }
 
   triggeredOnObject(object) {

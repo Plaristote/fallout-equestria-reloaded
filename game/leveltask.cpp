@@ -13,7 +13,6 @@
 
 LevelTask::LevelTask(QObject *parent) : ParentType(parent)
 {
-  soundManager = new SoundManager(this);
   taskRunner = new TaskRunner(this);
   updateTimer.setInterval(30);
   updateTimer.setSingleShot(false);
@@ -151,7 +150,6 @@ void LevelTask::update()
       endTurnTask(delta);
   }
   updateVisualEffects(delta);
-  soundManager->update();
   emit updated();
 }
 

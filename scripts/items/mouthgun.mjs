@@ -48,13 +48,13 @@ class MouthGun extends WeaponBehaviour {
       this.user.inventory.removeItemOfType("9mm-ammo", amount);
       this.model.ammo += amount;
       this.model.useMode = "shoot";
-      level.sounds.play("reload");
+      game.sounds.play("reload");
       return true;
     }
     else {
       game.appendToConsole("Out of ammo !");
       this.user.actionPoints += this.getActionPointCost();
-      level.sounds.play("out-of-ammo");
+      game.sounds.play("out-of-ammo");
     }
     return false;
   }
@@ -66,10 +66,10 @@ class MouthGun extends WeaponBehaviour {
     if (amount > 0) {
       this.model.ammo = 0;
       this.user.inventory.addItemOfType("9mm-ammo", amount);
-      level.sounds.play("reload");
+      game.sounds.play("reload");
     }
     else
-      level.sounds.play("out-of-ammo");
+      game.sounds.play("out-of-ammo");
     console.log("bye unlaoded", this.model.ammo);
   }
 
@@ -86,7 +86,7 @@ class MouthGun extends WeaponBehaviour {
     else {
       game.appendToConsole("Out of ammo !");
       this.user.actionPoints += this.getActionPointCost();
-      level.sounds.play("out-of-ammo");
+      game.sounds.play("out-of-ammo");
     }
     return false;
   }

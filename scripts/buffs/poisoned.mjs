@@ -39,8 +39,7 @@ class Poisoned extends StackableBuff {
     this.model.target.takeDamage(damage * times, null);
     if (this.model.target === game.player) {
       game.appendToConsole(i18n.t("messages.poison-damage", {damage: damage * times}));
-      if (typeof level != "undefined")
-        level.sounds.play("notification");
+      game.sounds.play("notification");
     }
     if (this.charges <= 0)
       this.model.remove();

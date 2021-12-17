@@ -45,7 +45,7 @@ void TutorialComponent::loadPage()
     {
       title = I18n::get()->t("tutorial." + QString::number(page + 1));
       html  = file.readAll();
-      Game::get()->getLevel()->getSoundManager()->play("tutorial-show");
+      Game::get()->getSoundManager()->play("tutorial-show");
       emit htmlChanged();
     }
     else

@@ -34,6 +34,7 @@ Game::Game(QObject *parent) : StorableObject(parent), timePasser(this)
   randomEncounters = new RandomEncounterController(this);
   quests = new QuestManager(this);
   taskManager = new TaskRunner(this);
+  soundManager = new SoundManager(this);
   scriptEngine.installExtensions(QJSEngine::ConsoleExtension);
   scriptEngine.globalObject().setProperty("game", scriptEngine.newQObject(this));
   scriptEngine.globalObject().setProperty("quests", scriptEngine.newQObject(quests));

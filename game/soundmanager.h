@@ -6,6 +6,7 @@
 #include <QUrl>
 #include <QVector>
 #include <QSharedPointer>
+#include <QTimer>
 
 class QSoundEffect;
 class DynamicObject;
@@ -17,14 +18,16 @@ class SoundManager : public QObject
 public:
   explicit SoundManager(QObject *parent = nullptr);
 
-  void update();
-
   Q_INVOKABLE void play(const QString&, qreal volume = 1.f);
   Q_INVOKABLE void play(const DynamicObject*, const QString&, qreal volume = 1.f);
+
+private slots:
+  void update();
 
 private:
   QMap<QString, QUrl> soundLibrary;
   QVector<QSharedPointer<QSoundEffect>> sounds;
+  QTimer timer;
 };
 
 #endif // SOUNDMANAGER_H

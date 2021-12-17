@@ -26,7 +26,6 @@ class LevelTask : public SaveComponent
   typedef SaveComponent ParentType;
 
   Q_PROPERTY(bool       paused  MEMBER paused NOTIFY pausedChanged)
-  Q_PROPERTY(SoundManager* sounds READ getSoundManager CONSTANT)
   Q_PROPERTY(TutorialComponent* tutorial MEMBER tutorial NOTIFY tutorialChanged)
 public:  
   explicit LevelTask(QObject *parent = nullptr);
@@ -36,7 +35,6 @@ public:
   bool isPaused() const { return paused; }
 
   const QString& getName() const { return name; }
-  SoundManager* getSoundManager() const { return soundManager; }
 
   void registerDynamicObject(DynamicObject*) override;
   void unregisterDynamicObject(DynamicObject*) override;
@@ -74,7 +72,6 @@ private:
 protected:
   QTimer         updateTimer;
   QElapsedTimer  clock;
-  SoundManager*  soundManager = nullptr;
   bool           paused = true;
   bool           initialized = false;
   qint64         finalizeTurnRemainingTime = 0;

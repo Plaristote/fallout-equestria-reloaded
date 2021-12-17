@@ -150,10 +150,7 @@ void DynamicObject::setSpriteOffset(QPoint offset)
 
 void DynamicObject::playSound(const QString& sound, qreal volume) const
 {
-  LevelTask* level = Game::get()->getLevel();
-
-  if (level)
-    level->getSoundManager()->play(this, sound, volume);
+  Game::get()->getSoundManager()->play(this, sound, volume);
 }
 
 void DynamicObject::load(const QJsonObject& data)

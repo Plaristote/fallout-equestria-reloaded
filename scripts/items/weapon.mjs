@@ -49,7 +49,7 @@ export class WeaponBehaviour extends ItemBehaviour {
 
     console.log("ROLL", roll, '/', successRate);
     if (this.fireSound)
-      level.sounds.play(this.fireSound);
+      game.sounds.play(this.fireSound);
     return randomCheck(successRate, {
       failure:         this.triggerDodgeUse.bind(this, target),
       criticalFailure: this.triggerCriticalFailure.bind(this, target),
@@ -76,7 +76,7 @@ export class WeaponBehaviour extends ItemBehaviour {
         target: target.statistics.name
       })
     );
-    level.sounds.play("dodge");
+    game.sounds.play("dodge");
     return true;
   }
 
@@ -94,7 +94,7 @@ export class WeaponBehaviour extends ItemBehaviour {
       })
     );
     target.takeDamage(damage, this.user);
-    level.sounds.play(this.hitSound);
+    game.sounds.play(this.hitSound);
     return true;
   }
 

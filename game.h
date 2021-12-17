@@ -29,6 +29,7 @@ class Game : public StorableObject
   Q_PROPERTY(TimeManager*    timeManager MEMBER timeManager CONSTANT)
   Q_PROPERTY(TaskRunner*     tasks       MEMBER taskManager CONSTANT)
   Q_PROPERTY(QuestManager*   quests      MEMBER quests CONSTANT)
+  Q_PROPERTY(SoundManager*   sounds      READ getSoundManager CONSTANT)
   Q_PROPERTY(RandomEncounterController* randomEncounters MEMBER randomEncounters CONSTANT)
   Q_PROPERTY(bool fastPassTime READ isFastPassingTime NOTIFY fastPassingChanged)
   Q_PROPERTY(bool isGameEditor MEMBER isGameEditor NOTIFY gameEditorEnabled)
@@ -57,6 +58,7 @@ public:
   WorldMap* getWorldmap() const { return worldmap; }
   LevelTask* getLevel() const { return currentLevel; }
   TaskRunner* getTaskManager() const { return taskManager; }
+  SoundManager* getSoundManager() const { return soundManager; }
   QJSEngine& getScriptEngine() { return scriptEngine; }
   QJSValue loadScript(const QString& path);
   QJSValue scriptCall(QJSValue callable, const QJSValueList& args, const QString& scriptName);
@@ -117,6 +119,7 @@ private:
   QJSEngine   scriptEngine;
   ScriptController* script = nullptr;
   TaskRunner* taskManager = nullptr;
+  SoundManager* soundManager = nullptr;
   TimePasser timePasser;
 
   QMap<QString, Trait> cmapTraits;

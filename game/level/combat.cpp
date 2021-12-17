@@ -211,7 +211,7 @@ void CombatComponent::initializeCharacterTurn(Character* character)
   if (!character->isUnconscious())
   {
     if (character == getPlayer())
-      Game::get()->getLevel()->getSoundManager()->play("start-turn");
+      Game::get()->getSoundManager()->play("start-turn");
     character->getFieldOfView()->runTask();
     finalizeArmorClassBonus(character);
     character->scriptCall("onTurnStart");
@@ -223,7 +223,7 @@ void CombatComponent::initializeCharacterTurn(Character* character)
 void CombatComponent::finalizeCharacterTurn(Character* character)
 {
   if (character == getPlayer())
-    Game::get()->getLevel()->getSoundManager()->play("end-turn");
+    Game::get()->getSoundManager()->play("end-turn");
   initializeArmorClassBonus(character);
   character->getActionQueue()->reset();
   character->resetActionPoints();
@@ -244,7 +244,7 @@ void CombatComponent::passTurn(Character *character)
 
 void CombatComponent::onCombatStateChanged()
 {
-  Game::get()->getLevel()->getSoundManager()->play(combat ? "start-combat" : "end-combat");
+  Game::get()->getSoundManager()->play(combat ? "start-combat" : "end-combat");
   getPlayer()->getActionQueue()->reset();
   if (!combat)
     finalizeAllArmorClassBonus();

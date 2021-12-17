@@ -8,7 +8,7 @@
 #include <QSettings>
 #include <cmath>
 
-SoundManager::SoundManager(QObject *parent) : QObject(parent)
+static void loadSoundLibrary(QMap<QString, QUrl>& soundLibrary)
 {
   QFile file(ASSETS_PATH + "audio.json");
 
@@ -23,6 +23,14 @@ SoundManager::SoundManager(QObject *parent) : QObject(parent)
   }
 }
 
+
+SoundManager::SoundManager(QObject *parent) : QObject(parent)
+{
+  loadSoundLibrary(soundLibrary);
+  timer.setInterval(1000);
+  connect(&timer, &QTimer::timeout, this, &SoundManager::update);
+}
+
 void SoundManager::update()
 {
   for (auto it = sounds.begin() ; it != sounds.end() ;)
@@ -34,6 +42,8 @@ void SoundManager::update()
     else
       it++;
   }
+  if (!sounds.size())
+    timer.stop();
 }
 
 void SoundManager::play(const QString& name, qreal volume)
@@ -48,6 +58,7 @@ void SoundManager::play(const QString& name, qreal volume)
     sound->setVolume(volume * volumeLevel / 100);
     sound->play();
     sounds.push_back(sound);
+    timer.start();
   }
 }
 
