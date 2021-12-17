@@ -3,6 +3,32 @@
 #include "game.h"
 #include <QJsonObject>
 #include <QJsonArray>
+#include <QRegularExpression>
+
+template<typename OBJECT_TYPE>
+static QString makeUniqueName(QString base, const ObjectGroup* group, OBJECT_TYPE* (ObjectGroup::*getter)(const QString&) const)
+{
+  if ((group->*getter)(base) != nullptr)
+  {
+    QString newName = base.replace(QRegularExpression("#[0-9]+$"), "");
+    unsigned int i = 0;
+
+    do {
+      newName = base + '#' + QString::number(++i);
+    } while ((group->*getter)(newName) != nullptr);
+    return newName;
+  }
+  return base;
+}
+
+static QString validateName(const QString& name, bool unique)
+{
+  if (name.indexOf('.') >= 0)
+    return QString("Invalid object name: contains forbidden character '.'");
+  if (!unique)
+    return QString("Object name must be unique within an object group");
+  return QString();
+}
 
 ObjectGroup::ObjectGroup(QObject *parent) : ParentType(parent)
 {
@@ -84,13 +110,14 @@ ObjectFactory* ObjectGroup::factory()
   return _factory;
 }
 
-QString ObjectGroup::validateObjectName(const QString& name)
+QString ObjectGroup::validateObjectName(const QString& name) const
 {
-  if (name.indexOf('.') >= 0)
-    return QString("Invalid object name: contains forbidden character '.'");
-  if (getObjectByName(name))
-    return QString("Object name must be unique within an object group");
-  return QString();
+  return validateName(name, getObjectByName(name) == nullptr);
+}
+
+QString ObjectGroup::validateGroupName(const QString& name) const
+{
+  return validateName(name, getGroupByName(name) == nullptr);
 }
 
 QJSValue ObjectGroup::getScriptObject() const
@@ -266,6 +293,9 @@ void ObjectGroup::appendGroup(ObjectGroup* group)
 {
   if (!groups.contains(group))
   {
+    QString name = makeUniqueName(group->getName(), this, &ObjectGroup::getGroupByName);
+
+    group->setProperty("name", name);
     group->setParent(this);
     groups.push_back(group);
     emit groupAdded(group);
@@ -277,6 +307,9 @@ void ObjectGroup::appendObject(DynamicObject* object)
 {
   if (!objects.contains(object))
   {
+    QString name = makeUniqueName(object->getObjectName(), this, &ObjectGroup::getObjectByName);
+
+    object->setObjectName(name);
     object->setParent(this);
     objects.push_back(object);
     emit objectAdded(object);

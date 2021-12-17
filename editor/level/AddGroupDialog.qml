@@ -8,6 +8,7 @@ import Game 1.0
 UiStyle.CustomDialog {
   id: dialogAddObject
   property QtObject objectGroup
+  property string error
 
   signal groupAdded(QtObject newObject)
 
@@ -18,7 +19,12 @@ UiStyle.CustomDialog {
   }
 
   function resetInputs() {
-    objectNameInput.text = "";
+    objectNameInput.text = error = "";
+  }
+
+  function validate() {
+    error = objectGroup.validateGroupName(objectNameInput.text);
+    return error.length === 0;
   }
 
   title: "New group"
@@ -41,6 +47,9 @@ UiStyle.CustomDialog {
         Layout.preferredHeight: 40
         onAccepted: dialogAddObject.accept()
       }
+
+      TerminalLabel { text: "Error"; visible: error.length > 0 }
+      TerminalLabel { text: error; visible: error.length > 0 }
     }
   }
 

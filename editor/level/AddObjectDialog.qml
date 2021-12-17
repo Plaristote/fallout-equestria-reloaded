@@ -8,6 +8,7 @@ import Game 1.0
 UiStyle.CustomDialog {
   id: dialogAddObject
   property QtObject objectGroup
+  property string error
 
   signal objectAdded(QtObject newObject)
 
@@ -18,9 +19,14 @@ UiStyle.CustomDialog {
   }
 
   function resetInputs() {
-    objectNameInput.text = "";
+    objectNameInput.text = error = "";
     itemTypeInput.model = itemLibrary.getObjectList();
     sheetInput.model = scriptController.getCharacterSheets()
+  }
+
+  function validate() {
+    error = objectGroup.validateObjectName(objectNameInput.text);
+    return error.length === 0;
   }
 
   title: "New object"
@@ -64,6 +70,9 @@ UiStyle.CustomDialog {
       Layout.fillWidth: true
       Layout.preferredHeight: 40
     }
+
+    CustomLabel { text: "Error"; visible: error.length > 0 }
+    CustomLabel { text: error; visible: error.length > 0 }
   }
 
   onAccepted: {

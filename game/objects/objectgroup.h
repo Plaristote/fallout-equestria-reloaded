@@ -39,7 +39,8 @@ public:
   void           load(const QJsonObject&);
   void           save(QJsonObject&) const;
   Q_INVOKABLE ObjectFactory* factory();
-  Q_INVOKABLE QString validateObjectName(const QString&);
+  Q_INVOKABLE QString validateObjectName(const QString&) const;
+  Q_INVOKABLE QString validateGroupName(const QString&) const;
 
   Q_INVOKABLE QJSValue       getScriptObject() const;
   void                       eachObject(std::function<void(DynamicObject*)>) const;
