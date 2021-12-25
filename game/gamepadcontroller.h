@@ -11,6 +11,8 @@ class GamepadController : public QObject
 {
   Q_OBJECT
 
+  Q_PROPERTY(bool connected READ isConnected NOTIFY connectedChanged)
+
   struct CursorTimer
   {
     CursorTimer();
@@ -27,7 +29,10 @@ public:
 
   static GamepadController* get() { return instance; }
 
+  bool isConnected() const;
+
 signals:
+  void connectedChanged();
   void cameraAxisClicked();
   void moveCameraXAxis(double movement);
   void moveCameraYAxis(double movement);
@@ -41,6 +46,9 @@ signals:
   void bottomClicked();
   void leftTriggerClicked();
   void rightTriggerClicked();
+
+public slots:
+  void lookForController();
 
 private slots:
   void movementAxisClicked(bool pressed);
@@ -65,6 +73,7 @@ private slots:
   void rightPressedChange(bool pressed);
 
 private:
+  void connectGamepad(int);
   void clickEvent(bool);
   bool isLevelMode() const;
   void swapUseMode(const QString& slotName);
