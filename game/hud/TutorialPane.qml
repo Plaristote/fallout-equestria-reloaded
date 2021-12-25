@@ -17,17 +17,18 @@ Item {
       anchors.left: parent.left
       anchors.right: parent.right
 
-      TerminalButton {
-        text: i18n.t("tutorial.open")
-        onClicked: controller.visible = true
-        Layout.fillWidth: true
-      }
-
       TerminalCheckBox {
+        id: enableCheckbox
         text: controller.enabled ? i18n.t("tutorial.enabled") : i18n.t("tutorial.disabled")
         onCheckedChanged: controller.enabled = checked
         Component.onCompleted: checked = controller.enabled
         clip: true
+        Layout.fillWidth: true
+      }
+
+      TerminalButton {
+        text: i18n.t("tutorial.open")
+        onClicked: enableCheckbox.checked = controller.visible = true
       }
     }
   }
