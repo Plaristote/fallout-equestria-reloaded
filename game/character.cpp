@@ -15,6 +15,7 @@ Character::Character(QObject *parent) : ParentType(parent)
   connect(this, &Character::died, [this]() { if (script) { script->call("onDied"); } });
   connect(this, &Character::died, this, &CharacterBuffs::clearBuffs, Qt::QueuedConnection);
   connect(this, &Character::died, this, &Character::blocksPathChanged);
+  connect(this, &Character::died, getFieldOfView(), &FieldOfView::reset, Qt::QueuedConnection);
   connect(this, &Sprite::animationFinished, this, &Character::afterDeathAnimation);
 }
 
