@@ -9,7 +9,7 @@ UiStyle.CustomDialog {
   title: i18n.t("controls-dialog")
   modal: true
   standardButtons: Dialog.Ok
-  property var controls: [
+  property var keyboardControls: [
     {key: "F1",  label: i18n.t("controls.help")},
     {key: "I",   label: i18n.t("controls.inventory")},
     {key: "C",   label: i18n.t("controls.centerCamera")},
@@ -21,6 +21,28 @@ UiStyle.CustomDialog {
     {key: "Esc", label: i18n.t("controls.passTurn")},
     {key: "F2",  label: i18n.t("controls.debugConsole")}
   ]
+  property var gamepadControls: ({
+    "L1":       i18n.t("controls.nextUseMode1"),
+    "L2":       i18n.t("controls.useMode1"),
+    "L3":       i18n.t("controls.interactionMode"),
+    "R1":       i18n.t("controls.nextUseMode2"),
+    "R2":       i18n.t("controls.useMode2"),
+    "R3":       i18n.t("controls.centerCamera"),
+    "A":        i18n.t("controls.click"),
+    "B":        i18n.t("controls.passTurn"),
+    "X":        i18n.t("controls.inventory"),
+    "Y":        i18n.t("controls.openSkilldex"),
+    "Top":      i18n.t("controls.cmap"),
+    "Left":     i18n.t("controls.previousTarget"),
+    "Right":    i18n.t("controls.nextTarget"),
+    "Bottom":   i18n.t("controls.pipboy"),
+    "PadLeft":  i18n.t("controls.padLeft"),
+    "PadRight": i18n.t("controls.padRight")
+  })
+
+  function initializeTabRow() {
+    tabView.currentTab = gamepad.connected ? "gamepad" : "keyboard";
+  }
 
   Shortcut {
     sequence: "F1"
@@ -28,57 +50,33 @@ UiStyle.CustomDialog {
     onActivated: root.close()
   }
 
-  Pane {
-    background: UiStyle.TerminalPane {}
+  Connections {
+    target: gamepad
+    function onConnectedChanged() { initializeTabRow(); }
+  }
+
+  ColumnLayout {
     anchors.fill: parent
-    clip: true
 
-    CustomFlickable {
-      anchors.fill: parent
-      contentWidth: grid.width
-      contentHeight: grid.height
-
-      GridLayout {
-        id: grid
-        columns: 4
-        rowSpacing: 1
-        columnSpacing: 5
-
-        Repeater {
-          model: controls
-          delegate: keyRow
-        }
-      }
+    TabRow {
+      id: tabView
+      tabs: ["keyboard", "gamepad"]
+      labels: [i18n.t("keyboard"), i18n.t("gamepad")]
+      Component.onCompleted: initializeTabRow()
     }
-  }
 
-  Component {
-    id: keyRow
-    Repeater {
-      property string key: controls[index].key
-      property string label: controls[index].label
-      model: 2
-      delegate: Loader {
-        property string cellKey: key
-        property string cellLabel: label
-        sourceComponent: index === 0 ? keyHint : keyLabel
-      }
-    }
-  }
-
-  Component {
-    id: keyHint
-    KeyHint {
-      key: cellKey
-      Layout.preferredWidth: 48
-    }
-  }
-
-  Component {
-    id: keyLabel
-    TerminalLabel {
-      text: cellLabel
+    ShortcutTable {
+      visible: tabView.currentTab === "keyboard"
+      Layout.fillHeight: true
       Layout.fillWidth: true
+      controls: keyboardControls
+    }
+
+    GamepadPreview {
+      visible: tabView.currentTab === "gamepad"
+      Layout.fillHeight: true
+      Layout.fillWidth: true
+      controls: gamepadControls
     }
   }
 }
