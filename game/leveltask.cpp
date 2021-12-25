@@ -142,7 +142,9 @@ void LevelTask::update()
     realTimeTask(delta);
   else
   {
-    if (!isCharacterTurn(getPlayer()) || finalizeTurnRemainingTime > 0)
+    if (finalizeTurnRemainingTime > 0)
+      delta *= 12;
+    else if (!isCharacterTurn(getPlayer()))
       delta *= static_cast<int>(combatSpeedOption);
     if (finalizeTurnRemainingTime <= 0)
       combatTask(delta);
