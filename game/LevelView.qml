@@ -7,7 +7,13 @@ import "./level"
 
 LevelDisplay {
   id: root
-  property bool hasOverlay: interactionMenu.visible || inventoryViewContainer.visible || itemPickerContainer.visible || skilldex.visible || countdownDialog.visible || mainMenu.visible
+  property bool hasOverlay: interactionMenu.visible ||
+                            inventoryViewContainer.visible ||
+                            itemPickerContainer.visible ||
+                            skilldex.visible ||
+                            countdownDialog.visible ||
+                            controlsDialog.visible ||
+                            mainMenu.visible
   enabled: !gameController.fastPassTime
 
   function openMenu() {
@@ -31,9 +37,12 @@ LevelDisplay {
     onInventoryTriggered:      inventoryViewContainer.visible = true
     onSkilldexTriggered:       skilldex.visible = !skilldex.visible
     onDebugModeTriggered:      debugConsole.visible = !debugConsole.visible
+    onHelpTriggered:           controlsDialog.open()
     onBackTriggered: {
       if  (mainMenu.activated)
         mainMenu.activated = false;
+      else if (controlsDialog.visible)
+        controlsDialog.close();
       else if (interactionMenu.visible)
         interactionMenu.interactionTarget = null;
       else if (countdownDialog.visible)
@@ -223,6 +232,13 @@ LevelDisplay {
       left: parent.left; right: parent.right
       top: parent.top
     }
+  }
+
+  Hud.ControlsDialog {
+    id: controlsDialog
+    anchors.centerIn: parent
+    height: root.height - levelHud.height
+    width: Math.min(parent.width, 1070)
   }
 
   Hud.Menu {

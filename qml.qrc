@@ -29,6 +29,7 @@
         <file>assets/ui/tab.png</file>
         <file>assets/ui/Tab.qml</file>
         <file>assets/ui/PlayPanel.qml</file>
+        <file>assets/ui/key.png</file>
         <file>assets/ui/play-panel.png</file>
         <file>assets/ui/play-panel-left.png</file>
         <file>assets/ui/play-panel-center.png</file>
@@ -264,5 +265,7 @@
         <file>editor/level/SpriteInputField.qml</file>
         <file>editor/ScriptInputField.qml</file>
         <file>editor/level/ElevatorObjectEditor.qml</file>
+        <file>game/hud/ControlsDialog.qml</file>
+        <file>ui/KeyHint.qml</file>
     </qresource>
 </RCC>

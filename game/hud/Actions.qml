@@ -21,6 +21,7 @@ Item {
   signal inventoryTriggered()
   signal skilldexTriggered()
   signal debugModeTriggered()
+  signal helpTriggered()
 
   Connections {
     target: gamepad
@@ -44,6 +45,17 @@ Item {
       onActivated: backAction.trigger()
     }
     onTriggered: backTriggered()
+  }
+
+  Action {
+    id: helpAction
+    enabled: root.enabled
+    shortcut: Shortcut {
+      sequence: "F1"
+      enabled: helpAction.enabled
+      onActivated: helpAction.trigger()
+    }
+    onTriggered: helpTriggered()
   }
 
   Action {
