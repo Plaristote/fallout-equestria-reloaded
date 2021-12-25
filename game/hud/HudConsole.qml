@@ -29,6 +29,12 @@ Pane {
           color: "green"
           font.family: application.consoleFont.name
           font.pointSize: application.consoleFont.tinySize
+
+          SequentialAnimation on color {
+            loops: index + 1 === gameController.consoleMessages.length ? 4 : 0
+            PropertyAnimation { to: "white"; duration: 250 }
+            PropertyAnimation { to: "green"; duration: 1000 }
+          }
         }
       }
     }
