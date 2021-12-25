@@ -8,7 +8,7 @@
 #include <QGuiApplication>
 #include <QMouseEvent>
 
-static const QString cursorPath = ASSETS_PATH + "ui/cursors/";
+static const QString cursorPath = ":/assets/ui/cursors/";
 
 static bool hasHoveredTile(LevelTask* level)
 {
