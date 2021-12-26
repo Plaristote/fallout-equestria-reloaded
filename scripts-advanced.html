@@ -116,7 +116,7 @@
         <div class="card mb-4">
           <div class="card-body">
 
-            <h4 class="card-title" id="c1-1">Introduction</h4>
+            <h4 class="card-title" id="c1-1">1.1 Introduction</h4>
             <p class="card-text">
 	      Factions are a tool to determine NPC behaviour towards the player character, or towards other NPCs.
 	      The most important use for factions is to determine whether NPCs are considered hostile or friendly:
@@ -130,7 +130,7 @@
 	      is liked or disliked by a NPC's faction.
 	    </p>
 
-            <h4 class="card-title" id="c1-2">Faction management</h4>
+            <h4 class="card-title" id="c1-2">1.2 Faction management</h4>
             <p class="card-text">
 	      Factions can be managed in the Game Editor by going into the <i>Diplomacy</i>. Here's an example
 	      of how to create a new faction:
@@ -153,10 +153,28 @@
 			towards another automatically sets the other faction hostile towards the first one.</li>
 	      </ul>
 	    </p>
+	    
+	    <div class="end-chapter"></div>
+	    
+	    <p class="card-text">
+        You will also need to set factions on your NPCs. You have two ways to set a NPC faction:
+	    </p>
+	    
+	    <p class="card-text">
+        Directly from the character editor, using the faction input:
+        <img src="pictures/diplomacy-character.png" />
+      </p>
+      
+      <p class="card-text">
+        Or, if you want to change that value during the game, by using the <span class="mono-span">statistics.faction</span>
+        property on the NPC's game object, as such:
+      </p>
+      
+      <pre class="code"><code>level.findObject("mynpc").statistics.faction = "player"</code></pre>
 
             <div class="end-chapter"></div>
 
-	    <h4 class="card-title" id="c1-3">Changing relationships</h4>
+	    <h4 class="card-title" id="c1-3">1.3 Changing relationships</h4>
 	    <p class="card-text">
               During the game, you may also update the relationships between factions. There are two ways of doing that:
 	    </p>
@@ -165,18 +183,19 @@
 	      Directly from an NPC object, using the <span class="mono-span">setAsEnemy</span> or
 	      <span class="mono-span">setAsFriendly</span>. For instance:
 	      <pre class="code"><code>game.player.setAsEnemy(npc)</code></pre>
-	      or
 	      <pre class="code"><code>game.player.setAsFriendly(npc)</code></pre>
 	    </p>
 
 	    <p class="card-text">
-              Using the <span class="mono-span">dataEngine</span> object and specifying the two factions' names:
-	      <pre class="code"><code>game.dataEngine.setFactionAsEnemy("player", "diamond-dogs", true)</code></pre>
+              Using the <span class="mono-span">setFactionAsEnemy</span> method and specifying the two factions' names:
+	      <pre class="code"><code>game.setFactionAsEnemy("player", "diamond-dogs", true)</code></pre>
+	      Set the third parameter to <span class="mono-span">true</span> to make the two factions hostiles, or to
+	      <span class=mono-span">false</span> to make them friendly again.
 	    </p>
 
             <div class="end-chapter"></div>
 
-	    <h4 class="card-title" id="c1-4">Scripted behaviours on relation changes</h4>
+	    <h4 class="card-title" id="c1-4">1.4 Scripted behaviours on relation changes</h4>
 	    <p class="card-text">
 	      As you may not always control the moment when a faction changes its relationship towards another,
 	      there is also a hook in the <span class="mono-span">main.mjs</span> script that you can use to react
@@ -210,7 +229,7 @@ export function create(model) {
 
             <div class="end-chapter"></div>
 
-	    <h4 class="card-title" id="c1-5">Reputation</h4>
+	    <h4 class="card-title" id="c1-5">1.5 Reputation</h4>
 	    <p class="card-text">
 	      There are three useful method you need to know to manage the player's reputation towards
 	      other factions:
@@ -234,8 +253,226 @@ export function create(model) {
         </h2>
         <div class="card mb-4">
           <div class="card-body">
-	  </div>
-	</div>
+            <p class="card-text">
+              If you want your world to look alive, you will need to set up some <i>Routines</i> on your NPCs. Routines are
+              designed to trigger specific behaviours at given times. A typical usecase would be a shopkeeper closing his
+              shop at night and going to sleep.
+            </p>
+            
+            <div class="end-chapter"></div>
+          
+            <h4 class="card-title" id="c2-1">2.1 Adding a RoutineComponent</h4>
+            <p class="card-text">
+              The first step is to set up the RoutineComponent object in our NPC's constructor:
+            </p>
+            
+            <pre class="code"><code>import {CharacterBehaviour} from "./character.mjs";
+import {RoutineComponent} from "../behaviour/routine.mjs";
+
+class MyNPC extends CharacterBehaviour {
+  constructor(model) {
+    super(model);
+    this.routine = new RoutineComponent(this, [
+      { hour: "6",  minute: "30", callback: "wakeUp" },
+      { hour: "23", minute: "45", callback: "goToSleep" }
+    ]);
+  }
+}</code></pre>
+
+            <p class="card-text">
+              When creating our <i>new RoutineComponent</i>, the first parameter is the concerned script object, while
+              the second parameter describe the routine we want to implement.
+            </p>
+            
+            <p class="card-text">
+              In our Routine description, we've defined two callbacks: <i>wakeUp</i> and <i>goToSleep</i>. These methods will
+              trigger at exactly 6:00 and 23:45... but we first have to implement those:
+            </p>
+            
+            <pre class="code"><code>import {CharacterBehaviour} from "./character.mjs";
+import {RoutineComponent} from "../behaviour/routine.mjs";
+
+class MyNPC extends CharacterBehaviour {
+  constructor(model) {
+    super(model);
+    this.routine = new RoutineComponent(this, [
+      { hour: "6",  minute: "30", callback: "wakeUp" },
+      { hour: "23", minute: "45", callback: "goToSleep" }
+    ]);
+  }
+
+  wakeUp() {
+    const myDesk = level.findObject("mynpc-desk");
+
+    this.model.actions.pushReach(myDesk);
+    this.model.actions.start();
+  }
+
+  goToSleep() {
+    const myBed = level.findObject("mynpc-bed");
+
+    this.model.actions.pushReach(this.myBed());
+    this.model.actions.start();
+  }
+}</code></pre>
+
+            <p class="card-text">
+              Now we're talking. With this implemention, our NPC will reach the <i>mynpc-desk</i> object at day, while he will
+              move to the <i>mynpc-bed</i> at night.
+            </p>
+            
+            <p class="card-text">
+              Let's go a little bit further. What if your NPC has an associated dialog, or text bubbles ? You may want those
+              behaviours to change depending on the current running routine. Let's see how to achieve this result:
+            </p>
+            
+            <pre class="code"><code>import {CharacterBehaviour} from "./character.mjs";
+import {RoutineComponent} from "../behaviour/routine.mjs";
+
+class MyNPC extends CharacterBehaviour {
+  constructor(model) {
+    super(model);
+    this.routine = new RoutineComponent(this, [
+      { hour: "6",  minute: "30", callback: "wakeUp" },
+      { hour: "23", minute: "45", callback: "goToSleep" }
+    ]);
+  }
+
+  wakeUp() {
+    const myDesk = level.findObject("mynpc-desk");
+
+    this.model.actions.pushReach(myDesk);
+    this.model.actions.start();
+  }
+
+  goToSleep() {
+    const myBed = level.findObject("mynpc-bed");
+
+    this.model.actions.pushReach(this.myBed());
+    this.model.actions.start();
+  }
+  
+  get dialog() {
+    if (this.routine.getCurrentRoutine().callback === "goToSleep")
+      return null;
+    return "mynpc-dialog";
+  }
+  
+  get textBubbles() {
+    if (this.routine.getCurrentRoutine().callback === "goToSleep")
+      return [{ content: "Zzz", duration: 2500, color: "gray"}];
+    return [];
+  }
+}</code></pre>
+
+              <p class="card-text">
+                In this example, we've overloaded the getters for <i>dialog</i> and <i>textBubbles</i> so that our character
+                would start the <i>mynpc-dialog</i> during the day, or use our custom text bubbles during night.<br/>
+                To achieve that result, we used <span class="mono-span">this.routine.getCurrentRoutine()</span> to retrieve
+                the current routine object, which allows us to identify the current routine with the
+                <span class="mono-span">callback</span> attribute.
+              </p>
+              
+              <div class="end-chapter"></div>
+
+            <h4 class="card-title" id="c2-1">2.2 Persistent Routines</h4>
+            
+            <p class="card-text">
+              A persistent routine is a routine that triggers its callback on a regular basis, ensuring that our NPC
+              will go back to it's routine whenver he's done with any other punctual task.
+            </p>
+
+            <p>
+              In the previous chapter, we got a bit ahead of ourselves. Our non-persistent routine is perfect for instant
+              changes, but not so much for performing actions. What if our NPC cannot reach their bed or desk when the clock
+              hits 6:30 or 23:45 ? With a non-persistent routine, they'll give up and won't do anything until the next routine
+              triggers.
+            </p>
+            
+            <p>
+              With a persistent routine however, the routine callback will be triggered periodically, allowing the character
+              to reach its destination as soon as a path is available to him. Let's see how to turn out previous example into
+              a persistent routine:
+            </p>
+            
+            <pre class="code"><code>import {CharacterBehaviour} from "./character.mjs";
+import {RoutineComponent} from "../behaviour/routine.mjs";
+
+class MyNPC extends CharacterBehaviour {
+  constructor(model) {
+    super(model);
+    this.routine = new RoutineComponent(this, [
+      { hour: "6",  minute: "30", callback: "wakeUp" },
+      { hour: "23", minute: "45", callback: "goToSleep" }
+    ]);
+    this.routine.refreshInterval = 5000;
+    this.routine.enablePersistentRoutine();
+  }
+
+  wakeUp() {
+    const myDesk = level.findObject("mynpc-desk");
+
+    this.model.actions.pushReach(myDesk);
+    this.model.actions.start();
+  }
+
+  goToSleep() {
+    const myBed = level.findObject("mynpc-bed");
+
+    this.model.actions.pushReach(this.myBed());
+    this.model.actions.start();
+  }
+}</code></pre>
+
+            <p class="card-text">
+              To turn our routine in a persistent one, we used the <span class="mono-span">enablePersistentRoutine</span> method
+              on our routine component.<br/>
+              Optionally, we can also manually set the <i>refreshInterval</i> property, to tell the engine at which frequency
+              should our callback be triggered. By default, it will be between 4 and 7 seconds.
+            </p>
+
+            <div class="end-chapter"></div>
+            
+            <h4 class="card-title" id="c2-3">2.3 Interrupting a routine</h4>
+            
+            <p class="card-text">
+              On some occasion, you might want to pause the Routine on a NPC. You can achieve this by using the
+              <span class="mono-span">toggleRoutine</span> helper, as following:
+            </p>
+            
+            <pre class="code"><code>import {toggleRoutine} from "../behaviour/routine.mjs";
+
+function interruptRoutineOnMyNPC() {
+  const myNpc = level.findObject("mynpc");
+  
+  toggleRoutine(myNpc, false);
+}</code></pre>
+
+            <p class="card-text">
+              In the function we defined up here, we disable the Routine on <i>mynpc</i>. The <span class="mono-span">toggleRoutine</span>
+              helper takes two parameters: the first one is the NPC's <i>game object</i> (not it's script object, mind you),
+              and the second one is a boolean defining whether you want the routine to be enabled or disabled.
+            </p>
+            
+            <div class="end-chapter"></div>
+
+            <h4 class="card-title" id="c2-3">2.4 Tips about routines</h4>
+            
+            <p class="card-text">
+              There are a few things you should know about the <i>Routine</i> component:
+            </p>
+            
+            <ul>
+              <li>Routine callbacks do not get called if the NPC is engaged in combat.<br/>
+                  They will be post-poned until the end of the combat.</li>
+              <li>Routine callbacks do not get called if the NPC is already doing something else.<br/>
+                  They will be post-poned until the NPC's action queue has been emptied.</li>
+              <li>The Routine component also works on non-NPC objects.</li>
+            </ul>
+            
+            <div class="end-chapter"></div>
+          </div>
+        </div>
 
         <h2 class="my-4" id="c3">
           3. Commonalities
@@ -243,7 +480,7 @@ export function create(model) {
         <div class="card mb-4">
           <div class="card-body">
 
-            <h4 class="card-title" id="c3-1">How to start a specific dialog from script</h4>
+            <h4 class="card-title" id="c3-1">3.1 How to start a specific dialog from script</h4>
             <p class="card-text">
               Sometimes, you may want an NPC to initiate a dialog themselves. This can be done easily by calling
               <span class="mono-span">level.initializeDialog(character)</span>, which will immediately open a
@@ -259,7 +496,7 @@ export function create(model) {
 
             <div class="end-chapter"></div>
 
-            <h4 class="card-title" id="c3-2">Trigger a behaviour when a character is detected</h4>
+            <h4 class="card-title" id="c3-2">3.2 Trigger a behaviour when a character is detected</h4>
             <p class="card-text">
               Your NPC can also react to character detection using the <span class="mono-span">onCharacterDetected</span> hook,
               such as:
@@ -310,7 +547,7 @@ export function create(model) {
 
             <div class="end-chapter"></div>
 
-            <h4 class="card-title" id="c3-3">How to know if a character sees another character</h4>
+            <h4 class="card-title" id="c3-3">3.3 How to know if a character sees another character</h4>
             <p class="card-text">
               There are several way a character can be aware o other characters: for instance, they may have a direct line o sight on those,
               or they may just know that they're around (because they saw them earlier).
@@ -321,18 +558,18 @@ export function create(model) {
               <span class="mono-span">character.hasLineOfSight(target)</span> can be used to know if a character can see another one.
             </p>
 
-            <p class="card card-hint">
+            <p class="card-text card-hint">
               Note that merely having a line of sight doesn't mean a character is actually aware of another one's presence:
               the other character might be sneaking.
             </p>
 
-            <p class="card card-hint">
+            <p class="card-text card-hint">
               <span class="mono-span">hasLineOfSight</span> can be used on any object, even non-character ones.
             </p>
 
             <div class="end-chapter"></div>
 
-            <h4 class="card-title" id="c3-4">Having a NPC prevent certain player actions</h4>
+            <h4 class="card-title" id="c3-4">3.4 Having a NPC prevent certain player actions</h4>
             <p class="card-text">
               Some common scenario for this would be preventing a character from opening a door when an NPC is guarding it.
               While you could create a script for the door, it sometimes make more sense to implement this behaviour directly
@@ -401,7 +638,10 @@ class Guard extends CharacterBehaviour {
             </div>
             <a href="#c2">2. NPCs Routines</a>
             <div class="chapter">
-              <a href="#c2-1">2.1 TODO</a>
+              <a href="#c2-1">2.1 Adding a RoutineComponent</a>
+              <a href="#c2-2">2.2 Persistent Routines</a>
+              <a href="#c2-3">2.3 Interrupting a routine</a>
+              <a href="#c2-4">2.4 Tips about routines</a>
             </div>
             <a href="#c3">3. Commonalities</a>
             <div class="chapter">
