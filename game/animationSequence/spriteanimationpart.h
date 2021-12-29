@@ -20,6 +20,8 @@ protected:
 public:
   ~SpriteAnimationPart();
 
+  static bool matches(const QJSValue&);
+
   void initialize(QJSValue& value) override;
   void start() override;
   bool isOver() const override { return over; }

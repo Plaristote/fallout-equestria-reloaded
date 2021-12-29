@@ -4,8 +4,33 @@
 # include "groupanimationpart.h"
 # include "objectanimationpart.h"
 # include "spriteanimationpart.h"
+# include "soundanimationpart.h"
 # include <QJSValue>
 # include <QDebug>
+
+template<typename PART, typename ANIMATION_GROUP>
+void addAnimationToGroup(ANIMATION_GROUP& group, QJSValue& animationDescriptor)
+{
+  auto* part = new PART;
+
+  part->initialize(animationDescriptor);
+  group.addAnimationPart(part);
+}
+
+template<typename ANIMATION_GROUP, typename CURRENT_PART, typename ...PARTS>
+void recursiveAnimationPartLoading(ANIMATION_GROUP& group, QJSValue& animationDescriptor)
+{
+  if (CURRENT_PART::matches(animationDescriptor))
+    addAnimationToGroup<CURRENT_PART>(group, animationDescriptor);
+  else
+    recursiveAnimationPartLoading<ANIMATION_GROUP, PARTS...>(group, animationDescriptor);
+}
+
+template<typename ANIMATION_GROUP>
+void recursiveAnimationPartLoading(ANIMATION_GROUP&, QJSValue& animationDescriptor)
+{
+  qDebug() << "ActionAnimation: unknown animation type" << animationDescriptor.property("type").toString();
+}
 
 template<typename ANIMATION_GROUP>
 void loadAnimationGroup(ANIMATION_GROUP& group, QJSValue& value)
@@ -17,29 +42,12 @@ void loadAnimationGroup(ANIMATION_GROUP& group, QJSValue& value)
     QJSValue animationDescriptor = value.property(i);
     QString  type = animationDescriptor.property("type").toString();
 
-    if (animationDescriptor.isArray())
-    {
-      auto* part = new GroupAnimationPart;
-
-      part->initialize(animationDescriptor);
-      group.addAnimationPart(part);
-    }
-    else if (type == "Sprite")
-    {
-      auto* part = new SpriteAnimationPart;
-
-      part->initialize(animationDescriptor);
-      group.addAnimationPart(part);
-    }
-    else if (type == "Animation")
-    {
-      auto* part = new ObjectAnimationPart;
-
-      part->initialize(animationDescriptor);
-      group.addAnimationPart(part);
-    }
-    else
-      qDebug() << "ActionAnimation: unknown animation type" << type;
+    recursiveAnimationPartLoading<ANIMATION_GROUP,
+      SpriteAnimationPart,
+      ObjectAnimationPart,
+      SoundAnimationPart,
+      GroupAnimationPart
+    >(group, animationDescriptor);
   }
 }
 

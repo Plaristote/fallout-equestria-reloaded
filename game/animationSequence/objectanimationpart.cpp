@@ -3,6 +3,11 @@
 #include <QDebug>
 #include "game/dynamicobject.h"
 
+bool ObjectAnimationPart::matches(const QJSValue& descriptor)
+{
+  return descriptor.property("type").toString() == "Animation";
+}
+
 void ObjectAnimationPart::initialize(QJSValue& value)
 {
   QObject* rawTarget = value.property("object").toQObject();
@@ -12,7 +17,7 @@ void ObjectAnimationPart::initialize(QJSValue& value)
     QJSValue jsPostAnimationName = value.property("afterAnimation");
 
     initialize(
-      reinterpret_cast<DynamicObject*>(value.property("object").toQObject()),
+      reinterpret_cast<DynamicObject*>(rawTarget),
       value.property("animation").toString(),
       jsPostAnimationName.isString() ? jsPostAnimationName.toString() : "idle"
     );

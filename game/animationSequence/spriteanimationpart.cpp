@@ -10,6 +10,11 @@ SpriteAnimationPart::~SpriteAnimationPart()
   level->unregisterVisualEffect(sprite);
 }
 
+bool SpriteAnimationPart::matches(const QJSValue& descriptor)
+{
+  return descriptor.property("type").toString() == "Sprite";
+}
+
 void SpriteAnimationPart::initialize(QJSValue &value)
 {
   sprite = new Sprite(this);

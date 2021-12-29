@@ -4,6 +4,11 @@ GroupAnimationPart::GroupAnimationPart()
 {
 }
 
+bool GroupAnimationPart::matches(const QJSValue& descriptor)
+{
+  return descriptor.isArray();
+}
+
 void GroupAnimationPart::initialize(QJSValue& value)
 {
   loadAnimationGroup(*this, value);

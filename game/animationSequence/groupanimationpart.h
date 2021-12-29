@@ -9,6 +9,7 @@ public:
   GroupAnimationPart();
   virtual ~GroupAnimationPart() override {}
 
+  static bool matches(const QJSValue&);
   void initialize(QJSValue&) override;
   void start() override;
   bool isOver() const override;

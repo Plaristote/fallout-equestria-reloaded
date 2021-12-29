@@ -231,6 +231,8 @@ set(PROJECT_SOURCES
         game/animationSequence/animationsequence.cpp
         game/animationSequence/movementhintanimationpart.h
         game/animationSequence/movementhintanimationpart.cpp
+        game/animationSequence/soundanimationpart.h
+        game/animationSequence/soundanimationpart.cpp
         game/animationSequence/groupanimationpart.h
         game/animationSequence/groupanimationpart.cpp
         game/animationSequence/animationloader.h
