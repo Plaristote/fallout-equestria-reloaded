@@ -1,35 +1,9 @@
-#include <QJSValue>
-#include <QDebug>
 #include "animationsequence.h"
-#include "objectanimationpart.h"
-#include "spriteanimationpart.h"
+#include "animationloader.h"
 
 void AnimationSequence::initialize(QJSValue& value)
 {
-  unsigned int length = value.property("length").toUInt();
-
-  for (unsigned int i = 0 ; i < length ; ++i)
-  {
-    QJSValue animationDescriptor = value.property(i);
-    QString  type = animationDescriptor.property("type").toString();
-
-    if (type == "Sprite")
-    {
-      auto* part = new SpriteAnimationPart;
-
-      part->initialize(animationDescriptor);
-      addAnimationPart(part);
-    }
-    else if (type == "Animation")
-    {
-      auto* part = new ObjectAnimationPart;
-
-      part->initialize(animationDescriptor);
-      addAnimationPart(part);
-    }
-    else
-      qDebug() << "ActionAnimation: unknown animation type" << type;
-  }
+  loadAnimationGroup(*this, value);
 }
 
 void AnimationSequence::start()

@@ -8,11 +8,11 @@ class QJSValue;
 class IAnimationPart : public QObject
 {
 public:
-  virtual ~IAnimationPart() {}
+  virtual ~IAnimationPart() override {}
 
   virtual void initialize(QJSValue&) = 0;
   virtual void start() = 0;
-  virtual void finish() {};
+  virtual void finish();
   virtual bool isOver() const = 0;
 };
 

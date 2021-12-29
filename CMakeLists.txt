@@ -222,6 +222,7 @@ set(PROJECT_SOURCES
         game/objects/components/lightsource.h
         game/objects/components/lightsource.cpp
         game/animationSequence/ianimationpart.h
+        game/animationSequence/ianimationpart.cpp
         game/animationSequence/objectanimationpart.h
         game/animationSequence/objectanimationpart.cpp
         game/animationSequence/spriteanimationpart.h
@@ -230,6 +231,9 @@ set(PROJECT_SOURCES
         game/animationSequence/animationsequence.cpp
         game/animationSequence/movementhintanimationpart.h
         game/animationSequence/movementhintanimationpart.cpp
+        game/animationSequence/groupanimationpart.h
+        game/animationSequence/groupanimationpart.cpp
+        game/animationSequence/animationloader.h
         game/pathfinding/caselocker.h
         game/pathfinding/astar.hpp
         game/pathfinding/preparecase.h
