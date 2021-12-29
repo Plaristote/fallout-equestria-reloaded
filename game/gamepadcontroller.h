@@ -12,6 +12,7 @@ class GamepadController : public QObject
   Q_OBJECT
 
   Q_PROPERTY(bool connected READ isConnected NOTIFY connectedChanged)
+  Q_PROPERTY(bool hoverScrollable MEMBER hoverScrollable NOTIFY hoverScrollableChanged)
 
   struct CursorTimer
   {
@@ -32,11 +33,13 @@ public:
   bool isConnected() const;
 
 signals:
+  void hoverScrollableChanged();
   void connectedChanged();
   void cameraAxisClicked();
   void moveCameraXAxis(double movement);
   void moveCameraYAxis(double movement);
   void startClicked();
+  void selectClicked();
   void backClicked();
   void skilldexClicked();
   void inventoryClicked();
@@ -59,6 +62,7 @@ private slots:
   void updateCameraOnXAxis(double value);
   void updateCameraOnYAxis(double value);
   void startPressedChange(bool pressed);
+  void selectPressedChange(bool pressed);
   void buttonBPressedChange(bool pressed);
   void buttonAPressedChange(bool pressed) { clickEvent(pressed); }
   void buttonYPressedChange(bool pressed);
@@ -83,6 +87,7 @@ private:
   QGamepad* gamepad = nullptr;
   CursorTimer cursorTimer, cameraTimer;
   double    xMovement, yMovement;
+  bool hoverScrollable = false;
 };
 
 #endif // GAMEPADCONTROLLER_H

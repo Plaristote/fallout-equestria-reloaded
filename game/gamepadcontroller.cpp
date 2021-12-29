@@ -33,26 +33,27 @@ void GamepadController::connectGamepad(int id)
   if (gamepad)
     delete gamepad;
   gamepad = new QGamepad(id, this);
-  connect(gamepad, &QGamepad::axisLeftXChanged,   this, &GamepadController::updateCursorOnXAxis);
-  connect(gamepad, &QGamepad::axisLeftYChanged,   this, &GamepadController::updateCursorOnYAxis);
-  connect(gamepad, &QGamepad::axisRightXChanged,  this, &GamepadController::updateCameraOnXAxis);
-  connect(gamepad, &QGamepad::axisRightYChanged,  this, &GamepadController::updateCameraOnYAxis);
-  connect(gamepad, &QGamepad::buttonStartChanged, this, &GamepadController::startPressedChange);
-  connect(gamepad, &QGamepad::buttonBChanged,     this, &GamepadController::buttonBPressedChange);
-  connect(gamepad, &QGamepad::buttonAChanged,     this, &GamepadController::buttonAPressedChange);
-  connect(gamepad, &QGamepad::buttonYChanged,     this, &GamepadController::buttonYPressedChange);
-  connect(gamepad, &QGamepad::buttonXChanged,     this, &GamepadController::buttonXPressedChange);
-  connect(gamepad, &QGamepad::buttonR1Changed,    this, &GamepadController::buttonR1PressedChange);
-  connect(gamepad, &QGamepad::buttonR2Changed,    this, &GamepadController::buttonR2PressedChange);
-  connect(gamepad, &QGamepad::buttonR3Changed,    this, &GamepadController::cameraAxisClicked);
-  connect(gamepad, &QGamepad::buttonL1Changed,    this, &GamepadController::buttonL1PressedChange);
-  connect(gamepad, &QGamepad::buttonL2Changed,    this, &GamepadController::buttonL2PressedChange);
-  connect(gamepad, &QGamepad::buttonL3Changed,    this, &GamepadController::movementAxisClicked);
-  connect(gamepad, &QGamepad::buttonUpChanged,    this, &GamepadController::upPressedChange);
-  connect(gamepad, &QGamepad::buttonDownChanged,  this, &GamepadController::downPressedChange);
-  connect(gamepad, &QGamepad::buttonLeftChanged,  this, &GamepadController::leftPressedChange);
-  connect(gamepad, &QGamepad::buttonRightChanged, this, &GamepadController::rightPressedChange);
-  connect(gamepad, &QGamepad::connectedChanged,   this, &GamepadController::connectedChanged);
+  connect(gamepad, &QGamepad::axisLeftXChanged,    this, &GamepadController::updateCursorOnXAxis);
+  connect(gamepad, &QGamepad::axisLeftYChanged,    this, &GamepadController::updateCursorOnYAxis);
+  connect(gamepad, &QGamepad::axisRightXChanged,   this, &GamepadController::updateCameraOnXAxis);
+  connect(gamepad, &QGamepad::axisRightYChanged,   this, &GamepadController::updateCameraOnYAxis);
+  connect(gamepad, &QGamepad::buttonStartChanged,  this, &GamepadController::startPressedChange);
+  connect(gamepad, &QGamepad::buttonSelectChanged, this, &GamepadController::selectPressedChange);
+  connect(gamepad, &QGamepad::buttonBChanged,      this, &GamepadController::buttonBPressedChange);
+  connect(gamepad, &QGamepad::buttonAChanged,      this, &GamepadController::buttonAPressedChange);
+  connect(gamepad, &QGamepad::buttonYChanged,      this, &GamepadController::buttonYPressedChange);
+  connect(gamepad, &QGamepad::buttonXChanged,      this, &GamepadController::buttonXPressedChange);
+  connect(gamepad, &QGamepad::buttonR1Changed,     this, &GamepadController::buttonR1PressedChange);
+  connect(gamepad, &QGamepad::buttonR2Changed,     this, &GamepadController::buttonR2PressedChange);
+  connect(gamepad, &QGamepad::buttonR3Changed,     this, &GamepadController::cameraAxisClicked);
+  connect(gamepad, &QGamepad::buttonL1Changed,     this, &GamepadController::buttonL1PressedChange);
+  connect(gamepad, &QGamepad::buttonL2Changed,     this, &GamepadController::buttonL2PressedChange);
+  connect(gamepad, &QGamepad::buttonL3Changed,     this, &GamepadController::movementAxisClicked);
+  connect(gamepad, &QGamepad::buttonUpChanged,     this, &GamepadController::upPressedChange);
+  connect(gamepad, &QGamepad::buttonDownChanged,   this, &GamepadController::downPressedChange);
+  connect(gamepad, &QGamepad::buttonLeftChanged,   this, &GamepadController::leftPressedChange);
+  connect(gamepad, &QGamepad::buttonRightChanged,  this, &GamepadController::rightPressedChange);
+  connect(gamepad, &QGamepad::connectedChanged,    this, &GamepadController::connectedChanged);
   connect(&cursorTimer.ticker, &QTimer::timeout, this, &GamepadController::updateCursorPosition);
   connect(&cameraTimer.ticker, &QTimer::timeout, this, &GamepadController::updateCameraPosition);
   emit connectedChanged();
@@ -132,6 +133,12 @@ void GamepadController::startPressedChange(bool pressed)
 {
   if (!pressed)
     emit startClicked();
+}
+
+void GamepadController::selectPressedChange(bool pressed)
+{
+  if (!pressed)
+    emit selectClicked();
 }
 
 void GamepadController::buttonBPressedChange(bool pressed)

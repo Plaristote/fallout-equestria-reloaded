@@ -49,7 +49,7 @@ Item {
 
     Connections {
       target: gamepad
-      enabled: root.enabled
+      enabled: root.enabled && !gamepad.hoverScrollable
       function onMoveCameraXAxis(value) {
         gamepadCamera.cumulatedXMovement += value;
         if (gamepadCamera.cumulatedXMovement > gamepadCamera.threshold)

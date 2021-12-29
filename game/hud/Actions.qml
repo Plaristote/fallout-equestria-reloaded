@@ -30,6 +30,7 @@ Item {
     function onSkilldexClicked() { openSkilldexAction.trigger() }
     function onInventoryClicked() { openInventoryAction.trigger() }
     function onStartClicked() { openMenuAction.trigger() }
+    function onSelectClicked() { helpAction.trigger() }
     function onLeftClicked() { previousTargetAction.trigger() }
     function onRightClicked() { nextTargetAction.trigger() }
     function onBottomClicked() { openPipboyAction.trigger() }

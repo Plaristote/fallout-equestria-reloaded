@@ -7,6 +7,8 @@ Flickable {
   property int maxContentX: contentWidth  - width
   property bool activated: hoverArea.containsMouse
 
+  onActivatedChanged: gamepad.hoverScrollable = activated
+
   function scrollTo(x, y) {
     if (maxContentX > 0)
       contentX = Math.min(maxContentX, Math.max(0, x));
@@ -21,8 +23,8 @@ Flickable {
   Connections {
     target: gamepad
     enabled: flickable.activated
-    function onMoveCameraXAxis(movement) { scrollTo(flickable.contentX + movement / 3, flickable.contentY); }
-    function onMoveCameraYAxis(movement) { scrollTo(flickable.contentX, flickable.contentY + movement / 3); }
+    function onMoveCameraXAxis(movement) { scrollTo(flickable.contentX + movement, flickable.contentY); }
+    function onMoveCameraYAxis(movement) { scrollTo(flickable.contentX, flickable.contentY + movement); }
   }
 
   MouseArea {

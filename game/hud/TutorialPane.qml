@@ -70,12 +70,13 @@ Item {
       color: "white"
     }
 
-    Flickable {
+    CustomFlickable {
       id: htmlFlickable
       anchors.top: title.bottom
       anchors { left: parent.left; right: parent.right; bottom: parent.bottom }
       contentHeight: htmlView.height
       //contentWidth: htmlView.width
+      activated: htmlArea.containsMouse
 
       ScrollBar.vertical: UiStyle.TerminalScrollbar { orientation: Qt.Vertical }
 
@@ -87,6 +88,12 @@ Item {
         color: "white"
         width: 300
         wrapMode: Text.Wrap
+      }
+
+      MouseArea {
+        id: htmlArea
+        anchors.fill: parent
+        hoverEnabled: true
       }
     }
   }
