@@ -9,6 +9,7 @@ Rectangle {
 
   Connections {
     target: application
+    enabled: fpsWidget.visible
     function onFrameSwapped() { fpsWidget.frameCount++; }
   }
 
