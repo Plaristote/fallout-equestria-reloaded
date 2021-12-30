@@ -5,14 +5,25 @@ function randomInterval() { return Math.ceil(Math.random() * 3000); }
 const refreshRoutineTaskName = "refreshRoutine";
 const updateRoutineTaskName  = "updateRoutine";
 
-export function toggleRoutine(character, value) {
-  const script = character ? character.getScriptObject() : null;
+function toRoutine(object) {
+  if (object) {
+    if (object.constructor === RoutineComponent)
+      return object;
+    else if (object.getScriptObject)
+      object = object.getScriptObject();
+    return object.routineComponent || object.routine;
+  }
+  return null;
+}
 
-  if (script && script.routineComponent) {
+export function toggleRoutine(object, value) {
+  const routine = toRoutine(object);
+
+  if (routine) {
     if (value === undefined)
-      script.routineComponent.interrupted = !script.routineComponent.interrupted;
+      routine.interrupted = !routine.interrupted;
     else
-      script.routineComponent.interrupted = !value;
+      routine.interrupted = !value;
   }
 }
 
