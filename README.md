@@ -3,6 +3,8 @@
 This repository contains a RPG engine, using a 2D isometric view, and mechanics inspired from the early Fallout games.
 
 The engine is designed to be heavily moddable and relies entirely on the Qt framework, JavaScript and QML.
+ 
+[Download technical demo for Windows](https://drive.google.com/file/d/18ftXNSmRfhel_hsPhS5ha0tdCY8UxAHa/view?usp=sharing) (~180Mb)
 
 ## Game design
 
