@@ -40,6 +40,7 @@ Pane {
 
     Loader {
       Layout.fillWidth: true
+      Layout.alignment: Qt.AlignTop
       sourceComponent: root.selectedObject ? itemPreviewComponent : null
     }
   }
