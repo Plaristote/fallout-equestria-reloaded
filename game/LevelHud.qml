@@ -156,13 +156,13 @@ Pane {
       Layout.fillWidth: true
       onClicked: openSkilldex()
     }
-
+/*
     UiStyle.TinyButton {
       text: i18n.t("hud.spellbook")
       Layout.fillWidth: true
       onClicked: openSpellbook()
     }
-
+*/
     UiStyle.TinyButton {
       text: i18n.t("hud.pipboy")
       Layout.fillWidth: true
