@@ -270,5 +270,7 @@
         <file>ui/KeyHint.qml</file>
         <file>ui/ShortcutTable.qml</file>
         <file>ui/GamepadPreview.qml</file>
+        <file>assets/ui/TitleText.qml</file>
+        <file>assets/ui/ColumnLabel.qml</file>
     </qresource>
 </RCC>

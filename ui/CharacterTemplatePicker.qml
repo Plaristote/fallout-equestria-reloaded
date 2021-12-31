@@ -2,6 +2,7 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
 import Game 1.0
+import "../assets/ui" as UiStyle
 
 Item {
   id: root
@@ -36,6 +37,14 @@ Item {
     onActivated: accepted(currentTemplate)
   }
 
+  function getSpecialColor(value) {
+    if (value >= 7)
+      return "yellow";
+    else if (value <= 3)
+      return "red";
+    return "white";
+  }
+
   Repeater {
     model: templates
     delegate: Image {
@@ -55,8 +64,8 @@ Item {
         anchors.topMargin: 50
         anchors.left: parent.left
         anchors.leftMargin: 10
-        Text { text: character.name; font.pointSize: 30; color: "yellow" }
-        Text { text: i18n.t("races." + character.race); font.pointSize: 15; color: "white" }
+        UiStyle.TitleText { text: character.name; font.pointSize: 30; color: "yellow"; outline: "black" }
+        UiStyle.TitleText { text: i18n.t("races." + character.race); font.pointSize: 15; color: "white"; outline: "black" }
       }
 
       RowLayout {
@@ -66,13 +75,14 @@ Item {
 
         ColumnLayout {
           Layout.fillHeight: true
-          Text { text: i18n.t("cmap.traits"); visible: character.traits.length > 0; color: "yellow"; font.bold: true; font.pointSize: 18 }
+          UiStyle.TitleText { text: i18n.t("cmap.traits"); visible: character.traits.length > 0; color: "yellow"; outline: "black"; font.bold: true; font.pointSize: 18 }
 
           Repeater {
             model: character.traits
-            delegate: Text {
+            delegate: UiStyle.TitleText {
               text: i18n.t("cmap." + character.traits[index]);
               color: "white"
+              outline: "black"
               font.capitalization: Font.Capitalize
               font.pointSize: 15
             }
@@ -82,9 +92,10 @@ Item {
 
           Repeater {
             model: character.proficiencies
-            delegate: Text {
+            delegate: UiStyle.TitleText {
               text: i18n.t("cmap." + character.proficiencies[index])
               color: "white"
+              outline: "black"
               font.capitalization: Font.Capitalize
               font.pointSize: 15
             }
@@ -96,7 +107,7 @@ Item {
         ColumnLayout {
           Layout.preferredWidth: 250
 
-          Text { text: "Special"; visible: character.traits.length > 0; color: "yellow"; font.bold: true;font.pointSize: 18 }
+          UiStyle.TitleText { text: "Special"; visible: character.traits.length > 0; color: "yellow"; outline: "black"; font.bold: true;font.pointSize: 18 }
 
           Repeater {
             model: specialAttributes
@@ -109,8 +120,14 @@ Item {
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.leftMargin: 10
                 anchors.left: parent.left
-                Text { text: i18n.t("cmap." + specialAttributes[index]); Layout.preferredWidth: 200; color: "white"; font.pointSize: 15 }
-                Text { text: character[specialAttributes[index]];        Layout.preferredWidth: 50; color: "white"; font.pointSize: 15 }
+                UiStyle.TitleText { text: i18n.t("cmap." + specialAttributes[index]); Layout.preferredWidth: 200; color: "white"; outline: "black"; font.pointSize: 15 }
+                UiStyle.TitleText {
+                  text: character[specialAttributes[index]]
+                  Layout.preferredWidth: 50
+                  color: getSpecialColor(character[specialAttributes[index]])
+                  outline: "black"
+                  font.pointSize: 15
+                }
               }
             }
           }
@@ -119,32 +136,33 @@ Item {
     }
   }
 
-  Text {
+  UiStyle.TitleText {
     id: viewTitle
     color: "white"
-    style: Text.Outline
-    styleColor: "black"
+    outline: "black"
     text: i18n.t("templates.title")
     anchors { top: parent.top; left: parent.left; topMargin: 10; leftMargin: 10 }
     font.pointSize: 20
   }
 
-  MenuButton {
-    id: previousButton
+  Column {
     anchors.verticalCenter: parent.verticalCenter
     anchors.left: parent.left
-    text: i18n.t("tutorial.previous")
-    visible: currentIndex > 0
-    onClicked: currentIndex > 0 ? currentIndex-- : null
-  }
+    spacing: 5
 
-  MenuButton {
-    id: nextButton
-    anchors.verticalCenter: parent.verticalCenter
-    anchors.right: parent.right
-    text: i18n.t("tutorial.next")
-    visible: currentIndex < templates.length - 1
-    onClicked: currentIndex < templates.length - 1 ? currentIndex++ : null
+    MenuButton {
+      id: previousButton
+      text: i18n.t("tutorial.previous")
+      enabled: currentIndex > 0
+      onClicked: currentIndex > 0 ? currentIndex-- : null
+    }
+
+    MenuButton {
+      id: nextButton
+      text: i18n.t("tutorial.next")
+      enabled: currentIndex < templates.length - 1
+      onClicked: currentIndex < templates.length - 1 ? currentIndex++ : null
+    }
   }
 
   RowLayout {

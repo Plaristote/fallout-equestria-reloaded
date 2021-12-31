@@ -4,8 +4,9 @@ import QtGraphicalEffects 1.0
 Image {
   property string name
   property string objectType
+  property real lightness: 1
 
-  source: `${assetPath}icons/ui/${name}.png`
+  source: `file:assets/icons/ui/${name}.png`
   onObjectTypeChanged: name = getNameFromObjectType()
 
   function getNameFromObjectType() {
@@ -27,6 +28,6 @@ Image {
   Colorize {
     anchors.fill: parent
     source: parent
-    lightness: 1
+    lightness: parent.lightness
   }
 }

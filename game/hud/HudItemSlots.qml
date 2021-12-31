@@ -46,7 +46,7 @@ Item {
         property bool activated: activeItem === slotItem
 
         anchors { top: parent.top; bottom: parent.bottom }
-        width: 200
+        width: itemSlotsPane.width / 2
         source: "qrc:/assets/ui/itemSlot.png"
         border { left: 4; bottom: 4; right: 4; top: 4 }
         clip: true

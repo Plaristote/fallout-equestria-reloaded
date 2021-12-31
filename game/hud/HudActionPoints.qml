@@ -13,6 +13,7 @@ Item {
     anchors.bottom: parent.bottom
     anchors.horizontalCenter: parent.horizontalCenter
     spacing: 3
+
     Repeater {
       model: maxActionPoints
       delegate: Image {

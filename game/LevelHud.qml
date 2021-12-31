@@ -82,8 +82,10 @@ Pane {
     anchors.left: menuPane.right
     anchors.leftMargin: 5
     anchors.top: actionPointPane.bottom
+    anchors.topMargin: 5
     anchors.bottom: parent.bottom
     anchors.bottomMargin: 1
+    width: levelHud.width - x - combatControls.width - countersDisplay.width - rightMenu.width - 60
     activeItem: levelController.activeItem
     onItemActivated: levelController.setActiveItem(activatedSlot)
   }
@@ -114,29 +116,24 @@ Pane {
     anchors.right: rightMenu.left
     anchors.rightMargin: 10
     anchors.bottom: parent.bottom
+    anchors.bottomMargin: -5
 
-    Text {
+    UiStyle.ColumnLabel {
       anchors.horizontalCenter: parent.horizontalCenter
+      icon: "hp"
       text: i18n.t("hud.HP")
-      color: "black"
-      style: Text.Outline
-      styleColor: "white"
-      font.family: application.titleFontName
-      font.pixelSize: 16
+      size: 16
     }
 
     HudCounter {
       source: levelController.player.statistics.hitPoints
     }
 
-    Text {
+    UiStyle.ColumnLabel {
       anchors.horizontalCenter: parent.horizontalCenter
+      icon: "ac"
       text: i18n.t("hud.AC")
-      color: "black"
-      style: Text.Outline
-      styleColor: "white"
-      font.family: application.titleFontName
-      font.pixelSize: 16
+      size: 16
     }
 
     HudCounter {

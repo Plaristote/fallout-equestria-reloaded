@@ -64,6 +64,7 @@ LevelDisplay {
     anchors {
       top: parent.top; topMargin: 50
       bottom: levelHud.top; left: parent.left
+      leftMargin: 5
     }
     visible: root.levelController.tutorial
     sourceComponent: visible ? tutorialPane : null
@@ -137,6 +138,7 @@ LevelDisplay {
   LevelHud {
     id: levelHud
     anchors.bottom: parent.bottom
+    anchors.bottomMargin: 5
     anchors.horizontalCenter: parent.horizontalCenter
     gameController:  root.gameController
     levelController: root.levelController

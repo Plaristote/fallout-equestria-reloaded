@@ -30,6 +30,28 @@ Pane {
 
   Column {
     anchors.centerIn: parent
+    spacing: 5
+
+    Row {
+      anchors.horizontalCenter: parent.horizontalCenter
+      spacing: 5
+      UiStyle.TitleText {
+        text: i18n.t("AP")
+        font.pixelSize: 16
+        anchors.verticalCenter: parent.verticalCenter
+      }
+      UiStyle.TerminalPane {
+        Text {
+          text: `${gameManager.currentGame.player.actionPoints}/${gameManager.currentGame.player.statistics.actionPoints}`
+          font.family: application.titleFontName
+          font.pixelSize: 16
+          color: "white"
+          anchors.centerIn: parent
+        }
+        height: 28
+        width:  55
+      }
+    }
 
     UiStyle.TinyButton {
       text: i18n.t("Pass turn")

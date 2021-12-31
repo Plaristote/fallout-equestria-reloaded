@@ -71,6 +71,11 @@ Window {
 
   GameLoadManager { id: gameLoadManager }
 
+  Shortcut {
+    sequence: "F12"
+    onActivated: application.isFullScreen = !application.isFullScreen
+  }
+
   property alias consoleFontName: consoleFont.name
   property alias titleFontName: titleFont.name
 

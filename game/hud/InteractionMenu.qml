@@ -55,8 +55,7 @@ Item {
     target: levelController
 
     function onInteractionRequired(interactionTarget, interactionList) {
-      if (interactionTarget)
-      {
+      if (interactionTarget) {
         interactionMenu.interactionTarget = interactionTarget;
         interactionMenu.interactionTypes  = interactionList;
         interactionMenu.interactionPosition = Qt.point(mouseArea.mouseX, mouseArea.mouseY)

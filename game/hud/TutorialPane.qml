@@ -88,6 +88,7 @@ Item {
         color: "white"
         width: 300
         wrapMode: Text.Wrap
+        onTextChanged: htmlFlickable.contentY = 0
       }
 
       MouseArea {
