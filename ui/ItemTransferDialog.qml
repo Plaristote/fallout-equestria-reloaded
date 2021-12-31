@@ -6,6 +6,7 @@ import "../assets/ui" as UiStyle
 UiStyle.CustomDialog {
   property QtObject inventoryItem
   property int maxQuantity: inventoryItem ? inventoryItem.quantity : 1
+  property int defaultValue: 1
 
   title: i18n.t("How much ?")
   modal: true
@@ -35,7 +36,7 @@ UiStyle.CustomDialog {
         id: inputLayout
         anchors.centerIn: parent
         TerminalField {
-          property int value: 1
+          property int value: defaultValue
           id: quantityInputField
           validator: IntValidator { bottom: 1; top: maxQuantity }
           text: "1"
@@ -72,5 +73,8 @@ UiStyle.CustomDialog {
     }
   }
 
-  onAccepted: pickedValue(quantityInputField.value)
+  onAccepted: {
+    pickedValue(quantityInputField.value);
+    quantityInputField.text = quantityInputField.value = defaultValue;
+  }
 }
