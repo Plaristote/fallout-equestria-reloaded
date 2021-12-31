@@ -59,10 +59,7 @@ bool ItemAction::trigger()
       state = InProgress;
     }
     else
-    {
-      Game::get()->appendToConsole(I18n::get()->t("messages.invalid-target"));
       state = Interrupted;
-    }
     if (!backupMode.isEmpty())
       item->setUseMode(backupMode);
   }

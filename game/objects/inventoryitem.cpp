@@ -251,6 +251,14 @@ QJSValue InventoryItem::useOn(DynamicObject* target)
     {
       if (target && isValidTarget(target))
         return script->call("attemptToUseOn", QJSValueList() << target->asJSValue());
+      else
+      {
+        const DynamicObject* owner = getOwner();
+        Game* game = Game::get();
+
+        if (owner && owner == game->getPlayer())
+          game->appendToConsole(I18n::get()->t("messages.invalid-target"));
+      }
     }
     else
       return script->call("attemptToUseOn");
