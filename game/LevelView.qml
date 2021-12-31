@@ -157,7 +157,6 @@ LevelDisplay {
     id: skilldex
     anchors.bottom: levelHud.top
     anchors.right: parent.right
-    width: 240
     visible: false
     character: levelController.player
     onPickedSkill: {

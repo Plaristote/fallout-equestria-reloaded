@@ -38,6 +38,8 @@ Pane {
       UiStyle.TitleText {
         text: i18n.t("AP")
         font.pixelSize: 16
+        color: "white"
+        outline: "black"
         anchors.verticalCenter: parent.verticalCenter
       }
       UiStyle.TerminalPane {

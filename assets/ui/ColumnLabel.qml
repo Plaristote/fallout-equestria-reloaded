@@ -14,6 +14,8 @@ Row {
   TitleText {
     id: label
     font.pixelSize: size
+    color: "white"
+    outline: "black"
     anchors.verticalCenter: parent.verticalCenter
   }
 }

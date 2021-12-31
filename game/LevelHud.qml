@@ -146,6 +146,7 @@ Pane {
     anchors {
       right: parent.right
       bottom: parent.bottom
+      top: parent.top
       margins: 5
     }
 
