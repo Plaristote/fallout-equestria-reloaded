@@ -111,12 +111,12 @@ Pane {
         }
 
         MenuButton {
-          text: "Take"
+          text: i18n.t("Take")
           action: takeAction
           anchors.horizontalCenter: parent.horizontalCenter
         }
         MenuButton {
-          text: "Leave"
+          text: i18n.t("Leave")
           action: dropAction
           anchors.horizontalCenter: parent.horizontalCenter
         }
@@ -142,12 +142,12 @@ Pane {
     anchors { bottom: parent.bottom; right: parent.right }
 
     MenuButton {
-      text: "Take all"
+      text: i18n.t("Take all")
       action: takeAllAction
     }
 
     MenuButton {
-      text: "Close"
+      text: i18n.t("Close")
       action: closeAction
     }
   }
