@@ -13,7 +13,7 @@ Window {
   color: "black"
   title: i18n.t("Fallout Equestria")
 
-  property bool isFullScreen: false
+  property bool isFullScreen: true
   property bool hasSavedGame: false // TODO
   property alias gameLoading: gameLoadManager.gameLoading
   property alias currentView: mainView.currentItem
