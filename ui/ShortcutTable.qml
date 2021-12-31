@@ -14,6 +14,7 @@ Pane {
     anchors.fill: parent
     contentWidth: grid.width
     contentHeight: grid.height
+    ScrollBar.vertical: UiStyle.TerminalScrollbar { orientation: Qt.Vertical }
 
     GridLayout {
       id: grid

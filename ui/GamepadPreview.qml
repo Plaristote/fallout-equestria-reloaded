@@ -12,9 +12,11 @@ Pane {
 
   CustomFlickable {
     anchors.fill: parent
-    contentWidth: gamepadImage.width + widthLeft + widthRight
-    contentHeight: gamepadImage.height + 10
+    contentWidth: gamepadImage.width + widthLeft + widthRight + 10
+    contentHeight: gamepadImage.height + 20
     contentX: contentWidth / 2 - width / 2
+    ScrollBar.vertical:   UiStyle.TerminalScrollbar { orientation: Qt.Vertical }
+    ScrollBar.horizontal: UiStyle.TerminalScrollbar { orientation: Qt.Horizontal }
 
     Image {
       id: gamepadImage
