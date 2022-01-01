@@ -36,6 +36,10 @@ Pane {
       Layout.preferredWidth: parent.width > 800 ? 400 : 200
       selectedObject: root.selectedObject
       onItemSelected: root.selectedObject = selectedItem
+      onItemActivated: {
+        root.selectedObject = activatedItem;
+        root.accepted();
+      }
     }
 
     Loader {

@@ -15,6 +15,7 @@ Pane {
   background: UiStyle.TerminalPane {}
 
   signal itemSelected(QtObject selectedItem)
+  signal itemActivated(QtObject activatedItem)
 
   function updateItemList() {
     if (typeFilter !== "") {
@@ -93,7 +94,8 @@ Pane {
             id: itemMouseArea
             anchors.fill: parent
             hoverEnabled: true
-            onClicked: root.itemSelected(inventoryItem);
+            onClicked: root.itemSelected(inventoryItem)
+            onDoubleClicked: root.itemActivated(inventoryItem)
           }
         }
       }
