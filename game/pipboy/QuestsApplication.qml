@@ -19,10 +19,16 @@ Item {
     visible: selectedQuest == null
   }
 
-  QuestApp.Show {
+  Loader {
     anchors.fill: parent
-    visible:  selectedQuest != null
-    quest:    root.selectedQuest
-    onExited: root.selectedQuest = null
+    sourceComponent: selectedQuest != null ? show : null
+  }
+
+  Component {
+    id: show
+    QuestApp.Show {
+      quest:    root.selectedQuest
+      onExited: root.selectedQuest = null
+    }
   }
 }
