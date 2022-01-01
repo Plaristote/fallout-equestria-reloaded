@@ -272,5 +272,6 @@
         <file>ui/GamepadPreview.qml</file>
         <file>assets/ui/TitleText.qml</file>
         <file>assets/ui/ColumnLabel.qml</file>
+        <file>game/LevelLoaderView.qml</file>
     </qresource>
 </RCC>

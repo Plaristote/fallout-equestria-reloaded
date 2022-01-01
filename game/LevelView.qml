@@ -30,7 +30,7 @@ LevelDisplay {
   Hud.Actions {
     id: actions
     level: root.levelController
-    enabled: application.currentView === root
+    enabled: application.currentView === root.parent
     onMenuTriggered:           root.openMenu()
     onPreviousTargetTriggered: levelController.centerCursorOn(levelController.targetList.previousTarget())
     onNextTargetTriggered:     levelController.centerCursorOn(levelController.targetList.nextTarget())

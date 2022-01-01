@@ -78,6 +78,7 @@ public:
 
 signals:
   void gameEditorEnabled();
+  void levelDestroy();
   void levelChanged();
   void levelSwapped();
   void consoleUpdated();
@@ -104,6 +105,7 @@ private slots:
 private:
   void initializeScript();
   LevelTask* newLevelTask();
+  void destroyLevelTask();
 
   bool isGameEditor = false;
   DataEngine* dataEngine = nullptr;

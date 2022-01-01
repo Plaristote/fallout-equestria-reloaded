@@ -64,10 +64,7 @@ Game::~Game()
 void Game::deleteLater()
 {
   if (currentLevel)
-  {
-    delete currentLevel;
-    currentLevel = nullptr;
-  }
+    destroyLevelTask();
   instance = nullptr;
   QObject::deleteLater();
 }
@@ -224,6 +221,13 @@ void Game::switchToLevel(const QString name, const QString targetZone)
     function();
 }
 
+void Game::destroyLevelTask()
+{
+  emit levelDestroy();
+  currentLevel->deleteLater();
+  currentLevel = nullptr;
+}
+
 void Game::exitLevel(bool silent)
 {
   if (currentLevel)
@@ -235,8 +239,7 @@ void Game::exitLevel(bool silent)
     disconnect(currentLevel, &LevelTask::exitZoneEntered, this, &Game::changeZone);
     playerParty->extractFromLevel(currentLevel);
     currentLevel->save(dataEngine);
-    currentLevel->deleteLater();
-    currentLevel = nullptr;
+    destroyLevelTask();
     scriptObject.deleteProperty("level");
     dataEngine->exitLevel();
     MouseCursor::get()->updatePointerType();

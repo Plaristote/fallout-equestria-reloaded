@@ -11,7 +11,7 @@ Item {
   property bool hasActiveView: application.currentView !== this
 
   function openLevelView() {
-    application.pushView("game/LevelView.qml", {
+    application.pushView("game/LevelLoaderView.qml", {
       gameController: gameController,
       levelController: gameController.level
     });
