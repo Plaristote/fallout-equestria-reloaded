@@ -108,11 +108,13 @@ Pane {
       UiStyle.TerminalButton {
         enabled: characterSheet.skillPoints > 0
         text: "+"
+        autoRepeat: true
         onClicked: skillEdition(propertyName, "Increase")
       }
 
       UiStyle.TerminalButton {
         text: "-"
+        autoRepeat: true
         onClicked: skillEdition(propertyName, "Decrease")
       }
     }
