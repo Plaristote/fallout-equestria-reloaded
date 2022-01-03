@@ -93,6 +93,15 @@ UiStyle.CustomDialog {
           id: resultColumn
           spacing: 5
 
+          TerminalButton {
+            Layout.fillWidth: true
+            text: "<i>No script</i>"
+            onClicked: {
+              currentIndex = -1;
+              accept();
+            }
+          }
+
           Repeater {
             model: filteredScripts
             delegate: TerminalButton {
