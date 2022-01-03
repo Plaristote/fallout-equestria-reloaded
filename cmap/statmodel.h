@@ -4,6 +4,7 @@
 # include <QObject>
 # include <QColor>
 # include <QMap>
+# include "utils/orderedmap.h"
 # include <QJsonDocument>
 # include <QJsonObject>
 
@@ -134,6 +135,11 @@ class StatModel : public QObject
   Q_PROPERTY(QColor      hairColor       MEMBER hairColor         NOTIFY hairColorChanged)
 
 public:
+  typedef void (StatModel::*SkillAssigner)();
+  typedef bool (StatModel::*SkillValidator)() const;
+  struct Skill { SkillAssigner increase, decrease; SkillValidator canDecrease; };
+  static const MapWithOrder<QString, Skill> skillMap;
+
   explicit StatModel(QObject *parent = nullptr);
 
   Q_INVOKABLE void fromTemplate(const QString& name);
@@ -184,10 +190,10 @@ public:
 
 #define SKILL_METHODS(skillName) \
   STAT_METHODS(skillName) \
-  Q_INVOKABLE bool skillName##CanIncrease() { return skillIncreaseCost(#skillName) <= skillPoints; } \
-  Q_INVOKABLE bool skillName##CanDecrease() { return spentPoints.skillName > 0; } \
+  Q_INVOKABLE bool skillName##CanIncrease() const { return skillIncreaseCost(#skillName) <= skillPoints; } \
+  Q_INVOKABLE bool skillName##CanDecrease() const { return spentPoints.skillName > 0; } \
   Q_INVOKABLE void skillName##Increase() { increaseSkill(#skillName, modifiers.skillName, spentPoints.skillName); } \
-  Q_INVOKABLE void skillName##Decrease() { decreaseSkill(#skillName, modifiers.skillName, spentPoints.skillName); }
+  Q_INVOKABLE void skillName##Decrease() { decreaseSkill(#skillName, modifiers.skillName, spentPoints.skillName); } \
 
   Q_INVOKABLE void addProficiency(const QString& skillName);
   Q_INVOKABLE void removeProficiency(const QString& skillName);

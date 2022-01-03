@@ -6,6 +6,27 @@
 #include "game.h"
 #include <QDebug>
 
+#define SKILL(NAME) QPair<QString, StatModel::Skill>(#NAME, {&StatModel::NAME##Increase, &StatModel::NAME##Decrease, &StatModel::NAME##CanDecrease})
+
+const MapWithOrder<QString, StatModel::Skill> StatModel::skillMap = MapWithOrder<QString, StatModel::Skill>()
+ << SKILL(smallGuns)
+ << SKILL(bigGuns)
+ << SKILL(energyGuns)
+ << SKILL(explosives)
+ << SKILL(unarmed)
+ << SKILL(lockpick)
+ << SKILL(meleeWeapons)
+ << SKILL(medicine)
+ << SKILL(repair)
+ << SKILL(science)
+ << SKILL(sneak)
+ << SKILL(spellcasting)
+ << SKILL(steal)
+ << SKILL(barter)
+ << SKILL(outdoorsman)
+ << SKILL(speech)
+ << SKILL(gambling);
+
 StatModel::StatModel(QObject *parent) : QObject(parent)
 {
   strength = perception = endurance = charisma = intelligence = agility = luck = 5;
@@ -251,6 +272,31 @@ void StatModel::decreaseSkill(const QString &skillName, int &skillValue, int& sp
   emit statisticsChanged();
 }
 
+static void setSkillValue(SkillData& data, const QString& skillName, int value)
+{
+  auto i = StatModel::skillMap.keys().indexOf(skillName);
+
+  if (i >= 0)
+  {
+    int* values = reinterpret_cast<int*>(&data);
+
+    values[i] = value;
+  }
+  else
+    qDebug() << "StatModel::setSkillValue: skill" << skillName << "not found.";
+}
+
+static int getSkillValue(const SkillData& data, const QString& skillName)
+{
+  auto i = StatModel::skillMap.keys().indexOf(skillName);
+
+  if (i >= 0)
+    return reinterpret_cast<const int*>(&data)[i];
+  else
+    qDebug() << "StatModel::getSkillValue: skill" << skillName << "not found.";
+  return 0;
+}
+
 static void applyCmapPlugin(StatModel* self, const CmapPlugin& plugin, StatData& data)
 {
   data.actionPoints        = plugin.modifyBaseStatistic(self, "actionPoints",        data.actionPoints);
@@ -266,23 +312,13 @@ static void applyCmapPlugin(StatModel* self, const CmapPlugin& plugin, StatData&
   data.radiationResistance = plugin.modifyBaseStatistic(self, "radiationResistance", data.radiationResistance);
   data.skillRate           = plugin.modifyBaseStatistic(self, "skillRate",           data.skillRate);
 
-  data.smallGuns    = plugin.modifyBaseSkill(self, "smallGuns",    data.smallGuns);
-  data.bigGuns      = plugin.modifyBaseSkill(self, "bigGuns",      data.bigGuns);
-  data.energyGuns   = plugin.modifyBaseSkill(self, "energyGuns",   data.energyGuns);
-  data.explosives   = plugin.modifyBaseSkill(self, "explosives",   data.explosives);
-  data.unarmed      = plugin.modifyBaseSkill(self, "unarmed",      data.unarmed);
-  data.meleeWeapons = plugin.modifyBaseSkill(self, "meleeWeapons", data.meleeWeapons);
-  data.lockpick     = plugin.modifyBaseSkill(self, "lockpick",     data.lockpick);
-  data.medicine     = plugin.modifyBaseSkill(self, "medicine",     data.medicine);
-  data.repair       = plugin.modifyBaseSkill(self, "repair",       data.repair);
-  data.science      = plugin.modifyBaseSkill(self, "science",      data.science);
-  data.sneak        = plugin.modifyBaseSkill(self, "sneak",        data.sneak);
-  data.spellcasting = plugin.modifyBaseSkill(self, "spellcasting", data.spellcasting);
-  data.steal        = plugin.modifyBaseSkill(self, "steal",        data.steal);
-  data.barter       = plugin.modifyBaseSkill(self, "barter",       data.barter);
-  data.outdoorsman  = plugin.modifyBaseSkill(self, "outdoorsman",  data.outdoorsman);
-  data.speech       = plugin.modifyBaseSkill(self, "speech",       data.speech);
-  data.gambling     = plugin.modifyBaseSkill(self, "gambling",     data.gambling);
+  for (auto it = StatModel::skillMap.begin() ; it != StatModel::skillMap.end() ; ++it)
+  {
+    int value = getSkillValue(data, it.key());
+
+    value = plugin.modifyBaseSkill(self, it.key(), value);
+    setSkillValue(data, it.key(), value);
+  }
 }
 
 void StatModel::updateBaseValues()
@@ -430,56 +466,18 @@ void StatModel::confirmChanges()
 
 void StatModel::cancelChanges()
 {
-  skillPoints += (
-    spentPoints.smallGuns +
-    spentPoints.bigGuns +
-    spentPoints.energyGuns +
-    spentPoints.explosives +
-    spentPoints.unarmed +
-    spentPoints.lockpick +
-    spentPoints.meleeWeapons +
-    spentPoints.medicine +
-    spentPoints.repair +
-    spentPoints.science +
-    spentPoints.sneak +
-    spentPoints.spellcasting +
-    spentPoints.steal +
-    spentPoints.barter +
-    spentPoints.outdoorsman +
-    spentPoints.speech +
-    spentPoints.gambling
-  );
-  modifiers.smallGuns    -= spentPoints.smallGuns;
-  modifiers.bigGuns      -= spentPoints.bigGuns;
-  modifiers.energyGuns   -= spentPoints.energyGuns;
-  modifiers.explosives   -= spentPoints.explosives;
-  modifiers.unarmed      -= spentPoints.unarmed;
-  modifiers.lockpick     -= spentPoints.lockpick;
-  modifiers.meleeWeapons -= spentPoints.meleeWeapons;
-  modifiers.medicine     -= spentPoints.medicine;
-  modifiers.repair       -= spentPoints.repair;
-  modifiers.science      -= spentPoints.science;
-  modifiers.sneak        -= spentPoints.sneak;
-  modifiers.spellcasting -= spentPoints.spellcasting;
-  modifiers.steal        -= spentPoints.steal;
-  modifiers.barter       -= spentPoints.barter;
-  modifiers.outdoorsman  -= spentPoints.outdoorsman;
-  modifiers.speech       -= spentPoints.speech;
-  modifiers.gambling     -= spentPoints.gambling;
-  spentPoints = SkillData();
+  for (auto it = skillMap.begin() ; it != skillMap.end() ; ++it)
+  {
+    while ((this->*(it->canDecrease))())
+      (this->*(it->decrease))();
+  }
   emit statisticsChanged();
   emit skillPointsChanged();
 }
 
 QStringList StatModel::getSkillList()
 {
-  return QStringList{
-    "smallGuns", "bigGuns", "energyGuns",
-    "explosives", "unarmed", "meleeWeapons",
-    "lockpick", "sneak", "medicine", "repair",
-    "science", "speech", "barter", "spellcasting",
-    "steal", "gambling", "outdoorsman"
-  };
+  return skillMap.keys();
 }
 
 QColor jsonToColor(QJsonValue value)
@@ -578,23 +576,8 @@ void StatModel::fromJson(const QJsonObject& json)
     obj.skillRate           = json[prefix + "-sr"].toInt();
     obj.perkRate            = json[prefix + "-pkr"].toInt();
 
-    obj.smallGuns           = json[prefix + "-smallGuns"].toInt();
-    obj.bigGuns             = json[prefix + "-bigGuns"].toInt();
-    obj.energyGuns          = json[prefix + "-energyGuns"].toInt();
-    obj.explosives          = json[prefix + "-explosives"].toInt();
-    obj.unarmed             = json[prefix + "-unarmed"].toInt();
-    obj.lockpick            = json[prefix + "-lockpick"].toInt();
-    obj.meleeWeapons        = json[prefix + "-meleeWeapons"].toInt();
-    obj.medicine            = json[prefix + "-medicine"].toInt();
-    obj.repair              = json[prefix + "-repair"].toInt();
-    obj.science             = json[prefix + "-science"].toInt();
-    obj.sneak               = json[prefix + "-sneak"].toInt();
-    obj.spellcasting        = json[prefix + "-spellcasting"].toInt();
-    obj.steal               = json[prefix + "-steal"].toInt();
-    obj.barter              = json[prefix + "-barter"].toInt();
-    obj.outdoorsman         = json[prefix + "-outdoorsman"].toInt();
-    obj.speech              = json[prefix + "-speech"].toInt();
-    obj.gambling            = json[prefix + "-gambling"].toInt();
+    for (auto it = skillMap.begin() ; it != skillMap.end() ; ++it)
+      setSkillValue(obj, it.key(), json[prefix + '-' + it.key()].toInt());
   };
 
   loadStatData("base", data);
@@ -679,23 +662,8 @@ void StatModel::toJson(QJsonObject& json)
     json[prefix + "-sr"]  = obj.skillRate;
     json[prefix + "-pkr"] = obj.perkRate;
 
-    json[prefix + "-smallGuns"]    = obj.smallGuns;
-    json[prefix + "-bigGuns"]      = obj.bigGuns;
-    json[prefix + "-energyGuns"]   = obj.energyGuns;
-    json[prefix + "-explosives"]   = obj.explosives;
-    json[prefix + "-unarmed"]      = obj.unarmed;
-    json[prefix + "-lockpick"]     = obj.lockpick;
-    json[prefix + "-meleeWeapons"] = obj.meleeWeapons;
-    json[prefix + "-medicine"]     = obj.medicine;
-    json[prefix + "-repair"]       = obj.repair;
-    json[prefix + "-science"]      = obj.science;
-    json[prefix + "-sneak"]        = obj.sneak;
-    json[prefix + "-spellcasting"] = obj.spellcasting;
-    json[prefix + "-steal"]        = obj.steal;
-    json[prefix + "-barter"]       = obj.barter;
-    json[prefix + "-outdoorsman"]  = obj.outdoorsman;
-    json[prefix + "-speech"]       = obj.speech;
-    json[prefix + "-gambling"]     = obj.gambling;
+    for (auto it = skillMap.begin() ; it != skillMap.end() ; ++it)
+      json[prefix + '-' + it.key()] = getSkillValue(obj, it.key());
   };
 
   storeStatData("base", data);
