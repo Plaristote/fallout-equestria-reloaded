@@ -63,7 +63,7 @@ void ZoneComponent::registerZone(TileZone* zone)
   {
     floor->getTilemap()->addTileZone(zone);
     floor->registerZone(zone);
-    connect(zone, &TileZone::enteredZone,  this, &ZoneComponent::onZoneEntered, Qt::QueuedConnection);
+    connect(zone, &TileZone::enteredZone,  this, &ZoneComponent::onZoneEntered);
     connect(zone, &TileZone::exitedZone,   this, &ZoneComponent::onZoneExited);
     connect(zone, &TileZone::floorChanged, this, &ZoneComponent::onZoneChangedFloor);
   }
@@ -80,7 +80,7 @@ void ZoneComponent::unregisterZone(TileZone* zone)
     disconnect(zone, &TileZone::floorChanged, this, &ZoneComponent::onZoneChangedFloor);
     floor->unregisterZone(zone);
     floor->getTilemap()->removeTileZone(zone);
-    for (DynamicObject* object : qAsConst(objects))
+    for (DynamicObject* object : allDynamicObjects())
     {
       if (object->isCharacter())
       {

@@ -189,7 +189,7 @@ void Game::loadLevel(const QString &name, const QString& targetZone)
   currentLevel = newLevelTask();
   scriptObject.setProperty("level", scriptEngine.newQObject(currentLevel));
   connect(currentLevel, &LevelTask::displayConsoleMessage, this, &Game::appendToConsole);
-  connect(currentLevel, &LevelTask::exitZoneEntered, this, &Game::changeZone);
+  connect(currentLevel, &LevelTask::exitZoneEntered, this, &Game::changeZone, Qt::QueuedConnection);
   try
   {
     currentLevel->load(name, dataEngine);
