@@ -248,8 +248,336 @@ export function create(model) {
 	  </div>
 	</div>
 
-        <h2 class="my-4" id="c2">
-          2. NPCs Routines
+	<h2 class="my-4" id="c2">
+          2. Action queue
+	</h2>
+	<div class="card mb-4">
+          <div class="card-body">
+            <p class="card-text">
+	      The action queue allows an NPC to perform a set of actions. Even when you want to perform a single action,
+	      you'll need to use the queue: you can either pile up new actions on it, or interrupt the current course
+	      of action to start a new one.<br/>
+	      We've already introduced how to use it in <a href="characters.html#c1-6">Characters 1.6</a>. We will now
+	      see in details all the features of the action queue.
+            </p>
+            <div class="end-chapter"></div>
+
+	    <h4 class="card-title" id="c2-1">2.1 Queue state</h4>
+	    <p class="card-text">
+	      Before your scripts interact with an action queue, you should take care of it's current state. You will
+	      want to know whether the NPC is already doing something or not:
+	    </p>
+
+            <pre class="code"><code>if (!character.actionQueue.isEmpty())
+  console.log("Character is already doing something");</code></pre>
+
+	    <p class="card-text">
+	      If you want your NPC to drop what he's doing before starting your new task, you'll want to reset the queue:
+	    </p>
+
+            <pre class="code"><code>character.actionQueue.reset()</code></pre>
+
+	    <p class="card-text">
+	      Lastly, when the queue isn't already running, you'll want to start it, after sheduling your actions:
+	    </p>
+
+            <pre class="code"><code>character.actionQueue.pushMovement(1, 1);
+if (character.actionQueue.start())
+  console.log("Action started");
+else
+  console.log("Action could not start");</code></pre>
+
+	    <p class="card-text">
+              Note that the <i>start</i> method returns a boolean reporting whether the action queue actually started or not.
+	      If the character cannot perform the first action you scheduled, the method will return false. Otherwise, the
+	      actions will run one after the other, until all the actions have been run <i>or</i> until an action fails.
+	    </p>
+
+	    <p class="card-text card-hint">
+              You do not need to call <i>start</i> on the actionQueue if it was already running when you started stacking new actions.<br/>
+	      If you do, <i>start</i> will always return true, as the queue is running indeed.
+	    </p>
+
+	    <p class="card-text">
+	      Once its started, the action queue will successively trigger all the actions one by one, until the
+	      queue is either completed <b>or</b> until one of the action cannot be completed.
+	    </p>
+
+	    <p class="card-text card-hint">
+	      When an action queue interrupts, either because of success or failure, the <span class="mono-span">onActionQueueCompleted</span> method gets called on the NPC's script object.
+	    </p>
+
+	    <div class="end-chapter"></div>
+
+	    <h4 class="card-title" id="c2-2">2.2 Reach</h4>
+	    <p class="card-text">
+	      The Reach action allows you to get in range of your target. The goal of the Reach action is to look for available
+	      positions, rather than to try and move to a specific one.
+	    </p>
+
+	    <p class="card-text">
+	      That is because you don't always know if your NPC will be able to move to specific coordinates. But you will often
+	      not really care about specific coordinates: you mostly care about distance, line of sight, cover value... that's
+	      what the Reach action really is for.
+	    </p>
+
+	    <p class="card-text">
+	      Let's start with something simple. We want a character to go to bed:
+	    </p>
+
+	    <pre class="code"><code>character.actionQueue.pushReach(level.findObject("my-bed"))</code></pre>
+
+	    <p class="card-text">
+	      This will make the character move to somewhere he'll be in contact with "my-bed". Easy right ?<br />
+	      Now, what if we don't really need to get that close:
+            </p>
+
+	    <pre class="code"><code>character.actionQueue.pushReach(level.findObject("my-bed"), 3)</code></pre>
+
+	    <p class="card-text">
+	      In this example, we will reach the closest coordinates which are in a range of 3 around "my-bed".<br/>
+	    </p>
+
+	    <p class="card-text card-hint">
+	      You can always use coordinates instead of game objects as paramters to <i>pushReach</i>, such as <span class="mono-span">character.actionQueue.pushReach(x, y, 3)</span>.
+	    </p>
+
+	    <p class="card-text">
+              Finally, we have a more advanced way to pick where our NPC will go: you can pass a callback to <i>pushReach</i> which will be called to <i>rate</i> the
+	      best coordinates available matching the criteria. Here's an example:
+	    </p>
+
+	    <pre class="code"><code>character.actionQueue.pushReach(game.player, 5, function(x, y, z) {
+  return -level.getVisionQuality(
+    game.player.position.x, game.player.position.y,
+    x, y);
+});
+</code></pre>
+
+            <p class="card-text">
+	      The callback must return the lowest values for the most preferred coordinates. On equal ratings, the coordinates closest to the target will be picked.
+	    </p>
+
+	    <p class="card-text card-hint">
+              <span class="mono-span">level.getVisionQuality</span> is a helper that returns a value between 0 and 100.<br/>
+	      100 represents a perfect visibility, 0 represents a lack of line of sight.<br/>
+	      Note that, by default, the Reach action will always lead the NPC to coordinates with line of sight towards the target.
+	    </p>
+
+            <div class="end-chapter"></div>
+
+	    <h4 class="card-title" id="c2-3">2.3 Look at</h4>
+	    <p class="card-text">
+	      This one is easy. Sometimes, after your NPC has moved or performed an action, you want it to look in a specific direction.
+	      You have two options for that:
+	    </p>
+
+	    <pre class="code"><code>character.actionQueue.pushLookAt(1, 1)</code></pre>
+
+	    <p class="card-text">
+  	      In this example, we send case coordinates.
+	    </p>
+
+	    <pre class="code"><code>character.actionQueue.pushLookAt(game.player)</code></pre>
+
+	    <p class="card-text">
+	      In this example, we send an object for our character to look at. Namely, the player, but it could be anything else.
+	    </p>
+
+	    <p class="card-text card-hint">
+	      The <i>Look at</i> action doesn't guarantee line of sight. It just turns the character in the general direction
+	      of the coordinates or object you used as parameters.
+	    </p>
+	    
+            <div class="end-chapter"></div>
+
+	    <h4 class="card-title" id="c2-4">2.4 Item use</h4>
+	    <p class="card-text">
+              Things are getting serious. This is typically the kind o action you'll want to use to attack other characters.
+	      You'll need two things to perform an item use: a target, and an item to use.<br/>
+	      There are two different way to setup an item use: by reference to the <i>item slot</i>, or directly with the
+	      item's game object. Let's see how that may work:
+	    </p>
+
+	    <pre class="code"><code>character.actionQueue.pushItemUse(game.player, "use-1")</code></pre>
+
+	    <p class="card-text">
+              In this example, we use the item in the <i>item slot</i> "use-1" on the player.
+	    </p>
+
+	    <pre class="code"><code>const item = character.inventory.getEquippedItem("use-1");
+character.actionQueue.pushItemUse(game.player, item, "shoot");</code></pre>
+
+	    <p class="card-text">
+  	      This example is a bit more explicit. Here, we retrive the game object for the item equipped in the "use-1" <i>item slot</i>,
+  	      and then use it on the player with the <i>use mode</i> "shoot".
+	    </p>
+
+	    <p class="card-text">
+	      Let's use what we've learned in a more advanced example, to see how that would come to practical use:
+	    </p>
+
+	    <pre class="code"><code>const item = character.inventory.getEquippedItem("use-1");
+character.actionQueue.pushReach(game.player, item.getRange());
+for (var i = 0 ; i &lt; item.ammo ; ++i)
+  character.actionQueue.pushItemUse(game.player, item, "shoot");
+character.actionQueue.pushItemUse(null, item, "reload");
+character.actionQueue.start();
+	    </code></pre>
+
+	    <p class="card-text">
+	      Here, we trigger as many uses of the gun as can be fired, depending on how many bullets are loaded. Then, we use the item again, but this time
+	      with the "reload" <i>use mode</i>.<br/>
+	      Note how the "reload" action doesn't have a target: some items can be used without a target. In which case, you need to pass <span class="mono-span">null</span> as the target parameter.
+	    </p>
+
+	    <p class="card-text card-hint">
+	      Note that, while all the examples use equipped items, you can also use this action on items that are not equipped. In fact, it will work with
+	      any item, even an item that isn't in the character's inventory: be careful with that though, it may have some unexpected side effects.
+	    </p>
+
+            <div class="end-chapter"></div>
+
+	    <h4 class="card-title" id="c2-5">2.5 Skill use</h4>
+	    <p class="card-text">
+	      All characters, including NPCs, can use skills. Let's say you want an NPC to sneakily lockpick a door, here's how you'd go about it:
+	    </p>
+
+	    <pre class="code"><code>const target = level.findObject("my-door");
+character.actionQueue.pushSkillUse(null, "sneak");
+character.actionQueue.pushReach(target);
+character.actionQueue.pushSkillUse(target, "lockpick");
+if (character.actionQueue.start())
+  console.log("sneakily trying to pick a door");
+else
+  console.log("oops, I cannot sneak right now !");
+	    </code></pre>
+
+	    <p class="card-text">
+	      In this example, we use both the sneak and the lockpick skill: sneak skill does not require a
+	      target, so we pass "null" as the first parameter to <span class="mono-span">pushSkillUse</span>.
+	      We then reach the target door to be in lockpick range, and use a new action to lockpic the door.
+	    </p>
+
+	    <p class="card-text">
+	      Note that sneaking is impossible in certain conditions (like if you're already detected), which
+	      is why we expect the action queue not to start if our first skill use fails.
+	    </p>
+
+            <div class="end-chapter"></div>
+
+	    <h4 class="card-title" id="c2-6">2.6 Interaction</h4>
+	    <p class="card-text">
+	      The interaction action is mostly useful to the player character, but it can also be used on
+	      NPCs, as scripts can react to those interactions. It's also a simple way to trigger the "use"
+	      animation on a character.
+	    </p>
+
+	    <p class="card-text">
+	      Here's how it's used:
+	    </p>
+
+	    <pre class="code"><code>const target = level.findObject("my-target");
+character.actionQueue.pushReach(target);
+character.actionQueue.pushInteraction(target, "use");
+character.actionQueue.start();</code></pre>
+
+	    <p class="card-text">
+	      Available interactions are <i>use</i>, <i>push</i>, <i>look</i> and <i>talk-to</i>.
+	    </p>
+
+	    <p class="card-text">
+              Note that, if it exists, the <span class="mono-span">onUse</span> method on the target's
+	      script object will be invoked. The first and only parameter of that method being the
+	      NPC's game object, you will also be able to identify where the interaction came from, and
+	      check if it came from the player or a specific NPC.
+	    </p>
+ 
+            <div class="end-chapter"></div>
+
+	    <h4 class="card-title" id="c2-7">2.7 Action Point costs</h4>
+	    <p class="card-text">
+	      When using the action queue in combat, you will want to know how much action points are
+	      required to perform each and all of the actions you schedule.
+	    </p>
+
+	    <p class="card-text warning">
+	      You should know that, during combat, your character action queue will be interrupted
+	      as soon as he doesn't have enough action points left to perform the next action.<br/>
+	      If you do not pick it up again, using the <span class="mono-span">onActionQueueCompleted</span>
+	      callback, the game might get stuck in your NPCs turn, as it is not over, yet your NPC
+	      won't be doing anything to end its own turn.
+	    </p>
+
+	    <p class="card-text">
+	      There are helpers to get the estimated action point cost of each action:
+	    </p>
+
+<pre class="code"><code>character.actionQueue.getMovementApCost(x, y)
+character.actionQueue.getReachApCost(target, range)
+character.actionQueue.getReachApCost(target, range, callback)
+character.actionQueue.getItemUseCost(target, slot)
+character.actionQueue.getItemUseCost(target, item, useMode)
+character.actionQueue.getSkillUseCost(target, skill)
+character.actionQueue.getInteractionApCost(target, interaction)
+</code></pre>
+	    <div class="end-chapter"></div>
+
+	    <h4 class="card-title" id="c2-8">2.8 Helpers</h4>
+	    <p class="card-text">
+	      There are also a couple helper actions: those are not really action, but they can
+	      help you in implementing more advanced stuff, and are mighty usefull when you use
+	      your action queue to have your NPCs play a scene.
+	    </p>
+
+	    <p class="card-text">
+	      First is the waiting helper, when you want your NPC to pause between two actions:
+	    </p>
+
+	    <pre class="code"><code>character.actionQueue.pushMovement(2, 3);
+character.actionQueue.pushWait(5); // 5 seconds
+character.actionQueue.pushMovement(character.position.x, character.position.y);
+character.actionQueue.start();
+</code></pre>
+
+            <p class="card-text">
+	      This example has the character move to the coordinates 2/3, waits 5 seconds there, then go
+	      back to wherever he was initially.
+	    </p>
+
+	    <p class="card-text">
+	      The second helper is a bit more exciting: it's the script helpers, allowing you to
+	      execute your own scripts between actions. Let's update our previous example a bit:
+	    </p>
+
+	    <pre class="code"><code>character.actionQueue.pushMovement(2, 3);
+character.actionQueue.pushScript(function() {
+  level.addTextBubble(character, "Greetings, be back soon fellow scripters", 5000);
+  return true;
+});
+character.actionQueue.pushWait(5); // 5 seconds
+character.actionQueue.pushMovement(character.position.x, character.position.y);
+character.actionQueue.start();
+</code></pre>
+
+            <p class="card-text">
+	      This is a typical example of what script and wait actions are good at:<br/>
+	      - There are no action to pop a text bubble, so the script action allows you to do so within a sequence of actions.<br/>
+	      - And you do not want an NPC to start moving away as soon as the text bubbles pop, which is where the wait action comes in handy.
+	    </p>
+
+            <p class="card-text card-hint">
+	      Script actions do not have to return a value. But when they do, it can be used
+	      to interrupt the action queue. Your script action will interrupt the queue if
+	      it returns <span class="mono-span">false</span>.
+	    </p>
+
+	    <div class="end-chapter"></div>
+	  </div>
+	</div>
+
+        <h2 class="my-4" id="c3">
+          3. NPCs Routines
         </h2>
         <div class="card mb-4">
           <div class="card-body">
@@ -261,7 +589,7 @@ export function create(model) {
             
             <div class="end-chapter"></div>
           
-            <h4 class="card-title" id="c2-1">2.1 Adding a RoutineComponent</h4>
+            <h4 class="card-title" id="c3-1">3.1 Adding a RoutineComponent</h4>
             <p class="card-text">
               The first step is to set up the RoutineComponent object in our NPC's constructor:
             </p>
@@ -375,7 +703,7 @@ class MyNPC extends CharacterBehaviour {
               
               <div class="end-chapter"></div>
 
-            <h4 class="card-title" id="c2-1">2.2 Persistent Routines</h4>
+            <h4 class="card-title" id="c3-1">3.2 Persistent Routines</h4>
             
             <p class="card-text">
               A persistent routine is a routine that triggers its callback on a regular basis, ensuring that our NPC
@@ -433,7 +761,7 @@ class MyNPC extends CharacterBehaviour {
 
             <div class="end-chapter"></div>
             
-            <h4 class="card-title" id="c2-3">2.3 Interrupting a routine</h4>
+            <h4 class="card-title" id="c3-3">3.3 Interrupting a routine</h4>
             
             <p class="card-text">
               On some occasion, you might want to pause the Routine on a NPC. You can achieve this by using the
@@ -456,7 +784,7 @@ function interruptRoutineOnMyNPC() {
             
             <div class="end-chapter"></div>
 
-            <h4 class="card-title" id="c2-3">2.4 Tips about routines</h4>
+            <h4 class="card-title" id="c3-4">3.4 Tips about routines</h4>
             
             <p class="card-text">
               There are a few things you should know about the <i>Routine</i> component:
@@ -474,13 +802,13 @@ function interruptRoutineOnMyNPC() {
           </div>
         </div>
 
-        <h2 class="my-4" id="c3">
-          3. Commonalities
+        <h2 class="my-4" id="c4">
+          4. Commonalities
         </h2>
         <div class="card mb-4">
           <div class="card-body">
 
-            <h4 class="card-title" id="c3-1">3.1 How to start a specific dialog from script</h4>
+            <h4 class="card-title" id="c4-1">4.1 How to start a specific dialog from script</h4>
             <p class="card-text">
               Sometimes, you may want an NPC to initiate a dialog themselves. This can be done easily by calling
               <span class="mono-span">level.initializeDialog(character)</span>, which will immediately open a
@@ -496,7 +824,7 @@ function interruptRoutineOnMyNPC() {
 
             <div class="end-chapter"></div>
 
-            <h4 class="card-title" id="c3-2">3.2 Trigger a behaviour when a character is detected</h4>
+            <h4 class="card-title" id="c4-2">4.2 Trigger a behaviour when a character is detected</h4>
             <p class="card-text">
               Your NPC can also react to character detection using the <span class="mono-span">onCharacterDetected</span> hook,
               such as:
@@ -547,7 +875,7 @@ function interruptRoutineOnMyNPC() {
 
             <div class="end-chapter"></div>
 
-            <h4 class="card-title" id="c3-3">3.3 How to know if a character sees another character</h4>
+            <h4 class="card-title" id="c4-3">4.3 How to know if a character sees another character</h4>
             <p class="card-text">
               There are several way a character can be aware o other characters: for instance, they may have a direct line o sight on those,
               or they may just know that they're around (because they saw them earlier).
@@ -569,7 +897,7 @@ function interruptRoutineOnMyNPC() {
 
             <div class="end-chapter"></div>
 
-            <h4 class="card-title" id="c3-4">3.4 Having a NPC prevent certain player actions</h4>
+            <h4 class="card-title" id="c4-4">4.4 Having a NPC prevent certain player actions</h4>
             <p class="card-text">
               Some common scenario for this would be preventing a character from opening a door when an NPC is guarding it.
               While you could create a script for the door, it sometimes make more sense to implement this behaviour directly
@@ -636,19 +964,30 @@ class Guard extends CharacterBehaviour {
               <a href="#c1-4">1.4 Scripted relation changes</a>
               <a href="#c1-5">1.5 Reputation</a>
             </div>
-            <a href="#c2">2. NPCs Routines</a>
+            <a href="#c2">2. Action queue</a>
             <div class="chapter">
-              <a href="#c2-1">2.1 Adding a RoutineComponent</a>
-              <a href="#c2-2">2.2 Persistent Routines</a>
-              <a href="#c2-3">2.3 Interrupting a routine</a>
-              <a href="#c2-4">2.4 Tips about routines</a>
+              <a href="#c2-1">2.1 Queue state</a>
+              <a href="#c2-2">2.2 Reach</a>
+              <a href="#c2-3">2.3 Look at</a>
+              <a href="#c2-4">2.4 Item use</a>
+              <a href="#c2-5">2.5 Skill use</a>
+              <a href="#c2-6">2.6 Interaction</a>
+              <a href="#c2-7">2.7 Action Point costs</a>
+              <a href="#c2-8">2.8 Helpers</a>
             </div>
-            <a href="#c3">3. Commonalities</a>
+            <a href="#c3">3. NPCs Routines</a>
             <div class="chapter">
-              <a href="#c3-1">3.1 Start dialog from script</a>
-              <a href="#c3-2">3.2 Trigger behaviour on detection</a>
-              <a href="#c3-3">3.3 Character awareness</a>
-              <a href="#c3-4">3.4 NPC guarding objects</a>
+              <a href="#c3-1">3.1 Adding a RoutineComponent</a>
+              <a href="#c3-2">3.2 Persistent Routines</a>
+              <a href="#c3-3">3.3 Interrupting a routine</a>
+              <a href="#c3-4">3.4 Tips about routines</a>
+            </div>
+            <a href="#c4">4. Commonalities</a>
+            <div class="chapter">
+              <a href="#c4-1">4.1 Start dialog from script</a>
+              <a href="#c4-2">4.2 Trigger behaviour on detection</a>
+              <a href="#c4-3">4.3 Character awareness</a>
+              <a href="#c4-4">4.4 NPC guarding objects</a>
             </div>
           </div>
         </div>
