@@ -7,7 +7,8 @@ bool SkillAction::trigger()
 {
   bool instantUseSkill = skillName == "sneak";
 
-  character->lookTo(target->getPosition());
+  if (target)
+    character->lookTo(target->getPosition());
   if (instantUseSkill)
     performAction();
   else
@@ -38,6 +39,8 @@ void SkillAction::performAction()
 
   if (skillName == "steal")
     success = performSteal();
+  else if (skillName == "sneak")
+    success = level->useSneak(character);
   else if (!isInCombat || getApCost() <= character->getActionPoints())
     success = target->triggerSkillUse(character, skillName);
   else if (character == level->getPlayer())
