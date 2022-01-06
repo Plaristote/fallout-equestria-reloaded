@@ -15,6 +15,8 @@
         <file>assets/ui/menuButton/normal.png</file>
         <file>assets/ui/menuButton/pressed.png</file>
         <file>assets/ui/MenuButton.qml</file>
+        <file>assets/ui/TitleText.qml</file>
+        <file>assets/ui/ColumnLabel.qml</file>
         <file>assets/ui/hud.png</file>
         <file>assets/ui/Label.qml</file>
         <file>assets/ui/Pane.qml</file>
@@ -125,6 +127,9 @@
         <file>ui/FpsWidget.qml</file>
         <file>ui/MenuButton.qml</file>
         <file>ui/TabRow.qml</file>
+        <file>ui/KeyHint.qml</file>
+        <file>ui/ShortcutTable.qml</file>
+        <file>ui/GamepadPreview.qml</file>
         <file>cmap/Experience.qml</file>
         <file>cmap/Status.qml</file>
         <file>cmap/Statistics.qml</file>
@@ -182,6 +187,7 @@
         <file>game/hud/Actions.qml</file>
         <file>game/hud/PlayerInventory.qml</file>
         <file>game/hud/DebugConsole.qml</file>
+        <file>game/hud/ControlsDialog.qml</file>
         <file>game/worldmap/Worldmap.qml</file>
         <file>game/worldmap/WorldmapView.qml</file>
         <file>game/worldmap/WorldmapCities.qml</file>
@@ -212,12 +218,7 @@
         <file>game/LevelTextBubbles.qml</file>
         <file>game/PauseController.qml</file>
         <file>game/GameLoadManager.qml</file>
-        <file>editor/Index.qml</file>
-        <file>editor/SpriteEditor.qml</file>
-        <file>editor/ObjectEditor.qml</file>
-        <file>editor/NpcEditor.qml</file>
-        <file>editor/EditorSelectPanel.qml</file>
-        <file>editor/LevelEditor.qml</file>
+        <file>game/LevelLoaderView.qml</file>
         <file>editor/level/LevelToolBar.qml</file>
         <file>editor/level/Breadcrumbs.qml</file>
         <file>editor/level/TreeEditorPanel.qml</file>
@@ -238,20 +239,6 @@
         <file>editor/level/ControlZoneEditor.qml</file>
         <file>editor/level/EditorCanvas.qml</file>
         <file>editor/level/EditorRender.mjs</file>
-        <file>editor/WorldMapEditor.qml</file>
-        <file>editor/worldmap/MapSizePane.qml</file>
-        <file>editor/worldmap/CityEditor.qml</file>
-        <file>editor/worldmap/CityForm.qml</file>
-        <file>editor/worldmap/ZoneEditor.qml</file>
-        <file>editor/worldmap/ZoneForm.qml</file>
-        <file>editor/worldmap/ZonePreview.qml</file>
-        <file>editor/worldmap/WorldmapListEditor.qml</file>
-        <file>editor/DiplomacyEditor.qml</file>
-        <file>editor/DialogEditor.qml</file>
-        <file>editor/SpriteForm.qml</file>
-        <file>editor/SpriteGroup.qml</file>
-        <file>editor/ObjectForm.qml</file>
-        <file>editor/FactionEditor.qml</file>
         <file>editor/level/ObjectSelectPanel.qml</file>
         <file>editor/level/SaveTemplateDialog.qml</file>
         <file>editor/level/AddTemplateDialog.qml</file>
@@ -261,17 +248,30 @@
         <file>editor/level/ObjectGroupForm.qml</file>
         <file>editor/level/ScriptPicker.qml</file>
         <file>editor/level/SpritePicker.qml</file>
-        <file>editor/AnimationPreview.qml</file>
         <file>editor/level/ScriptInputField.qml</file>
         <file>editor/level/SpriteInputField.qml</file>
-        <file>editor/ScriptInputField.qml</file>
         <file>editor/level/ElevatorObjectEditor.qml</file>
-        <file>game/hud/ControlsDialog.qml</file>
-        <file>ui/KeyHint.qml</file>
-        <file>ui/ShortcutTable.qml</file>
-        <file>ui/GamepadPreview.qml</file>
-        <file>assets/ui/TitleText.qml</file>
-        <file>assets/ui/ColumnLabel.qml</file>
-        <file>game/LevelLoaderView.qml</file>
+        <file>editor/WorldMapEditor.qml</file>
+        <file>editor/worldmap/MapSizePane.qml</file>
+        <file>editor/worldmap/CityEditor.qml</file>
+        <file>editor/worldmap/CityForm.qml</file>
+        <file>editor/worldmap/ZoneEditor.qml</file>
+        <file>editor/worldmap/ZoneForm.qml</file>
+        <file>editor/worldmap/ZonePreview.qml</file>
+        <file>editor/worldmap/WorldmapListEditor.qml</file>
+        <file>editor/Index.qml</file>
+        <file>editor/SpriteEditor.qml</file>
+        <file>editor/ObjectEditor.qml</file>
+        <file>editor/NpcEditor.qml</file>
+        <file>editor/EditorSelectPanel.qml</file>
+        <file>editor/LevelEditor.qml</file>
+        <file>editor/DiplomacyEditor.qml</file>
+        <file>editor/DialogEditor.qml</file>
+        <file>editor/SpriteForm.qml</file>
+        <file>editor/SpriteGroup.qml</file>
+        <file>editor/ObjectForm.qml</file>
+        <file>editor/FactionEditor.qml</file>
+        <file>editor/AnimationPreview.qml</file>
+        <file>editor/ScriptInputField.qml</file>
     </qresource>
 </RCC>
