@@ -12,7 +12,7 @@ Pane {
   states: [
     State {
       name: "in-combat"; when: levelController.combat
-      PropertyChanges { target: overlay; y: root.y - root.height }
+      PropertyChanges { target: overlay; y: root.y - root.height - 20 }
     },
     State { name: "no-combat"; when: !levelController.combat }
   ]
@@ -65,7 +65,9 @@ Pane {
    id: overlay
    source: "qrc:/assets/ui/hud.png"
    sourceClipRect: Qt.rect(130, 204, 75, 32)
-   width: parent.width
-   height: parent.height
+   width: parent.width + 20
+   height: parent.height + 20
+   x: -10
+   y: -10
  }
 }

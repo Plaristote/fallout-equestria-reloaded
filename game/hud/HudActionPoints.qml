@@ -22,6 +22,14 @@ Item {
         sourceClipRect: Qt.rect(available ? 0 : 59, 246, 59, 59)
         height: 15
         width:  15
+        PropertyAnimation on scale {
+          from: 1.2
+          to: 1
+          duration: 1000
+          loops: Animation.Infinite
+          running: available
+          alwaysRunToEnd: true
+        }
       }
     }
   }
