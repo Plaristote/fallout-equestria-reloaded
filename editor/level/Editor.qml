@@ -151,12 +151,6 @@ Item {
     selectedObject: root.selectedObject
   }
 
-  AddTemplateDialog {
-    id: addTemplateDialog
-    gameController: root.gameController
-    onObjectAdded: selectedObject = newObject
-  }
-
   CharacterInventoryEditor {
     id: characterInventory
     anchors.fill: parent

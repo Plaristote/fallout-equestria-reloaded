@@ -241,10 +241,7 @@
         <file>editor/level/EditorRender.mjs</file>
         <file>editor/level/ObjectSelectPanel.qml</file>
         <file>editor/level/SaveTemplateDialog.qml</file>
-        <file>editor/level/AddTemplateDialog.qml</file>
         <file>editor/level/AmbientLightDialog.qml</file>
-        <file>editor/level/addObjectDialog/TemplatePicker.qml</file>
-        <file>editor/level/addObjectDialog/ObjectForm.qml</file>
         <file>editor/level/ObjectGroupForm.qml</file>
         <file>editor/level/ScriptPicker.qml</file>
         <file>editor/level/SpritePicker.qml</file>
