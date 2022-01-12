@@ -17,6 +17,12 @@ Pane {
   ColumnLayout {
     spacing: 5
 
+    UiStyle.TitleText {
+      text: i18n.t("cmap.skills")
+      color: "white"
+      font.pointSize: 20
+    }
+
     Repeater {
       model: root.skills
       delegate: Row {

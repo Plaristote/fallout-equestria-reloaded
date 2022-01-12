@@ -11,6 +11,7 @@ Item {
   property alias openMenu:           openMenuAction
   property alias openInventory:      openInventoryAction
   property alias openSkilldex:       openSkilldexAction
+  property alias openSpellbook:      openSpellbookAction
   property alias openCharacterSheet: openCharacterSheetAction
   property alias openPipboy:         openPipboyAction
 
@@ -20,6 +21,7 @@ Item {
   signal menuTriggered()
   signal inventoryTriggered()
   signal skilldexTriggered()
+  signal spellbookTriggered()
   signal debugModeTriggered()
   signal helpTriggered()
 
@@ -119,6 +121,17 @@ Item {
       onActivated: openSkilldexAction.trigger()
     }
     onTriggered: skilldexTriggered()
+  }
+
+  Action {
+    id: openSpellbookAction
+    enabled: root.enabled && level
+    shortcut: Shortcut {
+      sequence: "z"
+      enabled: openSpellbookAction.enabled
+      onActivated: openSpellbookAction.trigger()
+    }
+    onTriggered: spellbookTriggered()
   }
 
   Action {

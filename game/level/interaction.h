@@ -31,6 +31,7 @@ public:
     TargetCursor      = 2,
     WaitCursor        = 3
   };
+  Q_ENUM(MouseMode)
 
   enum TargetMode
   {
@@ -38,12 +39,22 @@ public:
     CharacterTarget = 1,
     ZoneTarget      = 2
   };
+  Q_ENUM(TargetMode)
 
   enum MovementMode
   {
     MixedMovementMode = 0,
     RunMovementMode   = 1,
     WalkMovementMode  = 2
+  };
+  Q_ENUM(MovementMode)
+
+  enum InteractionType
+  {
+    NoInteraction,
+    ItemUse,
+    SkillUse,
+    SpellUse
   };
 
   explicit InteractionComponent(QObject *parent = nullptr);
@@ -59,15 +70,20 @@ public:
   Q_INVOKABLE void setActiveItem(const QString&);
   inline InventoryItem* getActiveItem() const { return activeItem; }
   Q_INVOKABLE void objectClicked(DynamicObject*);
+  Q_INVOKABLE void tileClicked(int x, int y);
+  void             targetTileClicked(int x, int y);
+  Q_INVOKABLE void useSpell(const QString& spell);
+  Q_INVOKABLE void useSpellOn(Character* user, DynamicObject* object, const QString& spell);
+  Q_INVOKABLE void useSpellAt(Character* user, int posX, int posY, const QString& spell);
   Q_INVOKABLE void useSkill(const QString& skill);
   Q_INVOKABLE void useSkillOn(Character* user, DynamicObject* object, const QString& skill);
   Q_INVOKABLE void movePlayerTo(int x, int y);
-  Q_INVOKABLE void tileClicked(int x, int y);
   MouseMode        getMouseMode() const { return static_cast<MouseMode>(mouseMode); }
   QPoint           getHoveredTilePosition() const { return hoveredTile; }
   int              getTargetMode() const;
   bool             mapIncludesMouse() const { return mouseInMap; }
   void             setDefaultMovementMode();
+  void             resetInteractionMode();
 
   Q_INVOKABLE DynamicObject*   getObjectAt(int posX, int posY) const;
   DynamicObject*               getObjectAt(QPoint point) const { return getObjectAt(point.x(), point.y()); }
@@ -110,6 +126,7 @@ protected:
   InventoryItem*        activeItem = nullptr;
   int                   mouseMode = MovementCursor;
   bool                  mouseInMap = false;
+  InteractionType       interactionType;
   InteractionTargetList targetList;
   QPoint                hoveredTile = QPoint(-1, -1);
 };

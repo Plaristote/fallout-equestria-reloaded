@@ -1,36 +1,32 @@
 #ifndef  ITEM_USE_ACTION_H
 # define ITEM_USE_ACTION_H
 
-# include "base.h"
-# include "game/animationSequence/animationsequence.h"
+# include "animatedaction.h"
 
-class ItemAction : public ActionBase
+class ItemAction : public AnimatedAction
 {
 public:
-  ItemAction(Character* character, DynamicObject* target, QString itemSlot) : ActionBase(character), target(target)
+  ItemAction(Character* character, DynamicObject* target, QString itemSlot) : AnimatedAction(character), target(target)
   {
     item = character->getInventory()->getEquippedItem(itemSlot);
   }
 
-  ItemAction(Character* character, DynamicObject* target, InventoryItem* item, QString useMode) : ActionBase(character), target(target), item(item), useMode(useMode)
+  ItemAction(Character* character, DynamicObject* target, InventoryItem* item, QString useMode) : AnimatedAction(character), target(target), item(item), useMode(useMode)
   {
   }
 
   int  getApCost() const override;
   bool trigger() override;
-  void update() override;
-  bool canInterrupt() const override;
 
 protected:
-  void performAction();
+  void performAction() override;
   virtual QPoint getTargetPosition() const { return target->getPosition(); }
-  virtual void lookAtTarget();
+  virtual void lookAtTarget() override;
+  QJSValue getDefaultCallback() override;
   virtual QJSValue callItemUseOn();
 
   DynamicObject*    target;
   InventoryItem*    item;
-  QJSValue          callback;
-  AnimationSequence animation;
   QString           useMode;
 };
 

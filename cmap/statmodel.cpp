@@ -530,6 +530,7 @@ void StatModel::fromJson(const QJsonObject& json)
   const QJsonArray jsonTraits        = json["traits"].toArray();
   const QJsonArray jsonPerks         = json["perks"].toArray();
   const QJsonArray jsonProficiencies = json["profs"].toArray();
+  const QJsonArray jsonSpells        = json["spells"].toArray();
 
   name = json["name"].toString();
   age  = json["age"].toInt(21);
@@ -560,6 +561,8 @@ void StatModel::fromJson(const QJsonObject& json)
     perks.push_back(value.toString());
   for (const QJsonValue& value : jsonProficiencies)
     proficiencies.push_back(value.toString());
+  for (const QJsonValue& value : jsonSpells)
+    spells.push_back(value.toString());
 
   auto loadStatData = [&json](const QString& prefix, StatData& obj) {
     obj.maxHitPoints        = json[prefix + "-hp"].toInt();
@@ -618,6 +621,7 @@ void StatModel::fromJson(const QJsonObject& json)
   emit genderChanged();
   emit factionChanged();
   emit proficienciesChanged();
+  emit spellsChanged();
 }
 
 void StatModel::toJson(QJsonObject& json)
@@ -645,6 +649,7 @@ void StatModel::toJson(QJsonObject& json)
   json["perks"]  = QJsonArray::fromStringList(perks);
   json["traits"] = QJsonArray::fromStringList(traits);
   json["profs"]  = QJsonArray::fromStringList(proficiencies);
+  json["spells"] = QJsonArray::fromStringList(spells);
   json["mp"] = maxProficiencies;
 
   auto storeStatData = [&json](const QString& prefix, const StatData& obj) {

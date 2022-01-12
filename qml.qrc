@@ -211,6 +211,7 @@
         <file>game/LevelFrameRate.qml</file>
         <file>game/LevelCursor.qml</file>
         <file>game/Skilldex.qml</file>
+        <file>game/hud/Spelldex.qml</file>
         <file>game/UsageSuccessHint.qml</file>
         <file>game/LevelLightOverlay.qml</file>
         <file>game/Interaction.mjs</file>

@@ -13,6 +13,7 @@
 #include "actions/speak.h"
 #include "actions/look.h"
 #include "actions/script.h"
+#include "actions/spellaction.h"
 
 ActionQueue::ActionQueue(QObject *parent) : QObject(parent), character(reinterpret_cast<Character*>(parent))
 {
@@ -286,6 +287,26 @@ void ActionQueue::pushItemUseAt(int x, int y, const QString &itemSlot)
 void ActionQueue::pushItemUseAt(int x, int y, InventoryItem *item)
 {
   queue << (new ItemZoneAction(character, QPoint(x, y), item));
+}
+
+void ActionQueue::pushSpellUse(const QString &spell)
+{
+  queue << (new SpellAction(character, spell));
+}
+
+void ActionQueue::pushSpellUseOn(DynamicObject *target, const QString &spell)
+{
+  queue << (new SpellAction(character, target, spell));
+}
+
+void ActionQueue::pushSpellUseAt(QPoint target, const QString &spell)
+{
+  queue << (new SpellAction(character, target, spell));
+}
+
+int ActionQueue::getSpellUseApCost(const QString &spell)
+{
+  return SpellAction(character, spell).getApCost();
 }
 
 int ActionQueue::getItemUseApCost(DynamicObject *target, const QString &itemSlot) const

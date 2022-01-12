@@ -25,6 +25,11 @@ void ItemAction::lookAtTarget()
     character->lookTo(getTargetPosition());
 }
 
+QJSValue ItemAction::getDefaultCallback()
+{
+  return item->getScriptObject().property("useOn");
+}
+
 bool ItemAction::trigger()
 {
   if (item)
@@ -38,28 +43,7 @@ bool ItemAction::trigger()
       item->setUseMode(useMode);
     }
     result = callItemUseOn();
-    lookAtTarget();
-    if (result.isObject())
-    {
-      QJSValue animationSteps = result.property("steps");
-
-      callback = result.property("callback");
-      animation.initialize(animationSteps);
-      animation.start();
-      state = InProgress;
-    }
-    else if (result.toBool())
-    {
-      auto* animationPart = new ObjectAnimationPart;
-
-      callback = item->getScriptObject().property("useOn");
-      animationPart->initialize(character, "use", "idle");
-      animation.addAnimationPart(animationPart);
-      animation.start();
-      state = InProgress;
-    }
-    else
-      state = Interrupted;
+    triggerAnimation(result);
     if (!backupMode.isEmpty())
       item->setUseMode(backupMode);
   }
@@ -69,19 +53,6 @@ bool ItemAction::trigger()
     state = Interrupted;
   }
   return state != Interrupted;
-}
-
-bool ItemAction::canInterrupt() const
-{
-  return !(state == InProgress && animation.isRunning());
-}
-
-void ItemAction::update()
-{
-  bool animationContinues = animation.update();
-
-  if (!animationContinues && state == InProgress)
-    performAction();
 }
 
 void ItemAction::performAction()
@@ -96,7 +67,7 @@ void ItemAction::performAction()
 
     if (target)
       args << target->asJSValue();
-    callback = item->getScriptObject().property("useOn");
+    callback = getDefaultCallback();
     success = Game::get()->scriptCall(callback, args, "ItemAction::performAction").toBool();
   }
   state = success ? Done : Interrupted;

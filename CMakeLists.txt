@@ -140,6 +140,10 @@ set(PROJECT_SOURCES
         game/characters/actions/look.cpp
         game/characters/actions/script.h
         game/characters/actions/script.cpp
+        game/characters/actions/animatedaction.h
+        game/characters/actions/animatedaction.cpp
+        game/characters/actions/spellaction.h
+        game/characters/actions/spellaction.cpp
         game/lootingcontroller.h
         game/lootingcontroller.cpp
         game/animationlibrary.h
@@ -172,6 +176,8 @@ set(PROJECT_SOURCES
         game/textbubble.cpp
         game/timepasser.h
         game/timepasser.cpp
+        game/spell.h
+        game/spell.cpp
         game/level/grid.h
         game/level/grid.cpp
         game/level/interaction.h

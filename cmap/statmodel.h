@@ -85,6 +85,7 @@ class StatModel : public QObject
   Q_PROPERTY(QStringList perks         MEMBER perks  NOTIFY perksChanged)
   Q_PROPERTY(QStringList traits        MEMBER traits NOTIFY traitsChanged)
   Q_PROPERTY(QStringList buffs         MEMBER buffs  NOTIFY buffsChanged)
+  Q_PROPERTY(QStringList spells        MEMBER spells NOTIFY spellsChanged)
   Q_PROPERTY(QStringList proficiencies MEMBER proficiencies NOTIFY proficienciesChanged)
   Q_PROPERTY(int maxProficiencies MEMBER maxProficiencies NOTIFY proficienciesChanged)
 
@@ -273,6 +274,7 @@ signals:
   void genderChanged();
   void leveledUpChanged();
   void proficienciesChanged();
+  void spellsChanged();
 
 private slots:
   void updateBaseValues();
@@ -297,7 +299,7 @@ private:
   StatData  modifiers;
   SkillData spentPoints;
 
-  QStringList traits, perks, proficiencies, buffs;
+  QStringList traits, perks, proficiencies, buffs, spells;
   QJsonDocument variables;
   QMap<QString, unsigned int> kills;
 

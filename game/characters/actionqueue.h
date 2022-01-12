@@ -30,11 +30,19 @@ public:
   Q_INVOKABLE int getReachApCost(DynamicObject* target, float range, QJSValue caseCompare);
   Q_INVOKABLE int getReachCaseApCost(int x, int y, float range = 1) const;
   Q_INVOKABLE int getReachCaseApCost(int x, int y, float range, QJSValue caseCompare);
+  Q_INVOKABLE int getSpellUseApCost(const QString& spell);
+  Q_INVOKABLE int getSpellUseOnApCost(DynamicObject*, const QString& spell) { return getSpellUseApCost(spell); }
+  int             getSpellUseAtApCost(QPoint, const QString& spell) { return getSpellUseApCost(spell); }
+  Q_INVOKABLE int getSpellUseAtApCost(int x, int y, const QString& spell) { return getSpellUseAtApCost(QPoint(x, y), spell); }
   Q_INVOKABLE void pushInteraction(DynamicObject* target, const QString& interactionName);
   Q_INVOKABLE void pushItemUse(DynamicObject* target, const QString& itemSlot);
   Q_INVOKABLE void pushItemUse(DynamicObject* target, InventoryItem* item, const QString& useMode);
   Q_INVOKABLE void pushItemUseAt(int x, int y, const QString& itemSlot);
   Q_INVOKABLE void pushItemUseAt(int x, int y, InventoryItem* item);
+  Q_INVOKABLE void pushSpellUse(const QString& spell);
+  Q_INVOKABLE void pushSpellUseOn(DynamicObject* target, const QString& spell);
+  void             pushSpellUseAt(QPoint target, const QString& spell);
+  Q_INVOKABLE void pushSpellUseAt(int x, int y, const QString& spell) { pushSpellUseAt(QPoint(x, y), spell); }
   Q_INVOKABLE void pushSkillUse(DynamicObject* target, const QString& name);
   void             pushMovement(QPoint target);
   Q_INVOKABLE void pushMovement(int x, int y) { pushMovement(QPoint(x, y)); }

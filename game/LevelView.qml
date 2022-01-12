@@ -11,6 +11,7 @@ LevelDisplay {
                             inventoryViewContainer.visible ||
                             itemPickerContainer.visible ||
                             skilldex.visible ||
+                            spellbook.visible ||
                             countdownDialog.visible ||
                             controlsDialog.visible ||
                             mainMenu.visible
@@ -36,6 +37,7 @@ LevelDisplay {
     onNextTargetTriggered:     levelController.centerCursorOn(levelController.targetList.nextTarget())
     onInventoryTriggered:      inventoryViewContainer.visible = true
     onSkilldexTriggered:       skilldex.visible = !skilldex.visible
+    onSpellbookTriggered:      spellbook.visible = !spellbook.visible
     onDebugModeTriggered:      debugConsole.visible = !debugConsole.visible
     onHelpTriggered:           controlsDialog.open()
     onBackTriggered: {
@@ -147,6 +149,7 @@ LevelDisplay {
     onOpenPipboy: actions.openPipboy.trigger()
     onOpenInventory: actions.openInventory.trigger()
     onOpenCharacterSheet: actions.openCharacterSheet.trigger()
+    onOpenSpellbook: actions.openSpellbook.trigger()
     onOpenSkilldex: {
       skilldex.target = null;
       actions.openSkilldex.trigger();
@@ -165,6 +168,18 @@ LevelDisplay {
         levelController.useSkillOn(levelController.player, skilldex.target, skillName);
       else
         levelController.useSkill(skillName);
+    }
+  }
+
+  Hud.Spelldex {
+    id: spellbook
+    anchors.bottom: levelHud.top
+    anchors.right: parent.right
+    visible: false
+    character: levelController.player
+    onPickedSpell: {
+      actions.openSpellbook.trigger();
+      levelController.useSpell(spellName);
     }
   }
 

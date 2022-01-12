@@ -4,6 +4,7 @@
 #include "../lootingcontroller.h"
 #include "game/characters/actionqueue.h"
 #include "game/mousecursor.h"
+#include "game/spell.h"
 #include <QDebug>
 
 int InteractionComponent::movementModeOption = InteractionComponent::MixedMovementMode;
@@ -109,12 +110,19 @@ void InteractionComponent::swapMouseMode()
       mouseMode = InteractionCursor;
       break ;
   }
-  if (activeItem) {
-    activeItem = nullptr;
+  resetInteractionMode();
+  emit mouseModeChanged();
+}
+
+void InteractionComponent::resetInteractionMode()
+{
+  interactionType = NoInteraction;
+  activeSkill     = "";
+  if (activeItem)
+  {
+    activeItem    = nullptr;
     emit activeItemChanged();
   }
-  activeSkill = "";
-  emit mouseModeChanged();
 }
 
 void InteractionComponent::enableWaitingMode(bool active)
@@ -128,10 +136,11 @@ void InteractionComponent::enableWaitingMode(bool active)
 
 void InteractionComponent::setActiveItem(const QString& slotName)
 {
+  resetInteractionMode();
   mouseMode = TargetCursor;
+  interactionType = ItemUse;
   activeItemSlot = slotName;
   activeItem = Game::get()->getPlayer()->getInventory()->getEquippedItem(slotName);
-  activeSkill = "";
   emit activeItemChanged();
   emit mouseModeChanged();
   onActiveItemChanged();
@@ -149,12 +158,19 @@ void InteractionComponent::onActiveItemChanged()
 
 int InteractionComponent::getTargetMode() const
 {
-  if (activeItem)
+  switch (interactionType)
   {
+  case ItemUse:
     if (activeItem->usesZoneTarget())
       return ZoneTarget;
     else if (activeItem->getCategory() == "weapon")
       return CharacterTarget;
+    break ;
+  case SpellUse:
+    return Spell::requireSpell(activeSkill).getTargetMode();
+  case SkillUse:
+  case NoInteraction:
+    break ;
   }
   return AnyTarget;
 }
@@ -167,15 +183,44 @@ void InteractionComponent::objectClicked(DynamicObject* object)
     openInteractionMenu(object);
     break ;
   case TargetCursor:
-    if (activeItem)
-      useItemOn(object);
-    else if (activeSkill.length() > 0)
+    switch (interactionType)
     {
+    case ItemUse:
+      useItemOn(object);
+      break ;
+    case SkillUse:
       useSkillOn(Game::get()->getPlayer(), object, activeSkill);
-      activeSkill = "";
+      break ;
+    case SpellUse:
+      useSpellOn(Game::get()->getPlayer(), object, activeSkill);
+      break ;
     }
-    else
-      qDebug() << "TODO missing behaviour for target cursor";
+    resetInteractionMode();
+    break ;
+  }
+}
+
+void InteractionComponent::useSpell(const QString &spellName)
+{
+  auto& spell = Spell::requireSpell(spellName);
+  auto* actions = getPlayer()->getActionQueue();
+
+  resetInteractionMode();
+  switch (spell.getTargetMode())
+  {
+  case AnyTarget:
+    actions->reset();
+    actions->pushSpellUse(spellName);
+    if (actions->start())
+      swapMouseMode();
+    break ;
+  case CharacterTarget:
+  case ZoneTarget:
+    interactionType = SpellUse;
+    mouseMode = TargetCursor;
+    activeSkill = spellName;
+    targetList.findNearbyTargets(allDynamicObjects());
+    emit mouseModeChanged();
     break ;
   }
 }
@@ -186,6 +231,7 @@ void InteractionComponent::useSkill(const QString &skill)
     useSneak(getPlayer());
   else
   {
+    interactionType = SkillUse;
     activeSkill = skill;
     mouseMode = TargetCursor;
     activeItem = nullptr;
@@ -193,6 +239,26 @@ void InteractionComponent::useSkill(const QString &skill)
     emit activeItemChanged();
     emit mouseModeChanged();
   }
+}
+
+void InteractionComponent::useSpellOn(Character* user, DynamicObject* target, const QString &spellName)
+{
+  auto* actions = user->getActionQueue();
+
+  actions->reset();
+  actions->pushSpellUseOn(target, spellName);
+  if (actions->start())
+    swapMouseMode();
+}
+
+void InteractionComponent::useSpellAt(Character* user, int posX, int posY, const QString &spellName)
+{
+  auto* actions = user->getActionQueue();
+
+  actions->reset();
+  actions->pushSpellUseAt(posX, posY, spellName);
+  if (actions->start())
+    swapMouseMode();
 }
 
 bool InteractionComponent::canSneak(Character* user)
@@ -436,6 +502,21 @@ void InteractionComponent::movePlayerTo(int x, int y)
   }
 }
 
+void InteractionComponent::targetTileClicked(int x, int y)
+{
+  switch (interactionType)
+  {
+  case ItemUse:
+    useItemAt(x, y);
+    break ;
+  case SpellUse:
+    useSpellAt(getPlayer(), x, y, activeSkill);
+    break ;
+  default:
+    break ;
+  }
+}
+
 void InteractionComponent::tileClicked(int x, int y)
 {
   switch (mouseMode)
@@ -445,7 +526,7 @@ void InteractionComponent::tileClicked(int x, int y)
     break ;
   case TargetCursor:
     if (getTargetMode() == ZoneTarget)
-      useItemAt(x, y);
+      targetTileClicked(x, y);
     break ;
   default:
     break ;
