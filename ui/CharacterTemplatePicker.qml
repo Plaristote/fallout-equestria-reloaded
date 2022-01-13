@@ -88,7 +88,7 @@ Item {
             }
           }
 
-          Text { text: i18n.t("cmap.proficiencies"); visible: character.proficiencies.length > 0; color: "yellow"; font.bold: true; font.pointSize: 18 }
+          UiStyle.TitleText { text: i18n.t("cmap.proficiencies"); visible: character.proficiencies.length > 0; color: "yellow"; font.bold: true; font.pointSize: 18 }
 
           Repeater {
             model: character.proficiencies
