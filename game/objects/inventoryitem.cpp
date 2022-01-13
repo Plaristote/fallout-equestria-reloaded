@@ -66,6 +66,18 @@ QStringList InventoryItem::getAvailableInteractions()
   return QStringList() << "use" << "look" << "use-skill";
 }
 
+bool InventoryItem::triggerInteraction(Character *character, const QString &interactionType)
+{
+  bool result = DynamicObject::triggerInteraction(character, interactionType);
+
+  if (!result && interactionType == "use")
+  {
+    Game::get()->getLevel()->pickUpItem(character, this);
+    return true;
+  }
+  return result;
+}
+
 int InventoryItem::getWeight() const
 {
   auto itemData = InventoryItemLibrary::get()->getObject(itemType);

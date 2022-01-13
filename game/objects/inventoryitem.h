@@ -56,6 +56,7 @@ public:
   Q_INVOKABLE bool canEquipInSlot(const QString&);
   void onEquippedBy(Character*, bool on);
 
+  bool                       triggerInteraction(Character* character, const QString& interactionType) override;
   Q_INVOKABLE int            evaluateValue(Character* buyer, Character* seller);
   Q_INVOKABLE int            getActionPointCost();
   Q_INVOKABLE bool           isCombatItem();
