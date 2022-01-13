@@ -53,6 +53,8 @@ LevelDisplay {
         inventoryViewContainer.visible = false;
       else if (skilldex.visible)
         skilldex.visible = false;
+      else if (spellbook.visible)
+        spellbook.visible = false;
       else if (itemPickerContainer.visible)
         itemPicker.closed();
       else if (levelController.combat && levelController.isPlayerTurn)
@@ -161,6 +163,7 @@ LevelDisplay {
     anchors.bottom: levelHud.top
     anchors.right: parent.right
     visible: false
+    onVisibleChanged: if (visible) { spellbook.visible = false }
     character: levelController.player
     onPickedSkill: {
       actions.openSkilldex.trigger();
@@ -177,6 +180,7 @@ LevelDisplay {
     anchors.right: parent.right
     visible: false
     character: levelController.player
+    onVisibleChanged: if (visible) { skilldex.visible = false }
     onPickedSpell: {
       actions.openSpellbook.trigger();
       levelController.useSpell(spellName);
