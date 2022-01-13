@@ -61,11 +61,9 @@ bool InventoryItem::defaultLookInteraction()
 
 QStringList InventoryItem::getAvailableInteractions()
 {
-  auto list = DynamicObject::getAvailableInteractions();
-
-  if (list.empty())
-    list << "use" << "look" << "use-skill";
-  return list;
+  if (script && script->hasMethod("getAvailableInteractions"))
+    return DynamicObject::getAvailableInteractions();
+  return QStringList() << "use" << "look" << "use-skill";
 }
 
 int InventoryItem::getWeight() const

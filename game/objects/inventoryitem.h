@@ -36,7 +36,7 @@ public:
   Q_INVOKABLE void add(int quantity = 1);
   Q_INVOKABLE bool remove(int quantity = 1);
   int getInteractionDistance() const override { return 0; }
-  QStringList getAvailableInteractions();
+  QStringList getAvailableInteractions() override;
   int         getWeight() const;
   int         getValue() const;
   int         getQuantity() const { return quantity; }
