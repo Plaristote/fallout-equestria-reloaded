@@ -19,9 +19,9 @@ DynamicObjectEditor {
     TerminalComboBox {
       Layout.fillWidth: true
       model: itemLibrary.getObjectList()
-      currentIndex: itemLibrary.getObjectList().indexOf(model.itemType)
+      currentIndex: itemLibrary.getObjectList().indexOf(itemEditor.model.itemType)
       onCurrentIndexChanged: {
-        model.itemType = itemLibrary.getObjectList()[currentIndex];
+        itemEditor.model.itemType = itemLibrary.getObjectList()[currentIndex];
       }
     },
 

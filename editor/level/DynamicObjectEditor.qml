@@ -120,6 +120,7 @@ ColumnLayout {
         Layout.fillWidth: true
         scriptCategory: objectEditor.scriptCategory
         model: objectEditor.model
+        visible: !readOnlyScript
       }
 
       TerminalLabel { text: "Sprite"; visible: !readOnlySprite }

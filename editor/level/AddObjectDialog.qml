@@ -88,7 +88,7 @@ UiStyle.CustomDialog {
     else if (objectTypeInput.currentText == "elevator")
       newObject = factory.generateElevator(objectNameInput.text);
     else if (objectTypeInput.currentText == "item")
-      newObject = factory.generateInventoryItem(objectNameInput.text, itemTypeInput.currentText);
+      newObject = factory.generateInventoryItem(objectNameInput.text, itemTypeInput.currentText, 1);
     else
       newObject = factory.generateDynamicObject(objectNameInput.text);
     objectAdded(newObject);
