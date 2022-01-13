@@ -200,6 +200,14 @@ set(PROJECT_SOURCES
         game/level/lineofsight.cpp
         game/level/ambientlightcomponent.h
         game/level/ambientlightcomponent.cpp
+        game/level/actions.h
+        game/level/actions.cpp
+        game/level/cursor.h
+        game/level/cursor.cpp
+        game/level/playermovement.h
+        game/level/playermovement.cpp
+        game/level/targetcomponent.h
+        game/level/targetcomponent.cpp
         game/objects/objectgroup.h
         game/objects/objectgroup.cpp
         game/objects/objectfactory.h
