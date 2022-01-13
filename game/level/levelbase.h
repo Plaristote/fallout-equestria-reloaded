@@ -34,6 +34,7 @@ public:
 signals:
   void playerChanged();
   void cameraMoved();
+  void attachedObjectsChanged();
 
 private slots:
   void onChildrenObjectAdded(DynamicObject*);

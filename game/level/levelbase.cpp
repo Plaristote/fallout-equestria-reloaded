@@ -85,9 +85,11 @@ void LevelBase::registerAllDynamicObjects()
 void LevelBase::registerDynamicObject(DynamicObject* object)
 {
   attachedObjects.push_back(object);
+  emit attachedObjectsChanged();
 }
 
 void LevelBase::unregisterDynamicObject(DynamicObject* object)
 {
   attachedObjects.removeOne(object);
+  emit attachedObjectsChanged();
 }
