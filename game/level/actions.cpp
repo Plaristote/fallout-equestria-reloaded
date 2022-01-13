@@ -206,7 +206,7 @@ void ActionsComponent::pickUpItem(Character* character, InventoryItem* item)
 
   if (inventory->getTotalWeight() + item->getWeight() <= statistics->get_carryWeight())
   {
-    Game::get()->getLevel()->unregisterDynamicObject(item);
+    detachObject(item);
     inventory->addItem(item);
   }
   else

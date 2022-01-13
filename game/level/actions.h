@@ -48,7 +48,7 @@ protected slots:
 protected:
   QString               activeItemSlot, activeSkill;
   InventoryItem*        activeItem = nullptr;
-  InteractionType       interactionType;
+  InteractionType       interactionType = NoInteraction;
 
 };
 
