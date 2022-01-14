@@ -1,9 +1,10 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
-import "qrc:/assets/ui" as UiStyle
+import "../../assets/ui" as UiStyle
+import "../../ui"
 
-Pane {
+SideBar {
   id: root
   property QtObject character
   property QtObject target
@@ -11,29 +12,25 @@ Pane {
 
   signal pickedSpell(string spellName)
 
-  background: UiStyle.Pane {}
+  title: i18n.t("spells.title")
   width: 160 + 75 + 35
-
-  ColumnLayout {
+  content: ColumnLayout {
     spacing: 5
-
-    UiStyle.TitleText {
-      text: i18n.t("spells.title")
-      color: "white"
-      font.pointSize: 20
-    }
 
     UiStyle.TitleText {
       text: i18n.t("spells.empty-spellbook")
       color: "white"
       visible: spells.length === 0
-      font.pointSize: 20
+      font.pointSize: 18
+      wrapMode: Text.WordWrap
+      Layout.fillWidth: true
     }
 
     Repeater {
       model: root.spells
       delegate: Button {
         background: UiStyle.Label { style: parent.down ? "dark" : "base" }
+        Layout.fillWidth: true
         text: i18n.t(`spells.${root.spells[index]}`)
         width: 160
         height: 40

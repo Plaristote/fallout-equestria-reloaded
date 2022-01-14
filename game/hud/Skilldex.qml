@@ -2,8 +2,9 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
 import "qrc:/assets/ui" as UiStyle
+import "../../ui"
 
-Pane {
+SideBar {
   id: root
   property QtObject character
   property QtObject target
@@ -11,27 +12,21 @@ Pane {
 
   signal pickedSkill(string skillName)
 
-  background: UiStyle.Pane {}
+  title: i18n.t("cmap.skills")
   width: 160 + 75 + 35
-
-  ColumnLayout {
+  content: ColumnLayout {
     spacing: 5
-
-    UiStyle.TitleText {
-      text: i18n.t("cmap.skills")
-      color: "white"
-      font.pointSize: 20
-    }
 
     Repeater {
       model: root.skills
       delegate: Row {
         spacing: 5
+        Layout.fillWidth: true
 
         Button {
           background: UiStyle.Label { style: parent.down ? "dark" : "base" }
           text: i18n.t(`cmap.${root.skills[index]}`)
-          width: 160
+          width: parent.width - 80
           height: 40
           contentItem: UiStyle.TitleText {
             anchors.centerIn: parent

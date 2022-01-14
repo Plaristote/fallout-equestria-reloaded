@@ -130,6 +130,7 @@
         <file>ui/KeyHint.qml</file>
         <file>ui/ShortcutTable.qml</file>
         <file>ui/GamepadPreview.qml</file>
+        <file>ui/SideBar.qml</file>
         <file>cmap/Experience.qml</file>
         <file>cmap/Status.qml</file>
         <file>cmap/Statistics.qml</file>
@@ -188,6 +189,8 @@
         <file>game/hud/PlayerInventory.qml</file>
         <file>game/hud/DebugConsole.qml</file>
         <file>game/hud/ControlsDialog.qml</file>
+        <file>game/hud/Skilldex.qml</file>
+        <file>game/hud/Spelldex.qml</file>
         <file>game/worldmap/Worldmap.qml</file>
         <file>game/worldmap/WorldmapView.qml</file>
         <file>game/worldmap/WorldmapCities.qml</file>
@@ -210,8 +213,6 @@
         <file>game/LevelHud.qml</file>
         <file>game/LevelFrameRate.qml</file>
         <file>game/LevelCursor.qml</file>
-        <file>game/Skilldex.qml</file>
-        <file>game/hud/Spelldex.qml</file>
         <file>game/UsageSuccessHint.qml</file>
         <file>game/LevelLightOverlay.qml</file>
         <file>game/Interaction.mjs</file>

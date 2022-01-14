@@ -158,10 +158,11 @@ LevelDisplay {
     }
   }
 
-  Skilldex {
+  Hud.Skilldex {
     id: skilldex
     anchors.bottom: levelHud.top
     anchors.right: parent.right
+    maxHeight: parent.height - levelHud.height
     visible: false
     onVisibleChanged: if (visible) { spellbook.visible = false }
     character: levelController.player
@@ -178,6 +179,7 @@ LevelDisplay {
     id: spellbook
     anchors.bottom: levelHud.top
     anchors.right: parent.right
+    maxHeight: parent.height - levelHud.height
     visible: false
     character: levelController.player
     onVisibleChanged: if (visible) { skilldex.visible = false }
