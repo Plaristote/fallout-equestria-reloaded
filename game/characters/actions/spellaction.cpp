@@ -37,20 +37,18 @@ void SpellAction::performAction()
   QJSValueList params;
 
   if (!callback.isCallable())
-  {
     callback = spell.triggerUse;
-    params << character->asJSValue();
-    switch (targetType)
-    {
-    case ObjectTarget:
-      params << target->asJSValue();
-      break ;
-    case PositionTarget:
-      params << targetPosition.x() << targetPosition.y();
-      break ;
-    case NoTarget:
-      break ;
-    }
+  params << character->asJSValue();
+  switch (targetType)
+  {
+  case ObjectTarget:
+    params << target->asJSValue();
+    break ;
+  case PositionTarget:
+    params << targetPosition.x() << targetPosition.y();
+    break ;
+  case NoTarget:
+    break ;
   }
   success = Game::get()->scriptCall(callback, params, "SpellAction::performAction").toBool();
   state = success ? Done : Interrupted;
