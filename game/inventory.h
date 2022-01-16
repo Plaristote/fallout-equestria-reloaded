@@ -46,6 +46,7 @@ public:
   Q_INVOKABLE bool isEquippedItem(InventoryItem*) const;
 
   Q_INVOKABLE int count(const QString& name) const;
+  Q_INVOKABLE bool contains(InventoryItem* item) const { return items.contains(item); }
 
   int getTotalWeight() const;
   int getTotalValue() const;

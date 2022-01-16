@@ -68,6 +68,7 @@ Pane {
       Layout.preferredWidth: parent.width > 800 ? 400 : 200
       selectedObject: root.selectedObject
       onItemSelected: root.selectedObject = selectedItem
+      dragZone: root
 
       Text {
         anchors.bottom: parent.bottom

@@ -51,6 +51,14 @@ Item {
         border { left: 4; bottom: 4; right: 4; top: 4 }
         clip: true
 
+        DropArea {
+          anchors.fill: parent
+          function receiveInventoryItem(inventoryItem) {
+            if (inventory.canEquipItem(inventoryItem, slotName) )
+              inventory.equipItem(inventoryItem, slotName);
+          }
+        }
+
         MouseArea {
           id: mouseArea
           anchors.fill: parent

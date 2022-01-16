@@ -272,5 +272,6 @@
         <file>editor/FactionEditor.qml</file>
         <file>editor/AnimationPreview.qml</file>
         <file>editor/ScriptInputField.qml</file>
+        <file>game/InventoryItemHandle.qml</file>
     </qresource>
 </RCC>

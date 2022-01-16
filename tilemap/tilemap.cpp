@@ -100,9 +100,14 @@ void TileMap::loadTilesets(const QJsonArray& tilesetsData)
     loadLightTileset();
 }
 
+int TileMap::getLastGid() const
+{
+  return tilesets.empty() ? 0 : tilesets.last()->getLastGid();
+}
+
 void TileMap::loadLightTileset()
 {
-  auto firstGid = tilesets.last()->getLastGid() + 1;
+  auto firstGid = getLastGid() + 1;
   auto source = tilemapsPath + "../tilesets/lights.json";
   auto* tileset = new Tileset(this);
 

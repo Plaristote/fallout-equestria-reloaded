@@ -11,6 +11,7 @@ Pane {
   property QtObject selectedObject
   property alias typeFilter: categoryFilter.currentText
   property var items: []
+  property var dragZone
   id: root
   background: UiStyle.TerminalPane {}
 
@@ -60,43 +61,15 @@ Pane {
 
       Repeater {
         model: items.length
-        delegate: Rectangle {
-          property QtObject inventoryItem: items[index]
-          property int itemCount: inventoryItem.quantity
-          property bool selected: selectedObject == inventoryItem
-
-          width: Math.max(root.itemIconWidth, root.itemIconHeight)
-          height: width
-          border.width: root.selectedObject === inventoryItem ? 1 : 0
-          border.color: "green"
-          radius: 5
-          color: "transparent"
-          ItemIcon {
-            anchors.centerIn: parent
-            model: inventoryItem
-            width: root.itemIconWidth
-            height: root.itemIconHeight
-          }
-          Text {
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: 5
-            text: itemCount > 1 ? `x${itemCount}` : ""
-            font.family: application.consoleFontName
-            font.pointSize: 8
-            style: Text.Raised
-            styleColor: "black"
-            color: "white"
-            width: root.itemIconWidth
-            wrapMode: Text.WrapAnywhere
-          }
-          MouseArea {
-            id: itemMouseArea
-            anchors.fill: parent
-            hoverEnabled: true
-            onClicked: root.itemSelected(inventoryItem)
-            onDoubleClicked: root.itemActivated(inventoryItem)
-          }
+        delegate: InventoryItemHandle {
+          inventoryItem: items[index]
+          itemCount: inventoryItem.quantity
+          selected: selectedObject == inventoryItem
+          itemIconWidth: root.itemIconWidth
+          itemIconHeight: root.itemIconHeight
+          dragZone: root.dragZone
+          onClicked: root.itemSelected(inventoryItem)
+          onDoubleClicked: root.itemActivated(inventoryItem)
         }
       }
     }

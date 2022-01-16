@@ -48,4 +48,18 @@ Pane {
       }
     }
   }
+
+  DropArea {
+    anchors.fill: parent
+    onDropped: {
+      console.log("Dropped on slot", drop.source.dragType);
+      if (drop.source.dragType === "InventoryItem")
+        receiveInventoryItem(drop.source.inventoryItem);
+    }
+
+    function receiveInventoryItem(inventoryItem) {
+      if (inventory.canEquipItem(inventoryItem, slotName) )
+        inventory.equipItem(inventoryItem, slotName);
+    }
+  }
 } // END Slot

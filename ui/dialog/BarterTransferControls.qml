@@ -13,6 +13,26 @@ Pane {
 
   background: UiStyle.TerminalPane{}
 
+  function triggerTransferToLeft() {
+    if (rightInventory.selectedObject.quantity > 1)
+      transferToLeftDialog.open();
+    else
+    {
+      transferToLeft(rightInventory.selectedObject, -1);
+      rightInventory.selectedObject = null;
+    }
+  }
+
+  function triggerTransferToRight() {
+    if (leftInventory.selectedObject.quantity > 1)
+      transferToRightDialog.open();
+    else
+    {
+      transferToRight(leftInventory.selectedObject, -1)
+      leftInventory.selectedObject = null;
+    }
+  }
+
   ItemTransferDialog {
     id: transferToRightDialog
     parent: Overlay.overlay
@@ -39,28 +59,12 @@ Pane {
     TerminalButton {
       Layout.alignment: Qt.AlignHCenter
       text: "<"
-      onClicked: {
-        if (rightInventory.selectedObject.quantity > 1)
-          transferToLeftDialog.open();
-        else
-        {
-          transferToLeft(rightInventory.selectedObject, -1);
-          rightInventory.selectedObject = null;
-        }
-      }
+      onClicked: triggerTransferToLeft()
     }
     TerminalButton {
       Layout.alignment: Qt.AlignHCenter
       text: ">"
-      onClicked: {
-        if (leftInventory.selectedObject.quantity > 1)
-          transferToRightDialog.open();
-        else
-        {
-          transferToRight(leftInventory.selectedObject, -1)
-          leftInventory.selectedObject = null;
-        }
-      }
+      onClicked: triggerTransferToRight()
     }
   }
 }

@@ -76,6 +76,7 @@ private:
   void loadWallFolder(const QJsonObject&);
   void loadFloorFolder(const QJsonObject&);
   void loadLightTileset();
+  int getLastGid() const;
 
   QSize               tileSize;
   QSize               mapSize;

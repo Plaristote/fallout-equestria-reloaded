@@ -33,13 +33,22 @@ Item {
         Layout.fillHeight: true
         Layout.fillWidth: true
         inventory: controller.player.inventory
+        dragZone: root
         onItemSelected: {
           playerStash.selectedObject = npcStash.selectedObject = npcInventory.selectedObject = null;
           selectedObject = selectedItem
         }
+        DropArea {
+          anchors.fill: parent
+          function receiveInventoryItem(inventoryItem) {
+            if (controller.playerStash.contains(inventoryItem) >= 0)
+              playerBarterControls.triggerTransferToLeft();
+          }
+        }
       }
 
       BarterTransferControls {
+        id: playerBarterControls
         Layout.alignment: Qt.AlignHCenter
         Layout.preferredWidth: 50
         leftInventory:  playerInventory
@@ -53,9 +62,18 @@ Item {
         Layout.fillHeight: true
         Layout.fillWidth: true
         inventory: controller.playerStash
+        dragZone: root
         onItemSelected: {
           playerInventory.selectedObject = npcStash.selectedObject = npcInventory.selectedObject = null;
           selectedObject = selectedItem
+        }
+        DropArea {
+          anchors.fill: parent
+          function receiveInventoryItem(inventoryItem) {
+            console.log("Coucou", inventoryItem, inventoryItem.parent, controller.player.inventory)
+            if (controller.player.inventory.contains(inventoryItem) >= 0)
+              playerBarterControls.triggerTransferToRight();
+          }
         }
       }
 
@@ -72,13 +90,22 @@ Item {
         Layout.fillHeight: true
         Layout.fillWidth: true
         inventory: controller.npcStash
+        dragZone: root
         onItemSelected: {
           playerInventory.selectedObject = playerStash.selectedObject = npcInventory.selectedObject = null;
           selectedObject = selectedItem
         }
+        DropArea {
+          anchors.fill: parent
+          function receiveInventoryItem(inventoryItem) {
+            if (controller.npcInventory.contains(inventoryItem) >= 0)
+              npcBarterControls.triggerTransferToLeft();
+          }
+        }
       }
 
       BarterTransferControls {
+        id: npcBarterControls
         Layout.alignment: Qt.AlignHCenter
         Layout.preferredWidth: 50
         leftInventory:  npcStash
@@ -100,9 +127,17 @@ Item {
           Layout.fillHeight: true
           Layout.fillWidth: true
           inventory: controller.npcInventory
+          dragZone: root
           onItemSelected: {
             playerInventory.selectedObject = playerStash.selectedObject = npcStash.selectedObject = null;
             selectedObject = selectedItem
+          }
+          DropArea {
+            anchors.fill: parent
+            function receiveInventoryItem(inventoryItem) {
+              if (controller.npcStash.contains(inventoryItem) >= 0)
+                npcBarterControls.triggerTransferToRight();
+            }
           }
         }
       }

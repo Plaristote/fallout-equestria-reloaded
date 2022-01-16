@@ -15,8 +15,11 @@ void PreRenderComponent::load(const QJsonObject& data)
   ParentType::load(data);
   for (LevelGrid* grid : getFloors())
   {
-    layers << grid->getTilemap()->getLayer("ground")
-           << grid->getTilemap()->getRoofs()
+    TileLayer* ground = grid->getTilemap()->getLayer("ground");
+
+    if (ground)
+      layers << ground;
+    layers << grid->getTilemap()->getRoofs()
            << grid->getTilemap()->getLights();
   }
   if (!dir.exists(getPreRenderPath()))
