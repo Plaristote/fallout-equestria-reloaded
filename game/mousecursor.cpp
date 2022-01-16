@@ -26,6 +26,7 @@ MouseCursor::MouseCursor(QGuiApplication* parent) : QObject(parent)
   QPixmap pointerView(cursorPath + "interaction.png");
   QPixmap activeView (cursorPath + "interaction-available.png");
   QPixmap targetView (cursorPath + "target.png");
+  QPixmap moveView   (cursorPath + "move.png");
   QPixmap emptyView(5, 5);
 
   emptyView.fill(Qt::transparent);
@@ -33,6 +34,7 @@ MouseCursor::MouseCursor(QGuiApplication* parent) : QObject(parent)
   cursors.insert(NormalPointer, new AnimatedCursor(parent, pointerView.scaled(64, 50)));
   cursors.insert(ActivePointer, new AnimatedCursor(parent, activeView.scaled(64, 50)));
   cursors.insert(TargetPointer, new AnimatedCursor(parent, targetView.scaled(50, 50), QPoint(25, 25)));
+  cursors.insert(MovePointer,   new AnimatedCursor(parent, moveView.scaled(72, 36), QPoint(5, -5)));
   cursors.insert(WaitPointer,   makeWaitCursor());
   cursors.insert(EmptyPointer,  new AnimatedCursor(parent, emptyView));
 }
@@ -64,7 +66,7 @@ void MouseCursor::updatePointerType()
       if (!hasHoveredTile(level))
         setCurrentPointer(NormalPointer);
       else
-        setCurrentPointer(EmptyPointer);
+        setCurrentPointer(withMoveCursor ? MovePointer : EmptyPointer);
       break ;
     case InteractionComponent::InteractionCursor:
       setCurrentPointer(NormalPointer);

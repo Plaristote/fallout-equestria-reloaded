@@ -80,6 +80,13 @@ Pane {
         onCurrentIndexChanged: gameManager.movementModeOption = currentIndex
       }
 
+      TerminalLabel { text: i18n.t("options.movementCursor") }
+      TerminalCheckBox {
+        id: movementCursorInput
+        checked: mouseCursor.withMoveCursor
+        onCheckedChanged: mouseCursor.withMoveCursor = checked
+      }
+
       TerminalLabel { text: i18n.t("options.combatSpeed") }
       Slider {
         id: combatSpeedInput

@@ -37,6 +37,7 @@ class MouseCursor : public QObject
   {
     NormalPointer,
     ActivePointer,
+    MovePointer,
     TargetPointer,
     WaitPointer,
     EmptyPointer
@@ -44,6 +45,7 @@ class MouseCursor : public QObject
 
   static MouseCursor* instance;
 
+  Q_PROPERTY(bool withMoveCursor MEMBER withMoveCursor NOTIFY withMoveCursorChanged)
 public:
   explicit MouseCursor(QGuiApplication *parent = nullptr);
 
@@ -59,6 +61,9 @@ public slots:
   void click(bool pressed);
   void updatePointerType();
 
+signals:
+  void withMoveCursorChanged();
+  
 private:
   void setCurrentPointer(PointerType);
   AnimatedCursor* makeWaitCursor() const;
@@ -66,6 +71,7 @@ private:
   QMap<PointerType, AnimatedCursor*> cursors;
   PointerType currentPointer = EmptyPointer;
   QObject* window = nullptr;
+  bool withMoveCursor = false;
 };
 
 #endif // MOUSECURSOR_H

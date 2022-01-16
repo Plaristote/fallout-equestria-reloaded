@@ -26,6 +26,7 @@ Window {
     property alias height: application.height
     property alias fullScreen: application.isFullScreen
     property int   movementMode: gameManager.movementModeOption
+    property bool  withMovementCursor: mouseCursor.withMoveCursor
     property real  combatSpeed:  gameManager.combatSpeedOption
   }
 
@@ -39,6 +40,7 @@ Window {
       application.showNormal();
     gameManager.movementModeOption = settings.movementMode;
     gameManager.combatSpeedOption = settings.combatSpeed;
+    mouseCursor.withMoveCursor = settings.withMovementCursor;
   }
 
   function createGame() {

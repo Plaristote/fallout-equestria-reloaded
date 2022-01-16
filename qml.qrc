@@ -75,6 +75,7 @@
         <file>assets/ui/cursors/interaction.png</file>
         <file>assets/ui/cursors/target.png</file>
         <file>assets/ui/cursors/target-tile.png</file>
+        <file>assets/ui/cursors/move.png</file>
         <file>assets/ui/cursors/move-tile.png</file>
         <file>assets/ui/cursors/move-tile-unavailable.png</file>
         <file>assets/ui/cursors/wait.png</file>
