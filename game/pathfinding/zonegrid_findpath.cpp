@@ -118,6 +118,8 @@ bool ZoneGrid::findPath(Point from, const QVector<Point> &to, QList<Point> &path
   CaseSorter                         heuristic = std::bind(&sortCasesByProximity, *targetCase, std::placeholders::_1, std::placeholders::_2);
   CaseLocker                         caseLock(fromCase);
 
+  if (!fromZone)
+    return false;
   qDebug() << character << "findPath" << candidates.length();
   while ((candidate = candidates.nextCandidate()) != candidates.end())
   {
