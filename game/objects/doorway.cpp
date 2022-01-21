@@ -144,20 +144,14 @@ bool Doorway::bustOpen(int damage)
 bool Doorway::onGoThrough(Character* character)
 {
   if (!opened && canGoThrough(character))
-  {
-    character->useActionPoints(2, "doorway");
-    opened = true;
-    playSound(openSound);
-    emit openedChanged();
-    return true;
-  }
+    onUse(character);
   return opened;
 }
 
 bool Doorway::canGoThrough(Character* character) const
 {
   if (character == Game::get()->getPlayer())
-    return opened;
+    return !locked;
   if (!opened)
   {
     if (script && script->hasMethod("canGoThrough"))
@@ -188,17 +182,20 @@ bool Doorway::triggerInteraction(Character *character, const QString &interactio
 
 bool Doorway::onUse(Character* character)
 {
-  auto* game  = Game::get();
-  auto* level = game->getLevel();
-  auto* grid  = level->getGrid();
-  QPoint position = getPosition();
-
   if (script && script->hasMethod("onUse") && script->call("onUse", QJSValueList() << character->asJSValue()).toBool())
     return true;
-  character->useActionPoints(2, "door");
+  return tryToOpen(*character);
+}
+
+bool Doorway::tryToOpen(Character& character)
+{
+  auto* game  = Game::get();
+  auto* level = game->getLevel();
+
+  character.useActionPoints(2, "door");
   if (locked)
   {
-    if (character == level->getPlayer())
+    if (&character == level->getPlayer())
       game->appendToConsole(I18n::get()->t("messages.door-is-locked"));
     playSound(lockedSound);
     return false;
@@ -207,8 +204,6 @@ bool Doorway::onUse(Character* character)
   {
     opened = false;
     playSound(closeSound);
-    emit openedChanged();
-    return true;
   }
   else
   {

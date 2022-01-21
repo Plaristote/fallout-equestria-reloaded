@@ -51,6 +51,8 @@ private slots:
   void updateAnimation();
 
 private:
+  bool tryToOpen(Character&);
+
   bool      destroyed = false;
   bool      opened = false;
   bool      locked = false;
