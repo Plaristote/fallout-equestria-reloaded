@@ -63,7 +63,10 @@ public:
   Q_INVOKABLE virtual bool triggerSkillUse(Character* user, const QString& skillName);
   Q_INVOKABLE void playSound(const QString&, qreal volume = 1.f) const;
 
+  void deleteLater() { emit beforeDestroy(); QObject::deleteLater(); }
+
 signals:
+  void beforeDestroy();
   void objectNameChanged();
   void blocksPathChanged();
   void visibilityChanged();

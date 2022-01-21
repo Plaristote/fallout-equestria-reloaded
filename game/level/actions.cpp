@@ -9,6 +9,19 @@ ActionsComponent::ActionsComponent(QObject *parent) : ParentType(parent)
 
 }
 
+void ActionsComponent::unsetActiveItem()
+{
+  if (activeItem)
+  {
+    if (interactionType == ItemUse)
+      interactionType = NoInteraction;
+    disconnect(activeItem, &InventoryItem::beforeDestroy, this, &ActionsComponent::unsetActiveItem);
+    disconnect(activeItem, &InventoryItem::parentChanged, this, &ActionsComponent::unsetActiveItem);
+    activeItem = nullptr;
+    emit activeItemChanged();
+  }
+}
+
 void ActionsComponent::setActiveItem(const QString& slotName)
 {
   resetInteractionMode();
@@ -16,6 +29,11 @@ void ActionsComponent::setActiveItem(const QString& slotName)
   interactionType = ItemUse;
   activeItemSlot = slotName;
   activeItem = Game::get()->getPlayer()->getInventory()->getEquippedItem(slotName);
+  if (activeItem)
+  {
+    connect(activeItem, &InventoryItem::beforeDestroy, this, &ActionsComponent::unsetActiveItem);
+    connect(activeItem, &InventoryItem::parentChanged, this, &ActionsComponent::unsetActiveItem);
+  }
   emit activeItemChanged();
   emit mouseModeChanged();
   onActiveItemChanged();
@@ -25,11 +43,7 @@ void ActionsComponent::resetInteractionMode()
 {
   interactionType = NoInteraction;
   activeSkill     = "";
-  if (activeItem)
-  {
-    activeItem    = nullptr;
-    emit activeItemChanged();
-  }
+  unsetActiveItem();
 }
 
 void ActionsComponent::onActiveItemChanged()

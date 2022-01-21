@@ -44,6 +44,7 @@ signals:
 protected slots:
   void onActiveItemChanged();
   void resetInteractionMode();
+  void unsetActiveItem();
 
 protected:
   QString               activeItemSlot, activeSkill;
