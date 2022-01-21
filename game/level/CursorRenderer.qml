@@ -54,7 +54,7 @@ Loader {
     Item {
       id: combatPathElement
       property var path: getPath()
-      property int length: Math.min(levelController.player.actionPoints, path.length)
+      property int length: path.positions.length
 
       function getPath() {
         return levelController.previewPathTo(...renderTarget.hoverTile);
@@ -74,17 +74,21 @@ Loader {
         model: combatPathElement.length
         delegate: Image {
           property var   tile: [
-            combatPathElement.path[index].x,
-            combatPathElement.path[index].y
+            combatPathElement.path.positions[index].x,
+            combatPathElement.path.positions[index].y
           ]
           property bool lastTile: index === (combatPathElement.length - 1)
           property point renderPosition: levelController.getRenderPositionForTile(...tile)
           x: renderPosition.x - cursorRenderer.x
           y: renderPosition.y - cursorRenderer.y
           source: "qrc:/assets/ui/cursors/move-tile" + (lastTile ? "" : "-unavailable") + ".png"
+          Component.onCompleted: {
+            console.log("kewa", combatPathElement.path.costs[index]);
+          }
+
           Text {
             anchors.centerIn: parent
-            text:             (index + 1).toString()
+            text:             combatPathElement.path.costs[index].toString()
             font.pointSize:   application.consoleFont.bigSize
             font.family:      application.consoleFont.name
             style:            Text.Outline

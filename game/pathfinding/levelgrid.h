@@ -52,7 +52,8 @@ public:
     void connectWith(CaseContent*);
     void disconnectFrom(CaseContent*);
     void clearConnections();
-    CaseConnection* connectionWith(CaseContent*) const;
+    CaseConnection* connectionWith(const CaseContent*) const;
+    int apCostTo(const CaseContent*) const;
   };
 
   struct CaseConnection
@@ -60,7 +61,7 @@ public:
     void connect(CaseContent*, CaseContent*);
     void disconnect();
     bool operator==(const CaseContent* value) const { return pair.first == value || pair.second == value; }
-    float getCost() const;
+    int getCost() const;
     bool canGoThrough(CharacterMovement* character);
     bool goThrough(CharacterMovement* character);
     CaseContent* getTargetFor(const CaseContent* value) const { return value && pair.first->position == value->position ? pair.second : pair.first; }

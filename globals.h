@@ -25,4 +25,7 @@
    QQmlListProperty<type>(this, &list)
 # endif
 
+class QJSEngine;
+extern QJSEngine* qmlJsEngine;
+
 #endif // MY_GLOBALS_H

@@ -16,6 +16,7 @@ public:
   bool findPath(Point from, const QVector<Point> &to, QList<Point> &path, CharacterMovement *character, bool quickMode = false);
   void connectCases(Point, Point);
   void disconnectCases(Point, Point);
+  int actionPointCost(Point, Point);
 
   LevelGrid::CaseContent* getGridCase(Point);
   PathZone*               getPathZone(Point);

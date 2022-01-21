@@ -28,7 +28,7 @@ bool LevelGrid::CaseContent::isLinkedTo(QPoint position) const
   return iterator != connections.end();
 }
 
-LevelGrid::CaseConnection* LevelGrid::CaseContent::connectionWith(CaseContent* other) const
+LevelGrid::CaseConnection* LevelGrid::CaseContent::connectionWith(const CaseContent* other) const
 {
   auto iterator = std::find_if(connections.begin(), connections.end(), [this, other](const CaseConnection* connection) -> bool
   {
@@ -36,6 +36,13 @@ LevelGrid::CaseConnection* LevelGrid::CaseContent::connectionWith(CaseContent* o
   });
 
   return iterator != connections.end() ? *iterator : nullptr;
+}
+
+int LevelGrid::CaseContent::apCostTo(const CaseContent* other) const
+{
+  auto* connection = connectionWith(other);
+
+  return other ? connection->getCost() : 0;
 }
 
 void LevelGrid::CaseContent::connectWith(CaseContent* other)
@@ -91,13 +98,13 @@ void LevelGrid::CaseConnection::disconnect()
   delete this;
 }
 
-float LevelGrid::CaseConnection::getCost() const
+int LevelGrid::CaseConnection::getCost() const
 {
   if (doorway && !doorway->property("opened").toBool())
-    return 3.f;
+    return 3;
   if (pair.first->position.z != pair.second->position.z)
-    return 3.f;
-  return 1.f;
+    return 3;
+  return 1;
 }
 
 bool LevelGrid::CaseConnection::canGoThrough(CharacterMovement* character)

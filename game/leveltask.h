@@ -39,8 +39,6 @@ public:
   void registerDynamicObject(DynamicObject*) override;
   void unregisterDynamicObject(DynamicObject*) override;
 
-  Q_INVOKABLE QVariantList previewPathTo(int x, int y);
-
   Q_INVOKABLE void addBloodStainAt(int x, int y, unsigned char z) { addBloodStainAt(QPoint(x, y), z); }
   void             addBloodStainAt(QPoint, unsigned char floor);
 

@@ -39,6 +39,8 @@
 #include "editor/leveleditorcontroller.h"
 #include "editor/gameobjecttemplates.h"
 
+QJSEngine* qmlJsEngine = nullptr;
+
 void registerQmlTilemap() {
   qmlRegisterType<TileMap>  ("Tiles", 1,0, "TileMap");
   qmlRegisterType<TileLayer>("Tiles", 1,0, "TileLayer");
@@ -131,6 +133,7 @@ int main(int argc, char *argv[])
   GameManager*  gameManager = new GameManager();
   I18n*         i18n = new I18n(&app);
 
+  qmlJsEngine = &engine;
   engine.rootContext()->setContextProperty("i18n", i18n);
   engine.rootContext()->setContextProperty("gameManager", gameManager);
   engine.rootContext()->setContextProperty("musicManager", musicManager);

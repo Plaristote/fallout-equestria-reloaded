@@ -22,6 +22,7 @@ public:
 
   void             setDefaultMovementMode();
   Q_INVOKABLE void movePlayerTo(int x, int y);
+  Q_INVOKABLE QJSValue previewPathTo(int x, int y);
 
 signals:
   void playerMovingTo(QPoint);

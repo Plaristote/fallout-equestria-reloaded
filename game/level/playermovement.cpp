@@ -51,3 +51,40 @@ void PlayerMovementComponent::movePlayerTo(int x, int y)
     emit playerMovingTo(getPlayer()->getCurrentPath().last());
   }
 }
+
+QJSValue PlayerMovementComponent::previewPathTo(int x, int y)
+{
+  auto& grid = getPathfinder();
+  QList<Point> path;
+  Point target{x, y, static_cast<unsigned char>(getCurrentFloor())};
+  Point lastPosition = getPlayer()->getPoint();
+  auto& scriptEngine = *qmlJsEngine;
+  QJSValue positions = scriptEngine.newArray();
+  QJSValue costs     = scriptEngine.newArray();
+  QJSValue result    = scriptEngine.newObject();
+  QJSValue push      = positions.property("push");
+  auto* player = getPlayer();
+  int actionPoints = player ? player->getActionPoints() : 0;
+  int totalCost = 0;
+
+  if (actionPoints > 0 && grid.findPath(getPlayer()->getPoint(), target, path, player))
+  {
+    for (const auto& point : qAsConst(path))
+    {
+      int cost = grid.actionPointCost(lastPosition, point);
+      QJSValue position = scriptEngine.newObject();
+
+      totalCost += cost;
+      if (totalCost > actionPoints)
+        break ;
+      position.setProperty("x", point.x);
+      position.setProperty("y", point.y);
+      push.callWithInstance(positions, QJSValueList() << position);
+      push.callWithInstance(costs, QJSValueList() << totalCost);
+      lastPosition = point;
+    }
+  }
+  result.setProperty("positions", positions);
+  result.setProperty("costs", costs);
+  return result;
+}

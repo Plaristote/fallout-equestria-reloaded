@@ -74,3 +74,11 @@ bool ZoneGrid::findPath(Point from, Point to, QList<Point>& path, CharacterMovem
 {
   return findPath(from, QVector<Point>{to}, path, character);
 }
+
+int ZoneGrid::actionPointCost(Point a, Point b)
+{
+  const auto* caseA = getGridCase(a);
+  const auto* caseB = getGridCase(b);
+
+  return caseA->apCostTo(caseB);
+}
