@@ -82,9 +82,6 @@ Loader {
           x: renderPosition.x - cursorRenderer.x
           y: renderPosition.y - cursorRenderer.y
           source: "qrc:/assets/ui/cursors/move-tile" + (lastTile ? "" : "-unavailable") + ".png"
-          Component.onCompleted: {
-            console.log("kewa", combatPathElement.path.costs[index]);
-          }
 
           Text {
             anchors.centerIn: parent
@@ -99,7 +96,7 @@ Loader {
       }
 
       Loader {
-        sourceComponent: path.length > length || path.length === 0 ? tileCursorComponent : null
+        sourceComponent: tileCursorComponent
       }
     }
   }
