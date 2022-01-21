@@ -135,24 +135,26 @@ bool Doorway::bustOpen(int damage)
   {
     destroyed = true;
     opened = true;
+    locked = false;
     emit destroyedChanged();
     emit openedChanged();
+    emit lockedChanged();
   }
   return success;
 }
 
 bool Doorway::onGoThrough(Character* character)
 {
-  if (!opened && canGoThrough(character))
+  if (!opened && !destroyed && canGoThrough(character))
     onUse(character);
-  return opened;
+  return opened || destroyed;
 }
 
 bool Doorway::canGoThrough(Character* character) const
 {
   if (character == Game::get()->getPlayer())
     return !locked;
-  if (!opened)
+  if (!opened && !destroyed)
   {
     if (script && script->hasMethod("canGoThrough"))
     {
