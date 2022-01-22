@@ -24,16 +24,22 @@ void ActionsComponent::unsetActiveItem()
 
 void ActionsComponent::setActiveItem(const QString& slotName)
 {
-  resetInteractionMode();
-  mouseMode = TargetCursor;
-  interactionType = ItemUse;
-  activeItemSlot = slotName;
-  activeItem = Game::get()->getPlayer()->getInventory()->getEquippedItem(slotName);
-  if (activeItem)
+  Inventory*     inventory     = Game::get()->getPlayer()->getInventory();
+  InventoryItem* newActiveItem = inventory->getEquippedItem(slotName);
+
+  if (activeItem != newActiveItem)
   {
-    connect(activeItem, &InventoryItem::beforeDestroy, this, &ActionsComponent::unsetActiveItem);
-    connect(activeItem, &InventoryItem::parentChanged, this, &ActionsComponent::unsetActiveItem);
+    resetInteractionMode();
+    interactionType = ItemUse;
+    activeItem = newActiveItem;
+    if (activeItem)
+    {
+      connect(activeItem, &InventoryItem::beforeDestroy, this, &ActionsComponent::unsetActiveItem);
+      connect(activeItem, &InventoryItem::parentChanged, this, &ActionsComponent::unsetActiveItem);
+    }
   }
+  activeItemSlot = slotName;
+  mouseMode = TargetCursor;
   emit activeItemChanged();
   emit mouseModeChanged();
   onActiveItemChanged();
