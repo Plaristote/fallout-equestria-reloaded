@@ -49,6 +49,7 @@ public:
   Q_INVOKABLE void  attackedBy(Character* dealer);
   Q_INVOKABLE bool  useActionPoints(int amount = 1, const QString& motive = "");
   inline int        getActionPoints() const { return actionPoints; }
+  inline int        getMaxActionPoints() const { return statistics ? statistics->get_actionPoints() : 0; }
   void              resetActionPoints();
   Q_INVOKABLE void  fallAwayFrom(int x, int y, int distance);
   Q_INVOKABLE void  fall(int distance, const QString& direction);

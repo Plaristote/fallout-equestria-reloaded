@@ -6,7 +6,7 @@
 # include "../character.h"
 # include "visualeffects.h"
 
-# define WORLDTIME_TURN_DURATION_IN_SECONDS 10
+# define WORLDTIME_TURN_DURATION_IN_SECONDS 8
 # define WORLDTIME_TURN_DURATION WORLDTIME_TURN_DURATION_IN_SECONDS * 1000
 
 class CombatComponent : public VisualEffectsComponent
@@ -40,6 +40,7 @@ public:
   Q_INVOKABLE void passTurn(Character* character);
 
   bool isCombatEnabled() const;
+  bool nothingHappenedInCombatTurn() const;
 
 signals:
   void combatChanged();

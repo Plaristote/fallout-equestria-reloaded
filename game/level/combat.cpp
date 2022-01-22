@@ -147,6 +147,7 @@ void CombatComponent::onNextCombatTurn()
 {
   Character* previous;
   Character* current;
+  bool shouldFinalizeTurn = !nothingHappenedInCombatTurn();
 
   previous = combattants.at(combatIterator);
   if (isPlayerTurn())
@@ -161,14 +162,21 @@ void CombatComponent::onNextCombatTurn()
     finalizeCharacterTurn(previous);
   if (combatIterator == 0)
   {
-    qDebug() << "CombatComponent::finalizeRound";
-    finalizeRound();
+    if (shouldFinalizeTurn)
+      finalizeRound();
     if (!tryToEndCombat())
       initializeCharacterTurn(current);
   }
   else
     initializeCharacterTurn(current);
   emit currentCombattantChanged();
+}
+
+bool CombatComponent::nothingHappenedInCombatTurn() const
+{
+  const auto* player = getPlayer();
+
+  return combattants.size() < 2 || player->getActionPoints() != player->getMaxActionPoints();
 }
 
 void CombatComponent::onCharacterDied(Character* character)
