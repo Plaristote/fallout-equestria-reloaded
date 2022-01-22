@@ -197,11 +197,22 @@ bool Doorway::tryToOpen(Character& character)
   character.useActionPoints(2, "door");
   if (locked)
   {
-    if (&character == level->getPlayer())
-      game->appendToConsole(I18n::get()->t("messages.door-is-locked"));
-    playSound(lockedSound);
-    return false;
+    if (&character == level->getPlayer() || !character.getInventory()->count(keyName))
+    {
+      if (&character == level->getPlayer())
+        game->appendToConsole(I18n::get()->t("messages.door-is-locked"));
+      playSound(lockedSound);
+    }
+    else
+      toggle();
   }
+  else
+    toggle();
+  return !locked;
+}
+
+void Doorway::toggle()
+{
   if (opened)
   {
     opened = false;
@@ -210,10 +221,10 @@ bool Doorway::tryToOpen(Character& character)
   else
   {
     opened = true;
+    locked = false;
     playSound(openSound);
   }
   emit openedChanged();
-  return true;
 }
 
 void Doorway::save(QJsonObject& data) const

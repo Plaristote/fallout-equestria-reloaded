@@ -52,6 +52,7 @@ private slots:
 
 private:
   bool tryToOpen(Character&);
+  void toggle();
 
   bool      destroyed = false;
   bool      opened = false;
