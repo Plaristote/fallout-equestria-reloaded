@@ -274,5 +274,6 @@
         <file>editor/AnimationPreview.qml</file>
         <file>editor/ScriptInputField.qml</file>
         <file>game/InventoryItemHandle.qml</file>
+        <file>game/InventoryItemDropArea.qml</file>
     </qresource>
 </RCC>

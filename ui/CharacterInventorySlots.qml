@@ -9,6 +9,7 @@ Pane {
   property QtObject selectedObject
   property bool canEditArmor: true
   property var layout
+  property var dragZone
   property bool hscrollbar: view.width > scrollable.width
   property bool vscrollbar: view.height > scrollable.height
 
@@ -46,6 +47,7 @@ Pane {
           slotName: inventory.slotNames[index]
           equippedItem: inventory.getEquippedItem(slotName)
           background: Rectangle { color: "transparent" }
+          dragZone: root.dragZone
           x: layout[slotName].x
           y: layout[slotName].y
         } // END Slot

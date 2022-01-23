@@ -54,7 +54,7 @@ Item {
         DropArea {
           anchors.fill: parent
           function receiveInventoryItem(inventoryItem) {
-            if (inventory.canEquipItem(inventoryItem, slotName) )
+            if (inventory.canEquipItem(inventoryItem, slotName) && inventoryItem !== slotItem)
               inventory.equipItem(inventoryItem, slotName);
           }
         }

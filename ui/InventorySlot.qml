@@ -5,6 +5,7 @@ import QtQuick.Controls 2.15
 Pane {
   property string slotName: inventory.slotNames[index]
   property QtObject equippedItem: inventory.getEquippedItem(slotName)
+  property var dragZone
   implicitHeight: 125
   implicitWidth: 125
   clip: true
@@ -20,18 +21,32 @@ Pane {
     }
 
     ItemIcon {
+      id: itemIcon
       Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
       model:  equippedItem
       Layout.maximumHeight: 50
       Layout.maximumWidth: 115
       visible: equippedItem && equippedItem.icon !== "any.png"
+      Drag.active: itemMouseArea.drag.active
+      Drag.hotSpot: Qt.point(width / 2, height / 2)
+      Drag.keys: ["InventoryItem"]
+      MouseArea {
+        id: itemMouseArea
+        anchors.fill: parent
+        drag.target: parent
+        onReleased: parent.Drag.target.receiveInventoryItem(equippedItem);
+      }
+      states: State {
+        when: itemMouseArea.drag.active
+        ParentChange { target: itemIcon; parent: dragZone }
+      }
     }
 
     Row {
       Layout.alignment: Qt.AlignBottom | Qt.AlignHCenter
 
       TerminalButton {
-        visible: equippedItem !== null && equippedItem.isVirtual !== true
+        visible: equippedItem != null && equippedItem.isVirtual !== true
         text: "✖"
         height: 20
         width: 25
@@ -39,7 +54,7 @@ Pane {
       }
 
       TerminalButton {
-        visible: root.selectedObject !== null && inventory.canEquipItem(root.selectedObject, slotName)
+        visible: root.selectedObject != null && inventory.canEquipItem(root.selectedObject, slotName)
         text: "✓"
         height: 20
         width: 25
@@ -58,7 +73,7 @@ Pane {
     }
 
     function receiveInventoryItem(inventoryItem) {
-      if (inventory.canEquipItem(inventoryItem, slotName) )
+      if (inventory.canEquipItem(inventoryItem, slotName) && inventoryItem !== equippedItem)
         inventory.equipItem(inventoryItem, slotName);
     }
   }

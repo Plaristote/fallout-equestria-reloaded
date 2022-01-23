@@ -8,6 +8,7 @@ GridLayout {
   property QtObject inventory
   property QtObject selectedObject
   property bool canEditArmor: true
+  property var dragZone
 
   function updateSlots() {
     repeater.model = [];
@@ -24,6 +25,7 @@ GridLayout {
       slotName: inventory.slotNames[index]
       equippedItem: inventory.getEquippedItem(slotName)
       background: UiStyle.TerminalPane {}
+      dragZone: root.dragZone
       Layout.alignment: Qt.AlignHCenter
     } // END Slot
   } // END Slots

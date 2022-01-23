@@ -66,9 +66,12 @@ Pane {
       id: itemsView
       Layout.fillHeight: true
       Layout.preferredWidth: parent.width > 800 ? 400 : 200
+      dragZone: root
       selectedObject: root.selectedObject
       onItemSelected: root.selectedObject = selectedItem
-      dragZone: root
+      onItemDropped: if (inventory.isEquippedItem(inventoryItem)) {
+        inventory.unequipItem(inventoryItem)
+      }
 
       Text {
         anchors.bottom: parent.bottom
@@ -174,6 +177,7 @@ Pane {
       canEditArmor: root.canEditArmor
       inventory: root.character.inventory
       selectedObject: root.selectedObject
+      dragZone: root
     }
   }
 
@@ -184,6 +188,7 @@ Pane {
       inventory: root.character.inventory
       selectedObject: root.selectedObject
       layout: slotLayout
+      dragZone: root
     }
   }
 

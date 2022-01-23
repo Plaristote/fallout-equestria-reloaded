@@ -38,12 +38,9 @@ Item {
           playerStash.selectedObject = npcStash.selectedObject = npcInventory.selectedObject = null;
           selectedObject = selectedItem
         }
-        DropArea {
-          anchors.fill: parent
-          function receiveInventoryItem(inventoryItem) {
-            if (controller.playerStash.contains(inventoryItem) >= 0)
-              playerBarterControls.triggerTransferToLeft();
-          }
+        onItemDropped: {
+          if (controller.playerStash.contains(inventoryItem) >= 0)
+            playerBarterControls.triggerTransferToLeft();
         }
       }
 
@@ -67,13 +64,9 @@ Item {
           playerInventory.selectedObject = npcStash.selectedObject = npcInventory.selectedObject = null;
           selectedObject = selectedItem
         }
-        DropArea {
-          anchors.fill: parent
-          function receiveInventoryItem(inventoryItem) {
-            console.log("Coucou", inventoryItem, inventoryItem.parent, controller.player.inventory)
-            if (controller.player.inventory.contains(inventoryItem) >= 0)
-              playerBarterControls.triggerTransferToRight();
-          }
+        onItemDropped: {
+          if (controller.player.inventory.contains(inventoryItem) >= 0)
+            playerBarterControls.triggerTransferToRight();
         }
       }
 
@@ -95,12 +88,9 @@ Item {
           playerInventory.selectedObject = playerStash.selectedObject = npcInventory.selectedObject = null;
           selectedObject = selectedItem
         }
-        DropArea {
-          anchors.fill: parent
-          function receiveInventoryItem(inventoryItem) {
-            if (controller.npcInventory.contains(inventoryItem) >= 0)
-              npcBarterControls.triggerTransferToLeft();
-          }
+        onItemDropped: {
+          if (controller.npcInventory.contains(inventoryItem) >= 0)
+            npcBarterControls.triggerTransferToLeft();
         }
       }
 
@@ -132,12 +122,9 @@ Item {
             playerInventory.selectedObject = playerStash.selectedObject = npcStash.selectedObject = null;
             selectedObject = selectedItem
           }
-          DropArea {
-            anchors.fill: parent
-            function receiveInventoryItem(inventoryItem) {
-              if (controller.npcStash.contains(inventoryItem) >= 0)
-                npcBarterControls.triggerTransferToRight();
-            }
+          onItemDropped: {
+            if (controller.npcStash.contains(inventoryItem) >= 0)
+              npcBarterControls.triggerTransferToRight();
           }
         }
       }

@@ -26,6 +26,7 @@ Rectangle {
   Drag.active: itemMouseArea.drag.active
   Drag.hotSpot.x: width / 2
   Drag.hotSpot.y: height / 2
+  Drag.keys: ["InventoryItem"]
   ItemIcon {
     anchors.centerIn: parent
     model: inventoryItem

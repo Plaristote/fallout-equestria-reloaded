@@ -17,6 +17,7 @@ Pane {
 
   signal itemSelected(QtObject selectedItem)
   signal itemActivated(QtObject activatedItem)
+  signal itemDropped(QtObject inventoryItem)
 
   function updateItemList() {
     if (typeFilter !== "") {
@@ -73,5 +74,10 @@ Pane {
         }
       }
     }
+  }
+
+  InventoryItemDropArea {
+    anchors.fill: parent
+    onItemDropped: root.itemDropped(inventoryItem)
   }
 }
