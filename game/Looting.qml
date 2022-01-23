@@ -85,12 +85,14 @@ Pane {
 
     InventoryItemsView {
       id: characterInventoryView
+      dragZone: root
       inventory: controller.character.inventory
       selectedObject: root.selectedObject
       onItemSelected: {
         root.selectedInventory = controller.character.inventory;
         root.selectedObject    = selectedItem;
       }
+      onItemDropped: takeAction.trigger()
       Layout.preferredWidth: parent.width / 3
       Layout.fillHeight: true
     }
@@ -125,12 +127,14 @@ Pane {
 
     InventoryItemsView {
       id: targetInventoryView
+      dragZone: root
       inventory: controller.inventory
       selectedObject: root.selectedObject
       onItemSelected: {
         root.selectedInventory = controller.inventory
         root.selectedObject    = selectedItem
       }
+      onItemDropped: dropAction.trigger()
 
       Layout.preferredWidth: parent.width / 3
       Layout.fillHeight: true
