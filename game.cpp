@@ -239,6 +239,7 @@ void Game::exitLevel(bool silent)
     disconnect(currentLevel, &LevelTask::displayConsoleMessage, this, &Game::appendToConsole);
     disconnect(currentLevel, &LevelTask::exitZoneEntered, this, &Game::changeZone);
     playerParty->extractFromLevel(currentLevel);
+    currentLevel->onExit();
     currentLevel->save(dataEngine);
     destroyLevelTask();
     scriptObject.deleteProperty("level");

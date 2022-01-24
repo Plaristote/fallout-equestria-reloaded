@@ -42,6 +42,7 @@ public:
   Q_INVOKABLE void addBloodStainAt(int x, int y, unsigned char z) { addBloodStainAt(QPoint(x, y), z); }
   void             addBloodStainAt(QPoint, unsigned char floor);
 
+  void onExit();
   void finalizeRound() override;
 
 signals:
