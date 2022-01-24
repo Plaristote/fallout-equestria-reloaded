@@ -31,6 +31,7 @@ class Game : public StorableObject
   Q_PROPERTY(QuestManager*   quests      MEMBER quests CONSTANT)
   Q_PROPERTY(SoundManager*   sounds      READ getSoundManager CONSTANT)
   Q_PROPERTY(RandomEncounterController* randomEncounters MEMBER randomEncounters CONSTANT)
+  Q_PROPERTY(bool saveLock MEMBER saveLock NOTIFY saveLockChanged)
   Q_PROPERTY(bool fastPassTime READ isFastPassingTime NOTIFY fastPassingChanged)
   Q_PROPERTY(bool isGameEditor MEMBER isGameEditor NOTIFY gameEditorEnabled)
 
@@ -78,6 +79,7 @@ public:
 
 signals:
   void gameEditorEnabled();
+  void saveLockChanged();
   void levelDestroy();
   void levelChanged();
   void levelSwapped();
@@ -108,6 +110,7 @@ private:
   void destroyLevelTask();
 
   bool isGameEditor = false;
+  bool saveLock = false;
   DataEngine* dataEngine = nullptr;
   TimeManager* timeManager;
   WorldDiplomacy* diplomacy;

@@ -184,6 +184,7 @@ void Game::loadLevel(const QString &name, const QString& targetZone)
 {
   auto scriptObject = scriptEngine.globalObject();
 
+  setProperty("saveLock", false);
   MusicManager::get()->play(name);
   dataEngine->setCurrentLevel(name);
   currentLevel = newLevelTask();
@@ -243,6 +244,7 @@ void Game::exitLevel(bool silent)
     scriptObject.deleteProperty("level");
     dataEngine->exitLevel();
     MouseCursor::get()->updatePointerType();
+    setProperty("saveLock", false);
     if (!silent)
       emit levelChanged();
   }
