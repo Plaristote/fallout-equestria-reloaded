@@ -61,14 +61,6 @@ void Character::takeDamage(int damage, Character* dealer)
 
     setAnimation("damaged");
     getStatistics()->setHitPoints(hp);
-    if (script && hp > 0)
-    {
-      QJSValueList args = QJSValueList() << damage;
-
-      if (dealer)
-        args << dealer->asJSValue();
-      script->call("onDamageTaken", args);
-    }
     if (hp <= 0)
     {
       if (!setFallAnimation())
@@ -79,6 +71,14 @@ void Character::takeDamage(int damage, Character* dealer)
     }
     else
       attackedBy(dealer);
+    if (script && hp > 0)
+    {
+      QJSValueList args = QJSValueList() << damage;
+
+      if (dealer)
+        args << dealer->asJSValue();
+      script->call("onDamageTaken", args);
+    }
   }
 }
 
