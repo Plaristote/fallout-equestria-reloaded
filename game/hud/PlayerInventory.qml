@@ -10,6 +10,14 @@ Rectangle {
     anchors.fill: parent
   }
 
+  DropArea {
+    anchors.fill: parent
+    keys: ["InventoryItem"]
+    function receiveInventoryItem(inventoryItem) {
+      gameManager.currentGame.player.inventory.dropItem(inventoryItem)
+    }
+  }
+
   CharacterInventory {
     id: inventoryView
     character: gameManager.currentGame.player

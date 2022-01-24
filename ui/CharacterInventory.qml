@@ -54,7 +54,7 @@ Pane {
 
     MenuButton {
       id: closeButton
-      text: "Close"
+      text: i18n.t("Close")
       onClicked: root.closed();
     }
   }
@@ -66,7 +66,7 @@ Pane {
       id: itemsView
       Layout.fillHeight: true
       Layout.preferredWidth: parent.width > 800 ? 400 : 200
-      dragZone: root
+      dragZone: root.parent.parent
       selectedObject: root.selectedObject
       onItemSelected: root.selectedObject = selectedItem
       onItemDropped: if (inventory.isEquippedItem(inventoryItem)) {

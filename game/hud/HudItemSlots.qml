@@ -77,6 +77,7 @@ Item {
             }
           }
         }
+
         ColorOverlay {
           anchors.fill: parent
           source: parent

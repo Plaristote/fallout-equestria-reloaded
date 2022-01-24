@@ -24,7 +24,7 @@ LevelDisplay {
     mainMenu.activated = !mainMenu.activated;
   }
 
-  onHasOverlayChanged: if (application.currentView === root) { levelController.paused = hasOverlay }
+  onHasOverlayChanged: if (application.currentView === root.parent) { levelController.paused = hasOverlay }
   onPickedObject: levelController.objectClicked(dynamicObject)
   onPickedTile:   levelController.tileClicked(tileX, tileY)
 
@@ -35,7 +35,7 @@ LevelDisplay {
     onMenuTriggered:           root.openMenu()
     onPreviousTargetTriggered: levelController.centerCursorOn(levelController.targetList.previousTarget())
     onNextTargetTriggered:     levelController.centerCursorOn(levelController.targetList.nextTarget())
-    onInventoryTriggered:      inventoryViewContainer.visible = true
+    onInventoryTriggered:      inventoryViewContainer.visible = !inventoryViewContainer.visible
     onSkilldexTriggered:       skilldex.visible = !skilldex.visible
     onSpellbookTriggered:      spellbook.visible = !spellbook.visible
     onDebugModeTriggered:      debugConsole.visible = !debugConsole.visible
@@ -144,6 +144,13 @@ LevelDisplay {
     hoverTile: levelMouseArea.hoverTile
   }
 
+  Hud.PlayerInventory {
+    id: inventoryViewContainer
+    anchors.fill: parent
+    visible: false
+    inventoryHeight: height - levelHud.height - 100
+  }
+
   LevelHud {
     id: levelHud
     anchors.bottom: parent.bottom
@@ -224,13 +231,6 @@ LevelDisplay {
         target = selectedObject = null;
       }
     }
-  }
-
-  Hud.PlayerInventory {
-    id: inventoryViewContainer
-    anchors.fill: parent
-    visible: false
-    inventoryHeight: height - levelHud.height - 100
   }
 
   Hud.CountdownDialog {

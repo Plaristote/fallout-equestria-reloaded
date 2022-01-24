@@ -18,6 +18,7 @@ Pane {
 
     MenuButton {
       text: i18n.t("Save game")
+      enabled: !gameManager.currentGame.saveLock
       onClicked: application.pushView("SaveGame.qml")
     }
 

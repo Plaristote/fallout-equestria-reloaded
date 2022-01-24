@@ -4,6 +4,7 @@ import QtQuick.Layouts 1.15
 import "../assets/ui" as UiStyle
 
 UiStyle.CustomDialog {
+  id: root
   property QtObject inventoryItem
   property int maxQuantity: inventoryItem ? inventoryItem.quantity : 1
   property int defaultValue: 1
@@ -11,8 +12,18 @@ UiStyle.CustomDialog {
   title: i18n.t("How much ?")
   modal: true
   standardButtons: Dialog.Ok | Dialog.Cancel
+  onVisibleChanged: if (visible) {
+    quantityInputField.forceActiveFocus();
+    quantityInputField.selectAll()
+  }
 
   signal pickedValue(int amount)
+
+  Shortcut {
+    enabled: parent.visible
+    sequence: "Esc"
+    onActivated: reject()
+  }
 
   RowLayout {
     anchors.centerIn: parent
@@ -48,6 +59,7 @@ UiStyle.CustomDialog {
             else if (number < 1)      { text = "1"; }
             value = parseInt(text);
           }
+          onAccepted: root.accept()
         }
 
         TerminalLabel {

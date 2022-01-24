@@ -22,9 +22,32 @@ Rectangle {
   }
 
   Action {
+    id: acceptAction
+    text: i18n.t("Ok")
+    shortcut: Shortcut {
+      sequences: ["Return", "Enter"]
+      enabled: root.visible
+      onActivated: acceptAction.trigger()
+    }
+    onTriggered: {
+      const timeout = minutes * 60 + seconds;
+
+      item.setCountdown(timeout);
+      root.visible = false;
+    }
+  }
+
+  Action {
+    id: cancelAction
+    text: i18n.t("Cancel")
+    onTriggered: root.visible = false
+  }
+
+  Action {
     id: increaseTimeAction
     shortcut: Shortcut {
       sequence: "+"
+      enabled: root.visible
       onActivated: increaseTimeAction.trigger()
     }
     onTriggered: {
@@ -41,6 +64,7 @@ Rectangle {
     id: decreaseTimeAction
     shortcut: Shortcut {
       sequence: "-"
+      enabled: root.visible
       onActivated: decreaseTimeAction.trigger()
     }
     onTriggered: {
@@ -116,19 +140,8 @@ Rectangle {
     Row {
       id: countdownControls
       anchors { bottom: parent.bottom; right: parent.right }
-      MenuButton {
-        text: i18n.t("Ok")
-        onClicked: {
-          const timeout = minutes * 60 + seconds;
-
-          item.setCountdown(timeout);
-          root.visible = false;
-        }
-      }
-      MenuButton {
-        text: i18n.t("Cancel")
-        onClicked: root.visible = false;
-      }
+      MenuButton { action: acceptAction }
+      MenuButton { action: cancelAction }
     }
   }
 }
