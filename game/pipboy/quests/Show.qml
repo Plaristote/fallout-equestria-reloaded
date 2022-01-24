@@ -12,7 +12,6 @@ Flickable {
 
   contentHeight: questContent.height
   anchors.fill: parent
-  visible: false
 
   ColumnLayout {
     id: questContent
@@ -78,7 +77,7 @@ Flickable {
           model: questObjectives
           delegate: TerminalLabel {
             property var objective: questObjectives[index]
-            property bool stroke: objective.success || objective.failed
+            property var stroke: objective.success || objective.failed
             property string label: stroke ? `<s>${objective.label}</s>` : objective.label
 
             text: "- " + label
