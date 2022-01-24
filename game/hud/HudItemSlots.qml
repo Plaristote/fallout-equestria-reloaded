@@ -8,6 +8,7 @@ Item {
   property QtObject inventory
   property QtObject activeItem
   property int focusedItem: 0
+  property var dragZone
   id: itemSlotsPane
 
   Component.onCompleted: refreshUsableSlots(itemSlotsRepeater)
@@ -95,10 +96,17 @@ Item {
           color: Qt.rgba(155, 155, 155, 0.3)
         }
 
-        ItemIcon {
+        Item {
           anchors.centerIn: parent
-          model: slotItem
-          visible: slotItem && slotItem.icon !== "any.png"
+          width: itemIcon.width
+          height: itemIcon.height
+          DraggableItemIcon {
+            id: itemIcon
+            model: slotItem
+            visible: slotItem && slotItem.icon !== "any.png"
+            dragZone: itemSlotsPane.dragZone
+            onClicked: mouseArea.clicked(mouse)
+          }
         }
 
         Loader {

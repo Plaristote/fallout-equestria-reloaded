@@ -139,6 +139,11 @@ LevelDisplay {
     }
   }
 
+  Hud.ItemDropArea {
+    anchors.fill: parent
+    hoverTile: levelMouseArea.hoverTile
+  }
+
   LevelHud {
     id: levelHud
     anchors.bottom: parent.bottom
@@ -146,6 +151,7 @@ LevelDisplay {
     anchors.horizontalCenter: parent.horizontalCenter
     gameController:  root.gameController
     levelController: root.levelController
+    dragZone: root
 
     onOpenMenu: actions.openMenu.trigger()
     onOpenPipboy: actions.openPipboy.trigger()

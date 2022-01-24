@@ -275,5 +275,7 @@
         <file>editor/ScriptInputField.qml</file>
         <file>game/InventoryItemHandle.qml</file>
         <file>game/InventoryItemDropArea.qml</file>
+        <file>ui/DraggableItemIcon.qml</file>
+        <file>game/hud/ItemDropArea.qml</file>
     </qresource>
 </RCC>

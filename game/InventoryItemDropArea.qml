@@ -17,7 +17,6 @@ Loader {
     DropArea {
       keys: ["InventoryItem"]
       function receiveInventoryItem(inventoryItem) {
-        console.log("New style drop are received", inventoryItem);
         root.itemDropped(inventoryItem);
         root.sourceComponent = null;
       }

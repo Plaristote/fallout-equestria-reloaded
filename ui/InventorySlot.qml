@@ -3,6 +3,7 @@ import QtQuick.Layouts 1.15
 import QtQuick.Controls 2.15
 
 Pane {
+  id: root
   property string slotName: inventory.slotNames[index]
   property QtObject equippedItem: inventory.getEquippedItem(slotName)
   property var dragZone
@@ -20,26 +21,14 @@ Pane {
       color: "yellow"
     }
 
-    ItemIcon {
+    DraggableItemIcon {
       id: itemIcon
       Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
       model:  equippedItem
       Layout.maximumHeight: 50
       Layout.maximumWidth: 115
       visible: equippedItem && equippedItem.icon !== "any.png"
-      Drag.active: itemMouseArea.drag.active
-      Drag.hotSpot: Qt.point(width / 2, height / 2)
-      Drag.keys: ["InventoryItem"]
-      MouseArea {
-        id: itemMouseArea
-        anchors.fill: parent
-        drag.target: parent
-        onReleased: parent.Drag.target.receiveInventoryItem(equippedItem);
-      }
-      states: State {
-        when: itemMouseArea.drag.active
-        ParentChange { target: itemIcon; parent: dragZone }
-      }
+      dragZone: root.dragZone
     }
 
     Row {

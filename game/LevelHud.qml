@@ -7,8 +7,9 @@ import "./hud"
 
 Pane {
   id: levelHud
-  property QtObject gameController;
-  property QtObject levelController;
+  property QtObject gameController
+  property QtObject levelController
+  property var dragZone
 
   height: 135
   width: Math.min(parent.width, 1070)
@@ -87,6 +88,7 @@ Pane {
     anchors.bottomMargin: 1
     width: levelHud.width - x - combatControls.width - countersDisplay.width - rightMenu.width - 60
     activeItem: levelController.activeItem
+    dragZone: levelHud.dragZone
     onItemActivated: levelController.setActiveItem(activatedSlot)
   }
 
