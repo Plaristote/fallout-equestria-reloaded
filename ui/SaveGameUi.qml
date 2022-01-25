@@ -15,6 +15,23 @@ Pane {
   property string currentSave: savedGameList[selectedIndex]
   background: UiStyle.Pane {}
 
+  Shortcut {
+    sequence: "Up"
+    autoRepeat: true
+    onActivated: selectedIndex = Math.max(0, selectedIndex - 1)
+  }
+
+  Shortcut {
+    sequence: "Down"
+    autoRepeat: true
+    onActivated: selectedIndex = Math.min(slots.length - 2, selectedIndex + 1)
+  }
+
+  Shortcut {
+    sequence: "Esc"
+    onActivated: application.popView()
+  }
+
   Text {
     id: viewTitle
     text: title

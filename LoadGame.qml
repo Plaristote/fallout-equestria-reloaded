@@ -10,6 +10,10 @@ SaveGameUi {
 
   Action {
     id: loadGame
+    shortcut: Shortcut {
+      sequences: ["Enter", "Return"]
+      onActivated: loadGame.trigger()
+    }
     onTriggered: {
       application.popAllViews();
       application.gameLoading = root.savedGameList[root.selectedIndex];
