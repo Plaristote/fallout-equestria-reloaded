@@ -58,7 +58,6 @@ Rectangle {
     onPressed: itemRectangle.clicked()
     onDoubleClicked: itemRectangle.doubleClicked()
     onReleased: {
-      console.log("coucou", parent.Drag.target);
       if (parent.Drag.target && parent.Drag.target.receiveInventoryItem)
         parent.Drag.target.receiveInventoryItem(inventoryItem);
     }

@@ -419,6 +419,8 @@ void InventoryItem::updateScript()
 
   if (itemData.isObject())
     scriptName = itemData["scriptName"].toString(scriptName);
+  if (!QFileInfo(getScriptPath() + '/' + scriptName).isFile())
+    scriptName = QString();
   setScript(scriptName);
   emit useModesChanged();
 }
@@ -445,6 +447,7 @@ void InventoryItem::save(QJsonObject& data) const
   if (maxAmmo > 0)
     data["maxAmmo"] = maxAmmo;
   DynamicObject::save(data);
+  data.remove("script");
 }
 
 void InventoryItem::load(const QJsonObject& data)
@@ -456,8 +459,8 @@ void InventoryItem::load(const QJsonObject& data)
   ammo = data["ammo"].toInt(0);
   maxAmmo = data["maxAmmo"].toInt(0);
   DynamicObject::load(data);
+  updateScript();
   emit quantityChanged();
   emit objectNameChanged();
-  emit useModesChanged();
   emit useModeChanged();
 }
