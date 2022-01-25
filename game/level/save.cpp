@@ -43,12 +43,18 @@ void SaveComponent::passElapsedTime(int lastUpdate)
   std::time_t newTimestamp = Game::get()->getTimeManager()->getDateTime().GetTimestamp();
   std::time_t elapsedTime  = newTimestamp - timestamp;
 
-  qDebug() << "ADVANCING TIME IN LEVEL" << timestamp << newTimestamp << elapsedTime;
-  eachObject([elapsedTime](DynamicObject* object)
+  if (elapsedTime > 0)
   {
-    object->getTaskManager()->update(elapsedTime * 1000);
-  });
-  taskRunner->update(elapsedTime *  1000);
+    DateTime timeFrom(static_cast<unsigned int>(timestamp));
+    DateTime timeTo(static_cast<unsigned int>(newTimestamp));
+
+    qDebug() << "Level::SaveComponent: advancing time in level from " << timeFrom.ToString().c_str() << "to" << timeTo.ToString().c_str();
+    eachObject([elapsedTime](DynamicObject* object)
+    {
+      object->getTaskManager()->update(elapsedTime * 1000);
+    });
+    taskRunner->update(elapsedTime * 1000);
+  }
 }
 
 void SaveComponent::persist()

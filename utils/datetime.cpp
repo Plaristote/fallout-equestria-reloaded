@@ -90,12 +90,17 @@ time_t DateTime::GetTimestamp(void) const
   {
     struct tm timeinfo;
 
+    timeinfo.tm_gmtoff = 0;
+    timeinfo.tm_isdst = 0;
+    timeinfo.tm_zone = nullptr;
+    timeinfo.tm_wday = 0;
+    timeinfo.tm_yday = 0;
     timeinfo.tm_year = (year < 1900 ? 0 : year - 1900);
-    timeinfo.tm_mon  = month - 1;
-    timeinfo.tm_mday = day;
-    timeinfo.tm_hour = hour;
-    timeinfo.tm_min  = minute;
-    timeinfo.tm_sec  = second;
+    timeinfo.tm_mon  = static_cast<int>(month - 1);
+    timeinfo.tm_mday = static_cast<int>(day);
+    timeinfo.tm_hour = static_cast<int>(hour);
+    timeinfo.tm_min  = static_cast<int>(minute);
+    timeinfo.tm_sec  = static_cast<int>(second);
     return (mktime(&timeinfo));
   }
   return (GetTimeOfTheMonth().seconds);
@@ -138,22 +143,22 @@ std::string DateTime::ToString(const std::string& format) const
       switch (format[i + 1])
       {
         case 'd':
-          number  = day;
+          number  = static_cast<short>(day);
           break ;
         case 'M':
-          number  = month;
+          number  = static_cast<short>(month);
           break ;
         case 'y':
-          number  = year;
+          number  = static_cast<short>(year);
           break ;
         case 'h':
-          number  = hour;
+          number  = static_cast<short>(hour);
           break ;
         case 'm':
-          number  = minute;
+          number  = static_cast<short>(minute);
           break ;
         case 's':
-          number  = second;
+          number  = static_cast<short>(second);
           break ;
         default:
           number  = -1;

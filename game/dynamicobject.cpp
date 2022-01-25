@@ -159,8 +159,8 @@ void DynamicObject::load(const QJsonObject& data)
   nextPosition.setX(data["nextX"].toInt()); nextPosition.setY(data["nextY"].toInt());
   blocksPath = data["blocksPath"].toBool(true);
   emit blocksPathChanged();
-  ParentType::load(data);
   taskManager->load(data);
+  ParentType::load(data);
   emit positionChanged();
 }
 
