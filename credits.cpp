@@ -38,7 +38,9 @@ unsigned short Credits::categoryCount(const QString& category) const
 
 CreditPerson* Credits::person(const QString& category, unsigned short index) const
 {
-  return persons[category][index];
+  if (persons[category].count() > index)
+    return persons[category][index];
+  return nullptr;
 }
 
 bool Credits::categoryHasArtwork(const QString& category) const

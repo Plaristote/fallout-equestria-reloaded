@@ -22,9 +22,12 @@ Rectangle {
       onTriggered: parent.contentY = Math.min(parent.contentY + 1, parent.contentHeight - parent.height)
     }
 
-    ColumnLayout {
+    GridLayout {
       id: creditColumn
-      width: parent.width
+      anchors.horizontalCenter: parent.horizontalCenter
+      columns: 2
+      columnSpacing: 5
+      rowSpacing: 5
 
       Repeater {
         model: credits.categories
@@ -35,46 +38,41 @@ Rectangle {
 
   Component {
     id: categoryComponent
-    GridLayout {
-      property string  category: credits.categories[index]
-      Layout.alignment: Qt.AlignCenter
-      columns:       2
-      columnSpacing: 5
-      rowSpacing:    5
+    Repeater {
+      id: categoryRepeater
+      property string category: credits.categories[index]
 
-      Text {
-        text:                category
-        font.family:         application.titleFont.name
-        font.pointSize:      application.titleFont.bigSize
-        font.capitalization: Font.Capitalize
-        color:               "orange"
-        Layout.alignment:    Qt.AlignCenter
-        Layout.columnSpan:   2
-      }
+      model: credits.categoryCount(category) + 1
+      delegate: Repeater {
+        id: row
+        property QtObject person: credits.person(category, index - 1)
+        property bool hasArtwork: person && credits.categoryHasArtwork(category)
 
-      Repeater {
-        model: credits.categoryCount(category)
-        delegate: personComponent
-      }
+        model: hasArtwork ? 2 : 1
+        delegate: Loader {
+          property string category: categoryRepeater.category
+          property QtObject person: row.person
 
-      Item {
-        Layout.preferredWidth:  40
-        Layout.preferredHeight: 40
-        Layout.columnSpan: 2
+          Layout.columnSpan: row.hasArtwork ? 1 : 2
+          sourceComponent: {
+            if (person)
+              return index === 0 ? identityComponent : artworkComponent;
+            return titleComponent;
+          }
+        }
       }
     }
   }
 
   Component {
-    id: personComponent
-    Repeater {
-      property QtObject person_: credits.person(parent.category, index)
-      Layout.alignment: Qt.AlignCenter
-      model: credits.categoryHasArtwork(parent.category) ? 2 : 1
-      delegate: Loader {
-        property QtObject person: person_
-        sourceComponent: index === 0 ? identityComponent : artworkComponent
-      }
+    id: titleComponent
+    Text {
+      text:                category
+      font.family:         application.titleFont.name
+      font.pointSize:      application.titleFont.bigSize
+      font.capitalization: Font.Capitalize
+      color:               "orange"
+      Layout.alignment:    Qt.AlignCenter
     }
   }
 
