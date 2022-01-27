@@ -15,6 +15,7 @@ LevelDisplay {
                             countdownDialog.visible ||
                             controlsDialog.visible ||
                             mainMenu.visible
+  property bool isCurrentView: application.currentView === root.parent
   enabled: !gameController.fastPassTime
 
   function openMenu() {
@@ -24,7 +25,7 @@ LevelDisplay {
     mainMenu.activated = !mainMenu.activated;
   }
 
-  onHasOverlayChanged: if (application.currentView === root.parent) { levelController.paused = hasOverlay }
+  onHasOverlayChanged: if (isCurrentView) { levelController.paused = hasOverlay }
   onPickedObject: levelController.objectClicked(dynamicObject)
   onPickedTile:   levelController.tileClicked(tileX, tileY)
 
@@ -123,7 +124,7 @@ LevelDisplay {
     function onStartDialog(dialogController) {
       console.log("ztarting dialog controller", dialogController);
       console.log("text iz ", dialogController.text);
-      application.pushView("game/Dialog.qml", {controller: dialogController});
+      openDialogTimer.dialogController = dialogController;
       levelController.paused = true;
     }
 
@@ -136,6 +137,18 @@ LevelDisplay {
     function onCountdownRequired(item) {
       countdownDialog.item = item;
       countdownDialog.visible = true;
+    }
+  }
+
+  Timer {
+    id: openDialogTimer
+    property var dialogController: null
+    running: dialogController !== null
+    interval: 150
+    onTriggered: {
+      application.pushView("game/Dialog.qml", {controller: dialogController});
+      levelController.paused = true;
+      dialogController = null;
     }
   }
 
