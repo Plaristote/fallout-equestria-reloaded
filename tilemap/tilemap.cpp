@@ -8,11 +8,12 @@
 static const QString tilemapsPath = "./assets/tilemaps/";
 
 const QMap<QString, TileMap::LayerFolderLoader> TileMap::loaders = {
-  {"zones",  &TileMap::loadZoneFolder},
-  {"roofs",  &TileMap::loadRoofFolder},
-  {"walls",  &TileMap::loadWallFolder},
-  {"floors", &TileMap::loadFloorFolder},
-  {"lights", &TileMap::loadLightFolder}
+  {"zones",       &TileMap::loadZoneFolder},
+  {"roofs",       &TileMap::loadRoofFolder},
+  {"walls",       &TileMap::loadWallFolder},
+  {"floors",      &TileMap::loadFloorFolder},
+  {"lights",      &TileMap::loadLightFolder},
+  {"pathfinding", &TileMap::loadPathfinding}
 };
 
 TileMap::TileMap(QObject *parent) : QObject(parent)
@@ -254,6 +255,19 @@ void TileMap::loadFloorFolder(const QJsonObject& layerData)
       previousFloor = floors.last()->getTileMap();
     previousFloor->roofs.push_back(floor);
     floors.push_back(floor);
+  }
+}
+
+void TileMap::loadPathfinding(const QJsonObject& layerData)
+{
+  const QJsonArray layersData = layerData["layers"].toArray();
+
+  for (const QJsonValue& value : layersData)
+  {
+    TileZone* layer = new TileZone(this);
+
+    layer->load(value.toObject(), mapSize);
+    pathfindindingZones.push_back(layer);
   }
 }
 

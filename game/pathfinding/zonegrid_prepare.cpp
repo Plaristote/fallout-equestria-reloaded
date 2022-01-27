@@ -83,7 +83,6 @@ static QVector<PathZone> makePathZonesFrom(QVector<LevelGrid::CaseContent*> miss
 static QVector<PathZone> subdivideZoneGrid(QRect rect, LevelGrid* grid)
 {
   QVector<LevelGrid::CaseContent*> cases;
-  TileLayer* ground = grid->getTilemap()->getLayer("ground");
 
   // step 1: register all the cases within the zone
   for (int x = rect.left() ; x < rect.right() ; ++x)
@@ -99,7 +98,48 @@ static QVector<PathZone> subdivideZoneGrid(QRect rect, LevelGrid* grid)
   return makePathZonesFrom(cases);
 }
 
-static void preparZoneGridForFloor(ZoneGrid& zoneGrid, LevelGrid* grid)
+static QVector<PathZone> preparePathZoneFromLayer(LevelGrid* grid, const TileZone* source, QVector<LevelGrid::CaseContent*>& allCases)
+{
+  QVector<LevelGrid::CaseContent*> cases;
+  const auto& positions = source->getPositions();
+
+  for (auto it = allCases.begin() ; it != allCases.end() ;)
+  {
+    auto* gridCase = *it;
+
+    if (positions.indexOf(gridCase->position) >= 0)
+    {
+      cases.push_back(gridCase);
+      it = allCases.erase(it);
+    }
+    else
+      ++it;
+  }
+  return makePathZonesFrom(cases);
+}
+
+static void prepareZoneGridForFloorUsingTilemap(ZoneGrid& zoneGrid, LevelGrid* grid)
+{
+  const auto& mapZones = grid->getTilemap()->getPathfindindingZones();
+  QVector<LevelGrid::CaseContent*> allCases;
+
+  for (int x = 0 ; x < grid->getSize().width() ; ++x)
+  {
+    for (int y = 0 ; y < grid->getSize().height() ; ++y)
+    {
+      auto* gridCase = grid->getGridCase(x, y);
+
+      if (gridCase && gridCase->connections.size())
+        allCases.push_back(gridCase);
+    }
+  }
+  for (const auto* mapZone : mapZones)
+    zoneGrid.zones << preparePathZoneFromLayer(grid, mapZone, allCases);
+  if (allCases.size() > 0)
+    zoneGrid.zones << makePathZonesFrom(allCases);
+}
+
+static void prepareZoneGridForFloor(ZoneGrid& zoneGrid, LevelGrid* grid)
 {
   QVector<QRect> parts;
   const int      granularityInt = 10;
@@ -110,7 +150,6 @@ static void preparZoneGridForFloor(ZoneGrid& zoneGrid, LevelGrid* grid)
   {
     for (int y = 0 ; y < std::ceil(grid->getSize().height() / granularity) ; ++y)
     {
-      PathZone zone;
       QPoint   topLeft(x * granularityInt, y * granularityInt);
 
       parts << QRect(topLeft, topLeft + zoneBaseSize);
@@ -145,7 +184,12 @@ void ZoneGrid::prepareZoneGrid(QVector<LevelGrid*> grids)
 
   levels = grids;
   for (LevelGrid* grid : grids)
-    preparZoneGridForFloor(*this, grid);
+  {
+    if (grid->hasPathfindingZones())
+      prepareZoneGridForFloorUsingTilemap(*this, grid);
+    else
+      prepareZoneGridForFloor(*this, grid);
+  }
   for (PathZone& zone : zones)
   {
     zone.id = n++;

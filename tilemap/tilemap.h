@@ -43,6 +43,7 @@ public:
   const QList<TileLayer*>& getLights() const { return lights; }
   const QVector<TileLayer*>& getLayers() const { return layers; }
   const QList<FloorLayer*>& getFloors() const { return floors; }
+  const QList<TileZone*>& getPathfindindingZones() const { return pathfindindingZones; }
   Tileset* getTileset(const QString& name) const;
   Q_INVOKABLE QPoint getPointFor(int x, int y) const;
 
@@ -75,6 +76,7 @@ private:
   void loadZoneFolder(const QJsonObject&);
   void loadWallFolder(const QJsonObject&);
   void loadFloorFolder(const QJsonObject&);
+  void loadPathfinding(const QJsonObject&);
   void loadLightTileset();
   int getLastGid() const;
 
@@ -86,6 +88,7 @@ private:
   QList<TileZone*>    zones;
   QList<TileLayer*>   roofs;
   QList<TileLayer*>   lights;
+  QList<TileZone*>    pathfindindingZones;
   QStringList         textureList;
   unsigned char       floor = 0;
 };

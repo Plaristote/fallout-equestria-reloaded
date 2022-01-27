@@ -83,3 +83,8 @@ void LevelGrid::initializePathfinding()
       gridCase.connectWith(downRight);
   }
 }
+
+bool LevelGrid::hasPathfindingZones() const
+{
+  return getTilemap()->getPathfindindingZones().size() > 0;
+}
