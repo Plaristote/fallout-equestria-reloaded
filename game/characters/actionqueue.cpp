@@ -145,23 +145,32 @@ void ActionQueue::reset()
   resetFlag = true;
 }
 
-void ActionQueue::pushMovement(QPoint target)
+void ActionQueue::pushMovement(Point target)
 {
-  queue << (new MovementAction(character, {target.x(), target.y(), static_cast<unsigned char>(character->getCurrentFloor())}));
+  queue << (new MovementAction(character, target));
 }
 
-int ActionQueue::getMovementApCost(QPoint target) const
+void ActionQueue::pushMovement(int x, int y)
+{
+  pushMovement(x, y, static_cast<unsigned char>(character->getCurrentFloor()));
+}
+
+int ActionQueue::getMovementApCost(Point target) const
 {
   ZoneGrid& grid = Game::get()->getLevel()->getPathfinder();
   QList<Point> path;
   Point from = character->getPoint();
-  Point to{target.x(), target.y(), from.z};
 
-  if (from == to)
+  if (from == target)
     return 0;
-  if (grid.findPath(from, to, path, character))
+  if (grid.findPath(from, target, path, character))
     return path.size();
   return -1;
+}
+
+int ActionQueue::getMovementApCost(int x, int y) const
+{
+  return getMovementApCost(x, y, character->getPoint().z);
 }
 
 void ActionQueue::pushReach(DynamicObject *target, float range)
@@ -202,9 +211,9 @@ void ActionQueue::pushReachCase(int x, int y, int z, float range, QJSValue caseC
 
 void ActionQueue::pushReachNear(int x, int y, int z, int range)
 {
-  QVector<QPoint> choices;
-  LevelGrid*      grid = Game::get()->getLevel()->getFloorGrid(static_cast<unsigned char>(z));
-  QPoint          position = character->getPosition();
+  QVector<Point> choices;
+  LevelGrid*     grid = Game::get()->getLevel()->getFloorGrid(static_cast<unsigned char>(z));
+  QPoint         position = character->getPosition();
 
   choices.reserve((range + 1) * (range + 1) - 1);
   for (int xx = x - range ; xx < x + range ; ++xx) {
@@ -212,18 +221,18 @@ void ActionQueue::pushReachNear(int x, int y, int z, int range)
       if (xx == position.x() && yy == position.y())
         continue ;
       if (!grid->isOccupied(xx, yy))
-        choices.push_back(QPoint(xx, yy));
+        choices.push_back(Point{xx, yy, static_cast<unsigned char>(z)});
     }
   }
   while (choices.size() > 0)
   {
     int it = Dices::Throw(static_cast<unsigned int>(choices.size() - 1));
-    QPoint candidate = choices[it];
+    Point candidate = choices[it];
 
     if (getMovementApCost(candidate) > 0)
     {
       pushMovement(candidate);
-      break ;
+      return ;
     }
     else
       choices.removeAt(static_cast<int>(it));

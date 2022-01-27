@@ -24,8 +24,9 @@ public:
   Q_INVOKABLE int getInteractionApCost(DynamicObject*, const QString& interactionName) const;
   Q_INVOKABLE int getItemUseApCost(DynamicObject* target, const QString& itemSlot) const;
   Q_INVOKABLE int getSkillUseApCost(DynamicObject* target, const QString& skillName) const;
-  int             getMovementApCost(QPoint target) const;
-  Q_INVOKABLE int getMovementApCost(int x, int y) const { return getMovementApCost(QPoint(x, y)); }
+  int             getMovementApCost(Point target) const;
+  Q_INVOKABLE int getMovementApCost(int x, int y) const;
+  Q_INVOKABLE int getMovementApCost(int x, int y, unsigned char z) const { return getMovementApCost({x, y, z}); }
   Q_INVOKABLE int getReachApCost(DynamicObject* target, float range = 1) const;
   Q_INVOKABLE int getReachApCost(DynamicObject* target, float range, QJSValue caseCompare);
   Q_INVOKABLE int getReachCaseApCost(int x, int y, float range = 1) const;
@@ -44,15 +45,16 @@ public:
   void             pushSpellUseAt(QPoint target, const QString& spell);
   Q_INVOKABLE void pushSpellUseAt(int x, int y, const QString& spell) { pushSpellUseAt(QPoint(x, y), spell); }
   Q_INVOKABLE void pushSkillUse(DynamicObject* target, const QString& name);
-  void             pushMovement(QPoint target);
-  Q_INVOKABLE void pushMovement(int x, int y) { pushMovement(QPoint(x, y)); }
+  void             pushMovement(Point target);
+  Q_INVOKABLE void pushMovement(int x, int y);
+  Q_INVOKABLE void pushMovement(int x, int y, unsigned char z) { pushMovement({x,y,z}); }
   Q_INVOKABLE void pushReach(DynamicObject* target, float range = 1);
   Q_INVOKABLE void pushReach(DynamicObject* target, float range, QJSValue caseCompare);
   Q_INVOKABLE void pushReachCase(int x, int y, float range);
   Q_INVOKABLE void pushReachCase(int x, int y, float range, QJSValue caseCompare);
-  Q_INVOKABLE void pushReachNear(int x, int y, int range);
   Q_INVOKABLE void pushReachCase(int x, int y, int z, float range);
   Q_INVOKABLE void pushReachCase(int x, int y, int z, float range, QJSValue caseCompare);
+  Q_INVOKABLE void pushReachNear(int x, int y, int range);
   Q_INVOKABLE void pushReachNear(int x, int y, int z, int range);
   Q_INVOKABLE void pushWait(unsigned int seconds);
   Q_INVOKABLE void pushSpeak(const QString& content, unsigned int interval, const QString& color);
