@@ -90,9 +90,11 @@ time_t DateTime::GetTimestamp(void) const
   {
     struct tm timeinfo;
 
+#ifdef	__USE_MISC
     timeinfo.tm_gmtoff = 0;
-    timeinfo.tm_isdst = 0;
     timeinfo.tm_zone = nullptr;
+#endif
+    timeinfo.tm_isdst = 0;
     timeinfo.tm_wday = 0;
     timeinfo.tm_yday = 0;
     timeinfo.tm_year = (year < 1900 ? 0 : year - 1900);
