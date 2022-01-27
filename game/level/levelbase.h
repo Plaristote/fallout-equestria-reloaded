@@ -46,6 +46,7 @@ private:
   QQmlListProperty<DynamicObject> getQmlObjects() { return QML_QLIST_CONSTRUCTOR(DynamicObject, attachedObjects); }
 
 protected:
+  QString getScriptFilename(const QString& levelName) const;
   QString getScriptPath() const override { return SCRIPTS_PATH + "levels"; }
 
   QPoint   canvasOffset;

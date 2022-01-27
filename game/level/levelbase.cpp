@@ -13,6 +13,15 @@ bool LevelBase::isGameEditor() const
   return Game::get()->property("isGameEditor").toBool();
 }
 
+QString LevelBase::getScriptFilename(const QString& levelName) const
+{
+  QString defaultName = levelName + ".mjs";
+
+  if (QFileInfo(getScriptPath() + '/' + defaultName).isFile())
+    return levelName + ".mjs";
+  return "base.mjs";
+}
+
 Character* LevelBase::getPlayer() const
 {
   return Game::get()->getPlayer();

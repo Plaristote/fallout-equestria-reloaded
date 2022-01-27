@@ -34,7 +34,7 @@ void PlayerMovementComponent::movePlayerTo(int x, int y)
   if (occupant)
     actions->pushReach(occupant, 1);
   else
-    actions->pushMovement(QPoint(x, y));
+    actions->pushMovement(Point{x, y, static_cast<unsigned char>(getCurrentFloor())});
   if (!(actions->start()))
     Game::get()->appendToConsole(I18n::get()->t("no-path"));
   else if (!getPlayer()->getCurrentPath().empty())
