@@ -2,6 +2,7 @@
 #include <cmath>
 #include <QDebug>
 #include "tilemap/tilemap.h"
+#define ZONE_GRANULARITY 10
 
 static void detectZoneBoundaries(PathZone& zone)
 {
@@ -98,15 +99,68 @@ static QVector<PathZone> subdivideZoneGrid(QRect rect, LevelGrid* grid)
   return makePathZonesFrom(cases);
 }
 
+static void adjustZoneSize(QRect& zoneSize, QPoint position)
+{
+  if (position.x() < zoneSize.x())
+    zoneSize.setLeft(position.x());
+  else if (position.x() > zoneSize.x())
+    zoneSize.setRight(position.x());
+  if (position.y() < zoneSize.y())
+    zoneSize.setTop(position.y());
+  else if (position.y() > zoneSize.bottom())
+    zoneSize.setBottom(position.y());
+}
+
+static QVector<LevelGrid::CaseContent*> getCaseSubset(const QVector<LevelGrid::CaseContent*>& cases, QRect rect)
+{
+  QVector<LevelGrid::CaseContent*> subset;
+
+  for (auto it = cases.begin() ; it != cases.end() ; ++it)
+  {
+    if (rect.contains((*it)->position))
+      subset.push_back(*it);
+  }
+  return subset;
+}
+
+static QVector<PathZone> subdivicePathZoneFromLayer(QRect zoneSize, QVector<LevelGrid::CaseContent*>& cases)
+{
+  QVector<PathZone> zones;
+  QVector<QRect>    parts;
+  const int         granularityInt = ZONE_GRANULARITY;
+  const double      granularity = static_cast<double>(granularityInt);
+  const QPoint      zoneBaseSize(granularityInt, granularityInt);
+
+  for (int x = 0 ; x < std::ceil(zoneSize.width() / granularity) ; ++x)
+  {
+    for (int y = 0 ; y < std::ceil(zoneSize.height() / granularity) ; ++y)
+    {
+      QPoint   topLeft(x * granularityInt, y * granularityInt);
+
+      parts << QRect(topLeft, topLeft + zoneBaseSize);
+    }
+  }
+  for (const auto& part : parts)
+    zones << makePathZonesFrom(getCaseSubset(cases, part));
+  return zones;
+}
+
 static QVector<PathZone> preparePathZoneFromLayer(LevelGrid* grid, const TileZone* source, QVector<LevelGrid::CaseContent*>& allCases)
 {
   QVector<LevelGrid::CaseContent*> cases;
   const auto& positions = source->getPositions();
+  QRect zoneSize;
 
+  if (allCases.size() > 1)
+  {
+    QPoint origin(allCases.first()->position);
+    zoneSize = QRect(origin, origin);
+  }
   for (auto it = allCases.begin() ; it != allCases.end() ;)
   {
     auto* gridCase = *it;
 
+    adjustZoneSize(zoneSize, gridCase->position);
     if (positions.indexOf(gridCase->position) >= 0)
     {
       cases.push_back(gridCase);
@@ -115,6 +169,8 @@ static QVector<PathZone> preparePathZoneFromLayer(LevelGrid* grid, const TileZon
     else
       ++it;
   }
+  if (zoneSize.width() > ZONE_GRANULARITY || zoneSize.height() > ZONE_GRANULARITY)
+    return subdivicePathZoneFromLayer(zoneSize, cases);
   return makePathZonesFrom(cases);
 }
 
@@ -142,7 +198,7 @@ static void prepareZoneGridForFloorUsingTilemap(ZoneGrid& zoneGrid, LevelGrid* g
 static void prepareZoneGridForFloor(ZoneGrid& zoneGrid, LevelGrid* grid)
 {
   QVector<QRect> parts;
-  const int      granularityInt = 10;
+  const int      granularityInt = ZONE_GRANULARITY;
   const double   granularity = static_cast<double>(granularityInt);
   const QPoint   zoneBaseSize(granularityInt, granularityInt);
 

@@ -75,6 +75,7 @@ public:
 
   void initializeGrid(TileMap*);
   void initializePathfinding();
+  bool hasPathfindingZones() const;
 
   Q_INVOKABLE inline QSize   getSize() const { return size; }
   Q_INVOKABLE bool           isOccupied(int x, int y) const;
