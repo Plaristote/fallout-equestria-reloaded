@@ -153,12 +153,15 @@ int main(int argc, char *argv[])
   });
 
   const QUrl url(QStringLiteral("qrc:/main.qml"));
-  QObject::connect(&engine, &QQmlApplicationEngine::objectCreated, &app, [url, cursor](QObject *obj, const QUrl &objUrl)
+  QObject::connect(&engine, &QQmlApplicationEngine::objectCreated, &app, [url, cursor, gamepad](QObject *obj, const QUrl &objUrl)
   {
     if (!obj && url == objUrl)
       QCoreApplication::exit(-1);
     else
+    {
+      gamepad->initialize();
       cursor->setWindow(obj);
+    }
   }, Qt::QueuedConnection);
   engine.load(url);
   return app.exec();
