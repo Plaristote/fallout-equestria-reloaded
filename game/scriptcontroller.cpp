@@ -30,7 +30,7 @@ bool ScriptController::hasMethod(const QString &method)
   return callback.isCallable();
 }
 
-static QString backtrace(QJSValue retval)
+QString jsErrorBacktrace(QJSValue retval)
 {
   static QString head("ScriptController: uncaught exception at ");
   QString path  = retval.property("fileName").toString() + ':' + QString::number(retval.property("lineNumber").toInt());
@@ -47,7 +47,7 @@ QJSValue ScriptController::call(const QString& method, const QJSValueList& args)
     QJSValue retval = callback.callWithInstance(instance, args);
 
     if (retval.isError())
-      qDebug() << backtrace(retval);
+      qDebug() << jsErrorBacktrace(retval);
     else
       return retval;
   }

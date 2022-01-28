@@ -46,10 +46,17 @@ void TimePasser::tick()
     timer.start();
 }
 
+QString jsErrorBacktrace(QJSValue retval);
+
 void TimePasser::triggerCallbacks()
 {
-  for (auto callback : callbacks)
-    callback.call();
+  for (auto callback : qAsConst(callbacks))
+  {
+    auto retval = callback.call();
+
+    if (retval.isError())
+      qDebug() << jsErrorBacktrace(retval);
+  }
   callbacks.clear();
   emit stateChanged();
 }
