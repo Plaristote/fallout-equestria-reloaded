@@ -168,7 +168,6 @@ void GridComponent::setCharacterPosition(Character* character, int x, int y, uns
   {
     character->rcurrentPath().clear();
     setObjectPosition(character, x, y, objectFloor);
-    grid->triggerZone(character, x, y);
   }
 }
 
@@ -256,6 +255,7 @@ void GridComponent::setGridObjectPosition(DynamicObject* object, int x, int y, u
     lastGrid->removeObject(object);
     grid->insertObject(object, x, y);
   }
+  grid->triggerZone(object, x, y);
 }
 
 void GridComponent::setRenderObjectPosition(DynamicObject* object, int x, int y)

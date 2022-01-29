@@ -89,6 +89,7 @@ public:
   bool insertObject(DynamicObject*, int x, int y);
   void extractObject(DynamicObject*);
   void removeObject(DynamicObject*);
+  void triggerZone(DynamicObject*, int x, int y);
   void triggerZone(CharacterMovement*, int x, int y);
   void triggerZone(CharacterMovement* c, QPoint p) { triggerZone(c, p.x(), p.y()); }
   void registerZone(TileZone*);

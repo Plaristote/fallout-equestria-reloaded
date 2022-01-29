@@ -240,9 +240,24 @@ void LevelGrid::updateObjectVisibility(DynamicObject* object)
   object->setVisible(!roof || !roof->isVisible());
 }
 
+static const QVector<TileZone*> emptyZoneList;
+
+void LevelGrid::triggerZone(DynamicObject* object, int x, int y)
+{
+  if (!object->isCharacter())
+  {
+    auto* gridCase = getGridCase(x, y);
+    const QVector<TileZone*>& newZones  = gridCase ? gridCase->zones : emptyZoneList;
+
+    for (auto* zone : newZones)
+      emit zone->enteredZone(object, zone);
+  }
+  else
+    triggerZone(reinterpret_cast<CharacterMovement*>(object), x, y);
+}
+
 void LevelGrid::triggerZone(CharacterMovement* character, int x, int y)
 {
-  static const QVector<TileZone*> emptyZoneList;
   auto* gridCase = getGridCase(x, y);
   const QVector<TileZone*>  lastZones = character->getCurrentZones();
   const QVector<TileZone*>& newZones  = gridCase ? gridCase->zones : emptyZoneList;
