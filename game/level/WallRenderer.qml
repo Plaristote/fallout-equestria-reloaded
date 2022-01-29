@@ -39,11 +39,11 @@ Item {
         levelController: wallRenderer.levelController
         offzetX: wallRenderer.x
         offzetY: wallRenderer.y - renderTarget.wallHeight
-        withClipping: {
-          levelController.player &&
-          ((tx >= levelController.player.position.x && ty >= levelController.player.position.y) ||
-           (wall === hwall && tx === levelController.player.position.x - 1 && ty === levelController.player.position.y) ||
-           (wall === vwall && ty === levelController.player.position.y - 1 && tx === levelController.player.position.x))
+        onPositionRefreshed: {
+          withClipping = levelController.player &&
+            ((tx >= levelController.player.position.x && ty >= levelController.player.position.y) ||
+             (wall === hwall && tx === levelController.player.position.x - 1 && ty === levelController.player.position.y) ||
+             (wall === vwall && ty === levelController.player.position.y - 1 && tx === levelController.player.position.x));
         }
       }
     }

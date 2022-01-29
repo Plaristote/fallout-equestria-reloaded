@@ -4,15 +4,35 @@ ShaderEffect {
   property variant source
   property QtObject levelController
   property QtObject player:   levelController.player
-  property point    position: player ? player.spritePosition : Qt.point(0, 0)
+  property point    lastPlayerPosition
+  property point    position: Qt.point(0, 0)
   property real     diameter: 90
   property real     offzetX: parent.x
   property real     offzetY: parent.y
-  property real     centerX: position.x - offzetX + 35
-  property real     centerY: position.y - offzetY + 10
+  property real     centerX: 0
+  property real     centerY: 0
   property bool     withClipping:     player
   property bool     withAmbientColor: levelController.useAmbientLight
   property color    ambientColor:     levelController.ambientColor
+
+  signal positionRefreshed()
+
+  Timer {
+    id: positionUpdateTimer
+    interval: 10
+    repeat: false
+    running: player.spritePosition != lastPlayerPosition
+    onTriggered: {
+      lastPlayerPosition = player.spritePosition;
+      updateCenter();
+      positionRefreshed();
+    }
+  }
+
+  function updateCenter() {
+    centerX = player.spritePosition.x - offzetX + 35;
+    centerY = player.spritePosition.y - offzetY + 10;
+  }
 
   anchors.fill: parent
   vertexShader: "
