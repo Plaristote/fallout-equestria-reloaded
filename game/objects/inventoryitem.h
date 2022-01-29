@@ -25,6 +25,7 @@ class InventoryItem : public DynamicObject
   Q_PROPERTY(bool        requiresTarget READ requiresTarget NOTIFY useModeChanged)
   Q_PROPERTY(bool        zoneTarget     READ usesZoneTarget NOTIFY useModeChanged)
   Q_PROPERTY(int         zoneSize       READ getZoneTargetSize NOTIFY useModeChanged)
+  Q_PROPERTY(bool        destructible  READ isDestructible)
 public:
   explicit InventoryItem(QObject* parent = nullptr);
 
@@ -44,6 +45,7 @@ public:
   QString     getIcon() const;
   QString     getDescription() const;
   QString     getDefaultMode() const;
+  bool        isDestructible() const;
   bool        isGroupable(InventoryItem* = nullptr);
   bool        isBlockingPath() const override { return false; }
   bool        isVirtual() const { return virtualItem; }

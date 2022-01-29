@@ -108,6 +108,13 @@ int InventoryItem::evaluateValue(Character* buyer, Character* seller)
   return getValue();
 }
 
+bool InventoryItem::isDestructible() const
+{
+  QJSValue destructible = script ? script->property("destructible") : QJSValue();
+
+  return destructible.isBool() ? destructible.toBool() : true;
+}
+
 bool InventoryItem::isGroupable(InventoryItem* other)
 {
   auto itemData = InventoryItemLibrary::get()->getObject(itemType);
