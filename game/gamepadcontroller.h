@@ -28,6 +28,7 @@ class GamepadController : public QObject
 public:
   explicit GamepadController(QObject *parent = nullptr);
 
+  void initialize();
   static GamepadController* get() { return instance; }
 
   bool isConnected() const;
@@ -88,6 +89,8 @@ private:
   CursorTimer cursorTimer, cameraTimer;
   double    xMovement, yMovement;
   bool hoverScrollable = false;
+
+  QTimer windowsWorkaroundTimer;
 };
 
 #endif // GAMEPADCONTROLLER_H

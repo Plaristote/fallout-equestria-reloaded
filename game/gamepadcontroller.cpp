@@ -10,19 +10,31 @@ GamepadController* GamepadController::instance = nullptr;
 
 GamepadController::GamepadController(QObject *parent) : QObject(parent)
 {
+}
+
+void GamepadController::initialize()
+{
+#ifdef _WIN32
+  windowsWorkaroundTimer.setInterval(2500);
+  windowsWorkaroundTimer.setSingleShot(false);
+  windowsWorkaroundTimer.start();
+  connect(&windowsWorkaroundTimer, &QTimer::timeout, this, &GamepadController::lookForController);
+#else
   connect(QGamepadManager::instance(), &QGamepadManager::connectedGamepadsChanged, this, &GamepadController::lookForController);
   lookForController();
+#endif
 }
 
 void GamepadController::lookForController()
 {
+  qDebug() << "GamepadController::lookForController";
   if (!isConnected())
   {
     auto gamepads = QGamepadManager::instance()->connectedGamepads();
 
     instance = this;
     if (gamepads.isEmpty())
-      qDebug() << "Did not find any connected gamepads";
+      qDebug() << "GamepadController: Did not find any connected gamepads";
     else
       connectGamepad(*gamepads.begin());
   }
@@ -30,6 +42,7 @@ void GamepadController::lookForController()
 
 void GamepadController::connectGamepad(int id)
 {
+  qDebug() << "GamepadController: Connected gamepad" << id;
   if (gamepad)
     delete gamepad;
   gamepad = new QGamepad(id, this);
