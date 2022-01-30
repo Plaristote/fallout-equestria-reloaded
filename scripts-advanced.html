@@ -801,14 +801,219 @@ function interruptRoutineOnMyNPC() {
             <div class="end-chapter"></div>
           </div>
         </div>
-
+        
         <h2 class="my-4" id="c4">
-          4. Commonalities
+          4. scenes
+        </h2>
+        <div class="card mb-4">
+          <div class="card-body">
+          
+            <p class="card-text">
+              Scenes are a useful tool when you want to stage a series of interaction between groups
+              of characters. The <span class="mono-span">SceneManager</span> object will let you
+              define the "actors" along with a series of steps describing what happens during the scene.
+            </p>
+
+            <h4 class="card-title" id="c4-1">4.1 Creating a scene</h4>
+            <p class="card-text">
+              We will first create our scene object in a new folder of our own:
+            </p>
+            
+            <div class="code-header">scripts/scenes/myscene.mjs</div>
+            <pre class="code"><code>import {SceneManager} from "../behaviour/SceneManager.mjs";
+            class MyScene extends SceneManager {
+  constructor(parent) {
+    // On construction, we must provide a unique key for our scene:
+    super(parent, "my-scene");
+    
+    // We then provide a list of states, which we will implement below:
+    this.states = [
+      this.firstState.bind(this)
+    ];
+  }
+  
+  firstState() {
+    const actions = game.player.actionQueue;
+
+    actions.pushSpeak("This character speech was triggered by a scene.", 3000, "white");
+    actions.pushWait(3);
+    actions.pushScript(this.triggerNextStep.bind(this));
+    actions.start();
+  }
+}</code></pre>
+
+          <p class="card-text">
+            Each scene is made of one or several steps, allowing you to eventually re-trigger
+            a scene when one of the step fails.<br />
+            In this code, <span class="mono-span">firstState</span> is our only step. Each step
+            should constitute of a list of actions on one or several characters. When all the
+            actions have ran, we move to the next step by calling <span class="mono-span">triggerNextStep</span>
+            on the scene manager.<br/>
+            We do the latter by using <span class="mono-span">actions.pushScript(this.triggerNextStep.bind(this))</span>
+            to ensure that it will be ran after the last action.
+          </p>
+          
+          <p class="card-text">
+            The actionQueue provides a couple procedures that are useful in scenes, such as <span class="mono-span">pushSpeak</span>,
+            <span class="mono-span">pushWait</span> and <span class="mono-span">pushScript</span>.
+          </p>
+          
+          <p class="card-text">
+            <span class="mono-span">pushSpeak</span> allows you to schedule a TextBubble through the action Queue. The parameters
+            are the text that should appear, how long it will lasts in milliseconds, and the text color.
+          </p>
+          
+          <p class="card-text">
+            <span class="mono-span">pushWait</span> will let the actionQueue hang for as many seconds as specified in the parameter.
+          </p>
+          
+          <p class="card-text">
+            <span class="mono-span">pushScript</span> is used to trigger scripts within the action Queue. You can use it to delay
+            the execution of any script you need until after other actions triggered. It is very useful when several characters
+            are involved in the same scene state:
+          </p>
+          
+<pre class="code"><code>  firstState() {
+    const actions = game.player.actionQueue;
+
+    actions.pushSpeak("This character speech was triggered by a scene.", 3000, "white");
+    actions.pushWait(2);
+    actions.pushScript(this.firstStatePart.bind(this));
+    actions.start();
+  }
+  
+  firstStatePart() {
+    const actions = level.findObject("scene-actor");
+    
+    actions.pushSpeak("This character too, spoke as a part of a scene.", 3000, "white");
+    actions.pushWait(3);
+    actions.pushScript(this.triggerNextStep.bind(this));
+    actions.start();
+  }
+}</code></pre>
+
+            <p class="card-text">
+              In this variant, we have two characters speech that slightly overlaps, and the next step is only tiggered when the
+              second character's speech is over.
+            </p>
+            
+            <div class="end-chapter"></div>
+            
+            <h4 class="card-title" id="c4-2">4.2 Actors</h4>
+            <p class="card-text">
+              A scene is played by actors. Actors are NPCs defined in the scene manager as such:
+            </p>
+            
+            <div class="code-header">scripts/scenes/myscene.mjs</div>
+            <pre class="code"><code>import {SceneManager} from "../behaviour/SceneManager.mjs";
+            class MyScene extends SceneManager {
+  constructor(parent) {
+    super(parent, "my-scene");
+    this.states = [
+      this.firstState.bind(this)
+    ];
+  }
+  
+  get actors() {
+    return [
+      level.findObject("my-actor-character")
+    ];
+  }
+  
+  firstState() {
+    const actions = this.actors[0].actionQueue;
+
+    actions.pushSpeak("This character speech was triggered by a scene.", 3000, "white");
+    actions.pushWait(3);
+    actions.pushScript(this.triggerNextStep.bind(this));
+    actions.start();
+  }
+}</code></pre>
+
+            <p class="card-text">
+              Defining actors will allow you to manage <a href="#c4-3">4.3 Interruptions</a> with those characters. It will
+              also toggle <a href="#c3">3. Routines</a> on and off when the scene starts or ends.
+            </p>
+            
+            <div class="end-chapter"></div>
+            
+            <h4 class="card-title" id="c4-3">4.3 Interruptions</h4>
+            <p class="card-text">
+              By default, the player is free to act on his own during a scene, which means he may interrupt it in several ways.
+              Other events may also interrupt a scene (like a trap hurting a scene actor). Here are hooks you can implement to
+              handle these cases:
+              <ul>
+                <li>Starting a fight: if a scene actor becomes involved in a fight, you can react to it by implementing
+                <span class="mono-span">onCombatTurn(character)</span>.</li>
+                <li>Taking damage: this can be handled using <span class="mono-span">onDamageTaken(character, attacker)</span>.</li>
+              </ul>
+            </p>
+            
+            <p class="card-text">
+              Your actors action queue may be interrupted due to other reasons. You can implement <span class="mono-span">onActionQueueCompleted(character)</span>
+              to check if a character really completed his tasks, or if an interruption left the scene uncompleted:
+            </p>
+
+<pre class="code"><code>  firstState() {
+    const actions = this.actors[0].actionQueue;
+
+    actions.pushReachCase(10, 10);
+    actions.pushSpeak("This character has reached its destinationn.", 3000, "white");
+    actions.pushScript(() => { this.firstStateComplete = true; });
+    actions.pushScript(this.triggerNextStep.bind(this));
+    actions.start();
+  }
+  
+  onActionQueueCompleted(character) {
+    if (character == this.actors[0] &amp;&amp; !this.firstStateComplete) {
+      this.states.push(this.failureStep.bind(this));
+      this.triggerNextStep();
+    }
+  }
+
+  failureStep() {
+    const actions = this.actors[0].actionQueue;
+
+    actions.pushSpeak("This character couldn't reach its destinationn.", 3000, "white");
+    actions.pushScript(this.triggerNextStep.bind(this));
+    actions.start();
+  }
+}</code></pre>
+
+            <p class="card-text">
+              In this example, the actor character tries to move to the 10,10 coordinates. If something prevents them
+              from reaching the target, the action Queue will be interrupted, and the scene's next step will never get
+              triggered.<br/>
+              So we added a way to tell whether all the tasks were completed using <span class="mono-span">actions.pushScript(() => { this.firstStateComplete = true; });</span>,
+              and we implemented <span class="mono-span">onActionQueueCompleted</span> to check whether the actor completed its action. When it hasn't, we replace the next
+              state with another one (<span class="mono-span">failureStep</span>), and we trigger it immediately, branching towards an alternative conclusion for the scene.
+            </p>
+            
+            <div class="end-chapter"></div>
+            
+            <h4 class="card-title" id="c4-4">4.4 End scene</h4>
+            <p class="card-text">
+              When the scene runs out of steps to run, the <span class="mono-span">finalize</span> method gets called. You may overload it
+              to run all the code you want to have run after a scene ends. You can also end the scene at any time by calling
+              <span class="mono-span">finalize</span> yourself.
+            </p>
+            
+            <p class="card-text">
+              Note that there's another case in which your scene will forcefully end: if the player exits the level during the scene. 
+            </p>
+
+            <div class="end-chapter"></div>
+          </div>
+        </div>
+
+
+        <h2 class="my-4" id="c5">
+          5. Commonalities
         </h2>
         <div class="card mb-4">
           <div class="card-body">
 
-            <h4 class="card-title" id="c4-1">4.1 How to start a specific dialog from script</h4>
+            <h4 class="card-title" id="c5-1">5.1 How to start a specific dialog from script</h4>
             <p class="card-text">
               Sometimes, you may want an NPC to initiate a dialog themselves. This can be done easily by calling
               <span class="mono-span">level.initializeDialog(character)</span>, which will immediately open a
@@ -824,7 +1029,7 @@ function interruptRoutineOnMyNPC() {
 
             <div class="end-chapter"></div>
 
-            <h4 class="card-title" id="c4-2">4.2 Trigger a behaviour when a character is detected</h4>
+            <h4 class="card-title" id="c5-2">5.2 Trigger a behaviour when a character is detected</h4>
             <p class="card-text">
               Your NPC can also react to character detection using the <span class="mono-span">onCharacterDetected</span> hook,
               such as:
@@ -875,7 +1080,7 @@ function interruptRoutineOnMyNPC() {
 
             <div class="end-chapter"></div>
 
-            <h4 class="card-title" id="c4-3">4.3 How to know if a character sees another character</h4>
+            <h4 class="card-title" id="c5-3">5.3 How to know if a character sees another character</h4>
             <p class="card-text">
               There are several way a character can be aware o other characters: for instance, they may have a direct line o sight on those,
               or they may just know that they're around (because they saw them earlier).
@@ -897,7 +1102,7 @@ function interruptRoutineOnMyNPC() {
 
             <div class="end-chapter"></div>
 
-            <h4 class="card-title" id="c4-4">4.4 Having a NPC prevent certain player actions</h4>
+            <h4 class="card-title" id="c5-4">5.4 Having a NPC prevent certain player actions</h4>
             <p class="card-text">
               Some common scenario for this would be preventing a character from opening a door when an NPC is guarding it.
               While you could create a script for the door, it sometimes make more sense to implement this behaviour directly
@@ -933,6 +1138,201 @@ class Guard extends CharacterBehaviour {
   }
 }</code></pre>
 
+            <div class="end-chapter"></div>
+
+            <h4 class="card-title" id="c5-5">5.5 Doorways</h4>
+            <p class="card-text">
+	      The script located at <span class="mono-span">scripts/behaviours/door.mjs</span> also deines a list
+	      o character races that are allowed to ope doors.<br/>
+	      For characters with one of the included race, the default behavior for doorways is to let anyone
+	      automatically open them as long as they are unlocked, or if any NPC that owns a key to the door.
+	    </p>
+	      
+            <p class="card-text">
+	      You may override that behaviour in your own door scripts, by overloading the <span class="mono-span">canGoThrough</span> method. If that method returns <span class="mono-span">false</span>, the character won't be allowed to move through the door unless it's already open.
+	    </p>
+
+	    <p class="card-text">
+	      Let's see how you may customize your NPCs so they won't open doors unless explicitely allowed to:
+	    </p>
+
+            <pre class="code javascript"><code>import {Door} from "./door.mjs";
+
+class CustomDoor extends Door {
+  canGoThrough(character) {
+    if (!game.playerParty.containsCharacter(character) &amp;&amp; character.hasVariable("can-open-custom-door"))
+      return false;
+    return super.canGoThrough(character);
+  }
+}
+
+export unction create(model) {
+  return new CustomDoor(model);
+}</code></pre>
+
+	    <p class="card-text">
+	      This script ensures that no NPC will try to open the door, while the player and their party member 
+	      will use the default behavior.
+	    </p>
+
+	    <p class="card-text">
+	      Return <span class="mono-span">true</span> or <span class="mono-span">false</span> to override the
+	      default behavior and allow all characters to open the door.
+	    </p>
+
+	    <p class="card-text card-hint">
+	      When a character needs to open the door to go through it, the <span class="mono-span">onUse</span>
+	      method will be called on the doorway script.
+	    </p>
+	    
+            <div class="end-chapter"></div>
+
+            <h4 class="card-title" id="c5-6">5.6 Locks</h4>
+            <p class="card-text">
+              While locks are commonly associated with doors, you can script other objects to include a lock
+	      behaviour, by leveraging <span class="mono-span">scripts/behaviours/locked.mjs</span>.<br/>
+	      Let's see how to use it create a locked storage box:
+	    </p>
+
+	    <pre class="code javascript"><code>import {LockedComponented} from "./locked.mjs";
+
+class LockedStorage {
+  constructor(model) {
+    this.model = model;
+    
+    // To begin with, we instantiate a LockedComponent. Available options are:
+    // - lockpickLevel: determines how hard the lock is to pick
+    // - breakable: if true, the lock will break on critical failure
+    // - onSuccess, onFailure and onCriticalFailure: hooks called after a success, failure or critical failure
+    this.lockedComponent = new LockedComponent(this, {
+      lockpickLevel: 2,
+      breakable: true,
+      onSuccess: function() { game.appendToConsole("Lock picked"); },
+      onFailure: function() { game.appendToConsole("Lock not picked"); },
+      onCriticalFailure: function() { game.appendToConsole("Lock broken"); },
+    });
+
+    // Unless our game object is a door, we must override the `toggleLocked`
+    // method on the LockedComponent:
+    this.lockedComponent.toggleLocked = this.toggleLocked.bind(this);
+  }
+
+  toggleLocked() {
+    this.model.setVariable("locked", !this.locked);
+  }
+
+  isLocked() {
+    return this.model.hasVariable("locked") ? this.model.getVariable("locked") : true;
+  }
+
+  // We provide the `onUse` hook, and return `true` when the storage is locked, to
+  // prevent the default behaviour from running.
+  onUse() {
+    if (this.isLocked()) {
+      game.appendToConsole(i18n.t("messages.locker-locked"));
+      return true;
+    }
+    return false;
+  }
+
+  // We do the same thing with `onSteal`, as stealing can also be used to open a
+  // storage box
+  onUseSteal() {
+    return this.onUse();
+  }
+  
+  // Lastly, we provide the `onUseLockpick` hook, and forward the call to
+  // the LockedComponent.
+  onUseLockpick(user) {
+    return this.lockedComponent.onUseLockpick(user);
+  }
+}</code></pre>
+
+	    <p class="card-text">
+	    Picking a lock will also grant experience to the player, according to the <span class="mono-span">lockpickLevel</span> value.<br/>
+	    You can also customize the reward:
+	    </p>
+	    
+	    <pre class="code javascript"><code>this.lockedComponent.xpReward = 42;</code></pre>
+	    
+	    <div class="end-chapter"></div>
+	    
+            <h4 class="card-title" id="c5-7">5.7 Traps</h4>
+            <p class="card-text">
+              Traps can be implemented just like locks by using <span class="mono-span">scripts/behaviours/trapped.mjs</span>.<br/>
+              Let's see how to use it to create a trapped storage box:
+            </p>
+            
+            <pre class="code javascript"><code>import {TrappedComponented} from "./trapped.mjs";
+import {explode} from "./explosion.mjs";
+
+class TrappedStorage {
+  constructor(model) {
+    this.model = model;
+    
+    // To begin with, we instantiate a TrappedComponent. Available options are:
+    // - trapLevel: determines how hard the trap is to disarm
+    // - onTriggered: determines what happens when the trap is triggered
+    // - onSuccess, onFailure and onCriticalFailure: hooks called after a success, failure or critical failure
+    this.trappedComponent = new TrappedComponent(this, {
+      trapLevel: 2,
+      onTriggered: this.onTriggered.bind(this),
+      onSuccess: function() { game.appendToConsole("Trap toggled"); },
+      onFailure: function() { game.appendToConsole("Trap not toggled"); },
+      onCriticalFailure: function() { game.appendToConsole("Trap triggered"); }
+    });
+
+    // We set `destructible` to true. This overrides the default behaviour, and
+    // means the object may be destroyed, in the blast of an explosion for instance.
+    this.destructible = true;
+  }
+
+  // Our onTriggered hook uses `explode` from `explosion.mjs` to trigger
+  // an explosion dealing 20 damage in a 1 case radius around the storage box.
+  onTriggered() {
+    const damage = 20;
+    const radius = 1;
+    const position = {
+      x: this.model.position.x,
+      y: this.model.position.y,
+      z: this.model.floor
+    };
+
+    explode(position, radius, damage);
+  }
+
+  // We provide the `onUse` hook, and return `true` when the storage is locked, to
+  // prevent the default behaviour from running.
+  onUse() {
+    if (!this.trappedComponent.disarmed) {
+      this.trappedComponent.trigger();
+      return true;
+    }
+    return false;
+  }
+
+  // We do the same thing with `onSteal`, as stealing can also be used to open a
+  // storage box
+  onUseSteal() {
+    return this.onUse();
+  }
+  
+  // Lastly, we provide the `onUseLockpick` hook, and forward the call to
+  // the LockedComponent.
+  onUseExplosives(user) {
+    return this.trappedComponent.onUseExplosives(user);
+  }
+}</code></pre>
+
+	    <p class="card-text">
+	    Disarming a trap grants experience, according to the <span class="mono-span">trapLevel</span> value.<br/>
+	    You can also customize the reward:
+	    </p>
+	    
+	    <pre class="code javascript"><code>this.trappedComponent.xpReward = 42;</code></pre>
+	    
+            <div class="end-chapter"></div>
+            
           </div>
         </div>
       </div>
@@ -982,12 +1382,22 @@ class Guard extends CharacterBehaviour {
               <a href="#c3-3">3.3 Interrupting a routine</a>
               <a href="#c3-4">3.4 Tips about routines</a>
             </div>
-            <a href="#c4">4. Commonalities</a>
+            <a href="#c4">4. Scenes</a>
             <div class="chapter">
-              <a href="#c4-1">4.1 Start dialog from script</a>
-              <a href="#c4-2">4.2 Trigger behaviour on detection</a>
-              <a href="#c4-3">4.3 Character awareness</a>
-              <a href="#c4-4">4.4 NPC guarding objects</a>
+              <a href="#c4-1">4.1 Creating a scene</a>
+              <a href="#c4-2">4.2 Actors</a>
+              <a href="#c4-3">4.3 Interruptions</a>
+              <a href="#c4-4">4.4 End scene</a>
+            </div>
+            <a href="#c5">5. Commonalities</a>
+            <div class="chapter">
+              <a href="#c5-1">5.1 Start dialog from script</a>
+              <a href="#c5-2">5.2 Trigger behaviour on detection</a>
+              <a href="#c5-3">5.3 Character awareness</a>
+              <a href="#c5-4">5.4 NPC guarding objects</a>
+              <a href="#c5-5">5.5 Doorways</a>
+              <a href="#c5-6">5.6 Locks</a>
+              <a href="#c5-7">5.7 Traps</a>
             </div>
           </div>
         </div>
