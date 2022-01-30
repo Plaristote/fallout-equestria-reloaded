@@ -61,6 +61,7 @@ public:
   void                 removeCharacter(Character*);
 
 signals:
+  void                 updated();
   void                 refreshed();
   void                 characterDetected(Character*);
 

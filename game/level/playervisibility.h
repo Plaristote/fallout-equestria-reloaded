@@ -22,6 +22,7 @@ signals:
   void visibleObjectsChanged();
 
 private slots:
+  void refreshCharacterDetection();
   void refreshHiddenObjectsDetection();
 
 private:

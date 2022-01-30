@@ -91,7 +91,10 @@ void FieldOfView::update(qint64 delta)
   if (timeLeft <= delta && character.getStatistics()->getHitPoints() > 0)
     runTask();
   else
+  {
     timeLeft -= delta;
+    emit updated();
+  }
 }
 
 void FieldOfView::runTask()
