@@ -11,6 +11,7 @@ Doorway::Doorway(QObject* parent) : DynamicObject(parent)
   connect(this, &Doorway::openedChanged, this, &Doorway::updateAnimation);
   connect(this, &DynamicObject::positionChanged,     this, &Doorway::updateTileConnections);
   connect(this, &OrientedSprite::orientationChanged, this, &Doorway::updateTileConnections);
+  connect(this, &OrientedSprite::orientationChanged, this, &Doorway::updateAnimation);
   openSound = closeSound = "door-open";
   lockedSound = "door-locked";
   tileConnections.reserve(8);
