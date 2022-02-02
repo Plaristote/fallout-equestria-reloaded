@@ -61,7 +61,7 @@ Pane {
 
       TerminalField {
         id: filterInput
-        visible: model.length > 0
+        visible: model && model.length > 0
         Layout.fillWidth: true
         Layout.bottomMargin: 5
         placeholderText: "Filter..."

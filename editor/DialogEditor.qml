@@ -96,46 +96,6 @@ Item {
     onAccepted: controller.removeAnswer()
   }
 
-  UiStyle.CustomDialog {
-    id: translateStateDialog
-    title: "Translate State"
-    modal: true
-    anchors.centerIn: parent
-    standardButtons: Dialog.Ok | Dialog.Cancel
-    Row {
-      Label { text: "Text" }
-      TextField {
-        id: translateStateInput
-        text: controller.text
-      }
-    }
-    onAccepted: {
-      const key = "dialogs." + currentDialog.replace(".json", "") + "." + controller.stateText;
-      scriptController.setTranslation(key, translateStateInput.text);
-      controller.loadState(controller.stateReference);
-    }
-  }
-
-  UiStyle.CustomDialog {
-    id: translateAnswerDialog
-    title: "Translate answer"
-    modal: true
-    anchors.centerIn: parent
-    standardButtons: Dialog.Ok | Dialog.Cancel
-    Row {
-      Label { text: "Text" }
-      TextField {
-        id: translateAnswerInput
-        text: i18n.t("dialogs." + currentDialog.replace(".json", "") + "." + controller.optionText)
-      }
-    }
-    onAccepted: {
-      const key = "dialogs." + currentDialog.replace(".json", "") + "." + controller.optionText;
-      scriptController.setTranslation(key, translateAnswerInput.text);
-      controller.optionsChanged();
-    }
-  }
-
   RowLayout {
     anchors.fill: parent
 
@@ -203,12 +163,13 @@ Item {
   Component {
     id: dialogStateComponent
     ColumnLayout {
+      id: stateLayout
       anchors.fill: parent
       RowLayout {
         Layout.fillWidth: true
         Pane {
           background: UiStyle.TerminalPane {}
-          Layout.fillWidth: true
+          Layout.preferredWidth: stateLayout.width / 2
           Layout.fillHeight: true
           GridLayout {
             width: parent.width
@@ -222,19 +183,13 @@ Item {
 
             TerminalLabel { text: "Text reference" }
 
-            RowLayout {
+            TranslationInputField {
               Layout.fillWidth: true
-              TerminalField {
-                Layout.fillWidth: true
-                id: stateTextInput
-                text: controller.stateText
-                onTextChanged: { controller.stateText = text }
-              }
-              TerminalButton {
-                height: stateTextInput.height
-                text: "Translate"
-                onClicked: translateStateDialog.open()
-              }
+              id: stateTextInput
+              translationKey: controller.stateText
+              prefix: "dialogs." + currentDialog.replace(".json", "")
+              onRequireKeyChange: controller.stateText = newKey
+              onUpdated: controller.loadState(controller.stateReference)
             }
 
             TerminalLabel { text: "Trigger callback" }
@@ -256,7 +211,7 @@ Item {
         } // END state pane
         Pane {
           background: UiStyle.TerminalPane {}
-          Layout.fillWidth: true
+          Layout.preferredWidth: stateLayout.width / 2
           Layout.fillHeight: true
           visible: controller.currentOption !== ""
           GridLayout {
@@ -273,19 +228,13 @@ Item {
 
             TerminalLabel { text: "Text reference" }
 
-            RowLayout {
+            TranslationInputField {
               Layout.fillWidth: true
-              TerminalField {
-                Layout.fillWidth: true
-                id: optionTextInput
-                text: controller.optionText
-                onTextChanged: { controller.optionText = text }
-              }
-              TerminalButton {
-                height: optionTextInput.height
-                text: "Translate"
-                onClicked: translateAnswerDialog.open()
-              }
+              id: optionTextInput
+              translationKey: controller.optionText
+              prefix: "dialogs." + currentDialog.replace(".json", "")
+              onRequireKeyChange: controller.optionText = newKey
+              onUpdated: controller.optionsChanged()
             }
 
             TerminalLabel { text: "To state" }

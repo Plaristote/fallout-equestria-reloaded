@@ -277,5 +277,6 @@
         <file>editor/FactionEditor.qml</file>
         <file>editor/AnimationPreview.qml</file>
         <file>editor/ScriptInputField.qml</file>
+        <file>editor/TranslationInputField.qml</file>
     </qresource>
 </RCC>
