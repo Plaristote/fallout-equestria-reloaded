@@ -74,7 +74,7 @@ Window {
   GameLoadManager { id: gameLoadManager }
 
   Shortcut {
-    sequence: "F12"
+    sequence: "F11"
     onActivated: application.isFullScreen = !application.isFullScreen
   }
 
