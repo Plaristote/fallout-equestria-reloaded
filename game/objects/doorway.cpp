@@ -118,13 +118,6 @@ void Doorway::updateAnimation()
     setAnimation("destroyed");
 }
 
-bool Doorway::isDestructible() const
-{
-  if (script)
-    return script->property("destructible").toBool();
-  return false;
-}
-
 bool Doorway::bustOpen(int damage)
 {
   bool success = true;

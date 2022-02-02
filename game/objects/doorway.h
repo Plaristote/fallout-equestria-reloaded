@@ -12,7 +12,6 @@ class Doorway : public DynamicObject
   Q_PROPERTY(bool    destroyed     MEMBER destroyed NOTIFY destroyedChanged)
   Q_PROPERTY(QString keyName       MEMBER keyName NOTIFY keyNameChanged)
   Q_PROPERTY(int     lockpickLevel MEMBER lockpickLevel NOTIFY lockpickLevelChanged)
-  Q_PROPERTY(bool    destructible  READ isDestructible)
   Q_PROPERTY(QString openSound   MEMBER openSound   NOTIFY soundChanged)
   Q_PROPERTY(QString closeSound  MEMBER closeSound  NOTIFY soundChanged);
   Q_PROPERTY(QString lockedSound MEMBER lockedSound NOTIFY soundChanged);
@@ -28,7 +27,6 @@ public:
   Q_INVOKABLE bool bustOpen(int damage);
   bool isBlockingPath() const { return false; }
   bool triggerInteraction(Character* character, const QString& interactionType) override;
-  bool isDestructible() const;
   int getCoverValue() const override;
   Q_INVOKABLE bool onGoThrough(Character*);
   Q_INVOKABLE bool canGoThrough(Character*) const;

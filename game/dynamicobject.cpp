@@ -114,6 +114,13 @@ void DynamicObject::setVisible(bool value)
   }
 }
 
+bool DynamicObject::isDestructible() const
+{
+  if (script)
+    return script->property("destructible").toBool();
+  return false;
+}
+
 void DynamicObject::onBlocksPathChanged()
 {
   auto* level = Game::get()->getLevel();

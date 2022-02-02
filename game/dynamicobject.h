@@ -24,6 +24,7 @@ class DynamicObject : public LightSourceComponent
   Q_PROPERTY(TaskRunner* tasks MEMBER taskManager)
   Q_PROPERTY(bool blocksPath MEMBER blocksPath NOTIFY blocksPathChanged)
   Q_PROPERTY(bool isVisible READ isVisible NOTIFY visibilityChanged)
+  Q_PROPERTY(bool destructible  READ isDestructible)
   Q_PROPERTY(QPoint spriteOffset READ getSpriteOffset WRITE setSpriteOffset NOTIFY spritePositionChanged)
   Q_PROPERTY(ObjectGroup* parent READ getGroup NOTIFY parentChanged)
 
@@ -42,6 +43,7 @@ public:
   virtual bool isBlockingPath() const { return blocksPath; }
   inline bool isVisible() const { return visible && !isHidden(); }
   void setVisible(bool value);
+  virtual bool isDestructible() const;
 
   void setObjectName(const QString& value) { objectName = value; emit objectNameChanged(); }
   ObjectGroup* getGroup() const;
