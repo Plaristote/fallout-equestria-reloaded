@@ -31,9 +31,9 @@ static void renderTilemapWalls(TileMap& tilemap, QImage& image, QPoint renderOff
   {
     for (int y = 0 ; y < mapSize.height() ; ++y)
     {
-      Tile* block = blocks            ? blocks->getTile(x, y) : nullptr;
-      Tile* vwall = vwalls && !blocks ? vwalls->getTile(x, y) : nullptr;
-      Tile* hwall = hwalls && !blocks ? hwalls->getTile(x, y) : nullptr;
+      Tile* block = blocks ? blocks->getTile(x, y) : nullptr;
+      Tile* vwall = vwalls ? vwalls->getTile(x, y) : nullptr;
+      Tile* hwall = hwalls ? hwalls->getTile(x, y) : nullptr;
       QPoint position(tilemap.getPointFor(x, y));
 
       for (Tile* tile : QVector<Tile*>{block, vwall, hwall})

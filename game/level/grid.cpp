@@ -39,11 +39,11 @@ void GridComponent::load(const QJsonObject& data)
     }
     currentFloor = static_cast<unsigned char>(data["currentFloor"].toInt(0));
     emit floorChanged();
+    pathfinding.prepareZoneGrid(floors);
     ParentType::load(data);
   }
   else
     throw std::runtime_error("Could not load tilemap");
-  pathfinding.prepareZoneGrid(floors);
 }
 
 void GridComponent::save(QJsonObject& data) const

@@ -41,7 +41,7 @@ void ZoneGrid::connectCases(Point a, Point b)
   auto* caseB = getGridCase(b);
   auto* zoneB = getPathZone(b);
 
-  if (caseA && caseB && caseA->connectionWith(caseB) == nullptr)
+  if (caseA && caseB && zoneA && zoneB && caseA->connectionWith(caseB) == nullptr)
   {
     caseA->connectWith(caseB);
     if (zoneA != zoneB)
