@@ -190,6 +190,8 @@ QSize TileLayer::getRenderedSize()
 
 void TileLayer::prepareRenderRect()
 {
+  bool hasInitializedLimits = false;
+
   if (tiles.begin() != tiles.end())
   {
     QPoint min, max;
@@ -204,14 +206,25 @@ void TileLayer::prepareRenderRect()
         {
           QRect renderRect = tile->getRenderRect();
 
-          if (min.x() > renderRect.topLeft().x())
-            min.setX(renderRect.topLeft().x());
-          if (min.y() > renderRect.topLeft().y())
-            min.setY(renderRect.topLeft().y());
-          if (max.x() < renderRect.bottomRight().x())
-            max.setX(renderRect.bottomRight().x());
-          if (max.y() < renderRect.bottomRight().y())
-            max.setY(renderRect.bottomRight().y());
+          /*
+          if (!hasInitializedLimits)
+          {
+            min = renderRect.topLeft();
+            max = renderRect.bottomRight();
+            hasInitializedLimits = true;
+          }
+          else
+          */
+          {
+            if (min.x() > renderRect.topLeft().x())
+              min.setX(renderRect.topLeft().x());
+            if (min.y() > renderRect.topLeft().y())
+              min.setY(renderRect.topLeft().y());
+            if (max.x() < renderRect.bottomRight().x())
+              max.setX(renderRect.bottomRight().x());
+            if (max.y() < renderRect.bottomRight().y())
+              max.setY(renderRect.bottomRight().y());
+          }
         }
       }
     }

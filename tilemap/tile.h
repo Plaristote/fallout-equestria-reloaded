@@ -39,7 +39,6 @@ private:
   QRect          rect;
   QPoint         position;
   QPoint         renderPosition;
-
 };
 
 #endif // TILE_H
