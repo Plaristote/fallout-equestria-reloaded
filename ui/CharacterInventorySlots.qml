@@ -46,6 +46,7 @@ Pane {
         delegate: InventorySlot {
           slotName: inventory.slotNames[index]
           equippedItem: inventory.getEquippedItem(slotName)
+          selectedItem: root.selectedObject
           background: Rectangle { color: "transparent" }
           dragZone: root.dragZone
           x: layout[slotName].x

@@ -28,6 +28,8 @@ Pane {
 
   onCharacterChanged: character !== null ? itemsView.inventory = character.inventory : null
 
+  DropArea { anchors.fill: parent }
+
   Text {
     id: header
     anchors.top: parent.top
@@ -198,5 +200,13 @@ Pane {
       root.selectedObject = null;
       slotsView.item.updateSlots();
     }
-  } // END Inventory Connections
+  }
+
+  Connections {
+    target: root.character
+    function onItemDropped(item) {
+      if (root.selectedObject === item)
+        root.selectedObject = null;
+    }
+  }
 }

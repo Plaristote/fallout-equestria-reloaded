@@ -48,7 +48,7 @@ void LevelTask::registerDynamicObject(DynamicObject* object)
   {
     Character* character = reinterpret_cast<Character*>(object);
 
-    addCharacterObserver(character, connect(character, &Character::itemDropped, this, [this, character](InventoryItem* item) { onItemDropped(item, character->getPosition()); }));
+    addCharacterObserver(character, connect(character, &Character::itemDropped, this, [this, character](InventoryItem* item) { onItemDropped(item, character->getPosition(), static_cast<unsigned char>(character->getCurrentFloor())); }));
     addCharacterObserver(character, connect(character, &Character::characterKill, this, &LevelTask::onCharacterKill));
     if (character == getPlayer())
       addCharacterObserver(character, connect(character, &Character::floorChanged, this, [this]() { setCurrentFloor(getPlayer()->getCurrentFloor()); }, Qt::QueuedConnection));

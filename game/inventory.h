@@ -44,6 +44,7 @@ public:
   Q_INVOKABLE InventoryItem* getEquippedItem(const QString& slotName) const;
   QVector<InventoryItem*> getEquippedItems() const;
   Q_INVOKABLE bool isEquippedItem(InventoryItem*) const;
+  Q_INVOKABLE QString getEquippedItemSlot(InventoryItem*) const;
 
   Q_INVOKABLE int count(const QString& name) const;
   Q_INVOKABLE bool contains(InventoryItem* item) const { return items.contains(item); }

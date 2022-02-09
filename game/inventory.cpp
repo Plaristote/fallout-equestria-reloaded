@@ -33,7 +33,7 @@ void Inventory::addItem(InventoryItem* item)
 
 void Inventory::removeItem(InventoryItem *item)
 {
-  if (itemSlots.values().contains(item))
+  if (isEquippedItem(item))
     unequipItem(item);
   items.removeAll(item);
   disconnect(item, &InventoryItem::weightChanged, this, &Inventory::totalWeightChanged);
@@ -61,30 +61,39 @@ void Inventory::destroyItem(InventoryItem *item, int quantity)
 
 void Inventory::dropItem(InventoryItem *item, int quantity)
 {
-  int amount = item->getQuantity();
-  auto* level = Game::get()->getLevel();
-  InventoryItem* droppedItem = item;
+  if (item && !item->isVirtual())
+  {
+    int amount = item->getQuantity();
+    auto* level = Game::get()->getLevel();
+    InventoryItem* droppedItem = item;
+    const auto currentSlot = getEquippedItemSlot(item);
 
-  if (amount >= quantity)
-  {
-    removeItem(item);
-    if (level && user)
-      emit user->itemDropped(item);
-    else
-      item->deleteLater();
-  }
-  else
-  {
-    if (level)
+    if (!currentSlot.isEmpty())
     {
-      droppedItem = new InventoryItem();
-      droppedItem->setObjectName(item->getObjectName());
-      droppedItem->setItemType(item->getItemType());
-      if (quantity > 1)
-        droppedItem->add(quantity - 1);
-      emit user->itemDropped(item);
+      itemSlots[currentSlot] = nullptr;
+      emit unequippedItem(currentSlot);
     }
-    item->remove(quantity);
+    else if (amount >= quantity)
+    {
+      removeItem(item);
+      if (!level || !user)
+        item->deleteLater();
+    }
+    else
+    {
+      if (level)
+      {
+        QJsonObject itemData;
+
+        droppedItem->save(itemData);
+        itemData["quantity"] = quantity;
+        droppedItem = new InventoryItem();
+        droppedItem->load(itemData);
+      }
+      item->remove(quantity);
+    }
+    if (user)
+      emit user->itemDropped(droppedItem);
   }
 }
 
@@ -214,29 +223,51 @@ bool Inventory::canEquipItem(InventoryItem *item, const QString &slotName) const
 
 bool Inventory::equipItem(InventoryItem *item, const QString& slotName)
 {
-  if (canEquipItem(item, slotName))
+  QString currentSlot = getEquippedItemSlot(item);
+
+  if (currentSlot != slotName && canEquipItem(item, slotName))
   {
     auto* oldItem = getEquippedItem(slotName);
-    bool  shouldDestroyOldObject = oldItem && oldItem->isVirtual();
 
-    if (item->getQuantity() > 1)
+    // Handling item previously in slot
+    if (oldItem && oldItem->isVirtual())
     {
-      InventoryItem* newItem = new InventoryItem(this);
-
-      newItem->setObjectName(item->getObjectName());
-      newItem->setItemType(item->getItemType());
-      item->remove(1);
-      item = newItem;
+      itemSlots[slotName]->deleteLater();
+      itemSlots[slotName] = nullptr;
     }
+    else if (oldItem)
+      addItem(itemSlots[slotName]);
+
+    // Swapping from one slot to another
+    if (!currentSlot.isEmpty())
+    {
+      itemSlots[currentSlot] = nullptr;
+      itemSlots[slotName] = item;
+      emit unequippedItem(currentSlot);
+    }
+
+    // Moving from inventory to slot
     else
-      removeItem(item);
-    unequipItem(slotName, shouldDestroyOldObject);
-    itemSlots[slotName] = item;
-    item->onEquippedBy(user, true);
-    emit equippedItemsChanged();
-    return true;
+    {
+      if (item->getQuantity() > 1)
+      {
+        InventoryItem* newItem = new InventoryItem(this);
+        QJsonObject itemData;
+
+        item->save(itemData);
+        item->remove(1);
+        item = newItem;
+        itemData.remove("quantity");
+        item->load(itemData);
+      }
+      else
+        removeItem(item);
+      itemSlots[slotName] = item;
+      item->onEquippedBy(user, true);
+      emit equippedItemsChanged();
+    }
   }
-  return false;
+  return getEquippedItem(slotName) == item;
 }
 
 void Inventory::unequipItem(const QString &slotName, bool dropped)
@@ -275,6 +306,13 @@ InventoryItem* Inventory::getEquippedItem(const QString &slotName) const
   if (itemSlots.contains(slotName))
     return itemSlots[slotName];
   return nullptr;
+}
+
+QString Inventory::getEquippedItemSlot(InventoryItem* item) const
+{
+  auto it = std::find(itemSlots.begin(), itemSlots.end(), item);
+
+  return it != itemSlots.end() ? it.key() : QString();
 }
 
 bool Inventory::isEquippedItem(InventoryItem* item) const

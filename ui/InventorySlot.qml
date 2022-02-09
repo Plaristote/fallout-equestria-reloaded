@@ -6,6 +6,7 @@ Pane {
   id: root
   property string slotName: inventory.slotNames[index]
   property QtObject equippedItem: inventory.getEquippedItem(slotName)
+  property QtObject selectedItem
   property var dragZone
   implicitHeight: 125
   implicitWidth: 125
@@ -43,12 +44,12 @@ Pane {
       }
 
       TerminalButton {
-        visible: root.selectedObject != null && inventory.canEquipItem(root.selectedObject, slotName)
+        visible: root.selectedItem != null && inventory.canEquipItem(root.selectedItem, slotName)
         text: "✓"
         height: 20
         width: 25
         font.bold: true
-        onClicked: inventory.equipItem(selectedObject, slotName);
+        onClicked: inventory.equipItem(root.selectedItem, slotName);
       }
     }
   }
@@ -56,7 +57,6 @@ Pane {
   DropArea {
     anchors.fill: parent
     onDropped: {
-      console.log("Dropped on slot", drop.source.dragType);
       if (drop.source.dragType === "InventoryItem")
         receiveInventoryItem(drop.source.inventoryItem);
     }
