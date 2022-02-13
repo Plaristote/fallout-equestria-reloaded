@@ -143,8 +143,8 @@ Item {
       onActivated: openCharacterSheetAction.trigger()
     }
     onTriggered: {
-      if (levelController)
-        levelController.mouseMode = 0;
+      if (level)
+        level.mouseMode = 0;
       application.pushView("game/CharacterView.qml", {gameController: gameManager.currentGame})
     }
   }
@@ -158,8 +158,8 @@ Item {
       onActivated: openPipboyAction.trigger()
     }
     onTriggered: {
-      if (levelController)
-        levelController.mouseMode = 0;
+      if (level)
+        level.mouseMode = 0;
       application.pushView("game/PipBoy.qml");
     }
   }
