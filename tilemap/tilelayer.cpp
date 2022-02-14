@@ -118,6 +118,7 @@ void TileLayer::loadTiles(const QJsonArray& tileArray, const QVector<Tileset*>& 
   for (const QJsonValue& value : qAsConst(tileArray))
   {
     int tid = value.toInt();
+    bool success = false;
 
     if (tid > 0)
     {
@@ -129,11 +130,12 @@ void TileLayer::loadTiles(const QJsonArray& tileArray, const QVector<Tileset*>& 
 
           tile->prepare(offset, tileset, tid, currentPosition);
           tiles.push_back(tile);
+          success = true;
           break ;
         }
       }
     }
-    else
+    if (!success)
       tiles.push_back(nullptr);
     if (currentPosition.x() >= size.width() - 1)
     {
