@@ -64,6 +64,7 @@ private slots:
   void displayMovementTargetHint(QPoint position);
 
 private:
+  void updateRoofVisibility();
   void combatTask(qint64);
   void endTurnTask(qint64);
   void realTimeTask(qint64);

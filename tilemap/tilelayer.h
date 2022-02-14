@@ -31,6 +31,7 @@ public:
 
   void load(const QJsonObject&, const QVector<Tileset*>& tilesets);
   const QString& getName() const { return name; }
+  const QString& getZoneName() const { return zoneName; }
   const QSize& getSize() const { return size; }
   void setVisible(bool value) { if (visible != value) { visible = value; emit visibleChanged(); } }
   bool isVisible() const { return visible; }
@@ -60,7 +61,7 @@ protected:
   static int             tilePropertyListCount(QQmlListProperty<Tile>*);
   static Tile*           tilePropertyListAt(QQmlListProperty<Tile>*, int);
 
-  QString        name;
+  QString        name, zoneName;
   QSize          size;
   QPoint         offset;
   QColor         color = Qt::transparent;

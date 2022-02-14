@@ -119,6 +119,21 @@ void LevelTask::onPauseChanged()
   }
 }
 
+void LevelTask::updateRoofVisibility()
+{
+  TileMap* tilemap = getTileMap();
+
+  for (TileLayer* roof : tilemap->getRoofs())
+  {
+    auto           point    = getPlayer()->getPoint();
+    const QString& zoneName = roof->getZoneName();
+    TileZone*      zone     = !zoneName.isEmpty() ? tilemap->getZone(zoneName) : nullptr;
+    bool           isInside = zone ? zone->isInside(point.x, point.y, point.z) : roof->isInside(point.x, point.y);
+
+    roof->setVisible(!isInside);
+  }
+}
+
 void LevelTask::update()
 {
   qint64 delta = clock.restart();
@@ -131,11 +146,7 @@ void LevelTask::update()
     enableWaitingMode(koMode || busyMode);
   }
 
-  for (TileLayer* roof : getTileMap()->getRoofs())
-  {
-    auto point = getPlayer()->getPoint();
-    roof->setVisible(!roof->isInside(point.x, point.y));
-  }
+  updateRoofVisibility();
 
   ParentType::update(delta);
   if (!combat)

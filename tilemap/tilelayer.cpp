@@ -26,6 +26,8 @@ void TileLayer::load(const QJsonObject& object, const QVector<Tileset*>& tileset
 
     if (propertyName == "color")
       color = QColor(value.toString());
+    else if (propertyName == "zone")
+      zoneName = value.toString();
   }
 }
 
