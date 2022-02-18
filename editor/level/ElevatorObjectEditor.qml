@@ -8,6 +8,9 @@ import Game 1.0
 
 DynamicObjectEditor {
   id: elevatorEditor
+  withOrientation: true
+  readOnlyAnimation: true
+
   Component.onCompleted: {
     if (model)
       updateModel();
