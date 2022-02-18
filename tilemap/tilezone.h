@@ -41,6 +41,7 @@ public:
   QPoint getOffset() const { return offset; }
   unsigned int getFloor() const { return static_cast<unsigned int>(floor); }
   void setFloor(unsigned char value) { floor = value; emit floorChanged(this); }
+  int getGranularity() const { return granularity; }
 
   Q_INVOKABLE int    getPositionCount() const { return positions.size(); }
   Q_INVOKABLE QPoint getPositionAt(int i) const { return offset + positions.at(i); }
@@ -66,6 +67,7 @@ private:
   QList<QPoint> positions;
   QPoint        offset;
   unsigned char floor = 0;
+  int           granularity = 0;
 };
 
 #endif // TILEZONE_H

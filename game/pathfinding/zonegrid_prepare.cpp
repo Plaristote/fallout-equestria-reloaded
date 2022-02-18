@@ -150,6 +150,7 @@ static QVector<PathZone> preparePathZoneFromLayer(LevelGrid* grid, const TileZon
   QVector<LevelGrid::CaseContent*> cases;
   const auto& positions = source->getPositions();
   QRect zoneSize;
+  int granularity = source->getGranularity();
 
   if (allCases.size() > 1)
   {
@@ -169,7 +170,9 @@ static QVector<PathZone> preparePathZoneFromLayer(LevelGrid* grid, const TileZon
     else
       ++it;
   }
-  if (zoneSize.width() > ZONE_GRANULARITY || zoneSize.height() > ZONE_GRANULARITY)
+  if (granularity == 0)
+    granularity = ZONE_GRANULARITY;
+  if (granularity > 0 && (zoneSize.width() > granularity || zoneSize.height() > granularity))
     return subdivicePathZoneFromLayer(zoneSize, cases);
   return makePathZonesFrom(cases);
 }
