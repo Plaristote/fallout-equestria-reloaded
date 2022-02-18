@@ -106,17 +106,23 @@ UiStyle.CustomDialog {
           } // END ColumnLayout
         } // END Flickable
 
-        GridLayout {
+        Flickable {
           Layout.preferredWidth: parent.width / 2
-          columns: 2
+          Layout.fillHeight: true
           clip: true
-          Repeater {
-            model: Math.min(animationPreviews.length, 10)
-            delegate: AnimationPreview {
-              spriteGroup: root.pickedOption
-              animationName: animationPreviews[index]
-              Layout.preferredHeight: nativeHeight
-              Layout.preferredWidth:  nativeWidth
+          ScrollBar.vertical: UiStyle.TerminalScrollbar { orientation: Qt.Vertical }
+          contentHeight: animationPreviewGrid.height
+          GridLayout {
+            id: animationPreviewGrid
+            columns: 2
+            Repeater {
+              model: Math.min(animationPreviews.length, 10)
+              delegate: AnimationPreview {
+                spriteGroup: root.pickedOption
+                animationName: animationPreviews[index]
+                Layout.preferredHeight: nativeHeight
+                Layout.preferredWidth:  nativeWidth
+              }
             }
           }
         }
