@@ -17,11 +17,11 @@ QmlSpriteAnimation::QmlSpriteAnimation(QObject* parent) : QObject(parent)
   connect(this, &QmlSpriteAnimation::clippedRectChanged, this, &QmlSpriteAnimation::animationChanged);
 }
 
-void QmlSpriteAnimation::initialize(const QString& group, const QString& name)
+void QmlSpriteAnimation::initialize(const QString& group, const QString& newName)
 {
   this->group = group;
-  this->oldName = name;
-  SpriteAnimation::operator=(AnimationLibrary::get()->getAnimation(group, name));
+  this->oldName = newName;
+  SpriteAnimation::operator=(AnimationLibrary::get()->getAnimation(group, newName));
   emit frameIntervalChanged();
   emit frameCountChanged();
   emit firstFramePositionChanged();
@@ -29,6 +29,7 @@ void QmlSpriteAnimation::initialize(const QString& group, const QString& name)
   emit nameChanged();
   emit repeatChanged();
   emit clippedRectChanged();
+  emit reverseChanged();
 }
 
 bool QmlSpriteAnimation::hasChanged() const
@@ -42,7 +43,48 @@ bool QmlSpriteAnimation::hasChanged() const
          self.frameInterval            != other.frameInterval ||
          self.frameCount               != other.frameCount ||
          self.firstFramePosition       != other.firstFramePosition ||
-         self.clippedRect.size()       != other.clippedRect.size();
+         self.clippedRect.size()       != other.clippedRect.size() ||
+         self.reverse                  != other.reverse;
+}
+
+QRect QmlSpriteAnimation::rectForFrame(int index) const
+{
+  if (frameCount > 1)
+  {
+    auto x = this->getOffset().x(); auto width  = this->clippedRect.width();
+    auto y = this->getOffset().y(); auto height = this->clippedRect.height();
+    auto count = this->frameCount;
+    auto frameX = x + (this->reverse ? width * (count - 1) - (width * index) : width * index);
+
+    return QRect(frameX, y, width, height);
+  }
+  return QRect(firstFramePosition, clippedRect.size());
+}
+
+QPoint QmlSpriteAnimation::getOffset() const
+{
+  if (reverse && frameCount > 1)
+  {
+    return QPoint(
+     firstFramePosition.x() - clippedRect.width() * (frameCount - 1),
+     firstFramePosition.y()
+    );
+  }
+  return firstFramePosition;
+}
+
+void QmlSpriteAnimation::setOffset(QPoint newVal)
+{
+  if (reverse && frameCount > 1)
+  {
+    firstFramePosition = QPoint(
+      newVal.x() + clippedRect.width() * (frameCount - 1),
+      newVal.y()
+    );
+  }
+  else
+    firstFramePosition = newVal;
+  emit firstFramePositionChanged();
 }
 
 QString QmlSpriteAnimation::getRelativeSource() const
@@ -50,9 +92,9 @@ QString QmlSpriteAnimation::getRelativeSource() const
   return toRelativeSource(source);
 }
 
-QString QmlSpriteAnimation::toRelativeSource(const QString& source)
+QString QmlSpriteAnimation::toRelativeSource(const QString& absolutePath)
 {
-  return QString(source).replace(ASSETS_PATH + "sprites/", "");
+  return QString(absolutePath).replace(ASSETS_PATH + "sprites/", "");
 }
 
 AnimationLibrary* AnimationLibrary::self = nullptr;
@@ -131,6 +173,15 @@ static SpriteAnimation makeDefaultSpriteAnimation(const QString& animation, cons
   return object;
 }
 
+static QPoint getFirstFramePosition(SpriteAnimation& sprite, const QJsonObject& data)
+{
+  QPoint point(data["offsetX"].toInt(0), data["offsetY"].toInt(0));
+
+  if (sprite.reverse && sprite.frameCount > 1)
+    point.rx() += data["width"].toInt() * (sprite.frameCount - 1);
+  return point;
+}
+
 SpriteAnimation AnimationLibrary::getAnimation(const QString &group, const QString &animation) const
 {
   SpriteAnimation object;
@@ -154,8 +205,8 @@ SpriteAnimation AnimationLibrary::getAnimation(const QString &group, const QStri
     object.repeat        = animationData["repeat"].toBool(false);
     object.frameCount    = animationData["frameCount"].toInt(1);
     object.frameInterval = animationData["frameInterval"].toInt(100);
-    object.firstFramePosition.setX(animationData["offsetX"].toInt(0));
-    object.firstFramePosition.setY(animationData["offsetY"].toInt(0));
+    object.reverse       = animationData["reverse"].toBool();
+    object.firstFramePosition = getFirstFramePosition(object, animationData.toObject());
     object.clippedRect.setX(object.firstFramePosition.x());
     object.clippedRect.setY(object.firstFramePosition.y());
     object.clippedRect.setWidth(animationData["width"].toInt());

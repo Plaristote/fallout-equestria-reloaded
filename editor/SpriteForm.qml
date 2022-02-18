@@ -154,6 +154,16 @@ Pane {
         checked: spriteAnimation.repeat
         onCheckedChanged: spriteAnimation.repeat = checked
       }
+
+      TerminalLabel {
+        text: "reverse"
+      }
+
+      TerminalCheckBox {
+        id: reverseInput
+        checked: spriteAnimation.reverse
+        onCheckedChanged: spriteAnimation.reverse = checked
+      }
     }
   } // END form flickable
 
@@ -181,11 +191,12 @@ Pane {
     border.color: "green"
     border.width: 2
     color: "transparent"
+    visible: spriteAnimation.frameCount > 1
     Image {
       source: assetPath + "sprites/" + sourceInput.text
       height: parseInt(heightInput.text)
       width: parseInt(widthInput.text)
-      sourceClipRect: Qt.rect(parseInt(xInput.text) + parseInt(widthInput.text) * animationLoopPreview.previewFrame, parseInt(yInput.text), parseInt(widthInput.text), parseInt(heightInput.text))
+      sourceClipRect: spriteAnimation.rectForFrame(animationLoopPreview.previewFrame)
       Timer {
         interval: parseInt(intervalInput.text)
         running: animationName != ""
@@ -218,7 +229,15 @@ Pane {
             source: assetPath + "sprites/" + sourceInput.text
             height: parseInt(heightInput.text)
             width: parseInt(widthInput.text)
-            sourceClipRect: Qt.rect(parseInt(xInput.text) + parseInt(widthInput.text) * index, parseInt(yInput.text), parseInt(widthInput.text), parseInt(heightInput.text))
+            sourceClipRect: {
+              const x = parseInt(xInput.text); const width  = parseInt(widthInput.text);
+              const y = parseInt(yInput.text); const height = parseInt(heightInput.text);
+              const count = parseInt(frameCountInput.text);
+              const reversed = reverseInput.checked;
+              const frameX = x + (reversed ? width * (count - 1) - (width * index) : width * index);
+
+              return Qt.rect(frameX, y, width, height);
+            }
           }
         }
       }

@@ -43,7 +43,8 @@ void Sprite::runAnimation()
   animation.currentFrame++;
   if (animation.currentFrame >= animation.frameCount)
   {
-    if (animation.repeat) {
+    if (animation.repeat)
+    {
       animation.currentFrame = 0;
       animation.clippedRect.setX(animation.firstFramePosition.x());
       animation.clippedRect.setWidth(width);
@@ -52,7 +53,11 @@ void Sprite::runAnimation()
       emit animationFinished();
   }
   else
-    animation.clippedRect.adjust(width, 0, width, 0);
+  {
+    auto movement = width * (animation.reverse ? -1 : 1);
+
+    animation.clippedRect.adjust(movement, 0, movement, 0);
+  }
   emit clippedRectChanged();
 }
 

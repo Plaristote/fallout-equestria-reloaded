@@ -27,7 +27,7 @@ Rectangle {
   Image {
     source: assetPath + "sprites/" + spriteAnimation.relativeSource
     anchors.fill: parent
-    sourceClipRect: Qt.rect(spriteAnimation.clippedRect.x + spriteAnimation.clippedRect.width * root.previewFrame, spriteAnimation.clippedRect.y, spriteAnimation.clippedRect.width, spriteAnimation.clippedRect.height)
+    sourceClipRect: spriteAnimation.rectForFrame(root.previewFrame)
     Timer {
       interval: spriteAnimation.frameInterval
       running: animationName != ""

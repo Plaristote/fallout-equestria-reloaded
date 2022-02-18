@@ -25,6 +25,7 @@ struct SpriteAnimation
   int     frameInterval;
   bool    repeat;
   int     currentFrame = 0;
+  bool    reverse = false;
 };
 
 class QmlSpriteAnimation : public QObject, public SpriteAnimation
@@ -34,11 +35,12 @@ class QmlSpriteAnimation : public QObject, public SpriteAnimation
   Q_PROPERTY(QString name   MEMBER name NOTIFY nameChanged)
   Q_PROPERTY(QString source MEMBER source NOTIFY sourceChanged)
   Q_PROPERTY(QString relativeSource READ getRelativeSource NOTIFY sourceChanged)
-  Q_PROPERTY(QPoint offset MEMBER firstFramePosition NOTIFY firstFramePositionChanged)
+  Q_PROPERTY(QPoint offset READ getOffset WRITE setOffset NOTIFY firstFramePositionChanged)
   Q_PROPERTY(QRect clippedRect MEMBER clippedRect NOTIFY clippedRectChanged)
   Q_PROPERTY(int frameCount MEMBER frameCount NOTIFY frameCountChanged)
   Q_PROPERTY(int frameInterval MEMBER frameInterval NOTIFY frameIntervalChanged)
   Q_PROPERTY(bool repeat MEMBER repeat NOTIFY repeatChanged)
+  Q_PROPERTY(bool reverse MEMBER reverse NOTIFY reverseChanged)
   Q_PROPERTY(bool hasChanged READ hasChanged NOTIFY animationChanged)
 public:
   QmlSpriteAnimation(QObject* parent = nullptr);
@@ -47,6 +49,9 @@ public:
   QString getRelativeSource() const;
   static QString toRelativeSource(const QString&);
   bool hasChanged() const;
+  Q_INVOKABLE QRect rectForFrame(int frame) const;
+  QPoint getOffset() const;
+  void setOffset(QPoint);
 
 signals:
   void frameIntervalChanged();
@@ -57,6 +62,7 @@ signals:
   void repeatChanged();
   void clippedRectChanged();
   void animationChanged();
+  void reverseChanged();
 
 private:
   QString group, oldName;
