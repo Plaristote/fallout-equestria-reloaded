@@ -69,6 +69,7 @@ Character* ObjectFactory::generateCharacter(const QString &name, const QString &
 
   object->setObjectName(name);
   object->setCharacterSheet(characterSheet);
+  object->setCurrentFloor(root->getCurrentFloor());
   root->appendObject(object);
   return object;
 }
@@ -78,6 +79,7 @@ StorageObject* ObjectFactory::generateStorageObject(const QString &name) const
   StorageObject* object = new StorageObject(root);
 
   object->setObjectName(name);
+  object->setCurrentFloor(root->getCurrentFloor());
   root->appendObject(object);
   return object;
 }
@@ -87,6 +89,7 @@ InventoryItem* ObjectFactory::generateInventoryItem(const QString& name, const Q
   InventoryItem* object = new InventoryItem(root);
 
   object->setObjectName(name);
+  object->setCurrentFloor(root->getCurrentFloor());
   object->setItemType(type);
   if (quantity > 1)
     object->add(quantity - 1);
@@ -99,6 +102,7 @@ Doorway* ObjectFactory::generateDoorway(const QString &name) const
   Doorway* object = new Doorway(root);
 
   object->setObjectName(name);
+  object->setCurrentFloor(root->getCurrentFloor());
   root->appendObject(object);
   return object;
 }
@@ -108,6 +112,7 @@ Elevator* ObjectFactory::generateElevator(const QString &name) const
   Elevator* object = new Elevator(root);
 
   object->setObjectName(name);
+  object->setCurrentFloor(root->getCurrentFloor());
   root->appendObject(object);
   return object;
 }
@@ -117,6 +122,7 @@ DynamicObject* ObjectFactory::generateDynamicObject(const QString &name) const
   DynamicObject* object = new DynamicObject(root);
 
   object->setObjectName(name);
+  object->setCurrentFloor(root->getCurrentFloor());
   root->appendObject(object);
   return object;
 }

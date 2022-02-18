@@ -41,6 +41,7 @@ ObjectGroup::ObjectGroup(QObject *parent) : ParentType(parent)
   connect(this, &ObjectGroup::objectRemoved, this, &ObjectGroup::objectsChanged);
   connect(this, &ObjectGroup::groupAdded,    this, &ObjectGroup::groupsChanged);
   connect(this, &ObjectGroup::groupRemoved,  this, &ObjectGroup::groupsChanged);
+  connect(this, &ObjectGroup::floorChanged,  this, &ObjectGroup::propagateFloorUpdate);
 }
 
 void ObjectGroup::load(const QJsonObject& data)
@@ -200,6 +201,14 @@ void ObjectGroup::setOffset(QPoint newOffset)
       objectAdjustStrategy(object);
     emit offsetChanged();
   }
+}
+
+void ObjectGroup::propagateFloorUpdate()
+{
+  for (ObjectGroup* group : groups)
+    group->setCurrentFloor(getCurrentFloor());
+  for (DynamicObject* object : objects)
+    object->setCurrentFloor(getCurrentFloor());
 }
 
 void ObjectGroup::eachObject(std::function<void (DynamicObject *)> callback) const

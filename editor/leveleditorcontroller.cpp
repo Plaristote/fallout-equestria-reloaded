@@ -103,9 +103,18 @@ void LevelEditorController::copy(StorableObject* object)
   emit clipperChanged();
 }
 
+template<typename RESULT>
+static RESULT* pasteIn(ObjectGroup* target, const QJsonObject& clipper, RESULT* (ObjectFactory::*builder)(const QJsonObject&) const)
+{
+  RESULT* result = (target->factory()->*builder)(clipper);
+
+  result->setCurrentFloor(target->getCurrentFloor());
+  return result;
+}
+
 StorableObject* LevelEditorController::pasteIn(ObjectGroup* target)
 {
   if (clipper["type"].toString() == target->metaObject()->className())
-    return target->factory()->loadJsonGroup(clipper);
-  return target->factory()->loadFromJson(clipper);
+    return ::pasteIn<ObjectGroup>(target, clipper, &ObjectFactory::loadJsonGroup);
+  return ::pasteIn<DynamicObject>(target, clipper, &ObjectFactory::loadFromJson);
 }
