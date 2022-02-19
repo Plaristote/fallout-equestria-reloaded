@@ -42,6 +42,8 @@ public:
   unsigned int getFloor() const { return static_cast<unsigned int>(floor); }
   void setFloor(unsigned char value) { floor = value; emit floorChanged(this); }
   int getGranularity() const { return granularity; }
+  void setOwner(DynamicObject* value) { owner = value; }
+  DynamicObject* getOwner() const { return owner; }
 
   Q_INVOKABLE int    getPositionCount() const { return positions.size(); }
   Q_INVOKABLE QPoint getPositionAt(int i) const { return offset + positions.at(i); }
@@ -58,16 +60,17 @@ signals:
   void floorChanged(TileZone*);
 
 private:
-  QString       name;
-  QString       type;
-  QString       target, targetZone;
-  bool          isDefault = false;
-  bool          accessBlocked = false;
-  QRect         clippedRect;
-  QList<QPoint> positions;
-  QPoint        offset;
-  unsigned char floor = 0;
-  int           granularity = 0;
+  QString        name;
+  QString        type;
+  QString        target, targetZone;
+  bool           isDefault = false;
+  bool           accessBlocked = false;
+  QRect          clippedRect;
+  QList<QPoint>  positions;
+  QPoint         offset;
+  unsigned char  floor = 0;
+  int            granularity = 0;
+  DynamicObject* owner = nullptr;
 };
 
 #endif // TILEZONE_H

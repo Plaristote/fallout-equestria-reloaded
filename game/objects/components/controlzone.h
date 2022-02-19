@@ -43,6 +43,8 @@ private slots:
   void updateCover();
 
 private:
+  void initializeZone();
+
   TileZone* controlZone = nullptr;
   bool zoneBlocked = true;
 };

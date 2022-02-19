@@ -15,14 +15,21 @@ ControlZoneComponent::ControlZoneComponent(QObject *parent) : ParentType(parent)
   connect(this, &GridObjectComponent::coverChanged,        this, &ControlZoneComponent::updateCover);
 }
 
+void ControlZoneComponent::initializeZone()
+{
+  controlZone = new TileZone(this);
+  if (metaObject()->inherits(DynamicObject().metaObject()))
+    controlZone->setOwner(reinterpret_cast<DynamicObject*>(this));
+  onPositionChanged();
+  connect(this, &ControlZoneComponent::positionChanged, this, &ControlZoneComponent::onPositionChanged);
+  connect(this, &ControlZoneComponent::floorChanged,    this, &ControlZoneComponent::onPositionChanged);
+}
+
 TileZone* ControlZoneComponent::addControlZone()
 {
   if (controlZone == nullptr)
   {
-    controlZone = new TileZone(this);
-    onPositionChanged();
-    connect(this, &ControlZoneComponent::positionChanged, this, &ControlZoneComponent::onPositionChanged);
-    connect(this, &ControlZoneComponent::floorChanged,    this, &ControlZoneComponent::onPositionChanged);
+    initializeZone();
     emit controlZoneAdded(controlZone);
   }
   return controlZone;
@@ -83,11 +90,11 @@ void ControlZoneComponent::onPositionChanged()
 
 void ControlZoneComponent::toggleZoneBlocked(bool value)
 {
-   if (zoneBlocked != value)
-   {
-     zoneBlocked = value;
-     emit zoneBlockedChanged();
-   }
+  if (zoneBlocked != value)
+  {
+    zoneBlocked = value;
+    emit zoneBlockedChanged();
+  }
 }
 
 void ControlZoneComponent::updateZoneBlock()
@@ -118,12 +125,7 @@ void ControlZoneComponent::load(const QJsonObject& data)
   if (data["zone"].isArray())
   {
     if (!controlZone)
-    {
-      controlZone = new TileZone(this);
-      onPositionChanged();
-      connect(this, &ControlZoneComponent::positionChanged, this, &ControlZoneComponent::onPositionChanged);
-      connect(this, &ControlZoneComponent::floorChanged,    this, &ControlZoneComponent::onPositionChanged);
-    }
+      initializeZone();
     zoneBlocked = data["zoneBlocked"].toBool();
     for (const QJsonValue posValue : data["zone"].toArray())
     {

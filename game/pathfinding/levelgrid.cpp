@@ -181,7 +181,15 @@ DynamicObject* LevelGrid::getOccupant(int x, int y)
   auto* gridCase = getGridCase(x, y);
 
   if (gridCase)
-    return gridCase->occupant;
+  {
+    if (gridCase->occupant)
+      return gridCase->occupant;
+    for (auto* zone : qAsConst(gridCase->zones))
+    {
+      if (zone->getAccessBlocked() && zone->getOwner())
+        return zone->getOwner();
+    }
+  }
   return nullptr;
 }
 
