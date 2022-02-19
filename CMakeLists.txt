@@ -144,6 +144,8 @@ set(PROJECT_SOURCES
         game/characters/actions/animatedaction.cpp
         game/characters/actions/spellaction.h
         game/characters/actions/spellaction.cpp
+        game/characters/actions/animation.h
+        game/characters/actions/animation.cpp
         game/lootingcontroller.h
         game/lootingcontroller.cpp
         game/animationlibrary.h

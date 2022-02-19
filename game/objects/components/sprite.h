@@ -26,6 +26,7 @@ public:
   QString getSpriteName() const { return name; }
   Q_INVOKABLE virtual void setAnimation(const QString& animationName);
   Q_INVOKABLE QString getAnimation() const { return animation.name; }
+  Q_INVOKABLE virtual bool hasAnimation(const QString& animationName) const;
   const QImage& getImage() const;
   void moveToCoordinates(QPoint coordinates);
   Q_INVOKABLE void setRenderPosition(QPoint coordinates);

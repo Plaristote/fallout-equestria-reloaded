@@ -35,6 +35,11 @@ void Sprite::setAnimation(const QString &animationName)
   emit clippedRectChanged();
 }
 
+bool Sprite::hasAnimation(const QString& animationName) const
+{
+  return AnimationLibrary::get()->hasAnimation(name, animationName);
+}
+
 void Sprite::runAnimation()
 {
   auto width = animation.clippedRect.width();

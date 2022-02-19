@@ -31,7 +31,8 @@ public:
   virtual void save(QJsonObject&) const;
 
   QString       getAnimationBaseName() const;
-  virtual void  setAnimation(const QString &animationName) override;
+  virtual void  setAnimation(const QString& animationName) override;
+  virtual bool  hasAnimation(const QString& animationName) const override;
   QString       getOrientationName() const;
   Direction     getOrientation() const { return orientation; }
   void          setOrientation(const QString&);

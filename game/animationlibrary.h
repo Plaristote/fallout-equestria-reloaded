@@ -79,6 +79,7 @@ public:
   static AnimationLibrary* get() { return self; }
   void initialize();
   SpriteAnimation getAnimation(const QString& group, const QString& animation) const;
+  bool            hasAnimation(const QString& group, const QString& name) const;
   const QImage& getImage(const QString& group, const QString& animation) const;
   const QImage& getImage(const QString& source) const;
 

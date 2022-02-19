@@ -44,7 +44,9 @@ void Character::onActionQueueCompleted()
 
 void Character::afterDeathAnimation()
 {
-  if (getAnimation().startsWith("fall") && !isAlive())
+  QString animationName = getAnimation();
+
+  if ((animationName.startsWith("fall") || animationName.startsWith("death")) && !isAlive())
   {
     setAnimation("dead");
     Game::get()->getLevel()->addBloodStainAt(getPosition(), static_cast<unsigned char>(getCurrentFloor()));
@@ -59,7 +61,8 @@ void Character::takeDamage(int damage, Character* dealer)
   {
     auto hp = getStatistics()->getHitPoints() - damage;
 
-    setAnimation("damaged");
+    if (hasAnimation("damaged"))
+      setAnimation("damaged");
     getStatistics()->setHitPoints(hp);
     if (hp <= 0)
     {
@@ -265,6 +268,20 @@ bool Character::setFallAnimation()
   {
     setAnimation("fall");
     return true;
+  }
+  return false;
+}
+
+bool Character::setDeathAnimation()
+{
+  if (!getAnimation().startsWith("death"))
+  {
+    if (hasAnimation("death"))
+    {
+      setAnimation("death");
+      return true;
+    }
+    return setFallAnimation();
   }
   return false;
 }

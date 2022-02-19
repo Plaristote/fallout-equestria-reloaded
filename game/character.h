@@ -57,6 +57,7 @@ public:
   Q_INVOKABLE void  fallUnconscious();
   Q_INVOKABLE void  wakeUp();
   bool              setFallAnimation();
+  bool              setDeathAnimation();
 
 signals:
   void actionPointsChanged();

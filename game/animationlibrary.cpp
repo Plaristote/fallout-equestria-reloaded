@@ -219,6 +219,22 @@ SpriteAnimation AnimationLibrary::getAnimation(const QString &group, const QStri
   return object;
 }
 
+bool AnimationLibrary::hasAnimation(const QString& group, const QString& animation) const
+{
+  SpriteAnimation object;
+  auto groupData = data[group];
+  auto animationData = groupData[animation];
+  auto defaultSource = groupData["defaultSource"].toString();
+
+  if (!groupData["cloneOf"].isUndefined())
+  {
+    defaultSource = groupData["defaultSource"].toString();
+    groupData     = data[groupData["cloneOf"].toString()].toObject();
+    animationData = groupData[animation];
+  }
+  return animationData.isObject();
+}
+
 QString AnimationLibrary::getDefaultSource(const QString& group) const
 {
   auto groupData = data[group].toObject();

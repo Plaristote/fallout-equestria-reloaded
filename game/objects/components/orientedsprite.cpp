@@ -49,6 +49,17 @@ void OrientedSprite::setAnimation(const QString &animationName)
     Sprite::setAnimation(animationName);
 }
 
+bool OrientedSprite::hasAnimation(const QString &animationName) const
+{
+  if (orientation != NoDir)
+  {
+    QString completeAnimationName = animationName + '-' + orientationSuffix[orientation];
+
+    return Sprite::hasAnimation(completeAnimationName);
+  }
+  return Sprite::hasAnimation(animationName);
+}
+
 void OrientedSprite::setOrientation(const QString& name)
 {
   auto it = directionByName.find(name);

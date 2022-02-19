@@ -12,7 +12,7 @@ class ActionQueue : public QObject
   Q_OBJECT
 public:
   ActionQueue(QObject *parent = nullptr);
-  ~ActionQueue();
+  ~ActionQueue() override;
 
   void update();
   void pause();
@@ -61,6 +61,8 @@ public:
   Q_INVOKABLE void pushLookAt(const DynamicObject* target);
   Q_INVOKABLE void pushLookAt(int x, int y);
   Q_INVOKABLE void pushScript(QJSValue callback);
+  Q_INVOKABLE void pushAnimation(const QString& animationName, const QString& postAnimationName = "idle");
+  Q_INVOKABLE void pushAnimation(QJSValue animation);
   void             pushSliding(QPoint target);
   Q_INVOKABLE bool start();
 
