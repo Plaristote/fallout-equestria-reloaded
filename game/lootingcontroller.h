@@ -14,6 +14,7 @@ class LootingController : public QObject
   Q_PROPERTY(Character* character MEMBER character NOTIFY targetChanged)
   Q_PROPERTY(int capacity READ getCharacterCapacity NOTIFY weightsChanged)
   Q_PROPERTY(int usedCapacity READ getCharacterUsedCapacity NOTIFY weightsChanged)
+  Q_PROPERTY(QQmlListProperty<DynamicObject> availableTargets READ getAvailableTargets NOTIFY availableTargetsChanged)
 public:
   explicit LootingController(QObject *parent = nullptr);
 
@@ -29,14 +30,23 @@ public:
   int getCharacterUsedCapacity() { return character->getInventory()->getTotalWeight(); }
   int getCapacityLeft() { return getCharacterCapacity() - getCharacterUsedCapacity(); }
 
+  Q_INVOKABLE void nextTarget();
+  Q_INVOKABLE void previousTarget();
+  QQmlListProperty<DynamicObject> getAvailableTargets() { return QQmlListProperty<DynamicObject>(this, &availableTargets); }
+
 signals:
   void targetChanged();
+  void availableTargetsChanged();
   void weightsChanged();
   void finished();
 
 private:
+  void initializeAvailableTargets(StorageObject*);
+  void setTarget(StorageObject*);
+
   StorageObject* target;
   Character*     character;
+  QList<DynamicObject*> availableTargets;
 };
 
 #endif // LOOTINGCONTROLLER_H

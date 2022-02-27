@@ -107,6 +107,41 @@ Pane {
         anchors.fill: parent
         anchors.margins: 10
 
+        Pane {
+          background: UiStyle.TerminalPane {}
+          anchors.left: parent.left
+          anchors.right: parent.right
+
+          ColumnLayout {
+            anchors.left: parent.left
+            anchors.right: parent.right
+
+            RowLayout {
+              Layout.fillWidth: true
+              Layout.alignment: Qt.AlignCenter
+
+              TerminalButton {
+                visible: controller.availableTargets.length > 1
+                text: '<'
+                onClicked: controller.previousTarget()
+              }
+
+              TerminalLabel { text: controller.target.objectName }
+
+              TerminalButton {
+                visible: controller.availableTargets.length > 1
+                text: '>'
+                onClicked: controller.nextTarget()
+              }
+            }
+
+            ObjectSpritePreview {
+              dynamicObject: controller.target
+              Layout.alignment: Qt.AlignCenter
+            }
+          }
+        }
+
         Loader {
           anchors { left: parent.left; right: parent.right }
           sourceComponent: selectedObject ? itemPreviewComponent : null

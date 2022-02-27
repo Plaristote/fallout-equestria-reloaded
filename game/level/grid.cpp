@@ -324,6 +324,13 @@ QJSValue GridComponent::getDynamicObjectsAt(int x, int y, unsigned int floor_) c
   return result;
 }
 
+QVector<DynamicObject*> GridComponent::getDynamicObjectsAt(Point position) const
+{
+  return findDynamicObjects(
+    [position](DynamicObject& object) { return object.getPoint() == position; }
+  );
+}
+
 QPoint GridComponent::getRenderPositionForTile(int x, int y, unsigned char z)
 {
   auto* grid  = z != NULL_FLOOR ? getFloorGrid(z) : getGrid();
