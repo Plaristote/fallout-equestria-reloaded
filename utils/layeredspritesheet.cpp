@@ -22,7 +22,6 @@ void LayeredSpriteSheet::addColorLayer(QColor color, const QImage &mask)
     QImage   colorLayer(size(), QImage::Format_ARGB32);
     QPainter painter;
 
-    color.setAlpha(150);
     colorLayer.fill(Qt::transparent);
     painter.begin(&colorLayer);
     for (int x = 0 ; x < size().width() ; ++x)
@@ -32,7 +31,7 @@ void LayeredSpriteSheet::addColorLayer(QColor color, const QImage &mask)
          QColor baseColor   = mask.pixelColor(x, y);
          bool   blackish    = baseColor.red() == 0 && baseColor.green() == 0 && baseColor.blue() == 0;
 
-         if (!blackish && baseColor != Qt::transparent)
+         if (!blackish && baseColor.alpha() != QColor(Qt::transparent).alpha())
            colorLayer.setPixelColor(x, y, color);
       }
     }
