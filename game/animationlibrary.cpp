@@ -361,8 +361,8 @@ QString AnimationLibrary::getCharacterSpriteName(const CharacterSpriteDescriptor
 {
   QStringList parts;
 
-  parts << descriptor.base << descriptor.bodyColor.name().replace('#', "")
-        << descriptor.hair << descriptor.hairColor.name().replace('#', "");
+  parts << descriptor.base << descriptor.bodyColor.name().replace('#', "") + QString::number(descriptor.bodyColor.alpha(), 16)
+        << descriptor.hair << descriptor.hairColor.name().replace('#', "") + QString::number(descriptor.bodyColor.alpha(), 16);
   parts << "static"  << (descriptor.baseStaticColor.isEmpty() ? "blank" : descriptor.baseStaticColor);
   parts << "overlay" << (descriptor.overLayer.isEmpty()       ? "blank" : descriptor.overLayer);
   parts << "armor"   << (descriptor.armor.isEmpty()           ? "blank" : descriptor.armor);
