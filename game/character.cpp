@@ -66,7 +66,7 @@ void Character::takeDamage(int damage, Character* dealer)
     getStatistics()->setHitPoints(hp);
     if (hp <= 0)
     {
-      if (!setFallAnimation())
+      if (!setDeathAnimation())
         afterDeathAnimation();
       blocksPath = false;
       emit characterKill(this, dealer);
@@ -266,8 +266,11 @@ bool Character::setFallAnimation()
 {
   if (!getAnimation().startsWith("fall"))
   {
-    setAnimation("fall");
-    return true;
+    if (hasAnimation("fall"))
+    {
+      setAnimation("fall");
+      return true;
+    }
   }
   return false;
 }
