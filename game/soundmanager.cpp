@@ -23,7 +23,6 @@ static void loadSoundLibrary(QMap<QString, QUrl>& soundLibrary)
   }
 }
 
-
 SoundManager::SoundManager(QObject *parent) : QObject(parent)
 {
   loadSoundLibrary(soundLibrary);

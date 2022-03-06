@@ -8,7 +8,7 @@ class LevelEditorController : public LevelTask
 {
   Q_OBJECT
 
-  Q_PROPERTY(bool clipperFilled READ clipperFilled NOTIFY clipperChanged);
+  Q_PROPERTY(bool clipperFilled READ clipperFilled NOTIFY clipperChanged)
 public:
   LevelEditorController(QObject* parent = nullptr);
 
