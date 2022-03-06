@@ -45,6 +45,7 @@ public:
   void save(QJsonObject&) const;
 
 signals:
+  void spriteChanged();
   void spriteGroupChanged();
   void spriteSourceChanged();
   void spritePositionChanged();

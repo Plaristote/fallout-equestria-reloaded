@@ -5,6 +5,8 @@
 Sprite::Sprite(QObject *parent) : ParentType(parent)
 {
   movementSpeed = 100;
+  connect(this, &Sprite::spriteChanged, this, &Sprite::spriteSourceChanged);
+  connect(this, &Sprite::spriteChanged, this, &Sprite::clippedRectChanged);
 }
 
 bool Sprite::isAnimated() const
