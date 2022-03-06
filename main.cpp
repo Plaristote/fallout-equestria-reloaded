@@ -39,6 +39,8 @@
 #include "editor/leveleditorcontroller.h"
 #include "editor/gameobjecttemplates.h"
 
+#include <QResource>
+
 QJSEngine* qmlJsEngine = nullptr;
 
 void registerQmlTilemap() {
@@ -63,6 +65,10 @@ int main(int argc, char *argv[])
 #endif
 
   Dices::Initialize();
+
+#ifdef GAME_EDITOR
+  QResource::registerResource("editor.rcc");
+#endif
 
   AnimationLibrary animationLibrary;
   animationLibrary.initialize();
@@ -146,6 +152,11 @@ int main(int argc, char *argv[])
   engine.rootContext()->setContextProperty("scriptController", &scriptEditorController);
   engine.rootContext()->setContextProperty("gamepad", gamepad);
   engine.rootContext()->setContextProperty("mouseCursor", cursor);
+#ifdef GAME_EDITOR
+  engine.rootContext()->setContextProperty("developmentEdition", true);
+#else
+  engine.rootContext()->setContextProperty("developmentEdition", false);
+#endif
 
   QObject::connect(i18n, &I18n::currentLocaleChanged, &app, [&engine, i18n]()
   {

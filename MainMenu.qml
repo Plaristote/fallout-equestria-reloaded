@@ -3,8 +3,14 @@ import QtQuick.Controls 2.15
 import "qrc:/ui"
 
 Image {
+  property var menuEntries: [continueAction, newGameAction, loadGameAction, optionsAction, creditsAction, exitAction]
   source: assetPath + "backgrounds/default.png"
   fillMode: Image.PreserveAspectCrop
+
+  Component.onCompleted: {
+    if (developmentEdition)
+      menuEntries = menuEntries.slice(0, 4).concat([gameEditorAction, exitAction]);
+  }
 
   Action {
     id: continueAction
@@ -57,7 +63,7 @@ Image {
     spacing: 10
 
     Repeater {
-      model: [continueAction, newGameAction, loadGameAction, optionsAction, creditsAction, gameEditorAction, exitAction]
+      model: menuEntries
       delegate: MenuButton { action: modelData }
     }
   }

@@ -22,6 +22,9 @@ void PreRenderComponent::load(const QJsonObject& data)
     layers << grid->getTilemap()->getRoofs()
            << grid->getTilemap()->getLights();
   }
+#ifdef GAME_EDITOR
+  clearCache();
+#endif
   if (!dir.exists(getPreRenderPath()))
     preRenderAllTilemaps();
   for (TileLayer* layer : layers)
@@ -31,6 +34,13 @@ void PreRenderComponent::load(const QJsonObject& data)
 QString PreRenderComponent::getPreRenderPath() const
 {
   return QDir::currentPath() + "/.prerender/" + name + '/';
+}
+
+bool PreRenderComponent::clearCache() const
+{
+  QDir directory(getPreRenderPath());
+
+  return directory.removeRecursively();
 }
 
 void PreRenderComponent::preRenderAllTilemaps()

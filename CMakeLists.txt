@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.14)
 
 project(falloutequestria LANGUAGES CXX)
 
+option(GAME_EDITOR "development edition" ON)
+
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 set(CMAKE_AUTOUIC ON)
@@ -269,14 +271,6 @@ set(PROJECT_SOURCES
         game/pathfinding/pathzone.cpp
         game/pathfinding/candidatesolution.h
         game/pathfinding/candidatesolution.cpp
-        editor/scripteditorcontroller.h
-        editor/scripteditorcontroller.cpp
-        editor/characterdialogeditor.h
-        editor/characterdialogeditor.cpp
-        editor/leveleditorcontroller.h
-        editor/leveleditorcontroller.cpp
-        editor/gameobjecttemplates.h
-        editor/gameobjecttemplates.cpp
         gamemanager.h
         gamemanager.cpp
         musicmanager.h
@@ -287,6 +281,21 @@ set(PROJECT_SOURCES
         game.cpp
         qml.qrc
 )
+
+if (GAME_EDITOR)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DGAME_EDITOR")
+  set(PROJECT_SOURCES ${PROJECT_SOURCES}
+        editor/scripteditorcontroller.h
+        editor/scripteditorcontroller.cpp
+        editor/characterdialogeditor.h
+        editor/characterdialogeditor.cpp
+        editor/leveleditorcontroller.h
+        editor/leveleditorcontroller.cpp
+        editor/gameobjecttemplates.h
+        editor/gameobjecttemplates.cpp
+        editor.qrc
+  )
+endif()
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
   qt_add_executable(falloutequestria ${PROJECT_SOURCES})

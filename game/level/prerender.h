@@ -14,7 +14,11 @@ public:
 
   void load(const QJsonObject&);
 
+protected:
+  virtual bool usePrerenderCache() const { return true; }
+
 private:
+  bool    clearCache() const;
   void    preRenderAllTilemaps();
   void    preRenderTilemap(TileMap*, const QString& prefix);
   void    preRenderGround(TileMap*, const QString& prefix);
