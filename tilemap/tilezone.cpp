@@ -3,7 +3,7 @@
 #include <QJsonArray>
 #include <QDebug>
 
-TileZone::TileZone(QObject *parent) : QObject(parent)
+TileZone::TileZone(QObject *parent) : TileMask(parent)
 {
   offset = QPoint(0, 0);
   clippedRect.setX(72 * 2); clippedRect.setY(0);

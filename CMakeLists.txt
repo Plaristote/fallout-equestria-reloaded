@@ -55,6 +55,8 @@ set(PROJECT_SOURCES
         tilemap/floorlayer.cpp
         tilemap/tilemap.h
         tilemap/tilemap.cpp
+        tilemap/tilemask.h
+        tilemap/tilemask.cpp
         tilemap/properties.cpp
         tilemap/painter.cpp
         cmap/statmodel.h

@@ -312,14 +312,20 @@ TileLayer* TileMap::getLightLayer(const QString &name)
   return nullptr;
 }
 
-TileZone* TileMap::getZone(const QString& name)
+static TileZone* getZone(const QList<TileZone*>& list, const QString& name)
 {
-  for (TileZone* zone : qAsConst(zones))
+  for (TileZone* zone : list)
   {
     if (zone->getName() == name)
       return zone;
   }
   return nullptr;
+
+}
+
+TileZone* TileMap::getZone(const QString& name)
+{
+  return ::getZone(zones, name);
 }
 
 TileMap* TileMap::getFloor(const QString& name)
@@ -338,6 +344,20 @@ QPoint TileMap::getPointFor(int x, int y) const
     x * tileSize.width()  / 2 - y * tileSize.width()  / 2,
     y * tileSize.height() / 2 + x * tileSize.height() / 2
   );
+}
+
+TileMask* TileMap::getMaskLayerFor(TileLayer* layer) const
+{
+  if (!layer->getZoneName().isEmpty())
+  {
+    TileMask* mask = ::getZone(pathfindindingZones, layer->getZoneName());
+
+    if (!mask)
+      mask = ::getZone(zones, layer->getZoneName());
+    if (mask)
+      return mask;
+  }
+  return layer;
 }
 
 void TileMap::renderToFile(const QString &filename)

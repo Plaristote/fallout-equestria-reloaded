@@ -52,6 +52,7 @@ public:
   Q_INVOKABLE TileLayer* getLightLayer(const QString& name);
   Q_INVOKABLE TileZone*  getZone(const QString& name);
   Q_INVOKABLE TileMap*   getFloor(const QString& name);
+  Q_INVOKABLE TileMask*  getMaskLayerFor(TileLayer*) const;
 
   QQmlListProperty<TileZone> getZonesQml() { return QML_QLIST_CONSTRUCTOR(TileZone, zones); }
   QQmlListProperty<TileLayer> getRoofsQml() { return QML_QLIST_CONSTRUCTOR(TileLayer, roofs); }

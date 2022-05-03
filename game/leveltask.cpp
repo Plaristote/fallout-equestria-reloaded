@@ -125,10 +125,9 @@ void LevelTask::updateRoofVisibility()
 
   for (TileLayer* roof : tilemap->getRoofs())
   {
-    auto           point    = getPlayer()->getPoint();
-    const QString& zoneName = roof->getZoneName();
-    TileZone*      zone     = !zoneName.isEmpty() ? tilemap->getZone(zoneName) : nullptr;
-    bool           isInside = zone ? zone->isInside(point.x, point.y, point.z) : roof->isInside(point.x, point.y);
+    auto      point    = getPlayer()->getPoint();
+    TileMask* mask     = tilemap->getMaskLayerFor(roof);
+    bool      isInside = mask->isInside(point.x, point.y, point.z);
 
     roof->setVisible(!isInside);
   }

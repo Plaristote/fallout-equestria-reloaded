@@ -1,7 +1,7 @@
 #ifndef  TILEZONE_H
 # define TILEZONE_H
 
-# include <QObject>
+# include "tilemask.h"
 # include <QSize>
 # include <QPoint>
 # include <QRect>
@@ -10,7 +10,7 @@
 class QJsonObject;
 class DynamicObject;
 
-class TileZone : public QObject
+class TileZone : public TileMask
 {
   Q_OBJECT
 
@@ -33,7 +33,8 @@ public:
 
   inline bool getAccessBlocked() const { return accessBlocked; }
   inline void setAccessBlocked(bool value) { accessBlocked = value; }
-  Q_INVOKABLE bool isInside(int x, int y, unsigned char z) const;
+  Q_INVOKABLE bool isInside(int x, int y, unsigned char z) const override;
+  bool isInside(int x, int y) const override { return isInside(x, y, floor); }
   const QList<QPoint>& getPositions() const { return positions; }
   QVector<QPoint> getAbsolutePositions() const;
   void setOffset(QPoint value) { offset = value; emit tilesChanged(); }

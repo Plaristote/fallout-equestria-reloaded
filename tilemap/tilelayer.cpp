@@ -7,7 +7,7 @@
 #include <QJsonArray>
 #include <QDebug>
 
-TileLayer::TileLayer(QObject *parent) : QObject(parent)
+TileLayer::TileLayer(QObject *parent) : TileMask(parent)
 {
 }
 

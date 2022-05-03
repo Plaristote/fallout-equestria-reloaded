@@ -65,11 +65,13 @@ void GridComponent::setCurrentFloor(unsigned int value)
 
 void GridComponent::onRoofVisibilityChanged(TileLayer* layer)
 {
+  TileMask* mask = getTileMap()->getMaskLayerFor(layer);
+
   for (DynamicObject* object : qAsConst(objects))
   {
     QPoint position = object->getPosition();
 
-    if (layer->isInside(position.x(), position.y()))
+    if (mask->isInside(position.x(), position.y()))
       object->setVisible(!layer->isVisible());
   }
 }
@@ -297,11 +299,13 @@ TileLayer* GridComponent::getRoofFor(const DynamicObject* object) const
 
   if (grid)
   {
-    for (TileLayer* layer : grid->getTilemap()->getRoofs())
-    {
-      Tile* tile = layer->getTile(position.x(), position.y());
+    TileMap* tilemap = grid->getTilemap();
 
-      if (tile)
+    for (TileLayer* layer : tilemap->getRoofs())
+    {
+      TileMask* mask = tilemap->getMaskLayerFor(layer);
+
+      if (mask->isInside(position.x(), position.y()))
         return layer;
     }
   }

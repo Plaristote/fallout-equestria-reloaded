@@ -1,7 +1,7 @@
 #ifndef  TILELAYER_H
 # define TILELAYER_H
 
-# include <QObject>
+# include "tilemask.h"
 # include <QString>
 # include <QSize>
 # include <QPoint>
@@ -15,7 +15,7 @@ class QJsonArray;
 class Tileset;
 class Limits;
 
-class TileLayer : public QObject
+class TileLayer : public TileMask
 {
   Q_OBJECT
 
@@ -37,11 +37,12 @@ public:
   bool isVisible() const { return visible; }
   void renderToFile(const QString& file);
   virtual void renderToImage(QImage& image, QPoint offset);
+  TileLayer* getMaskLayer() const;
 
   Q_INVOKABLE Tile* getTile(int x, int y) const;
   Q_INVOKABLE QSize getRenderedSize();
   Q_INVOKABLE QRect getRenderedRect();
-  Q_INVOKABLE bool isInside(int x, int y) const;
+  Q_INVOKABLE bool isInside(int x, int y) const override;
 
   void initialize(QSize);
   void fill(Tileset* tileset, int tileId);
