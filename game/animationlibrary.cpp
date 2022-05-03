@@ -14,6 +14,7 @@ QmlSpriteAnimation::QmlSpriteAnimation(QObject* parent) : QObject(parent)
   connect(this, &QmlSpriteAnimation::sourceChanged, this, &QmlSpriteAnimation::animationChanged);
   connect(this, &QmlSpriteAnimation::nameChanged, this, &QmlSpriteAnimation::animationChanged);
   connect(this, &QmlSpriteAnimation::repeatChanged, this, &QmlSpriteAnimation::animationChanged);
+  connect(this, &QmlSpriteAnimation::reverseChanged, this, &QmlSpriteAnimation::animationChanged);
   connect(this, &QmlSpriteAnimation::clippedRectChanged, this, &QmlSpriteAnimation::animationChanged);
 }
 
@@ -214,6 +215,8 @@ SpriteAnimation AnimationLibrary::getAnimation(const QString &group, const QStri
   }
   else if (groupData["idle"].isObject())
     return getAnimation(group, "idle");
+  else if (groupData["idle-down"].isObject())
+    return getAnimation(group, "idle-down");
   else
     return makeDefaultSpriteAnimation(animation, defaultSource);
   return object;
@@ -270,7 +273,8 @@ void AnimationLibrary::setAnimationWithDefaultSource(const QString &group, const
   {
     auto groupData = data[group].toObject();
 
-    if (!groupData["cloneOf"].isString()) {
+    if (!groupData["cloneOf"].isString())
+    {
       QJsonObject animationData;
       QString     source = animation->getRelativeSource();
 
@@ -278,6 +282,10 @@ void AnimationLibrary::setAnimationWithDefaultSource(const QString &group, const
         animationData.remove("source");
       else
         animationData["source"] = source;
+      if (animation->reverse)
+        animationData["reverse"] = true;
+      else
+        animationData.remove("reserve");
       animationData["repeat"] = animation->repeat;
       animationData["frameCount"] = animation->frameCount;
       animationData["frameInterval"] = animation->frameInterval;
