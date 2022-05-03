@@ -5,24 +5,20 @@
 LightSourceComponent::LightSourceComponent(QObject *parent) : ParentType(parent)
 {
   connect(this, &LightSourceComponent::lightRadiusChanged, this, &LightSourceComponent::reloadLightzone);
-  connect(this, &LightSourceComponent::lightTypeChanged,   this, &LightSourceComponent::refreshLightzone);
   connect(this, &LightSourceComponent::positionChanged,    this, &LightSourceComponent::refreshLightzone);
 }
 
 void LightSourceComponent::load(const QJsonObject& data)
 {
   lightRadius = data["lightRadius"].toInt(0);
-  lightType = data["lightType"].toInt(0);
   ParentType::load(data);
   emit lightRadiusChanged();
-  emit lightTypeChanged();
 }
 
 void LightSourceComponent::save(QJsonObject& data) const
 {
   if (lightRadius > 0) {
     data["lightRadius"] = lightRadius;
-    data["lightType"] = lightType;
   }
   ParentType::save(data);
 }

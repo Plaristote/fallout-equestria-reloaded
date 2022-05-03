@@ -11,7 +11,6 @@ class LightSourceComponent : public DetectableComponent
   typedef DetectableComponent ParentType;
 
   Q_PROPERTY(int lightRadius MEMBER lightRadius NOTIFY lightRadiusChanged)
-  Q_PROPERTY(int lightType MEMBER lightType NOTIFY lightTypeChanged)
 public:
   explicit LightSourceComponent(QObject *parent = nullptr);
 
@@ -22,7 +21,6 @@ public:
 
 signals:
   void lightRadiusChanged();
-  void lightTypeChanged();
   void lightZoneRemoved(TileLayer*);
   void lightZoneAdded(TileLayer*);
 
@@ -34,7 +32,6 @@ private:
   void drawLightzone();
 
   int lightRadius = 0;
-  int lightType = 0;
   TileLayer* lightZone = nullptr;
 };
 
