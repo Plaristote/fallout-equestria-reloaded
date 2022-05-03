@@ -60,7 +60,9 @@ QStringList DynamicObject::getAvailableInteractions()
 {
   if (script && script->hasMethod("getAvailableInteractions"))
     return script->call("getAvailableInteractions").toVariant().toStringList();
-  return QStringList() << "look";
+  if (interactive)
+    return QStringList() << "look";
+  return QStringList();
 }
 
 bool DynamicObject::triggerInteraction(Character* character, const QString &interactionType)
@@ -165,6 +167,7 @@ void DynamicObject::load(const QJsonObject& data)
   objectName = data["objectName"].toString();
   nextPosition.setX(data["nextX"].toInt()); nextPosition.setY(data["nextY"].toInt());
   blocksPath = data["blocksPath"].toBool(true);
+  interactive = data["interactive"].toBool(true);
   emit blocksPathChanged();
   taskManager->load(data);
   ParentType::load(data);
@@ -177,6 +180,8 @@ void DynamicObject::save(QJsonObject& data) const
   data["nextX"] = nextPosition.x(); data["nextY"] = nextPosition.y();
   if (!blocksPath)
     data["blocksPath"] = blocksPath;
+  if (!interactive)
+    data["interactive"] = false;
   ParentType::save(data);
   taskManager->save(data);
 }

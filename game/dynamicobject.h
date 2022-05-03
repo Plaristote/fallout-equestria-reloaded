@@ -25,6 +25,7 @@ class DynamicObject : public LightSourceComponent
   Q_PROPERTY(bool blocksPath MEMBER blocksPath NOTIFY blocksPathChanged)
   Q_PROPERTY(bool isVisible READ isVisible NOTIFY visibilityChanged)
   Q_PROPERTY(bool destructible  READ isDestructible)
+  Q_PROPERTY(bool interactive MEMBER interactive NOTIFY interactiveChanged)
   Q_PROPERTY(QPoint spriteOffset READ getSpriteOffset WRITE setSpriteOffset NOTIFY spritePositionChanged)
   Q_PROPERTY(ObjectGroup* parent READ getGroup NOTIFY parentChanged)
 
@@ -54,7 +55,7 @@ public:
 
   Q_INVOKABLE QString getObjectType() const { return metaObject()->className(); }
   Q_INVOKABLE virtual int getZIndex() const { return 1; }
-  Q_INVOKABLE virtual bool hasInteractionOverlay() const { return true; }
+  Q_INVOKABLE virtual bool hasInteractionOverlay() const { return interactive; }
   Q_INVOKABLE QString getHint() const;
   virtual int getInteractionDistance() const { return 1; }
   virtual QStringList getAvailableInteractions();
@@ -75,6 +76,7 @@ signals:
   void parentChanged();
   void pathChanged();
   void coverChanged();
+  void interactiveChanged();
 
 protected slots:
   void onBlocksPathChanged();
@@ -89,6 +91,7 @@ protected:
   QString objectName;
   bool visible = true;
   QPoint nextPosition;
+  bool interactive = true;
 };
 
 #endif // DYNAMICOBJECT_H

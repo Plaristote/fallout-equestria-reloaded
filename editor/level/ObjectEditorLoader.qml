@@ -109,6 +109,7 @@ Loader {
       gameController: root.gameController
       withPathBlocking: true
       withCover: true
+      withInteractive: true
     }
   }
 }
