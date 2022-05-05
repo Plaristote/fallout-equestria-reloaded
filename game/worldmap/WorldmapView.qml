@@ -11,8 +11,8 @@ CustomFlickable {
   signal mapClicked();
 
   clip: true
-  contentHeight: mapImage.height
-  contentWidth:  mapImage.width
+  contentHeight: mapImage.height + 30
+  contentWidth:  mapImage.width + 30
 
   ScrollBar.vertical:   UiStyle.HudScrollbar { orientation: Qt.Vertical }
   ScrollBar.horizontal: UiStyle.HudScrollbar { orientation: Qt.Horizontal }
@@ -38,8 +38,8 @@ CustomFlickable {
             delegate: Rectangle {
               id: caseRectangle
               property int indexX: index
-              height: controller.caseSize.height - 2
-              width:  controller.caseSize.width - 2
+              height: controller.caseSize.height
+              width:  controller.caseSize.width
               border.width: 1
               border.color: "green"
               color: controller.isVisible(indexX, indexY) ? "transparent" : "black"
