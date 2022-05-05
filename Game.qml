@@ -100,12 +100,6 @@ Item {
         application.popView();
     }
 
-    function onLevelSwapped() {
-      console.log("Game.qml onLevelSwapped has been called");
-      deferredLevelLoading.running = true;
-      application.popView();
-    }
-
     function onGameOver() {
       console.log("Game.qml onGameOver has been called");
       deferredGameOverScreen.running = true;

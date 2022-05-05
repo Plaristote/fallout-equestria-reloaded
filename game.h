@@ -82,7 +82,6 @@ signals:
   void saveLockChanged();
   void levelDestroy();
   void levelChanged();
-  void levelSwapped();
   void consoleUpdated();
   void gameOver();
   void transitionRequired(const QString& video, int elapsingTime = 0);
