@@ -6,22 +6,19 @@ import "game/slideshows/"
 
 Item {
   id: root
-  property var gameController
   property string currentLevelName
   property bool hasActiveView: application.currentView !== this
 
   function openLevelView() {
     application.pushView("game/LevelLoaderView.qml", {
-      gameController: gameController,
-      levelController: gameController.level
+      gameController: gameManager.currentGame,
+      levelController: gameManager.currentGame.level
     });
   }
 
-  // Level control
-  Timer {
-    id: deferredLevelLoading
-    interval: 500
-    onTriggered: openLevelView();
+  function openWorldmapView() {
+    gameManager.currentGame.worldmap.paused = false;
+    application.pushView("game/worldmap/Worldmap.qml", { controller: gameManager.currentGame.worldmap })
   }
 
   Timer {
@@ -40,21 +37,6 @@ Item {
   }
 
   Timer {
-    id: deferredWorldmapDisplay
-    interval: 500
-    onTriggered: {
-      gameManager.currentGame.worldmap.paused = false;
-      application.pushView("game/worldmap/Worldmap.qml", { controller: root.gameController.worldmap })
-    }
-  }
-
-  Timer {
-    id: deferredCharacterCreate
-    interval: 500
-    onTriggered: application.pushView("NewGame.qml", {gameController: root.gameController})
-  }
-
-  Timer {
     id: deferredGameOverScreen
     interval: 1000
     onTriggered: {
@@ -66,20 +48,15 @@ Item {
   Connections {
     target: gameManager
 
-    function onCurrentGameChanged() {
-      console.log("(!) Current game changed");
-      root.gameController = gameManager.currentGame;
-    }
-
     function onNewGameStarted() {
-      deferredCharacterCreate.running = true;
+      application.pushView("NewGame.qml", {gameController: gameManager.currentGame})
     }
 
     function onGameLoaded() {
       if (gameManager.currentGame.level)
-        deferredLevelLoading.running = true;
+        openLevelView();
       else
-        deferredWorldmapDisplay.running = true;
+        openWorldmapView();
     }
 
     function onGameOver() {
@@ -90,14 +67,16 @@ Item {
   Connections {
     target: gameManager.currentGame
 
-    function onLevelChanged() {
-      console.log("Game.qml onLevelChanged has been called", gameController.level);
-      if (gameController.level)
-        deferredLevelLoading.running = true;
-      else
-        deferredWorldmapDisplay.running = true;
-      if (root.hasActiveView)
+    function onRequestLoadingScreen() {
+      while (root.StackView.status === StackView.Inactive)
         application.popView();
+    }
+
+    function onLevelChanged() {
+      if (gameManager.currentGame.level)
+        openLevelView();
+      else
+        openWorldmapView();
     }
 
     function onGameOver() {

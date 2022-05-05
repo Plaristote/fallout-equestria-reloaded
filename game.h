@@ -80,6 +80,7 @@ public:
 signals:
   void gameEditorEnabled();
   void saveLockChanged();
+  void requestLoadingScreen();
   void levelDestroy();
   void levelChanged();
   void consoleUpdated();

@@ -182,31 +182,40 @@ LevelTask* Game::newLevelTask()
 
 void Game::loadLevel(const QString &name, const QString& targetZone)
 {
-  auto scriptObject = scriptEngine.globalObject();
+  auto* timer = new QTimer(this);
 
-  setProperty("saveLock", false);
-  MusicManager::get()->play(name);
-  dataEngine->setCurrentLevel(name);
-  currentLevel = newLevelTask();
-  scriptObject.setProperty("level", scriptEngine.newQObject(currentLevel));
-  connect(currentLevel, &LevelTask::displayConsoleMessage, this, &Game::appendToConsole);
-  connect(currentLevel, &LevelTask::exitZoneEntered, this, &Game::changeZone, Qt::QueuedConnection);
-  try
+  emit requestLoadingScreen();
+  timer->setInterval(500);
+  timer->start();
+  connect(timer, &QTimer::timeout, timer, &QObject::deleteLater);
+  connect(timer, &QTimer::timeout, this, [this, name, targetZone]()
   {
-    currentLevel->load(name, dataEngine);
-    currentLevel->setPaused(false);
-    if (targetZone == nullTargetZone)
-      playerParty->loadIntoLevel(currentLevel);
-    else if (!isGameEditor)
-      currentLevel->insertPartyIntoZone(playerParty, targetZone);
-  }
-  catch (const std::runtime_error& error)
-  {
-    delete currentLevel;
-    currentLevel = nullptr;
-    emit loadError(QString(error.what()));
-  }
-  emit levelChanged();
+    auto scriptObject = scriptEngine.globalObject();
+
+    setProperty("saveLock", false);
+    MusicManager::get()->play(name);
+    dataEngine->setCurrentLevel(name);
+    currentLevel = newLevelTask();
+    scriptObject.setProperty("level", scriptEngine.newQObject(currentLevel));
+    connect(currentLevel, &LevelTask::displayConsoleMessage, this, &Game::appendToConsole);
+    connect(currentLevel, &LevelTask::exitZoneEntered, this, &Game::changeZone, Qt::QueuedConnection);
+    try
+    {
+      currentLevel->load(name, dataEngine);
+      currentLevel->setPaused(false);
+      if (targetZone == nullTargetZone)
+        playerParty->loadIntoLevel(currentLevel);
+      else if (!isGameEditor)
+        currentLevel->insertPartyIntoZone(playerParty, targetZone);
+    }
+    catch (const std::runtime_error& error)
+    {
+      delete currentLevel;
+      currentLevel = nullptr;
+      emit loadError(QString(error.what()));
+    }
+    emit levelChanged();
+  });
 }
 
 void Game::switchToLevel(const QString name, const QString targetZone)
@@ -233,21 +242,30 @@ void Game::exitLevel(bool silent)
 {
   if (currentLevel)
   {
-    auto scriptObject = scriptEngine.globalObject();
+    auto* timer = new QTimer(this);
 
-    MusicManager::get()->play("worldmap");
-    disconnect(currentLevel, &LevelTask::displayConsoleMessage, this, &Game::appendToConsole);
-    disconnect(currentLevel, &LevelTask::exitZoneEntered, this, &Game::changeZone);
-    playerParty->extractFromLevel(currentLevel);
-    currentLevel->onExit();
-    currentLevel->save(dataEngine);
-    destroyLevelTask();
-    scriptObject.deleteProperty("level");
-    dataEngine->exitLevel();
-    MouseCursor::get()->updatePointerType();
-    setProperty("saveLock", false);
-    if (!silent)
-      emit levelChanged();
+    emit requestLoadingScreen();
+    timer->setInterval(500);
+    timer->start();
+    connect(timer, &QTimer::timeout, timer, &QObject::deleteLater);
+    connect(timer, &QTimer::timeout, this, [this, silent]()
+    {
+      auto scriptObject = scriptEngine.globalObject();
+
+      MusicManager::get()->play("worldmap");
+      disconnect(currentLevel, &LevelTask::displayConsoleMessage, this, &Game::appendToConsole);
+      disconnect(currentLevel, &LevelTask::exitZoneEntered, this, &Game::changeZone);
+      playerParty->extractFromLevel(currentLevel);
+      currentLevel->onExit();
+      currentLevel->save(dataEngine);
+      destroyLevelTask();
+      scriptObject.deleteProperty("level");
+      dataEngine->exitLevel();
+      MouseCursor::get()->updatePointerType();
+      setProperty("saveLock", false);
+      if (!silent)
+        emit levelChanged();
+    });
   }
   else
     qDebug() << "Game::exitLevel called, but level is null";
