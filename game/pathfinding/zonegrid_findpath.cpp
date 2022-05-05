@@ -110,16 +110,15 @@ static bool findZonePathToZone(
 
 bool ZoneGrid::findPath(Point from, const QVector<Point> &to, QList<Point> &path, CharacterMovement *character, bool quickMode)
 {
-  LevelGrid::CaseContent*            fromCase   = getGridCase(from);
   LevelGrid::CaseContent*            targetCase = to.size() > 0 ? getGridCase(to.first()) : nullptr;
+  LevelGrid::CaseContent*            fromCase   = getGridCase(from);
   PathZone*                          fromZone   = getPathZone(from);
+  if (!targetCase || !fromCase || !fromZone) return false;
   CandidateSolutions                 candidates(*this, to);
   CandidateSolutions::const_iterator candidate;
   CaseSorter                         heuristic = std::bind(&sortCasesByProximity, *targetCase, std::placeholders::_1, std::placeholders::_2);
   CaseLocker                         caseLock(fromCase);
 
-  if (!fromZone)
-    return false;
   qDebug() << character << "findPath" << candidates.length();
   while ((candidate = candidates.nextCandidate()) != candidates.end())
   {
