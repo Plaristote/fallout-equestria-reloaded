@@ -49,7 +49,7 @@ bool MovementAction::canMakeNextMovement() const
 {
   if (character->getCurrentPath().length() > 0)
   {
-    auto*  level        = Game::get()->getLevel();
+    auto*  level = Game::get()->getLevel();
 
     if (level->isInCombat(character))
     {

@@ -9,28 +9,51 @@ bool ReachDoorAction::trigger()
       state = Done;
     else
     {
-      auto& grid = Game::get()->getLevel()->getPathfinder();
-      auto candidates = doorway->getInteractionPositions();
+      QList<Point> path = getPath();
 
-      state = Interrupted;
-      if (grid.findPath(character->getPoint(), candidates, character->rcurrentPath(), character, true))
+      character->rcurrentPath() = path;
+      if (path.size())
         state = canMakeNextMovement() ? InProgress : Interrupted;
+      else
+        state = Interrupted;
     }
     return state == Done || state == InProgress;
   }
   return ReachAction::trigger();
 }
 
+QList<Point> ReachDoorAction::getPath() const
+{
+  auto& grid = Game::get()->getLevel()->getPathfinder();
+  QList<Point> shortestPath;
+
+  for (Point candidate : candidates)
+  {
+    QList<Point> path;
+
+    grid.findPath(character->getPoint(), candidate, path, character);
+    if (path.size() > 0 && (shortestPath.size() == 0 || path.size() < shortestPath.size()))
+      shortestPath = path;
+  }
+  return shortestPath;
+}
+
 int ReachDoorAction::getApCost() const
 {
   if (range == 0.f)
-    return getApCostForCandidates(doorway->getInteractionPositions(), true);
+  {
+    auto path = getPath();
+
+    if (path.size() > 0)
+      return pathApCost(path);
+    return -1;
+  }
   return ReachAction::getApCost();
 }
 
 bool ReachDoorAction::alreadyReached() const
 {
   if (range == 0.f)
-    return doorway->getInteractionPositions().contains(character->getPoint());
+    return candidates.contains(character->getPoint());
   return ReachAction::alreadyReached();
 }

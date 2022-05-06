@@ -11,10 +11,12 @@ class ReachDoorAction : public ReachAction
 public:
   ReachDoorAction(Character* character, Doorway* object, float range) : ReachAction(character, object, range), doorway(object)
   {
+    candidates = doorway->getInteractionPositions();
   }
 
   ReachDoorAction(Character* character, Doorway* object, float range, QJSValue callback) : ReachAction(character, object, range, callback), doorway(object)
   {
+    candidates = doorway->getInteractionPositions();
   }
 
   bool trigger() override;
@@ -22,8 +24,10 @@ public:
 
 private:
   bool alreadyReached() const override;
+  QList<Point> getPath() const;
 
   Doorway* doorway;
+  QVector<Point> candidates;
 };
 
 #endif // REACHDOORACTION_H
