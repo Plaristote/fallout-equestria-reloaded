@@ -284,6 +284,10 @@ set(PROJECT_SOURCES
         qml.qrc
 )
 
+set(FOT_SPRITE_IMPORT_SOURCES
+  spriteImport.cpp
+)
+
 if (GAME_EDITOR)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DGAME_EDITOR")
   set(PROJECT_SOURCES ${PROJECT_SOURCES}
@@ -309,6 +313,7 @@ else()
   else()
     add_executable(falloutequestria ${PROJECT_SOURCES})
   endif()
+  add_executable(fotspriteimport ${FOT_SPRITE_IMPORT_SOURCES})
 endif()
 
 target_compile_definitions(falloutequestria
@@ -319,4 +324,9 @@ target_link_libraries(falloutequestria
           Qt${QT_VERSION_MAJOR}::Gui
           Qt${QT_VERSION_MAJOR}::Multimedia
           Qt${QT_VERSION_MAJOR}::Gamepad
+)
+
+target_link_libraries(fotspriteimport
+  PRIVATE Qt${QT_VERSION_MAJOR}::Core
+          Qt${QT_VERSION_MAJOR}::Multimedia
 )
