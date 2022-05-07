@@ -33,7 +33,7 @@ void SaveComponent::load(const QString& levelName, DataEngine* dataEngine)
   if (!lastUpdate.isUndefined() && !lastUpdate.isNull())
     passElapsedTime(lastUpdate.toInt());
   if (!initialized)
-    ScriptableComponent::initializeIfNeeded();
+    scriptCall("initialize");
   loadTutorial();
 }
 
