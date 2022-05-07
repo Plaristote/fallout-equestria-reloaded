@@ -150,13 +150,10 @@ bool Doorway::canGoThrough(Character* character) const
     return !locked;
   if (!opened && !destroyed)
   {
-    if (script && script->hasMethod("canGoThrough"))
-    {
-      QJSValue result = script->call("canGoThrough", QJSValueList() << character->asJSValue());
+    QJSValue result = scriptCall("canGoThrough", QJSValueList() << character->asJSValue());
 
-      if (result.isBool())
-        return result.toBool();
-    }
+    if (result.isBool())
+      return result.toBool();
     return !locked || character->getInventory()->count(keyName) > 0;
   }
   return true;
@@ -178,7 +175,9 @@ bool Doorway::triggerInteraction(Character *character, const QString &interactio
 
 bool Doorway::onUse(Character* character)
 {
-  if (script && script->hasMethod("onUse") && script->call("onUse", QJSValueList() << character->asJSValue()).toBool())
+  QJSValue result = scriptCall("onUse", QJSValueList() << character->asJSValue());
+
+  if (result.toBool())
     return true;
   return tryToOpen(*character);
 }

@@ -73,14 +73,12 @@ void ControlZoneComponent::stopListeningControlZone(TileZone* zone)
 
 void ControlZoneComponent::onZoneEntered(DynamicObject* object, TileZone* zone)
 {
-  if (script && script->hasMethod("onZoneEntered"))
-    script->call("onZoneEntered", QJSValueList() << object->asJSValue() << Game::get()->getScriptEngine().newQObject(zone));
+  scriptCall("onZoneEntered", QJSValueList() << object->asJSValue() << Game::get()->getScriptEngine().newQObject(zone));
 }
 
 void ControlZoneComponent::onZoneExited(DynamicObject* object, TileZone* zone)
 {
-  if (script && script->hasMethod("onZoneExited"))
-    script->call("onZoneExited", QJSValueList() << object->asJSValue() << Game::get()->getScriptEngine().newQObject(zone));
+  scriptCall("onZoneExited", QJSValueList() << object->asJSValue() << Game::get()->getScriptEngine().newQObject(zone));
 }
 
 void ControlZoneComponent::onPositionChanged()

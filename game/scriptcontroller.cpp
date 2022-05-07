@@ -12,13 +12,12 @@ ScriptController::ScriptController(const QString& modulePath) :
 
 void ScriptController::initialize(QObject* object)
 {
-  Game*     game = Game::get();
   QJSValue createCallback;
 
   createCallback = module.property("create");
   model = engine.newQObject(object);
   if (createCallback.isCallable())
-    instance = game->scriptCall(createCallback, QJSValueList() << model, path);
+    instance = callFunction(createCallback, QJSValueList() << model);
   else
     qDebug() << "ScriptController: Missing `create` export in " << path;
 }
@@ -54,6 +53,18 @@ QJSValue ScriptController::call(const QString& method, const QJSValueList& args)
   else
     qDebug() << "ScriptController: Missing method" << method << "in" << path;
   return false;
+}
+
+QJSValue ScriptController::callFunction(QJSValue function, const QJSValueList& args)
+{
+  QJSValue retval = function.call(args);
+
+  if (retval.isError())
+  {
+    qDebug() << jsErrorBacktrace(retval);
+    return false;
+  }
+  return retval;
 }
 
 QJSValue ScriptController::property(const QString &name)

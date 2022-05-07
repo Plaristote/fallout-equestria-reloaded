@@ -322,17 +322,10 @@ void Game::onDiplomacyUpdate(const QStringList& factions, bool enemy)
   }
 }
 
-QJSValue Game::scriptCall(QJSValue callable, const QJSValueList& args, const QString& scriptName)
+// TODO replace  with scriptcontroller::callvunction
+QJSValue Game::scriptCall(QJSValue callable, const QJSValueList& args, const QString&)
 {
-  QJSValue retval = callable.call(args);
-
-  if (retval.isError())
-  {
-    qDebug() << "Script crashed:" << scriptName << ": uncaught exception at line "
-             << retval.property("lineNumber").toInt() << ":" << retval.toString();
-    return false;
-  }
-  return retval;
+  return ScriptController::callFunction(callable, args);
 }
 
 void Game::appendToConsole(const QString& message)

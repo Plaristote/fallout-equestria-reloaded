@@ -23,7 +23,8 @@ public:
   QString getScriptName() const { return scriptName; }
   bool hasScript() const { return script != nullptr; }
 
-  Q_INVOKABLE QJSValue  scriptCall(const QString& method, const QString& message = "");
+  Q_INVOKABLE QJSValue  scriptCall(const QString& method, const QString& message = "") const;
+  QJSValue              scriptCall(const QString& method, const QJSValueList& params) const;
   Q_INVOKABLE QJSValue  getScriptObject() const;
   QJSValue asJSValue();
 

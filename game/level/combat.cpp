@@ -254,31 +254,23 @@ void CombatComponent::onCombatStateChanged()
 {
   Game::get()->getSoundManager()->play(combat ? "start-combat" : "end-combat");
   getPlayer()->getActionQueue()->reset();
-  if (!combat)
-    finalizeAllArmorClassBonus();
-  if (script)
+  if (combat)
+    scriptCall("onCombatStarted");
+  else if (!combat)
   {
-    if (combat && script->hasMethod("onCombatStarted"))
-      script->call("onCombatStarted");
-    else if (!combat && script->hasMethod("onCombatEnded"))
-      script->call("onCombatEnded");
+    finalizeAllArmorClassBonus();
+    scriptCall("onCombatEnded");
   }
 }
 
 void CombatComponent::onCurrentCombattantChanged()
 {
-  if (script && combat)
-  {
-    if (script->hasMethod("onCurrentCombattantChanged"))
-      script->call("onCurrentCombattantChanged");
-  }
+  if (combat)
+    scriptCall("onCurrentCombattantChanged");
 }
 
 void CombatComponent::onCombattantsChanged()
 {
-  if (script && combat)
-  {
-    if (script->hasMethod("onCombattantsChanged"))
-      script->call("onCombattantsChanged");
-  }
+  if (combat)
+    scriptCall("onCombattantsChanged");
 }

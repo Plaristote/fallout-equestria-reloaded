@@ -14,6 +14,8 @@ public:
   QJSValue call(const QString& method, const QJSValueList& = QJSValueList());
   QJSValue property(const QString& name);
 
+  static QJSValue callFunction(QJSValue function, const QJSValueList& = QJSValueList());
+
   QJSValue getObject() const { return instance; }
   QJSValue getModel() const { return model; }
 

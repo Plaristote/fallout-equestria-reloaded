@@ -64,20 +64,17 @@ void CharacterMovement::onIdle()
 
 void CharacterMovement::onMovementStart()
 {
-  if (script)
-    script->call("onMovementStart");
+  scriptCall("onMovementStart");
 }
 
 void CharacterMovement::onMovementEnded()
 {
-  if (script)
-    script->call("onMovementEnded");
+  scriptCall("onMovementEnded");
 }
 
 void CharacterMovement::onDestinationReached()
 {
-  if (script)
-    script->call("onDestinationReached");
+  scriptCall("onDestinationReached");
 }
 
 void CharacterMovement::load(const QJsonObject& data)

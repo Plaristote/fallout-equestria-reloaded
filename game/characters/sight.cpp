@@ -71,17 +71,10 @@ void CharacterSight::refreshFieldOfView()
 
 void CharacterSight::onRefreshed()
 {
-  if (script && script->hasMethod("onObservationTriggered"))
-    script->call("onObservationTriggered");
+  scriptCall("onObservationTriggered");
 }
 
 void CharacterSight::onCharacterDetected(Character* character)
 {
-  if (script && script->hasMethod("onCharacterDetected"))
-  {
-    QJSValueList args;
-
-    args << character->asJSValue();
-    script->call("onCharacterDetected", args);
-  }
+  scriptCall("onCharacterDetected", QJSValueList() << character->asJSValue());
 }

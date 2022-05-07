@@ -38,8 +38,10 @@ void CharacterInventory::initializeEmptySlot(const QString& slotName)
 
 QString CharacterInventory::getDefaultItemForSlot(const QString& name)
 {
-  if (script && script->hasMethod("getDefaultItem"))
-    return script->call("getDefaultItem", QJSValueList() << name).toString();
+  QJSValue scriptResult = scriptCall("getDefaultItem", name);
+
+  if (scriptResult.isString())
+    return scriptResult.toString();
   if (statistics && statistics->getRaceController())
     return statistics->getRaceController()->getDefaultItemForSlot(statistics, name);
   return "melee";

@@ -35,8 +35,10 @@ QString InventoryItem::getCategory() const
 
 QString InventoryItem::getDescription() const
 {
-  if (script && script->hasMethod("getDescription"))
-    return script->call("getDescription").toString();
+  QJSValue retval = scriptCall("getDescription");
+
+  if (retval.isString())
+    return retval.toString();
   return I18n::get()->t("item-descriptions." + itemType);
 }
 
@@ -186,13 +188,8 @@ bool InventoryItem::remove(int amount)
 void InventoryItem::onEquippedBy(Character* user, bool on)
 {
   resetUseMode();
-  if (script && user)
-  {
-    QJSValueList args;
-
-    args << user->asJSValue() << on;
-    script->call("onEquipped", args);
-  }
+  if (user)
+    scriptCall("onEquipped", QJSValueList() << user->asJSValue() << on);
 }
 
 bool InventoryItem::canEquipInSlot(const QString& slotType)

@@ -12,7 +12,7 @@ Character::Character(QObject *parent) : ParentType(parent)
   inventory->setUser(this);
   connect(actionQueue, &ActionQueue::queueCompleted, this, &Character::onActionQueueCompleted);
   connect(this, &Character::characterKill, this, &Character::died);
-  connect(this, &Character::died, [this]() { if (script) { script->call("onDied"); } });
+  connect(this, &Character::died, [this]() { scriptCall("onDied"); });
   connect(this, &Character::died, this, &CharacterBuffs::clearBuffs, Qt::QueuedConnection);
   connect(this, &Character::died, this, &Character::blocksPathChanged);
   connect(this, &Character::died, getFieldOfView(), &FieldOfView::reset, Qt::QueuedConnection);
@@ -38,8 +38,7 @@ bool Character::shouldJoinFight() const
 
 void Character::onActionQueueCompleted()
 {
-  if (script)
-    script->call("onActionQueueCompleted");
+  scriptCall("onActionQueueCompleted");
 }
 
 void Character::afterDeathAnimation()
@@ -74,13 +73,13 @@ void Character::takeDamage(int damage, Character* dealer)
     }
     else
       attackedBy(dealer);
-    if (script && hp > 0)
+    if (hp > 0)
     {
       QJSValueList args = QJSValueList() << damage;
 
       if (dealer)
         args << dealer->asJSValue();
-      script->call("onDamageTaken", args);
+      scriptCall("onDamageTaken", args);
     }
   }
 }

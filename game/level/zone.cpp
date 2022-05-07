@@ -127,8 +127,7 @@ void ZoneComponent::onZoneEntered(DynamicObject* object, TileZone* zone)
     if (!character->isInZone(zone))
       character->onZoneEntered(zone);
   }
-  if (script && script->hasMethod("onZoneEntered"))
-    script->call("onZoneEntered", QJSValueList() << zone->getName() << object->asJSValue());
+  scriptCall("onZoneEntered", QJSValueList() << zone->getName() << object->asJSValue());
   if (zone->getType() == "exit" && object == getPlayer())
     emit exitZoneEntered(zone);
 }
@@ -138,8 +137,7 @@ void ZoneComponent::onZoneExited(DynamicObject* object, TileZone* zone)
   if (object->isCharacter())
   {
     reinterpret_cast<Character*>(object)->onZoneExited(zone);
-    if (script && script->hasMethod("onZoneExited"))
-      script->call("onZoneExited", QJSValueList() << zone->getName() << object->asJSValue());
+    scriptCall("onZoneExited", QJSValueList() << zone->getName() << object->asJSValue());
   }
 }
 

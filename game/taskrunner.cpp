@@ -111,7 +111,6 @@ void TaskRunner::addTask(const QString &name, qint64 interval, int iterationCoun
   }
   else
     qDebug() << "/!\\ Tried to add task" << name << "with interval=0";
-
 }
 
 void TaskRunner::addUniqueTask(const QString &name, qint64 interval, int iterationCount)

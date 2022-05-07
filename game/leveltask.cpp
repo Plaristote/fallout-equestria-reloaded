@@ -288,6 +288,5 @@ void LevelTask::addBloodStainAt(QPoint position_, unsigned char floor_)
 
 void LevelTask::onExit()
 {
-  if (script && script->hasMethod("onExit"))
-    script->call("onExit");
+  scriptCall("onExit");
 }
