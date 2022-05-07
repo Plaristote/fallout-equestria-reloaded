@@ -88,14 +88,22 @@ bool DynamicObject::defaultLookInteraction()
   const I18n* i18n = I18n::get();
 
   Game::get()->appendToConsole(i18n->t("inspection.item", {
-    {"item", i18n->t("objects." + getBaseName())}
+    {"item", getDisplayName()}
   }));
   return true;
+}
+
+QString DynamicObject::getDisplayName() const
+{
+  const I18n* i18n = I18n::get();
+
+  return i18n->t("objects." + getBaseName());
 }
 
 bool DynamicObject::triggerSkillUse(Character *user, const QString &skillName)
 {
   QString methodName = skillName;
+  const I18n* i18n = I18n::get();
 
   methodName[0] = methodName[0].toUpper();
   methodName = "onUse" + methodName;
@@ -103,7 +111,11 @@ bool DynamicObject::triggerSkillUse(Character *user, const QString &skillName)
   if (user && script && script->hasMethod(methodName))
     return script->call(methodName, QJSValueList() << user->asJSValue()).toBool();
   else if (user == Game::get()->getPlayer())
-    Game::get()->appendToConsole("You use " + skillName + " on " + getObjectName() + ". It does nothing.");
+  {
+    Game::get()->appendToConsole(
+      i18n->t("messages.use-skill-does-nothing", {{"skillName", skillName}, {"target", getDisplayName()}})
+    );
+  }
   return false;
 }
 

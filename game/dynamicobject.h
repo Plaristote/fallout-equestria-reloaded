@@ -51,6 +51,7 @@ public:
   QString getPath() const;
   const QString& getObjectName() const { return objectName; }
   QString getBaseName() const;
+  virtual QString getDisplayName() const;
   TaskRunner* getTaskManager() { return taskManager; }
 
   Q_INVOKABLE QString getObjectType() const { return metaObject()->className(); }
