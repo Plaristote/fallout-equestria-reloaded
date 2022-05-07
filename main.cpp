@@ -123,6 +123,7 @@ int main(int argc, char *argv[])
   qRegisterMetaType<DynamicObject*>("const DynamicObject*");
   qRegisterMetaType<ObjectFactory*>("ObjectFactory*");
   qRegisterMetaType<ObjectGroup*>("const ObjectGroup*");
+  qRegisterMetaType<GridComponent*>("GridComponent*");
 
   registerQmlTilemap();
   // GAME EDITOR

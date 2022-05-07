@@ -68,6 +68,7 @@ public:
   void loadCmapTraits();
   void loadCmapRaces();
 
+  Q_INVOKABLE CharacterParty* createNpcGroup(QJSValue description) { return CharacterParty::factory(description.toVariant().toMap(), this); }
   Q_INVOKABLE CharacterParty* getPlayerParty() { return playerParty; }
   Q_INVOKABLE Character* getPlayer() { return player; }
   Q_INVOKABLE StatModel* getPlayerStatistics() { return getPlayer()->getStatistics(); }
