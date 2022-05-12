@@ -3,6 +3,7 @@
 #include "../inventoryitemlibrary.h"
 #include "game.h"
 #include "i18n.h"
+#include <cmath>
 #include <QDebug>
 
 InventoryItem::InventoryItem(QObject* parent) : DynamicObject(parent), quantity(1)
@@ -226,16 +227,18 @@ bool InventoryItem::isInRange(DynamicObject *target)
 {
   if (target)
   {
-    if (script && script->hasMethod("isInRange"))
-      return script->call("isInRange", QJSValueList() << target->asJSValue()).toBool();
-    else
+    QJSValue result = scriptCall("isInRange", QJSValueList() << target->asJSValue());
+
+    if (result.isNull())
     {
       float range = getRange();
+      CharacterSight* owner = reinterpret_cast<CharacterSight*>(getOwner());
 
       if (range == 1.f)
-        return maxDistance(getOwner()->getPosition(), target->getPosition()) <= 1;
-      return reinterpret_cast<Character*>(getOwner())->getDistance(target) <= range;
+        return maxDistance(owner->getPosition(), target->getPosition()) <= 1;
+      return std::floor(owner->getDistance(target)) <= range;
     }
+    return result.toBool();
   }
   return true;
 }
