@@ -47,10 +47,11 @@ signals:
   void combattantsChanged();
   void currentCombattantChanged();
 
+protected slots:
+  virtual void onCombatStateChanged();
 private slots:
   void onCurrentCombattantChanged();
   void onCombattantsChanged();
-  void onCombatStateChanged();
   void onActiveItemChanged();
   void updateWaitingMode();
   virtual void onCharacterDied(Character*);

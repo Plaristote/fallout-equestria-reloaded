@@ -58,12 +58,12 @@ public slots:
 private slots:
   virtual void update();
   void onPauseChanged();
-  void onCombatChanged();
   void onCharacterKill(Character* victim, Character* killer);
   void onItemDropped(InventoryItem* item, QPoint position, unsigned char floor = NULL_FLOOR);
   void displayMovementTargetHint(QPoint position);
 
 private:
+  void onCombatStateChanged() override;
   void updateRoofVisibility();
   void combatTask(qint64);
   void endTurnTask(qint64);

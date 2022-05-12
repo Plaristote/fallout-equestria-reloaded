@@ -19,7 +19,6 @@ LevelTask::LevelTask(QObject *parent) : ParentType(parent)
   connect(&updateTimer, &QTimer::timeout, this, &LevelTask::update);
   connect(this, &LevelTask::pausedChanged, this, &LevelTask::onPauseChanged);
   connect(this, &LevelTask::pausedChanged, MouseCursor::get(), &MouseCursor::updatePointerType);
-  connect(this, &LevelTask::combatChanged, this, &LevelTask::onCombatChanged);
   connect(this, &InteractionComponent::playerMovingTo, this, &LevelTask::displayMovementTargetHint);
 }
 
@@ -242,8 +241,9 @@ void LevelTask::endTurnTask(qint64 delta)
   enableWaitingMode(finalizeTurnRemainingTime > 0);
 }
 
-void LevelTask::onCombatChanged()
+void LevelTask::onCombatStateChanged()
 {
+  ParentType::onCombatStateChanged();
   for (auto* object : allDynamicObjects())
   {
     if (object->isCharacter())
