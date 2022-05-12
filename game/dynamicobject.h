@@ -20,6 +20,7 @@ class DynamicObject : public LightSourceComponent
   typedef LightSourceComponent ParentType;
 
   Q_PROPERTY(QString objectName MEMBER objectName NOTIFY objectNameChanged)
+  Q_PROPERTY(QString displayName READ getDisplayName NOTIFY objectNameChanged)
   Q_PROPERTY(QString path READ getPath NOTIFY pathChanged)
   Q_PROPERTY(TaskRunner* tasks MEMBER taskManager)
   Q_PROPERTY(bool blocksPath MEMBER blocksPath NOTIFY blocksPathChanged)

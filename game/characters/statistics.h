@@ -41,6 +41,8 @@ signals:
   void uniqueChanged();
 
 protected:
+  QString getDisplayName() const override;
+
   QString characterSheet;
   StatModel* statistics = nullptr;
   bool isUnique = false;

@@ -10,6 +10,13 @@ CharacterStatistics::CharacterStatistics(QObject *parent) : ParentType(parent)
   connect(inventory, &Inventory::equippedItemsChanged,       this, &CharacterStatistics::updateSpriteSheet);
 }
 
+QString CharacterStatistics::getDisplayName() const
+{
+  if (statistics)
+    return statistics->getName();
+  return ParentType::getDisplayName();
+}
+
 void CharacterStatistics::load(const QJsonObject& data)
 {
   QString objectName = data["objectName"].toString();
