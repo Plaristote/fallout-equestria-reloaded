@@ -70,7 +70,7 @@ Pane {
     onPickedValue: {
       const removed = selectedObject.quantity == amount;
 
-      if (selectedInventory == controller.character.inventory)
+      if (selectedInventory === controller.character.inventory)
         controller.drop(selectedObject, amount);
       else
         controller.take(selectedObject, amount);
