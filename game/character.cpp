@@ -47,6 +47,7 @@ void Character::afterDeathAnimation()
 
   if ((animationName.startsWith("fall") || animationName.startsWith("death")) && !isAlive())
   {
+    unequipUseSlots();
     setAnimation("dead");
     Game::get()->getLevel()->addBloodStainAt(getPosition(), static_cast<unsigned char>(getCurrentFloor()));
   }

@@ -57,3 +57,16 @@ void CharacterInventory::updateInventorySlots()
     slotTypes = Race().getItemSlots();
   inventory->setSlots(slotTypes);
 }
+
+void CharacterInventory::unequipUseSlots()
+{
+  const auto itemSlots = inventory->getSlots();
+
+  for (auto it = itemSlots.begin() ; it != itemSlots.end() ; ++it)
+  {
+    InventoryItem* item = inventory->getEquippedItem(it.key());
+
+    if (item && !item->isVirtual())
+      inventory->unequipItem(it.key());
+  }
+}

@@ -10,6 +10,8 @@ class CharacterInventory : public CharacterDiplomacy
 public:
   explicit CharacterInventory(QObject *parent = nullptr);
 
+public slots:
+  void unequipUseSlots();
 private slots:
   void updateInventorySlots();
   void initializeEmptySlots();
