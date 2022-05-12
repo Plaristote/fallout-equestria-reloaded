@@ -23,7 +23,7 @@ void LootingController::initializeAvailableTargets(StorageObject* t)
     allTargets = currentLevel->getDynamicObjectsAt(t->getPoint());
   for (DynamicObject* target : allTargets)
   {
-    if (target->metaObject()->inherits(StorableObject().metaObject()))
+    if (target->metaObject()->inherits(StorageObject().metaObject()))
       availableTargets.push_back(target);
   }
   availableTargets.removeOne(character);
