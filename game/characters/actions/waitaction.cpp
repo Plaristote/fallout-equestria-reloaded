@@ -16,8 +16,12 @@ bool WaitAction::trigger()
 
 void WaitAction::update()
 {
-  DateTime dateTime = Game::get()->getTimeManager()->getDateTime();
+  Game* game = Game::get();
+  auto* level = game->getLevel();
+  DateTime dateTime = game->getTimeManager()->getDateTime();
 
   if (dateTime >= endsAt)
     state = Done;
+  else if (level && level->isInCombat(character))
+    level->passTurn(character);
 }
