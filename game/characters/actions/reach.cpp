@@ -1,17 +1,18 @@
 #include "reach.h"
 #include "game.h"
 #include <cmath>
+#include <functional>
 
-static int rateCase(Game* game, QJSValue callback, const Point position)
+static int rateCase(QJSValue callback, const Point position)
 {
-  return game->scriptCall(callback, QJSValueList() << position.x << position.y << static_cast<int>(position.z), "ReachAction").toInt();
+  return ScriptController::callFunction(callback, QJSValueList() << position.x << position.y << static_cast<int>(position.z)).toInt();
 }
 
-static void filterCases(Game* game, QJSValue callback, QVector<Point>& candidates)
+static void filterCases(QJSValue callback, QVector<Point>& candidates)
 {
   for (auto it = candidates.begin() ; it != candidates.end() ;)
   {
-    if (rateCase(game, callback, *it) < 0)
+    if (rateCase(callback, *it) < 0)
       it = candidates.erase(it);
     else
       it++;
@@ -25,9 +26,8 @@ static bool candidateCompare(Character* character, QPoint a, QPoint b)
 
 static bool scriptedCandidateCompare(Character* character, QJSValue callback, Point a, Point b)
 {
-  Game* game = Game::get();
-  int   rateA = rateCase(game, callback, a);
-  int   rateB = rateCase(game, callback, b);
+  int   rateA = rateCase(callback, a);
+  int   rateB = rateCase(callback, b);
 
   if (rateA < rateB)
     return true;
@@ -55,7 +55,7 @@ QVector<Point> ReachAction::getCandidates(int caseDistance) const
   }
   if (rateCallback.isCallable())
   {
-    filterCases(game, rateCallback, candidates);
+    filterCases(rateCallback, candidates);
     compare = std::bind(&scriptedCandidateCompare, character, rateCallback, std::placeholders::_1, std::placeholders::_2);
   }
   else
