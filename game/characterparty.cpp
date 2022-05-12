@@ -40,11 +40,14 @@ CharacterParty* CharacterParty::factory(const QVariantMap& parameters, QObject* 
 void CharacterParty::createCharacter(const QString& name, const QVariantMap& attributes)
 {
   Character* character = new Character;
+  Inventory* inventory = character->getInventory();
 
   character->setObjectName(name);
   character->setUnique(attributes.value("uniq", false).toBool());
   character->setCharacterSheet(attributes["sheet"].toString());
   character->setScript(attributes.value("script", "character").toString());
+  if (!attributes.value("inventory").isNull())
+    inventory->load(QJsonObject::fromVariantMap(attributes.value("inventory").toMap()));
   addCharacter(character);
 }
 
