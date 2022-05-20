@@ -463,7 +463,7 @@ void InventoryItem::load(const QJsonObject& data)
   ammo = data["ammo"].toInt(0);
   maxAmmo = data["maxAmmo"].toInt(0);
   DynamicObject::load(data);
-  updateScript();
+  emit itemTypeChanged();
   emit quantityChanged();
   emit objectNameChanged();
   emit useModeChanged();

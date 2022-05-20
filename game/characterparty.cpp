@@ -48,6 +48,7 @@ void CharacterParty::createCharacter(const QString& name, const QVariantMap& att
   character->setScript(attributes.value("script", "character").toString());
   if (!attributes.value("inventory").isNull())
     inventory->load(QJsonObject::fromVariantMap(attributes.value("inventory").toMap()));
+  character->updateSpriteSheet();
   addCharacter(character);
 }
 

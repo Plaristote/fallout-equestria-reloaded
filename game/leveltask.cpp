@@ -255,6 +255,11 @@ void LevelTask::onCombatStateChanged()
       else
         actionQueue->unpause();
     }
+    if (combat)
+      object->scriptCall("onCombatStarted");
+    else
+      object->scriptCall("onCombatEnded");
+
   }
 }
 

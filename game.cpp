@@ -37,6 +37,7 @@ Game::Game(QObject *parent) : StorableObject(parent), timePasser(this)
   soundManager = new SoundManager(this);
   scriptEngine.installExtensions(QJSEngine::ConsoleExtension);
   scriptEngine.globalObject().setProperty("game", scriptEngine.newQObject(this));
+  scriptEngine.globalObject().setProperty("worldmap", scriptEngine.newQObject(worldmap));
   scriptEngine.globalObject().setProperty("quests", scriptEngine.newQObject(quests));
   scriptEngine.globalObject().setProperty("musicManager", scriptEngine.newQObject(MusicManager::get()));
   scriptEngine.globalObject().setProperty("i18n", scriptEngine.newQObject(I18n::get()));

@@ -37,6 +37,13 @@ void ScriptableComponent::setScript(const QString& name)
   emit scriptNameChanged();
 }
 
+QJSValue ScriptableComponent::scriptProperty(const QString& name) const
+{
+  if (script)
+    return script->property(name);
+  return QJSValue();
+}
+
 QJSValue ScriptableComponent::scriptCall(const QString& method, const QString& message) const
 {
   return scriptCall(method, QJSValueList() << message);
