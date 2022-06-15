@@ -32,6 +32,7 @@ public:
   Q_INVOKABLE Character* get(const QString& name);
   const QList<Character*>& getCharacters() const { return list; }
   Q_INVOKABLE void grantXp(unsigned int value);
+  Q_INVOKABLE Character* find(QJSValue callback) const;
 
   bool insertIntoZone(GridComponent*, TileZone*) const;
   Q_INVOKABLE bool insertIntoZone(GridComponent*, const QString& zoneName) const;

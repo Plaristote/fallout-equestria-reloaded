@@ -82,6 +82,19 @@ void CharacterParty::removeCharacter(const QString& name)
   emit partyChanged();
 }
 
+Character* CharacterParty::find(QJSValue callback) const
+{
+  if (callback.isCallable())
+  {
+    for (auto* character : list)
+    {
+      if (callback.call(QJSValueList() << character->asJSValue()).toBool())
+        return character;
+    }
+  }
+  return nullptr;
+}
+
 Character* CharacterParty::get(const QString& name)
 {
   for (auto it = list.begin() ; it != list.end() ; ++it)
