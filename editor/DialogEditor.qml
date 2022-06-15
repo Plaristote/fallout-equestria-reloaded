@@ -15,11 +15,13 @@ Item {
   Character {
     id: playerCharacter
     characterSheet: "testChar"
+    Component.onCompleted: statistics.name = "player"
   }
 
   Character {
     id: npcCharacter
     characterSheet: "testChar"
+    Component.onCompleted: statistics.name = "npc"
   }
 
   CharacterDialogEditor {

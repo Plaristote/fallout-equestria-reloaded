@@ -14,6 +14,7 @@ class CharacterDialog : public QObject
 
   Q_PROPERTY(Character*     player         MEMBER player CONSTANT)
   Q_PROPERTY(DynamicObject* npc            MEMBER npc CONSTANT)
+  Q_PROPERTY(QString        name           READ getName NOTIFY nameChanged)
   Q_PROPERTY(QString        stateReference MEMBER stateReference NOTIFY stateReferenceChanged)
   Q_PROPERTY(QString        text           MEMBER text NOTIFY textChanged)
   Q_PROPERTY(QStringList    options        MEMBER options NOTIFY optionsChanged)
@@ -34,6 +35,7 @@ public:
   Q_INVOKABLE bool    isOptionAvailable(const QString& answer);
   QStringList         getStateList() const;
   QStringList         getAnswerList() const;
+  QString             getName() const;
   BarterController*   getBarterController() const { return barter; }
   Q_INVOKABLE bool    tryToBarter();
 
@@ -51,6 +53,7 @@ signals:
   void stateListChanged();
   void answerListChanged();
   void barterControllerChanged();
+  void nameChanged();
   void ready();
 
 private slots:

@@ -26,6 +26,7 @@ bool CharacterDialog::load(const QString& name, Character* player, DynamicObject
     script = new ScriptController(SCRIPTS_PATH + "dialogs/" + name + ".mjs");
     if (npc->isCharacter())
       barter->initialize(script, player, reinterpret_cast<Character*>(npc));
+    connect(npc, &DynamicObject::objectNameChanged, this, &CharacterDialog::nameChanged);
     script->initialize(this);
     loadState(getEntryPoint());
     emit ready();
@@ -143,9 +144,21 @@ QString CharacterDialog::getNextState(const QString& answer)
   return optionData["state"].toString();
 }
 
+QString CharacterDialog::getName() const
+{
+  return npc->getDisplayName();
+}
+
 QString CharacterDialog::t(const QString &name, const QVariantMap& options)
 {
-  return I18n::get()->t(translationGroup + '.' + name, options);
+  QVariantMap parameters{
+    {"name", player->getStatistics()->getName()},
+    {"npc", npc->isCharacter() ? reinterpret_cast<Character*>(npc)->getStatistics()->getName() : getName()}
+  };
+
+  for (auto it = options.begin() ; it != options.end() ; ++it)
+    parameters.insert(it.key(), it.value());
+  return I18n::get()->t(translationGroup + '.' + name, parameters);
 }
 
 QString CharacterDialog::getOptionText(const QString& key)
