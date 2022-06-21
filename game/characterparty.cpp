@@ -54,6 +54,7 @@ void CharacterParty::createCharacter(const QString& name, const QVariantMap& att
 
 void CharacterParty::addCharacter(Character* character)
 {
+  connect(character, &DynamicObject::beforeDestroy, this, [this, character]() { removeCharacter(character); });
   character->setParent(this);
   list.push_back(character);
   emit partyChanged();
@@ -128,9 +129,9 @@ bool CharacterParty::insertIntoZone(GridComponent* level, TileZone* zone) const
         break ;
     }
   }
-  if (characterIt > 0)
-    emit reinterpret_cast<LevelTask*>(level)->cameraFocusRequired(list.at(0));
-  return characterIt == list.length();
+  for (auto* character : list)
+    character->scriptCall("insertedIntoZone", QJSValueList() << zone->getName());
+  return characterIt >= list.length();
 }
 
 bool CharacterParty::insertIntoZone(GridComponent* level, const QString &zoneName) const
@@ -183,7 +184,7 @@ void CharacterParty::load(const QJsonObject& data)
     Character*  character = new Character(this);
 
     character->load(characterData);
-    list << character;
+    addCharacter(character);
   }
   if (list.length() == 0)
     qDebug() << "Fatal error: saved data did not contain any player character";
