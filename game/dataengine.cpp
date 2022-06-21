@@ -235,6 +235,11 @@ bool DataEngine::isLevelActive(const QString& name) const
   return data["levels"][name].isObject();
 }
 
+bool DataEngine::hasLevelBeenVisited(const QString& name) const
+{
+  return isLevelActive(name) && data["levels"][name]["init"] == true;
+}
+
 QJsonObject DataEngine::getLevelData(const QString& name)
 {
   return data["levels"].toObject()[name].toObject();

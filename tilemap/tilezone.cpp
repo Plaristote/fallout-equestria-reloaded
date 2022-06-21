@@ -31,6 +31,8 @@ void TileZone::load(const QJsonObject& object, const QSize mapSize)
       targetZone = value.toString();
     else if (propertyName == "granularity")
       granularity = value.toInt();
+    else if (propertyName == "targetZone")
+      targetZone = value.toString();
   }
   for (QJsonValue value : object["data"].toArray())
   {

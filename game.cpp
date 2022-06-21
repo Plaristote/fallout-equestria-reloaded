@@ -351,7 +351,7 @@ void Game::advanceTime(unsigned int minutes)
       character->updateTasks(delta);
     taskManager->update(delta);
     if (script)
-      script->call("outdoorsTick");
+      script->call("outdoorsTick", QJSValueList() << minutes);
   }
 }
 

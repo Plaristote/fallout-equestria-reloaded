@@ -74,6 +74,8 @@ void SaveComponent::save(DataEngine* dataEngine)
     levelData.remove("script");
     if (!isGameEditor())
       levelData["lastUpdate"] = static_cast<int>(game->getTimeManager()->getDateTime().GetTimestamp());
+    else
+      levelData.remove("init");
     dataEngine->setLevelData(name, levelData);
   }
   else

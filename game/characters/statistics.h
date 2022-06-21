@@ -26,6 +26,7 @@ public:
   void setCharacterSheet(const QString& name);
   bool getIsUnique() const { return isUnique; }
   void setUnique(bool value) { isUnique = value; }
+  QString getDisplayName() const override;
 
 public slots:
   void updateSpriteSheet();
@@ -41,8 +42,6 @@ signals:
   void uniqueChanged();
 
 protected:
-  QString getDisplayName() const override;
-
   QString characterSheet;
   StatModel* statistics = nullptr;
   bool isUnique = false;
