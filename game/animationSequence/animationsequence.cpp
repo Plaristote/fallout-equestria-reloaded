@@ -14,7 +14,6 @@ void AnimationSequence::start()
 
 void AnimationSequence::addAnimationPart(IAnimationPart* part)
 {
-  part->setParent(nullptr);
   parts << QSharedPointer<IAnimationPart>(part);
 }
 

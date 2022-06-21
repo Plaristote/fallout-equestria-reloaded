@@ -2,6 +2,8 @@
 #define GROUPANIMATIONPART_H
 
 #include "ianimationpart.h"
+#include <QVector>
+#include <QSharedPointer>
 
 class GroupAnimationPart : public IAnimationPart
 {

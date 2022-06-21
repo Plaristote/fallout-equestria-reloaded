@@ -3,6 +3,11 @@
 #include <QDebug>
 #include "game/dynamicobject.h"
 
+ObjectAnimationPart::~ObjectAnimationPart()
+{
+  QObject::disconnect(eventListener);
+}
+
 bool ObjectAnimationPart::matches(const QJSValue& descriptor)
 {
   return descriptor.property("type").toString() == "Animation";
@@ -31,7 +36,7 @@ void ObjectAnimationPart::initialize(DynamicObject* target, const QString& anima
   this->target            = target;
   this->animationName     = animationName;
   this->postAnimationName = postAnimationName;
-  connect(target, &Sprite::animationFinished, this, &ObjectAnimationPart::onAnimationFinished);
+  eventListener = QObject::connect(target, &Sprite::animationFinished, std::bind(&ObjectAnimationPart::onAnimationFinished, this));
 }
 
 void ObjectAnimationPart::start()

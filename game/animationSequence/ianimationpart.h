@@ -1,14 +1,12 @@
 #ifndef  IANIMATIONPART_H
 # define IANIMATIONPART_H
 
-# include <QObject>
-
 class QJSValue;
 
-class IAnimationPart : public QObject
+class IAnimationPart
 {
 public:
-  virtual ~IAnimationPart() override {}
+  virtual ~IAnimationPart() {}
 
   virtual void initialize(QJSValue&) = 0;
   virtual void start() = 0;

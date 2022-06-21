@@ -16,7 +16,6 @@ void GroupAnimationPart::initialize(QJSValue& value)
 
 void GroupAnimationPart::addAnimationPart(IAnimationPart* part)
 {
-  part->setParent(nullptr);
   parts << QSharedPointer<IAnimationPart>(part);
 }
 

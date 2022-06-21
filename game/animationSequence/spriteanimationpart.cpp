@@ -8,6 +8,7 @@
 SpriteAnimationPart::~SpriteAnimationPart()
 {
   level->unregisterVisualEffect(sprite);
+  delete sprite;
 }
 
 bool SpriteAnimationPart::matches(const QJSValue& descriptor)
@@ -17,7 +18,7 @@ bool SpriteAnimationPart::matches(const QJSValue& descriptor)
 
 void SpriteAnimationPart::initialize(QJSValue &value)
 {
-  sprite = new Sprite(this);
+  sprite = new Sprite();
   level  = Game::get()->getLevel();
   sprite->setProperty("floating", true);
   sprite->setSpriteName(value.property("name").toString());
@@ -43,10 +44,10 @@ void SpriteAnimationPart::initialize(QJSValue &value)
     if (value.hasProperty("speed"))
       sprite->setMovementSpeed(static_cast<float>(value.property("speed").toNumber()));
     sprite->moveToCoordinates(to);
-    connect(sprite, &Sprite::movementFinished, this, &SpriteAnimationPart::onAnimationFinished);
+    QObject::connect(sprite, &Sprite::movementFinished, std::bind(&SpriteAnimationPart::onAnimationFinished, this));
   }
   else
-    connect(sprite, &Sprite::animationFinished, this, &SpriteAnimationPart::onAnimationFinished);
+    QObject::connect(sprite, &Sprite::animationFinished, std::bind(&SpriteAnimationPart::onAnimationFinished, this));
 }
 
 void SpriteAnimationPart::start()

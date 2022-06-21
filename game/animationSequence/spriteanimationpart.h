@@ -9,8 +9,6 @@ class LevelTask;
 
 class SpriteAnimationPart : public IAnimationPart
 {
-  Q_OBJECT
-
 protected:
   Sprite*    sprite;
   LevelTask* level;
@@ -18,15 +16,13 @@ protected:
   QPoint     from, to;
 
 public:
-  ~SpriteAnimationPart();
+  ~SpriteAnimationPart() override;
 
   static bool matches(const QJSValue&);
 
   void initialize(QJSValue& value) override;
   void start() override;
   bool isOver() const override { return over; }
-
-public slots:
   void onAnimationFinished() { over = true; }
 };
 

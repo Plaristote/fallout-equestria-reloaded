@@ -6,7 +6,7 @@ MovementHintAnimationPart::MovementHintAnimationPart(QPoint position)
   TileLayer* layer;
   Tile*      tile;
 
-  sprite = new Sprite(this);
+  sprite = new Sprite();
   level  = Game::get()->getLevel();
   layer  = level->getTileMap()->getLayer("ground");
   tile   = layer->getTile(position.x(), position.y());
@@ -15,5 +15,5 @@ MovementHintAnimationPart::MovementHintAnimationPart(QPoint position)
   sprite->setAnimation("movement-hint");
   if (tile)
     from = to = tile->getRenderPosition();
-  connect(sprite, &Sprite::animationFinished, this, &SpriteAnimationPart::onAnimationFinished);
+  QObject::connect(sprite, &Sprite::animationFinished, std::bind(&SpriteAnimationPart::onAnimationFinished, this));
 }

@@ -2,6 +2,7 @@
 #define SOUNDANIMATIONPART_H
 
 #include "ianimationpart.h"
+#include <QString>
 
 class DynamicObject;
 
