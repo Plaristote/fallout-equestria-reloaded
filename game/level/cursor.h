@@ -32,7 +32,6 @@ public:
   Q_INVOKABLE DynamicObject* getObjectAt(int posX, int posY) const;
   DynamicObject*             getObjectAt(QPoint point) const { return getObjectAt(point.x(), point.y()); }
 
-
   QPoint getClickableOffsetFor(const DynamicObject* target) const;
 
 signals:
@@ -41,6 +40,7 @@ signals:
   void hoveredTileChanged();
 
 protected:
+  virtual bool isPotentialTarget(const DynamicObject&) const;
   int    mouseMode = MovementCursor;
   bool   mouseInMap = false;
   QPoint hoveredTile = QPoint(-1, -1);

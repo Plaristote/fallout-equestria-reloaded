@@ -32,3 +32,10 @@ void TargetComponent::swapMouseMode()
   }
   ParentType::swapMouseMode();
 }
+
+bool TargetComponent::isPotentialTarget(const DynamicObject& object) const
+{
+  if (mouseMode == TargetCursor && getTargetMode() == CharacterTarget)
+    return object.isCharacter() && reinterpret_cast<const Character&>(object).isAlive() && ParentType::isPotentialTarget(object);
+  return ParentType::isPotentialTarget(object);
+}

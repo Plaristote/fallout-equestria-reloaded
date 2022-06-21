@@ -34,7 +34,7 @@ Item {
     id: characterInteractionOverlayComponent
     InteractionOverlay {
       levelController:  root.levelController
-      filter:           function(item) { return item.floor === levelController.currentFloor && item.isAlive(); }
+      filter:           function(item) { return item.floor === levelController.currentFloor && item.isAlive() && item !== levelController.player; }
       model:            levelController.visibleCharacters
       overlayColor:     levelController.targetMode === Interaction.TargetMode.Any ? Qt.rgba(255, 255, 0, 1)   : Qt.rgba(255, 0, 0, 1)
       overlayMaxColor:  levelController.targetMode === Interaction.TargetMode.Any ? Qt.rgba(255, 255, 0, 0.5) : Qt.rgba(255, 0, 0, 0.5)
@@ -47,7 +47,7 @@ Item {
     id: characterOverlayComponent
     InteractionOverlay {
       levelController:  root.levelController
-      filter:           function(item) { return item.floor === levelController.currentFloor && item.isAlive(); }
+      filter:           function(item) { return item.floor === levelController.currentFloor && item.isAlive() && item !== levelController.player; }
       model:            levelController.visibleCharacters
       withColorOverlay: false
       offsetX:          root.offsetX

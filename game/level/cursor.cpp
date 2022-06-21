@@ -62,6 +62,14 @@ void CursorComponent::enableWaitingMode(bool active)
   }
 }
 
+bool CursorComponent::isPotentialTarget(const DynamicObject& object) const
+{
+  DynamicObject& p = const_cast<DynamicObject&>(object);
+  bool isLiveCharacter = object.isCharacter() && reinterpret_cast<const Character&>(object).isAlive();
+
+  return !isLiveCharacter || visibleCharacters.indexOf(reinterpret_cast<Character*>(&p)) >= 0;
+}
+
 DynamicObject* CursorComponent::getObjectAt(int posX, int posY) const
 {
   QVector<DynamicObject*> list;
@@ -75,7 +83,7 @@ DynamicObject* CursorComponent::getObjectAt(int posX, int posY) const
   sortByRenderOrder(list);
   for (DynamicObject* object : qAsConst(list))
   {
-    if (!object->isCharacter() || visibleCharacters.indexOf(reinterpret_cast<Character*>(object)) >= 0)
+    if (isPotentialTarget(*object))
     {
       QPoint coordinates = getAdjustedOffsetFor(object);
       QRect  clip = object->getClippedRect();

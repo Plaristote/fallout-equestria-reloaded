@@ -28,6 +28,7 @@ public:
   virtual int  getTargetMode() const { return AnyTarget; }
 
 protected:
+  bool isPotentialTarget(const DynamicObject&) const override;
   InteractionTargetList* getTargetList() { return &targetList; }
   InteractionTargetList targetList;
 };
