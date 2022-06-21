@@ -173,4 +173,8 @@ Item {
       onClosed: root.controller.barterEnded()
     }
   }
+
+  FastTimePassView {
+    delay: 0
+  }
 }
