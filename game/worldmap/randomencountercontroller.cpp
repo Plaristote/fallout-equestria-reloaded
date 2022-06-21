@@ -41,17 +41,20 @@ void RandomEncounterController::startEncounter(const QString &name, const QVaria
 void RandomEncounterController::initializeEncounter()
 {
   Game* game = Game::get();
+  auto* level = game->getLevel();
   const QVariantList list = scheduledEncounter.value("parties").toList();
   
   disconnect(game, &Game::levelChanged, this, &RandomEncounterController::initializeEncounter);
-  game->getLevel()->setProperty("persistent", scheduledEncounter.value("persistent", false));
+  if (!level)
+    return ;
+  level->setProperty("persistent", scheduledEncounter.value("persistent", false));
   for (const QVariant& entry : list)
   {
     const QVariantMap partyData(entry.toMap());
     CharacterParty*   party = CharacterParty::factory(partyData, game->getLevel());
 
     if (party->getCharacters().size() > 0)
-      party->insertIntoZone(game->getLevel(), partyData.value("zone").toString());
+      party->insertIntoZone(level, partyData.value("zone").toString());
     else
       qDebug() << "RandomEncounterController::initializeEncounter: generated an empty CharacterParty";
   }
