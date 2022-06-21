@@ -57,7 +57,10 @@ float CharacterSight::getDistance(QPoint other) const
   auto a = self.x() - other.x();
   auto b = self.y() - other.y();
 
-  return std::sqrt(static_cast<float>(a * a + b * b));
+  // use pathvinding distance
+  return static_cast<float>(std::max(std::abs(a), std::abs(b)));
+  // or use actual distance
+  //return std::sqrt(static_cast<float>(a * a + b * b));
 }
 
 void CharacterSight::refreshFieldOfView()
