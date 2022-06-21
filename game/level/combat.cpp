@@ -174,9 +174,7 @@ void CombatComponent::onNextCombatTurn()
 
 bool CombatComponent::nothingHappenedInCombatTurn() const
 {
-  const auto* player = getPlayer();
-
-  return combattants.size() < 2 || player->getActionPoints() != player->getMaxActionPoints();
+  return combattants.size() < 2;
 }
 
 void CombatComponent::onCharacterDied(Character* character)
