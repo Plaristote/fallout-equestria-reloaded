@@ -350,13 +350,31 @@ bool ObjectGroup::detachGroup(ObjectGroup* o, bool destroy)
   return recursivelyDetachChild(groups, o, destroy, &ObjectGroup::detachGroup);
 }
 
+class DynamicObjectDeleter
+{
+public:
+  static void deleteObject(DynamicObject* object)
+  {
+    auto* deleter = new QTimer;
+    emit object->beforeDestroy();
+    QObject::connect(deleter, &QTimer::timeout, [object, deleter]()
+    {
+      qDebug() << "Deleting object now";
+      delete object;
+      deleter->deleteLater();
+      qDebug() << "Deleting object done";
+    });
+    deleter->start(5432);
+  }
+};
+
 bool ObjectGroup::detachObject(DynamicObject* o, bool destroy)
 {
   if (objects.indexOf(o) >= 0)
   {
     objects.removeOne(o);
     if (destroy)
-      o->deleteLater();
+      DynamicObjectDeleter::deleteObject(o);
     emit objectRemoved(o);
     return true;
   }
