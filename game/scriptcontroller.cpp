@@ -10,16 +10,43 @@ ScriptController::ScriptController(const QString& modulePath) :
   module = game->loadScript(path);
 }
 
+static QString pathToClassName(const QString& path)
+{
+  QRegularExpression regex(".m?js$");
+  QRegularExpression separator("[-_.]+");
+  QString name = path.split("/").last().replace(regex, "");
+  QString result;
+
+  for (auto part : name.split(separator))
+  {
+    if (part.length() > 0)
+    {
+      part[0] = part.front().toUpper();
+      result += part;
+    }
+  }
+  return result;
+}
+
 void ScriptController::initialize(QObject* object)
 {
   QJSValue createCallback;
+  QString objectName = pathToClassName(path);
+  QJSValueList parameters;
 
-  createCallback = module.property("create");
   model = engine.newQObject(object);
+  parameters << model;
+  createCallback = module.property(objectName);
   if (createCallback.isCallable())
-    instance = callFunction(createCallback, QJSValueList() << model);
+    instance = callConstructor(createCallback, parameters);
   else
-    qDebug() << "ScriptController: Missing `create` export in " << path;
+  {
+    createCallback = module.property("create");
+    if (createCallback.isCallable())
+      instance = callFunction(createCallback, parameters);
+    else
+      qDebug() << "ScriptController: Cannot find" << objectName << " in " << path;
+  }
 }
 
 bool ScriptController::hasMethod(const QString &method)
@@ -58,6 +85,18 @@ QJSValue ScriptController::call(const QString& method, const QJSValueList& args)
 QJSValue ScriptController::callFunction(QJSValue function, const QJSValueList& args)
 {
   QJSValue retval = function.call(args);
+
+  if (retval.isError())
+  {
+    qDebug() << jsErrorBacktrace(retval);
+    return false;
+  }
+  return retval;
+}
+
+QJSValue ScriptController::callConstructor(QJSValue constructor, const QJSValueList& args)
+{
+  QJSValue retval = constructor.callAsConstructor(args);
 
   if (retval.isError())
   {
