@@ -2,6 +2,17 @@
 #include "leveltask.h"
 #include <QJsonArray>
 #include <QDebug>
+#include <algorithm>
+
+static bool findWithCallback(Character* character, QJSValue callback)
+{
+  return callback.call(QJSValueList() << character->asJSValue()).toBool();
+}
+
+static bool findByObjectName(Character* character, const QString& name)
+{
+  return character->getObjectName() == name;
+}
 
 CharacterParty::CharacterParty(QObject *parent) : QObject(parent)
 {
@@ -62,38 +73,35 @@ void CharacterParty::addCharacter(Character* character)
 
 void CharacterParty::removeCharacter(Character* character)
 {
-  list.removeAll(character);
-  emit partyChanged();
+  if (character)
+  {
+    list.removeAll(character);
+    emit partyChanged();
+    qDebug() << "removing character vrom party" << character->getDisplayName() << "(remaining characters" << list.length() << ')';
+  }
 }
 
-bool CharacterParty::containsCharacter(Character* character)
+bool CharacterParty::containsCharacter(Character* character) const
 {
   return list.count(character) > 0;
 }
 
-void CharacterParty::removeCharacter(const QString& name)
-{
-  for (auto it = list.begin() ; it != list.end() ;)
-  {
-    if ((*it)->getStatistics()->getName() == name)
-      it = list.erase(it);
-    else
-      ++it;
-  }
-  emit partyChanged();
-}
-
 Character* CharacterParty::find(QJSValue callback) const
 {
-  if (callback.isCallable())
+  std::function<bool (Character*)> predicate = [](Character*) { return false; };
+  QList<Character*>::const_iterator iterator;
+
+  if (callback.isQObject())
+    iterator = std::find(list.begin(), list.end(), callback.toQObject());
+  else
   {
-    for (auto* character : list)
-    {
-      if (callback.call(QJSValueList() << character->asJSValue()).toBool())
-        return character;
-    }
+    if (callback.isCallable())
+      predicate = std::bind(findWithCallback, std::placeholders::_1, callback);
+    else if (callback.isString())
+      predicate = std::bind(findByObjectName, std::placeholders::_1, callback.toString());
+    iterator = std::find_if(list.begin(), list.end(), predicate);
   }
-  return nullptr;
+  return iterator != list.end() ? *iterator : nullptr;
 }
 
 Character* CharacterParty::get(const QString& name)

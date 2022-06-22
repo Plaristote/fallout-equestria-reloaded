@@ -27,8 +27,7 @@ public:
   Q_INVOKABLE void createCharacter(const QString &name, const QVariantMap& parameters);
   Q_INVOKABLE void addCharacter(Character*);
   Q_INVOKABLE void removeCharacter(Character*);
-  Q_INVOKABLE void removeCharacter(const QString& name);
-  Q_INVOKABLE bool containsCharacter(Character*);
+  Q_INVOKABLE bool containsCharacter(Character*) const;
   Q_INVOKABLE Character* get(const QString& name);
   const QList<Character*>& getCharacters() const { return list; }
   Q_INVOKABLE void grantXp(unsigned int value);
