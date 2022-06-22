@@ -58,6 +58,7 @@ public:
   Q_INVOKABLE void  wakeUp();
   bool              setFallAnimation();
   bool              setDeathAnimation();
+  void              onIdle() override;
 
 signals:
   void actionPointsChanged();

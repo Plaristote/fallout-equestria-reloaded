@@ -30,7 +30,7 @@ public:
   Q_INVOKABLE bool          isInZone(TileZone* value) const { return currentZones.indexOf(value) >= 0; }
 
 public slots:
-  void onIdle();
+  virtual void onIdle();
   void onZoneEntered(TileZone* value) { currentZones.append(value); }
   void onZoneExited(TileZone* value) { currentZones.removeOne(value); }
 

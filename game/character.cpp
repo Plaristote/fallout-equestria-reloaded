@@ -55,6 +55,14 @@ void Character::afterDeathAnimation()
     setAnimation("idle");
 }
 
+void Character::onIdle()
+{
+  if (isUnconscious() || !isAlive())
+    setAnimation("dead");
+  else
+    ParentType::onIdle();
+}
+
 void Character::takeDamage(int damage, Character* dealer)
 {
   if (isAlive())

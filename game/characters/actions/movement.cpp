@@ -103,7 +103,7 @@ void MovementAction::triggerNextMovement()
 
 void MovementAction::interrupt()
 {
-  character->setAnimation("idle");
+  character->onIdle();
   onMovementFinished();
 }
 

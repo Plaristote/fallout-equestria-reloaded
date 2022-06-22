@@ -9,7 +9,7 @@ Image {
 
   Component.onCompleted: {
     if (developmentEdition)
-      menuEntries = menuEntries.slice(0, 4).concat([gameEditorAction, exitAction]);
+      menuEntries = menuEntries.slice(0, 4).concat([gameEditorAction, creditsAction, exitAction]);
   }
 
   Action {

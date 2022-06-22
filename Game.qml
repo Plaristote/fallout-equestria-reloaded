@@ -41,7 +41,8 @@ Item {
     interval: 1000
     onTriggered: {
       gameOverScreen.visible = true;
-      application.popView();
+      while (root.StackView.status === StackView.Inactive)
+        application.popView();
     }
   }
 

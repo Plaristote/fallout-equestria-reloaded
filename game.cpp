@@ -183,11 +183,13 @@ LevelTask* Game::newLevelTask()
 
 void Game::loadLevel(const QString &name, const QString& targetZone)
 {
-  auto* timer = new QTimer(this);
+  QTimer* timer;
 
+  if (player && !player->isAlive())
+    return ;
   emit requestLoadingScreen();
-  timer->setInterval(500);
-  timer->start();
+  timer = new QTimer(this);
+  timer->start(500);
   connect(timer, &QTimer::timeout, timer, &QObject::deleteLater);
   connect(timer, &QTimer::timeout, this, [this, name, targetZone]()
   {
