@@ -356,7 +356,7 @@ public:
   static void deleteObject(DynamicObject* object)
   {
     auto* deleter = new QTimer;
-    emit object->beforeDestroy();
+    emit object->beforeDestroy(object);
     QObject::connect(deleter, &QTimer::timeout, [object, deleter]()
     {
       qDebug() << "Deleting object now";

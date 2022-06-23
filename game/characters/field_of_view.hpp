@@ -9,6 +9,7 @@
 
 class Level;
 class Character;
+class DynamicObject;
 
 class FieldOfView : public QObject
 {
@@ -59,6 +60,7 @@ public:
   void                 runTask();
   void                 reset();
   void                 removeCharacter(Character*);
+  void                 removeObject(DynamicObject*);
 
 signals:
   void                 updated();

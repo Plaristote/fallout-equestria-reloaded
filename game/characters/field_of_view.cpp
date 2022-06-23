@@ -113,8 +113,15 @@ void FieldOfView::reset()
   detected_enemies.clear();
 }
 
+void FieldOfView::removeObject(DynamicObject* object)
+{
+  if (object->isCharacter())
+    removeCharacter(reinterpret_cast<Character*>(object));
+}
+
 void FieldOfView::removeCharacter(Character* character)
 {
+  disconnect(character, &DynamicObject::beforeDestroy, this, &FieldOfView::removeObject);
   for (auto it = detected_characters.begin() ; it != detected_characters.end() ;)
   {
     if (it->character == character)
@@ -260,12 +267,13 @@ void FieldOfView::setCharacterDetected(Character* character)
 void FieldOfView::InsertOrUpdateCharacterInList(Character& character, std::list<Entry>& list)
 {
   auto iterator = find(list.begin(), list.end(), &character);
-  
+
   if (iterator != list.end())
     iterator->time_to_live = FOV_TTL;
   else
   {
     list.push_back(&character);
+    connect(&character, &DynamicObject::beforeDestroy, this, &FieldOfView::removeObject);
     emit characterDetected(&character);
   }
 }
