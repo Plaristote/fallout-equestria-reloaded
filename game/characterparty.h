@@ -34,7 +34,8 @@ public:
   Q_INVOKABLE Character* find(QJSValue callback) const;
 
   bool insertIntoZone(GridComponent*, TileZone*) const;
-  Q_INVOKABLE bool insertIntoZone(GridComponent*, const QString& zoneName) const;
+  bool insertIntoZone(GridComponent*, const QString& zoneName) const;
+  Q_INVOKABLE bool insertIntoZone(GridComponent*, QJSValue) const;
   Q_INVOKABLE void extractFromLevel(GridComponent*);
 
   QQmlListProperty<Character> getQmlCharacters() { return QML_QLIST_CONSTRUCTOR(Character, list); }

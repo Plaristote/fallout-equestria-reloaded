@@ -122,23 +122,26 @@ void CharacterParty::grantXp(unsigned int value)
 
 bool CharacterParty::insertIntoZone(GridComponent* level, TileZone* zone) const
 {
-  auto* grid = level->getGrid();
+  auto* grid = level->getFloorGrid(zone->getFloor());
   int characterIt = 0;
 
-  for (auto position : zone->getPositions())
+  if (list.length() > 0)
   {
-    if (!grid->isOccupied(position.x(), position.y()))
+    for (auto position : zone->getPositions())
     {
-      Character* character = list.at(characterIt);
+      if (!grid->isOccupied(position.x(), position.y()))
+      {
+        Character* character = list.at(characterIt);
 
-      level->appendObject(character);
-      level->setCharacterPosition(character, position.x(), position.y());
-      if (++characterIt >= list.length())
-        break ;
+        level->appendObject(character);
+        level->setCharacterPosition(character, position.x(), position.y());
+        if (++characterIt >= list.length())
+          break ;
+      }
     }
+    for (int i = 0 ; i < characterIt ; ++i)
+      list[i]->scriptCall("insertedIntoZone", QJSValueList() << zone->getName());
   }
-  for (auto* character : list)
-    character->scriptCall("insertedIntoZone", QJSValueList() << zone->getName());
   return characterIt >= list.length();
 }
 
@@ -151,6 +154,17 @@ bool CharacterParty::insertIntoZone(GridComponent* level, const QString &zoneNam
     if (zone->getName() == zoneName)
       return insertIntoZone(level, zone);
   }
+  return false;
+}
+
+bool CharacterParty::insertIntoZone(GridComponent* level, QJSValue param) const
+{
+  if (param.isString())
+    return insertIntoZone(level, param.toString());
+  else if (param.isQObject())
+    return insertIntoZone(level, reinterpret_cast<TileZone*>(param.toQObject()));
+  else
+    qDebug() << "CharacterParty::insertIntoZone: called with invalid parameter";
   return false;
 }
 
