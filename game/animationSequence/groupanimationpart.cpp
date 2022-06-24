@@ -4,6 +4,13 @@ GroupAnimationPart::GroupAnimationPart()
 {
 }
 
+GroupAnimationPart::~GroupAnimationPart()
+{
+  for (const auto& part : parts)
+    delete part;
+  parts.clear();
+}
+
 bool GroupAnimationPart::matches(const QJSValue& descriptor)
 {
   return descriptor.isArray();
@@ -16,7 +23,7 @@ void GroupAnimationPart::initialize(QJSValue& value)
 
 void GroupAnimationPart::addAnimationPart(IAnimationPart* part)
 {
-  parts << QSharedPointer<IAnimationPart>(part);
+  parts << part;
 }
 
 void GroupAnimationPart::start()

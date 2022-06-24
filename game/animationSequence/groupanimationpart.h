@@ -9,7 +9,7 @@ class GroupAnimationPart : public IAnimationPart
 {
 public:
   GroupAnimationPart();
-  virtual ~GroupAnimationPart() override {}
+  virtual ~GroupAnimationPart() override;
 
   static bool matches(const QJSValue&);
   void initialize(QJSValue&) override;
@@ -18,7 +18,7 @@ public:
   void addAnimationPart(IAnimationPart*);
 
 private:
-  QVector<QSharedPointer<IAnimationPart>> parts;
+  QVector<IAnimationPart*> parts;
 };
 
 #endif // GROUPANIMATIONPART_H

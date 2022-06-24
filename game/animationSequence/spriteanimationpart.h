@@ -5,15 +5,15 @@
 #include <QPoint>
 
 class Sprite;
-class LevelTask;
+class VisualEffectsComponent;
 
 class SpriteAnimationPart : public IAnimationPart
 {
 protected:
-  Sprite*    sprite;
-  LevelTask* level;
-  bool       over = false;
-  QPoint     from, to;
+  Sprite*                 sprite;
+  VisualEffectsComponent* level;
+  bool                    over = false;
+  QPoint                  from, to;
 
 public:
   ~SpriteAnimationPart() override;
