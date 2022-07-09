@@ -357,6 +357,17 @@ int GridComponent::getVisionQuality(int ax, int ay, int bx, int by) const
   return getGrid()->getVisionQuality(ax, ay, bx, by);
 }
 
+TileZone* GridComponent::getTileZone(const QString& zoneName) const
+{
+  TileZone* result = nullptr;
+  for (LevelGrid* grid : floors)
+  {
+    result = grid->getTilemap()->getZone(zoneName);
+    if (result) break ;
+  }
+  return result;
+}
+
 bool GridComponent::isRenderedBefore(const DynamicObject* a, const DynamicObject* b)
 {
   QPoint posA = a->getPosition();

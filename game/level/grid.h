@@ -52,6 +52,7 @@ public:
   Q_INVOKABLE float       getDistance(QPoint, QPoint) const;
   Q_INVOKABLE float       getDistance(int ax, int ay, int bx, int by) const { return getDistance(QPoint(ax, ay), QPoint(bx, by)); }
   Q_INVOKABLE int         getVisionQuality(int ax, int ay, int bx, int by) const;
+  Q_INVOKABLE TileZone*   getTileZone(const QString& name) const;
 
   template<typename LIST>
   static void sortByRenderOrder(LIST& list)
