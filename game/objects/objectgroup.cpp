@@ -358,12 +358,17 @@ public:
     auto* deleter = new QTimer;
     object->setParent(nullptr);
     emit object->beforeDestroy(object);
-    QObject::connect(deleter, &QTimer::timeout, [object, deleter]()
+    QObject::connect(deleter, &QTimer::timeout, deleter, [object, deleter]()
     {
       qDebug() << "Deleting object now";
       delete object;
       deleter->deleteLater();
       qDebug() << "Deleting object done";
+    });
+    QObject::connect(object, &QObject::destroyed, [deleter]()
+    {
+      deleter->stop();
+      deleter->deleteLater();
     });
     deleter->start(15432);
   }

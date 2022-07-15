@@ -47,7 +47,7 @@ Pane {
         property string propertyName: `factions.${faction}`
 
         text: label ? i18n.t(`factions.${faction}.name`) : i18n.t(`reputation.${category}`)
-        visible: reputation !== 0 && dataEngine.hasReputation(faction)
+        visible: dataEngine.hasReputation(faction)
         font.family: application.consoleFont.name
         font.pointSize: application.consoleFont.tinySize
         color: selectedProperty === propertyName ? "green" : "white"

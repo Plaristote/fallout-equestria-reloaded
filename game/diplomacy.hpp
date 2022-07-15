@@ -15,10 +15,10 @@ public:
     unsigned int flag;
     unsigned int enemyMask;
 
-    bool operator==(const QString& name)
+    bool operator==(const QString& name) const
     { return (this->name == name); }
 
-    bool operator==(unsigned int flag)
+    bool operator==(unsigned int flag) const
     { return (this->flag == flag); }
   };
 
@@ -30,7 +30,8 @@ public:
   Faction* getFaction(const QString& name);
   Faction* getFaction(unsigned int flag);
 
-  void     setAsEnemy(bool set, const QString& name1, const QString& name2);
+  Q_INVOKABLE bool areEnemies(const QString& name1, const QString& name2) const;
+  Q_INVOKABLE void setAsEnemy(bool set, const QString& name1, const QString& name2);
   void     setAsEnemy(bool set, unsigned int flag1, unsigned int flag2);
 
   void     initialize(void);

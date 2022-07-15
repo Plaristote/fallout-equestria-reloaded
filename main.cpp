@@ -31,6 +31,7 @@
 #include "game/mousecursor.h"
 #include "game/gamepadcontroller.h"
 #include "game/savepreview.h"
+#include "game/diplomacy.hpp"
 
 #include "cmap/statmodel.h"
 
@@ -124,6 +125,7 @@ int main(int argc, char *argv[])
   qRegisterMetaType<ObjectFactory*>("ObjectFactory*");
   qRegisterMetaType<ObjectGroup*>("const ObjectGroup*");
   qRegisterMetaType<GridComponent*>("GridComponent*");
+  qRegisterMetaType<WorldDiplomacy*>("WorldDiplomacy*");
 
   registerQmlTilemap();
   // GAME EDITOR

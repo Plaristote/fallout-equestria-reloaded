@@ -33,6 +33,7 @@ private slots:
 protected:
   WorldDiplomacy::Faction* faction = nullptr;
   unsigned int enemyFlag = 0;
+  QMetaObject::Connection factionListener;
 };
 
 #endif // CHARACTERDIPLOMACY_H

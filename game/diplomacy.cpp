@@ -55,10 +55,21 @@ WorldDiplomacy::Faction* WorldDiplomacy::getFaction(unsigned int flag)
   return nullptr;
 }
 
+bool WorldDiplomacy::areEnemies(const QString& name1, const QString& name2) const
+{
+  Factions::const_iterator it_first  = find(_factions.begin(), _factions.end(), name1);
+  Factions::const_iterator it_second = find(_factions.begin(), _factions.end(), name2);
+
+  if (it_first != _factions.end() && it_second != _factions.end())
+    return (it_first->flag & it_second->enemyMask) > 0 ||
+           (it_second->flag & it_first->enemyMask) > 0;
+  return false;
+}
+
 void WorldDiplomacy::setAsEnemy(bool set, const QString& name1, const QString& name2)
 {
-  auto it_first  = find(_factions.begin(), _factions.end(), name1);
-  auto it_second = find(_factions.begin(), _factions.end(), name2);
+  Factions::iterator it_first  = find(_factions.begin(), _factions.end(), name1);
+  Factions::iterator it_second = find(_factions.begin(), _factions.end(), name2);
 
   if (it_first != _factions.end() && it_second != _factions.end())
     setAsEnemy(set, *it_first, *it_second);

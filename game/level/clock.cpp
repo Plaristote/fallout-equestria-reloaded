@@ -31,5 +31,6 @@ void ClockComponent::advanceTime(unsigned int minutes)
     for (ObjectGroup* group : allObjectGroups())
       group->getTaskManager()->update(delta);
     taskRunner->update(delta);
+    Game::get()->getTaskManager()->update(delta);
   }
 }

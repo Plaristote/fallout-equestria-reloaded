@@ -10,6 +10,7 @@ VisualEffectsComponent::~VisualEffectsComponent()
 {
   for (auto it = runningAnimations.begin() ; it != runningAnimations.end() ; ++it)
     delete it->first;
+  runningAnimations.clear();
 }
 
 void VisualEffectsComponent::registerVisualEffect(Sprite* sprite)

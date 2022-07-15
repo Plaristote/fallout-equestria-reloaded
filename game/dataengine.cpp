@@ -129,7 +129,7 @@ int DataEngine::getReputation(const QString& faction) const
 
 void DataEngine::showReputation(const QString& faction)
 {
-  if (hasFactionReputationEnabled(faction))
+  if (!hasFactionReputationEnabled(faction))
   {
     QJsonObject factionData = diplomacy[faction].toObject();
 

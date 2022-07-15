@@ -209,7 +209,10 @@ void Game::loadLevel(const QString &name, const QString& targetZone)
       if (targetZone == nullTargetZone)
         playerParty->loadIntoLevel(currentLevel);
       else if (!isGameEditor)
+      {
         currentLevel->insertPartyIntoZone(playerParty, targetZone);
+        currentLevel->scriptCall("onLoaded");
+      }
     }
     catch (const std::runtime_error& error)
     {

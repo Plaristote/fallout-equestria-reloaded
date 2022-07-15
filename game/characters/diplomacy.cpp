@@ -23,8 +23,12 @@ void CharacterDiplomacy::initializeFaction()
   auto* characterSheet = getStatistics();
   auto* diplomacy = Game::get()->getDiplomacy();
 
+  disconnect(factionListener);
   if (characterSheet && diplomacy)
+  {
+    factionListener = connect(characterSheet, &StatModel::factionChanged, this, &CharacterDiplomacy::initializeFaction);
     faction = diplomacy->getFaction(characterSheet->getFaction());
+  }
   else
     faction = nullptr;
 }

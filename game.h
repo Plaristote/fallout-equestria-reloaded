@@ -26,6 +26,7 @@ class Game : public StorableObject
   Q_PROPERTY(Character*      player      MEMBER player CONSTANT)
   Q_PROPERTY(CharacterParty* playerParty MEMBER playerParty CONSTANT)
   Q_PROPERTY(DataEngine*     dataEngine  MEMBER dataEngine CONSTANT)
+  Q_PROPERTY(WorldDiplomacy* diplomacy   READ getDiplomacy CONSTANT)
   Q_PROPERTY(TimeManager*    timeManager MEMBER timeManager CONSTANT)
   Q_PROPERTY(TaskRunner*     tasks       MEMBER taskManager CONSTANT)
   Q_PROPERTY(QuestManager*   quests      MEMBER quests CONSTANT)
