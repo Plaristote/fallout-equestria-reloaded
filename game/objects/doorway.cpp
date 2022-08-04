@@ -147,7 +147,7 @@ bool Doorway::onGoThrough(Character* character)
 bool Doorway::canGoThrough(Character* character) const
 {
   if (character == Game::get()->getPlayer())
-    return !locked;
+    return opened || !locked;
   if (!opened && !destroyed)
   {
     QJSValue result = scriptCall("canGoThrough", QJSValueList() << character->asJSValue());
