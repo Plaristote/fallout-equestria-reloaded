@@ -49,7 +49,7 @@ Pane {
     TerminalComboBox {
       Layout.fillWidth: true
       id: typeInput
-      model: ["weapon","armor","ammo","consommables","misc"]
+      model: ["weapon","armor","ammo","consommables","keys","misc"]
       currentIndex: model.indexOf(currentObject.type)
     }
 
