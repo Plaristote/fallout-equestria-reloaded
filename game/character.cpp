@@ -147,6 +147,7 @@ void Character::moveAway(Character* target)
   {
     QPoint destination = candidates.first();
 
+    actionQueue->reset();
     actionQueue->pushMovement(destination.x(), destination.y());
     actionQueue->start();
   }
