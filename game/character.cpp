@@ -33,7 +33,7 @@ void Character::update(qint64 delta)
 
 bool Character::shouldJoinFight() const
 {
-  return Game::get()->getPlayer() != this && hasLivingEnemiesInSight() && morale > 0;
+  return Game::get()->getPlayer() != this && !unconscious && hasLivingEnemiesInSight() && morale > 0;
 }
 
 void Character::onActionQueueCompleted()
