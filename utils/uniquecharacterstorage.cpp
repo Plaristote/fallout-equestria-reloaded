@@ -24,6 +24,7 @@ int UniqueCharacterStorage::loadUniqueCharactersToLevel(GridComponent* level)
 
     Character* character = slot->storedCharacter;
     QPoint position = slot->storedPosition;
+    // TODO: calculate the time spent stored inside the storage and add it to the character's task manager
 
     level->appendObject(character);
     level->setCharacterPosition(character, position.x(), position.y());
@@ -56,9 +57,11 @@ int UniqueCharacterStorage::saveUniqueCharactersFromLevel(GridComponent* level)
       bool isDetached = level->detachObject(dynamicObject);
       if(isDetached)
       {
+
         dynamicObject->setParent(this);
         Character* character = (Character*)dynamicObject;
         QPoint position = character->getPosition();
+        // TODO: add the current time
         StorageSlot* slot = new StorageSlot(this,character,position);
 
         storage.append(slot);
