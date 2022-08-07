@@ -32,6 +32,7 @@ Game::Game(QObject *parent) : StorableObject(parent), timePasser(this)
   playerParty = new CharacterParty(this);
   worldmap = new WorldMap(this);
   randomEncounters = new RandomEncounterController(this);
+  uniqueCharacterStorage = new UniqueCharacterStorage(this);
   quests = new QuestManager(this);
   taskManager = new TaskRunner(this);
   soundManager = new SoundManager(this);
