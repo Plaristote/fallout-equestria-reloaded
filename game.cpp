@@ -208,7 +208,10 @@ void Game::loadLevel(const QString &name, const QString& targetZone)
       currentLevel->load(name, dataEngine);
       currentLevel->setPaused(false);
       if (targetZone == nullTargetZone)
+      {
         playerParty->loadIntoLevel(currentLevel);
+        uniqueCharacterStorage->loadUniqueCharactersToLevel(currentLevel);
+      }
       else if (!isGameEditor)
       {
         currentLevel->insertPartyIntoZone(playerParty, targetZone);
