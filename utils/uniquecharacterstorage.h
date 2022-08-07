@@ -5,23 +5,36 @@
 #include <QQmlListProperty>
 #include "game/character.h"
 #include "game/level/grid.h"
+class StorageSlot;
 
 class UniqueCharacterStorage : public QObject
 {
   Q_OBJECT
 
-  Q_PROPERTY(QQmlListProperty<Character> uniqueCharacterList READ getUniqueCharacterList)
-
 public:
   explicit UniqueCharacterStorage(QObject *parent = nullptr);
-  QQmlListProperty<Character> getUniqueCharacterList() { return QML_QLIST_CONSTRUCTOR(Character, uniqueCharacterList); }
 
   Q_INVOKABLE int saveUniqueCharactersFromLevel(GridComponent* level);
+  Q_INVOKABLE int loadUniqueCharactersToLevel(GridComponent* level);
 
 signals:
 
 private:
-  QList<Character*> uniqueCharacterList;
+  QMap<QString,QList<StorageSlot*>> levelToStorage;
+
+};
+
+class StorageSlot : public QObject
+{
+  Q_OBJECT
+
+public:
+  explicit StorageSlot(QObject *parent = nullptr, Character* character = nullptr, QPoint position=QPoint());
+
+public:
+  Character* storedCharacter;
+  QPoint storedPosition;
+
 };
 
 #endif // UNIQUECHARACTERSTORAGE_H
