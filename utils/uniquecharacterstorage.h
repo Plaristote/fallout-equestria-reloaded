@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QQmlListProperty>
 #include "game/character.h"
+#include "game/level/grid.h"
 
 class UniqueCharacterStorage : public QObject
 {
@@ -15,6 +16,7 @@ public:
   explicit UniqueCharacterStorage(QObject *parent = nullptr);
   QQmlListProperty<Character> getUniqueCharacterList() { return QML_QLIST_CONSTRUCTOR(Character, uniqueCharacterList); }
 
+  Q_INVOKABLE int saveUniqueCharactersFromLevel(GridComponent* level);
 
 signals:
 
