@@ -14,9 +14,22 @@ int UniqueCharacterStorage::loadUniqueCharactersToLevel(GridComponent* level)
     return -1;
   }
 
-  int numberOfCharactersLoaded = 0;
+  QString levelName = level->getName();
+  QList<StorageSlot*> storage = levelToStorage.take(levelName);
+  int numberOfCharactersLoaded = storage.count();
 
+  for(int i=0; i<storage.count();i++)
+  {
+    StorageSlot* slot = storage.at(i);
 
+    Character* character = slot->storedCharacter;
+    QPoint position = slot->storedPosition;
+
+    level->appendObject(character);
+    level->setCharacterPosition(character, position.x(), position.y());
+
+    slot->deleteLater();
+  }
 
   return numberOfCharactersLoaded;
 
