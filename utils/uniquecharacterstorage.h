@@ -12,6 +12,8 @@ class UniqueCharacterStorage : public QObject
 {
   Q_OBJECT
 
+  Q_PROPERTY(QMap<QString,QList<StorageSlot*>> levelToStorage MEMBER levelToStorage CONSTANT)
+
 public:
   explicit UniqueCharacterStorage(QObject *parent = nullptr);
 
@@ -29,6 +31,10 @@ class StorageSlot : public QObject
 {
   Q_OBJECT
 
+  Q_PROPERTY(Character* storedCharacter MEMBER storedCharacter)
+  Q_PROPERTY(QPoint storedPosition MEMBER storedPosition)
+  Q_PROPERTY(long storedTimestampAtStorage MEMBER storedTimestampAtStorage)
+
 public:
   explicit StorageSlot(QObject *parent = nullptr, Character* character = nullptr, QPoint position=QPoint(), long timestampAtStorage = 0);
 
@@ -36,7 +42,6 @@ public:
   Character* storedCharacter;
   QPoint storedPosition;
   long storedTimestampAtStorage;
-
 };
 
 #endif // UNIQUECHARACTERSTORAGE_H
