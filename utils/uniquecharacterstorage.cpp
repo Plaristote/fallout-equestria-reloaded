@@ -1,4 +1,5 @@
 #include "uniquecharacterstorage.h"
+#include "game.h"
 
 UniqueCharacterStorage::UniqueCharacterStorage(QObject *parent)
   : QObject{parent}
@@ -17,6 +18,8 @@ int UniqueCharacterStorage::loadUniqueCharactersToLevel(GridComponent* level)
   QString levelName = level->getName();
   QList<StorageSlot*> storage = levelToStorage.take(levelName);
   int numberOfCharactersLoaded = storage.count();
+  TimeManager* timeManager = Game::get()->getTimeManager();
+  long currentTime = timeManager->getTimestamp();
 
   for(int i=0; i<storage.count();i++)
   {
@@ -24,13 +27,16 @@ int UniqueCharacterStorage::loadUniqueCharactersToLevel(GridComponent* level)
 
     Character* character = slot->storedCharacter;
     QPoint position = slot->storedPosition;
-    // TODO: calculate the time spent stored inside the storage and add it to the character's task manager
+
+    long timeAtStorage = slot->storedTimestampAtStorage;
+    qint64 elapsedTime = (currentTime - timeAtStorage) * 1000; // it needs milliseconds
 
     level->appendObject(character);
     level->setCharacterPosition(character, position.x(), position.y());
-
-    slot->deleteLater();
+    character->getTaskManager()->update(elapsedTime);
   }
+
+  // TODO: should I eliminate manually all the slots?
 
   return numberOfCharactersLoaded;
 
@@ -61,8 +67,9 @@ int UniqueCharacterStorage::saveUniqueCharactersFromLevel(GridComponent* level)
         dynamicObject->setParent(this);
         Character* character = (Character*)dynamicObject;
         QPoint position = character->getPosition();
-        // TODO: add the current time
-        StorageSlot* slot = new StorageSlot(this,character,position);
+        TimeManager* tm = Game::get()->getTimeManager();
+        long time = tm->getTimestamp();
+        StorageSlot* slot = new StorageSlot(this,character,position,time);
 
         storage.append(slot);
 
@@ -80,9 +87,10 @@ int UniqueCharacterStorage::saveUniqueCharactersFromLevel(GridComponent* level)
   return numberOfCharactersSaved;
 }
 
-StorageSlot::StorageSlot(QObject *parent, Character* character, QPoint position)
+StorageSlot::StorageSlot(QObject *parent, Character* character, QPoint position, long timestampAtStorage)
   : QObject{parent}
 {
   storedCharacter = character;
   storedPosition = position;
+  storedTimestampAtStorage = timestampAtStorage;
 }
