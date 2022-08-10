@@ -19,6 +19,8 @@ public:
 
   Q_INVOKABLE int saveUniqueCharactersFromLevel(GridComponent* level);
   Q_INVOKABLE int loadUniqueCharactersToLevel(GridComponent* level);
+  Q_INVOKABLE void log();
+
 
 signals:
 

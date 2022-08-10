@@ -4,11 +4,12 @@
 UniqueCharacterStorage::UniqueCharacterStorage(QObject *parent)
   : QObject{parent}
 {
-
+  qDebug()<<"Seting up storage for unique characters.";
 }
 
 int UniqueCharacterStorage::loadUniqueCharactersToLevel(GridComponent* level)
 {
+  qDebug()<<"Load unique characters to "<<level->getName()<<".";
   if(level == nullptr)
   {
     qDebug()<<"Level pointer is null.";
@@ -42,8 +43,25 @@ int UniqueCharacterStorage::loadUniqueCharactersToLevel(GridComponent* level)
 
 }
 
+void UniqueCharacterStorage::log()
+{
+  QList<QString> levels = levelToStorage.keys();
+  for(QString level : levels)
+  {
+    qDebug()<<"Level: "<<level<<".";
+    QList<StorageSlot*> characterSlots = levelToStorage[level];
+    for (auto slot : characterSlots)
+    {
+      qDebug()<<slot->storedCharacter->getDialogName();
+      qDebug()<<"x: "<<slot->storedPosition.x()<<", y: "<<slot->storedPosition.y();
+      qDebug()<<"Time stamp: "<<slot->storedTimestampAtStorage;
+    }
+  }
+}
+
 int UniqueCharacterStorage::saveUniqueCharactersFromLevel(GridComponent* level)
 {
+  qDebug()<<"Saving unique characters from "<<level->getName()<<".";
   if(level == nullptr)
   {
     qDebug()<<"Level pointer is null.";
