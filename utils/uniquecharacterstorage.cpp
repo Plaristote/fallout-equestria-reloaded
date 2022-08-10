@@ -4,15 +4,15 @@
 UniqueCharacterStorage::UniqueCharacterStorage(QObject *parent)
   : QObject{parent}
 {
-  qDebug()<<"Seting up storage for unique characters.";
+  qDebug()<<"UniqueCharacterStorage: Seting up storage for unique characters.";
 }
 
 int UniqueCharacterStorage::loadUniqueCharactersToLevel(GridComponent* level)
 {
-  qDebug()<<"Load unique characters to "<<level->getName()<<".";
+  qDebug()<<"UniqueCharacterStorage: Load unique characters to "<<level->getName()<<".";
   if(level == nullptr)
   {
-    qDebug()<<"Level pointer is null.";
+    qDebug()<<"UniqueCharacterStorage: Level pointer is null.";
     return -1;
   }
 
@@ -46,25 +46,27 @@ int UniqueCharacterStorage::loadUniqueCharactersToLevel(GridComponent* level)
 void UniqueCharacterStorage::log()
 {
   QList<QString> levels = levelToStorage.keys();
+  qDebug()<<"UniqueCharacterStorage: Levels "<<levels.count()<<".";
+
   for(QString level : levels)
   {
-    qDebug()<<"Level: "<<level<<".";
+    qDebug()<<"UniqueCharacterStorage: Level "<<level<<".";
     QList<StorageSlot*> characterSlots = levelToStorage[level];
     for (auto slot : characterSlots)
     {
       qDebug()<<slot->storedCharacter->getDialogName();
-      qDebug()<<"x: "<<slot->storedPosition.x()<<", y: "<<slot->storedPosition.y();
-      qDebug()<<"Time stamp: "<<slot->storedTimestampAtStorage;
+      qDebug()<<"UniqueCharacterStorage: x: "<<slot->storedPosition.x()<<", y: "<<slot->storedPosition.y();
+      qDebug()<<"UniqueCharacterStorage: Time stamp: "<<slot->storedTimestampAtStorage;
     }
   }
 }
 
 int UniqueCharacterStorage::saveUniqueCharactersFromLevel(GridComponent* level)
 {
-  qDebug()<<"Saving unique characters from "<<level->getName()<<".";
+  qDebug()<<"UniqueCharacterStorage: Saving unique characters from "<<level->getName()<<".";
   if(level == nullptr)
   {
-    qDebug()<<"Level pointer is null.";
+    qDebug()<<"UniqueCharacterStorage: Level pointer is null.";
     return -1;
   }
 
@@ -94,7 +96,7 @@ int UniqueCharacterStorage::saveUniqueCharactersFromLevel(GridComponent* level)
         numberOfCharactersSaved++;
       }else
       {
-        qDebug()<<"Could not detach dynamic object "<<dynamicObject->getObjectName()<<" from level "<<level->getName();
+        qDebug()<<"UniqueCharacterStorage: Could not detach dynamic object "<<dynamicObject->getObjectName()<<" from level "<<level->getName();
       }
     }
   }
