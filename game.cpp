@@ -210,16 +210,14 @@ void Game::loadLevel(const QString &name, const QString& targetZone)
       if (targetZone == nullTargetZone)
       {
         playerParty->loadIntoLevel(currentLevel);
-        // this loadUniqueCharactersToLevel is not called during testing witht he console
+
         uniqueCharacterStorage->loadUniqueCharactersToLevel(currentLevel);
       }
       else if (!isGameEditor)
       {
         currentLevel->insertPartyIntoZone(playerParty, targetZone);
-        // if I put loadUniqueCharactersToLevel here then upon loading the game segfault
-        // my hypothesis is that the unique characters still have a pointer to the non-unique ones
-        // this makes FieldOfView::LoseTrackOfCharacters segfault since they must check if the
-        // non-unique characters, who now have changed address
+
+        uniqueCharacterStorage->loadUniqueCharactersToLevel(currentLevel);
         currentLevel->scriptCall("onLoaded");
       }
     }

@@ -93,8 +93,9 @@ int UniqueCharacterStorage::saveUniqueCharactersFromLevel(GridComponent* level)
         QPoint position = character->getPosition();
         TimeManager* tm = Game::get()->getTimeManager();
         long time = tm->getTimestamp();
-        StorageSlot* slot = new StorageSlot(this,character,position,time);
+        character->getFieldOfView()->reset();
 
+        StorageSlot* slot = new StorageSlot(this,character,position,time);
         storage.append(slot);
 
         numberOfCharactersSaved++;
