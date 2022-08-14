@@ -37,7 +37,10 @@ int UniqueCharacterStorage::loadUniqueCharactersToLevel(GridComponent* level)
     character->getTaskManager()->update(elapsedTime);
   }
 
-  // TODO: should I eliminate manually all the slots?
+  for (auto slot: storage)
+  {
+    slot->deleteLater();
+  }
 
   return numberOfCharactersLoaded;
 
