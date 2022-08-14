@@ -48,7 +48,7 @@ int UniqueCharacterStorage::saveUniqueCharactersFromLevel(LevelTask* level)
         numberOfCharactersSaved++;
       }else
       {
-        qDebug()<<"UniqueCharacterStorage: Could not detach dynamic object"<<dynamicObject->getObjectName()<<" from level "<<level->getName();
+        qDebug()<<"UniqueCharacterStorage: Could not detach dynamic object"<<dynamicObject->getObjectName()<<"from level"<<level->getName();
       }
     }
   }
@@ -80,17 +80,17 @@ int UniqueCharacterStorage::loadUniqueCharactersToLevel(LevelTask* level)
   for (auto slot: storage)
   {
     slot->deleteLater();
-    storage.clear();
   }
+  storage.clear();
 
   return numberOfCharactersLoaded;
-
 }
 
 bool UniqueCharacterStorage::loadCharacterToCurrentLevel(QString characterSheet, int x = 0, int y = 0, int z = 0)
 {
   bool character_loaded = false;
 
+  // find the character first
   StorageSlot* characterSlot = nullptr;
   bool character_found = false;
   QMapIterator<QString, QList<StorageSlot*>> i(levelToStorage);
@@ -112,7 +112,8 @@ bool UniqueCharacterStorage::loadCharacterToCurrentLevel(QString characterSheet,
     }
   }
 
-  if(character_found && characterSlot)
+  // if found
+  if(character_found)
   {
     LevelTask* level = Game::get()->getLevel();
     Point position = Point();
