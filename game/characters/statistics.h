@@ -23,6 +23,7 @@ public:
 
   StatModel* getStatistics() const { return statistics; }
   void setStatistics(StatModel* value);
+  QString getCharacterSheet() const { return characterSheet; }
   void setCharacterSheet(const QString& name);
   bool getIsUnique() const { return isUnique; }
   void setUnique(bool value) { isUnique = value; }
