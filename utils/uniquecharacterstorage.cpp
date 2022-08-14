@@ -27,13 +27,13 @@ int UniqueCharacterStorage::loadUniqueCharactersToLevel(GridComponent* level)
     StorageSlot* slot = storage.at(i);
 
     Character* character = slot->storedCharacter;
-    QPoint position = slot->storedPosition;
+    Point position = character->getPoint();
 
     long timeAtStorage = slot->storedTimestampAtStorage;
     qint64 elapsedTime = (currentTime - timeAtStorage) * 1000; // it needs milliseconds
 
     level->appendObject(character);
-    level->setCharacterPosition(character, position.x(), position.y());
+    level->setCharacterPosition(character, position.x, position.y, position.z);
     character->getTaskManager()->update(elapsedTime);
   }
 
@@ -58,8 +58,7 @@ void UniqueCharacterStorage::log()
     for (auto slot : characterSlots)
     {
       qDebug()<<"UniqueCharacterStorage:"<<slot->storedCharacter->getBaseName();
-      qDebug()<<"UniqueCharacterStorage:"<<slot->storedPosition;
-      qDebug()<<"UniqueCharacterStorage: Time stamp:"<<slot->storedTimestampAtStorage;
+      qDebug()<<"UniqueCharacterStorage: Time stamp"<<slot->storedTimestampAtStorage;
     }
   }
 }
@@ -93,12 +92,11 @@ int UniqueCharacterStorage::saveUniqueCharactersFromLevel(GridComponent* level)
       if(isDetached)
       {
         character->setParent(this);
-        QPoint position = character->getPosition();
         TimeManager* tm = Game::get()->getTimeManager();
         long time = tm->getTimestamp();
         character->getFieldOfView()->reset();
 
-        StorageSlot* slot = new StorageSlot(this,character,position,time);
+        StorageSlot* slot = new StorageSlot(this,character,time);
         storage.append(slot);
 
         numberOfCharactersSaved++;
@@ -115,10 +113,9 @@ int UniqueCharacterStorage::saveUniqueCharactersFromLevel(GridComponent* level)
   return numberOfCharactersSaved;
 }
 
-StorageSlot::StorageSlot(QObject *parent, Character* character, QPoint position, long timestampAtStorage)
+StorageSlot::StorageSlot(QObject *parent, Character* character, long timestampAtStorage)
   : QObject{parent}
 {
   storedCharacter = character;
-  storedPosition = position;
   storedTimestampAtStorage = timestampAtStorage;
 }

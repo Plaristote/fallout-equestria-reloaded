@@ -34,15 +34,13 @@ class StorageSlot : public QObject
   Q_OBJECT
 
   Q_PROPERTY(Character* storedCharacter MEMBER storedCharacter)
-  Q_PROPERTY(QPoint storedPosition MEMBER storedPosition)
   Q_PROPERTY(long storedTimestampAtStorage MEMBER storedTimestampAtStorage)
 
 public:
-  explicit StorageSlot(QObject *parent = nullptr, Character* character = nullptr, QPoint position=QPoint(), long timestampAtStorage = 0);
+  explicit StorageSlot(QObject *parent = nullptr, Character* character = nullptr, long timestampAtStorage = 0);
 
 public:
   Character* storedCharacter;
-  QPoint storedPosition;
   long storedTimestampAtStorage;
 };
 
