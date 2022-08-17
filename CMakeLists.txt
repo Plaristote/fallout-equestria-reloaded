@@ -43,6 +43,8 @@ set(PROJECT_SOURCES
         utils/orderedmap.h
         utils/layeredspritesheet.h
         utils/layeredspritesheet.cpp
+        utils/uniquecharacterstorage.h
+        utils/uniquecharacterstorage.cpp
         tilemap/tileset.h
         tilemap/tileset.cpp
         tilemap/tile.h

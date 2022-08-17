@@ -29,6 +29,7 @@ public:
   Q_INVOKABLE void addElapsedTime(DateTime::TimeUnit);
   Q_INVOKABLE void addElapsedMinutes(int);
   Q_INVOKABLE long secondsUntilTime(const QVariantMap& timeData) const;
+  // Return timestamp in seconds
   Q_INVOKABLE long getTimestamp() const { return getDateTime().GetTimestamp(); }
 
   int getYear()   const { return dateTime.GetYear(); }

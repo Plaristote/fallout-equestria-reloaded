@@ -32,6 +32,7 @@ Game::Game(QObject *parent) : StorableObject(parent), timePasser(this)
   playerParty = new CharacterParty(this);
   worldmap = new WorldMap(this);
   randomEncounters = new RandomEncounterController(this);
+  uniqueCharacterStorage = new UniqueCharacterStorage(this);
   quests = new QuestManager(this);
   taskManager = new TaskRunner(this);
   soundManager = new SoundManager(this);
@@ -207,10 +208,14 @@ void Game::loadLevel(const QString &name, const QString& targetZone)
       currentLevel->load(name, dataEngine);
       currentLevel->setPaused(false);
       if (targetZone == nullTargetZone)
+      {
         playerParty->loadIntoLevel(currentLevel);
+        uniqueCharacterStorage->loadUniqueCharactersToLevel(currentLevel);
+      }
       else if (!isGameEditor)
       {
         currentLevel->insertPartyIntoZone(playerParty, targetZone);
+        uniqueCharacterStorage->loadUniqueCharactersToLevel(currentLevel);
         currentLevel->scriptCall("onLoaded");
       }
     }
@@ -262,6 +267,7 @@ void Game::exitLevel(bool silent)
       disconnect(currentLevel, &LevelTask::displayConsoleMessage, this, &Game::appendToConsole);
       disconnect(currentLevel, &LevelTask::exitZoneEntered, this, &Game::changeZone);
       playerParty->extractFromLevel(currentLevel);
+      uniqueCharacterStorage->saveUniqueCharactersFromLevel(currentLevel);
       currentLevel->onExit();
       currentLevel->save(dataEngine);
       destroyLevelTask();

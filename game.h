@@ -3,6 +3,7 @@
 
 # include <QObject>
 # include "utils/storableobject.h"
+# include "utils/uniquecharacterstorage.h"
 # include "game/dataengine.h"
 # include "game/leveltask.h"
 # include "game/characterparty.h"
@@ -32,6 +33,7 @@ class Game : public StorableObject
   Q_PROPERTY(QuestManager*   quests      MEMBER quests CONSTANT)
   Q_PROPERTY(SoundManager*   sounds      READ getSoundManager CONSTANT)
   Q_PROPERTY(RandomEncounterController* randomEncounters MEMBER randomEncounters CONSTANT)
+  Q_PROPERTY(UniqueCharacterStorage*    uniqueCharacterStorage MEMBER uniqueCharacterStorage CONSTANT)
   Q_PROPERTY(bool saveLock MEMBER saveLock NOTIFY saveLockChanged)
   Q_PROPERTY(bool fastPassTime READ isFastPassingTime NOTIFY fastPassingChanged)
   Q_PROPERTY(bool isGameEditor MEMBER isGameEditor NOTIFY gameEditorEnabled)
@@ -120,6 +122,7 @@ private:
   QuestManager* quests;
   WorldMap* worldmap;
   RandomEncounterController* randomEncounters;
+  UniqueCharacterStorage* uniqueCharacterStorage;
   LevelTask*  currentLevel = nullptr;
   CharacterParty* playerParty = nullptr;
   Character* player = nullptr;

@@ -26,6 +26,7 @@ class TaskRunner : public QObject
 public:
   explicit TaskRunner(QObject *parent = nullptr);
 
+  // Update TaskRunner. The parameter is in milliseconds
   void update(qint64);
 
   void setScriptController(ScriptController* v) { script = v; }
