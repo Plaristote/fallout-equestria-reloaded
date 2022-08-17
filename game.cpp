@@ -115,6 +115,7 @@ void Game::loadFromDataEngine()
   diplomacy->initialize();
   timeManager->load(dataEngine->getTimeData());
   playerParty->load(dataEngine->getPlayerParty());
+  uniqueCharacterStorage->load(dataEngine->getUniqueCharacterStorage());
   worldmap->load(dataEngine->getWorldmap());
   quests->load(dataEngine->getQuests());
   quests->addQuest("quest-test");
@@ -304,16 +305,18 @@ void Game::changeZone(TileZone* tileZone)
 
 void Game::save()
 {
-  QJsonObject partyData, timeData;
+  QJsonObject partyData, timeData, uniqueCharactersData;
 
   timeManager->save(timeData);
   playerParty->save(partyData);
+  uniqueCharacterStorage->save(uniqueCharactersData);
   if (currentLevel)
     currentLevel->save(dataEngine);
   dataEngine->setTimeData(timeData);
   dataEngine->setQuests(quests->save());
   dataEngine->setWorldmap(worldmap->save());
   dataEngine->setPlayerParty(partyData);
+  dataEngine->setUniqueCharacterStorage(uniqueCharactersData);
   dataEngine->setVariables(dataStore);
 }
 

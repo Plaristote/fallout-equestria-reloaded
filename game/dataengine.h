@@ -32,6 +32,9 @@ public:
   QJsonObject  getPlayerParty() const;
   void         setPlayerParty(const QJsonObject&);
 
+  QJsonObject getUniqueCharacterStorage() const;
+  void        setUniqueCharacterStorage(const QJsonObject&);
+
   QJsonObject  getWorldDiplomacy() const;
   void         setWorldDiplomacy(const QJsonObject&);
   Q_INVOKABLE void registerFaction(const QString&);

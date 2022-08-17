@@ -1,5 +1,7 @@
 #include "uniquecharacterstorage.h"
 #include "game.h"
+#include <QJsonObject>
+#include <QJsonArray>
 
 UniqueCharacterStorage::UniqueCharacterStorage(QObject *parent)
   : QObject{parent}
@@ -40,6 +42,7 @@ int UniqueCharacterStorage::loadUniqueCharactersToLevel(GridComponent* level)
   for (auto slot: storage)
   {
     slot->deleteLater();
+    storage.clear();
   }
 
   return numberOfCharactersLoaded;
@@ -113,9 +116,59 @@ int UniqueCharacterStorage::saveUniqueCharactersFromLevel(GridComponent* level)
   return numberOfCharactersSaved;
 }
 
+void UniqueCharacterStorage::load(const QJsonObject& data)
+{
+  for (auto it = data.begin() ; it != data.end() ; ++it)
+  {
+    QList<StorageSlot*> slotList;
+
+    for (auto slotJson : it.value().toArray())
+    {
+      StorageSlot* slot = new StorageSlot(this);
+
+      slot->load(slotJson.toObject());
+      slotList.push_back(slot);
+    }
+    levelToStorage[it.key()] = slotList;
+  }
+}
+
+void UniqueCharacterStorage::save(QJsonObject& data)
+{
+  for (auto it = levelToStorage.begin() ; it != levelToStorage.end() ; ++it)
+  {
+    QJsonArray storageSlotsJson;
+
+    for (StorageSlot* slot : it.value())
+    {
+      QJsonObject slotJson;
+
+      slot->save(slotJson);
+      storageSlotsJson.push_back(slotJson);
+    }
+    data[it.key()] = storageSlotsJson;
+  }
+}
+
 StorageSlot::StorageSlot(QObject *parent, Character* character, long timestampAtStorage)
   : QObject{parent}
 {
   storedCharacter = character;
   storedTimestampAtStorage = timestampAtStorage;
+}
+
+void StorageSlot::load(const QJsonObject& data)
+{
+  storedCharacter = new Character(parent());
+  storedCharacter->load(data["character"].toObject());
+  storedTimestampAtStorage = data["timestamp"].toVariant().toLongLong();
+}
+
+void StorageSlot::save(QJsonObject& data)
+{
+  QJsonObject characterJson;
+
+  storedCharacter->save(characterJson);
+  data["character"] = characterJson;
+  data["timestamp"] = QJsonValue::fromVariant(QVariant::fromValue(storedTimestampAtStorage));
 }

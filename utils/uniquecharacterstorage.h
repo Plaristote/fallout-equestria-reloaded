@@ -7,6 +7,7 @@
 #include "game/level/grid.h"
 
 class StorageSlot;
+class QJsonObject;
 
 class UniqueCharacterStorage : public QObject
 {
@@ -21,6 +22,8 @@ public:
   Q_INVOKABLE int loadUniqueCharactersToLevel(GridComponent* level);
   Q_INVOKABLE void log();
 
+  void load(const QJsonObject&);
+  void save(QJsonObject&);
 
 signals:
 
@@ -38,6 +41,9 @@ class StorageSlot : public QObject
 
 public:
   explicit StorageSlot(QObject *parent = nullptr, Character* character = nullptr, long timestampAtStorage = 0);
+
+  void load(const QJsonObject&);
+  void save(QJsonObject&);
 
 public:
   Character* storedCharacter;

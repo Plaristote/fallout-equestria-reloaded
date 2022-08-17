@@ -16,6 +16,7 @@ DataEngine::DataEngine(QObject *parent) : QObject(parent)
   data.insert("characters", characters);
   data.insert("levels", levels);
   data.insert("playerParty", QJsonObject());
+  data.insert("characterStorage", QJsonObject());
   data.insert("time", time);
   data.insert("quests", quests);
   data.insert("worldmap", worldmap);
@@ -213,6 +214,17 @@ void DataEngine::setPlayerParty(const QJsonObject& partyData)
 {
   data.remove("playerParty");
   data.insert("playerParty", partyData);
+}
+
+QJsonObject DataEngine::getUniqueCharacterStorage() const
+{
+  return data["characterStorage"].toObject();
+}
+
+void DataEngine::setUniqueCharacterStorage(const QJsonObject& characterStorageData)
+{
+  data.remove("characterStorage");
+  data.insert("characterStorage", characterStorageData);
 }
 
 void DataEngine::setCurrentLevel(const QString& name)
