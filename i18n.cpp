@@ -8,6 +8,7 @@
 #include <QDebug>
 
 I18n* I18n::instance = nullptr;
+void merge(QJsonObject&, const QJsonObject&);
 
 I18n::I18n(QObject *parent) : QObject(parent)
 {
@@ -28,6 +29,15 @@ I18n::I18n(QObject *parent) : QObject(parent)
 QString I18n::getSourceForLocale(const QString &locale)
 {
   return ASSETS_PATH + "locales/" + locale + ".json";
+}
+
+QString I18n::getSourceForLocale(const QString& translationFile, const QString &locale)
+{
+  const auto base_path = ASSETS_PATH + "locales/" + translationFile;
+
+  if (*translationFile.rbegin() == '/')
+    return base_path + locale + ".json";
+  return base_path + '.' + locale + ".json";
 }
 
 static QStringList getSourcesForLocale(const QString& locale, const QString& basePath = ASSETS_PATH + "locales/")
@@ -65,8 +75,7 @@ static void loadLocale(const QString& locale, QJsonObject& data)
     {
       QJsonObject fileData = QJsonDocument::fromJson(file.readAll()).object();
 
-      for (auto it = fileData.constBegin() ; it != fileData.constEnd() ; ++it)
-        data.insert(it.key(), it.value());
+      merge(data, fileData);
     }
     else
       qDebug() << "i18n: failed to open file" << filename;

@@ -225,38 +225,48 @@ void ScriptEditorController::newDialog(const QString &name)
   }
 }
 
-void ScriptEditorController::setTranslation(const QString &key, const QString &text)
+void ScriptEditorController::setTranslation(const QString &key, const QString &text, const QString &translationFile)
 {
-  QString locale = I18n::get()->getCurrentLocale();
-  QFile   file(I18n::getSourceForLocale(locale));
+  QString     locale = I18n::get()->getCurrentLocale();
+  QString     sourcePath = translationFile.length() ? I18n::getSourceForLocale(translationFile, locale) : I18n::getSourceForLocale(locale);
+  QFile       file(sourcePath);
+  QJsonObject data;
+  std::function<void(QJsonObject&, QStringList)> recursive;
+  QStringList parts = key.split('.');
 
-  if (file.open(QIODevice::ReadOnly))
+  if (!file.exists())
   {
-    QJsonObject data = QJsonDocument::fromJson(file.readAll()).object();
-    QStringList parts = key.split('.');
-    std::function<void(QJsonObject&, QStringList)> recursive;
+    QDir        dir;
+    QStringList pathParts = sourcePath.split('/');
 
+    pathParts.removeLast();
+    dir.mkpath(pathParts.join('/'));
+    qDebug() << "setTranslation: created directory: " << pathParts.join('/');
+  }
+  else if (file.open(QIODevice::ReadOnly))
+  {
+    data = QJsonDocument::fromJson(file.readAll()).object();
     file.close();
-    recursive = [&recursive, text](QJsonObject& parent, QStringList remainingParts)
-    {
-      QString& key = remainingParts.first();
+  }
+  recursive = [&recursive, text](QJsonObject& parent, QStringList remainingParts)
+  {
+    QString& key = remainingParts.first();
 
-      if (remainingParts.length() > 1) {
-        QJsonObject scope = parent[key].toObject();
+    if (remainingParts.length() > 1) {
+      QJsonObject scope = parent[key].toObject();
 
-        remainingParts.removeFirst();
-        recursive(scope, remainingParts);
-        parent.insert(key, scope);
-      }
-      else
-        parent.insert(key, text);
-    };
-    recursive(data, parts);
-    if (file.open(QIODevice::WriteOnly))
-    {
-      file.write(QJsonDocument(data).toJson());
-      file.close();
-      I18n::get()->loadCurrentLocale();
+      remainingParts.removeFirst();
+      recursive(scope, remainingParts);
+      parent.insert(key, scope);
     }
+    else
+      parent.insert(key, text);
+  };
+  recursive(data, parts);
+  if (file.open(QIODevice::WriteOnly))
+  {
+    file.write(QJsonDocument(data).toJson());
+    file.close();
+    I18n::get()->loadCurrentLocale();
   }
 }

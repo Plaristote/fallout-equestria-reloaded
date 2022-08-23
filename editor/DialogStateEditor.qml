@@ -9,6 +9,7 @@ import Game 1.0
 
 ColumnLayout {
   id: stateLayout
+  property string translationFile
   anchors.fill: parent
   RowLayout {
     Layout.fillWidth: true
@@ -32,6 +33,7 @@ ColumnLayout {
           Layout.fillWidth: true
           id: stateTextInput
           translationKey: controller.stateText
+          translationFile: stateLayout.translationFile
           prefix: "dialogs." + currentDialog.replace(".json", "")
           onRequireKeyChange: controller.stateText = newKey
           onUpdated: controller.loadState(controller.stateReference)
@@ -77,6 +79,7 @@ ColumnLayout {
           Layout.fillWidth: true
           id: optionTextInput
           translationKey: controller.optionText
+          translationFile: stateLayout.translationFile
           prefix: "dialogs." + currentDialog.replace(".json", "")
           onRequireKeyChange: controller.optionText = newKey
           onUpdated: controller.optionsChanged()

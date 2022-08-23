@@ -7,6 +7,7 @@ RowLayout {
   id: root
   property string translationKey
   property string prefix
+  property string translationFile
 
   signal updated()
   signal requireKeyChange(string newKey)
@@ -15,7 +16,7 @@ RowLayout {
     const key = prefix + '.' + translationKey;
 
     if (i18n.t(key) !== textInput.text) {
-      scriptController.setTranslation(key, textInput.text);
+      scriptController.setTranslation(key, textInput.text, translationFile);
       updated();
     }
   }

@@ -24,6 +24,7 @@ public:
   const QString& getCurrentLocale() const { return currentLocale; }
 
   static QString getSourceForLocale(const QString& locale);
+  static QString getSourceForLocale(const QString& translationFile, const QString& locale);
 
 signals:
   void currentLocaleChanged();

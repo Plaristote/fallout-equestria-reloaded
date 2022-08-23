@@ -165,6 +165,7 @@ Item {
   Component {
     id: dialogStateComponent
     DialogStateEditor {
+      translationFile: `dialogs/${root.currentDialog.replace(".json", "")}`
     }
   }
 }
