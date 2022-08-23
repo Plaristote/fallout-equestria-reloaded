@@ -256,7 +256,7 @@ void ScriptEditorController::setTranslation(const QString &key, const QString &t
     {
       file.write(QJsonDocument(data).toJson());
       file.close();
-      I18n::get()->loadLocale();
+      I18n::get()->loadCurrentLocale();
     }
   }
 }

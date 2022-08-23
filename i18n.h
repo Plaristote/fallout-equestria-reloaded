@@ -30,7 +30,7 @@ signals:
   void translationsChanged();
 
 public slots:
-  void loadLocale();
+  void loadCurrentLocale();
 
 private:
   QJsonObject getTranslationGroupForKey(const QString& key) const;
