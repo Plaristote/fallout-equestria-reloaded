@@ -45,6 +45,7 @@ set(PROJECT_SOURCES
         utils/layeredspritesheet.cpp
         utils/uniquecharacterstorage.h
         utils/uniquecharacterstorage.cpp
+        utils/qjsonobject_merge.cpp
         tilemap/tileset.h
         tilemap/tileset.cpp
         tilemap/tile.h
