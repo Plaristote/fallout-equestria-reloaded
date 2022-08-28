@@ -94,16 +94,16 @@ bool UniqueCharacterStorage::loadCharacterToCurrentLevel(QString characterSheet,
   // find the character first
   StorageSlot* characterSlot = nullptr;
   bool character_found = false;
-  QMapIterator<QString, QList<StorageSlot*>> i(levelToStorage);
-  while(!character_found && i.hasNext())
-  {
-    i.next();
-    QList<StorageSlot*> storage = i.value();
+  auto keys = levelToStorage.keys();
 
-    QListIterator<StorageSlot*> j(storage);
-    while(!character_found && j.hasNext())
+  for(int i = 0; i<keys.count() && !character_found; i++)
+  {
+    QList<StorageSlot*>& storage = levelToStorage[keys.at(i)];
+
+    for(int j = 0; j<storage.count() && !character_found; j++)
     {
-      StorageSlot* slot = j.next();
+      StorageSlot* slot = storage.at(j);
+
       if(characterSheet == slot->storedCharacter->getCharacterSheet())
       {
         characterSlot = slot;
@@ -112,7 +112,6 @@ bool UniqueCharacterStorage::loadCharacterToCurrentLevel(QString characterSheet,
       }
     }
   }
-
   // if found
   if(character_found)
   {
