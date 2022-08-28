@@ -88,6 +88,7 @@ int UniqueCharacterStorage::loadUniqueCharactersToLevel(LevelTask* level)
 
 bool UniqueCharacterStorage::loadCharacterToCurrentLevel(QString characterSheet, int x = 0, int y = 0, int z = 0)
 {
+  qDebug()<<"UniqueCharacterStorage: Looking for character:"<<characterSheet;
   bool character_loaded = false;
 
   // find the character first
@@ -97,12 +98,12 @@ bool UniqueCharacterStorage::loadCharacterToCurrentLevel(QString characterSheet,
   while(!character_found && i.hasNext())
   {
     i.next();
-    auto storage = i.value();
+    QList<StorageSlot*> storage = i.value();
 
     QListIterator<StorageSlot*> j(storage);
     while(!character_found && j.hasNext())
     {
-      auto slot = j.next();
+      StorageSlot* slot = j.next();
       if(characterSheet == slot->storedCharacter->getCharacterSheet())
       {
         characterSlot = slot;
