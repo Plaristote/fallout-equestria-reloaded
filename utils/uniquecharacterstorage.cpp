@@ -61,12 +61,12 @@ int UniqueCharacterStorage::saveUniqueCharactersFromLevel(LevelTask* level)
 
 int UniqueCharacterStorage::loadUniqueCharactersToLevel(LevelTask* level)
 {
-  qDebug()<<"UniqueCharacterStorage: Load unique characters to"<<level->getName()<<".";
   if(level == nullptr)
   {
     qDebug()<<"UniqueCharacterStorage: Level pointer is null.";
     return -1;
   }
+  qDebug()<<"UniqueCharacterStorage: Load unique characters to"<<level->getName()<<".";
 
   QString levelName = level->getName();
   QList<StorageSlot*> storage = levelToStorage.take(levelName);
