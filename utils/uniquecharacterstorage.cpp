@@ -11,12 +11,12 @@ UniqueCharacterStorage::UniqueCharacterStorage(QObject *parent)
 
 int UniqueCharacterStorage::saveUniqueCharactersFromLevel(LevelTask* level)
 {
-  qDebug()<<"UniqueCharacterStorage: Saving unique characters from"<<level->getName()<<".";
   if(level == nullptr)
   {
     qDebug()<<"UniqueCharacterStorage: Level pointer is null.";
     return -1;
   }
+  qDebug()<<"UniqueCharacterStorage: Saving unique characters from"<<level->getName()<<".";
 
   QList<StorageSlot*> storage;
   int numberOfCharactersSaved = 0;
