@@ -45,12 +45,21 @@ Pane {
 
   HudConsole {
     id: terminalPane
+    property bool expanded: terminalHoverArea.containsMouse
     gameController: levelHud.gameController
     anchors.left: parent.left
-    anchors.top: parent.top
     anchors.bottom: parent.bottom
     anchors.margins: -4
     width: 300
+    height: terminalPane.expanded ? parent.height * 3 : parent.height
+    MouseArea {
+      id: terminalHoverArea
+      hoverEnabled: true
+      anchors.fill: parent
+    }
+    Behavior on height {
+      NumberAnimation { duration: 277 }
+    }
   }
 
   HudMenu {
