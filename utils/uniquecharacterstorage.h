@@ -5,6 +5,7 @@
 #include <QQmlListProperty>
 #include "game/character.h"
 #include "game/level/grid.h"
+#include "game/leveltask.h"
 
 class StorageSlot;
 class QJsonObject;
@@ -18,12 +19,17 @@ class UniqueCharacterStorage : public QObject
 public:
   explicit UniqueCharacterStorage(QObject *parent = nullptr);
 
-  Q_INVOKABLE int saveUniqueCharactersFromLevel(GridComponent* level);
-  Q_INVOKABLE int loadUniqueCharactersToLevel(GridComponent* level);
+  Q_INVOKABLE int saveUniqueCharactersFromLevel(LevelTask* level);
+  Q_INVOKABLE int loadUniqueCharactersToLevel(LevelTask* level);
+  Q_INVOKABLE bool loadCharacterToCurrentLevel(QString characterSheet, int x, int y, int z);
   Q_INVOKABLE void log();
 
   void load(const QJsonObject&);
   void save(QJsonObject&);
+private:
+  bool loadCharacterIntoLevel(LevelTask* level, StorageSlot* characterSlot);
+  bool loadCharacterIntoLevel(LevelTask* level, StorageSlot* characterSlot, Point position);
+
 
 signals:
 
@@ -32,6 +38,7 @@ private:
 
 };
 
+// Contains character and relative information neccessary to spawn it
 class StorageSlot : public QObject
 {
   Q_OBJECT

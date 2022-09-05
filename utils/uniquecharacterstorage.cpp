@@ -9,71 +9,14 @@ UniqueCharacterStorage::UniqueCharacterStorage(QObject *parent)
   qDebug()<<"UniqueCharacterStorage: Seting up storage for unique characters.";
 }
 
-int UniqueCharacterStorage::loadUniqueCharactersToLevel(GridComponent* level)
+int UniqueCharacterStorage::saveUniqueCharactersFromLevel(LevelTask* level)
 {
-  qDebug()<<"UniqueCharacterStorage: Load unique characters to"<<level->getName()<<".";
   if(level == nullptr)
   {
     qDebug()<<"UniqueCharacterStorage: Level pointer is null.";
     return -1;
   }
-
-  QString levelName = level->getName();
-  QList<StorageSlot*> storage = levelToStorage.take(levelName);
-  int numberOfCharactersLoaded = storage.count();
-  TimeManager* timeManager = Game::get()->getTimeManager();
-  long currentTime = timeManager->getTimestamp();
-
-  for(int i=0; i<storage.count();i++)
-  {
-    StorageSlot* slot = storage.at(i);
-
-    Character* character = slot->storedCharacter;
-    Point position = character->getPoint();
-
-    long timeAtStorage = slot->storedTimestampAtStorage;
-    qint64 elapsedTime = (currentTime - timeAtStorage) * 1000; // it needs milliseconds
-
-    level->appendObject(character);
-    level->setCharacterPosition(character, position.x, position.y, position.z);
-    character->getTaskManager()->update(elapsedTime);
-  }
-
-  for (auto slot: storage)
-  {
-    slot->deleteLater();
-    storage.clear();
-  }
-
-  return numberOfCharactersLoaded;
-
-}
-
-void UniqueCharacterStorage::log()
-{
-  QList<QString> levels = levelToStorage.keys();
-  qDebug()<<"UniqueCharacterStorage: Levels"<<levels.count()<<".";
-
-  for(QString level : levels)
-  {
-    qDebug()<<"UniqueCharacterStorage: Level"<<level<<"with"<<levelToStorage[level].count()<<"characters";
-    QList<StorageSlot*> characterSlots = levelToStorage[level];
-    for (auto slot : characterSlots)
-    {
-      qDebug()<<"UniqueCharacterStorage:"<<slot->storedCharacter->getBaseName();
-      qDebug()<<"UniqueCharacterStorage: Time stamp"<<slot->storedTimestampAtStorage;
-    }
-  }
-}
-
-int UniqueCharacterStorage::saveUniqueCharactersFromLevel(GridComponent* level)
-{
   qDebug()<<"UniqueCharacterStorage: Saving unique characters from"<<level->getName()<<".";
-  if(level == nullptr)
-  {
-    qDebug()<<"UniqueCharacterStorage: Level pointer is null.";
-    return -1;
-  }
 
   QList<StorageSlot*> storage;
   int numberOfCharactersSaved = 0;
@@ -105,7 +48,7 @@ int UniqueCharacterStorage::saveUniqueCharactersFromLevel(GridComponent* level)
         numberOfCharactersSaved++;
       }else
       {
-        qDebug()<<"UniqueCharacterStorage: Could not detach dynamic object"<<dynamicObject->getObjectName()<<" from level "<<level->getName();
+        qDebug()<<"UniqueCharacterStorage: Could not detach dynamic object"<<dynamicObject->getObjectName()<<"from level"<<level->getName();
       }
     }
   }
@@ -115,6 +58,121 @@ int UniqueCharacterStorage::saveUniqueCharactersFromLevel(GridComponent* level)
 
   return numberOfCharactersSaved;
 }
+
+int UniqueCharacterStorage::loadUniqueCharactersToLevel(LevelTask* level)
+{
+  if(level == nullptr)
+  {
+    qDebug()<<"UniqueCharacterStorage: Level pointer is null.";
+    return -1;
+  }
+  qDebug()<<"UniqueCharacterStorage: Load unique characters to"<<level->getName()<<".";
+
+  QString levelName = level->getName();
+  QList<StorageSlot*> storage = levelToStorage.take(levelName);
+  int numberOfCharactersLoaded = storage.count();
+
+  for(int i=0; i<storage.count();i++)
+  {
+    loadCharacterIntoLevel(level, storage.at(i));
+  }
+
+  for (auto slot: storage)
+  {
+    slot->deleteLater();
+  }
+  storage.clear();
+
+  return numberOfCharactersLoaded;
+}
+
+bool UniqueCharacterStorage::loadCharacterToCurrentLevel(QString characterSheet, int x = 0, int y = 0, int z = 0)
+{
+  qDebug()<<"UniqueCharacterStorage: Looking for character:"<<characterSheet;
+  bool character_loaded = false;
+
+  // find the character first
+  StorageSlot* characterSlot = nullptr;
+  bool character_found = false;
+  auto keys = levelToStorage.keys();
+
+  for(int i = 0; i<keys.count() && !character_found; i++)
+  {
+    QList<StorageSlot*>& storage = levelToStorage[keys.at(i)];
+
+    for(int j = 0; j<storage.count() && !character_found; j++)
+    {
+      StorageSlot* slot = storage.at(j);
+
+      if(characterSheet == slot->storedCharacter->getCharacterSheet())
+      {
+        characterSlot = slot;
+        character_found = true;
+        storage.removeAll(characterSlot);
+      }
+    }
+  }
+  // if found
+  if(character_found)
+  {
+    LevelTask* level = Game::get()->getLevel();
+    Point position = Point();
+    position.x = x;
+    position.y = y;
+    position.z = z;
+
+    loadCharacterIntoLevel(level, characterSlot, position);
+    characterSlot->deleteLater();
+    character_loaded = true;
+    qDebug()<<"UniqueCharacterStorage: character loaded.";
+  }else{
+    qDebug()<<"UniqueCharacterStorage: character not found.";
+  }
+
+  return character_loaded;
+}
+
+void UniqueCharacterStorage::log()
+{
+  QList<QString> levels = levelToStorage.keys();
+  qDebug()<<"UniqueCharacterStorage: Levels"<<levels.count()<<".";
+
+  for(QString level : levels)
+  {
+    qDebug()<<"UniqueCharacterStorage: Level"<<level<<"with"<<levelToStorage[level].count()<<"characters";
+    QList<StorageSlot*> characterSlots = levelToStorage[level];
+    for (auto slot : characterSlots)
+    {
+      qDebug()<<"UniqueCharacterStorage:"<<slot->storedCharacter->getBaseName();
+      qDebug()<<"UniqueCharacterStorage: Time stamp"<<slot->storedTimestampAtStorage;
+    }
+  }
+}
+
+bool UniqueCharacterStorage::loadCharacterIntoLevel(LevelTask *level, StorageSlot *characterSlot)
+{
+  Point position = characterSlot->storedCharacter->getPoint();
+  return loadCharacterIntoLevel(level, characterSlot, position);
+}
+
+bool UniqueCharacterStorage::loadCharacterIntoLevel(LevelTask *level, StorageSlot *characterSlot, Point position)
+{
+  bool character_loaded = false;
+
+  Character* character = characterSlot->storedCharacter;
+
+  TimeManager* timeManager = Game::get()->getTimeManager();
+  long currentTime = timeManager->getTimestamp();
+  long timeAtStorage = characterSlot->storedTimestampAtStorage;
+  qint64 elapsedTime = (currentTime - timeAtStorage) * 1000; // it needs milliseconds
+
+  level->appendObject(character);
+  level->setCharacterPosition(character, position.x, position.y, position.z);
+  character->getTaskManager()->update(elapsedTime);
+
+  return character_loaded;
+}
+
 
 void UniqueCharacterStorage::load(const QJsonObject& data)
 {
