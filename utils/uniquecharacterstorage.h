@@ -21,15 +21,21 @@ public:
 
   Q_INVOKABLE int saveUniqueCharactersFromLevel(LevelTask* level);
   Q_INVOKABLE int loadUniqueCharactersToLevel(LevelTask* level);
-  Q_INVOKABLE bool loadCharacterToCurrentLevel(QString characterSheet, int x, int y, int z);
+  Q_INVOKABLE bool loadCharacterToCurrentLevel(const QString& characterSheet, int x, int y, int z = NULL_FLOOR);
+  Q_INVOKABLE void saveCharacterFromCurrentLevel(Character*);
+  Q_INVOKABLE Character* getCharacter(const QString& characterSheet);
   Q_INVOKABLE void log();
 
   void load(const QJsonObject&);
   void save(QJsonObject&);
 private:
+  StorageSlot* getCharacterSlot(const QString& characterSheet, bool take = false);
+  StorageSlot* takeCharacterSlot(const QString& characterSheet) { return  getCharacterSlot(characterSheet, true); }
   bool loadCharacterIntoLevel(LevelTask* level, StorageSlot* characterSlot);
   bool loadCharacterIntoLevel(LevelTask* level, StorageSlot* characterSlot, Point position);
+  bool saveCharacterIntoStorage(LevelTask* level, Character* character, QList<StorageSlot*>& storage);
 
+  QList<StorageSlot*>& requireLevelStorage(const QString& levelName);
 
 signals:
 

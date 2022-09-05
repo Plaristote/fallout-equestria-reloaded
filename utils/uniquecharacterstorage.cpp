@@ -18,7 +18,7 @@ int UniqueCharacterStorage::saveUniqueCharactersFromLevel(LevelTask* level)
   }
   qDebug()<<"UniqueCharacterStorage: Saving unique characters from"<<level->getName()<<".";
 
-  QList<StorageSlot*> storage;
+  QList<StorageSlot*>& storage = requireLevelStorage(level->getName());
   int numberOfCharactersSaved = 0;
 
   QVector<DynamicObject*> dynamicObjects = level->allDynamicObjects();
@@ -32,31 +32,54 @@ int UniqueCharacterStorage::saveUniqueCharactersFromLevel(LevelTask* level)
     Character* character = (Character*)dynamicObject;
     bool isUnique = character->getIsUnique();
 
-    if(isUnique)
-    {
-      bool isDetached = level->detachObject(dynamicObject);
-      if(isDetached)
-      {
-        character->setParent(this);
-        TimeManager* tm = Game::get()->getTimeManager();
-        long time = tm->getTimestamp();
-        character->getFieldOfView()->reset();
-
-        StorageSlot* slot = new StorageSlot(this,character,time);
-        storage.append(slot);
-
-        numberOfCharactersSaved++;
-      }else
-      {
-        qDebug()<<"UniqueCharacterStorage: Could not detach dynamic object"<<dynamicObject->getObjectName()<<"from level"<<level->getName();
-      }
-    }
+    if(isUnique && saveCharacterIntoStorage(level, character, storage))
+      numberOfCharactersSaved++;
   }
 
-  QString levelName = level->getName();
-  levelToStorage[levelName] = storage;
-
   return numberOfCharactersSaved;
+}
+
+bool UniqueCharacterStorage::saveCharacterIntoStorage(LevelTask* level, Character* character, QList<StorageSlot*>& storage)
+{
+  bool isDetached = level->detachObject(character);
+
+  if(isDetached)
+  {
+    character->setParent(this);
+    TimeManager* tm = Game::get()->getTimeManager();
+    long time = tm->getTimestamp();
+    character->getFieldOfView()->reset();
+
+    StorageSlot* slot = new StorageSlot(this,character,time);
+    storage.append(slot);
+  }else
+  {
+    qDebug()<<"UniqueCharacterStorage: Could not detach dynamic object"<<character->getObjectName()<<"from level"<<level->getName();
+  }
+  return isDetached;
+}
+
+QList<StorageSlot*>& UniqueCharacterStorage::requireLevelStorage(const QString& levelName)
+{
+  auto iterator = levelToStorage.find(levelName);
+
+  if (iterator == levelToStorage.end())
+    iterator = levelToStorage.insert(levelName, {});
+  return *iterator;
+}
+
+void UniqueCharacterStorage::saveCharacterFromCurrentLevel(Character* character)
+{
+  LevelTask* level = Game::get()->getLevel();
+
+  if (level)
+  {
+    saveCharacterIntoStorage(
+      level,
+      character,
+      requireLevelStorage(level->getName())
+    );
+  }
 }
 
 int UniqueCharacterStorage::loadUniqueCharactersToLevel(LevelTask* level)
@@ -86,40 +109,50 @@ int UniqueCharacterStorage::loadUniqueCharactersToLevel(LevelTask* level)
   return numberOfCharactersLoaded;
 }
 
-bool UniqueCharacterStorage::loadCharacterToCurrentLevel(QString characterSheet, int x = 0, int y = 0, int z = 0)
+Character* UniqueCharacterStorage::getCharacter(const QString& characterSheet)
 {
-  qDebug()<<"UniqueCharacterStorage: Looking for character:"<<characterSheet;
-  bool character_loaded = false;
+  StorageSlot* slot = getCharacterSlot(characterSheet);
 
-  // find the character first
-  StorageSlot* characterSlot = nullptr;
-  bool character_found = false;
-  auto keys = levelToStorage.keys();
+  return slot ? slot->storedCharacter : nullptr;
+}
 
-  for(int i = 0; i<keys.count() && !character_found; i++)
+StorageSlot* UniqueCharacterStorage::getCharacterSlot(const QString& characterSheet, bool take)
+{
+  for (auto it = levelToStorage.begin() ; it != levelToStorage.end() ; ++it)
   {
-    QList<StorageSlot*>& storage = levelToStorage[keys.at(i)];
+    QList<StorageSlot*>& storage = *it;
 
-    for(int j = 0; j<storage.count() && !character_found; j++)
+    for(int j = 0; j<storage.count() ; j++)
     {
       StorageSlot* slot = storage.at(j);
 
       if(characterSheet == slot->storedCharacter->getCharacterSheet())
       {
-        characterSlot = slot;
-        character_found = true;
-        storage.removeAll(characterSlot);
+        if (take)
+          storage.removeAll(slot);
+        return slot;
       }
     }
   }
+
+  return nullptr;
+}
+
+bool UniqueCharacterStorage::loadCharacterToCurrentLevel(const QString& characterSheet, int x, int y, int z)
+{
+  qDebug()<<"UniqueCharacterStorage: Looking for character:"<<characterSheet;
+  bool character_loaded = false;
+
+  // find the character first
+  StorageSlot* characterSlot = takeCharacterSlot(characterSheet);
   // if found
-  if(character_found)
+  if(characterSlot)
   {
     LevelTask* level = Game::get()->getLevel();
     Point position = Point();
     position.x = x;
     position.y = y;
-    position.z = z;
+    position.z = z == NULL_FLOOR ? level->getCurrentFloor() : z;
 
     loadCharacterIntoLevel(level, characterSlot, position);
     characterSlot->deleteLater();
