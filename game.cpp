@@ -121,6 +121,7 @@ void Game::loadFromDataEngine()
   quests->addQuest("quest-test");
   player = playerParty->getCharacters().first();
   connect(diplomacy, &WorldDiplomacy::update, this, &Game::onDiplomacyUpdate);
+  connect(player->getInventory(), &Inventory::itemPicked, quests, &QuestManager::onItemPicked);
   connect(player, &Character::died, this, &Game::gameOver);
   if (currentLevelName != "")
     loadLevel(currentLevelName, nullTargetZone);
