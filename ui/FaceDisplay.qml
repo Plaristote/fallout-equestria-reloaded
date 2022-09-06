@@ -13,12 +13,15 @@ Image {
   property color  eyeColor:  Qt.rgba(255, 0, 0)
   property color  hairColor: Qt.rgba(255, 255, 0)
   property var    accessories: ["fancypants","eye-scar"]
+  property real   breathingSpeed: 2048
 
   source: basePath + "/backgrounds/" + ambiance + ".png"
   fillMode: Image.PreserveAspectCrop
+  clip: true
 
   Component.onCompleted: {
     scheduleNextBlink();
+    breathingInhale.running = true;
   }
 
   function scheduleNextBlink() {
@@ -47,11 +50,34 @@ Image {
 
     height: Math.min(parent.height - 20, sourceSize.height)
 
+    PropertyAnimation on anchors.bottomMargin {
+      id: breathingInhale
+      from: 0
+      to: -8
+      duration: breathingSpeed
+      onFinished: breathingExhale.running = true
+    }
+
+    PropertyAnimation on anchors.bottomMargin {
+      id: breathingExhale
+      from: -8
+      to: 0
+      duration: breathingSpeed * 1.42
+      onFinished: breathingInhale.running = true
+    }
+
     ColorOverlay {
       visible: coloured
       anchors.fill: parent
       source: parent
       color: root.color
+    }
+
+    Image {
+      id: faceOverlay
+      anchors.fill: parent
+      source: basePath + '/' + theme + '/base-overlay.png'
+      fillMode: Image.PreserveAspectFit
     }
 
     Image {
