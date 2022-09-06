@@ -43,6 +43,7 @@
         <file>editor/ObjectEditor.qml</file>
         <file>editor/NpcEditor.qml</file>
         <file>editor/EditorSelectPanel.qml</file>
+        <file>editor/EditorSelectTree.qml</file>
         <file>editor/LevelEditor.qml</file>
         <file>editor/DiplomacyEditor.qml</file>
         <file>editor/DialogEditor.qml</file>

@@ -13,6 +13,18 @@ const QMap<QString, QPair<QString, QString> > scriptDefaultSuper = {
   {"items", {"ItemBehaviour", "item.mjs"}}
 };
 
+static QStringList recursively_find_files(const QString& path, QStringList extensions)
+{
+  QDir dir(path);
+  QDirIterator it(dir.path(), extensions, QDir::Files, QDirIterator::Subdirectories);
+  QStringList output;
+
+  while (it.hasNext())
+    output << it.next().replace(dir.path() + '/', "");
+  output.sort();
+  return output;
+}
+
 ScriptEditorController::ScriptEditorController(QObject *parent) : QObject(parent)
 {
   connect(this, &ScriptEditorController::error, this, [](QString value) { qDebug() << "ScriptEditorController:" << value; });
@@ -20,21 +32,12 @@ ScriptEditorController::ScriptEditorController(QObject *parent) : QObject(parent
 
 QStringList ScriptEditorController::getScripts(const QString& type)
 {
-  QDir dir("scripts/" + type);
-  QStringList extensions{"*.mjs", "*.js"};
-  QDirIterator it(dir.path(), extensions, QDir::Files, QDirIterator::Subdirectories);
-  QStringList output;
-
-  while (it.hasNext())
-    output << it.next().replace(dir.path() + '/', "");
-  return output;
+  return recursively_find_files("scripts/" + type, {"*.mjs","*.js"});
 }
 
 QStringList ScriptEditorController::getCharacterSheets()
 {
-  QDir dir("assets/characterSheets");
-
-  return dir.entryList(QStringList() << "*.json", QDir::NoFilter, QDir::Name);
+  return recursively_find_files("assets/characterSheets", {"*.json"});
 }
 
 QString ScriptEditorController::getScript(const QString &type, const QString &name)
@@ -142,6 +145,7 @@ void ScriptEditorController::saveCharacterSheet(const QString &name, StatModel* 
 {
   QFile file("assets/characterSheets/" + name);
 
+  QDir().mkpath(QFileInfo(file).absoluteDir().path());
   if (file.open(QIODevice::WriteOnly))
   {
       QJsonObject data;
@@ -188,18 +192,14 @@ QStringList ScriptEditorController::getFactions()
   return QStringList();
 }
 
-QStringList ScriptEditorController::getDialogs()
-{
-  QDir dir("scripts/dialogs");
-
-  return dir.entryList(QStringList() << "*.json", QDir::NoFilter, QDir::Name);
-}
+QStringList ScriptEditorController::getDialogs() { return recursively_find_files("scripts/dialogs", {"*.json"}); }
 
 void ScriptEditorController::newDialog(const QString &name)
 {
   QFile jsonFile(SCRIPTS_PATH + "dialogs/" + name + ".json");
   QFile mjsFile (SCRIPTS_PATH + "dialogs/" + name + ".mjs");
 
+  QDir().mkpath(QFileInfo(jsonFile).absoluteDir().path());
   if (!jsonFile.exists() && jsonFile.open(QIODevice::WriteOnly))
   {
     QByteArray jsonText;

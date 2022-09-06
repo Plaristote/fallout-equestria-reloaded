@@ -32,9 +32,9 @@ Item {
   RowLayout {
     anchors.fill: parent
 
-    EditorSelectPanel {
+    EditorSelectTree {
       id: characterSheetSelect
-      model: list
+      treeModel: list
       onNewClicked: newCharacterDialog.open()
     }
 

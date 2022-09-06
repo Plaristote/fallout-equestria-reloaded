@@ -101,9 +101,9 @@ Item {
   RowLayout {
     anchors.fill: parent
 
-    EditorSelectPanel {
+    EditorSelectTree {
       id: dialogSelect
-      model: scriptController.getDialogs()
+      treeModel: scriptController.getDialogs()
       onNewClicked: addDialogDialog.open()
     }
 
