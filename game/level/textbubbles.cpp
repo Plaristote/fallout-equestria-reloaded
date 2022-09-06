@@ -65,7 +65,7 @@ void TextBubblesComponent::unregisterDynamicObject(DynamicObject* object)
     if ((*it)->getTarget() == object)
     {
       delete *it;
-      textBubbles.erase(it);
+      it = textBubbles.erase(it);
     }
     else
       ++it;
