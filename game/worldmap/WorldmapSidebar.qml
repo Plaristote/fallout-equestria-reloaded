@@ -26,17 +26,21 @@ Pane {
       Layout.fillHeight: true
       Layout.fillWidth: true
 
-      Column {
+      ColumnLayout {
+        width: parent.width
+        spacing: 5
         Repeater {
           model: controller.discoveredCities
-          delegate: Row {
+          delegate: RowLayout {
             property QtObject city: controller.getCity(controller.discoveredCities[index]);
 
+            Layout.fillWidth: true
             UiStyle.TinyButton {
               id: cityButton
               onClicked: clickedOnCity(city)
             }
             Label {
+              Layout.fillWidth: true
               height: cityButton.height
               text: i18n.t(`locations.${city.name}`)
               color: "white"

@@ -164,9 +164,10 @@ Item {
   SplashscreenDisplay {
     id: splashscreen
     controller: root.controller
-    anchors.left: parent.left
-    anchors.right: parent.right
+    anchors.left: worldmapView.left
+    anchors.right: worldmapView.right
     height: parent.height
+    MouseArea { anchors.fill: parent }
   }
 
   states: [

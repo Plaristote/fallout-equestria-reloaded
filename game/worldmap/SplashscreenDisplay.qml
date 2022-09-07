@@ -28,6 +28,9 @@ Loader {
         splashscreenSlideIn.running = true;
       }
     }
+    function onTargetPositionChanged() {
+      splashscreenSlideOut.running = true;
+    }
   }
 
   PropertyAnimation on y {
