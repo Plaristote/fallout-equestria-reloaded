@@ -4,6 +4,7 @@ import "../../assets/ui" as UiStyle
 import "../../ui"
 
 CustomFlickable {
+  id: root
   property QtObject controller;
   property alias mouseX: mapMouseArea.mouseX
   property alias mouseY: mapMouseArea.mouseY
@@ -32,24 +33,13 @@ CustomFlickable {
       Repeater {
         model: controller.caseCount.height
         delegate: Row {
-          property int indexY: index
+          property int indexY_: index
           Repeater {
             model: controller.caseCount.width
-            delegate: Rectangle {
-              id: caseRectangle
-              property int indexX: index
-              height: controller.caseSize.height
-              width:  controller.caseSize.width
-              border.width: 1
-              border.color: "green"
-              color: controller.isVisible(indexX, indexY) ? "transparent" : "black"
-              Connections {
-                target: controller
-                function onCaseRevealed(caseX, caseY) {
-                  if (caseX === indexX && caseY === indexY)
-                    caseRectangle.color = "transparent";
-                }
-              }
+            delegate: WorldmapCase {
+              indexX: index
+              indexY: indexY_
+              controller: root.controller
             }
           }
         }

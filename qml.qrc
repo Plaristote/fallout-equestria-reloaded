@@ -197,6 +197,7 @@
         <file>game/hud/ItemDropArea.qml</file>
         <file>game/worldmap/Worldmap.qml</file>
         <file>game/worldmap/WorldmapView.qml</file>
+        <file>game/worldmap/WorldmapCase.qml</file>
         <file>game/worldmap/WorldmapCities.qml</file>
         <file>game/worldmap/WorldmapSidebar.qml</file>
         <file>game/slideshows/LoadingScreen.qml</file>

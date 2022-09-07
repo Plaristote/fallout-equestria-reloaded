@@ -1,23 +1,23 @@
 import QtQuick 2.15
+import "qrc:/game/worldmap"
 
 Column {
+  id: root
   property QtObject controller
   property QtObject zone
 
   Repeater {
     model: controller.caseCount.height
     delegate: Row {
-      property int indexY: index
+      property int indexY_: index
       Repeater {
         model: controller.caseCount.width
-        delegate: Rectangle {
+        delegate: WorldmapCase {
           id: caseRectangle
-          property int indexX: index
-          height: controller.caseSize.height - 2
-          width:  controller.caseSize.width - 2
-          border.width: 1
-          border.color: "green"
+          indexX: index
+          indexY: indexY_
           color: getColor()
+          controller: root.controller
 
           function getColor() {
             if (zone.containsCase(indexX, indexY))
