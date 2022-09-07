@@ -100,6 +100,8 @@ void CharacterDialog::loadState(const QString& reference)
 
   options.clear();
   stateReference = reference;
+  if (stateData["mood"].toString().length() > 0)
+    setProperty("mood", stateData["mood"].toString());
   initializeStateHook(text, answers);
   if (text.length() == 0)
     text = t(stateData["text"].toString());

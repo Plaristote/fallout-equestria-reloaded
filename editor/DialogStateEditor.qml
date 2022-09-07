@@ -47,6 +47,14 @@ ColumnLayout {
           onTextChanged: { controller.stateHook = text }
         }
 
+        TerminalLabel { text: "Mood" }
+        TerminalField {
+          Layout.fillWidth: true
+          id: stateMoodInput
+          text: controller.stateMood
+          onTextChanged: { controller.stateMood = text }
+        }
+
         TerminalButton {
           Layout.columnSpan: 2
           Layout.alignment: Qt.AlignRight

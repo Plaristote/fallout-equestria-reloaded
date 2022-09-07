@@ -6,6 +6,7 @@ CharacterDialogEditor::CharacterDialogEditor(QObject *parent) : CharacterDialog(
   connect(this, &CharacterDialog::ready, this, &CharacterDialogEditor::entryPointChanged);
   connect(this, &CharacterDialog::stateReferenceChanged, this, &CharacterDialogEditor::stateHookChanged);
   connect(this, &CharacterDialog::stateReferenceChanged, this, &CharacterDialogEditor::stateTextChanged);
+  connect(this, &CharacterDialog::stateReferenceChanged, this, &CharacterDialogEditor::stateMoodChanged);
   connect(this, &CharacterDialogEditor::currentOptionChanged, this, &CharacterDialogEditor::optionHookChanged);
   connect(this, &CharacterDialogEditor::currentOptionChanged, this, &CharacterDialogEditor::optionTextChanged);
   connect(this, &CharacterDialogEditor::currentOptionChanged, this, &CharacterDialogEditor::optionTextHookChanged);
@@ -48,7 +49,13 @@ void CharacterDialogEditor::setStateText(const QString& value)
   initializeStateHook(text, answers);
   if (text.length() == 0)
     text = t(value);
-  emit  textChanged();
+  emit textChanged();
+}
+
+void CharacterDialogEditor::setStateMood(const QString& value)
+{
+  setStateVariable("mood", value);
+  emit stateMoodChanged();
 }
 
 void CharacterDialogEditor::setOptionHook(const QString& value)
