@@ -167,7 +167,7 @@ Item {
     anchors.left: worldmapView.left
     anchors.right: worldmapView.right
     height: parent.height
-    MouseArea { anchors.fill: parent }
+    MouseArea { anchors.fill: parent; enabled: splashscreen.selectedCity != null }
   }
 
   states: [

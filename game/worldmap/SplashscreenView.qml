@@ -20,6 +20,7 @@ Image {
       x: root.width * (position.x / 100) - width / 2
       y: root.height * (position.y / 100) - height / 2
       onClicked: entryPointClicked(entryPoint)
+      backgroundColor: down ? "green" : "black"
       Connections {
         target: location.splashscreen
         function onEntryPointsChanged() {
