@@ -198,6 +198,7 @@
         <file>game/worldmap/Worldmap.qml</file>
         <file>game/worldmap/WorldmapView.qml</file>
         <file>game/worldmap/SplashscreenView.qml</file>
+        <file>game/worldmap/SplashscreenDisplay.qml</file>
         <file>game/worldmap/WorldmapCase.qml</file>
         <file>game/worldmap/WorldmapCities.qml</file>
         <file>game/worldmap/WorldmapSidebar.qml</file>

@@ -15,6 +15,7 @@ Image {
     delegate: TerminalButton {
       property string entryPoint: location.splashscreen.entryPoints[index]
       property point position: location.splashscreen.getPositionFor(entryPoint)
+      visible: gameManager.currentGame.isGameEditor || gameManager.currentGame.dataEngine.hasLevelBeenVisited(entryPoint)
       text: i18n.t("cities.entryPoints." + entryPoint)
       x: root.width * (position.x / 100) - width / 2
       y: root.height * (position.y / 100) - height / 2

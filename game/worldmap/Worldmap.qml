@@ -9,7 +9,6 @@ import Game 1.0 as MyGame
 
 Item {
   property QtObject controller // WorldMap
-  property QtObject selectedCity
   property point movementStart: controller.currentPosition
   property bool hasOverlay: inventoryViewContainer.visible || mainMenu.visible
   id: root
@@ -20,11 +19,6 @@ Item {
   Component.onCompleted: {
     controller.restart();
     musicManager.play("worldmap");
-  }
-
-  onSelectedCityChanged: {
-    if (selectedCity == null)
-      splashscreenSlideOut.running = true;
   }
 
   Connections {
@@ -39,16 +33,6 @@ Item {
         encounterConfirmDialog.open();
       }
       root.controller.paused = true;
-    }
-
-    function onSplashscreenEntered(city) {
-      if (root.selectedCity)
-        splashscreenSlideOut.running = true;
-      else {
-        root.selectedCity = city;
-        splashscreen.sourceComponent = splashscreenView;
-        splashscreenSlideIn.running = true;
-      }
     }
 
     function onCityEntered() {
@@ -76,8 +60,8 @@ Item {
         mainMenu.visible = false;
       else if (inventoryViewContainer.visible)
         inventoryViewContainer.visible = false;
-      else if (selectedCity)
-        selectedCity = null;
+      else if (splashscreen.selectedCity)
+        splashscreen.selectedCity = null;
       else
         mainMenu.visible = true
     }
@@ -177,38 +161,12 @@ Item {
     }
   }
 
-  Loader {
+  SplashscreenDisplay {
     id: splashscreen
+    controller: root.controller
     anchors.left: parent.left
     anchors.right: parent.right
     height: parent.height
-
-    PropertyAnimation on y {
-      id: splashscreenSlideIn
-      from: -splashscreen.height
-      to: 0
-      duration: 230
-    }
-
-    PropertyAnimation on y {
-      id: splashscreenSlideOut
-      from: 0
-      to: -splashscreen.height
-      duration: 230
-      onFinished: splashscreen.sourceComponent = selectedCity = null
-    }
-  }
-
-  Component {
-    id: splashscreenView
-    SplashscreenView {
-      Component.onCompleted: location = root.selectedCity
-      location: root.selectedCity
-      onEntryPointClicked: function (entryPoint) {
-        controller.cityEntered(entryPoint);
-        root.selectedCity = null
-      }
-    }
   }
 
   states: [
