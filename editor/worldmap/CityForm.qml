@@ -10,6 +10,7 @@ Pane {
 
   signal cityNameChanged();
   signal previousClicked();
+  signal splashscreenClicked();
   signal destroyClicked();
 
   id: cityPanel
@@ -48,12 +49,10 @@ Pane {
         text: "Level"
       }
 
-      TerminalComboBox {
+      LevelPicker {
         Layout.fillWidth: true
-        model: scriptController.getLevels()
-        currentIndex: scriptController.getLevels().indexOf(cityModel.level)
-        onCurrentTextChanged: cityModel.level = currentText
-        clip: true
+        value: cityModel.level
+        onValueChanged: if (value !== cityModel.level) { cityModel.level = value }
       }
 
       TerminalLabel {
@@ -83,6 +82,13 @@ Pane {
         text: cityModel.size
         onTextChanged: cityModel.size = parseInt(text)
       }
+    }
+
+    TerminalButton {
+      text: "Splashscreen"
+      onClicked: splashscreenClicked()
+      width: parent.width
+      height: 25
     }
 
     TerminalButton {

@@ -33,11 +33,7 @@ QJsonObject WorldMap::save() const
   {
     QJsonObject cityJson;
 
-    cityJson.insert("name",  (*it)->getName());
-    cityJson.insert("level", (*it)->getLevel());
-    cityJson.insert("x",     (*it)->getPosition().x());
-    cityJson.insert("y",     (*it)->getPosition().y());
-    cityJson.insert("size",  (*it)->getSize());
+    (*it)->save(cityJson);
     citiesJson << cityJson;
   }
   for (auto it = zones.begin() ; it != zones.end() ; ++it)
@@ -100,10 +96,7 @@ void WorldMap::load(const QJsonObject& data)
     QJsonObject cityJson = it->toObject();
     auto* city = new WorldMapCity(this);
 
-    city->setName(cityJson["name"].toString());
-    city->setLevel(cityJson["level"].toString());
-    city->setPosition(QPoint(cityJson["x"].toInt(), cityJson["y"].toInt()));
-    city->setSize(cityJson["size"].toInt());
+    city->load(cityJson);
     cities << city;
   }
 
@@ -237,6 +230,11 @@ void WorldMap::getIntoCity(WorldMapCity* city)
   {
     discoveredCities << city->getName();
     emit discoveredCitiesChanged();
+  }
+  else if (city->getSplashscreen()->getEntryPoints().size() > 0)
+  {
+    emit splashscreenEntered(city);
+    return ;
   }
   emit cityEntered(levelSource);
 }

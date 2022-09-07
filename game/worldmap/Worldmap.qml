@@ -9,6 +9,7 @@ import Game 1.0 as MyGame
 
 Item {
   property QtObject controller // WorldMap
+  property QtObject selectedCity
   property point movementStart: controller.currentPosition
   property bool hasOverlay: inventoryViewContainer.visible || mainMenu.visible
   id: root
@@ -33,6 +34,14 @@ Item {
         encounterConfirmDialog.open();
       }
       root.controller.paused = true;
+    }
+
+    function onSplashscreenEntered(city) {
+      root.selectedCity = city;
+    }
+
+    function onCityEntered() {
+      application.popView();
     }
   }
 
@@ -66,7 +75,6 @@ Item {
     if (controller.paused) { return ; }
     for (var i = 0 ; i < controller.cities.length ; ++i) {
       if (controller.cities[i].isInside(controller.currentPosition)) {
-        application.popView();
         return controller.getIntoCity(controller.cities[i]);
       }
     }
@@ -82,8 +90,12 @@ Item {
 
   function clickedOnCity(city) {
     if (controller.paused) { return ; }
-    movementStart = controller.currentPosition;
-    controller.targetPosition = city.position;
+    if (controller.getCurrentCity() === city)
+      controller.getIntoCity(city);
+    else {
+      movementStart = controller.currentPosition;
+      controller.targetPosition = city.position;
+    }
   }
 
   WorldmapView {
@@ -148,6 +160,23 @@ Item {
         loops: Animation.Infinite
         from: 1
         to:   0.5
+      }
+    }
+  }
+
+  Loader {
+    id: splashscreen
+    anchors.fill: worldmapView
+    sourceComponent: root.selectedCity ? splashscreenView : null
+  }
+
+  Component {
+    id: splashscreenView
+    SplashscreenView {
+      location: root.selectedCity
+      onEntryPointClicked: function (entryPoint) {
+        controller.cityEntered(entryPoint);
+        root.selectedCity = null
       }
     }
   }

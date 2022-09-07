@@ -7,17 +7,29 @@ import "../../ui"
 
 WorldmapListEditor {
   id: root
+  property bool showSplashscreen: false
 
-  formComponent: Component {
-    id: cityComponent
+  formComponent: showSplashscreen ? splashscreenComponent : mapComponent
+
+  Component {
+    id: mapComponent
     CityForm {
       cityModel: root.currentModel
       onCityNameChanged: root.refreshNames()
       onPreviousClicked: root.selectedName = ""
+      onSplashscreenClicked: showSplashscreen = true
       onDestroyClicked: {
         worldMap.removeCity(root.currentModel);
         root.refreshNames();
       }
+    }
+  }
+
+  Component {
+    id: splashscreenComponent
+    SplashscreenForm {
+      splashscreenModel: root.currentModel.splashscreen
+      onPreviousClicked: showSplashscreen = false
     }
   }
 

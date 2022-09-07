@@ -69,6 +69,7 @@ signals:
   void timeManagerChanged();
   void citiesChanged();
   void cityEntered(QString);
+  void splashscreenEntered(WorldMapCity* city);
   void zonesChanged();
   void caseRevealed(int caseX, int caseY);
   void discoveredCitiesChanged();

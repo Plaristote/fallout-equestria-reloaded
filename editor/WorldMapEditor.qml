@@ -12,6 +12,7 @@ Item {
   property QtObject worldMap
   property QtObject selectedZone
   property QtObject selectedCity
+  property bool splashscreenEnabled
 
   function updateMapSize() {
     const mapSize  = Qt.size(parseInt(mapSizeWidthInput.text), parseInt(mapSizeHeightInput.text));
@@ -34,10 +35,17 @@ Item {
     }
   }
 
+  SplashscreenView {
+    id: splashscreenView
+    anchors.fill: worldMapView
+    location: selectedCity
+    visible: tabRow.currentTab === "cities" && splashscreenEnabled
+  }
+
   Pane {
     id: sidebar
     background: UiStyle.Pane {}
-    width: 250
+    width: 370
     anchors { top: parent.top; left: parent.left; bottom: parent.bottom }
 
     ColumnLayout {
@@ -85,6 +93,9 @@ Item {
       id: cityEditor
       list: root.worldMap.cities
       worldMap: root.worldMap
+      onShowSplashscreenChanged: root.splashscreenEnabled = showSplashscreen
+      Component.onCompleted: root.splashscreenEnabled = false
+      onCurrentModelChanged: root.selectedCity = currentModel
 
       Connections {
         target: root

@@ -34,10 +34,12 @@
         <file>editor/worldmap/MapSizePane.qml</file>
         <file>editor/worldmap/CityEditor.qml</file>
         <file>editor/worldmap/CityForm.qml</file>
+        <file>editor/worldmap/SplashscreenForm.qml</file>
         <file>editor/worldmap/ZoneEditor.qml</file>
         <file>editor/worldmap/ZoneForm.qml</file>
         <file>editor/worldmap/ZonePreview.qml</file>
         <file>editor/worldmap/WorldmapListEditor.qml</file>
+        <file>editor/worldmap/LevelPicker.qml</file>
         <file>editor/Index.qml</file>
         <file>editor/SpriteEditor.qml</file>
         <file>editor/ObjectEditor.qml</file>
