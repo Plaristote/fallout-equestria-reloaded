@@ -22,6 +22,11 @@ Item {
     musicManager.play("worldmap");
   }
 
+  onSelectedCityChanged: {
+    if (selectedCity == null)
+      splashscreenSlideOut.running = true;
+  }
+
   Connections {
     target: controller
 
@@ -37,7 +42,13 @@ Item {
     }
 
     function onSplashscreenEntered(city) {
-      root.selectedCity = city;
+      if (root.selectedCity)
+        splashscreenSlideOut.running = true;
+      else {
+        root.selectedCity = city;
+        splashscreen.sourceComponent = splashscreenView;
+        splashscreenSlideIn.running = true;
+      }
     }
 
     function onCityEntered() {
@@ -65,6 +76,8 @@ Item {
         mainMenu.visible = false;
       else if (inventoryViewContainer.visible)
         inventoryViewContainer.visible = false;
+      else if (selectedCity)
+        selectedCity = null;
       else
         mainMenu.visible = true
     }
@@ -166,13 +179,30 @@ Item {
 
   Loader {
     id: splashscreen
-    anchors.fill: worldmapView
-    sourceComponent: root.selectedCity ? splashscreenView : null
+    anchors.left: parent.left
+    anchors.right: parent.right
+    height: parent.height
+
+    PropertyAnimation on y {
+      id: splashscreenSlideIn
+      from: -splashscreen.height
+      to: 0
+      duration: 230
+    }
+
+    PropertyAnimation on y {
+      id: splashscreenSlideOut
+      from: 0
+      to: -splashscreen.height
+      duration: 230
+      onFinished: splashscreen.sourceComponent = selectedCity = null
+    }
   }
 
   Component {
     id: splashscreenView
     SplashscreenView {
+      Component.onCompleted: location = root.selectedCity
       location: root.selectedCity
       onEntryPointClicked: function (entryPoint) {
         controller.cityEntered(entryPoint);
