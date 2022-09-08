@@ -30,6 +30,7 @@ public:
   void load(const QJsonObject&);
   QJsonObject save() const;
 
+  Q_INVOKABLE void addObjective(const QString&, const QString&);
   Q_INVOKABLE void completeObjective(const QString&);
   Q_INVOKABLE bool isObjectiveCompleted(const QString&) const;
   inline bool inProgress() const { return !completed && !failed; }
@@ -60,6 +61,7 @@ private:
   QString           name, location;
   bool              completed, failed;
   ScriptController* script = nullptr;
+  QVariantMap       objectives;
 };
 
 #endif // QUEST_H

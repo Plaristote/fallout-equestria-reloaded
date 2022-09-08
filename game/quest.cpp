@@ -23,6 +23,7 @@ void Quest::initialize(const QString& name)
   script->initialize(this);
   if (script->hasMethod("initialize"))
     script->call("initialize");
+  Game::get()->getSoundManager()->play("pipbuck/newquest");
 }
 
 void Quest::load(const QJsonObject& data)
@@ -32,6 +33,7 @@ void Quest::load(const QJsonObject& data)
   location = data["location"].toString();
   completed = data["over"].toBool(false);
   failed = data["failed"].isBool();
+  objectives = data["objectives"].toVariant().toMap();
   script = new ScriptController(SCRIPTS_PATH + "/quests/" + name + ".mjs");
   script->initialize(this);
 }
@@ -45,21 +47,39 @@ QJsonObject Quest::save() const
   data.insert("location", location);
   if (failed)
     data.insert("failed", true);
+  data.insert("objectives", QJsonValue::fromVariant(objectives));
   StorableObject::save(data);
   return data;
 }
 
+void Quest::addObjective(const QString& name, const QString& label)
+{
+  objectives[name] = QVariantMap{{"label",label}};
+}
+
 void Quest::completeObjective(const QString& name)
 {
-  if (script)
-    script->call("completeObjective", QJSValueList() << name);
+  if (!isObjectiveCompleted(name))
+  {
+    if (objectives.count(name))
+      objectives[name].toMap()["success"] = true;
+    else
+      objectives[name] = QVariantMap{{"success",true}};
+    if (script)
+      script->call("completeObjective", QJSValueList() << name);
+  }
 }
 
 bool Quest::isObjectiveCompleted(const QString& name) const
 {
-  if (script)
+  auto objective = objectives.find(name);
+  QVariantMap params;
+
+  if (script && script->hasMethod("isObjectiveCompleted"))
     return script->call("isObjectiveCompleted", QJSValueList() << name).toBool();
-  return false;
+  if (objective != objectives.end())
+    params = objective->toMap();
+  return params.contains("success") && params["success"] == true;
 }
 
 void Quest::onCharacterKilled(Character* character, Character* killer)
@@ -118,7 +138,10 @@ QString Quest::translate(const QString& key, const QVariantMap& options) const
 void Quest::onCompletedChanged()
 {
   if (completed && script && script->hasMethod("onCompleted"))
+  {
     script->call("onCompleted");
+    Game::get()->getSoundManager()->play("pipbuck/questdone");
+  }
 }
 
 int Quest::getObjectiveCount() const
