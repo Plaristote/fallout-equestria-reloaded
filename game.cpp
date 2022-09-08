@@ -88,8 +88,7 @@ void Game::newPlayerParty(StatModel* statistics)
   player->setStatistics(statistics);
   player->setScript("player.mjs");
   playerParty->addCharacter(player);
-  connect(player->getInventory(), &Inventory::itemPicked, quests, &QuestManager::onItemPicked);
-  connect(player, &Character::died, this, &Game::gameOver);
+  initializeEvents();
   initializeScript();
   if (script && script->hasMethod("initialize"))
     script->call("initialize");
@@ -108,6 +107,14 @@ void Game::onGameOver()
   disconnect(diplomacy, &WorldDiplomacy::update, this, &Game::onDiplomacyUpdate);
 }
 
+void Game::initializeEvents()
+{
+  connect(diplomacy, &WorldDiplomacy::update, this, &Game::onDiplomacyUpdate);
+  connect(player->getInventory(), &Inventory::itemPicked, quests, &QuestManager::onItemPicked);
+  connect(player, &Character::died, this, &Game::gameOver);
+  connect(player->getStatistics(), &StatModel::levelChanged, this, [this]() { if (player->getStatistics()->property("level").toInt() > 1) soundManager->play("pipbuck/levelup"); });
+}
+
 void Game::loadFromDataEngine()
 {
   QString currentLevelName = dataEngine->getCurrentLevel();
@@ -120,9 +127,7 @@ void Game::loadFromDataEngine()
   quests->load(dataEngine->getQuests());
   quests->addQuest("quest-test");
   player = playerParty->getCharacters().first();
-  connect(diplomacy, &WorldDiplomacy::update, this, &Game::onDiplomacyUpdate);
-  connect(player->getInventory(), &Inventory::itemPicked, quests, &QuestManager::onItemPicked);
-  connect(player, &Character::died, this, &Game::gameOver);
+  initializeEvents();
   if (currentLevelName != "")
     loadLevel(currentLevelName, nullTargetZone);
   else

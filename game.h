@@ -110,6 +110,7 @@ private slots:
   void onGameOver();
 
 private:
+  void initializeEvents();
   void initializeScript();
   LevelTask* newLevelTask();
   void destroyLevelTask();
