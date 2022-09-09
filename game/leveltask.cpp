@@ -233,6 +233,8 @@ void LevelTask::endTurnTask(qint64 delta)
       if (!asCharacter->getActionQueue()->isEmpty())
         ++affectedCharacters;
     }
+    else
+      object->updateTasks(WORLDTIME_TURN_DURATION);
   }
   if (affectedCharacters > 0)
     finalizeTurnRemainingTime -= delta;
