@@ -56,6 +56,7 @@ public:
   QPoint         getPosition() const { return position; }
   int            getSize() const { return size; }
   CitySplashscreen* getSplashscreen() const { return splashscreen; }
+  bool              hasSplashscreen() const { return splashscreen->getEntryPoints().size(); }
 
   void setName(const QString& value) { name = value; }
   void setLevel(const QString& value) { level = value; }

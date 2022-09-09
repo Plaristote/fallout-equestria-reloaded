@@ -222,16 +222,23 @@ WorldMapZone* WorldMap::getZone(const QString &name) const
   return nullptr;
 }
 
+void WorldMap::moveToCity(WorldMapCity* city)
+{
+  currentPosition = targetPosition = city->getPosition();
+  emit currentPositionChanged();
+}
+
 void WorldMap::getIntoCity(WorldMapCity* city)
 {
   QString levelSource = city->getLevel();
+  bool visited = Game::get()->getDataEngine()->hasLevelBeenVisited(city->getLevel());
 
   if (discoveredCities.indexOf(city->getName()) < 0)
   {
     discoveredCities << city->getName();
     emit discoveredCitiesChanged();
   }
-  else if (city->getSplashscreen()->getEntryPoints().size() > 0)
+  else if (city->hasSplashscreen() > 0 && visited)
   {
     emit splashscreenEntered(city);
     return ;

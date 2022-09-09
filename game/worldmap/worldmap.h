@@ -39,6 +39,7 @@ public:
 
   Q_INVOKABLE void restart();
 
+  Q_INVOKABLE void moveToCity(WorldMapCity*);
   Q_INVOKABLE void getIntoCity(WorldMapCity*);
   Q_INVOKABLE void getIntoWasteland(QPoint);
   Q_INVOKABLE bool isVisible(int x, int y) const;
