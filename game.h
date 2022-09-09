@@ -72,10 +72,10 @@ public:
   void loadCmapTraits();
   void loadCmapRaces();
 
-  Q_INVOKABLE CharacterParty* createNpcGroup(QJSValue description) { return CharacterParty::factory(description.toVariant().toMap(), this); }
-  Q_INVOKABLE CharacterParty* getPlayerParty() { return playerParty; }
-  Q_INVOKABLE Character* getPlayer() { return player; }
-  Q_INVOKABLE StatModel* getPlayerStatistics() { return getPlayer()->getStatistics(); }
+  Q_INVOKABLE CharacterParty* getPlayerParty() const { return playerParty; }
+  Q_INVOKABLE Character* getPlayer() const { return player; }
+  Q_INVOKABLE StatModel* getPlayerStatistics() const { return getPlayer()->getStatistics(); }
+  Q_INVOKABLE Character* getCharacter(const QString& characterSheet) const;
   Q_INVOKABLE void       advanceTime(unsigned int minutes);
   Q_INVOKABLE void       asyncAdvanceTime(unsigned int minutes);
   Q_INVOKABLE void       asyncAdvanceTime(unsigned int minutes, QJSValue callback);

@@ -50,7 +50,7 @@ CharacterParty* CharacterParty::factory(const QVariantMap& parameters, QObject* 
 
 void CharacterParty::createCharacter(const QString& name, const QVariantMap& attributes)
 {
-  Character* character = new Character;
+  Character* character = new Character(this);
   Inventory* inventory = character->getInventory();
 
   character->setObjectName(name);

@@ -384,3 +384,12 @@ void Game::asyncAdvanceTime(unsigned int minutes, QJSValue callback)
 {
   timePasser.advanceTime(minutes, callback);
 }
+
+Character* Game::getCharacter(const QString& characterSheet) const
+{
+  Character* match = nullptr;
+
+  if (currentLevel)
+    match = currentLevel->findCharacter([characterSheet](Character& character) { return character.getCharacterSheet() == characterSheet; });
+  return match ? match : uniqueCharacterStorage->getCharacter(characterSheet);
+}

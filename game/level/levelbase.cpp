@@ -41,6 +41,16 @@ QList<Character*> LevelBase::findCharacters(std::function<bool (Character &)> co
   return characters;
 }
 
+Character* LevelBase::findCharacter(std::function<bool (Character&)> compare) const
+{
+  return reinterpret_cast<Character*>(
+    findObject([compare](DynamicObject& object)
+    {
+      return object.isCharacter() && compare(reinterpret_cast<Character&>(object));
+    })
+  );
+}
+
 void LevelBase::load(const QJsonObject& data)
 {
   freezeObjectRegistration = true;

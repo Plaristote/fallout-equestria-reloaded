@@ -22,6 +22,7 @@ public:
   bool                       isGameEditor() const;
   Character*                 getPlayer() const;
   QList<Character*>          findCharacters(std::function<bool (Character&)> compare) const;
+  Character*                 findCharacter(std::function<bool (Character&)> compare) const;
 
   void update(qint64) {}
   void load(const QJsonObject&);

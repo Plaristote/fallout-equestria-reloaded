@@ -41,7 +41,7 @@ public:
   int  getSneakAbility() const override;
   bool isBlockingPath() const override { return isAlive(); }
 
-  Q_INVOKABLE QJSValue getActions();
+  Q_INVOKABLE QJSValue getActions(); // TODO: either remove this, or replace actionQueue property with it
   bool             isUnconscious() const override { return unconscious; }
   bool             hasInteractionOverlay() const override { return !isAlive(); }
 
