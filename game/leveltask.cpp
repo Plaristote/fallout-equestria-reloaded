@@ -177,7 +177,7 @@ void LevelTask::realTimeTask(qint64 delta)
 
     object->update(delta);
     object->updateTasks(delta);
-    if (object->isCharacter() && asCharacter->isAlive())
+    if (object->isCharacter() && asCharacter->isAlive() && attachedObjects.contains(object))
     {
       asCharacter->getFieldOfView()->update(delta);
       asCharacter->getActionQueue()->update();
