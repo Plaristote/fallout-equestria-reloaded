@@ -23,7 +23,7 @@ public:
   void         exitLevel();
   bool         isLevelActive(const QString&) const;
   Q_INVOKABLE bool hasLevelBeenVisited(const QString&) const;
-  QJsonObject  getLevelData(const QString&);
+  Q_INVOKABLE QJsonObject getLevelData(const QString&);
   void         setLevelData(const QString&, const QJsonObject&);
 
   QJsonObject  getTimeData() const;
