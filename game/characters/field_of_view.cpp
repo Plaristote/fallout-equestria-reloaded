@@ -88,7 +88,7 @@ void FieldOfView::SetIntervalDurationFromStatistics(void)
 
 void FieldOfView::update(qint64 delta)
 {
-  if (timeLeft <= delta && character.getStatistics()->getHitPoints() > 0)
+  if (timeLeft <= delta && character.isAlive() && !character.isUnconscious())
     runTask();
   else
   {
