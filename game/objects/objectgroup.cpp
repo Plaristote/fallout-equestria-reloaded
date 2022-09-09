@@ -252,6 +252,23 @@ QVector<DynamicObject*> ObjectGroup::findDynamicObjects(std::function<bool (Dyna
   return results;
 }
 
+DynamicObject* ObjectGroup::findObject(std::function<bool (DynamicObject&)> compare) const
+{
+  for (DynamicObject* object : objects)
+  {
+    if (compare(*object))
+      return object;
+  }
+  for (ObjectGroup* group : groups)
+  {
+    DynamicObject* result = group->findObject(compare);
+
+    if (result)
+      return result;
+  }
+  return nullptr;
+}
+
 void ObjectGroup::collectObjects(QVector<DynamicObject*>& results) const
 {
   results.reserve(results.size() + objects.size());
