@@ -79,5 +79,6 @@ void CharacterSight::onRefreshed()
 
 void CharacterSight::onCharacterDetected(Character* character)
 {
-  scriptCall("onCharacterDetected", QJSValueList() << character->asJSValue());
+  if (fieldOfView->isDetected(character))
+    scriptCall("onCharacterDetected", QJSValueList() << character->asJSValue());
 }
