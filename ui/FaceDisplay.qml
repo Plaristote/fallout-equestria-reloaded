@@ -14,6 +14,7 @@ Image {
   property color  hairColor: Qt.rgba(255, 255, 0)
   property var    accessories: ["fancypants","eye-scar"]
   property real   breathingSpeed: 2048
+  property string moodSource: mood == "sleep" ? "neutral" : mood
 
   source: basePath + "/backgrounds/" + ambiance + ".png"
   fillMode: Image.PreserveAspectCrop
@@ -53,14 +54,14 @@ Image {
     PropertyAnimation on anchors.bottomMargin {
       id: breathingInhale
       from: 0
-      to: -8
+      to: mood == "sleep" ? 0 : -8
       duration: breathingSpeed
       onFinished: breathingExhale.running = true
     }
 
     PropertyAnimation on anchors.bottomMargin {
       id: breathingExhale
-      from: -8
+      from: mood == "sleep" ? 0 : -8
       to: 0
       duration: breathingSpeed * 1.42
       onFinished: breathingInhale.running = true
@@ -83,14 +84,14 @@ Image {
     Image {
       id: eyes
       anchors.fill: parent
-      source: basePath + '/' + theme + '/eyes/' + mood + '.png'
+      source: basePath + '/' + theme + '/eyes/' + moodSource + '.png'
       fillMode: Image.Stretch
     }
 
     Image {
       id: eyesColor
       anchors.fill: parent
-      source: basePath + '/' + theme + '/eye-colors/' + mood + '.png'
+      source: basePath + '/' + theme + '/eye-colors/' + moodSource + '.png'
 
       ColorOverlay {
         anchors.fill: parent
@@ -105,7 +106,7 @@ Image {
 
       Image {
         id: eyelids
-        source: basePath + '/' + theme + '/eyes/' + mood + '.png'
+        source: basePath + '/' + theme + '/eyes/' + moodSource + '.png'
         anchors { top: parent.top; left: parent.left; right: parent.right }
         height: eyes.height
 
@@ -119,14 +120,14 @@ Image {
       PropertyAnimation on height {
         id: openEyelids
         from: eyes.height
-        to: 0
+        to: mood != "sleep" ? 0 : eyes.height
         duration: 200
         onFinished: scheduleNextBlink()
       }
 
       PropertyAnimation on height {
         id: closeEyelids
-        from: 0
+        from: mood != "sleep" ? 0 : eyes.height
         to: eyes.height
         duration: 200
         onFinished: openEyelids.running = true
@@ -135,13 +136,13 @@ Image {
 
     Image {
       anchors.fill: parent
-      source: basePath + '/' + theme + '/eyelids/' + mood +  '.png'
+      source: basePath + '/' + theme + '/eyelids/' + moodSource +  '.png'
       fillMode: Image.Stretch
     }
 
     Image {
       anchors.fill: parent
-      source: basePath + '/' + theme + '/mouthes/' + mood + '.png'
+      source: basePath + '/' + theme + '/mouthes/' + moodSource + '.png'
       fillMode: Image.Stretch
 
       ColorOverlay {
