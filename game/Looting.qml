@@ -15,8 +15,10 @@ Pane {
   Connections {
     target: controller
     function onFinished() {
-      application.popView();
-      gameManager.currentGame.level.paused = false;
+      if (root.StackView.status === StackView.Active)
+        application.popView();
+      if (gameManager.currentGame.level)
+        gameManager.currentGame.level.paused = false;
     }
   }
 

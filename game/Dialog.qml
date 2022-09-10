@@ -13,8 +13,10 @@ Item {
   Connections {
     target: controller
     function onDialogEnded() {
-      application.popView();
-      gameManager.currentGame.level.paused = false;
+      if (root.StackView.status === StackView.Active)
+        application.popView();
+      if (gameManager.currentGame.level)
+        gameManager.currentGame.level.paused = false;
     }
     function onBarterStarted() { root.state = "barter"; }
     function onBarterEnded()   { root.state = "dialog"; }

@@ -1,6 +1,5 @@
 #include "leveltask.h"
 #include "game.h"
-#include "characterdialog.h"
 #include <QJsonArray>
 #include "characters/actionqueue.h"
 #include "objects/inventoryitem.h"
@@ -10,6 +9,7 @@
 #include "game/mousecursor.h"
 #include <QDebug>
 #include "objects/objectfactory.h"
+#include "i18n.h"
 
 LevelTask::LevelTask(QObject *parent) : ParentType(parent)
 {
