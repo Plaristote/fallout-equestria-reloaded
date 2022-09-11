@@ -18,7 +18,8 @@ Rectangle {
   property bool     renderWalls: true
   property bool     renderRoofs: true
   property var      visibleZones: []
-  property alias    groundLayer: groundLayer_
+  property alias    groundLayer: groundLayer
+  property rect     renderedTiles: levelController.renderedTiles
 
   id: renderTarget
   color: "black"
@@ -34,7 +35,7 @@ Rectangle {
     x: parent.width / 2
 
     Image {
-      id: groundLayer_
+      id: groundLayer
       source: `file:///${levelController.preRenderPath}floor${levelController.currentFloor}_tilemap.png`
       x:      groundRect.x
       y:      groundRect.y

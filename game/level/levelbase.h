@@ -15,7 +15,6 @@ class LevelBase : public ObjectGroup
 
   Q_PROPERTY(Character*                      player         READ getPlayer     NOTIFY playerChanged)
   Q_PROPERTY(QQmlListProperty<DynamicObject> dynamicObjects READ getQmlObjects NOTIFY objectsChanged)
-  Q_PROPERTY(QPoint                          canvasOffset   MEMBER canvasOffset NOTIFY cameraMoved)
 public:
   explicit LevelBase(QObject *parent = nullptr);
 
@@ -34,7 +33,6 @@ public:
 
 signals:
   void playerChanged();
-  void cameraMoved();
   void attachedObjectsChanged();
 
 private slots:
@@ -50,7 +48,6 @@ protected:
   QString getScriptFilename(const QString& levelName) const;
   QString getScriptPath() const override { return SCRIPTS_PATH + "levels"; }
 
-  QPoint   canvasOffset;
   QList<DynamicObject*> attachedObjects;
 };
 

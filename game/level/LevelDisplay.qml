@@ -5,26 +5,29 @@ Item {
   id: root
   property QtObject gameController
   property QtObject levelController
-  property alias renderTarget:   renderTarget_
-  property alias levelMouseArea: levelMouseArea_
-  property alias camera:         camera_
+  property alias renderTarget:   renderTarget
+  property alias levelMouseArea: levelMouseArea
+  property alias camera:         camera
   clip: true
 
   signal pickedObject(QtObject dynamicObject)
   signal pickedTile(int tileX, int tileY)
 
+  onWidthChanged:  levelController.canvasSize.width  = width
+  onHeightChanged: levelController.canvasSize.height = height
+
   LevelRenderTarget {
-    id: renderTarget_
+    id: renderTarget
     hoverTile: levelMouseArea.hoverTile
   }
 
   LevelMouseArea {
-    id: levelMouseArea_
+    id: levelMouseArea
     onHoverTileChanged: levelController.hoveredTile = hoverTile ? Qt.point(...hoverTile) : Qt.point(-1, -1)
   }
 
   LevelCamera {
-    id: camera_
+    id: camera
     anchors.fill: parent
   }
 

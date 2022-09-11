@@ -1,12 +1,12 @@
 #ifndef  AMBIENTLIGHTCOMPONENT_H
 # define AMBIENTLIGHTCOMPONENT_H
 
-# include "prerender.h"
+# include "camera.h"
 
-class AmbientLightComponent : public PreRenderComponent
+class AmbientLightComponent : public CameraComponent
 {
   Q_OBJECT
-  typedef PreRenderComponent ParentType;
+  typedef CameraComponent ParentType;
 
   Q_PROPERTY(QColor ambientColor    MEMBER ambientColor    NOTIFY ambientColorChanged)
   Q_PROPERTY(bool   useAmbientLight MEMBER useAmbientLight NOTIFY ambientColorChanged)

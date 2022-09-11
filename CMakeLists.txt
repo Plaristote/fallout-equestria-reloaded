@@ -92,6 +92,8 @@ set(PROJECT_SOURCES
         game/level/debug.cpp
         game/level/save.h
         game/level/save.cpp
+        game/level/camera.h
+        game/level/camera.cpp
         game/leveltask.h
         game/leveltask.cpp
         game/dynamicobject.h

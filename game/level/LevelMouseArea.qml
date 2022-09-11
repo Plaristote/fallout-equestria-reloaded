@@ -105,9 +105,8 @@ MouseArea {
   }
 
   function getHoveredCase(posX, posY) {
-    return [
-      Math.floor((posY / renderTarget.tileSize.height) + (posX / renderTarget.tileSize.width)),
-      Math.floor((posY / renderTarget.tileSize.height) - (posX / renderTarget.tileSize.width))
-    ];
+    const a = posY / renderTarget.tileSize.height;
+    const b = posX / renderTarget.tileSize.width;
+    return [Math.floor(a + b), Math.floor(a - b)];
   }
 }

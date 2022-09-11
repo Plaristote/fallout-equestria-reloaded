@@ -12,7 +12,7 @@ void CursorComponent::centerCursorOn(DynamicObject *object)
 {
   if (object)
   {
-    QPoint position = canvasOffset + getClickableOffsetFor(object);
+    QPoint position = cameraOffset() + getClickableOffsetFor(object);
 
     MouseCursor::get()->setRelativePosition(position);
   }
