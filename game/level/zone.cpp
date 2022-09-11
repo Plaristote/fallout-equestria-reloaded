@@ -120,6 +120,8 @@ void ZoneComponent::onZoneChangedFloor(TileZone* zone)
 
 void ZoneComponent::onZoneEntered(DynamicObject* object, TileZone* zone)
 {
+  QJSValue result;
+
   if (object->isCharacter())
   {
     Character* character = reinterpret_cast<Character*>(object);
@@ -127,7 +129,9 @@ void ZoneComponent::onZoneEntered(DynamicObject* object, TileZone* zone)
     if (!character->isInZone(zone))
       character->onZoneEntered(zone);
   }
-  scriptCall("onZoneEntered", QJSValueList() << zone->getName() << object->asJSValue());
+  result = scriptCall("onZoneEntered", QJSValueList() << zone->getName() << object->asJSValue());
+  if (result.isBool() && result.toBool() == true)
+    return ;
   if (zone->getType() == "exit" && object == getPlayer())
     emit exitZoneEntered(zone);
 }
