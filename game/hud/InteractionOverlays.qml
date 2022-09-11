@@ -47,7 +47,7 @@ Item {
     id: characterOverlayComponent
     InteractionOverlay {
       levelController:  root.levelController
-      filter:           function(item) { return item.floor === levelController.currentFloor && item.isAlive() && item !== levelController.player; }
+      filter:           function(item) { return item.floor === levelController.currentFloor && item.isAlive() }
       model:            levelController.visibleCharacters
       withColorOverlay: false
       offsetX:          root.offsetX
