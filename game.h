@@ -50,7 +50,8 @@ public:
   void newPlayerParty(StatModel*);
 
   Q_INVOKABLE void appendToConsole(const QString&);
-  Q_INVOKABLE void switchToLevel(const QString name, const QString targetZone = "");
+  Q_INVOKABLE void switchToLevel(const QString& name, const QString& targetZone = "");
+  Q_INVOKABLE void switchToCity(const QString& name, const QString& levelName = "", const QString& targetZone = "");
   void exitLevel(bool silence = false);
 
   static Game* get() { return instance; }
@@ -117,6 +118,7 @@ private:
 
   bool isGameEditor = false;
   bool saveLock = false;
+  bool exitingLevel = false;
   DataEngine* dataEngine = nullptr;
   TimeManager* timeManager;
   WorldDiplomacy* diplomacy;

@@ -236,17 +236,38 @@ void Game::loadLevel(const QString &name, const QString& targetZone)
   });
 }
 
-void Game::switchToLevel(const QString name, const QString targetZone)
+void Game::switchToLevel(const QString& name, const QString& targetZone)
 {
   auto function = std::bind(&Game::loadLevel, this, name, targetZone);
+  static QMetaObject::Connection listener;
 
-  if (currentLevel)
+  if (exitingLevel)
   {
-    connect(currentLevel, &QObject::destroyed, function);
+    disconnect(listener);
+    listener = connect(currentLevel, &QObject::destroyed, function);
+  }
+  else if (currentLevel)
+  {
+    listener = connect(currentLevel, &QObject::destroyed, function);
     exitLevel(true);
   }
   else
     function();
+}
+
+void Game::switchToCity(const QString& name, const QString& levelName, const QString& targetZone)
+{
+  WorldMapCity* city = worldmap->getCity(name);
+
+  if (city)
+  {
+    QString targetLevel = levelName.isEmpty() ? city->getLevel() : levelName;
+
+    worldmap->moveToCity(city);
+    switchToLevel(targetLevel, targetZone);
+  }
+  else
+    qDebug() << "Game::switchToCity: " << name << " is not a city name";
 }
 
 void Game::destroyLevelTask()
@@ -263,6 +284,7 @@ void Game::exitLevel(bool silent)
     auto* timer = new QTimer(this);
 
     emit requestLoadingScreen();
+    exitingLevel = true;
     timer->setInterval(500);
     timer->start();
     connect(timer, &QTimer::timeout, timer, &QObject::deleteLater);
@@ -284,6 +306,7 @@ void Game::exitLevel(bool silent)
       setProperty("saveLock", false);
       if (!silent)
         emit levelChanged();
+      exitingLevel = false;
     });
   }
   else
