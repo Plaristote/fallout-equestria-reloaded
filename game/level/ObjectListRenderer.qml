@@ -12,7 +12,7 @@ Repeater {
     sourceClipRect: dynamicObject.clippedRect
     x: offset.x
     y: offset.y
-    z: (dynamicObject.position.x + dynamicObject.position.y * renderTarget.mapSize.width) * 3 + 1
+    z: (dynamicObject.position.x + dynamicObject.position.y * renderTarget.mapSize.width) * 4 + dynamicObject.zIndex - 1
     //Text { color: "yellow"; text: parent.z }
 
     onSourceClipRectChanged: offset = levelController.getAdjustedOffsetFor(dynamicObject)

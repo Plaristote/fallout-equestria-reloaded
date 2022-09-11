@@ -14,7 +14,7 @@ Item {
 
   x: renderPosition.x
   y: renderPosition.y
-  z: (tx + ty * renderTarget.mapSize.width) * 3 + (vwall || hwall ? 2 : 0)
+  z: (tx + ty * renderTarget.mapSize.width) * 4 + (vwall || hwall ? 2 : 0)
   visible: rendered
 
   //Text { color: "white"; font.bold: true; text: parent.z }

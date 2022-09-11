@@ -29,6 +29,7 @@ class DynamicObject : public LightSourceComponent
   Q_PROPERTY(bool interactive MEMBER interactive NOTIFY interactiveChanged)
   Q_PROPERTY(QPoint spriteOffset READ getSpriteOffset WRITE setSpriteOffset NOTIFY spritePositionChanged)
   Q_PROPERTY(ObjectGroup* parent READ getGroup NOTIFY parentChanged)
+  Q_PROPERTY(int zIndex READ getZIndex NOTIFY zIndexChanged)
 
 public:
   explicit DynamicObject(QObject *parent = nullptr);
@@ -59,7 +60,7 @@ public:
   Q_INVOKABLE virtual int getZIndex() const { return 1; }
   Q_INVOKABLE virtual bool hasInteractionOverlay() const { return interactive; }
   Q_INVOKABLE QString getHint() const;
-  virtual int getInteractionDistance() const { return 1; }
+  virtual int getInteractionDistance() const { return blocksPath ? 1 : 0; }
   virtual QStringList getAvailableInteractions();
   QPoint getSpriteOffset() const;
   void   setSpriteOffset(QPoint);
@@ -79,6 +80,7 @@ signals:
   void pathChanged();
   void coverChanged();
   void interactiveChanged();
+  void zIndexChanged();
 
 protected slots:
   void onBlocksPathChanged();
