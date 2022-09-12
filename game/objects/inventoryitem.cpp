@@ -229,7 +229,7 @@ bool InventoryItem::isInRange(DynamicObject *target)
   {
     QJSValue result = scriptCall("isInRange", QJSValueList() << target->asJSValue());
 
-    if (result.isNull())
+    if (result.isNull() || result.isUndefined())
     {
       float range = getRange();
       CharacterSight* owner = reinterpret_cast<CharacterSight*>(getOwner());
@@ -245,8 +245,10 @@ bool InventoryItem::isInRange(DynamicObject *target)
 
 float InventoryItem::getRange() const
 {
-  if (script && script->hasMethod("getRange"))
-    return static_cast<float>(script->call("getRange").toNumber());
+  QJSValue result = scriptCall("getRange");
+
+  if (result.isNumber())
+    return static_cast<float>(result.toNumber());
   return 1.f;
 }
 
