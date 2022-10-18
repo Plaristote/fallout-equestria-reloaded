@@ -93,10 +93,7 @@ void MusicManager::playNext(void)
 
   qDebug() << "MusicManager::playNext in category" << currentCategory << ", options:" << keys;
   if (max == 0)
-  {
-    if (currentTrack != "")
-      startTrack(currentTrack);
-  }
+    startTrack("");
   else
     play(currentCategory, keys.at(rand() % max));
 }
