@@ -72,12 +72,26 @@ void MusicManager::play(const QString& scategory, const QString& name)
     startTrack(track.toString());
 }
 
+QStringList MusicManager::potentialSuccessors(void) const
+{
+  const QJsonObject category = dataTree[currentCategory].toObject();
+  QStringList keys;
+
+  for (auto it = category.begin() ; it != category.end() ; ++it)
+  {
+    if (it.value() != currentTrack)
+      keys << it.key();
+  }
+  return keys;
+}
+
 void MusicManager::playNext(void)
 {
   const QJsonObject    category = dataTree[currentCategory].toObject();
-  const QStringList    keys     = category.keys();
+  const QStringList    keys     = potentialSuccessors();
   const unsigned short max      = static_cast<unsigned short>(keys.length());
 
+  qDebug() << "MusicManager::playNext in category" << currentCategory << ", options:" << keys;
   if (max == 0)
   {
     if (currentTrack != "")

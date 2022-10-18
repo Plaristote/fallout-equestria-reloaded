@@ -24,7 +24,7 @@ public:
   Q_INVOKABLE void     play(const QString& category);
   Q_INVOKABLE void     play(const QString& category, const QString& name);
   Q_INVOKABLE void     pause(bool paused);
-  void                 playNext(void);
+  Q_INVOKABLE void     playNext(void);
   Q_INVOKABLE void     setVolume(int volume);
   Q_INVOKABLE void     setVolumeToDefault(void);
   void                 setDefaultVolume(int);
@@ -41,6 +41,7 @@ private slots:
 private:
   void                 loadDataTree();
   void                 startTrack(const QString& filename);
+  QStringList          potentialSuccessors() const;
 
   QJsonObject          data;
   QJsonObject          dataTree;
