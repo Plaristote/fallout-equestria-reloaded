@@ -225,6 +225,8 @@ void Game::loadLevel(const QString &name, const QString& targetZone)
         uniqueCharacterStorage->loadUniqueCharactersToLevel(currentLevel);
         currentLevel->scriptCall("onLoaded");
       }
+      else
+        uniqueCharacterStorage->loadUniqueCharactersToLevel(currentLevel);
     }
     catch (const std::runtime_error& error)
     {
