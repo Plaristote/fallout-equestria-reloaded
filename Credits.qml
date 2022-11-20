@@ -16,7 +16,7 @@ Rectangle {
     contentHeight: creditColumn.height
 
     Timer {
-      running: true
+      running: !parent.flicking && !parent.dragging
       repeat: true
       interval: 75
       onTriggered: parent.contentY = Math.min(parent.contentY + 1, parent.contentHeight - parent.height)
@@ -28,6 +28,12 @@ Rectangle {
       columns: 2
       columnSpacing: 5
       rowSpacing: 5
+
+      Item {
+        Layout.columnSpan: 2
+        Layout.fillWidth: true
+        Layout.preferredHeight: root.height / 2
+      }
 
       Repeater {
         model: credits.categories
@@ -78,28 +84,37 @@ Rectangle {
 
   Component {
     id: identityComponent
-    ColumnLayout {
-      Layout.columnSpan: person.assets.length ? 1 : 2
-
-      Label {
-        text: person.name
-        font.family:    application.titleFont.name
-        font.pointSize: application.titleFont.pointSize + 6
-        color:          "white"
-        Layout.alignment: Qt.AlignLeft
+    RowLayout {
+      AnimatedImage {
+        source: person.avatar
+        Layout.alignment: Qt.AlignTop
+        Layout.preferredWidth: 50
+        Layout.preferredHeight: 50
       }
 
-      TerminalToolButton {
-        iconName: "open"
-        text: "Homepage"
-        visible: person.url.length > 0
-        onClicked: Qt.openUrlExternally(person.url)
-        Layout.alignment: Qt.AlignLeft
-      }
+      ColumnLayout {
+        Layout.columnSpan: person.assets.length ? 1 : 2
 
-      Item {
-        Layout.preferredHeight: 20
-        Layout.preferredWidth:  20
+        Label {
+          text: person.name
+          font.family:    application.titleFont.name
+          font.pointSize: application.titleFont.pointSize + 6
+          color:          "white"
+          Layout.alignment: Qt.AlignLeft
+        }
+
+        TerminalToolButton {
+          iconName: "open"
+          text: "Homepage"
+          visible: person.url.length > 0
+          onClicked: Qt.openUrlExternally(person.url)
+          Layout.alignment: Qt.AlignLeft
+        }
+
+        Item {
+          Layout.preferredHeight: 20
+          Layout.preferredWidth:  20
+        }
       }
     }
   }

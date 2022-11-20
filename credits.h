@@ -12,6 +12,7 @@ class CreditPerson : public QObject
   Q_OBJECT
   Q_PROPERTY(QString     name   MEMBER name   CONSTANT)
   Q_PROPERTY(QString     url    MEMBER url    CONSTANT)
+  Q_PROPERTY(QString     avatar MEMBER avatar CONSTANT)
   Q_PROPERTY(QStringList assets MEMBER assets CONSTANT)
 public:
   CreditPerson(QObject* parent = nullptr);
@@ -20,7 +21,7 @@ public:
   bool hasAssets() const { return assets.size() > 0; }
 
 private:
-  QString     name, url;
+  QString     name, url, avatar;
   QStringList assets;
 };
 

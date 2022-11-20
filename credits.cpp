@@ -57,19 +57,26 @@ CreditPerson::CreditPerson(QObject* parent) : QObject(parent)
 {
 }
 
+static QString getCreditResourcePath(const QString& filename)
+{
+  const auto currentDir = QDir::currentPath();
+  const auto path = currentDir + '/' + filename;
+
+  if (QFile::exists(path))
+    return ("file:/" + path);
+  return ("qrc:/" + filename);
+}
+
 void CreditPerson::initialize(const QJsonObject& data)
 {
   auto currentDir = QDir::currentPath();
 
   name   = data["name"].toString();
   url    = data["url"].toString();
+  if (data["avatar"].isUndefined())
+    avatar = getCreditResourcePath("assets/credits/no-avatar.png");
+  else
+    avatar = getCreditResourcePath("assets/credits/" + data["avatar"].toString());
   for (const QString& filename : data["files"].toVariant().toStringList())
-  {
-    const auto path = currentDir + '/' + filename;
-
-    if (QFile::exists(path))
-      assets << ("file:/" + path);
-    else
-      assets << ("qrc:/" + filename);
-  }
+    assets << getCreditResourcePath(filename);
 }
