@@ -36,9 +36,12 @@ Pane {
   Component {
     id: defaultListItem
     TerminalButton {
+      id: button
       text: model
+      hoverEnabled: true
       onClicked: { root.currentName = model; }
       backgroundColor: root.currentName === model || down ? "green" : "transparent"
+      UiStyle.TerminalToolTip { target: button }
     }
   }
 

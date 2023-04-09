@@ -59,11 +59,13 @@ EditorSelectPanel {
   Component {
     id: treeListItem
     TerminalButton {
+      id: self
       property bool isFolder: (treeBranch[model] && treeBranch[model].type === "folder") || model === ".."
       property string name: isFolder ? model : model.substr(0, model.lastIndexOf('.'));
       text: isFolder ? `> ${name}` : `- ${name}`
       onClicked: itemClicked(model, isFolder)
       backgroundColor: root.currentName === (prefix + model) || down ? "green" : "transparent"
+      UiStyle.TerminalToolTip { target: self }
     }
   }
 }

@@ -28,6 +28,7 @@
         <file>assets/ui/TerminalScrollbar.qml</file>
         <file>assets/ui/TinyButton.qml</file>
         <file>assets/ui/TerminalButton.qml</file>
+        <file>assets/ui/TerminalToolTip.qml</file>
         <file>assets/ui/tab.png</file>
         <file>assets/ui/Tab.qml</file>
         <file>assets/ui/PlayPanel.qml</file>
