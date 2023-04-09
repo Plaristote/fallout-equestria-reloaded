@@ -28,7 +28,10 @@ Item {
     id: controller
 
     onStateListChanged: {
+      const newEntryPointIndex = stateList.indexOf(entryPointInput.currentText);
+
       entryPointInput.model = stateSelect.model = stateList;
+      entryPointInput.currentIndex = newEntryPointIndex;
     }
   }
 
