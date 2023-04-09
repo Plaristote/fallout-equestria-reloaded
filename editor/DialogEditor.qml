@@ -62,7 +62,7 @@ Item {
     anchors.centerIn: parent
     onAccepted: {
       scriptController.newDialog(value);
-      dialogSelect.model = scriptController.getDialogs();
+      dialogSelect.treeModel = scriptController.getDialogs();
     }
   }
 
