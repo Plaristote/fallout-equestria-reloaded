@@ -1,6 +1,7 @@
 #include "globals.h"
 #include "characterdialog.h"
 #include "game.h"
+#include "utils/javascript2i18n.hpp"
 #include <QFile>
 #include <QJsonArray>
 #include <QDebug>
@@ -153,14 +154,16 @@ QString CharacterDialog::getName() const
 
 QString CharacterDialog::t(const QString &name, const QVariantMap& options)
 {
+  QString translationPath = translationGroup + '.' + name;
   QVariantMap parameters{
     {"name", player->getStatistics()->getName()},
     {"npc", npc->isCharacter() ? reinterpret_cast<Character*>(npc)->getStatistics()->getName() : getName()}
   };
 
+  parameters = fetchScriptVariablesFromTranslation(translationPath, parameters, script);
   for (auto it = options.begin() ; it != options.end() ; ++it)
     parameters.insert(it.key(), it.value());
-  return I18n::get()->t(translationGroup + '.' + name, parameters);
+  return I18n::get()->t(translationPath, parameters);
 }
 
 QString CharacterDialog::getOptionText(const QString& key)

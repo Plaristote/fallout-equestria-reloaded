@@ -46,6 +46,7 @@ set(PROJECT_SOURCES
         utils/uniquecharacterstorage.h
         utils/uniquecharacterstorage.cpp
         utils/qjsonobject_merge.cpp
+        utils/javascript2i18n.cpp
         tilemap/tileset.h
         tilemap/tileset.cpp
         tilemap/tile.h
