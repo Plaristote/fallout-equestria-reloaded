@@ -9,6 +9,8 @@ Text {
   font.family: application.consoleFontName
   font.pointSize: 13
   color: "white"
+  style: Text.Outline
+  styleColor: "black"
   x: parent.mouseX + 30
   y: parent.mouseY + 5 - height / 2
   onEnabledChanged: refreshHint()
