@@ -6,6 +6,8 @@ QuickControls.Dialog {
   id: root
   background: Pane {}
 
+  onOpened: okButton.forceActiveFocus()
+
   function validate() {
     return true;
   }
