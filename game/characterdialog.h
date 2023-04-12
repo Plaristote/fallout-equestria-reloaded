@@ -7,6 +7,7 @@
 # include "character.h"
 # include "i18n.h"
 # include "bartercontroller.h"
+# include "dialog/data.h"
 
 class CharacterDialog : public QObject
 {
@@ -29,6 +30,8 @@ public:
   Q_INVOKABLE bool load(const QString& name, Character* player, DynamicObject* npc);
   Q_INVOKABLE void loadState(const QString& reference);
   void setAmbiance(const QString& value) { ambiance = value; emit ambianceChanged(); }
+  Q_INVOKABLE QJSValue getScriptObject() const { return script ? script->getObject() : QJSValue(); }
+  ScriptController* getScript() const { return script; }
 
   Q_INVOKABLE void    selectOption(const QString& key);
   Q_INVOKABLE QString getOptionText(const QString& key);
@@ -60,14 +63,13 @@ private slots:
   void onBarterEnded();
 
 protected:
-  void initializeStateHook(QString& text, QStringList& answers);
   virtual void loadOption(const QString& answer);
   QString getNextState(const QString& answer);
   QString getEntryPoint();
 
+  DialogData        data;
   ScriptController* script = nullptr;
   BarterController* barter = nullptr;
-  QJsonObject       data;
   Character*        player;
   DynamicObject*    npc;
   QString           stateReference;

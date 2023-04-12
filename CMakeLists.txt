@@ -47,6 +47,7 @@ set(PROJECT_SOURCES
         utils/uniquecharacterstorage.cpp
         utils/qjsonobject_merge.cpp
         utils/javascript2i18n.cpp
+        utils/javascriptforeach.cpp
         tilemap/tileset.h
         tilemap/tileset.cpp
         tilemap/tile.h
@@ -105,6 +106,9 @@ set(PROJECT_SOURCES
         game/characterparty.cpp
         game/characterdialog.h
         game/characterdialog.cpp
+        game/dialog/data.cpp
+        game/dialog/state.cpp
+        game/dialog/answer.cpp
         game/bartercontroller.h
         game/bartercontroller.cpp
         game/characters/buff.h

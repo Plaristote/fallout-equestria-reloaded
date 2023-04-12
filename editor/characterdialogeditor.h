@@ -23,15 +23,15 @@ public:
 
   Q_INVOKABLE void save(const QString&);
 
-  QString getEntryPoint()          { return data["entryPoint"].toString(); }
-  QString getStateHook()           { return getStateVariable("hook"); }
-  QString getStateText()           { return getStateVariable("text"); }
-  QString getStateMood()           { return getStateVariable("mood"); }
-  QString getOptionHook()          { return getOptionVariable("hook"); }
-  QString getOptionState()         { return getOptionVariable("state"); }
-  QString getOptionAvailableHook() { return getOptionVariable("availableHook"); }
-  QString getOptionText()          { return getOptionVariable("text"); }
-  QString getOptionTextHook()      { return getOptionVariable("textHook"); }
+  QString getEntryPoint()          { return data.getDefaultEntryPoint(); }
+  QString getStateHook()           { return getStateVariable(&DialogStateData::getTriggerHookAsString); }
+  QString getStateText()           { return getStateVariable(&DialogStateData::getDefaultLocalTranslationPath); }
+  QString getStateMood()           { return getStateVariable(&DialogStateData::getDefaultMood); }
+  QString getOptionHook()          { return getOptionVariable(&DialogAnswer::getTriggerHook); }
+  QString getOptionState()         { return getOptionVariable(&DialogAnswer::getDefaultNextState); }
+  QString getOptionAvailableHook() { return getOptionVariable(&DialogAnswer::getAvailableHook); }
+  QString getOptionText()          { return getOptionVariable(&DialogAnswer::getLocalTranslationPath); }
+  QString getOptionTextHook()      { return getOptionVariable(&DialogAnswer::getTextHook); }
   void setEntryPoint(const QString&);
   void setStateHook(const QString&);
   void setStateText(const QString&);
@@ -66,10 +66,15 @@ signals:
 private:
   void loadOption(const QString&) override;
 
-  QString getStateVariable(const QString&);
-  void    setStateVariable(const QString&, const QString&);
-  QString getOptionVariable(const QString&);
-  void    setOptionVariable(const QString&, const QString&);
+  typedef QString (DialogStateData::*DialogStateDataGetter)() const;
+  typedef void (DialogStateData::*DialogStateDataSetter)(const QString&);
+  typedef QString (DialogAnswer::*DialogAnswerGetter)() const;
+  typedef void (DialogAnswer::*DialogAnswerSetter)(const QString&);
+
+  QString getStateVariable(DialogStateDataGetter);
+  void    setStateVariable(DialogStateDataSetter, const QString&);
+  QString getOptionVariable(DialogAnswerGetter);
+  void    setOptionVariable(DialogAnswerSetter, const QString&);
 
   QString currentOption;
 };

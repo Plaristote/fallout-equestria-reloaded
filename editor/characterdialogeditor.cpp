@@ -20,14 +20,17 @@ void CharacterDialogEditor::save(const QString& name)
 
   if (file.open(QIODevice::WriteOnly))
   {
-    file.write(QJsonDocument(data).toJson());
+    QJsonObject object;
+
+    data.save(object);
+    file.write(QJsonDocument(object).toJson());
     file.close();
   }
 }
 
 void CharacterDialogEditor::setEntryPoint(const QString& value)
 {
-  data.insert("entryPoint", value);
+  data.setDefaultEntryPoint(value);
   emit entryPointChanged();
 }
 
@@ -35,7 +38,7 @@ void CharacterDialogEditor::setStateHook(const QString& value)
 {
   QStringList answers;
 
-  setStateVariable("hook", value);
+  setStateVariable(&DialogStateData::setTriggerHook, value);
   emit stateTextChanged();
   loadState(stateReference);
 }
@@ -44,9 +47,8 @@ void CharacterDialogEditor::setStateText(const QString& value)
 {
   QStringList answers;
 
-  setStateVariable("text", value);
+  setStateVariable(&DialogStateData::setLocalTranslationPath, value);
   emit stateTextChanged();
-  initializeStateHook(text, answers);
   if (text.length() == 0)
     text = t(value);
   emit textChanged();
@@ -54,147 +56,126 @@ void CharacterDialogEditor::setStateText(const QString& value)
 
 void CharacterDialogEditor::setStateMood(const QString& value)
 {
-  setStateVariable("mood", value);
+  setStateVariable(&DialogStateData::setMood, value);
   emit stateMoodChanged();
 }
 
 void CharacterDialogEditor::setOptionHook(const QString& value)
 {
-  setOptionVariable("hook", value);
+  setOptionVariable(&DialogAnswer::setTriggerHook, value);
   emit optionHookChanged();
   emit optionsChanged();
 }
 
 void CharacterDialogEditor::setOptionState(const QString& value)
 {
-  setOptionVariable("state", value);
+  setOptionVariable(&DialogAnswer::setDefaultNextState, value);
   emit optionStateChanged();
 }
 
 void CharacterDialogEditor::setOptionAvailableHook(const QString& value)
 {
-  setOptionVariable("availableHook", value);
+  setOptionVariable(&DialogAnswer::setAvailableHook, value);
   emit optionAvailableHookChanged();
   loadState(stateReference);
 }
 
 void CharacterDialogEditor::setOptionText(const QString& value)
 {
-  setOptionVariable("text", value);
+  setOptionVariable(&DialogAnswer::setLocalTranslationPath, value);
   emit optionTextChanged();
   emit optionsChanged();
 }
 
 void CharacterDialogEditor::setOptionTextHook(const QString& value)
 {
-  setOptionVariable("textHook", value);
+  setOptionVariable(&DialogAnswer::setTextHook, value);
   emit optionTextHookChanged();
   emit optionsChanged();
 }
 
-QString CharacterDialogEditor::getStateVariable(const QString& name)
+QString CharacterDialogEditor::getStateVariable(DialogStateDataGetter getter)
 {
-  QJsonObject stateData = data["states"].toObject()[stateReference].toObject();
+  DialogStateData* state = data.findState(stateReference).get();
 
-  return stateData[name].toString();
+  if (state)
+    return (state->*getter)();
+  return QString();
 }
 
-void    CharacterDialogEditor::setStateVariable(const QString& name, const QString& value)
+void CharacterDialogEditor::setStateVariable(DialogStateDataSetter setter, const QString& value)
 {
-  QJsonObject states = data["states"].toObject();
-  QJsonObject state  = states[stateReference].toObject();
+  DialogStateData* state = data.findState(stateReference).get();
 
-  state.insert(name, value);
-  states.insert(stateReference, state);
-  data.insert("states", states);
+  if (state)
+    (state->*setter)(value);
 }
 
-QString CharacterDialogEditor::getOptionVariable(const QString& name)
+QString CharacterDialogEditor::getOptionVariable(DialogAnswerGetter getter)
 {
-  QJsonObject answerData = data["answers"].toObject()[currentOption].toObject();
+  DialogAnswer* answer = data.findAnswer(currentOption).get();
 
-  return answerData[name].toString();
+  if (answer)
+    return (answer->*getter)();
+  return QString();
 }
 
-void    CharacterDialogEditor::setOptionVariable(const QString& name, const QString& value)
+void CharacterDialogEditor::setOptionVariable(DialogAnswerSetter setter, const QString& value)
 {
-  QJsonObject answers = data["answers"].toObject();
-  QJsonObject answer  = answers[currentOption].toObject();
+  DialogAnswer* answer = data.findAnswer(currentOption).get();
 
-  answer.insert(name, value);
-  answers.insert(currentOption, answer);
-  data.insert("answers", answers);
+  if (answer)
+    (answer->*setter)(value);
 }
 
 void CharacterDialogEditor::newState(const QString &name)
 {
-  QJsonObject states = data["states"].toObject();
-  QJsonObject state;
-
-  state.insert("answers", QJsonArray());
-  state.insert("text", name);
-  states.insert(name, state);
-  data.insert("states", states);
+  data.createNewState(name);
   loadState(name);
   emit stateListChanged();
 }
 
 void CharacterDialogEditor::newAnswer(const QString &name)
 {
-  QJsonObject states  = data["states"].toObject();
-  QJsonObject answers = data["answers"].toObject();
-  QJsonObject state   = states[stateReference].toObject();
-  QJsonArray  stateAnswers = state["answers"].toArray();
+  const auto& currentState = data.findState(stateReference);
 
-  if (!answers[name].isObject())
+  if (currentState)
   {
-    QJsonObject answer{{"text", name}};
+    QStringList answerList = currentState->getDefaultAnswers();
 
-    answers.insert(name, answer);
-    data.insert("answers", answers);
+    if (!answerList.contains(name))
+    {
+      data.createNewAnswer(name);
+      answerList.push_front(name);
+      currentState->setDefaultAnswers(answerList);
+      if (answerList.size() == 1)
+        options.clear();
+      options.push_front(name);
+    }
+    currentOption = name;
+    emit currentOptionChanged();
+    emit optionsChanged();
   }
-  if (!stateAnswers.contains(name))
-  {
-    stateAnswers.push_front(name);
-    state.insert("answers", stateAnswers);
-    states.insert(stateReference, state);
-    data.insert("states", states);
-    if (stateAnswers.size() == 1)
-      options.clear();
-    options.push_front(name);
-  }
-  currentOption = name;
-  emit currentOptionChanged();
-  emit optionsChanged();
 }
 
 void CharacterDialogEditor::removeState()
 {
-  QJsonObject states = data["states"].toObject();
-
-  states.remove(stateReference);
-  data.insert("states", states);
+  data.removeState(stateReference);
   emit stateListChanged();
 }
 
 void CharacterDialogEditor::removeAnswer()
 {
-  QJsonObject states  = data["states"].toObject();
-  QJsonObject answers = data["answers"].toObject();
-  QJsonObject state   = states[stateReference].toObject();
-  QJsonArray  stateAnswers = state["answers"].toArray();
+  const auto& currentState = data.findState(stateReference);
 
-  for (auto it = stateAnswers.begin() ; it != stateAnswers.end() ; ++it)
+  if (currentState)
   {
-    if (it->toString() == currentOption)
-    {
-      stateAnswers.erase(it);
-      break ;
-    }
+    QStringList answerList = currentState->getDefaultAnswers();
+
+    answerList.removeOne(currentOption);
+    currentState->setDefaultAnswers(answerList);
+    data.removeAnswerIfUnreferenced(currentOption);
   }
-  state.insert("answers", stateAnswers);
-  states.insert(stateReference, state);
-  data.insert("states", states);
   options.removeAll(currentOption);
   currentOption = "";
   emit currentOptionChanged();
@@ -208,39 +189,34 @@ void CharacterDialogEditor::loadOption(const QString& value)
 
 void CharacterDialogEditor::moveOptionUp(int index)
 {
+  const auto& state = data.findState(stateReference);
+  QStringList answers = state->getDefaultAnswers();
+
   if (index > 0)
   {
-    QJsonObject states       = data["states"].toObject();
-    QJsonObject state        = states[stateReference].toObject();
-    QJsonArray  stateAnswers = state["answers"].toArray();
-    QJsonValue  a = stateAnswers.at(index - 1);
-    QJsonValue  b = stateAnswers.at(index);
+    QString     a = answers.at(index - 1);
+    QString     b = answers.at(index);
 
-    stateAnswers[index - 1] = b;
-    stateAnswers[index]     = a;
-    state .insert("answers",      stateAnswers);
-    states.insert(stateReference, state);
-    data  .insert("states",       states);
+    answers[index - 1] = b;
+    answers[index]     = a;
+    state->setDefaultAnswers(answers);
     loadState(stateReference);
   }
 }
 
 void CharacterDialogEditor::moveOptionDown(int index)
 {
-  QJsonObject states       = data["states"].toObject();
-  QJsonObject state        = states[stateReference].toObject();
-  QJsonArray  stateAnswers = state["answers"].toArray();
+  const auto& state = data.findState(stateReference);
+  QStringList answers = state->getDefaultAnswers();
 
-  if (index + 1 < stateAnswers.size())
+  if (index + 1 < answers.size())
   {
-    QJsonValue  a = stateAnswers.at(index + 1);
-    QJsonValue  b = stateAnswers.at(index);
+    QString     a = answers.at(index - 1);
+    QString     b = answers.at(index);
 
-    stateAnswers[index + 1] = b;
-    stateAnswers[index]     = a;
-    state .insert("answers",      stateAnswers);
-    states.insert(stateReference, state);
-    data  .insert("states",       states);
+    answers[index + 1] = b;
+    answers[index]     = a;
+    state->setDefaultAnswers(answers);
     loadState(stateReference);
   }
 }

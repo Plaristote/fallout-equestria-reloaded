@@ -23,7 +23,7 @@ bool CharacterDialog::load(const QString& name, Character* player, DynamicObject
     this->player     = player;
     this->npc        = npc;
     translationGroup = "dialogs." + name;
-    data             = QJsonDocument::fromJson(file.readAll()).object();
+    data.load(QJsonDocument::fromJson(file.readAll()).object());
     script = new ScriptController(SCRIPTS_PATH + "dialogs/" + name + ".mjs");
     if (npc->isCharacter())
       barter->initialize(script, player, reinterpret_cast<Character*>(npc));
@@ -47,43 +47,12 @@ QString CharacterDialog::getEntryPoint()
     if (entryPoint.isString())
       return entryPoint.toString();
   }
-  return data["entryPoint"].toString();
-}
-
-void CharacterDialog::initializeStateHook(QString& text, QStringList& answers)
-{
-  QJsonObject statesData  = data["states"].toObject();
-  QJsonObject stateData   = statesData[stateReference].toObject();
-  QString triggerCallback = stateData["hook"].toString();
-
-  text = "";
-  if (script->hasMethod(triggerCallback))
-  {
-    QJSValue value = script->call(triggerCallback);
-
-    if (value.isString())
-      text = value.toString();
-    else if (value.isObject())
-    {
-      if (value.hasProperty("text"))
-        text = value.property("text").toString();
-      if (value.hasProperty("answers"))
-        answers = value.property("answers").toVariant().toStringList();
-    }
-  }
+  return data.getDefaultEntryPoint();
 }
 
 bool CharacterDialog::isOptionAvailable(const QString &answer)
 {
-  QJsonObject answerData = data["answers"].toObject();
-  QJsonObject optionData = answerData[answer].toObject();
-  QJsonValue  availableHook = optionData["availableHook"];
-  QJSValue    retval;
-
-  if (availableHook.isUndefined() || !script->hasMethod(availableHook.toString()))
-    return true;
-  retval = script->call(availableHook.toString());
-  return retval.toBool();
+  return data.isAnswerAvailable(*this, answer);
 }
 
 void CharacterDialog::loadOption(const QString &answer)
@@ -94,57 +63,49 @@ void CharacterDialog::loadOption(const QString &answer)
 
 void CharacterDialog::loadState(const QString& reference)
 {
-  QJsonObject statesData  = data["states"].toObject();
-  QJsonObject answerData  = data["answers"].toObject();
-  QJsonObject stateData   = statesData[reference].toObject();
-  QStringList answers;
+  const auto& stateData = data.findState(reference);
+  DialogState state;
 
-  options.clear();
-  stateReference = reference;
-  if (stateData["mood"].toString().length() > 0)
-    setProperty("mood", stateData["mood"].toString());
-  initializeStateHook(text, answers);
-  if (text.length() == 0)
-    text = t(stateData["text"].toString());
-  if (answers.length() == 0)
-    answers = stateData["answers"].toVariant().toStringList();
-  for (const QString& answer : answers)
-    loadOption(answer);
-  if (answers.length() == 0)
-    loadOption("exit");
-  emit stateReferenceChanged();
-  emit textChanged();
-  emit optionsChanged();
-  qDebug() << "Loaded dialog ztate" << reference << ": optionz are " << options;
-  qDebug() << QJsonDocument(stateData).toJson();
+  if (stateData)
+  {
+    options.clear();
+    stateReference = reference;
+    state   = stateData->setAsCurrentState(*this);
+    text    = state.text;
+    if (!state.mood.isEmpty())
+      mood  = state.mood;
+    for (const QString& answer : state.answers)
+      loadOption(answer);
+    if (state.answers.length() == 0)
+      loadOption("exit");
+    emit stateReferenceChanged();
+    emit textChanged();
+    emit optionsChanged();
+    emit moodChanged();
+  }
+  else
+    emit dialogEnded();
 }
 
-void CharacterDialog::selectOption(const QString& key)
+void CharacterDialog::selectOption(const QString& answerSymbol)
 {
   QString nextState;
 
-  if (key != "exit")
-    nextState = getNextState(key);
-  if (nextState != "")
+  if (answerSymbol != "exit")
+    nextState = getNextState(answerSymbol);
+  if (!nextState.isEmpty())
     loadState(nextState);
   else
     emit dialogEnded();
 }
 
-QString CharacterDialog::getNextState(const QString& answer)
+QString CharacterDialog::getNextState(const QString& answerSymbol)
 {
-  QJsonObject answersData  = data["answers"].toObject();
-  QJsonObject optionData   = answersData[answer].toObject();
-  QString     callbackName = optionData["hook"].toString();
+  const auto& answer = data.findAnswer(answerSymbol);
 
-  if (callbackName != "" && script->hasMethod(callbackName))
-  {
-    QJSValue retval = script->call(callbackName);
-
-    if (retval.isString())
-      return retval.toString();
-  }
-  return optionData["state"].toString();
+  if (answer)
+    return answer->trigger(*this);
+  return QString();
 }
 
 QString CharacterDialog::getName() const
@@ -168,33 +129,27 @@ QString CharacterDialog::t(const QString &name, const QVariantMap& options)
 
 QString CharacterDialog::getOptionText(const QString& key)
 {
-  QJsonObject answers    = data["answers"].toObject();
-  QJsonObject answerData = answers[key].toObject();
-  QString     textHook   = answerData["textHook"].toString();
-  QString     callback("getAnswerText");
+  const auto& answer = data.findAnswer(key);
 
-  if (textHook.length() > 0)
-    callback = textHook;
-  if (script->hasMethod(callback))
-  {
-    QJSValue retval = script->call(callback, QJSValueList() << key);
-
-    if (retval.isString())
-      return retval.toString();
-  }
-  if (answerData["text"].toString() == "")
-    return "[...]";
-  return t(answerData["text"].toString());
+  return answer->getText(*this);
 }
 
 QStringList CharacterDialog::getStateList() const
 {
-  return data["states"].toObject().keys();
+  QStringList result;
+
+  for (const auto& state : data.getStates())
+    result.push_back(state->getSymbol());
+  return result;
 }
 
 QStringList CharacterDialog::getAnswerList() const
 {
-  return data["answers"].toObject().keys();
+  QStringList result;
+
+  for (const auto& answer : data.getAnswers())
+    result.push_back(answer->getSymbol());
+  return result;
 }
 
 bool CharacterDialog::tryToBarter()
