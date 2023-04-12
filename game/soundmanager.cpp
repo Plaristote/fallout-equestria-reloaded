@@ -8,26 +8,57 @@
 #include <QSettings>
 #include <cmath>
 
-static void loadSoundLibrary(QMap<QString, QUrl>& soundLibrary)
-{
-  QFile file(ASSETS_PATH + "audio.json");
-
-  if (file.open(QIODevice::ReadOnly))
-  {
-    const QJsonObject data = QJsonDocument::fromJson(file.readAll()).object();
-    const QStringList keys = data.keys();
-
-    file.close();
-    for (const QString& key : keys)
-       soundLibrary.insert(key, QUrl::fromLocalFile(SOUNDS_PATH + data[key].toString()));
-  }
-}
+SoundManager* SoundManager::_global_ptr = nullptr;
+static const QString volumeOption = "audio/soundVolume";
 
 SoundManager::SoundManager(QObject *parent) : QObject(parent)
 {
-  loadSoundLibrary(soundLibrary);
+  _global_ptr = this;
   timer.setInterval(1000);
   connect(&timer, &QTimer::timeout, this, &SoundManager::update);
+}
+
+void SoundManager::initialize()
+{
+  if (!initialized)
+  {
+    QFile file(ASSETS_PATH + "audio.json");
+
+    if (file.open(QIODevice::ReadOnly))
+    {
+      const QJsonObject data = QJsonDocument::fromJson(file.readAll()).object();
+      const QStringList keys = data.keys();
+
+      file.close();
+      for (const QString& key : keys)
+        soundLibrary.insert(key, QUrl::fromLocalFile(SOUNDS_PATH + data[key].toString()));
+      initialized = true;
+    }
+  }
+}
+
+void SoundManager::stop()
+{
+  auto it = sounds.begin();
+
+  while (it != sounds.end())
+  {
+    QSharedPointer<QSoundEffect> sound = *it;
+
+    sound->stop();
+    it = sounds.erase(it);
+  }
+}
+
+void SoundManager::setDefaultVolume(int value)
+{
+  QSettings().setValue(volumeOption, value);
+  emit defaultVolumeChanged();
+}
+
+int SoundManager::getDefaultVolume() const
+{
+  return QSettings().value(volumeOption, 100).toInt();
 }
 
 void SoundManager::update()
@@ -49,7 +80,7 @@ void SoundManager::play(const QString& name, qreal volume)
 {
   if (soundLibrary.contains(name))
   {
-    auto volumeLevel = QSettings().value("audio/volume", 100).toInt();
+    auto volumeLevel = QSettings().value(volumeOption, 100).toInt();
     auto sound = QSharedPointer<QSoundEffect>(new QSoundEffect);
 
     sound->setSource(soundLibrary[name]);

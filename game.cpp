@@ -35,7 +35,7 @@ Game::Game(QObject *parent) : StorableObject(parent), timePasser(this)
   uniqueCharacterStorage = new UniqueCharacterStorage(this);
   quests = new QuestManager(this);
   taskManager = new TaskRunner(this);
-  soundManager = new SoundManager(this);
+  SoundManager::get()->initialize();
   scriptEngine.installExtensions(QJSEngine::ConsoleExtension);
   scriptEngine.globalObject().setProperty("game", scriptEngine.newQObject(this));
   scriptEngine.globalObject().setProperty("worldmap", scriptEngine.newQObject(worldmap));
@@ -55,6 +55,7 @@ Game::Game(QObject *parent) : StorableObject(parent), timePasser(this)
 
 Game::~Game()
 {
+  SoundManager::get()->stop();
   scriptEngine.collectGarbage();
   if (instance == this)
     instance = nullptr;
@@ -112,7 +113,7 @@ void Game::initializeEvents()
   connect(diplomacy, &WorldDiplomacy::update, this, &Game::onDiplomacyUpdate);
   connect(player->getInventory(), &Inventory::itemPicked, quests, &QuestManager::onItemPicked);
   connect(player, &Character::died, this, &Game::gameOver);
-  connect(player->getStatistics(), &StatModel::levelChanged, this, [this]() { if (player->getStatistics()->property("level").toInt() > 1) soundManager->play("pipbuck/levelup"); });
+  connect(player->getStatistics(), &StatModel::levelChanged, this, [this]() { if (player->getStatistics()->property("level").toInt() > 1) getSoundManager()->play("pipbuck/levelup"); });
 }
 
 void Game::loadFromDataEngine()

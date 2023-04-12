@@ -63,7 +63,7 @@ public:
   WorldMap* getWorldmap() const { return worldmap; }
   LevelTask* getLevel() const { return currentLevel; }
   TaskRunner* getTaskManager() const { return taskManager; }
-  SoundManager* getSoundManager() const { return soundManager; }
+  SoundManager* getSoundManager() const { return SoundManager::get(); }
   QJSEngine& getScriptEngine() { return scriptEngine; }
   QJSValue loadScript(const QString& path);
   QJSValue scriptCall(QJSValue callable, const QJSValueList& args, const QString& scriptName);
@@ -133,7 +133,6 @@ private:
   QJSEngine   scriptEngine;
   ScriptController* script = nullptr;
   TaskRunner* taskManager = nullptr;
-  SoundManager* soundManager = nullptr;
   TimePasser timePasser;
 
   QMap<QString, Trait> cmapTraits;

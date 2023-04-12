@@ -41,6 +41,12 @@ Pane {
     GridLayout {
       columns: 2
 
+      TerminalLabel {
+        text: i18n.t("options.title.interface")
+        font.pixelSize: 30
+        Layout.columnSpan: 2
+      }
+
       TerminalLabel { text: i18n.t("options.locale") }
       TerminalComboBox {
         id: localeInput
@@ -61,14 +67,38 @@ Pane {
         onCheckedChanged: application.isFullScreen = checked
       }
 
-      TerminalLabel { text: i18n.t("options.volume") }
+      TerminalLabel {
+        text: i18n.t("options.title.sounds")
+        font.pixelSize: 30
+        Layout.columnSpan: 2
+        Layout.topMargin: 20
+      }
+
+      TerminalLabel { text: i18n.t("options.musicVolume") }
       Slider {
-        id: volumeInput
+        id: musicVolumeInput
         Layout.fillWidth: true
         from: 0
         to: 100
-        Component.onCompleted: { value = musicManager.defaultVolume }
+        Component.onCompleted: { value = musicManager.defaultVolume; }
         onValueChanged: { musicManager.defaultVolume = value; }
+      }
+
+      TerminalLabel { text: i18n.t("options.soundEffectsVolume") }
+      Slider {
+        id: soundEffectsVolume
+        Layout.fillWidth: true
+        from: 0
+        to: 100
+        Component.onCompleted: { value = soundManager.defaultVolume; }
+        onValueChanged: { soundManager.defaultVolume = value; }
+      }
+
+      TerminalLabel {
+        text: i18n.t("options.title.gameplay")
+        font.pixelSize: 30
+        Layout.columnSpan: 2
+        Layout.topMargin: 20
       }
 
       TerminalLabel { text: i18n.t("options.movementMode") }

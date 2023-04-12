@@ -26,6 +26,7 @@
 #include "game/lootingcontroller.h"
 #include "gamemanager.h"
 #include "musicmanager.h"
+#include "game/soundmanager.h"
 #include "game/characters/buff.h"
 #include "game/characters/actionqueue.h"
 #include "game/mousecursor.h"
@@ -103,6 +104,7 @@ int main(int argc, char *argv[])
   qmlRegisterType<LootingController>("Game", 1,0, "LootingController");
   qmlRegisterType<GameManager>("Game", 1,0, "GameManager");
   qmlRegisterType<MusicManager>("Game", 1,0, "MusicManager");
+  qmlRegisterType<SoundManager>("Game", 1,0, "SoundManager");
   qmlRegisterType<QuestManager>("Game", 1,0, "QuestManager");
   qmlRegisterType<Quest>("Game", 1,0, "Quest");
   qmlRegisterType<WorldMap>("Game", 1,0, "WorldMap");
@@ -139,6 +141,7 @@ int main(int argc, char *argv[])
   // END GAME EDITOR
 
   MusicManager* musicManager = new MusicManager(&app);
+  SoundManager* soundManager = new SoundManager(&app);
   GameManager*  gameManager = new GameManager();
   I18n*         i18n = new I18n(&app);
 
@@ -146,6 +149,7 @@ int main(int argc, char *argv[])
   engine.rootContext()->setContextProperty("i18n", i18n);
   engine.rootContext()->setContextProperty("gameManager", gameManager);
   engine.rootContext()->setContextProperty("musicManager", musicManager);
+  engine.rootContext()->setContextProperty("soundManager", soundManager);
   engine.rootContext()->setContextProperty("animationLibrary", &animationLibrary);
   engine.rootContext()->setContextProperty("itemLibrary", &itemLibrary);
   engine.rootContext()->setContextProperty("fileProtocol", fileProtocol);
