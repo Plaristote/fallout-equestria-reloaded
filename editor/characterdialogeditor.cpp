@@ -194,8 +194,8 @@ void CharacterDialogEditor::moveOptionUp(int index)
 
   if (index > 0)
   {
-    QString     a = answers.at(index - 1);
-    QString     b = answers.at(index);
+    QString a = answers.at(index - 1);
+    QString b = answers.at(index);
 
     answers[index - 1] = b;
     answers[index]     = a;
@@ -211,8 +211,8 @@ void CharacterDialogEditor::moveOptionDown(int index)
 
   if (index + 1 < answers.size())
   {
-    QString     a = answers.at(index - 1);
-    QString     b = answers.at(index);
+    QString a = answers.at(index + 1);
+    QString b = answers.at(index);
 
     answers[index + 1] = b;
     answers[index]     = a;
