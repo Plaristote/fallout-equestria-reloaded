@@ -77,7 +77,7 @@ void CharacterDialog::loadState(const QString& reference)
     for (const QString& answer : state.answers)
       loadOption(answer);
     if (state.answers.length() == 0)
-      loadOption("exit");
+      options.push_back("exit");
     emit stateReferenceChanged();
     emit textChanged();
     emit optionsChanged();
@@ -131,7 +131,9 @@ QString CharacterDialog::getOptionText(const QString& key)
 {
   const auto& answer = data.findAnswer(key);
 
-  return answer->getText(*this);
+  if (answer)
+    return answer->getText(*this);
+  return "[...]";
 }
 
 QStringList CharacterDialog::getStateList() const
