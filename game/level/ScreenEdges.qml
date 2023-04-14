@@ -106,7 +106,7 @@ Item {
 
   MouseArea {
     id: bottomLeftCorner
-    anchors { bottom: parent.bottom; right: parent.left }
+    anchors { bottom: parent.bottom; left: parent.left }
     height: scrollBorderSize
     width: scrollBorderSize
     hoverEnabled: parent.enabled
