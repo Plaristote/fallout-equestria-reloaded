@@ -29,7 +29,7 @@ private slots:
 private:
   QQmlListProperty<DynamicObject> getQmlVisibleObjects() override;
   QQmlListProperty<Character>     getQmlVisibleCharacters() override;
-  QJsonObject clipper;
+  static QJsonObject clipper;
 };
 
 #endif // LEVELEDITORCONTROLLER_H

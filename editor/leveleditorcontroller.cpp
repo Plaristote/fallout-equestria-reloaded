@@ -3,6 +3,8 @@
 #include "game/objects/doorway.h"
 #include "game/objects/objectfactory.h"
 
+QJsonObject LevelEditorController::clipper;
+
 LevelEditorController::LevelEditorController(QObject* parent) : LevelTask(parent)
 {
 }
