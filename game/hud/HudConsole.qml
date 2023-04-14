@@ -6,6 +6,10 @@ Pane {
   property QtObject gameController
   background: UiStyle.TerminalPane {}
 
+  onHeightChanged: {
+    terminalFlickable.contentY = terminalFlickable.contentHeight - terminalFlickable.height
+  }
+
   Flickable {
     id: terminalFlickable
     anchors.fill: parent

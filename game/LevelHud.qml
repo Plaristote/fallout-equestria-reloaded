@@ -56,6 +56,11 @@ Pane {
       id: terminalHoverArea
       hoverEnabled: true
       anchors.fill: parent
+      propagateComposedEvents: true
+      onClicked:      mouse.accepted = false
+      onPressed:      mouse.accepted = false
+      onPressAndHold: mouse.accepted = false
+      onReleased:     mouse.accepted = false
     }
     Behavior on height {
       NumberAnimation { duration: 277 }
