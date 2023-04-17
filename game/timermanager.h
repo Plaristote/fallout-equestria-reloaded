@@ -17,6 +17,18 @@ class TimeManager : public QObject
   Q_PROPERTY(int minute READ getMinute NOTIFY dateChanged)
   Q_PROPERTY(int second READ getSecond NOTIFY dateChanged)
 public:
+  struct TimePoint
+  {
+    TimePoint(const TimeManager& tm) : hour(tm.getHour()), minute(tm.getMinute()), second(tm.getSecond()) {}
+    TimePoint(const QVariantMap& tm);
+    bool operator==(const TimePoint&) const;
+    bool operator>(const TimePoint&) const;
+    bool operator<(const TimePoint&) const;
+    bool operator>=(const TimePoint& b) const { return operator==(b) || operator>(b); }
+    bool operator<=(const TimePoint& b) const { return operator==(b) || operator<(b); }
+    unsigned int hour = 0, minute = 0, second = 0;
+  };
+
   explicit TimeManager(QObject *parent = nullptr);
 
   void save(QJsonObject&) const;
@@ -31,6 +43,9 @@ public:
   Q_INVOKABLE long secondsUntilTime(const QVariantMap& timeData) const;
   // Return timestamp in seconds
   Q_INVOKABLE long getTimestamp() const { return getDateTime().GetTimestamp(); }
+
+  Q_INVOKABLE bool isWithinRange(const QVariantMap&) const;
+  bool isWithinRange(const TimePoint& from, const TimePoint& to) const;
 
   int getYear()   const { return dateTime.GetYear(); }
   int getMonth()  const { return dateTime.GetMonth(); }

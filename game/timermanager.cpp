@@ -64,3 +64,47 @@ long TimeManager::secondsUntilTime(const QVariantMap &timeData) const
   seconds = (nextTime - dateTime).GetTimestamp();
   return static_cast<long>(seconds);
 }
+
+TimeManager::TimePoint::TimePoint(const QVariantMap& timeData)
+{
+  hour   = timeData.contains("hour") ? timeData["hour"].toUInt() : 0;
+  minute = timeData.contains("minute") ? timeData["minute"].toUInt() : 0;
+  second = timeData.contains("second") ? timeData["second"].toUInt() : 0;
+}
+
+bool TimeManager::TimePoint::operator<(const TimeManager::TimePoint& b) const
+{
+  return hour < b.hour || (hour == b.hour && (minute < b.minute || (minute == b.minute && second < b.second)));
+}
+
+bool TimeManager::TimePoint::operator>(const TimeManager::TimePoint& b) const
+{
+  return hour > b.hour || (hour == b.hour && (minute > b.minute || (minute == b.minute && second > b.second)));
+}
+
+bool TimeManager::TimePoint::operator==(const TimeManager::TimePoint& b) const
+{
+  return hour == b.hour && minute == b.minute && second == b.second;
+}
+
+bool TimeManager::isWithinRange(const QVariantMap& data) const
+{
+  if (data.contains("from") && data.contains("to"))
+  {
+    QVariantMap from = data["from"].toMap();
+    QVariantMap to   = data["to"].toMap();
+
+    return isWithinRange(TimePoint(from), TimePoint(to));
+  }
+  qDebug() << "Invalid timeRange sent to TimeManager::isWithinRange";
+  return false;
+}
+
+bool TimeManager::isWithinRange(const TimePoint& from, const TimePoint& to) const
+{
+  TimePoint now(*this);
+
+  if (from > to)
+    return now >= from || now < to;
+  return now >= from && now < to;
+}
