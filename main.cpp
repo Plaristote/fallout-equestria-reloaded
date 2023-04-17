@@ -121,6 +121,7 @@ int main(int argc, char *argv[])
   qmlRegisterType<Credits>("Game", 1,0, "Credits");
   qmlRegisterType<CreditPerson>("Game", 1,0, "Person");
 
+  qRegisterMetaType<Character*>("Character*");
   qRegisterMetaType<Character*>("const Character*");
   qRegisterMetaType<CharacterDiplomacy*>("const CharacterDiplomacy*");
   qRegisterMetaType<DynamicObject*>("const DynamicObject*");
