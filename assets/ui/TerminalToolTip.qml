@@ -22,6 +22,9 @@ ToolTip {
   }
   MouseArea {
     anchors.fill: parent
-    onClicked: target.clicked()
+    onClicked: {
+      target.forceActiveFocus()
+      target.clicked()
+    }
   }
 }
