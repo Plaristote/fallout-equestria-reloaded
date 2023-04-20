@@ -47,11 +47,13 @@ Item {
   }
 
   function moveToObject(object) {
-    const position = object.getSpritePosition();
+    if (object) {
+      const position = object.getSpritePosition();
 
-    position.x -= camera.width / 2;
-    position.y -= camera.height / 2;
-    translate(-origin.x - position.x, -origin.y - position.y);
+      position.x -= camera.width / 2;
+      position.y -= camera.height / 2;
+      translate(-origin.x - position.x, -origin.y - position.y);
+    }
   }
 
   Shortcut {

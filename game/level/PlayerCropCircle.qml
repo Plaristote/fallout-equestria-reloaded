@@ -21,7 +21,7 @@ ShaderEffect {
     id: positionUpdateTimer
     interval: 10
     repeat: false
-    running: player.spritePosition != lastPlayerPosition
+    running: player && player.spritePosition != lastPlayerPosition
     onTriggered: {
       lastPlayerPosition = player.spritePosition;
       updateCenter();
