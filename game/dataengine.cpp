@@ -195,12 +195,10 @@ void DataEngine::saveToFile(const QString &path)
 {
   QFile out(path.startsWith("./assets") ? path : "./saves/" + path);
 
-  qDebug() << "Diplomacy data:" << QJsonDocument(diplomacy).toJson();
   data.insert("diplomacy", diplomacy);
   data.insert("quests", quests);
-
   if (out.open(QIODevice::WriteOnly))
-    out.write(QJsonDocument(data).toJson());
+    out.write(QJsonDocument(data).toJson(QJsonDocument::Compact));
   else
     qDebug() << "Could not open save file" << path;
 }
