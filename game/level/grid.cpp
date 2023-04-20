@@ -222,12 +222,13 @@ bool GridComponent::moveCharacterToZone(Character* character, TileZone* zone)
 
 bool GridComponent::insertPartyIntoZone(CharacterParty* party, const QString& zoneName)
 {
-  for (auto* zone : getTileMap()->getZones())
-  {
-    if (zone->getType() == "entry" && (zone->getName() == zoneName || (zone->getIsDefault() && zoneName == "")))
-      return party->insertIntoZone(this, zone);
-  }
-  return false;
+  TileZone* zone;
+
+  if (zoneName == "")
+    zone = getTileZone([](const TileZone& candidate) { return candidate.getIsDefault(); });
+  else
+    zone = getTileZone([zoneName](const TileZone& candidate) { return candidate.getName() == zoneName; });
+  return zone && party->insertIntoZone(this, zone);
 }
 
 QPoint GridComponent::getTilePosition(QPoint tilePosition) const
