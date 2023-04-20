@@ -6,6 +6,14 @@
 
 class QJsonObject;
 
-QVariantMap loadTiledProperties(const QJsonObject&, const QString& tiledVersion = "1.9");
+enum TiledPropertyVersion
+{
+  TiledProperty_1_8,
+  TiledProperty_1_9
+};
+
+TiledPropertyVersion getTiledPropertyVersion(const QString& tiledVersion);
+QVariantMap loadTiledProperties(const QJsonObject&, const QString& tiledVersion);
+QVariantMap loadTiledProperties(const QJsonObject&, TiledPropertyVersion = TiledProperty_1_9);
 
 #endif

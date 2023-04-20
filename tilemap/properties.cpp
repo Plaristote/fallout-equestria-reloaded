@@ -2,6 +2,21 @@
 #include <QJsonObject>
 #include <QJsonArray>
 
+TiledPropertyVersion getTiledPropertyVersion(const QString& tiledVersion)
+{
+  QStringList parts = tiledVersion.split('.');
+
+  if (parts.size() > 1)
+  {
+    auto it = parts.begin();
+    int major = it->toInt();
+    int minor = (++it)->toInt();
+
+    return major == 1 && minor < 9 ? TiledProperty_1_8 : TiledProperty_1_9;
+  }
+  return TiledProperty_1_9;
+}
+
 static QVariant tiledPropertyToVariant(const QJsonValue& value, const QString& typeName)
 {
   if (typeName == "bool")
@@ -49,7 +64,12 @@ static QVariantMap loadTiledProperties_v1_9(const QJsonObject& object)
 
 QVariantMap loadTiledProperties(const QJsonObject& object, const QString& tiledVersion)
 {
-  if (tiledVersion.startsWith("1") && !tiledVersion.startsWith("1.9"))
+  return loadTiledProperties(object, getTiledPropertyVersion(tiledVersion));
+}
+
+QVariantMap loadTiledProperties(const QJsonObject& object, TiledPropertyVersion version)
+{
+  if (version == TiledProperty_1_8)
     return loadTiledProperties_v1_8(object);
   return loadTiledProperties_v1_9(object);
 }

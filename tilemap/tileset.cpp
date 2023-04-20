@@ -43,13 +43,28 @@ bool Tileset::load(const QString& filepath, int firstGid)
 
 void Tileset::loadProperties(const QJsonDocument& document)
 {
-  const QJsonArray tiles = document["tiles"].toArray();
+  TiledPropertyVersion version = getTiledPropertyVersion(tiledVersion);
 
-  for (const QJsonValue& descriptors : tiles)
+  if (version == TiledProperty_1_9)
   {
-    int tileId = descriptors["id"].toInt();
+    const QJsonObject jsonProperties = document["tileproperties"].toObject();
 
-    tileProperties.insert(tileId, loadTiledProperties(descriptors.toObject(), tiledVersion));
+    for (const QString& key : jsonProperties.keys())
+    {
+      int tileId = key.toInt();
+      tileProperties.insert(tileId, jsonProperties[key].toVariant().toMap());
+    }
+  }
+  else
+  {
+    const QJsonArray tiles = document["tiles"].toArray();
+
+    for (const QJsonValue& descriptors : tiles)
+    {
+      int tileId = descriptors["id"].toInt();
+
+      tileProperties.insert(tileId, loadTiledProperties(descriptors.toObject(), version));
+    }
   }
 }
 
