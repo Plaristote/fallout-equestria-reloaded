@@ -11,10 +11,12 @@ FloorLayer::FloorLayer(QObject *parent) : TileLayer(parent)
 void FloorLayer::load(const QJsonObject& object, const TileMap* parent)
 {
   QVector<TileLayer*> allLayers;
+  QVariantMap properties = loadTiledProperties(object, parent->getTiledVersion());
 
   name = "floor_" + object["name"].toString();
   offset.setX(object["offsetx"].toInt() - parent->tileSize.width() / 2);
   offset.setY(object["offsety"].toInt() - parent->tileSize.height() / 2 + 15);
+  underground = properties.contains("underground") && properties["underground"].toBool();
   tilemap              = new TileMap(this);
   tilemap->tilesets    = parent->tilesets;
   tilemap->textureList = parent->textureList;

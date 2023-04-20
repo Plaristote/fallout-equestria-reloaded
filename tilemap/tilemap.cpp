@@ -241,6 +241,15 @@ void TileMap::loadWallFolder(const QJsonObject& layerData)
   layers.push_back(wallsH);
 }
 
+static unsigned char getFloorDepth(const QList<FloorLayer*>& floors)
+{
+  unsigned char count = 1;
+
+  for (const FloorLayer* floor : floors)
+    count = floor->isUnderground() ? count : count + 1;
+  return count;
+}
+
 void TileMap::loadFloorFolder(const QJsonObject& layerData)
 {
   const QJsonArray layersData = layerData["layers"].toArray();
@@ -251,10 +260,13 @@ void TileMap::loadFloorFolder(const QJsonObject& layerData)
     TileMap*    previousFloor = this;
 
     floor->load(value.toObject(), this);
-    floor->getTileMap()->floor = static_cast<unsigned char>(floors.size() + 1);
-    if (floors.size() > 0)
-      previousFloor = floors.last()->getTileMap();
-    previousFloor->roofs.push_back(floor);
+    floor->getTileMap()->floor = getFloorDepth(floors);
+    if (!floor->isUnderground())
+    {
+      if (floors.size() > 0)
+        previousFloor = floors.last()->getTileMap();
+      previousFloor->roofs.push_back(floor);
+    }
     floors.push_back(floor);
   }
 }

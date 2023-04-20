@@ -14,10 +14,12 @@ public:
   void load(const QJsonObject& object, const TileMap* parent);
 
   TileMap* getTileMap() const { return tilemap; }
+  bool isUnderground() const { return underground; }
 
   void renderToImage(QImage& image, QPoint) override;
 
 private:
+  bool          underground;
   unsigned char floor;
   TileMap*      tilemap;
   Tile          dummyTile;

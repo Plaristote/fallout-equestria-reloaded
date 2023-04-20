@@ -34,6 +34,7 @@ public:
   void renderToFile(const QString& filename);
   void renderToImage(QImage& image, QPoint offset = {0,0});
 
+  const QString& getTiledVersion() const { return tiledVersion; }
   unsigned char getFloor() const { return floor; }
   inline const QSize& getSize() const { return mapSize; }
   inline int getPixelWidth() const { return (mapSize.width() - 1) * tileSize.width();}
