@@ -357,15 +357,22 @@ int GridComponent::getVisionQuality(int ax, int ay, int bx, int by) const
   return getGrid()->getVisionQuality(ax, ay, bx, by);
 }
 
-TileZone* GridComponent::getTileZone(const QString& zoneName) const
+TileZone* GridComponent::getTileZone(std::function<bool (const TileZone&)> compare) const
 {
-  TileZone* result = nullptr;
   for (LevelGrid* grid : floors)
   {
-    result = grid->getTilemap()->getZone(zoneName);
-    if (result) break ;
+    for (TileZone* candidate : grid->getTilemap()->getZones())
+    {
+      if (compare(*candidate))
+        return candidate;
+    }
   }
-  return result;
+  return nullptr;
+}
+
+TileZone* GridComponent::getTileZone(const QString& zoneName) const
+{
+  return getTileZone([zoneName](const TileZone& candidate) { return candidate.getName() == zoneName; });
 }
 
 bool GridComponent::isRenderedBefore(const DynamicObject* a, const DynamicObject* b)
