@@ -113,6 +113,7 @@ private slots:
 private:
   void initializeEvents();
   void initializeScript();
+  void setupPlayerPartyIntoLevel(const QString& targetZone);
   LevelTask* newLevelTask();
   void destroyLevelTask();
 
