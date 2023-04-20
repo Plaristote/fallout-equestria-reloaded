@@ -72,7 +72,7 @@ void UniqueCharacterStorage::saveCharacterFromCurrentLevel(Character* character)
 {
   LevelTask* level = Game::get()->getLevel();
 
-  if (level)
+  if (level && character)
   {
     saveCharacterIntoStorage(
       level,
