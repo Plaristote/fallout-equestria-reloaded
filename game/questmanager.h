@@ -13,12 +13,19 @@ class QuestManager : public QObject
 
   Q_PROPERTY(QQmlListProperty<Quest> list READ getQmlList NOTIFY listChanged)
 public:
+  enum QuestFlags
+  {
+    NormalQuest = 0,
+    HiddenQuest = 1
+  };
+  Q_ENUM(QuestFlags)
+
   explicit QuestManager(QObject *parent = nullptr);
 
   void load(const QJsonObject&);
   QJsonObject save() const;
 
-  Q_INVOKABLE void   addQuest(const QString&);
+  Q_INVOKABLE void   addQuest(const QString&, int flags = NormalQuest);
   Q_INVOKABLE Quest* getQuest(const QString&) const;
   Q_INVOKABLE bool   hasQuest(const QString& name) const { return getQuest(name) != nullptr; }
 

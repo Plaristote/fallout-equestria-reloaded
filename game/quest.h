@@ -14,6 +14,7 @@ class Quest : public StorableObject
 
   Q_PROPERTY(QString     name           MEMBER name            NOTIFY nameChanged)
   Q_PROPERTY(QString     location       MEMBER location        NOTIFY locationChanged)
+  Q_PROPERTY(bool        hidden         READ isHidden WRITE setHidden NOTIFY completedChanged)
   Q_PROPERTY(bool        completed      MEMBER completed       NOTIFY completedChanged)
   Q_PROPERTY(bool        failed         MEMBER failed          NOTIFY completedChanged)
   Q_PROPERTY(bool        inProgress     READ inProgress        NOTIFY completedChanged)
@@ -26,7 +27,7 @@ public:
   explicit Quest(QObject *parent = nullptr);
   ~Quest() override;
 
-  void initialize(const QString& name);
+  void initialize(const QString& name, bool hidden);
   void load(const QJsonObject&);
   QJsonObject save() const;
 
@@ -34,6 +35,8 @@ public:
   Q_INVOKABLE void completeObjective(const QString&);
   Q_INVOKABLE bool isObjectiveCompleted(const QString&) const;
   inline bool inProgress() const { return !completed && !failed; }
+  inline bool isHidden() const { return hidden; }
+  void setHidden(bool value);
 
   Q_INVOKABLE QVariantList getObjectives() const;
   Q_INVOKABLE QJSValue getScriptObject() const;
@@ -59,7 +62,7 @@ private slots:
 
 private:
   QString           name, location;
-  bool              completed, failed;
+  bool              completed, failed, hidden;
   ScriptController* script = nullptr;
   QVariantMap       objectives;
 };

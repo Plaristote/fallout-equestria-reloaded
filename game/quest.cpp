@@ -4,9 +4,15 @@
 #include "game.h"
 #include "i18n.h"
 
+static void playNewQuestSound()
+{
+  Game::get()->getSoundManager()->play("pipbuck/newquest");
+}
+
 Quest::Quest(QObject *parent) : StorableObject(parent)
 {
   connect(this, &Quest::completedChanged, this, &Quest::onCompletedChanged);
+  hidden = false;
 }
 
 Quest::~Quest()
@@ -15,15 +21,17 @@ Quest::~Quest()
     delete script;
 }
 
-void Quest::initialize(const QString& name)
+void Quest::initialize(const QString& name, bool hidden)
 {
   this->name = name;
+  this->hidden = hidden;
   completed = failed = false;
   script = new ScriptController(SCRIPTS_PATH + "quests/" + name + ".mjs");
   script->initialize(this);
   if (script->hasMethod("initialize"))
     script->call("initialize");
-  Game::get()->getSoundManager()->play("pipbuck/newquest");
+  if (!hidden)
+    playNewQuestSound();
 }
 
 void Quest::load(const QJsonObject& data)
@@ -32,6 +40,7 @@ void Quest::load(const QJsonObject& data)
   name = data["name"].toString();
   location = data["location"].toString();
   completed = data["over"].toBool(false);
+  hidden = data["hidden"].isBool();
   failed = data["failed"].isBool();
   objectives = data["objectives"].toVariant().toMap();
   script = new ScriptController(SCRIPTS_PATH + "/quests/" + name + ".mjs");
@@ -45,11 +54,21 @@ QJsonObject Quest::save() const
   data.insert("name", name);
   data.insert("over", completed);
   data.insert("location", location);
+  if (hidden)
+    data.insert("hidden", hidden);
   if (failed)
     data.insert("failed", true);
   data.insert("objectives", QJsonValue::fromVariant(objectives));
   StorableObject::save(data);
   return data;
+}
+
+void Quest::setHidden(bool value)
+{
+  if (hidden && !value)
+    playNewQuestSound();
+  hidden = value;
+  emit completedChanged();
 }
 
 void Quest::addObjective(const QString& name, const QString& label)
@@ -113,7 +132,7 @@ QVariantList Quest::getObjectives() const
     return script->call("getObjectives").toVariant().toList();
   else
     qDebug() << "Quest" << name << ": missing `getObjectives` method";
-  return QVariantList();
+  return objectives.values();
 }
 
 QJSValue Quest::getScriptObject() const
