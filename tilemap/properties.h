@@ -6,7 +6,6 @@
 
 class QJsonObject;
 
-QVariant tiledPropertyToVariant(const QJsonObject&);
-QVariantMap loadTiledProperties(const QJsonObject&);
+QVariantMap loadTiledProperties(const QJsonObject&, const QString& tiledVersion = "1.9");
 
 #endif

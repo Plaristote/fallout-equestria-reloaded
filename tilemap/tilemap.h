@@ -81,6 +81,7 @@ private:
   void loadLightTileset();
   int getLastGid() const;
 
+  QString             tiledVersion;
   QSize               tileSize;
   QSize               mapSize;
   QVector<Tileset*>   tilesets;

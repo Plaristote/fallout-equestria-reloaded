@@ -64,6 +64,7 @@ bool TileMap::load(const QString& name)
   {
     QJsonDocument document = QJsonDocument::fromJson(sourceFile.readAll());
 
+    tiledVersion = document["tiledversion"].toString();
     tileSize.setWidth(document["tilewidth"].toInt(0));
     tileSize.setHeight(document["tileheight"].toInt(0));
     mapSize.setWidth(document["width"].toInt(0));
@@ -183,7 +184,7 @@ void TileMap::loadZoneFolder(const QJsonObject& layerData)
     auto* zone = new TileZone(this);
 
     zone->setFloor(floor);
-    zone->load(zoneData, mapSize);
+    zone->load(zoneData, mapSize, tiledVersion);
     zones.push_back(zone);
   }
 }
@@ -266,7 +267,7 @@ void TileMap::loadPathfinding(const QJsonObject& layerData)
   {
     TileZone* layer = new TileZone(this);
 
-    layer->load(value.toObject(), mapSize);
+    layer->load(value.toObject(), mapSize, tiledVersion);
     pathfindindingZones.push_back(layer);
   }
 }

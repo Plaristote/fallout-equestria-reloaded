@@ -24,7 +24,7 @@ class TileZone : public TileMask
 public:
   explicit TileZone(QObject *parent = nullptr);
 
-  void load(const QJsonObject&, const QSize mapSize);
+  void load(const QJsonObject&, const QSize mapSize, const QString& tiledVersion);
   const QString& getName() const { return name; }
   const QString& getType() const { return type; }
   const QString& getTarget() const { return target; }

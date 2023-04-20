@@ -2,33 +2,54 @@
 #include <QJsonObject>
 #include <QJsonArray>
 
-QVariant tiledPropertyToVariant(const QJsonObject& object)
+static QVariant tiledPropertyToVariant(const QJsonValue& value, const QString& typeName)
 {
-  QString typeName = object["type"].toString();
-
   if (typeName == "bool")
-    return object["value"].toBool();
+    return value.toBool();
   if (typeName == "string" || typeName == "color" || typeName == "file")
-    return object["value"].toString();
+    return value.toString();
   if (typeName == "float")
-    return object["value"].toDouble();
+    return value.toDouble();
   if (typeName == "int")
-    return object["value"].toInt();
+    return value.toInt();
   return QVariant();
 }
 
-QVariantMap loadTiledProperties(const QJsonObject& object)
+static QVariantMap loadTiledProperties_v1_8(const QJsonObject& object)
 {
   const QJsonArray jsonProperties = object["properties"].toArray();
   QVariantMap properties;
 
   for (const QJsonValue& descriptor : jsonProperties)
   {
+    QJsonObject asObject = descriptor.toObject();
     properties.insert(
       descriptor["name"].toString(),
-      tiledPropertyToVariant(descriptor.toObject())
+      tiledPropertyToVariant(asObject["value"], asObject["type"].toString())
     );
   }
   return properties;
 }
 
+static QVariantMap loadTiledProperties_v1_9(const QJsonObject& object)
+{
+  const QJsonObject jsonProperties = object["properties"].toObject();
+  const QJsonObject propertyTypes  = object["propertytypes"].toObject();
+  QVariantMap properties;
+
+  for (const QString& key : jsonProperties.keys())
+  {
+    properties.insert(
+      key,
+      tiledPropertyToVariant(jsonProperties[key], propertyTypes[key].toString())
+    );
+  }
+  return properties;
+}
+
+QVariantMap loadTiledProperties(const QJsonObject& object, const QString& tiledVersion)
+{
+  if (tiledVersion.startsWith("1") && !tiledVersion.startsWith("1.9"))
+    return loadTiledProperties_v1_8(object);
+  return loadTiledProperties_v1_9(object);
+}

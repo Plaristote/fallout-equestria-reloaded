@@ -36,6 +36,7 @@ public:
 private:
   void loadProperties(const QJsonDocument&);
 
+  QString    tiledVersion;
   QImage     image;
   QString    name;
   QString    source;

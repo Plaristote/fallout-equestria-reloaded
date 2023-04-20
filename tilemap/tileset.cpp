@@ -23,6 +23,7 @@ bool Tileset::load(const QString& filepath, int firstGid)
     QJsonDocument document = QJsonDocument::fromJson(sourceFile.readAll());
 
     this->name = document["name"].toString();
+    tiledVersion = document["tiledversion"].toString();
     source = tilesetsPath + document["image"].toString();
     image = QImage(source);
     spacing = document["spacing"].toInt();
@@ -48,7 +49,7 @@ void Tileset::loadProperties(const QJsonDocument& document)
   {
     int tileId = descriptors["id"].toInt();
 
-    tileProperties.insert(tileId, loadTiledProperties(descriptors.toObject()));
+    tileProperties.insert(tileId, loadTiledProperties(descriptors.toObject(), tiledVersion));
   }
 }
 

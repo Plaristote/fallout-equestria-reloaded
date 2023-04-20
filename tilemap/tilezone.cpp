@@ -1,4 +1,5 @@
 #include "tilezone.h"
+#include "properties.h"
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QDebug>
@@ -11,15 +12,15 @@ TileZone::TileZone(QObject *parent) : TileMask(parent)
   clippedRect.setHeight(36);
 }
 
-void TileZone::load(const QJsonObject& object, const QSize mapSize)
+void TileZone::load(const QJsonObject& object, const QSize mapSize, const QString& tiledVersion)
 {
   QPoint currentPosition(0, 0);
+  QVariantMap properties = loadTiledProperties(object, tiledVersion);
 
   name = object["name"].toString();
-  for (QJsonValue property : object["properties"].toArray())
+  for (const QString& propertyName : properties.keys())
   {
-    QString propertyName = property["name"].toString();
-    QJsonValue value = property["value"];
+    QVariant value = properties[propertyName];
 
     if (propertyName == "type")
       type = value.toString();

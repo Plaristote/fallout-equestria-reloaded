@@ -1,5 +1,6 @@
 #include "floorlayer.h"
 #include "tilemap.h"
+#include "properties.h"
 #include <QJsonArray>
 
 FloorLayer::FloorLayer(QObject *parent) : TileLayer(parent)
