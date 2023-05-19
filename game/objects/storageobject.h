@@ -20,6 +20,7 @@ public:
   Inventory* getInventory() { return inventory; }
   virtual QStringList getAvailableInteractions();
 
+  Q_INVOKABLE bool onInspectInventory(Character*);
   Q_INVOKABLE bool onTakeItem(Character*, InventoryItem*, int quantity = 1);
   Q_INVOKABLE bool onPutItem(Character*, InventoryItem*, int quantity = 1);
 

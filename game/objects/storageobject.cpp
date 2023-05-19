@@ -44,6 +44,13 @@ QStringList StorageObject::getAvailableInteractions()
   return results;
 }
 
+bool StorageObject::onInspectInventory(Character* user)
+{
+  if (script && script->hasMethod("onInspectInventory"))
+    return script->call("onInspectInventory", QJSValueList() << user->asJSValue()).toBool();
+  return true;
+}
+
 bool StorageObject::onTakeItem(Character* user, InventoryItem* item, int quantity)
 {
   if (!user || !item)

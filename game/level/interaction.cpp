@@ -154,8 +154,11 @@ void InteractionComponent::initializeLooting(StorageObject* target)
   Character* player = Game::get()->getPlayer();
   LootingController* controller = new LootingController(this);
 
-  controller->initialize(player, target);
-  emit startLooting(controller);
+  if (target->onInspectInventory(player))
+  {
+    controller->initialize(player, target);
+    emit startLooting(controller);
+  }
 }
 
 void InteractionComponent::targetTileClicked(int x, int y)
