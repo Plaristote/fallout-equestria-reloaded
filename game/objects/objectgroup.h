@@ -51,6 +51,7 @@ public:
   void                       collectObjects(std::function<bool (DynamicObject&)> compare, QVector<DynamicObject*>&) const;
   DynamicObject*             findObject(std::function<bool (DynamicObject&)> compare) const;
   Q_INVOKABLE DynamicObject* findObject(const QString& path) const { return find<DynamicObject>(path, &ObjectGroup::getObjectByName); }
+  Q_INVOKABLE QJSValue       findObjects(QString expression) const;
   Q_INVOKABLE ObjectGroup*   findGroup(const QString& path)  const { return find<ObjectGroup>  (path, &ObjectGroup::getGroupByName); }
   Q_INVOKABLE DynamicObject* getObjectByName(const QString& name) const;
   Q_INVOKABLE ObjectGroup*   getGroupByName(const QString& name) const;

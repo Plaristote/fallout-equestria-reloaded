@@ -121,6 +121,24 @@ QString ObjectGroup::validateGroupName(const QString& name) const
   return validateName(name, getGroupByName(name) == nullptr);
 }
 
+QJSValue ObjectGroup::findObjects(QString expression) const
+{
+  QRegularExpression regex('^' + expression
+    .replace('.', "\\.")
+    .replace("**", ".*")
+    .replace('*', "[^.]+") + '$');
+  QVector<DynamicObject*> objects;
+  QJSValue result = Game::get()->getScriptEngine().newArray();
+  QJSValue push = result.property("push");
+
+  eachObject([regex, &push, &result](DynamicObject* object)
+  {
+    if (regex.match(object->getPath()).hasMatch())
+      push.callWithInstance(result, QJSValueList() << object->asJSValue());
+  });
+  return result;
+}
+
 QJSValue ObjectGroup::getScriptObject() const
 {
   if (script)
