@@ -111,9 +111,17 @@ void StatModel::addKill(const QString &race, unsigned int amount)
 
 void StatModel::addExperience(int xp)
 {
-  experience += xp;
-  if (experience >= getXpNextLevel())
-    levelUp();
+  if (experience + xp > getXpNextLevel())
+  {
+    do
+    {
+      xp -= getXpNextLevel() - experience;
+      experience = getXpNextLevel();
+      levelUp();
+    } while (experience + xp >= getXpNextLevel());
+  }
+  else
+    experience += xp;
   emit experienceChanged();
 }
 
