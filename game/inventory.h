@@ -33,7 +33,7 @@ public:
   Q_INVOKABLE void destroyItem(InventoryItem* item, int quantity = 1);
   Q_INVOKABLE void dropItem(InventoryItem* item, int quantity = 1);
 
-  Q_INVOKABLE void addItemOfType(const QString& name, int quantity = 1);
+  Q_INVOKABLE InventoryItem* addItemOfType(const QString& name, int quantity = 1);
   Q_INVOKABLE bool removeItemOfType(const QString& name, int quantity = 1);
   Q_INVOKABLE InventoryItem* getItemOfType(const QString& name) const;
 
@@ -48,6 +48,8 @@ public:
 
   Q_INVOKABLE int count(const QString& name) const;
   Q_INVOKABLE bool contains(InventoryItem* item) const { return items.contains(item); }
+  Q_INVOKABLE InventoryItem* findOne(QJSValue filter) const;
+  Q_INVOKABLE QJSValue find(QJSValue filter) const;
 
   int getTotalWeight() const;
   int getTotalValue() const;

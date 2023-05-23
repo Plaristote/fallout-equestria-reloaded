@@ -97,7 +97,7 @@ void Inventory::dropItem(InventoryItem *item, int quantity)
   }
 }
 
-void Inventory::addItemOfType(const QString &name, int quantity)
+InventoryItem* Inventory::addItemOfType(const QString &name, int quantity)
 {
   InventoryItem* item;
 
@@ -106,7 +106,7 @@ void Inventory::addItemOfType(const QString &name, int quantity)
     if (inventoryItem->getItemType() == name && inventoryItem->isGroupable())
     {
       inventoryItem->add(quantity);
-      return ;
+      return inventoryItem;
     }
   }
   item = new InventoryItem(this);
@@ -115,6 +115,7 @@ void Inventory::addItemOfType(const QString &name, int quantity)
   if (quantity > 1)
     item->add(quantity - 1);
   addItem(item);
+  return item;
 }
 
 bool Inventory::removeItemOfType(const QString &name, int quantity)
@@ -168,6 +169,41 @@ int Inventory::count(const QString& name) const
       total += inventoryItem->getQuantity();
   }
   return total;
+}
+
+InventoryItem* Inventory::findOne(QJSValue filter) const
+{
+  if (filter.isCallable())
+  {
+    for (auto* inventoryItem : items)
+    {
+      if (filter.call(QJSValueList() << inventoryItem->asJSValue()).toBool())
+        return inventoryItem;
+    }
+  }
+  else
+    qDebug() << "Called Inventory::findOne with non-callable value";
+  return nullptr;
+}
+
+QJSValue Inventory::find(QJSValue filter) const
+{
+  QJSValue array = Game::get()->getScriptEngine().newArray();
+  QJSValue push = array.property("push");
+
+  if (filter.isCallable())
+  {
+    for (auto* inventoryItem : items)
+    {
+      QJSValueList valueList{inventoryItem->asJSValue()};
+
+      if (filter.call(valueList).toBool())
+        push.callWithInstance(array, valueList);
+    }
+  }
+  else
+    qDebug() << "Called Inventory::find with non-callable value";
+  return array;
 }
 
 int Inventory::getTotalWeight() const
