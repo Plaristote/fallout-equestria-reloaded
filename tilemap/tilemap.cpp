@@ -64,7 +64,7 @@ bool TileMap::load(const QString& name)
   {
     QJsonDocument document = QJsonDocument::fromJson(sourceFile.readAll());
 
-    tiledVersion = document["tiledversion"].toString();
+    tiledVersion = document["version"].toString();
     tileSize.setWidth(document["tilewidth"].toInt(0));
     tileSize.setHeight(document["tileheight"].toInt(0));
     mapSize.setWidth(document["width"].toInt(0));
