@@ -1,6 +1,7 @@
 #include "controlzone.h"
 #include "tilemap/tilezone.h"
 #include "game.h"
+#include "game/dices.hpp"
 #include <QJsonArray>
 #include <QDebug>
 
@@ -49,7 +50,7 @@ void ControlZoneComponent::removeControlZone()
   }
 }
 
-QJSValue ControlZoneComponent::getControlZoneOccupants()
+QJSValue ControlZoneComponent::getControlZoneOccupants() const
 {
   auto* game  = Game::get();
   auto* level = game->getLevel();
@@ -57,6 +58,17 @@ QJSValue ControlZoneComponent::getControlZoneOccupants()
   if (level)
     return level->getZoneOccupants(controlZone);
   return game->getScriptEngine().newArray();
+}
+
+QPoint ControlZoneComponent::getRandomZonePosition() const
+{
+  if (controlZone != nullptr && controlZone->getPositionCount() > 0)
+  {
+    int result = Dices::Throw(controlZone->getPositionCount());
+
+    return controlZone->getPositionAt(result);
+  }
+  return QPoint(-1, -1);
 }
 
 void ControlZoneComponent::listenControlZone(TileZone* zone)

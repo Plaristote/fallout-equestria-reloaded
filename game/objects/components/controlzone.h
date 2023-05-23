@@ -22,7 +22,8 @@ public:
 
   Q_INVOKABLE TileZone* addControlZone();
   Q_INVOKABLE void      removeControlZone();
-  Q_INVOKABLE QJSValue  getControlZoneOccupants();
+  Q_INVOKABLE QJSValue  getControlZoneOccupants() const;
+  Q_INVOKABLE QPoint    getRandomZonePosition() const;
   TileZone*             getControlZone() { return controlZone; }
   void                  toggleZoneBlocked(bool value);
   inline bool           hasControlZone() const { return controlZone != nullptr; }
