@@ -25,6 +25,7 @@ public:
   explicit ObjectGroup(QObject *parent = nullptr);
 
   QString        getPath() const;
+  QString        getRelativePath(const ObjectGroup&) const;
   const QString& getName() const { return name; }
   ObjectGroup*   getParent() const;
   QPoint         getPosition() const override;
@@ -44,6 +45,7 @@ public:
 
   Q_INVOKABLE QJSValue       getScriptObject() const;
   void                       eachObject(std::function<void(DynamicObject*)>) const;
+  void                       eachGroup(std::function<void(ObjectGroup*)>) const;
   QVector<DynamicObject*>    findDynamicObjects(std::function<bool (DynamicObject&)> compare) const;
   QVector<DynamicObject*>    allDynamicObjects() const;
   QList<ObjectGroup*>        allObjectGroups() const;
@@ -51,7 +53,7 @@ public:
   void                       collectObjects(std::function<bool (DynamicObject&)> compare, QVector<DynamicObject*>&) const;
   DynamicObject*             findObject(std::function<bool (DynamicObject&)> compare) const;
   Q_INVOKABLE DynamicObject* findObject(const QString& path) const { return find<DynamicObject>(path, &ObjectGroup::getObjectByName); }
-  Q_INVOKABLE QJSValue       findObjects(QString expression) const;
+  Q_INVOKABLE QJSValue       find(QJSValue filter) const;
   Q_INVOKABLE ObjectGroup*   findGroup(const QString& path)  const { return find<ObjectGroup>  (path, &ObjectGroup::getGroupByName); }
   Q_INVOKABLE DynamicObject* getObjectByName(const QString& name) const;
   Q_INVOKABLE ObjectGroup*   getGroupByName(const QString& name) const;
@@ -79,6 +81,8 @@ private:
   void updatePosition();
   QQmlListProperty<ObjectGroup>   getQmlGroups()  { return QML_QLIST_CONSTRUCTOR(ObjectGroup,   groups);  }
   QQmlListProperty<DynamicObject> getQmlObjects() { return QML_QLIST_CONSTRUCTOR(DynamicObject, objects); }
+  QJSValue findFromFilter(QJSValue) const;
+  QJSValue findFromExpression(QString expression) const;
 
   template<typename RESULT_TYPE>
   RESULT_TYPE* find(const QString& path, RESULT_TYPE* (ObjectGroup::*getter)(const QString&) const) const

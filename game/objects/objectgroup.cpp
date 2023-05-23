@@ -121,7 +121,42 @@ QString ObjectGroup::validateGroupName(const QString& name) const
   return validateName(name, getGroupByName(name) == nullptr);
 }
 
-QJSValue ObjectGroup::findObjects(QString expression) const
+QString ObjectGroup::getRelativePath(const ObjectGroup& group) const
+{
+  QString path = getPath();
+  QString from = group.getPath();
+
+  if (from.length() > 0)
+    return path.right(path.length() - (from.length() + 1));
+  return path;
+}
+
+QJSValue ObjectGroup::find(QJSValue filter) const
+{
+  return filter.isString()
+    ? findFromExpression(filter.toString())
+    : findFromFilter(filter);
+}
+
+QJSValue ObjectGroup::findFromFilter(QJSValue filter) const
+{
+  QJSValue result = Game::get()->getScriptEngine().newArray();
+  QJSValue push = result.property("push");
+
+  eachGroup([&filter, &push, &result](ObjectGroup* group)
+  {
+    QJSValueList params{group->asJSValue()};
+    if (filter.call(params).toBool()) push.callWithInstance(result, params);
+  });
+  eachObject([&filter, &push, &result](DynamicObject* object)
+  {
+    QJSValueList params{object->asJSValue()};
+    if (filter.call(params).toBool()) push.callWithInstance(result, params);
+  });
+  return result;
+}
+
+QJSValue ObjectGroup::findFromExpression(QString expression) const
 {
   QRegularExpression regex('^' + expression
     .replace('.', "\\.")
@@ -131,9 +166,14 @@ QJSValue ObjectGroup::findObjects(QString expression) const
   QJSValue result = Game::get()->getScriptEngine().newArray();
   QJSValue push = result.property("push");
 
-  eachObject([regex, &push, &result](DynamicObject* object)
+  eachGroup([this, regex, &push, &result](ObjectGroup* group)
   {
-    if (regex.match(object->getPath()).hasMatch())
+    if (regex.match(group->getRelativePath(*this)).hasMatch())
+      push.callWithInstance(result, QJSValueList() << group->asJSValue());
+  });
+  eachObject([this, regex, &push, &result](DynamicObject* object)
+  {
+    if (regex.match(object->getRelativePath(*this)).hasMatch())
       push.callWithInstance(result, QJSValueList() << object->asJSValue());
   });
   return result;
@@ -235,6 +275,15 @@ void ObjectGroup::eachObject(std::function<void (DynamicObject *)> callback) con
     group->eachObject(callback);
   for (DynamicObject* object : objects)
     callback(object);
+}
+
+void ObjectGroup::eachGroup(std::function<void (ObjectGroup*)> callback) const
+{
+  for (ObjectGroup* group : groups)
+  {
+    callback(group);
+    group->eachGroup(callback);
+  }
 }
 
 QVector<DynamicObject*> ObjectGroup::allDynamicObjects() const

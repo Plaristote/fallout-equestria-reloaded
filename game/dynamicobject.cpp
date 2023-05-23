@@ -32,6 +32,16 @@ QString DynamicObject::getPath() const
   return group ? group->getPath() + '.' + getObjectName() : getObjectName();
 }
 
+QString DynamicObject::getRelativePath(const ObjectGroup& group) const
+{
+  QString path = getPath();
+  QString from = group.getPath();
+
+  if (from.length() > 0)
+    return path.right(path.length() - (from.length() + 1));
+  return path;
+}
+
 void DynamicObject::setScript(const QString& name)
 {
   ParentType::setScript(name);

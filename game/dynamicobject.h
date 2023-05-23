@@ -51,6 +51,7 @@ public:
   void setObjectName(const QString& value) { objectName = value; emit objectNameChanged(); }
   ObjectGroup* getGroup() const;
   QString getPath() const;
+  QString getRelativePath(const ObjectGroup&) const;
   const QString& getObjectName() const { return objectName; }
   QString getBaseName() const;
   virtual QString getDisplayName() const;
