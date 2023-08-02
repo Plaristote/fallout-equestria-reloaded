@@ -1,7 +1,7 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
-import QtQuick.Dialogs 1.2 as BiDialog
+import QtQuick.Dialogs as BiDialog
 import "qrc:/assets/ui" as UiStyle
 import "../ui"
 import Game 1.0

@@ -26,8 +26,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 #    endif()
 #endif()
 
-find_package(QT NAMES Qt5 COMPONENTS Core Quick Gui REQUIRED)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Quick Gui OPTIONAL_COMPONENTS Gamepad)
+find_package(QT NAMES Qt6 Qt5 COMPONENTS Core Quick Gui REQUIRED)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Quick Gui OPTIONAL_COMPONENTS Gamepad Core5Compat)
 find_package(Qt${QT_VERSION_MAJOR}Multimedia REQUIRED)
 
 set(QT_USE_QTMULTIMEDIA TRUE)
@@ -316,7 +316,12 @@ if (GAME_EDITOR)
 endif()
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
-  qt_add_executable(falloutequestria ${PROJECT_SOURCES})
+  if (WIN32)
+    qt_add_executable(falloutequestria WIN32 ${PROJECT_SOURCES})
+  else()
+    qt_add_executable(falloutequestria ${PROJECT_SOURCES})
+  endif()
+  qt_add_executable(fotspriteimport ${FOT_SPRITE_IMPORT_SOURCES})
 else()
   if(ANDROID)
     add_library(falloutequestria SHARED ${PROJECT_SOURCES})
@@ -330,6 +335,7 @@ endif()
 
 set(ENGINE_LINK_LIBRARIES 
           Qt${QT_VERSION_MAJOR}::Core
+          Qt${QT_VERSION_MAJOR}::Core5Compat
           Qt${QT_VERSION_MAJOR}::Quick
           Qt${QT_VERSION_MAJOR}::Gui
           Qt${QT_VERSION_MAJOR}::Multimedia)
