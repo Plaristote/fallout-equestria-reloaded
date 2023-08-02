@@ -15,7 +15,7 @@ class Character : public CharacterBuffs
   Q_OBJECT
   typedef CharacterBuffs ParentType;
 
-  Q_PROPERTY(ActionQueue* actionQueue READ getActionQueue CONSTANT)
+  Q_PROPERTY(QObject* actionQueue READ qpropertyActionQueue CONSTANT)
   Q_PROPERTY(int actionPoints MEMBER actionPoints NOTIFY actionPointsChanged)
   Q_PROPERTY(bool unconscious READ isUnconscious NOTIFY unconsciousChanged)
   Q_PROPERTY(int morale MEMBER morale NOTIFY moraleChanged)
@@ -26,6 +26,7 @@ public:
   void load(const QJsonObject&) override;
   void save(QJsonObject&) const override;
 
+  QObject* qpropertyActionQueue() const { return reinterpret_cast<QObject*>(actionQueue); }
   ActionQueue* getActionQueue() const { return actionQueue; }
   Q_INVOKABLE QString getDialogName();
   unsigned int getXpValue() const;

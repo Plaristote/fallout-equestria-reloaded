@@ -131,6 +131,7 @@ void MouseCursor::click(bool pressed)
     QMouseEvent event(
       pressed ? QEvent::MouseButtonPress : QEvent::MouseButtonRelease,
       QCursor::pos() - windowOffset(),
+      QCursor::pos(),
       Qt::LeftButton,
       Qt::NoButton,
       Qt::NoModifier

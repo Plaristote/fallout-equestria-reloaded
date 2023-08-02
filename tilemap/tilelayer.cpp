@@ -163,12 +163,12 @@ bool TileLayer::isInside(int x, int y) const
   return getTile(x, y) != nullptr;
 }
 
-int TileLayer::tilePropertyListCount(QQmlListProperty<Tile>* source)
+TileLayer::QmlSizeType TileLayer::tilePropertyListCount(QQmlListProperty<Tile>* source)
 {
   return reinterpret_cast<TileLayer*>(source->object)->tiles.size();
 }
 
-Tile* TileLayer::tilePropertyListAt(QQmlListProperty<Tile>* source, int index)
+Tile* TileLayer::tilePropertyListAt(QQmlListProperty<Tile>* source, QmlSizeType index)
 {
   return reinterpret_cast<TileLayer*>(source->object)->tiles.at(index);
 }

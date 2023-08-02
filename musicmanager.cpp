@@ -4,20 +4,40 @@
 #include <QSettings>
 #include <QDebug>
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+# define NEW_MEDIA_PLAYER \
+  audioManager = new QMediaPlayer(this);
+# define PLAYBACK_SIGNAL &QMediaPlayer::stateChanged
+# define GET_PLAYBACK_STATE audioManager->state()
+# define GET_VOLUME audioManager->volume()
+# define SET_VOLUME(value) audioManager->setVolume(value)
+# define SET_SOURCE(value) audioManager->setMedia(value)
+#else
+# include <QAudioOutput>
+# define NEW_MEDIA_PLAYER \
+  audioManager = new QMediaPlayer(this); \
+  audioManager->setAudioOutput(new QAudioOutput(audioManager));
+# define PLAYBACK_SIGNAL &QMediaPlayer::playbackStateChanged
+# define GET_PLAYBACK_STATE audioManager->playbackState()
+# define GET_VOLUME audioManager->audioOutput()->volume()
+# define SET_VOLUME(value) audioManager->audioOutput()->setVolume(value)
+# define SET_SOURCE(value) audioManager->setSource(value)
+#endif
+
 using namespace std;
 
 MusicManager* MusicManager::_global_ptr = nullptr;
 
 MusicManager::MusicManager(QObject* parent) : QObject(parent)
 {
-  audioManager = new QMediaPlayer(this);
+  NEW_MEDIA_PLAYER
   _global_ptr  = this;
   fadingOut    = false;
   loadDataTree();
   fadingTimer.setInterval(50);
   fadingTimer.setSingleShot(false);
-  connect(&fadingTimer, &QTimer::timeout,            this, &MusicManager::fadeVolume);
-  connect(audioManager, &QMediaPlayer::stateChanged, this, &MusicManager::onStateChanged);
+  connect(&fadingTimer, &QTimer::timeout, this, &MusicManager::fadeVolume);
+  connect(audioManager, PLAYBACK_SIGNAL, this, &MusicManager::onStateChanged);
   connect(this, &MusicManager::defaultVolumeChanged, [this]() { setVolumeToDefault(); });
   setVolumeToDefault();
 }
@@ -63,7 +83,7 @@ void MusicManager::play(const QString& scategory, const QString& name)
   if (category.isUndefined()) return ;
   track = category[name];
   if (track.isUndefined())    return ;
-  if (audioManager->state() == QMediaPlayer::PlayingState)
+  if (GET_PLAYBACK_STATE == QMediaPlayer::PlayingState)
   {
     nextTrack = track.toString();
     fadeOut();
@@ -104,19 +124,19 @@ void MusicManager::startTrack(const QString& filename)
   nextTrack    = currentTrack;
   if (audioManager)
   {
-    disconnect(audioManager, &QMediaPlayer::stateChanged, this, &MusicManager::onStateChanged);
+    disconnect(audioManager, PLAYBACK_SIGNAL, this, &MusicManager::onStateChanged);
     audioManager->deleteLater();
   }
-  audioManager = new QMediaPlayer(this);
-  audioManager->setMedia(QUrl::fromLocalFile(ASSETS_PATH + "audio/" + currentTrack));
+  NEW_MEDIA_PLAYER
+  SET_SOURCE(QUrl::fromLocalFile(ASSETS_PATH + "audio/" + currentTrack));
 #ifndef _WIN32
   audioManager->play();
 #endif
   setVolumeToDefault();
-  connect(audioManager, &QMediaPlayer::stateChanged, this, &MusicManager::onStateChanged);
+  connect(audioManager, PLAYBACK_SIGNAL, this, &MusicManager::onStateChanged);
 }
 
-void MusicManager::onStateChanged(QMediaPlayer::State state)
+void MusicManager::onStateChanged(PlaybackState state)
 {
   switch (state)
   {
@@ -131,7 +151,7 @@ void MusicManager::onStateChanged(QMediaPlayer::State state)
 
 void MusicManager::fadeVolume()
 {
-  int volume = audioManager->volume();
+  int volume = GET_VOLUME;
 
   if (volume > volumeGoal)
   {
@@ -145,7 +165,7 @@ void MusicManager::fadeVolume()
     if (volume > volumeGoal)
       volume = volumeGoal;
   }
-  audioManager->setVolume(volume);
+  SET_VOLUME(volume);
   if (volume == volumeGoal)
   {
     fadingTimer.stop();
@@ -156,7 +176,7 @@ void MusicManager::fadeVolume()
 
 void MusicManager::fadeOut()
 {
-  int volume = audioManager->volume();
+  int volume = GET_VOLUME;
 
   volumeGoal = 0;
   if (volume == volumeGoal)
@@ -172,7 +192,7 @@ void MusicManager::fadeOut()
 void MusicManager::setVolume(int volume)
 {
   volumeGoal = volume;
-  audioManager->setVolume(volume);
+  SET_VOLUME(volume);
 }
 
 void MusicManager::setVolumeToDefault()

@@ -58,9 +58,15 @@ protected:
   void loadTiles(const QJsonArray&, const QVector<Tileset*>& tilesets);
   void prepareRenderRect();
   void prepareRenderSize();
+
+#if QT_VERSION < QT_VERSION_CHECK(6,0,0)
+  typedef int QmlSizeType;
+#else
+  typedef qsizetype QmlSizeType;
+#endif
   QQmlListProperty<Tile> getQmlTiles();
-  static int             tilePropertyListCount(QQmlListProperty<Tile>*);
-  static Tile*           tilePropertyListAt(QQmlListProperty<Tile>*, int);
+  static QmlSizeType     tilePropertyListCount(QQmlListProperty<Tile>*);
+  static Tile*           tilePropertyListAt(QQmlListProperty<Tile>*, QmlSizeType);
 
   QString        name, zoneName;
   QSize          size;
