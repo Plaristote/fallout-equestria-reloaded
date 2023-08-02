@@ -6,6 +6,7 @@ import "../../ui"
 
 UiStyle.CustomDialog {
   id: root
+  property alias tabs: tabView.tabs
   title: i18n.t("controls-dialog")
   modal: true
   standardButtons: Dialog.Ok
@@ -41,7 +42,17 @@ UiStyle.CustomDialog {
   })
 
   function initializeTabRow() {
+    const labels = [];
+
+    if (gamepad.enabled)
+      tabs = ["keyboard", "gamepad"];
+    else
+      tabs = ["keyboard"];
+    for (let i = 0 ; i < tabs.length ; ++i)
+      labels.push(i18n.t(tabs[i]));
+    tabView.labels = labels;
     tabView.currentTab = gamepad.connected ? "gamepad" : "keyboard";
+    
   }
 
   Shortcut {
@@ -60,8 +71,7 @@ UiStyle.CustomDialog {
 
     TabRow {
       id: tabView
-      tabs: ["keyboard", "gamepad"]
-      labels: [i18n.t("keyboard"), i18n.t("gamepad")]
+      visible: tabs.length > 1
       Component.onCompleted: initializeTabRow()
     }
 

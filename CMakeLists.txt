@@ -26,9 +26,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 #    endif()
 #endif()
 
-find_package(QT NAMES Qt5 COMPONENTS Core Quick Gui Gamepad REQUIRED)
-find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Quick Gui Gamepad REQUIRED)
-find_package(Qt5Multimedia REQUIRED)
+find_package(QT NAMES Qt5 COMPONENTS Core Quick Gui REQUIRED)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Quick Gui OPTIONAL_COMPONENTS Gamepad)
+find_package(Qt${QT_VERSION_MAJOR}Multimedia REQUIRED)
 
 set(QT_USE_QTMULTIMEDIA TRUE)
 
@@ -326,14 +326,22 @@ else()
   add_executable(fotspriteimport ${FOT_SPRITE_IMPORT_SOURCES})
 endif()
 
+set(ENGINE_LINK_LIBRARIES 
+          Qt${QT_VERSION_MAJOR}::Core
+          Qt${QT_VERSION_MAJOR}::Quick
+          Qt${QT_VERSION_MAJOR}::Gui
+          Qt${QT_VERSION_MAJOR}::Multimedia)
+
+if (TARGET Qt${QT_VERSION_MAJOR}::Gamepad)
+  set(ENGINE_LINK_LIBRARIES ${ENGINE_LINK_LIBRARIES}
+          Qt${QT_VERSION_MAJOR}::Gamepad)
+  add_definitions(-DWITH_GAMEPAD)
+endif()
+
 target_compile_definitions(falloutequestria
   PRIVATE $<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:QT_QML_DEBUG>)
 target_link_libraries(falloutequestria
-  PRIVATE Qt${QT_VERSION_MAJOR}::Core
-          Qt${QT_VERSION_MAJOR}::Quick
-          Qt${QT_VERSION_MAJOR}::Gui
-          Qt${QT_VERSION_MAJOR}::Multimedia
-          Qt${QT_VERSION_MAJOR}::Gamepad
+  PRIVATE ${ENGINE_LINK_LIBRARIES}
 )
 
 target_link_libraries(fotspriteimport

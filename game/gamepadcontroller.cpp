@@ -1,10 +1,12 @@
 #include "gamepadcontroller.h"
-#include <QGamepad>
 #include <QCursor>
 #include "mousecursor.h"
 #include <QDebug>
 #include "game.h"
 #include "game/leveltask.h"
+#ifdef WITH_GAMEPAD
+# include <QGamepad>
+#endif
 
 GamepadController* GamepadController::instance = nullptr;
 
@@ -14,19 +16,22 @@ GamepadController::GamepadController(QObject *parent) : QObject(parent)
 
 void GamepadController::initialize()
 {
-#ifdef _WIN32
+#ifdef WITH_GAMEPAD
+# ifdef _WIN32
   windowsWorkaroundTimer.setInterval(2500);
   windowsWorkaroundTimer.setSingleShot(false);
   windowsWorkaroundTimer.start();
   connect(&windowsWorkaroundTimer, &QTimer::timeout, this, &GamepadController::lookForController);
-#else
+# else
   connect(QGamepadManager::instance(), &QGamepadManager::connectedGamepadsChanged, this, &GamepadController::lookForController);
   lookForController();
+# endif
 #endif
 }
 
 void GamepadController::lookForController()
 {
+#ifdef WITH_GAMEPAD
   qDebug() << "GamepadController::lookForController";
   if (!isConnected())
   {
@@ -38,10 +43,12 @@ void GamepadController::lookForController()
     else
       connectGamepad(*gamepads.begin());
   }
+#endif
 }
 
 void GamepadController::connectGamepad(int id)
 {
+#ifdef WITH_GAMEPAD
   qDebug() << "GamepadController: Connected gamepad" << id;
   if (gamepad)
     delete gamepad;
@@ -70,11 +77,25 @@ void GamepadController::connectGamepad(int id)
   connect(&cursorTimer.ticker, &QTimer::timeout, this, &GamepadController::updateCursorPosition);
   connect(&cameraTimer.ticker, &QTimer::timeout, this, &GamepadController::updateCameraPosition);
   emit connectedChanged();
+#endif
+}
+
+bool GamepadController::isEnabled() const
+{
+#ifdef WITH_GAMEPAD
+  return true;
+#else
+  return false;
+#endif
 }
 
 bool GamepadController::isConnected() const
 {
+#ifdef WITH_GAMEPAD
   return gamepad && gamepad->isConnected();
+#else
+  return false;
+#endif
 }
 
 GamepadController::CursorTimer::CursorTimer()

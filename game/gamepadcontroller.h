@@ -11,6 +11,7 @@ class GamepadController : public QObject
 {
   Q_OBJECT
 
+  Q_PROPERTY(bool enabled READ isEnabled NOTIFY connectedChanged)
   Q_PROPERTY(bool connected READ isConnected NOTIFY connectedChanged)
   Q_PROPERTY(bool hoverScrollable MEMBER hoverScrollable NOTIFY hoverScrollableChanged)
 
@@ -32,6 +33,7 @@ public:
   static GamepadController* get() { return instance; }
 
   bool isConnected() const;
+  bool isEnabled() const;
 
 signals:
   void hoverScrollableChanged();
