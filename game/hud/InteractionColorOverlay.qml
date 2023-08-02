@@ -12,29 +12,8 @@ ShaderEffect {
   width: source.width
   height: source.height
 
-  vertexShader: "
-      uniform highp mat4 qt_Matrix;
-      attribute highp vec4 qt_Vertex;
-      attribute highp vec2 qt_MultiTexCoord0;
-      varying highp vec2 coord;
-      void main() {
-          coord = qt_MultiTexCoord0;
-          gl_Position = qt_Matrix * qt_Vertex;
-      }"
-  fragmentShader: "
-      varying highp vec2 coord;
-      uniform sampler2D source;
-      uniform vec4 color;
-      uniform lowp float qt_Opacity;
-      void main() {
-          lowp vec4 tex = texture2D(source, coord);
-          if (tex.a != 0.0) {
-            gl_FragColor = color * qt_Opacity;
-          }
-          else {
-            gl_FragColor = tex * qt_Opacity;
-          }
-      }"
+  vertexShader: "qrc:/game/hud/InteractionColorOverlay.shader.vert.qsb"
+  fragmentShader: "qrc:/game/hud/InteractionColorOverlay.shader.frag.qsb"
 
   ColorAnimation on color {
     from: root.from

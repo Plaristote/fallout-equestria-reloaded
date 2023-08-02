@@ -1,6 +1,5 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
-import QtGraphicalEffects 1.0
 import "qrc:/assets/ui" as UiStyle
 import "../../ui"
 
@@ -77,7 +76,7 @@ Item {
             }
           }
         }
-
+/*
         ColorOverlay {
           anchors.fill: parent
           source: parent
@@ -96,7 +95,7 @@ Item {
           visible: parent.activated && mouseArea.containsMouse
           color: Qt.rgba(155, 155, 155, 0.3)
         }
-
+*/
         Item {
           anchors.centerIn: parent
           width: itemIcon.width

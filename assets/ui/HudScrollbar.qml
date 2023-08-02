@@ -1,6 +1,5 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
-import QtGraphicalEffects 1.15
 
 ScrollBar {
   readonly property int barWidth: 28
@@ -22,12 +21,5 @@ ScrollBar {
     border { left: 10; top: 15; right: 10; bottom: 20 }
     verticalTileMode: BorderImage.Repeat
     //width: 28
-
-    ColorOverlay {
-      anchors.fill: parent
-      source: parent
-      color: Qt.rgba(0, 0, 0, 0.1)
-      visible: scrollBar.active
-    }
   }
 }

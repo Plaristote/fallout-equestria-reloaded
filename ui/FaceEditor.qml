@@ -3,7 +3,7 @@ import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
 import "../assets/ui" as UiStyle
 import "../ui"
-import QtQuick.Dialogs 1.2 as WindowDialogs
+import QtQuick.Dialogs as WindowDialogs
 
 UiStyle.CustomDialog {
   property QtObject characterSheet

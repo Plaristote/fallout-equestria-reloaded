@@ -1,5 +1,4 @@
 import QtQuick 2.15
-import QtGraphicalEffects 1.15
 
 Repeater {
   property QtObject levelController
@@ -82,11 +81,12 @@ Repeater {
       height: lightObjectBase.height
       color: lightObjectOverlay.lightColor
     }
-
+/*
     OpacityMask {
       anchors.fill: lightObjectFilling
       source: lightObjectFilling
       maskSource: lightObjectBase
     }
+*/
   }
 }

@@ -1,5 +1,4 @@
 import QtQuick 2.15
-import QtGraphicalEffects 1.15
 
 Image {
   id: root
@@ -66,14 +65,14 @@ Image {
       duration: breathingSpeed * 1.42
       onFinished: breathingInhale.running = true
     }
-
+/*
     ColorOverlay {
       visible: coloured
       anchors.fill: parent
       source: parent
       color: root.color
     }
-
+*/
     Image {
       id: faceOverlay
       anchors.fill: parent
@@ -92,12 +91,13 @@ Image {
       id: eyesColor
       anchors.fill: parent
       source: basePath + '/' + theme + '/eye-colors/' + moodSource + '.png'
-
+/*
       ColorOverlay {
         anchors.fill: parent
         source: parent
         color: Qt.rgba(eyeColor.r, eyeColor.g, eyeColor.b, 0.5)
       }
+*/
     }
 
     Item {
@@ -109,12 +109,13 @@ Image {
         source: basePath + '/' + theme + '/eyes/' + moodSource + '.png'
         anchors { top: parent.top; left: parent.left; right: parent.right }
         height: eyes.height
-
+/*
         ColorOverlay {
           anchors.fill: parent
           source: parent
           color: Qt.rgba(root.color.r, root.color.g, root.color.b, 1)
         }
+*/
       }
 
       PropertyAnimation on height {
@@ -144,13 +145,14 @@ Image {
       anchors.fill: parent
       source: basePath + '/' + theme + '/mouthes/' + moodSource + '.png'
       fillMode: Image.Stretch
-
+/*
       ColorOverlay {
         visible: coloured
         anchors.fill: parent
         source: parent
         color: root.color
       }
+*/
     }
 
     Repeater {
@@ -172,13 +174,14 @@ Image {
       Image {
         source: basePath + '/' + theme + '/hairstyles/' + hairStyle + '.png'
         fillMode: Image.Stretch
-
+/*
         ColorOverlay {
           visible: coloured
           anchors.fill: parent
           source: parent
           color: Qt.rgba(hairColor.r, hairColor.g, hairColor.b, 0.5)
         }
+*/
       }
     }
   }

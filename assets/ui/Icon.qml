@@ -1,5 +1,4 @@
 import QtQuick 2.15
-import QtGraphicalEffects 1.0
 
 Image {
   property string name
@@ -24,10 +23,11 @@ Image {
     }
     return "object";
   }
-
+/*
   Colorize {
     anchors.fill: parent
     source: parent
     lightness: parent.lightness
   }
+*/
 }
