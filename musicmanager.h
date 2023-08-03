@@ -16,7 +16,7 @@ class MusicManager : public QObject
   Q_PROPERTY(int defaultVolume READ getDefaultVolume WRITE setDefaultVolume NOTIFY defaultVolumeChanged)
 
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-  typedef QMediaPlayer::State PlaybackState
+  typedef QMediaPlayer::State PlaybackState;
 #else
   typedef QMediaPlayer::PlaybackState PlaybackState;
 #endif
