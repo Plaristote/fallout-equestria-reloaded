@@ -10,8 +10,9 @@ class ScriptableComponent : public StorableObject
   Q_OBJECT
   typedef StorableObject ParentType;
 
-  Q_PROPERTY(QString scriptName READ getScriptName NOTIFY scriptNameChanged)
-  Q_PROPERTY(bool    hasScript  READ hasScript NOTIFY scriptNameChanged)
+  Q_PROPERTY(QString  scriptName READ getScriptName NOTIFY scriptNameChanged)
+  Q_PROPERTY(bool     hasScript  READ hasScript NOTIFY scriptNameChanged)
+  Q_PROPERTY(QJSValue script     READ getScriptObject)
 public:
   explicit ScriptableComponent(QObject *parent = nullptr);
   virtual ~ScriptableComponent();
