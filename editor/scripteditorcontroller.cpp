@@ -75,7 +75,7 @@ static QString scriptTemplate(const QString& scriptName, const QString& scriptCa
   QString className = capitalize(scriptName);
   QString code;
   QPair<QString, QString> superclass;
-  int depth = relativePath.split('/').size();
+  int depth = 1 + relativePath.split('/').size();
 
   if (scriptDefaultSuper.contains(scriptCategory))
     superclass = scriptDefaultSuper[scriptCategory];
