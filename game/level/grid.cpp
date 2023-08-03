@@ -185,7 +185,7 @@ TileZone* GridComponent::getDefaultEntryZone() const
 
 bool GridComponent::moveCharacterToZone(Character* character, const QString& zoneName, unsigned char objectFloor)
 {
-  TileZone* zone;
+  const TileZone* zone;
 
   if (objectFloor >= getFloors().size())
     objectFloor = this->floor;
@@ -195,9 +195,9 @@ bool GridComponent::moveCharacterToZone(Character* character, const QString& zon
   return moveCharacterToZone(character, zone);
 }
 
-bool GridComponent::moveCharacterToZone(Character* character, TileZone* zone)
+Point GridComponent::getRandomUnoccupiedTileFromZone(const TileZone* zone) const
 {
-  if (character && zone)
+  if (zone)
   {
     auto candidates = zone->getPositions();
     LevelGrid* grid = getFloorGrid(static_cast<unsigned char>(zone->getFloor()));
@@ -208,10 +208,22 @@ bool GridComponent::moveCharacterToZone(Character* character, TileZone* zone)
       QPoint candidate = candidates.takeAt(randomValue) + zone->getOffset();
 
       if (!grid->isOccupied(candidate.x(), candidate.y()))
-      {
-        setCharacterPosition(character, candidate.x(), candidate.y(), static_cast<unsigned char>(zone->getFloor()));
-        return true;
-      }
+        return Point{candidate.x(), candidate.y(), static_cast<unsigned char>(zone->getFloor())};
+    }
+  }
+  return Point{-1, -1, NULL_FLOOR};
+}
+
+bool GridComponent::moveCharacterToZone(Character* character, const TileZone* zone)
+{
+  if (character && zone)
+  {
+    Point coordinates = getRandomUnoccupiedTileFromZone(zone);
+
+    if (!coordinates.isInvalid())
+    {
+      setCharacterPosition(character, coordinates.x, coordinates.y, coordinates.z);
+      return true;
     }
     qDebug() << "GridComponent::moveCharacterToZone: could not find teleport" << character->getPath() << ": no cases available in zone | candidate count:" << zone->getPositionCount();
   }

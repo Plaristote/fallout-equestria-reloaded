@@ -129,6 +129,7 @@ int main(int argc, char *argv[])
   qRegisterMetaType<ObjectGroup*>("const ObjectGroup*");
   qRegisterMetaType<GridComponent*>("GridComponent*");
   qRegisterMetaType<WorldDiplomacy*>("WorldDiplomacy*");
+  qRegisterMetaType<TileZone*>("const TileZone*");
 
   registerQmlTilemap();
   // GAME EDITOR

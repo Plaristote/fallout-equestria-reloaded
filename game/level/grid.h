@@ -40,8 +40,9 @@ public:
 
   Q_INVOKABLE void        setCharacterPosition(Character*, int x, int y, unsigned char floor = NULL_FLOOR);
   QPoint                  getTilePosition(QPoint position) const;
+  Point                   getRandomUnoccupiedTileFromZone(const TileZone*) const;
   Q_INVOKABLE bool        moveCharacterToZone(Character*, const QString& name, unsigned char floor = NULL_FLOOR);
-  Q_INVOKABLE bool        moveCharacterToZone(Character*, TileZone* zone);
+  Q_INVOKABLE bool        moveCharacterToZone(Character*, const TileZone* zone);
   Q_INVOKABLE void        setObjectPosition(DynamicObject*, int x, int y, unsigned char floor = NULL_FLOOR);
   Q_INVOKABLE bool        insertPartyIntoZone(CharacterParty*, const QString& zoneName = "");
   Q_INVOKABLE QPoint      getAdjustedOffsetFor(const DynamicObject*) const;

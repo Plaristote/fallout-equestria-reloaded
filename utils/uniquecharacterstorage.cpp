@@ -149,7 +149,7 @@ bool UniqueCharacterStorage::loadCharacterToCurrentLevel(const QString& characte
   if(characterSlot)
   {
     LevelTask* level = Game::get()->getLevel();
-    Point position = Point();
+    Point position;
     position.x = x;
     position.y = y;
     position.z = z == NULL_FLOOR ? level->getCurrentFloor() : z;
@@ -163,6 +163,19 @@ bool UniqueCharacterStorage::loadCharacterToCurrentLevel(const QString& characte
   }
 
   return character_loaded;
+}
+
+bool UniqueCharacterStorage::loadCharacterToZone(const QString& characterSheet, const TileZone* tileZone)
+{
+  LevelTask* level = Game::get()->getLevel();
+  Point position = level->getRandomUnoccupiedTileFromZone(tileZone);
+
+  if (position.isInvalid())
+  {
+    qDebug() << "UniqueCharacterStorage: cannot find space to insert" << characterSheet << "into zone" << tileZone->getName();
+    return false;
+  }
+  return loadCharacterToCurrentLevel(characterSheet, position.x, position.y, position.z);
 }
 
 void UniqueCharacterStorage::log()

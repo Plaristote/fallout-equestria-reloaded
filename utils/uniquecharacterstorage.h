@@ -9,6 +9,7 @@
 
 class StorageSlot;
 class QJsonObject;
+class TileZone;
 
 class UniqueCharacterStorage : public QObject
 {
@@ -22,6 +23,7 @@ public:
   Q_INVOKABLE int saveUniqueCharactersFromLevel(LevelTask* level);
   Q_INVOKABLE int loadUniqueCharactersToLevel(LevelTask* level);
   Q_INVOKABLE bool loadCharacterToCurrentLevel(const QString& characterSheet, int x, int y, int z = NULL_FLOOR);
+  Q_INVOKABLE bool loadCharacterToZone(const QString& characterSheet, const TileZone* tileZone);
   Q_INVOKABLE void saveCharacterFromCurrentLevel(Character*);
   Q_INVOKABLE Character* getCharacter(const QString& characterSheet);
   Q_INVOKABLE void log();
