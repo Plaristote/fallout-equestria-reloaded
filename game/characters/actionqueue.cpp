@@ -15,6 +15,8 @@
 #include "actions/script.h"
 #include "actions/spellaction.h"
 #include "actions/animation.h"
+#define ASSERT_NOT_NULL(context, target) \
+  if (!target) { qDebug() << context << "called with null target" << target; return ; }
 
 ActionQueue::ActionQueue(QObject *parent) : QObject(parent), character(reinterpret_cast<Character*>(parent))
 {
@@ -176,6 +178,7 @@ int ActionQueue::getMovementApCost(int x, int y) const
 
 void ActionQueue::pushReach(DynamicObject *target, float range)
 {
+  ASSERT_NOT_NULL("ActionQueue::pushReach", target)
   if (!target->isDoorway())
     queue << (new ReachAction(character, target, range));
   else
@@ -184,6 +187,7 @@ void ActionQueue::pushReach(DynamicObject *target, float range)
 
 void ActionQueue::pushReach(DynamicObject *target, float range, QJSValue caseCompare)
 {
+  ASSERT_NOT_NULL("ActionQueue::pushReach", target)
   if (!target->isDoorway())
     queue << (new ReachAction(character, target, range, caseCompare));
   else
@@ -247,6 +251,8 @@ void ActionQueue::pushReachNear(int x, int y, int range)
 
 int ActionQueue::getReachApCost(DynamicObject *target, float range) const
 {
+  if (!target)
+    return 0;
   if (target->isDoorway())
     return ReachAction(character, reinterpret_cast<Doorway*>(target), range).getApCost();
   return ReachAction(character, target, range).getApCost();
@@ -254,6 +260,8 @@ int ActionQueue::getReachApCost(DynamicObject *target, float range) const
 
 int ActionQueue::getReachApCost(DynamicObject *target, float range, QJSValue caseCompare)
 {
+  if (!target)
+    return 0;
   if (target->isDoorway())
     return ReachAction(character, reinterpret_cast<Doorway*>(target), range, caseCompare).getApCost();
   return ReachAction(character, target, range, caseCompare).getApCost();
@@ -271,6 +279,7 @@ int ActionQueue::getReachCaseApCost(int x, int y, float range, QJSValue caseComp
 
 void ActionQueue::pushInteraction(DynamicObject *target, const QString &interactionName)
 {
+  ASSERT_NOT_NULL("ActionQueue::pushInteraction", target)
   queue << (new InteractionAction(character, target, interactionName));
 }
 
@@ -281,11 +290,13 @@ int ActionQueue::getInteractionApCost(DynamicObject* target, const QString &inte
 
 void ActionQueue::pushItemUse(DynamicObject *target, const QString &itemSlot)
 {
+  ASSERT_NOT_NULL("ActionQueue::pushItemUse", target)
   queue << (new ItemAction(character, target, itemSlot));
 }
 
 void ActionQueue::pushItemUse(DynamicObject *target, InventoryItem* item, const QString& useMode)
 {
+  ASSERT_NOT_NULL("ActionQueue::pushItemUse", target)
   queue << (new ItemAction(character, target, item, useMode));
 }
 
@@ -306,6 +317,7 @@ void ActionQueue::pushSpellUse(const QString &spell)
 
 void ActionQueue::pushSpellUseOn(DynamicObject *target, const QString &spell)
 {
+  ASSERT_NOT_NULL("ActionQueue::pushSpellUseOn", target)
   queue << (new SpellAction(character, target, spell));
 }
 
@@ -326,6 +338,7 @@ int ActionQueue::getItemUseApCost(DynamicObject *target, const QString &itemSlot
 
 void ActionQueue::pushSkillUse(DynamicObject *target, const QString &skillName)
 {
+  ASSERT_NOT_NULL("ActionQueue::pushSkillUse", target)
   queue << (new SkillAction(character, target, skillName));
 }
 
@@ -351,6 +364,7 @@ void ActionQueue::pushSpeak(const QString& content, unsigned int duration, const
 
 void ActionQueue::pushLookAt(const DynamicObject* target)
 {
+  ASSERT_NOT_NULL("ActionQueue::pushLookAt", target)
   queue << (new LookAction(character, target->getPosition()));
 }
 
