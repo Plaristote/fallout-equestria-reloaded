@@ -26,6 +26,7 @@ class CharacterDialog : public QObject
   Q_PROPERTY(BarterController* barter   READ   getBarterController NOTIFY barterControllerChanged)
 public:
   explicit CharacterDialog(QObject *parent = nullptr);
+  virtual ~CharacterDialog();
 
   Q_INVOKABLE bool load(const QString& name, Character* player, DynamicObject* npc);
   Q_INVOKABLE void loadState(const QString& reference);

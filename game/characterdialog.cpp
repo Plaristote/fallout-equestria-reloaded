@@ -14,6 +14,12 @@ CharacterDialog::CharacterDialog(QObject *parent) : QObject(parent)
   connect(this, &CharacterDialog::barterEnded, this, &CharacterDialog::onBarterEnded);
 }
 
+CharacterDialog::~CharacterDialog()
+{
+  if (script)
+    delete script;
+}
+
 bool CharacterDialog::load(const QString& name, Character* player, DynamicObject* npc)
 {
   QFile file(SCRIPTS_PATH + "/dialogs/" + name + ".json");
