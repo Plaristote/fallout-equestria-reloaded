@@ -30,7 +30,7 @@ Item {
     onStateListChanged: {
       const newEntryPointIndex = stateList.indexOf(entryPointInput.currentText);
 
-      entryPointInput.model = stateSelect.model = stateList;
+      entryPointInput.model = stateSelect.treeModel = stateList;
       entryPointInput.currentIndex = newEntryPointIndex;
     }
   }
@@ -40,7 +40,7 @@ Item {
     dialogStateEditor.sourceComponent = null;
     controller.load(currentDialog.replace(".json", ""), playerCharacter, npcCharacter);
     currentState = "";
-    stateSelect.model = controller.stateList;
+    stateSelect.treeModel = controller.stateList;
     entryPointIndex = controller.stateList.indexOf(controller.entryPoint);
     entryPointInput.model = controller.stateList;
     entryPointInput.currentIndex = entryPointIndex;
@@ -90,7 +90,7 @@ Item {
     onAccepted: {
       controller.removeState();
       currentState = "";
-      stateSelect.model = controller.stateList
+      stateSelect.treeModel = controller.stateList
     }
   }
 
@@ -138,7 +138,7 @@ Item {
         }
       }
 
-      EditorSelectPanel {
+      EditorSelectTree {
         id: stateSelect
         onNewClicked: newStateDialog.open()
         Layout.fillHeight: true
