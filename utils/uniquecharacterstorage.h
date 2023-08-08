@@ -25,6 +25,7 @@ public:
   Q_INVOKABLE bool loadCharacterToCurrentLevel(const QString& characterSheet, int x, int y, int z = NULL_FLOOR);
   Q_INVOKABLE bool loadCharacterToZone(const QString& characterSheet, const TileZone* tileZone);
   Q_INVOKABLE void saveCharacterFromCurrentLevel(Character*);
+  Q_INVOKABLE void detachCharacter(Character*);
   Q_INVOKABLE Character* getCharacter(const QString& characterSheet);
   Q_INVOKABLE void log();
 
@@ -36,6 +37,7 @@ private:
   bool loadCharacterIntoLevel(LevelTask* level, StorageSlot* characterSlot);
   bool loadCharacterIntoLevel(LevelTask* level, StorageSlot* characterSlot, Point position);
   bool saveCharacterIntoStorage(LevelTask* level, Character* character, QList<StorageSlot*>& storage);
+  bool swapCharacterToStorage(Character* character, QList<StorageSlot*>& storage);
 
   QList<StorageSlot*>& requireLevelStorage(const QString& levelName);
 
@@ -59,6 +61,7 @@ public:
 
   void load(const QJsonObject&);
   void save(QJsonObject&);
+  Character* getCharacter() const { return storedCharacter; }
 
 public:
   Character* storedCharacter;

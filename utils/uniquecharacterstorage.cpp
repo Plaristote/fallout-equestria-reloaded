@@ -41,7 +41,7 @@ int UniqueCharacterStorage::saveUniqueCharactersFromLevel(LevelTask* level)
 
 bool UniqueCharacterStorage::saveCharacterIntoStorage(LevelTask* level, Character* character, QList<StorageSlot*>& storage)
 {
-  bool isDetached = level->detachObject(character);
+  bool isDetached = level && level->detachObject(character);
 
   if(isDetached)
   {
@@ -54,7 +54,7 @@ bool UniqueCharacterStorage::saveCharacterIntoStorage(LevelTask* level, Characte
     storage.append(slot);
   }else
   {
-    qDebug()<<"UniqueCharacterStorage: Could not detach dynamic object"<<character->getObjectName()<<"from level"<<level->getName();
+    qDebug()<<"UniqueCharacterStorage: Could not detach dynamic object"<<character->getObjectName()<<"from level"<<(level ? level->getName() : QString());
   }
   return isDetached;
 }
@@ -107,6 +107,33 @@ int UniqueCharacterStorage::loadUniqueCharactersToLevel(LevelTask* level)
   storage.clear();
 
   return numberOfCharactersLoaded;
+}
+
+void UniqueCharacterStorage::detachCharacter(Character* character)
+{
+  LevelTask* level = Game::get()->getLevel();
+  QList<StorageSlot*>& storage = requireLevelStorage("__no_level__");
+
+  saveCharacterIntoStorage(level, character, storage) || swapCharacterToStorage(character, storage);
+}
+
+bool UniqueCharacterStorage::swapCharacterToStorage(Character* character, QList<StorageSlot*>& storage)
+{
+  for (auto it = levelToStorage.begin() ; it != levelToStorage.end() ; ++it)
+  {
+    QList<StorageSlot*>& levelStorage = it.value();
+
+    for (auto* slot : levelStorage)
+    {
+      if (slot->getCharacter() == character)
+      {
+        levelStorage.removeAll(slot);
+        storage.push_back(slot);
+        return true;
+      }
+    }
+  }
+  return false;
 }
 
 Character* UniqueCharacterStorage::getCharacter(const QString& characterSheet)
