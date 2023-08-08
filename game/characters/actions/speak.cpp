@@ -3,7 +3,7 @@
 #include "game/leveltask.h"
 
 SpeakAction::SpeakAction(Character* character, const QString& content, unsigned int duration, const QString& color)
-  : ActionBase(character), content(content), duration(duration), color(color)
+  : ActionBase(character), content(content), color(color), duration(duration)
 {
 }
 

@@ -39,7 +39,7 @@ public:
   virtual void updateTasks(qint64 v);
   virtual void load(const QJsonObject&);
   virtual void save(QJsonObject&) const;
-  virtual void setScript(const QString& name);
+  virtual void setScript(const QString& name) override;
 
   inline bool isCharacter() const { return getObjectType() == "Character"; }
   inline bool isDoorway() const { return getObjectType() == "Doorway"; }

@@ -88,7 +88,7 @@ Pane {
     InventoryItemsView {
       id: characterInventoryView
       dragZone: root
-      inventory: controller.character.inventory
+      inventory: controller ? controller.character.inventory : null
       selectedObject: root.selectedObject
       onItemSelected: {
         root.selectedInventory = controller.character.inventory;
@@ -123,22 +123,22 @@ Pane {
               Layout.alignment: Qt.AlignCenter
 
               TerminalButton {
-                visible: controller.availableTargets.length > 1
+                visible: controller != null && controller.availableTargets.length > 1
                 text: '<'
                 onClicked: controller.previousTarget()
               }
 
-              TerminalLabel { text: controller.target.objectName }
+              TerminalLabel { text: controller ? controller.target.objectName : "" }
 
               TerminalButton {
-                visible: controller.availableTargets.length > 1
+                visible: controller != null && controller.availableTargets.length > 1
                 text: '>'
                 onClicked: controller.nextTarget()
               }
             }
 
             ObjectSpritePreview {
-              dynamicObject: controller.target
+              dynamicObject: controller ? controller.target : null
               Layout.alignment: Qt.AlignCenter
             }
           }
@@ -165,7 +165,7 @@ Pane {
     InventoryItemsView {
       id: targetInventoryView
       dragZone: root
-      inventory: controller.inventory
+      inventory: controller ? controller.inventory : null
       selectedObject: root.selectedObject
       onItemSelected: {
         root.selectedInventory = controller.inventory
