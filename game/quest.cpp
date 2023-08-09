@@ -73,7 +73,10 @@ void Quest::setHidden(bool value)
 
 void Quest::addObjective(const QString& name, const QString& label)
 {
-  objectives[name] = QVariantMap{{"label",label}};
+  if (objectives.count(name))
+    objectives[name].toMap()["label"] = label;
+  else
+    objectives[name] = QVariantMap{{"label",label}};
 }
 
 void Quest::completeObjective(const QString& name)
@@ -84,9 +87,19 @@ void Quest::completeObjective(const QString& name)
       objectives[name].toMap()["success"] = true;
     else
       objectives[name] = QVariantMap{{"success",true}};
-    if (script)
-      script->call("completeObjective", QJSValueList() << name);
+    if (script && script->hasMethod("completeObjective"))
+      script->call("completeObjective", QJSValueList() << name << true);
   }
+}
+
+void Quest::failObjective(const QString& name)
+{
+  if (objectives.count(name))
+    objectives[name].toMap()["failure"] = true;
+  else
+    objectives[name] = QVariantMap{{"failure", true}};
+  if (script && script->hasMethod("completeObjective"))
+    script->call("completeObjective", QJSValueList() << name << false);
 }
 
 bool Quest::isObjectiveCompleted(const QString& name) const
@@ -99,6 +112,16 @@ bool Quest::isObjectiveCompleted(const QString& name) const
   if (objective != objectives.end())
     params = objective->toMap();
   return params.contains("success") && params["success"] == true;
+}
+
+bool Quest::areObjectivesCompleted(const QStringList& names) const
+{
+  for (const QString& name : names)
+  {
+    if (!isObjectiveCompleted(name))
+      return false;
+  }
+  return true;
 }
 
 void Quest::onCharacterKilled(Character* character, Character* killer)

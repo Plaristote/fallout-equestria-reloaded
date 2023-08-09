@@ -33,7 +33,9 @@ public:
 
   Q_INVOKABLE void addObjective(const QString&, const QString&);
   Q_INVOKABLE void completeObjective(const QString&);
+  Q_INVOKABLE void failObjective(const QString&);
   Q_INVOKABLE bool isObjectiveCompleted(const QString&) const;
+  Q_INVOKABLE bool areObjectivesCompleted(const QStringList&) const;
   inline bool inProgress() const { return !completed && !failed; }
   inline bool isHidden() const { return hidden; }
   void setHidden(bool value);
