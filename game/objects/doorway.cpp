@@ -218,6 +218,8 @@ void Doorway::toggle()
     playSound(openSound);
   }
   emit openedChanged();
+  if (script && script->hasMethod("onToggle"))
+    script->call("onToggle", QJSValueList() << opened);
 }
 
 void Doorway::save(QJsonObject& data) const
