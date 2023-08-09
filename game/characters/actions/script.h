@@ -6,7 +6,7 @@
 class ScriptAction : public ActionBase
 {
 public:
-  ScriptAction(Character* character, QJSValue callback);
+  ScriptAction(Character* character, QJSValue config);
 
   int getApCost() const { return 0; }
   void update() override;
@@ -14,9 +14,9 @@ public:
   void canceled() override;
 
 private:
-  bool call(bool param);
+  bool call(QJSValue callback);
 
-  QJSValue callback;
+  QJSValue triggerCallback, cancelCallback;
 };
 
 #endif // SCRIPTACTION_H
