@@ -7,17 +7,21 @@ QuestManager::QuestManager(QObject *parent) : QObject(parent)
   connect(Game::get(), &Game::levelChanged, this, &QuestManager::onLevelChanged);
 }
 
-void QuestManager::addQuest(const QString& name, int flags)
+Quest* QuestManager::addQuest(const QString& name, int flags)
 {
-  if (!getQuest(name))
-  {
-    Quest* quest = new Quest(this);
+  Quest* quest = getQuest(name);
 
+  if (!quest)
+  {
+    quest = new Quest(this);
     list << quest;
     quest->initialize(name, (flags & HiddenQuest) > 0);
     if ((flags & HiddenQuest) > 0)
       emit listChanged();
   }
+  if (quest->isHidden() && (flags & NormalQuest) > 0)
+    quest->setHidden(false);
+  return quest;
 }
 
 Quest* QuestManager::getQuest(const QString& name) const

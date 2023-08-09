@@ -25,7 +25,7 @@ public:
   void load(const QJsonObject&);
   QJsonObject save() const;
 
-  Q_INVOKABLE void   addQuest(const QString&, int flags = NormalQuest);
+  Q_INVOKABLE Quest* addQuest(const QString&, int flags = NormalQuest);
   Q_INVOKABLE Quest* getQuest(const QString&) const;
   Q_INVOKABLE bool   hasQuest(const QString& name) const { return getQuest(name) != nullptr; }
 
