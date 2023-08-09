@@ -21,9 +21,8 @@ class Quest : public StorableObject
   Q_PROPERTY(QString     description    READ getDescription    NOTIFY descriptionChanged)
   Q_PROPERTY(int         objectiveCount READ getObjectiveCount NOTIFY nameChanged)
   Q_PROPERTY(int         completeCount  READ getCompleteCount  NOTIFY completedChanged)
+  Q_PROPERTY(QJSValue    script         READ getScriptObject)
 public:
-  enum ObjectiveState { InProgress = 0, Done, Failed };
-
   explicit Quest(QObject *parent = nullptr);
   ~Quest() override;
 

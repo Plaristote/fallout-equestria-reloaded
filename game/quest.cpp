@@ -9,6 +9,21 @@ static void playNewQuestSound()
   Game::get()->getSoundManager()->play("pipbuck/newquest");
 }
 
+template<typename VALUE>
+static void setPropertyOnObjective(QVariantMap& objectives, const QString& objectiveName, const QString& flagName, VALUE value)
+{
+  QVariantMap result;
+
+  if (objectives.count(objectiveName))
+  {
+    result = objectives[objectiveName].toMap();
+    result[flagName] = value;
+  }
+  else
+    result = QVariantMap{{flagName,value}};
+  objectives[objectiveName] = result;
+}
+
 Quest::Quest(QObject *parent) : StorableObject(parent)
 {
   connect(this, &Quest::completedChanged, this, &Quest::onCompletedChanged);
@@ -73,20 +88,14 @@ void Quest::setHidden(bool value)
 
 void Quest::addObjective(const QString& name, const QString& label)
 {
-  if (objectives.count(name))
-    objectives[name].toMap()["label"] = label;
-  else
-    objectives[name] = QVariantMap{{"label",label}};
+  setPropertyOnObjective(objectives, name, "label", label);
 }
 
 void Quest::completeObjective(const QString& name)
 {
   if (!isObjectiveCompleted(name))
   {
-    if (objectives.count(name))
-      objectives[name].toMap()["success"] = true;
-    else
-      objectives[name] = QVariantMap{{"success",true}};
+    setPropertyOnObjective(objectives, name, "success", true);
     if (script && script->hasMethod("completeObjective"))
       script->call("completeObjective", QJSValueList() << name << true);
   }
@@ -94,10 +103,7 @@ void Quest::completeObjective(const QString& name)
 
 void Quest::failObjective(const QString& name)
 {
-  if (objectives.count(name))
-    objectives[name].toMap()["failure"] = true;
-  else
-    objectives[name] = QVariantMap{{"failure", true}};
+  setPropertyOnObjective(objectives, name, "failed", true);
   if (script && script->hasMethod("completeObjective"))
     script->call("completeObjective", QJSValueList() << name << false);
 }
