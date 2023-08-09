@@ -61,7 +61,7 @@ Item {
     }
 
     function onGameOver() {
-      application.popView();
+      application.popAllViews();
     }
   }
 
