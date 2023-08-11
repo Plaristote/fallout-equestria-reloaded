@@ -6,7 +6,7 @@ QVariantMap fetchScriptVariablesFromTranslation(QString translationPath, QVarian
   if (script)
   {
     QString base = I18n::get()->t(translationPath);
-    QRegularExpression pattern("\\{\\{([a-zA-Z]+[a-zA-Z0-9]*)\\}\\}");
+    QRegularExpression pattern("\\{\\{([a-zA-Z]+[a-zA-Z0-9_]*)\\}\\}");
     QRegularExpressionMatch match;
 
     match = pattern.match(base);
