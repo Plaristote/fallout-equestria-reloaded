@@ -104,7 +104,7 @@ Item {
 
     content: [
       WorldmapCities {
-        model: controller.cities
+        model: controller ? controller.cities : []
       }
     ]
 
