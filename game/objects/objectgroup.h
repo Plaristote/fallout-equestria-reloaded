@@ -21,6 +21,7 @@ class ObjectGroup : public ControlZoneComponent
   Q_PROPERTY(QQmlListProperty<DynamicObject> objects  READ getQmlObjects NOTIFY objectsChanged)
   Q_PROPERTY(TaskRunner*                     tasks    MEMBER taskRunner CONSTANT)
   Q_PROPERTY(ObjectGroup*                    parent   READ getParent NOTIFY parentChanged)
+  Q_PROPERTY(QString                         type     READ getObjectType)
 public:
   explicit ObjectGroup(QObject *parent = nullptr);
 
@@ -43,6 +44,7 @@ public:
   Q_INVOKABLE QString validateObjectName(const QString&) const;
   Q_INVOKABLE QString validateGroupName(const QString&) const;
 
+  Q_INVOKABLE QString        getObjectType() const { return metaObject()->className(); }
   Q_INVOKABLE QJSValue       getScriptObject() const;
   void                       eachObject(std::function<void(DynamicObject*)>) const;
   void                       eachGroup(std::function<void(ObjectGroup*)>) const;

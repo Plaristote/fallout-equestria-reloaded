@@ -29,6 +29,7 @@ class DynamicObject : public LightSourceComponent
   Q_PROPERTY(bool interactive MEMBER interactive NOTIFY interactiveChanged)
   Q_PROPERTY(QPoint spriteOffset READ getSpriteOffset WRITE setSpriteOffset NOTIFY spritePositionChanged)
   Q_PROPERTY(ObjectGroup* parent READ getGroup NOTIFY parentChanged)
+  Q_PROPERTY(QString type READ getObjectType)
   Q_PROPERTY(int zIndex READ getZIndex NOTIFY zIndexChanged)
 
 public:
