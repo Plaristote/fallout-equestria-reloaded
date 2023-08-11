@@ -65,7 +65,7 @@ ColumnLayout {
           border.width: 1
           border.color: root.hoveredQuest === quest ? "white" : questColor
           color: "transparent"
-          visible: !quest.hidden && (quest.completed && completedEnabled.checked) || (quest.failed && failedEnabled.checked) || (quest.inProgress && onGoingEnabled.checked)
+          visible: !quest.hidden && ((quest.completed && completedEnabled.checked) || (quest.failed && failedEnabled.checked) || (quest.inProgress && onGoingEnabled.checked))
           implicitHeight: visible ? 30 : 0
           implicitWidth: cellContent.width + 20
           Layout.fillWidth: column === 0
