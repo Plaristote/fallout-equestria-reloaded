@@ -32,7 +32,8 @@ DialogState DialogStateData::loadStateFromScriptObject(DialogState state, QJSVal
   QJSValue answers = retval.property("answers");
   QJSValue mood = retval.property("mood");
 
-  state.text = text.isCallable() ? text.call().toString() : text.toString();
+  if (!text.isUndefined())
+    state.text = text.isCallable() ? text.call().toString() : text.toString();
   if (mood.isString())
     state.mood = mood.toString();
   if (answers.isArray())
