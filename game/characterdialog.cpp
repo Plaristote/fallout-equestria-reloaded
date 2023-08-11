@@ -75,6 +75,8 @@ void CharacterDialog::loadState(const QString& reference)
   if (stateData)
   {
     options.clear();
+    if (!stateReference.isEmpty())
+      stateHistory.push_front(stateReference);
     stateReference = reference;
     state   = stateData->setAsCurrentState(*this);
     text    = state.text;

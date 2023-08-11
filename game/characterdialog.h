@@ -13,17 +13,18 @@ class CharacterDialog : public QObject
 {
   Q_OBJECT
 
-  Q_PROPERTY(Character*     player         MEMBER player CONSTANT)
-  Q_PROPERTY(DynamicObject* npc            MEMBER npc CONSTANT)
-  Q_PROPERTY(QString        name           READ getName NOTIFY nameChanged)
-  Q_PROPERTY(QString        stateReference MEMBER stateReference NOTIFY stateReferenceChanged)
-  Q_PROPERTY(QString        text           MEMBER text NOTIFY textChanged)
-  Q_PROPERTY(QStringList    options        MEMBER options NOTIFY optionsChanged)
-  Q_PROPERTY(QString        mood           MEMBER mood NOTIFY moodChanged);
-  Q_PROPERTY(QString        ambiance       MEMBER ambiance NOTIFY ambianceChanged)
-  Q_PROPERTY(QStringList    stateList      READ   getStateList NOTIFY stateListChanged)
-  Q_PROPERTY(QStringList    answerList     READ   getAnswerList NOTIFY answerListChanged)
-  Q_PROPERTY(BarterController* barter   READ   getBarterController NOTIFY barterControllerChanged)
+  Q_PROPERTY(Character*        player         MEMBER player CONSTANT)
+  Q_PROPERTY(DynamicObject*    npc            MEMBER npc CONSTANT)
+  Q_PROPERTY(QString           name           READ getName NOTIFY nameChanged)
+  Q_PROPERTY(QString           stateReference MEMBER stateReference NOTIFY stateReferenceChanged)
+  Q_PROPERTY(QString           text           MEMBER text NOTIFY textChanged)
+  Q_PROPERTY(QStringList       options        MEMBER options NOTIFY optionsChanged)
+  Q_PROPERTY(QString           mood           MEMBER mood NOTIFY moodChanged);
+  Q_PROPERTY(QString           ambiance       MEMBER ambiance NOTIFY ambianceChanged)
+  Q_PROPERTY(QStringList       stateList      READ   getStateList NOTIFY stateListChanged)
+  Q_PROPERTY(QStringList       answerList     READ   getAnswerList NOTIFY answerListChanged)
+  Q_PROPERTY(BarterController* barter         READ   getBarterController NOTIFY barterControllerChanged)
+  Q_PROPERTY(QStringList       stateHistory   READ   getStateHistory NOTIFY stateReferenceChanged)
 public:
   explicit CharacterDialog(QObject *parent = nullptr);
   virtual ~CharacterDialog();
@@ -40,6 +41,7 @@ public:
   QStringList         getStateList() const;
   QStringList         getAnswerList() const;
   QString             getName() const;
+  const QStringList&  getStateHistory() const { return stateHistory; }
   BarterController*   getBarterController() const { return barter; }
   Q_INVOKABLE bool    tryToBarter();
 
@@ -78,6 +80,7 @@ protected:
   QStringList       options;
   QString           mood, ambiance;
   QString           translationGroup;
+  QStringList       stateHistory;
 };
 
 #endif // CHARACTERDIALOG_H
