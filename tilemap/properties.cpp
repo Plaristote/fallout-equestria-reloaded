@@ -12,9 +12,15 @@ TiledPropertyVersion getTiledPropertyVersion(const QString& tiledVersion)
     int major = it->toInt();
     int minor = (++it)->toInt();
 
-    return major == 1 && minor < 9 ? TiledProperty_1_8 : TiledProperty_1_9;
+    if (major == 1)
+    {
+      if (minor < 9)
+        return TiledProperty_1_8;
+      else if (minor == 9)
+        return TiledProperty_1_9;
+    }
   }
-  return TiledProperty_1_9;
+  return TiledProperty_1_10;
 }
 
 static QVariant tiledPropertyToVariant(const QJsonValue& value, const QString& typeName)
@@ -69,7 +75,7 @@ QVariantMap loadTiledProperties(const QJsonObject& object, const QString& tiledV
 
 QVariantMap loadTiledProperties(const QJsonObject& object, TiledPropertyVersion version)
 {
-  if (version == TiledProperty_1_8)
-    return loadTiledProperties_v1_8(object);
-  return loadTiledProperties_v1_9(object);
+  if (version == TiledProperty_1_9)
+    return loadTiledProperties_v1_9(object);
+  return loadTiledProperties_v1_8(object);
 }
