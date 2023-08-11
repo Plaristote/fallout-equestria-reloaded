@@ -138,21 +138,30 @@ QJSValue ObjectGroup::find(QJSValue filter) const
     : findFromFilter(filter);
 }
 
+QString jsErrorBacktrace(QJSValue retval);
+
+template<typename OBJECT_TYPE>
+static std::function<void(OBJECT_TYPE*)> makeFilterLambda(QJSValue filter, QJSValue& result, QJSValue& push)
+{
+  return [&filter, &push, &result](OBJECT_TYPE* object)
+  {
+    QJSValueList params{object->asJSValue()};
+    QJSValue retval = filter.call(params);
+
+    if (retval.isError())
+      jsErrorBacktrace(retval);
+    else if (retval.toBool())
+      push.callWithInstance(result, params);
+  };
+}
+
 QJSValue ObjectGroup::findFromFilter(QJSValue filter) const
 {
   QJSValue result = Game::get()->getScriptEngine().newArray();
   QJSValue push = result.property("push");
 
-  eachGroup([&filter, &push, &result](ObjectGroup* group)
-  {
-    QJSValueList params{group->asJSValue()};
-    if (filter.call(params).toBool()) push.callWithInstance(result, params);
-  });
-  eachObject([&filter, &push, &result](DynamicObject* object)
-  {
-    QJSValueList params{object->asJSValue()};
-    if (filter.call(params).toBool()) push.callWithInstance(result, params);
-  });
+  eachGroup(makeFilterLambda<ObjectGroup>(filter, result, push));
+  eachObject(makeFilterLambda<DynamicObject>(filter, result, push));
   return result;
 }
 
