@@ -33,8 +33,12 @@ public:
   Q_INVOKABLE void addObjective(const QString&, const QString&);
   Q_INVOKABLE void completeObjective(const QString&);
   Q_INVOKABLE void failObjective(const QString&);
+  Q_INVOKABLE QString objectiveNameAt(int) const;
+  Q_INVOKABLE bool isObjectiveCompleted(int index) const { return isObjectiveCompleted(objectiveNameAt(index)); }
   Q_INVOKABLE bool isObjectiveCompleted(const QString&) const;
   Q_INVOKABLE bool areObjectivesCompleted(const QStringList&) const;
+  Q_INVOKABLE bool isObjectiveFailed(int index) const { return isObjectiveFailed(objectiveNameAt(index)); }
+  Q_INVOKABLE bool isObjectiveFailed(const QString&) const;
   inline bool inProgress() const { return !completed && !failed; }
   inline bool isHidden() const { return hidden; }
   void setHidden(bool value);
@@ -62,6 +66,8 @@ private slots:
   void onCompletedChanged();
 
 private:
+  bool getObjectiveFlag(const QString& name, const QString& flag, const QString& hookName) const;
+
   QString           name, location;
   bool              completed, failed, hidden;
   ScriptController* script = nullptr;

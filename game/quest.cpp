@@ -108,16 +108,27 @@ void Quest::failObjective(const QString& name)
     script->call("completeObjective", QJSValueList() << name << false);
 }
 
-bool Quest::isObjectiveCompleted(const QString& name) const
+bool Quest::getObjectiveFlag(const QString& name, const QString& flag, const QString& hookName) const
 {
-  auto objective = objectives.find(name);
+  QVariantMap::const_iterator objective;
   QVariantMap params;
 
-  if (script && script->hasMethod("isObjectiveCompleted"))
-    return script->call("isObjectiveCompleted", QJSValueList() << name).toBool();
+  if (script && script->hasMethod(hookName))
+  {
+    QJSValue retval = script->call(hookName, QJSValueList() << name);
+
+    if (retval.isBool())
+      return retval.toBool();
+  }
+  objective = objectives.constFind(name);
   if (objective != objectives.end())
     params = objective->toMap();
-  return params.contains("success") && params["success"] == true;
+  return params.contains(flag) && params[flag].toBool();
+}
+
+bool Quest::isObjectiveCompleted(const QString& name) const
+{
+  return getObjectiveFlag(name, "success", "isObjectiveCompleted");
 }
 
 bool Quest::areObjectivesCompleted(const QStringList& names) const
@@ -128,6 +139,18 @@ bool Quest::areObjectivesCompleted(const QStringList& names) const
       return false;
   }
   return true;
+}
+
+bool Quest::isObjectiveFailed(const QString& name) const
+{
+  return getObjectiveFlag(name, "failed", "isObjectiveFailed");
+}
+
+QString Quest::objectiveNameAt(int index) const
+{
+  auto keys = objectives.keys();
+
+  return keys.size() > index ? keys[index] : QString();
 }
 
 void Quest::onCharacterKilled(Character* character, Character* killer)

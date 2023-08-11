@@ -77,11 +77,13 @@ Flickable {
           model: questObjectives
           delegate: TerminalLabel {
             property var objective: questObjectives[index]
-            property var stroke: objective.success || objective.failed
+            property bool success: quest.isObjectiveCompleted(index)
+            property bool failed:  quest.isObjectiveFailed(index)
+            property var stroke: success || failed
             property string label: stroke ? `<s>${objective.label}</s>` : objective.label
 
             text: "- " + label
-            color: objective.failed === true ? "red" : "white"
+            color: failed === true ? "red" : "white"
             wrapMode: Text.WordWrap
             Layout.preferredWidth: (root.width / 2) - 50
           }
