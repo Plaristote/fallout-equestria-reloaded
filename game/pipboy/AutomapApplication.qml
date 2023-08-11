@@ -75,6 +75,8 @@ Item {
         property color colorReference: {
           if (character === levelController.player)
             return "white";
+          if (!character.isAlive())
+            return "transparent";
           if (character.isEnemy(levelController.player))
             return "red";
           else if (character.isAlly(levelController.player))
