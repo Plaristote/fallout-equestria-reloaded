@@ -45,13 +45,13 @@ public:
 
   Q_INVOKABLE QStringList getCharacterTemplateList() const;
   Q_INVOKABLE void prepareEditor();
-  void loadFromDataEngine();
+  void loadFromDataEngine(std::function<void()> callback);
   Q_INVOKABLE void save();
   void newPlayerParty(StatModel*);
 
   Q_INVOKABLE void appendToConsole(const QString&);
-  Q_INVOKABLE void switchToLevel(const QString& name, const QString& targetZone = "");
-  Q_INVOKABLE void switchToCity(const QString& name, const QString& levelName = "", const QString& targetZone = "");
+  Q_INVOKABLE void switchToLevel(const QString& name, const QString& targetZone = "", QJSValue callback = QJSValue());
+  Q_INVOKABLE void switchToCity(const QString& name, const QString& levelName = "", const QString& targetZone = "", QJSValue callback = QJSValue());
   void exitLevel(bool silence = false);
 
   static Game* get() { return instance; }
@@ -103,7 +103,8 @@ public slots:
   void onCityEnteredAt(const QString& city, const QString& zone);
   void changeZone(TileZone*);
   void deleteLater();
-  void loadLevel(const QString& name, const QString& targetZone = "");
+  void loadLevel(const QString& name, const QString& targetZone = "", QJSValue callback = QJSValue());
+  void loadLevel(const QString& name, const QString& targetZone, std::function<void()> callback);
   void onDiplomacyUpdate(const QStringList& factions, bool enemy);
 
 private slots:

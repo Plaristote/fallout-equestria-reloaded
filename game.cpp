@@ -116,7 +116,7 @@ void Game::initializeEvents()
   connect(player->getStatistics(), &StatModel::levelChanged, this, [this]() { if (player->getStatistics()->property("level").toInt() > 1) getSoundManager()->play("pipbuck/levelup"); });
 }
 
-void Game::loadFromDataEngine()
+void Game::loadFromDataEngine(std::function<void()> callback)
 {
   QString currentLevelName = dataEngine->getCurrentLevel();
 
@@ -129,12 +129,14 @@ void Game::loadFromDataEngine()
   quests->addQuest("quest-test");
   player = playerParty->getCharacters().first();
   initializeEvents();
-  if (currentLevelName != "")
-    loadLevel(currentLevelName, nullTargetZone);
+  if (!currentLevelName.isEmpty())
+    loadLevel(currentLevelName, nullTargetZone, callback);
   else
     emit levelChanged();
   dataStore = dataEngine->getVariables();
   initializeScript();
+  if (currentLevelName.isEmpty())
+    callback();
 }
 
 void Game::initializeScript()
@@ -204,7 +206,15 @@ void Game::setupPlayerPartyIntoLevel(const QString& targetZone)
   }
 }
 
-void Game::loadLevel(const QString &name, const QString& targetZone)
+void Game::loadLevel(const QString &name, const QString& targetZone, QJSValue callback)
+{
+  if (callback.isCallable())
+    loadLevel(name, targetZone, [callback]() { QJSValue(callback).call(); });
+  else
+    loadLevel(name, targetZone, std::function<void()>());
+}
+
+void Game::loadLevel(const QString &name, const QString& targetZone, std::function<void()> callback)
 {
   QTimer* timer;
 
@@ -214,7 +224,7 @@ void Game::loadLevel(const QString &name, const QString& targetZone)
   timer = new QTimer(this);
   timer->start(500);
   connect(timer, &QTimer::timeout, timer, &QObject::deleteLater);
-  connect(timer, &QTimer::timeout, this, [this, name, targetZone]()
+  connect(timer, &QTimer::timeout, this, [this, name, targetZone, callback]()
   {
     auto scriptObject = scriptEngine.globalObject();
 
@@ -241,13 +251,15 @@ void Game::loadLevel(const QString &name, const QString& targetZone)
       currentLevel = nullptr;
       emit loadError(QString(error.what()));
     }
+    if (callback)
+      callback();
     emit levelChanged();
   });
 }
 
-void Game::switchToLevel(const QString& name, const QString& targetZone)
+void Game::switchToLevel(const QString& name, const QString& targetZone, QJSValue callback)
 {
-  auto function = std::bind(&Game::loadLevel, this, name, targetZone);
+  auto function = [=]() { loadLevel(name, targetZone, callback); };
   static QMetaObject::Connection listener;
 
   if (exitingLevel)
@@ -264,7 +276,7 @@ void Game::switchToLevel(const QString& name, const QString& targetZone)
     function();
 }
 
-void Game::switchToCity(const QString& name, const QString& levelName, const QString& targetZone)
+void Game::switchToCity(const QString& name, const QString& levelName, const QString& targetZone, QJSValue callback)
 {
   WorldMapCity* city = worldmap->getCity(name);
 
@@ -273,7 +285,7 @@ void Game::switchToCity(const QString& name, const QString& levelName, const QSt
     QString targetLevel = levelName.isEmpty() ? city->getLevel() : levelName;
 
     worldmap->moveToCity(city);
-    switchToLevel(targetLevel, targetZone);
+    switchToLevel(targetLevel, targetZone, callback);
   }
   else
     qDebug() << "Game::switchToCity: " << name << " is not a city name";

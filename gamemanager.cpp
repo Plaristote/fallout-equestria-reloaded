@@ -67,8 +67,7 @@ void GameManager::loadGame(const QString& path)
   endGame();
   currentGame = new Game(this);
   currentGame->getDataEngine()->loadFromFile(path + ".json");
-  currentGame->loadFromDataEngine();
-  emit gameLoaded();
+  currentGame->loadFromDataEngine([this]() { emit gameLoaded(); });
 }
 
 void GameManager::saveGame(const QString& path)
