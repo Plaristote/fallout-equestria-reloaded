@@ -82,9 +82,12 @@ bool DialogAnswer::isAvailable(CharacterDialog& dialog)
   else if (availableHook.isString())
   {
     QString callback = availableHook.toString();
+    QJSValue property = dialog.getScript()->property(callback);
 
-    if (dialog.getScript()->hasMethod(callback))
-      return dialog.getScript()->call(callback).toBool();
+    if (property.isCallable())
+      return dialog.getScript()->callMethod(property).toBool();
+    else if (property.isBool())
+      return property.toBool();
   }
   return true;
 }
