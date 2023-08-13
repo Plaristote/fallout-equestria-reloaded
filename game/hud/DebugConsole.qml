@@ -41,6 +41,13 @@ Pane {
     debugConsoleInput.clear();
   }
 
+  Connections {
+    target: gameController
+    function onJavascriptError(error) {
+      consoleDisplay.text += '\n' + error + '\n';
+    }
+  }
+
   Pane {
     clip: true
     background: UiStyle.TerminalPane {}

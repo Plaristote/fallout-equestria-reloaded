@@ -12,6 +12,7 @@ public:
   void     initialize(QObject* object);
   bool     hasMethod(const QString& method);
   QJSValue call(const QString& method, const QJSValueList& = QJSValueList());
+  QJSValue callMethod(QJSValue method, const QJSValueList& = QJSValueList());
   QJSValue property(const QString& name);
 
   static QJSValue callFunction(QJSValue function, const QJSValueList& = QJSValueList());

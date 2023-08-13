@@ -1,5 +1,7 @@
 #include "script.h"
 
+QString jsErrorBacktrace(QJSValue retval);
+
 ScriptAction::ScriptAction(Character* character, QJSValue config) : ActionBase(character)
 {
   if (config.isCallable())
@@ -27,12 +29,14 @@ bool ScriptAction::trigger()
 void ScriptAction::canceled()
 {
   if (cancelCallback.isCallable())
-    cancelCallback.call();
+    call(cancelCallback);
 }
 
 bool ScriptAction::call(QJSValue callback)
 {
   QJSValue retval = callback.call();
 
+  if (retval.isError())
+    jsErrorBacktrace(retval);
   return retval.isBool() ? retval.toBool() : true;
 }

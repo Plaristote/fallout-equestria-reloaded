@@ -97,6 +97,7 @@ signals:
   void loadError(const QString&);
   void fastPassingChanged();
   void requireScreenshot(QString);
+  void javascriptError(QString);
 
 public slots:
   void onCityEntered(QString name);
