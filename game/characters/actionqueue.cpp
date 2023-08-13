@@ -290,13 +290,11 @@ int ActionQueue::getInteractionApCost(DynamicObject* target, const QString &inte
 
 void ActionQueue::pushItemUse(DynamicObject *target, const QString &itemSlot)
 {
-  ASSERT_NOT_NULL("ActionQueue::pushItemUse", target)
   queue << (new ItemAction(character, target, itemSlot));
 }
 
 void ActionQueue::pushItemUse(DynamicObject *target, InventoryItem* item, const QString& useMode)
 {
-  ASSERT_NOT_NULL("ActionQueue::pushItemUse", target)
   queue << (new ItemAction(character, target, item, useMode));
 }
 
