@@ -6,6 +6,7 @@
 # include <QSize>
 # include <QTimer>
 # include <QQmlListProperty>
+# include <QImage>
 # include "../timermanager.h"
 # include "worldmapcity.h"
 # include "worldmapzone.h"
@@ -33,6 +34,7 @@ public:
   QJsonObject save() const;
 
   bool isMoving() const { return updateTimer.isActive(); }
+  bool canBeMovedOn(QPoint) const;
 
   QQmlListProperty<WorldMapCity> getCitiesQml() { return QML_QLIST_CONSTRUCTOR(WorldMapCity, cities); }
   QQmlListProperty<WorldMapZone> getZonesQml() { return QML_QLIST_CONSTRUCTOR(WorldMapZone, zones); }
@@ -102,6 +104,7 @@ private:
   QSize         mapSize;
   QSize         caseSize, caseCount;
   bool          paused = false;
+  QImage        terrainData;
 };
 
 #endif // WORLDMAP_H

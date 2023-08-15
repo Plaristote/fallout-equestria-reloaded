@@ -18,6 +18,20 @@ WorldMap::WorldMap(QObject* parent) : QObject(parent)
   connect(Game::get(), &Game::encounterTriggered, this, &WorldMap::encounterTriggered);
   connect(Game::get(), &Game::encounterNotify,    this, &WorldMap::encounterNotify);
   timeManager = Game::get()->getTimeManager();
+  terrainData = QImage(ASSETS_PATH + "worldmap-terrain.png");
+}
+
+bool WorldMap::canBeMovedOn(QPoint coordinates) const
+{
+  if (!terrainData.isNull())
+  {
+    float ratioY = static_cast<float>(terrainData.height()) / mapSize.height();
+    float ratioX = static_cast<float>(terrainData.width())  / mapSize.width();
+    QRgb pixel = terrainData.pixel(coordinates.x() * ratioX, coordinates.y() * ratioY);
+
+    return qAlpha(pixel) == 0;
+  }
+  return true;
 }
 
 QJsonObject WorldMap::save() const
@@ -155,17 +169,24 @@ void WorldMap::update()
 {
   if (!paused)
   {
-    float movementSpeed = getCurrentMovementSpeed();
-    float movementSpeedX = movementSpeed;
-    float movementSpeedY = movementSpeed;
-    int   distX = std::max(currentPosition.x(), targetPosition.x()) - std::min(currentPosition.x(), targetPosition.x());
-    int   distY = std::max(currentPosition.y(),  targetPosition.y()) - std::min(currentPosition.y(), targetPosition.y());
+    float  movementSpeed = getCurrentMovementSpeed();
+    float  movementSpeedX = movementSpeed;
+    float  movementSpeedY = movementSpeed;
+    int    distX = std::max(currentPosition.x(), targetPosition.x()) - std::min(currentPosition.x(), targetPosition.x());
+    int    distY = std::max(currentPosition.y(),  targetPosition.y()) - std::min(currentPosition.y(), targetPosition.y());
+    QPoint nextPosition;
 
     if      (distX > distY) { movementSpeedY = movementSpeed * (static_cast<float>(distY) / static_cast<float>(distX)); }
     else if (distY > distX) { movementSpeedX = movementSpeed * (static_cast<float>(distX) / static_cast<float>(distY)); }
-    currentPosition.setX(axisMovement(currentPosition.x(), targetPosition.x(), static_cast<int>(movementSpeedX)));
-    currentPosition.setY(axisMovement(currentPosition.y(), targetPosition.y(), static_cast<int>(movementSpeedY)));
-    emit currentPositionChanged();
+    nextPosition.setX(axisMovement(currentPosition.x(), targetPosition.x(), static_cast<int>(movementSpeedX)));
+    nextPosition.setY(axisMovement(currentPosition.y(), targetPosition.y(), static_cast<int>(movementSpeedY)));
+    if (canBeMovedOn(nextPosition))
+    {
+      currentPosition = nextPosition;
+      emit currentPositionChanged();
+    }
+    else
+      targetPosition = currentPosition;
     if (currentPosition == targetPosition)
       onTargetPositionReached();
     Game::get()->advanceTime(14);
