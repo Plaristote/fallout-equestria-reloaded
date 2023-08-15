@@ -29,7 +29,7 @@ public:
   void             targetTileClicked(int x, int y);
   int              getTargetMode() const override;
   Q_INVOKABLE void initializeDialog(Character* npc);
-  Q_INVOKABLE void initializeDialog(DynamicObject* object, const QString& diaogName);
+  Q_INVOKABLE void initializeDialog(DynamicObject* object, const QString& dialogName, const QString& state = "");
   Q_INVOKABLE void initializeLooting(StorageObject*);
 
 signals:

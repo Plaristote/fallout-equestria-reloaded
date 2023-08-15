@@ -124,7 +124,7 @@ void InteractionComponent::initializeDialog(Character* npc)
   initializeDialog(npc, npc->getDialogName());
 }
 
-void InteractionComponent::initializeDialog(DynamicObject* object, const QString& dialogName)
+void InteractionComponent::initializeDialog(DynamicObject* object, const QString& dialogName, const QString& state)
 {
   if (object)
   {
@@ -139,7 +139,7 @@ void InteractionComponent::initializeDialog(DynamicObject* object, const QString
       npc->lookAt(player);
       player->getFieldOfView()->setCharacterDetected(npc);
     }
-    if (dialog->load(dialogName, player, object))
+    if (dialog->load(dialogName, player, object, state))
       emit startDialog(dialog);
     else
       delete dialog;
@@ -147,7 +147,6 @@ void InteractionComponent::initializeDialog(DynamicObject* object, const QString
   else
     qDebug() << "/!\\ Called level.initializeDialog with invalid parameters.";
 }
-
 
 void InteractionComponent::initializeLooting(StorageObject* target)
 {

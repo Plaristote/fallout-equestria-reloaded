@@ -20,7 +20,7 @@ CharacterDialog::~CharacterDialog()
     delete script;
 }
 
-bool CharacterDialog::load(const QString& name, Character* player, DynamicObject* npc)
+bool CharacterDialog::load(const QString& name, Character* player, DynamicObject* npc, const QString& state)
 {
   QFile file(SCRIPTS_PATH + "/dialogs/" + name + ".json");
 
@@ -35,7 +35,7 @@ bool CharacterDialog::load(const QString& name, Character* player, DynamicObject
       barter->initialize(script, player, reinterpret_cast<Character*>(npc));
     connect(npc, &DynamicObject::objectNameChanged, this, &CharacterDialog::nameChanged);
     script->initialize(this);
-    loadState(getEntryPoint());
+    loadState(state.isEmpty() ? getEntryPoint() : state);
     emit ready();
     return true;
   }
