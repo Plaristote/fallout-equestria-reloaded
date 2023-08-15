@@ -115,6 +115,7 @@ Item {
 
   LoadingScreen {
     visible: !gameOverScreen.visible
+    backgroundName: gameManager.currentGame ? gameManager.currentGame.loadingScreenBackground : "loading-screen";
   }
 
   GameOverScreen {

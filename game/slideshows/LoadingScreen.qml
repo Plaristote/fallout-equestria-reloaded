@@ -1,12 +1,15 @@
 import QtQuick 2.15
 
 Image {
-  source: assetPath + "backgrounds/loading-screen.png"
+  property string backgroundName
+  source: `${assetPath}backgrounds/${backgroundName.length ? backgroundName : "loading-screen"}.png`
   anchors.fill: parent
   fillMode: Image.PreserveAspectCrop
 
   Rectangle {
-    anchors.centerIn: parent
+    anchors.horizontalCenter: parent.horizontalCenter
+    anchors.bottom: parent.bottom
+    anchors.bottomMargin: 10
     width: parent.width
     height: 100
     color: Qt.rgba(0, 0, 0, 0.5)
@@ -16,13 +19,17 @@ Image {
       anchors.centerIn: parent
       color: "white"
       text: qsTr("Loading")
+      font.family: application.consoleFont.name
+      font.pointSize: application.consoleFont.bigSize
     }
 
     Text {
       y: loadingLabel.y
       anchors.left: loadingLabel.right
-      text: "..."
       color: "white"
+      text: "..."
+      font.family: application.consoleFont.name
+      font.pointSize: application.consoleFont.hugeSize
       Timer {
         running: root.visible
         repeat: true

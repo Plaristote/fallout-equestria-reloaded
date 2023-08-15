@@ -34,6 +34,7 @@ class Game : public StorableObject
   Q_PROPERTY(SoundManager*   sounds      READ getSoundManager CONSTANT)
   Q_PROPERTY(RandomEncounterController* randomEncounters MEMBER randomEncounters CONSTANT)
   Q_PROPERTY(UniqueCharacterStorage*    uniqueCharacterStorage MEMBER uniqueCharacterStorage CONSTANT)
+  Q_PROPERTY(QString loadingScreenBackground MEMBER loadingScreenBackground NOTIFY loadingScreenBackgroundChanged)
   Q_PROPERTY(bool saveLock MEMBER saveLock NOTIFY saveLockChanged)
   Q_PROPERTY(bool fastPassTime READ isFastPassingTime NOTIFY fastPassingChanged)
   Q_PROPERTY(bool isGameEditor MEMBER isGameEditor NOTIFY gameEditorEnabled)
@@ -98,6 +99,7 @@ signals:
   void fastPassingChanged();
   void requireScreenshot(QString);
   void javascriptError(QString);
+  void loadingScreenBackgroundChanged();
 
 public slots:
   void onCityEntered(QString name);
@@ -137,6 +139,7 @@ private:
   ScriptController* script = nullptr;
   TaskRunner* taskManager = nullptr;
   TimePasser timePasser;
+  QString loadingScreenBackground;
 
   QMap<QString, Trait> cmapTraits;
   QMap<QString, Race>  cmapRaces;
