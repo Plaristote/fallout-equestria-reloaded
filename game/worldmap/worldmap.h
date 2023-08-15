@@ -19,7 +19,7 @@ class WorldMap : public QObject
   Q_PROPERTY(QSize  mapSize   MEMBER mapSize NOTIFY mapSizeChanged)
   Q_PROPERTY(QSize  caseSize  MEMBER caseSize NOTIFY mapSizeChanged)
   Q_PROPERTY(QSize  caseCount MEMBER caseCount NOTIFY caseCountChanged)
-  Q_PROPERTY(QPoint currentPosition MEMBER currentPosition NOTIFY currentPositionChanged)
+  Q_PROPERTY(QPointF currentPosition MEMBER currentPosition NOTIFY currentPositionChanged)
   Q_PROPERTY(QPoint targetPosition  MEMBER targetPosition  NOTIFY targetPositionChanged)
   Q_PROPERTY(TimeManager* timeManager MEMBER timeManager NOTIFY timeManagerChanged)
   Q_PROPERTY(QQmlListProperty<WorldMapCity> cities READ getCitiesQml NOTIFY citiesChanged)
@@ -95,7 +95,8 @@ private:
   float getCurrentMovementSpeed() const;
 
   QTimer updateTimer;
-  QPoint currentPosition, targetPosition;
+  QPointF currentPosition;
+  QPoint targetPosition;
   TimeManager* timeManager;
   QList<WorldMapCity*> cities;
   QList<WorldMapZone*> zones;

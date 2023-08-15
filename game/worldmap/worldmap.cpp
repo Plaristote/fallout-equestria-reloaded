@@ -4,6 +4,7 @@
 #include <QDebug>
 #include <QSize>
 #include <QJsonArray>
+#include <cmath>
 
 WorldMap::WorldMap(QObject* parent) : QObject(parent)
 {
@@ -124,7 +125,7 @@ void WorldMap::load(const QJsonObject& data)
 
   currentPosition.setX(data["playerX"].toInt(0));
   currentPosition.setY(data["playerY"].toInt(0));
-  targetPosition = currentPosition;
+  targetPosition = currentPosition.toPoint();
 
   emit mapSizeChanged();
   emit citiesChanged();
@@ -132,9 +133,9 @@ void WorldMap::load(const QJsonObject& data)
   emit discoveredCitiesChanged();
 }
 
-static int axisMovement(int current, int final, int speed)
+static float axisMovement(float current, int final, float speed)
 {
-  int result = final;
+  float result = final;
 
   if      (current < final && final - current > speed) { result = current + speed; }
   else if (current > final && current - final > speed) { result = current - speed; }
@@ -169,25 +170,28 @@ void WorldMap::update()
 {
   if (!paused)
   {
-    float  movementSpeed = getCurrentMovementSpeed();
-    float  movementSpeedX = movementSpeed;
-    float  movementSpeedY = movementSpeed;
-    int    distX = std::max(currentPosition.x(), targetPosition.x()) - std::min(currentPosition.x(), targetPosition.x());
-    int    distY = std::max(currentPosition.y(),  targetPosition.y()) - std::min(currentPosition.y(), targetPosition.y());
-    QPoint nextPosition;
+    float   movementSpeed = getCurrentMovementSpeed();
+    float   movementSpeedX = movementSpeed;
+    float   movementSpeedY = movementSpeed;
+    float   distX = std::max<float>(currentPosition.x(), targetPosition.x()) - std::min<float>(currentPosition.x(), targetPosition.x());
+    float   distY = std::max<float>(currentPosition.y(), targetPosition.y()) - std::min<float>(currentPosition.y(), targetPosition.y());
+    QPointF nextPosition;
 
-    if      (distX > distY) { movementSpeedY = movementSpeed * (static_cast<float>(distY) / static_cast<float>(distX)); }
-    else if (distY > distX) { movementSpeedX = movementSpeed * (static_cast<float>(distX) / static_cast<float>(distY)); }
-    nextPosition.setX(axisMovement(currentPosition.x(), targetPosition.x(), static_cast<int>(movementSpeedX)));
-    nextPosition.setY(axisMovement(currentPosition.y(), targetPosition.y(), static_cast<int>(movementSpeedY)));
-    if (canBeMovedOn(nextPosition))
+    float distance = std::sqrt(distX * distX + distY * distY);
+    float ratio = movementSpeed / distance;
+    movementSpeedX = distX * ratio;
+    movementSpeedY = distY * ratio;
+
+    nextPosition.setX(axisMovement(currentPosition.x(), targetPosition.x(), movementSpeedX));
+    nextPosition.setY(axisMovement(currentPosition.y(), targetPosition.y(), movementSpeedY));
+    if (canBeMovedOn(nextPosition.toPoint()))
     {
       currentPosition = nextPosition;
       emit currentPositionChanged();
     }
     else
-      targetPosition = currentPosition;
-    if (currentPosition == targetPosition)
+      targetPosition = currentPosition.toPoint();
+    if (currentPosition.toPoint() == targetPosition)
       onTargetPositionReached();
     Game::get()->advanceTime(14);
   }
@@ -195,7 +199,7 @@ void WorldMap::update()
 
 void WorldMap::onCurrentPositionChanged()
 {
-  revealCaseAt(currentPosition);
+  revealCaseAt(currentPosition.toPoint());
 }
 
 void WorldMap::onTargetPositionChanged()
@@ -309,8 +313,8 @@ void WorldMap::revealCity(WorldMapCity* city)
 
 void WorldMap::setPosition(int x, int y)
 {
-  currentPosition = QPoint(x, y);
-  targetPosition = currentPosition;
+  targetPosition = QPoint(x, y);
+  currentPosition = targetPosition;
   emit currentPositionChanged();
 }
 
@@ -369,7 +373,7 @@ QPoint WorldMap::getCaseAt(QPoint position) const
 
 WorldMapZone* WorldMap::getCurrentZone() const
 {
-  QPoint currentCase = getCaseAt(currentPosition);
+  QPoint currentCase = getCaseAt(currentPosition.toPoint());
 
   for (WorldMapZone* zone : qAsConst(zones))
   {
@@ -383,7 +387,7 @@ WorldMapCity* WorldMap::getCurrentCity() const
 {
   for (WorldMapCity* city : cities)
   {
-    if (city->isInside(currentPosition))
+    if (city->isInside(currentPosition.toPoint()))
       return city;
   }
   return nullptr;
@@ -392,7 +396,7 @@ WorldMapCity* WorldMap::getCurrentCity() const
 QVector<WorldMapZone*> WorldMap::getCurrentZoneList() const
 {
   QVector<WorldMapZone*> list;
-  QPoint currentCase = getCaseAt(currentPosition);
+  QPoint currentCase = getCaseAt(currentPosition.toPoint());
 
   for (WorldMapZone* zone : qAsConst(zones))
   {
