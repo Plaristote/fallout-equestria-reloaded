@@ -78,7 +78,7 @@ bool TaskRunner::runTask(Task& task, int iterations)
   return false;
 }
 
-bool TaskRunner::hasTask(const QString &name)
+bool TaskRunner::hasTask(const QString &name) const
 {
   for (auto it = tasks.begin() ; it != tasks.end() ; ++it)
   {
@@ -198,4 +198,15 @@ void TaskRunner::save(QJsonObject& data) const
     }
     data["tasks"] = array;
   }
+}
+
+QString TaskRunner::log() const
+{
+  QString output;
+  QTextStream result(&output, QIODevice::WriteOnly);
+
+  result << "TaskRunner (" << tasks.size() << " tasks)\n";
+  for (const Task& task : tasks)
+    result << "Task `" << task.name << "`: next trigger at " << task.timeLeft << ", interval=" << task.interval << ", count=" << task.iterationCount << '\n';
+  return output;
 }

@@ -12,7 +12,7 @@ class TaskRunner : public QObject
 {
   Q_OBJECT
 
-  friend class TaskUpdateLock;
+  friend struct TaskUpdateLock;
 
   struct Task
   {
@@ -33,11 +33,12 @@ public:
   void load(const QJsonObject&);
   void save(QJsonObject&) const;
 
-  Q_INVOKABLE bool hasTask(const QString& name);
+  Q_INVOKABLE bool hasTask(const QString& name) const;
   Q_INVOKABLE void addTask(const QString& name, qint64 interval, int iterationCount = 1);
   Q_INVOKABLE void addUniqueTask(const QString& name, qint64 interval, int iterationCount = 1);
   Q_INVOKABLE bool removeTask(const QString& name);
   Q_INVOKABLE void decreaseIterationsFor(const QString& name, int iteractionCount);
+  Q_INVOKABLE QString log() const;
 
 signals:
 
