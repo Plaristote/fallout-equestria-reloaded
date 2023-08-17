@@ -1,6 +1,8 @@
 #include "answer.h"
 #include "../characterdialog.h"
 
+QString jsErrorBacktrace(QJSValue retval);
+
 void DialogAnswer::load(const QString& symbol, const QJsonObject& data)
 {
   this->symbol = symbol;
@@ -46,7 +48,13 @@ QString DialogAnswer::getText(CharacterDialog& dialog)
   QString callback("getAnswerText");
 
   if (textHook.isCallable())
-    return textHook.call(QJSValueList() << dialog.getScriptObject()).toString();
+  {
+    QJSValue retval = textHook.call(QJSValueList() << dialog.getScriptObject()).toString();
+
+    if (retval.isError())
+      qDebug() << "DialogAsnwer: textHook:" << jsErrorBacktrace(retval);
+    return retval.toString();
+  }
   else if (textHook.isString())
     callback = textHook.toString();
   if (dialog.getScript()->hasMethod(callback))
@@ -67,7 +75,11 @@ QString DialogAnswer::trigger(CharacterDialog& dialog)
   QJSValue retval;
 
   if (triggerHook.isCallable())
+  {
     retval = triggerHook.call(QJSValueList() << dialog.getScriptObject());
+    if (retval.isError())
+      qDebug() << "DialogAnswer: hook:" << jsErrorBacktrace(retval);
+  }
   else if (triggerHook.isString() && script->hasMethod(triggerHook.toString()))
     retval = script->call(triggerHook.toString());
   if (retval.isString())
@@ -78,7 +90,13 @@ QString DialogAnswer::trigger(CharacterDialog& dialog)
 bool DialogAnswer::isAvailable(CharacterDialog& dialog)
 {
   if (availableHook.isCallable())
-    return availableHook.call().toBool();
+  {
+    QJSValue retval = availableHook.call();
+
+    if (retval.isError())
+      qDebug() << "DialogAnswer: availableHook: " << jsErrorBacktrace(retval);
+    return retval.toBool();
+  }
   else if (availableHook.isString())
   {
     QString callback = availableHook.toString();

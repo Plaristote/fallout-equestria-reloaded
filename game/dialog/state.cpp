@@ -3,6 +3,8 @@
 #include "../characterdialog.h"
 #include "utils/javascriptforeach.h"
 
+QString jsErrorBacktrace(QJSValue retval);
+
 DialogStateData::DialogStateData(DialogData& data) : data(data)
 {
 }
@@ -59,7 +61,11 @@ DialogState DialogStateData::setAsCurrentState(CharacterDialog& dialog)
   state.answers = defaultAnswers;
   state.mood = mood;
   if (triggerHook.isCallable())
+  {
     retval = triggerHook.call();
+    if (retval.isError())
+      qDebug() << "DialogState: hook:" << jsErrorBacktrace(retval);
+  }
   else if (triggerHook.isString() && dialog.getScript()->hasMethod(triggerHook.toString()))
     retval = dialog.getScript()->call(triggerHook.toString());
   if (retval.isString())
