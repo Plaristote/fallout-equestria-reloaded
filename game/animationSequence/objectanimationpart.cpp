@@ -17,7 +17,7 @@ void ObjectAnimationPart::initialize(QJSValue& value)
 {
   QObject* rawTarget = value.property("object").toQObject();
 
-  if (rawTarget)
+  if (rawTarget && rawTarget->metaObject()->inherits(DynamicObject().metaObject()))
   {
     QJSValue jsPostAnimationName = value.property("afterAnimation");
 
@@ -28,7 +28,11 @@ void ObjectAnimationPart::initialize(QJSValue& value)
     );
   }
   else
+  {
+    if (rawTarget)
+      qDebug() << "ObjectAnimationPart::initialize: object option has invalid type" << rawTarget->metaObject()->className();
     over = true;
+  }
 }
 
 void ObjectAnimationPart::initialize(DynamicObject* target, const QString& animationName, const QString& postAnimationName)

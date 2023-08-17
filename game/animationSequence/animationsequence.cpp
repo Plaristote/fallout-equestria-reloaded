@@ -3,7 +3,10 @@
 
 void AnimationSequence::initialize(QJSValue& value)
 {
-  loadAnimationGroup(*this, value);
+  if (value.isArray())
+    loadAnimationGroup(*this, value);
+  else
+    qDebug() << "AnimationSequence: received an invalid initializer";
 }
 
 void AnimationSequence::start()
