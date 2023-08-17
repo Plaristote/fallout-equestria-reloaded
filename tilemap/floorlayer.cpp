@@ -8,7 +8,7 @@ FloorLayer::FloorLayer(QObject *parent) : TileLayer(parent)
 
 }
 
-void FloorLayer::load(const QJsonObject& object, const TileMap* parent)
+void FloorLayer::load(const QJsonObject& object, const TileMap* parent, unsigned char floor)
 {
   QVector<TileLayer*> allLayers;
   QVariantMap properties = loadTiledProperties(object, parent->getTiledVersion());
@@ -22,7 +22,7 @@ void FloorLayer::load(const QJsonObject& object, const TileMap* parent)
   tilemap->textureList = parent->textureList;
   tilemap->tileSize    = parent->tileSize;
   tilemap->mapSize     = parent->mapSize;
-  tilemap->floor       = parent->getFloor() + 1;
+  tilemap->floor       = floor;
   tilemap->loadLayers(object["layers"].toArray());
   allLayers.append(tilemap->getLayers());
   allLayers.append(tilemap->getRoofs().toVector());

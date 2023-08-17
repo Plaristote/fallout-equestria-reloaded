@@ -11,7 +11,7 @@ class FloorLayer : public TileLayer
 public:
   explicit FloorLayer(QObject *parent = nullptr);
 
-  void load(const QJsonObject& object, const TileMap* parent);
+  void load(const QJsonObject& object, const TileMap* parent, unsigned char floor);
 
   TileMap* getTileMap() const { return tilemap; }
   bool isUnderground() const { return underground; }

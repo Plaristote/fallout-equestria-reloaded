@@ -259,8 +259,7 @@ void TileMap::loadFloorFolder(const QJsonObject& layerData)
     FloorLayer* floor = new FloorLayer(this);
     TileMap*    previousFloor = this;
 
-    floor->load(value.toObject(), this);
-    floor->getTileMap()->floor = getFloorDepth(floors);
+    floor->load(value.toObject(), this, getFloorDepth(floors));
     if (!floor->isUnderground())
     {
       if (floors.size() > 0)
