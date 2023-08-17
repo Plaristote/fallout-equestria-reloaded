@@ -429,6 +429,17 @@ void Game::asyncAdvanceTime(unsigned int minutes, QJSValue callback)
   timePasser.advanceTime(minutes, callback);
 }
 
+void Game::asyncAdvanceToHour(unsigned int hour, unsigned int minutes, QJSValue callback)
+{
+  DateTime time = timeManager->getDateTime();
+  DateTime targetTimeOfDay = DateTime(DateTime::Hours(hour) + DateTime::Minutes(minutes));
+  DateTime target = time.GetStartOfDay() + targetTimeOfDay;
+
+  if (target < time)
+    target = target + DateTime::Days(1);
+  asyncAdvanceTime((target.GetTimestamp() - time.GetTimestamp()) / 60, callback);
+}
+
 Character* Game::getCharacter(const QString& characterSheet) const
 {
   Character* match = nullptr;

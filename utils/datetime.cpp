@@ -52,26 +52,26 @@ DateTime DateTime::operator+(TimeUnit time_unit) const
 
 bool DateTime::operator>=(const DateTime& time) const
 {
+  return *this == time || *this > time;
+}
+
+bool DateTime::operator<=(const DateTime& time) const
+{
+  return *this == time || *this < time;
+}
+
+bool DateTime::operator>(const DateTime& time) const
+{
   RecursiveChecker<int>::CompFunc comp([](int a, int b) { return (a > b); });
 
   return (recursive_compare(comp, time));
 }
 
-bool DateTime::operator<=(const DateTime& time) const
+bool DateTime::operator<(const DateTime& time) const
 {
   RecursiveChecker<int>::CompFunc comp([](int a, int b) { return (a < b); });
 
   return (recursive_compare(comp, time));
-}
-
-bool DateTime::operator>(const DateTime& item) const
-{
-  return (*this != item && *this > item);
-}
-
-bool DateTime::operator<(const DateTime& item) const
-{
-  return (*this != item && *this < item);
 }
 
 bool DateTime::operator!=(const DateTime& item) const
@@ -81,7 +81,7 @@ bool DateTime::operator!=(const DateTime& item) const
 
 bool DateTime::operator==(const DateTime& item) const
 {
-  return (!(*this != item));
+  return (second == item.second && minute == item.minute && hour == item.hour && day == item.day && month == item.month && year == item.year);
 }
 
 time_t DateTime::GetTimestamp(void) const

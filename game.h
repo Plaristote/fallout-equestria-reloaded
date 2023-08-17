@@ -81,6 +81,7 @@ public:
   Q_INVOKABLE void       advanceTime(unsigned int minutes);
   Q_INVOKABLE void       asyncAdvanceTime(unsigned int minutes);
   Q_INVOKABLE void       asyncAdvanceTime(unsigned int minutes, QJSValue callback);
+  Q_INVOKABLE void       asyncAdvanceToHour(unsigned int hour, unsigned int minute = 0, QJSValue callback = QJSValue());
   bool                   isFastPassingTime() const { return timePasser.isActive(); }
   Q_INVOKABLE void       setFactionAsEnemy(const QString &faction, const QString &enemyFaction, bool set);
 

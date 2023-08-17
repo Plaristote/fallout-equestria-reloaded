@@ -23,7 +23,7 @@ struct RecursiveChecker
       checkers.pop();
       if (!(checkers.empty()))
         return (checkers.front().Execute(checkers));
-      return (true);
+      return (false);
     }
     return (comp(first, second));
   }
@@ -98,6 +98,7 @@ public:
   unsigned short  GetDayOfTheWeek(void)   const;
   unsigned short  GetDayOfTheYear(void)   const;
   time_t          GetTimestamp(void)      const;
+  DateTime        GetStartOfDay(void)     const { return DateTime(year, month, day, 0, 0, 0); }
 
   static unsigned short days_per_months(unsigned short month, unsigned short year = 1);
 
