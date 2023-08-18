@@ -58,7 +58,7 @@ public:
 
   void                 update(qint64 delta);
   void                 runTask();
-  void                 reset();
+  Q_INVOKABLE void     reset();
   void                 removeCharacter(Character*);
   void                 removeObject(DynamicObject*);
 
