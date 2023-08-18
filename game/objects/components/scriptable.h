@@ -25,8 +25,7 @@ public:
   bool hasScript() const { return script != nullptr; }
 
   QJSValue              scriptProperty(const QString& name) const;
-  Q_INVOKABLE QJSValue  scriptCall(const QString& method, const QString& message = "") const;
-  QJSValue              scriptCall(const QString& method, const QJSValueList& params) const;
+  QJSValue              scriptCall(const QString& method, const QJSValueList& params = QJSValueList()) const;
   Q_INVOKABLE QJSValue  getScriptObject() const;
   QJSValue asJSValue();
 

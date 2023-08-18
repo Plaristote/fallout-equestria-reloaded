@@ -44,11 +44,6 @@ QJSValue ScriptableComponent::scriptProperty(const QString& name) const
   return QJSValue();
 }
 
-QJSValue ScriptableComponent::scriptCall(const QString& method, const QString& message) const
-{
-  return scriptCall(method, QJSValueList() << message);
-}
-
 QJSValue ScriptableComponent::scriptCall(const QString& method, const QJSValueList& params)  const
 {
   if (script && script->hasMethod(method))

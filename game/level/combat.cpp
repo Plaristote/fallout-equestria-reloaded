@@ -108,7 +108,7 @@ bool CombatComponent::isCombatEnabled() const
 }
 
 bool CombatComponent::tryToEndCombat()
-{  
+{
   if (!isCombatEnabled())
   {
     combat = false;

@@ -38,7 +38,7 @@ void CharacterInventory::initializeEmptySlot(const QString& slotName)
 
 QString CharacterInventory::getDefaultItemForSlot(const QString& name)
 {
-  QJSValue scriptResult = scriptCall("getDefaultItem", name);
+  QJSValue scriptResult = scriptCall("getDefaultItem", QJSValueList() << name);
 
   if (scriptResult.isString())
     return scriptResult.toString();
