@@ -383,5 +383,8 @@ void ActionQueue::pushAnimation(const QString& animationName, const QString& pos
 
 void ActionQueue::pushAnimation(QJSValue animation)
 {
-  queue << (new AnimationAction(character, animation));
+  if (animation.isString())
+    pushAnimation(animation.toString());
+  else
+    queue << (new AnimationAction(character, animation));
 }
