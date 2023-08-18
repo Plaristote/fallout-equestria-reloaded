@@ -12,6 +12,7 @@ CombatComponent::CombatComponent(QObject *parent) : VisualEffectsComponent(paren
   connect(this, &CombatComponent::combatChanged,            this, &CombatComponent::onCombatStateChanged);
   connect(this, &CombatComponent::combattantsChanged,       this, &CombatComponent::onCombattantsChanged);
   connect(this, &CombatComponent::currentCombattantChanged, this, &CombatComponent::onCurrentCombattantChanged);
+  connect(this, &CombatComponent::scheduleCombatEnd,        this, &CombatComponent::tryToEndCombat, Qt::QueuedConnection);
 }
 
 void CombatComponent::updateWaitingMode()

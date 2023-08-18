@@ -46,6 +46,7 @@ signals:
   void combatChanged();
   void combattantsChanged();
   void currentCombattantChanged();
+  void scheduleCombatEnd();
 
 protected slots:
   virtual void onCombatStateChanged();
@@ -54,7 +55,7 @@ private slots:
   void onCombattantsChanged();
   void onActiveItemChanged();
   void updateWaitingMode();
-  virtual void onCharacterDied(Character*);
+  virtual void onCharacterDied(Character*) override;
 
 protected:
   void sortCombattants();
