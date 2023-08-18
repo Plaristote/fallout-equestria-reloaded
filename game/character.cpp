@@ -68,7 +68,8 @@ void Character::takeDamage(int damage, Character* dealer)
 {
   if (isAlive())
   {
-    auto hp = getStatistics()->getHitPoints() - damage;
+    QJSValue modifiedDamage = scriptCall("mitigateDamage", QJSValueList() << damage << (dealer ? dealer->asJSValue() : QJSValue()));
+    auto hp = getStatistics()->getHitPoints() - (modifiedDamage.isUndefined() ? damage : modifiedDamage.toInt());
 
     if (hasAnimation("damaged"))
       setAnimation("damaged");
