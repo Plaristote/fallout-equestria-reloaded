@@ -54,9 +54,7 @@ Item {
     }
 
     function onGameLoaded() {
-      if (gameManager.currentGame.level)
-        openLevelView();
-      else
+      if (!gameManager.currentGame.level)
         openWorldmapView();
     }
 
