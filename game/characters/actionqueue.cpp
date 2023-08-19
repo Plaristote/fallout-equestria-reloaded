@@ -5,6 +5,7 @@
 #include "actions/skillUse.h"
 #include "actions/interaction.h"
 #include "actions/movement.h"
+#include "actions/zone_movement.h"
 #include "actions/reach.h"
 #include "actions/reachcase.h"
 #include "actions/reachdoor.h"
@@ -174,6 +175,17 @@ int ActionQueue::getMovementApCost(Point target) const
 int ActionQueue::getMovementApCost(int x, int y) const
 {
   return getMovementApCost(x, y, character->getPoint().z);
+}
+
+void ActionQueue::pushMoveToZone(const QString& zoneName)
+{
+  pushMoveToZone(Game::get()->getLevel()->getTileZone(zoneName));
+}
+
+void ActionQueue::pushMoveToZone(const TileZone* zone)
+{
+  ASSERT_NOT_NULL("ActionQueue::pushMoveToZone", zone)
+  queue << (new ZoneMovementAction(character, zone));
 }
 
 void ActionQueue::pushReach(DynamicObject *target, float range)

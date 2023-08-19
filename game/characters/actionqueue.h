@@ -48,6 +48,8 @@ public:
   void             pushMovement(Point target);
   Q_INVOKABLE void pushMovement(int x, int y);
   Q_INVOKABLE void pushMovement(int x, int y, unsigned char z) { pushMovement({x,y,z}); }
+  Q_INVOKABLE void pushMoveToZone(const QString& zoneName);
+  Q_INVOKABLE void pushMoveToZone(const TileZone*);
   Q_INVOKABLE void pushReach(DynamicObject* target, float range = 1);
   Q_INVOKABLE void pushReach(DynamicObject* target, float range, QJSValue caseCompare);
   Q_INVOKABLE void pushReachCase(int x, int y, float range);

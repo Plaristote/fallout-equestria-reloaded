@@ -144,6 +144,8 @@ set(PROJECT_SOURCES
         game/characters/actions/reachcase.cpp
         game/characters/actions/reachdoor.h
         game/characters/actions/reachdoor.cpp
+        game/characters/actions/zone_movement.h
+        game/characters/actions/zone_movement.cpp
         game/characters/actions/sliding.h
         game/characters/actions/sliding.cpp
         game/characters/actions/waitaction.h

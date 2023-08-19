@@ -21,7 +21,7 @@ bool ScriptAction::trigger()
 {
   if (triggerCallback.isCallable())
     return call(triggerCallback);
-  else
+  else if (!triggerCallback.isUndefined())
     qDebug() << character << ": ScriptAction callback is not callable.";
   return false;
 }
