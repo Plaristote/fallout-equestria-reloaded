@@ -91,6 +91,11 @@ void Quest::addObjective(const QString& name, const QString& label)
   setPropertyOnObjective(objectives, name, "label", label);
 }
 
+bool Quest::hasObjective(const QString& name) const
+{
+  return objectives.find(name) != objectives.end();
+}
+
 void Quest::completeObjective(const QString& name)
 {
   if (!isObjectiveCompleted(name))

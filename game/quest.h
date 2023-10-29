@@ -30,7 +30,8 @@ public:
   void load(const QJsonObject&);
   QJsonObject save() const;
 
-  Q_INVOKABLE void addObjective(const QString&, const QString&);
+  Q_INVOKABLE void addObjective(const QString&, const QString& label);
+  Q_INVOKABLE bool hasObjective(const QString&) const;
   Q_INVOKABLE void completeObjective(const QString&);
   Q_INVOKABLE void failObjective(const QString&);
   Q_INVOKABLE QString objectiveNameAt(int) const;
