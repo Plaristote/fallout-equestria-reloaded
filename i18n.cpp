@@ -17,7 +17,11 @@ I18n::I18n(QObject *parent) : QObject(parent)
   instance = this;
   QStringList files = QDir(ASSETS_PATH + "locales").entryList(QStringList() << "*.json", QDir::NoFilter, QDir::Name);
   for (QString& file : files)
-    locales << file.replace(".json", "");
+  {
+    file.replace(".json", "");
+    if (file.indexOf('.') == -1)
+      locales << file;
+  }
   if (locales.contains(defaultLocale))
     currentLocale = defaultLocale;
   else if (locales.size() > 0)
