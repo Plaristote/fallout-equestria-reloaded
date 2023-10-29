@@ -83,17 +83,17 @@ Window {
 
   property var consoleFont: FontStyle {
     id: consoleFont
-    source: "./assets/fonts/JH_FALLOUT.TTF"
-    pointSize: 9
-    tinySize:  8
-    bigSize:   12
+    source: i18n.consoleFont
+    pointSize: i18n.consoleFontMetrics["point"]
+    tinySize:  i18n.consoleFontMetrics["tiny"]
+    bigSize:   i18n.consoleFontMetrics["big"]
   }
 
   property var titleFont: FontStyle {
     id: titleFont
-    source: "./assets/fonts/fallout.ttf"
-    pointSize: 18
-    tinySize:  24
-    bigSize:   32
+    source: i18n.titleFont
+    pointSize: i18n.titleFontMetrics["point"]
+    tinySize:  i18n.titleFontMetrics["tiny"]
+    bigSize:   i18n.titleFontMetrics["big"]
   }
 }

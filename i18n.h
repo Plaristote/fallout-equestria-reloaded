@@ -11,6 +11,10 @@ class I18n : public QObject
   Q_OBJECT
 
   Q_PROPERTY(QString currentLocale MEMBER currentLocale NOTIFY currentLocaleChanged)
+  Q_PROPERTY(QString consoleFont READ getConsoleFont NOTIFY currentLocaleChanged)
+  Q_PROPERTY(QVariantMap consoleFontMetrics READ getConsoleFontMetrics NOTIFY currentLocaleChanged)
+  Q_PROPERTY(QString titleFont READ getTitleFont NOTIFY currentLocaleChanged)
+  Q_PROPERTY(QVariantMap titleFontMetrics READ getTitleFontMetrics NOTIFY currentLocaleChanged)
 
   static I18n* instance;
 public:
@@ -23,6 +27,11 @@ public:
   Q_INVOKABLE QString t(const QString& key, const QVariantMap& variables) const;
   const QString& getCurrentLocale() const { return currentLocale; }
 
+  QString getConsoleFont() const;
+  QVariantMap getConsoleFontMetrics() const;
+  QString getTitleFont() const;
+  QVariantMap getTitleFontMetrics() const;
+
   static QString getSourceForLocale(const QString& locale);
   static QString getSourceForLocale(const QString& translationFile, const QString& locale);
 
@@ -34,8 +43,11 @@ public slots:
   void loadCurrentLocale();
 
 private:
+  QJsonValue  getTranslation(const QString& key) const;
   QJsonObject getTranslationGroupForKey(const QString& key) const;
   QJsonObject getTranslationGroup(const QStringList& path) const;
+  QString     getFontPath(const QString& style, const QString& defaultPath) const;
+  QVariantMap getFontMetrics(const QString& style, QVariantMap defaultMetrics) const;
 
   QString     currentLocale;
   QStringList locales;

@@ -90,10 +90,58 @@ void I18n::loadCurrentLocale()
   emit translationsChanged();
 }
 
-QString I18n::t(const QString &key) const
+QString I18n::getFontPath(const QString& style, const QString& defaultPath) const
+{
+  QJsonValue fontFile = getTranslation("fonts." + style + ".file");
+
+  if (fontFile.isUndefined() || fontFile.isNull())
+    return defaultPath;
+  return ASSETS_PATH + "fonts/" + fontFile.toString();
+}
+
+QVariantMap I18n::getFontMetrics(const QString& style, QVariantMap metrics) const
+{
+  QJsonObject fontData = getTranslationGroupForKey("fonts." + style);
+
+  if (fontData.find("point-size") != fontData.end())
+    metrics.insert("point", fontData.find("point-size").value().toInt());
+  if (fontData.find("tiny-size") != fontData.end())
+    metrics.insert("tiny", fontData.find("tiny-size").value().toInt());
+  if (fontData.find("big-size") != fontData.end())
+    metrics.insert("big", fontData.find("big-size").value().toInt());
+  return metrics;
+}
+
+QString I18n::getConsoleFont() const
+{
+  return getFontPath("console", "qrc:/assets/fonts/JH_FALLOUT.TTF");
+}
+
+QVariantMap I18n::getConsoleFontMetrics() const
+{
+  return getFontMetrics("console", {{"point", 9}, {"tiny", 8}, {"big", 12}});
+}
+
+QString I18n::getTitleFont() const
+{
+  return getFontPath("title", "qrc:/assets/fonts/fallout.ttf");
+}
+
+QVariantMap I18n::getTitleFontMetrics() const
+{
+  return getFontMetrics("title", {{"point", 18}, {"tiny", 24}, {"big", 32}});
+}
+
+QJsonValue I18n::getTranslation(const QString& key) const
 {
   QJsonObject group = getTranslationGroupForKey(key);
-  QJsonValue value = group[key.split('.').last()];
+
+  return group[key.split('.').last()];
+}
+
+QString I18n::t(const QString &key) const
+{
+  QJsonValue value = getTranslation(key);
 
   if (value.isUndefined() || value.isNull())
     return key;
