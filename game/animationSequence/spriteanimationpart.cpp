@@ -4,6 +4,7 @@
 #include "game.h"
 #include "game/leveltask.h"
 #include "game/objects/components/sprite.h"
+#include <cmath>
 
 SpriteAnimationPart::~SpriteAnimationPart()
 {
@@ -41,14 +42,47 @@ void SpriteAnimationPart::initialize(QJSValue &value)
   else
     to = from;
   if (from != to)
+    initializeMovement(value);
+  else
+    QObject::connect(sprite, &Sprite::animationFinished, std::bind(&SpriteAnimationPart::onAnimationFinished, this));
+}
+
+void SpriteAnimationPart::initializeMovement(QJSValue& settings)
+{
+  if (settings.hasProperty("speed"))
+    sprite->setMovementSpeed(static_cast<float>(settings.property("speed").toNumber()));
+  // A position callback exists and will be used to compute movement
+  if (settings.hasProperty("position") && settings.property("position").isCallable())
   {
-    if (value.hasProperty("speed"))
-      sprite->setMovementSpeed(static_cast<float>(value.property("speed").toNumber()));
+    position = settings.property("position");
+    stepCount  = std::sqrt(std::pow(from.x() - to.x(), 2) + std::pow(from.y() - to.y(), 2)) * 10;
+    stepCount /= sprite->getMovementSpeed();
+    timer.setInterval(animationInterval);
+    timer.setSingleShot(false);
+    QObject::connect(&timer, &QTimer::timeout, std::bind(&SpriteAnimationPart::onRefreshPosition, this));
+  }
+  // No position callback provided, so we'll use the generic sprite movement system
+  else
+  {
     sprite->moveToCoordinates(to);
     QObject::connect(sprite, &Sprite::movementFinished, std::bind(&SpriteAnimationPart::onAnimationFinished, this));
   }
-  else
-    QObject::connect(sprite, &Sprite::animationFinished, std::bind(&SpriteAnimationPart::onAnimationFinished, this));
+}
+
+void SpriteAnimationPart::onRefreshPosition()
+{
+  float percentage = static_cast<float>(stepIt) / static_cast<float>(stepCount);
+  QJSValue result = position.call(QJSValueList() << percentage);
+
+  sprite->setRenderPosition(QPoint{
+    result.property("x").toInt(),
+    result.property("y").toInt()
+  });
+  if (++stepIt >= stepCount)
+  {
+    onAnimationFinished();
+    timer.stop();
+  }
 }
 
 void SpriteAnimationPart::start()
@@ -57,5 +91,10 @@ void SpriteAnimationPart::start()
   sprite->setRenderPosition(from);
   qDebug() << "SpriteAnimationPart::start at" << from;
   if (from != to)
-    sprite->moveToCoordinates(to);
+  {
+    if (position.isCallable())
+      timer.start();
+    else
+      sprite->moveToCoordinates(to);
+  }
 }
