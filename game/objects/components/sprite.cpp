@@ -19,7 +19,7 @@ void Sprite::update(qint64 delta)
   if (animation.repeat || isAnimated())
   {
     animationElapsedTime += delta;
-    if (animationElapsedTime > animation.frameInterval)
+    while (animationElapsedTime > animation.frameInterval)
       runAnimation();
   }
   if (spritePosition != spriteMovementTarget)
@@ -46,7 +46,7 @@ void Sprite::runAnimation()
 {
   auto width = animation.clippedRect.width();
 
-  animationElapsedTime = 0;
+  animationElapsedTime = -animation.frameInterval;
   animation.currentFrame++;
   if (animation.currentFrame >= animation.frameCount)
   {
@@ -57,7 +57,10 @@ void Sprite::runAnimation()
       animation.clippedRect.setWidth(width);
     }
     else
+    {
+      animationElapsedTime = 0;
       emit animationFinished();
+    }
   }
   else
   {
