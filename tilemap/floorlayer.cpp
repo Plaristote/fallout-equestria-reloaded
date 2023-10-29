@@ -30,6 +30,14 @@ void FloorLayer::load(const QJsonObject& object, const TileMap* parent, unsigned
   dirtyRenderRect = dirtyRenderSize = false;
   renderRect = QRect(0, 0, size.width() * tilemap->getTileSize().width(), size.height() * tilemap->getTileSize().height());
   renderSize = renderRect.size();
+  for (QJsonValue property : object["properties"].toArray())
+  {
+    QString propertyName = property["name"].toString();
+    QJsonValue value = property["value"];
+
+    if (propertyName == "zone")
+      zoneName = value.toString();
+  }
   for (int x = 0 ; x < tilemap->getSize().width() ; ++x)
   {
     for (int y = 0 ; y < tilemap->getSize().height() ; ++y)

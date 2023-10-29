@@ -33,7 +33,7 @@ public:
 
   inline bool getAccessBlocked() const { return accessBlocked; }
   inline void setAccessBlocked(bool value) { accessBlocked = value; }
-  Q_INVOKABLE bool isInside(int x, int y, unsigned char z) const override;
+  Q_INVOKABLE bool isInside(int x, int y, int z) const override;
   bool isInside(int x, int y) const override { return isInside(x, y, floor); }
   const QList<QPoint>& getPositions() const { return positions; }
   QVector<QPoint> getAbsolutePositions() const;
