@@ -1,4 +1,5 @@
 #include "gridobjectcomponent.h"
+#include "game.h"
 
 GridObjectComponent::GridObjectComponent(QObject *parent) : ScriptableComponent(parent)
 {
@@ -26,4 +27,14 @@ void GridObjectComponent::save(QJsonObject& data) const
     data["z"] = QJsonValue::fromVariant(static_cast<unsigned int>(floor));
   if (cover != 100)
     data["cover"] = static_cast<int>(cover);
+}
+
+QJSValue GridObjectComponent::positionSplat() const
+{
+  QJSValue array = Game::get()->getScriptEngine().newArray(3);
+
+  array.setProperty(0, QJSValue(position.x()));
+  array.setProperty(1, QJSValue(position.y()));
+  array.setProperty(2, QJSValue(static_cast<int>(floor)));
+  return array;
 }

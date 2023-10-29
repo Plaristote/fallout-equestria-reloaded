@@ -24,6 +24,8 @@ public:
   virtual void   setCurrentFloor(unsigned int value) { floor = static_cast<unsigned short>(value); emit floorChanged(); }
   virtual int    getCoverValue() const { return cover; }
 
+  Q_INVOKABLE QJSValue positionSplat() const;
+
   void load(const QJsonObject&);
   void save(QJsonObject&) const;
 
