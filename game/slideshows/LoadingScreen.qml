@@ -18,7 +18,7 @@ Image {
       id: loadingLabel
       anchors.centerIn: parent
       color: "white"
-      text: qsTr("Loading")
+      text: i18n.t("Loading")
       font.family: application.consoleFont.name
       font.pointSize: application.consoleFont.bigSize
     }
