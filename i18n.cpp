@@ -5,14 +5,27 @@
 #include <QJsonDocument>
 #include <QSettings>
 #include <QDir>
+#include <QLocale>
 #include <QDebug>
 
 I18n* I18n::instance = nullptr;
 void merge(QJsonObject&, const QJsonObject&);
 
+static QString inferDefaultLocale(const QStringList& candidates)
+{
+  QStringList uiLanguages = QLocale().uiLanguages();
+
+  for (const QString& locale : uiLanguages)
+  {
+    if (candidates.contains(locale))
+      return locale;
+  }
+  return DEFAULT_LOCALE;
+}
+
 I18n::I18n(QObject *parent) : QObject(parent)
 {
-  QString defaultLocale = QSettings().value("locale", DEFAULT_LOCALE).toString();
+  QString defaultLocale;
 
   instance = this;
   QStringList files = QDir(ASSETS_PATH + "locales").entryList(QStringList() << "*.json", QDir::NoFilter, QDir::Name);
@@ -22,6 +35,7 @@ I18n::I18n(QObject *parent) : QObject(parent)
     if (file.indexOf('.') == -1)
       locales << file;
   }
+  defaultLocale = QSettings().value("locale", inferDefaultLocale(locales)).toString();
   if (locales.contains(defaultLocale))
     currentLocale = defaultLocale;
   else if (locales.size() > 0)
