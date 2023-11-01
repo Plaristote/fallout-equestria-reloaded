@@ -49,9 +49,14 @@ Item {
   Component {
     id: characterSheetEditor
     CharacterSheet {
+      property string nameTranslationKey: "character-names." + currentCharacter.replace(/\.json$/, '')
+
       mode: "gameEditor"
       characterSheet: statController
-      onAccepted: scriptController.saveCharacterSheet(currentCharacter, statController)
+      onAccepted: {
+        scriptController.saveCharacterSheet(currentCharacter, statController)
+        scriptController.setTranslation(nameTranslationKey, statController.name, "characters");
+      }
 
       StatModel {
         id: statController
@@ -62,6 +67,8 @@ Item {
 
       Component.onCompleted: {
         scriptController.loadCharacterSheet(currentCharacter, statController);
+        if (i18n.t(nameTranslationKey) != nameTranslationKey) // condition will be useless once data have been migrated
+          statController.name = i18n.t(nameTranslationKey);
       }
     }
   }

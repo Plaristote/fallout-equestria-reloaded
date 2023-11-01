@@ -1,5 +1,6 @@
 #include "statistics.h"
 #include "game.h"
+#include "i18n.h"
 #include <QDebug>
 
 CharacterStatistics::CharacterStatistics(QObject *parent) : ParentType(parent)
@@ -13,7 +14,12 @@ CharacterStatistics::CharacterStatistics(QObject *parent) : ParentType(parent)
 QString CharacterStatistics::getDisplayName() const
 {
   if (statistics)
-    return statistics->getName();
+  {
+    const QString  key = "character-names." + characterSheet;
+    const QString& localName = I18n::get()->t(key);
+
+    return localName != key ? localName : statistics->getName();
+  }
   return ParentType::getDisplayName();
 }
 
