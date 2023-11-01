@@ -58,6 +58,13 @@ Pane {
           if (i18n.currentLocale !== newLocale && loaded)
             i18n.currentLocale = newLocale;
         }
+
+        TerminalButton {
+          anchors.left: localeInput.right
+          anchors.leftMargin: 10
+          text: i18n.t("Restore")
+          onClicked: localeInput.currentIndex = localeInput.indexOfValue(i18n.systemLocale);
+        }
       }
 
       TerminalLabel { text: i18n.t("options.fullscreen") }

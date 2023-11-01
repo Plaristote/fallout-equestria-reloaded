@@ -11,18 +11,6 @@
 I18n* I18n::instance = nullptr;
 void merge(QJsonObject&, const QJsonObject&);
 
-static QString inferDefaultLocale(const QStringList& candidates)
-{
-  QStringList uiLanguages = QLocale().uiLanguages();
-
-  for (const QString& locale : uiLanguages)
-  {
-    if (candidates.contains(locale))
-      return locale;
-  }
-  return DEFAULT_LOCALE;
-}
-
 I18n::I18n(QObject *parent) : QObject(parent)
 {
   QString defaultLocale;
@@ -35,13 +23,26 @@ I18n::I18n(QObject *parent) : QObject(parent)
     if (file.indexOf('.') == -1)
       locales << file;
   }
-  defaultLocale = QSettings().value("locale", inferDefaultLocale(locales)).toString();
+  defaultLocale = QSettings().value("locale", getSystemLocale()).toString();
   if (locales.contains(defaultLocale))
     currentLocale = defaultLocale;
   else if (locales.size() > 0)
     currentLocale = locales.first();
   loadCurrentLocale();
   connect(this, &I18n::currentLocaleChanged, this, &I18n::loadCurrentLocale);
+}
+
+QString I18n::getSystemLocale() const
+{
+  QStringList uiLanguages = QLocale().uiLanguages();
+
+  qDebug() << "getSystemLocale" << uiLanguages;
+  for (const QString& locale : uiLanguages)
+  {
+    if (locales.contains(locale))
+      return locale;
+  }
+  return DEFAULT_LOCALE;
 }
 
 QString I18n::getSourceForLocale(const QString &locale)

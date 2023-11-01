@@ -10,6 +10,7 @@ class I18n : public QObject
 {
   Q_OBJECT
 
+  Q_PROPERTY(QString systemLocale READ getSystemLocale CONSTANT)
   Q_PROPERTY(QString currentLocale MEMBER currentLocale NOTIFY currentLocaleChanged)
   Q_PROPERTY(QString consoleFont READ getConsoleFont NOTIFY currentLocaleChanged)
   Q_PROPERTY(QVariantMap consoleFontMetrics READ getConsoleFontMetrics NOTIFY currentLocaleChanged)
@@ -26,6 +27,7 @@ public:
   Q_INVOKABLE QString t(const QString& key) const;
   Q_INVOKABLE QString t(const QString& key, const QVariantMap& variables) const;
   const QString& getCurrentLocale() const { return currentLocale; }
+  QString getSystemLocale() const;
 
   QString getConsoleFont() const;
   QVariantMap getConsoleFontMetrics() const;
