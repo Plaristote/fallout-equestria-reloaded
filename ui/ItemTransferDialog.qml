@@ -12,9 +12,11 @@ UiStyle.CustomDialog {
   title: i18n.t("How much ?")
   modal: true
   standardButtons: Dialog.Ok | Dialog.Cancel
-  onVisibleChanged: if (visible) {
-    quantityInputField.forceActiveFocus();
-    quantityInputField.selectAll()
+  onVisibleChanged: {
+    if (visible) {
+      quantityInputField.forceActiveFocus();
+      quantityInputField.selectAll();
+    }
   }
 
   signal pickedValue(int amount)
