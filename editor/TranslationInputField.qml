@@ -8,9 +8,17 @@ RowLayout {
   property string translationKey
   property string prefix
   property string translationFile
+  property string lastModifiedText
 
   signal updated()
   signal requireKeyChange(string newKey)
+
+  function scheduleUpdate() {
+    if (!updateTimer.running) {
+      lastModifiedText = textInput.text;
+      updateTimer.start();
+    }
+  }
 
   function update() {
     const key = prefix + '.' + translationKey;
@@ -21,13 +29,24 @@ RowLayout {
     }
   }
 
+  Timer {
+    id: updateTimer
+    interval: 750
+    onTriggered: {
+      if (textInput.text == lastModifiedText)
+        root.update();
+      else
+        root.scheduleUpdate();
+    }
+  }
+
   TerminalField {
     id: textInput
     Layout.fillWidth: true
     implicitHeight: focus ? 120 : 40
     wrapMode: Text.WordWrap
     text: i18n.t(prefix + '.' + translationKey)
-    onTextChanged: root.update()
+    onTextChanged: root.scheduleUpdate()
 
     Behavior on implicitHeight {
       NumberAnimation { duration: 200 }
