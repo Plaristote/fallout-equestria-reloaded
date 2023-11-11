@@ -27,7 +27,7 @@ public:
 
   Q_INVOKABLE Quest* addQuest(const QString&, int flags = NormalQuest);
   Q_INVOKABLE Quest* getQuest(const QString&) const;
-  Q_INVOKABLE bool   hasQuest(const QString& name) const { return getQuest(name) != nullptr; }
+  Q_INVOKABLE bool   hasQuest(const QString& name) const;
 
   QQmlListProperty<Quest> getQmlList() { return QML_QLIST_CONSTRUCTOR(Quest, list); }
 

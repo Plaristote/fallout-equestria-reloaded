@@ -34,6 +34,13 @@ Quest* QuestManager::getQuest(const QString& name) const
   return nullptr;
 }
 
+bool QuestManager::hasQuest(const QString& name) const
+{
+  Quest* quest = getQuest(name);
+
+  return quest != nullptr && !quest->isHidden();
+}
+
 void QuestManager::load(const QJsonObject& data)
 {
   const QJsonArray jsonList = data["list"].toArray();
