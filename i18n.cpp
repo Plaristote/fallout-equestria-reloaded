@@ -109,13 +109,13 @@ void I18n::loadCurrentLocale()
   emit translationsChanged();
 }
 
-QString I18n::getFontPath(const QString& style, const QString& defaultPath) const
+QUrl I18n::getFontPath(const QString& style, const QString& defaultPath) const
 {
   QJsonValue fontFile = getTranslation("fonts." + style + ".file");
 
   if (fontFile.isUndefined() || fontFile.isNull())
     return defaultPath;
-  return ASSETS_PATH + "fonts/" + fontFile.toString();
+  return FILE_PROTOCOL + ASSETS_PATH + "fonts/" + fontFile.toString();
 }
 
 QVariantMap I18n::getFontMetrics(const QString& style, QVariantMap metrics) const
@@ -131,7 +131,7 @@ QVariantMap I18n::getFontMetrics(const QString& style, QVariantMap metrics) cons
   return metrics;
 }
 
-QString I18n::getConsoleFont() const
+QUrl I18n::getConsoleFont() const
 {
   return getFontPath("console", "qrc:/assets/fonts/JH_FALLOUT.TTF");
 }
@@ -141,7 +141,7 @@ QVariantMap I18n::getConsoleFontMetrics() const
   return getFontMetrics("console", {{"point", 9}, {"tiny", 8}, {"big", 12}});
 }
 
-QString I18n::getTitleFont() const
+QUrl I18n::getTitleFont() const
 {
   return getFontPath("title", "qrc:/assets/fonts/fallout.ttf");
 }

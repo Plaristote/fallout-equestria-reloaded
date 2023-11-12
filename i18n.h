@@ -12,9 +12,9 @@ class I18n : public QObject
 
   Q_PROPERTY(QString systemLocale READ getSystemLocale CONSTANT)
   Q_PROPERTY(QString currentLocale MEMBER currentLocale NOTIFY currentLocaleChanged)
-  Q_PROPERTY(QString consoleFont READ getConsoleFont NOTIFY currentLocaleChanged)
+  Q_PROPERTY(QUrl consoleFont READ getConsoleFont NOTIFY currentLocaleChanged)
   Q_PROPERTY(QVariantMap consoleFontMetrics READ getConsoleFontMetrics NOTIFY currentLocaleChanged)
-  Q_PROPERTY(QString titleFont READ getTitleFont NOTIFY currentLocaleChanged)
+  Q_PROPERTY(QUrl titleFont READ getTitleFont NOTIFY currentLocaleChanged)
   Q_PROPERTY(QVariantMap titleFontMetrics READ getTitleFontMetrics NOTIFY currentLocaleChanged)
 
   static I18n* instance;
@@ -29,9 +29,9 @@ public:
   const QString& getCurrentLocale() const { return currentLocale; }
   QString getSystemLocale() const;
 
-  QString getConsoleFont() const;
+  QUrl getConsoleFont() const;
   QVariantMap getConsoleFontMetrics() const;
-  QString getTitleFont() const;
+  QUrl getTitleFont() const;
   QVariantMap getTitleFontMetrics() const;
 
   static QString getSourceForLocale(const QString& locale);
@@ -48,7 +48,7 @@ private:
   QJsonValue  getTranslation(const QString& key) const;
   QJsonObject getTranslationGroupForKey(const QString& key) const;
   QJsonObject getTranslationGroup(const QStringList& path) const;
-  QString     getFontPath(const QString& style, const QString& defaultPath) const;
+  QUrl        getFontPath(const QString& style, const QString& defaultPath) const;
   QVariantMap getFontMetrics(const QString& style, QVariantMap defaultMetrics) const;
 
   QString     currentLocale;
