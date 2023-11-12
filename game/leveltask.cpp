@@ -11,6 +11,8 @@
 #include "objects/objectfactory.h"
 #include "i18n.h"
 
+bool LevelTask::withPlayerCropCircle = true;
+
 LevelTask::LevelTask(QObject *parent) : ParentType(parent)
 {
   taskRunner = new TaskRunner(this);

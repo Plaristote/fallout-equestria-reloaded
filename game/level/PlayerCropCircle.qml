@@ -19,9 +19,9 @@ ShaderEffect {
 
   Timer {
     id: positionUpdateTimer
-    interval: 10
+    interval: 10 + Math.random() * 50
     repeat: false
-    running: player && player.spritePosition != lastPlayerPosition
+    running: gameManager.withPlayerCropCircle && player && player.spritePosition != lastPlayerPosition
     onTriggered: {
       lastPlayerPosition = player.spritePosition;
       updateCenter();

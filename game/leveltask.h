@@ -29,6 +29,8 @@ class LevelTask : public SaveComponent
   Q_PROPERTY(bool       paused  MEMBER paused NOTIFY pausedChanged)
   Q_PROPERTY(TutorialComponent* tutorial MEMBER tutorial NOTIFY tutorialChanged)
 public:  
+  static bool withPlayerCropCircle;
+
   explicit LevelTask(QObject *parent = nullptr);
   virtual ~LevelTask() override;
 

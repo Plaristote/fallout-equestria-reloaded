@@ -34,7 +34,7 @@ Item {
         id: image
         source: fileProtocol + wall.image
         sourceClipRect: wall.clippedRect
-        visible: false
+        visible: !gameManager.withPlayerCropCircle
       }
 
       PlayerCropCircle {

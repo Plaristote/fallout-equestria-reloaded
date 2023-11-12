@@ -114,3 +114,17 @@ void GameManager::setCombatSpeedOption(double value)
     emit combatSpeedOptionChanged();
   }
 }
+
+bool GameManager::getWithPlayerCropCircle() const
+{
+  return LevelTask::withPlayerCropCircle;
+}
+
+void GameManager::setWithPlayerCropCircle(bool value)
+{
+  if (value != LevelTask::withPlayerCropCircle)
+  {
+    LevelTask::withPlayerCropCircle = value;
+    emit withPlayerCropCircleChanged();
+  }
+}

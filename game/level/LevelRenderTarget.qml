@@ -112,7 +112,7 @@ Rectangle {
         Image {
           id: mypic
           source: `file:///${levelController.preRenderPath}floor${renderTarget.levelController.currentFloor}_roof_${roof.name}.png`
-          visible: false
+          visible: !gameManager.withPlayerCropCircle
         }
 
         PlayerCropCircle {

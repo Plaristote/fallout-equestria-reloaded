@@ -124,6 +124,13 @@ Pane {
         onCheckedChanged: mouseCursor.withMoveCursor = checked
       }
 
+      TerminalLabel { text: i18n.t("options.withPlayerCropCircle") }
+      TerminalCheckBox {
+        id: withPlayerCropCircleInput
+        checked: gameManager.withPlayerCropCircle
+        onCheckedChanged: gameManager.withPlayerCropCircle = checked
+      }
+
       TerminalLabel { text: i18n.t("options.combatSpeed") }
       Slider {
         id: combatSpeedInput

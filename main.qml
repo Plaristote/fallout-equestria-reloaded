@@ -27,6 +27,7 @@ Window {
     property alias fullScreen: application.isFullScreen
     property int   movementMode: gameManager.movementModeOption
     property bool  withMovementCursor: mouseCursor.withMoveCursor
+    property bool  withPlayerCropCircle: gameManager.withPlayerCropCircle
     property real  combatSpeed:  gameManager.combatSpeedOption
   }
 
