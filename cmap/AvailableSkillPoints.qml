@@ -11,7 +11,7 @@ RowLayout {
   Label {
     text: label
     font.family: application.titleFontName
-    font.pointSize: 14
+    font.pointSize: application.titleFont.pointSize * 0.75
     color: "white"
     padding: 10
     leftPadding: 30
@@ -21,7 +21,7 @@ RowLayout {
   Label {
     text: value
     font.family: application.consoleFontName
-    font.pointSize: 12
+    font.pointSize: application.consoleFont.bigSize
     color: "white"
     padding: 10
     background: UiStyle.TerminalPane {}

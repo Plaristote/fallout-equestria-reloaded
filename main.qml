@@ -88,6 +88,7 @@ Window {
     pointSize: i18n.consoleFontMetrics["point"]
     tinySize:  i18n.consoleFontMetrics["tiny"]
     bigSize:   i18n.consoleFontMetrics["big"]
+    hugeSize:  bigSize / 3 * 4
   }
 
   property var titleFont: FontStyle {

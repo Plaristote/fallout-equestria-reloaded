@@ -23,7 +23,7 @@ Pane {
     anchors.leftMargin: 10
     text: i18n.t("Pick an item")
     font.family: application.titleFontName
-    font.pointSize: 18
+    font.pointSize: application.titleFont.pointSize
     color: "white"
   }
 

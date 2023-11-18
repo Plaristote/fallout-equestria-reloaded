@@ -7,4 +7,5 @@ Text {
   style: Text.Outline
   styleColor: outline
   font.family: application.titleFontName
+  font.pointSize: application.titleFont.pointSize
 }

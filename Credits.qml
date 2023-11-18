@@ -98,7 +98,7 @@ Rectangle {
         Label {
           text: person.name
           font.family:    application.titleFont.name
-          font.pointSize: application.titleFont.pointSize + 6
+          font.pointSize: application.titleFont.tinySize
           color:          "white"
           Layout.alignment: Qt.AlignLeft
         }

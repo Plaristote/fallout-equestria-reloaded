@@ -21,7 +21,7 @@ Pane {
     Text {
       Layout.fillWidth: true
       font.family: application.consoleFontName
-      font.pointSize: 12
+      font.pointSize: application.consoleFont.bigSize
       text: i18n.t(`items.${objectPreview.model.objectName}`)
       color: "white"
       wrapMode: Text.Wrap
@@ -45,7 +45,7 @@ Pane {
         id: descText
         width: parent.width - 15
         font.family: application.consoleFontName
-        font.pointSize: 8
+        font.pointSize: application.consoleFont.tinySize
         textFormat: Text.RichText
         text: model.description
         wrapMode: Text.WordWrap
@@ -63,7 +63,7 @@ Pane {
     Text {
       Layout.fillWidth: true
       font.family: application.consoleFontName
-      font.pointSize: 8
+      font.pointSize: application.consoleFont.tinySize
       text: i18n.t("Weight") + ": " + objectPreview.model.weight
       color: "white"
     }
@@ -71,7 +71,7 @@ Pane {
     Text {
       Layout.fillWidth: true
       font.family: application.consoleFontName
-      font.pointSize: 8
+      font.pointSize: application.consoleFont.tinySize
       text: {
         const value = evaluateValue
           ? evaluateValue(objectPreview.model)

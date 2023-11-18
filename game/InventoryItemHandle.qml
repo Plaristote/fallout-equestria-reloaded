@@ -43,7 +43,7 @@ Rectangle {
     anchors.bottomMargin: 5
     text: itemCount > 1 ? `x${itemCount}` : ""
     font.family: application.consoleFontName
-    font.pointSize: 8
+    font.pointSize: application.consoleFont.tinySize
     style: Text.Raised
     styleColor: "black"
     color: "white"

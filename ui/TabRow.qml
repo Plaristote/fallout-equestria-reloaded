@@ -14,7 +14,7 @@ Row {
       text: labels[index]
       font.bold: currentTab === tabs[index]
       font.family: application.titleFontName
-      font.pointSize: 16
+      font.pointSize: application.titleFont.pointSize
       background: UiStyle.Tab {}
       contentItem: Text {
         horizontalAlignment: Text.AlignHCenter

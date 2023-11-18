@@ -37,7 +37,7 @@ Pane {
     text: title
     color: "white"
     font.family: application.titleFont.name
-    font.pointSize: 25
+    font.pointSize: application.titleFont.tinySize
     anchors.topMargin: 10
     anchors.leftMargin: 10
     anchors.top: parent.top

@@ -9,7 +9,7 @@ Button {
   implicitHeight: 48
   font.bold: true
   font.family: application.titleFontName
-  font.pointSize: 19
+  font.pointSize: application.titleFont.tinySize
   font.letterSpacing: 3
   contentItem: Text {
     horizontalAlignment: Text.AlignHCenter

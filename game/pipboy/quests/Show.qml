@@ -23,7 +23,7 @@ Flickable {
 
       TerminalLabel {
         text: i18n.t(`quests.${quest.name}.title`)
-        font.pointSize: 16
+        font.pointSize: application.consoleFont.hugeSize
         Layout.fillWidth: true
       }
 
@@ -49,12 +49,12 @@ Flickable {
 
         TerminalLabel {
           text: i18n.t("quests.description")
-          font.pointSize: 14
+          font.pointSize: application.consoleFont.bigSize / 6 * 7
         }
 
         Text {
           text: quest.description
-          font.pointSize: 14
+          font.pointSize: application.consoleFont.bigSize / 6 * 7
           horizontalAlignment: Text.AlignJustify
           wrapMode: Text.WordWrap
           Layout.preferredWidth: (root.width / 2) - 50
@@ -70,7 +70,7 @@ Flickable {
 
         TerminalLabel {
           text: i18n.t("quests.objectives")
-          font.pointSize: 14
+          font.pointSize: application.consoleFont.bigSize / 6 * 7
         }
 
         Repeater {

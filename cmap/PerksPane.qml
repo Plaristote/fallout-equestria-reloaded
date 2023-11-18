@@ -19,7 +19,7 @@ Pane {
       delegate: Text {
         text: i18n.t("cmap." + root.characterSheet.traits[index]); color: "lightgreen"
         font.family: application.consoleFontName
-        font.pointSize: 8
+        font.pointSize: application.consoleFont.tinySize
         MouseArea { anchors.fill: parent; onClicked: selectProperty(characterSheet.traits[index]) }
       }
     }
@@ -33,7 +33,7 @@ Pane {
       delegate: Text {
         text: i18n.t("cmap." + root.characterSheet.perks[index]); color: "lightgreen"
         font.family: application.consoleFontName
-        font.pointSize: 8
+        font.pointSize: application.consoleFont.tinySize
         MouseArea { anchors.fill: parent; onClicked: selectProperty(root.characterSheet.perks[index]) }
       }
     }

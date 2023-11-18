@@ -30,6 +30,7 @@ Pane {
       anchors.right:     gamepadImage.left
       anchors.top:       gamepadImage.top
       anchors.topMargin: 2
+      font.pointSize: application.consoleFont.tinySize
       text: controls["L2"] + " «L2"
     }
 
@@ -38,6 +39,7 @@ Pane {
       anchors.right: gamepadImage.left
       anchors.top: gamepadImage.top
       anchors.topMargin: 35
+      font.pointSize: application.consoleFont.tinySize
       text: controls["L1"] + " «L1"
     }
 
@@ -46,6 +48,7 @@ Pane {
       anchors.right: gamepadImage.left
       anchors.top: gamepadImage.top
       anchors.topMargin: 90
+      font.pointSize: application.consoleFont.tinySize
       text: controls["PadLeft"]
     }
 
@@ -53,7 +56,7 @@ Pane {
       id: labelPadLeftClick
       anchors.top: labelPadLeft.bottom
       anchors.right: labelPadLeft.right
-      font.pointSize: 8
+      font.pointSize: application.consoleFont.tinySize
       text: controls["L3"] + " «L3"
     }
 
@@ -62,6 +65,7 @@ Pane {
       anchors.right: gamepadImage.left
       anchors.top: gamepadImage.top
       anchors.topMargin: 140
+      font.pointSize: application.consoleFont.tinySize
       text: controls["Left"]
     }
 
@@ -70,6 +74,7 @@ Pane {
       anchors.right: gamepadImage.left
       anchors.top: gamepadImage.top
       anchors.topMargin: 180
+      font.pointSize: application.consoleFont.tinySize
       text: controls["Right"]
     }
 
@@ -79,6 +84,7 @@ Pane {
       anchors.rightMargin: -55
       anchors.top: gamepadImage.top
       anchors.topMargin: 290
+      font.pointSize: application.consoleFont.tinySize
       text: i18n.t("controls.pipboy") // controls["Bottom"]
     }
 
@@ -88,6 +94,7 @@ Pane {
       anchors.rightMargin: -55
       anchors.top: gamepadImage.top
       anchors.topMargin: 340
+      font.pointSize: application.consoleFont.tinySize
       text: i18n.t("controls.cmap") // controls["Top"]
     }
 
@@ -96,6 +103,7 @@ Pane {
       anchors.left: gamepadImage.right
       anchors.top:  gamepadImage.top
       anchors.topMargin: 2
+      font.pointSize: application.consoleFont.tinySize
       text: "R2» " + controls["R2"]
     }
 
@@ -104,6 +112,7 @@ Pane {
       anchors.left: gamepadImage.right
       anchors.top: gamepadImage.top
       anchors.topMargin: 35
+      font.pointSize: application.consoleFont.tinySize
       text: "R1» " + controls["R1"]
     }
 
@@ -112,6 +121,7 @@ Pane {
       anchors.left: gamepadImage.right
       anchors.top: gamepadImage.top
       anchors.topMargin: 63
+      font.pointSize: application.consoleFont.tinySize
       text: controls["Y"]
     }
 
@@ -120,6 +130,7 @@ Pane {
       anchors.left: gamepadImage.right
       anchors.top: gamepadImage.top
       anchors.topMargin: 85
+      font.pointSize: application.consoleFont.tinySize
       text: controls["B"]
     }
 
@@ -128,6 +139,7 @@ Pane {
       anchors.left: gamepadImage.right
       anchors.top: gamepadImage.top
       anchors.topMargin: 108
+      font.pointSize: application.consoleFont.tinySize
       text: controls["A"]
     }
 
@@ -136,6 +148,7 @@ Pane {
       anchors.left: gamepadImage.right
       anchors.top: gamepadImage.top
       anchors.topMargin: 134
+      font.pointSize: application.consoleFont.tinySize
       text: controls["X"]
     }
 
@@ -145,6 +158,7 @@ Pane {
       anchors.leftMargin: -69
       anchors.top: gamepadImage.top
       anchors.topMargin: 290
+      font.pointSize: application.consoleFont.tinySize
       text: controls["PadRight"]
     }
 
@@ -152,7 +166,7 @@ Pane {
       id: labelR3
       anchors.left: labelPadRight.left
       anchors.top: labelPadRight.bottom
-      font.pointSize: 8
+      font.pointSize: application.consoleFont.tinySize
       text: "R3» " + controls["R3"]
     }
   }

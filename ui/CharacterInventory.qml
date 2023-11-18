@@ -37,7 +37,7 @@ Pane {
     anchors.leftMargin: 10
     text: i18n.t("Inventory")
     font.family: application.titleFontName
-    font.pointSize: 18
+    font.pointSize: application.titleFont.pointSize
     color: "white"
   }
 
@@ -79,7 +79,7 @@ Pane {
         anchors.bottom: parent.bottom
         anchors.horizontalCenter: parent.horizontalCenter
         font.family: application.consoleFontName
-        font.pointSize: 8
+        font.pointSize: application.consoleFont.tinySize
         color: "green"
         text: {
           if (character === null)

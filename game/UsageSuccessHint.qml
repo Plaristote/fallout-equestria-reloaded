@@ -7,7 +7,7 @@ Text {
   property var targetTile
 
   font.family: application.consoleFontName
-  font.pointSize: 13
+  font.pointSize: application.consoleFont.bigSize * (13/12)
   color: "white"
   style: Text.Outline
   styleColor: "black"

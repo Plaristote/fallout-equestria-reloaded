@@ -21,7 +21,6 @@ SideBar {
       text: i18n.t("spells.empty-spellbook")
       color: "white"
       visible: spells.length === 0
-      font.pointSize: 18
       wrapMode: Text.WordWrap
       Layout.fillWidth: true
     }
@@ -39,7 +38,6 @@ SideBar {
           text: parent.text
           color: "white"
           outline: "black"
-          font.pointSize: 18
         }
         onClicked: root.pickedSpell(root.spells[index])
       }

@@ -28,7 +28,7 @@ Pane {
     id: descriptionTitle
     text: selectedProperty ? getName(selectedProperty) : i18n.t("Cutie Mark Acquisition Program")
     font.family: application.titleFontName
-    font.pointSize: 15
+    font.pointSize: application.titleFont.pointSize * 0.8
     font.letterSpacing: 2
     wrapMode: Text.WordWrap
     width: parent.width

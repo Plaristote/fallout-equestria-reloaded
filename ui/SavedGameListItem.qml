@@ -12,7 +12,7 @@ Button {
     text: root.name
     color: root.currentColor
     font.family: application.consoleFont.name
-    font.pointSize: 16
+    font.pointSize: application.consoleFont.hugeSize
   }
 
   background: Rectangle {

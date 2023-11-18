@@ -33,7 +33,7 @@ SideBar {
             text: parent.text
             color: "white"
             outline: "black"
-            font.pointSize: 18
+            font.pointSize: application.titleFont.pointSize
           }
           onClicked: root.pickedSkill(root.skills[index])
         }

@@ -26,7 +26,7 @@ Pane {
       id: titleText
       text: root.title
       color: "white"
-      font.pointSize: 20
+      font.pointSize: application.titleFont.pointSize
       anchors.top: parent.top
       anchors.horizontalCenter: parent.horizontalCenter
     }

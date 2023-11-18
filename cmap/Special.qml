@@ -36,7 +36,7 @@ Repeater {
       Layout.minimumWidth: 100
       text: list[index]
       font.family: application.titleFontName
-      font.pointSize: 16
+      font.pointSize: application.titleFont.pointSize
       font.letterSpacing: 3
       color: "white"
       horizontalAlignment: Qt.AlignHCenter
@@ -48,7 +48,7 @@ Repeater {
       Layout.minimumWidth: 50
       text: characterSheet[propertyName [index]]
       font.family: application.consoleFontName
-      font.pointSize: 8
+      font.pointSize: application.consoleFont.tinySize
       color: "white"
       horizontalAlignment: Qt.AlignHCenter
       verticalAlignment: Qt.AlignVCenter
