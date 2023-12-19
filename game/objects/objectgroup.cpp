@@ -188,13 +188,6 @@ QJSValue ObjectGroup::findFromExpression(QString expression) const
   return result;
 }
 
-QJSValue ObjectGroup::getScriptObject() const
-{
-  if (script)
-    return script->getObject();
-  return QJSValue();
-}
-
 ObjectGroup* ObjectGroup::getParent() const
 {
   return parent() && parent()->metaObject()->inherits(ObjectGroup().metaObject())

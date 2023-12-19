@@ -45,7 +45,6 @@ public:
   Q_INVOKABLE QString validateGroupName(const QString&) const;
 
   Q_INVOKABLE QString        getObjectType() const { return metaObject()->className(); }
-  Q_INVOKABLE QJSValue       getScriptObject() const;
   void                       eachObject(std::function<void(DynamicObject*)>) const;
   void                       eachGroup(std::function<void(ObjectGroup*)>) const;
   QVector<DynamicObject*>    findDynamicObjects(std::function<bool (DynamicObject&)> compare) const;
