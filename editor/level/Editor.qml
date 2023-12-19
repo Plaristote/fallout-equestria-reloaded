@@ -114,7 +114,10 @@ Item {
           Layout.fillHeight: true
           onNewObjectClicked: dialogAddObject.openWithGroup(currentGroup)
           onNewGroupClicked:  dialogAddGroup.openWithGroup(currentGroup)
-          onShowClicked:      canvas.camera.moveToObject(object)
+          onShowClicked: {
+            gameController.level.currentFloor = object.floor;
+            canvas.camera.moveToObject(object)
+          }
           onRemoveObjectClicked: {
             currentGroup = object.parent;
             gameController.level.deleteObject(object);

@@ -4,7 +4,6 @@
 # include "globals.h"
 # include "cmap/statmodel.h"
 # include "diplomacy.hpp"
-# include "characters/field_of_view.hpp"
 # include "characters/buffs.h"
 # define CHARACTER_MAX_MORALE 100
 
@@ -17,7 +16,6 @@ class Character : public CharacterBuffs
 
   Q_PROPERTY(QObject* actionQueue READ qpropertyActionQueue CONSTANT)
   Q_PROPERTY(int actionPoints MEMBER actionPoints NOTIFY actionPointsChanged)
-  Q_PROPERTY(bool unconscious READ isUnconscious NOTIFY unconsciousChanged)
   Q_PROPERTY(int morale MEMBER morale NOTIFY moraleChanged)
 public:
   explicit Character(QObject *parent = nullptr);
@@ -43,7 +41,7 @@ public:
   bool isBlockingPath() const override { return isAlive(); }
 
   Q_INVOKABLE QJSValue getActions(); // TODO: either remove this, or replace actionQueue property with it
-  bool             isUnconscious() const override { return unconscious; }
+  bool             isUnconscious() const override { return unconscious || ParentType::isUnconscious(); }
   bool             hasInteractionOverlay() const override { return !isAlive(); }
 
   Q_INVOKABLE void  takeDamage(int damage, Character* dealer);
@@ -64,9 +62,7 @@ public:
 signals:
   void actionPointsChanged();
   void requireJoinCombat();
-  void died();
   void characterKill(Character* victim, Character* killer);
-  void unconsciousChanged();
   void moraleChanged();
 
 private slots:

@@ -11,6 +11,8 @@ class CharacterStatistics : public CharacterMovement
 
   Q_PROPERTY(StatModel* statistics READ getStatistics WRITE setStatistics NOTIFY statisticsChanged)
   Q_PROPERTY(bool isUnique MEMBER isUnique NOTIFY uniqueChanged)
+  Q_PROPERTY(bool unconscious READ isUnconscious NOTIFY unconsciousChanged)
+  Q_PROPERTY(bool alive READ isAlive NOTIFY died)
   Q_PROPERTY(QString characterSheet MEMBER characterSheet NOTIFY characterSheetChanged)
 public:
   explicit CharacterStatistics(QObject *parent = nullptr);
@@ -19,7 +21,7 @@ public:
   void save(QJsonObject&) const;
 
   Q_INVOKABLE bool isAlive() const { return statistics ? statistics->getHitPoints() > 0 : true; }
-  virtual bool isUnconscious() const { return isAlive(); }
+  virtual bool isUnconscious() const { return !isAlive(); }
 
   StatModel* getStatistics() const { return statistics; }
   void setStatistics(StatModel* value);
@@ -41,6 +43,8 @@ signals:
   void characterSheetChanged();
   void raceChanged();
   void uniqueChanged();
+  void died();
+  void unconsciousChanged();
 
 protected:
   QString characterSheet;
