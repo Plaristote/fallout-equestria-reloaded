@@ -25,6 +25,7 @@ class CharacterDialog : public QObject
   Q_PROPERTY(QStringList       answerList     READ   getAnswerList NOTIFY answerListChanged)
   Q_PROPERTY(BarterController* barter         READ   getBarterController NOTIFY barterControllerChanged)
   Q_PROPERTY(QStringList       stateHistory   READ   getStateHistory NOTIFY stateReferenceChanged)
+  Q_PROPERTY(QJSValue          script         READ   getScriptObject NOTIFY ready)
 public:
   explicit CharacterDialog(QObject *parent = nullptr);
   virtual ~CharacterDialog();
