@@ -39,12 +39,14 @@ public:
 
   Q_INVOKABLE bool equipItem(InventoryItem* item, const QString& slotName);
   Q_INVOKABLE bool canEquipItem(InventoryItem* item, const QString& slotName) const;
+  Q_INVOKABLE void unequipAllItems();
   Q_INVOKABLE void unequipItem(const QString& slotName, bool dropped = false);
   Q_INVOKABLE void unequipItem(InventoryItem*, bool dropped = false);
   Q_INVOKABLE InventoryItem* getEquippedItem(const QString& slotName) const;
   QVector<InventoryItem*> getEquippedItems() const;
   Q_INVOKABLE bool isEquippedItem(InventoryItem*) const;
   Q_INVOKABLE QString getEquippedItemSlot(InventoryItem*) const;
+  Q_INVOKABLE void transferTo(Inventory*);
 
   Q_INVOKABLE int count(const QString& name) const;
   Q_INVOKABLE bool contains(InventoryItem* item) const { return items.contains(item); }
@@ -57,7 +59,6 @@ public:
 
   void                   setSlots(const QMap<QString, QString>&);
   QMap<QString, QString> getSlots() const { return slotTypes; }
-  void transferTo(Inventory*);
 
 signals:
   void itemsChanged();

@@ -306,6 +306,15 @@ bool Inventory::equipItem(InventoryItem *item, const QString& slotName)
   return getEquippedItem(slotName) == item;
 }
 
+void Inventory::unequipAllItems()
+{
+  for (InventoryItem* equippedItem : getEquippedItems())
+  {
+    if (equippedItem && !equippedItem->isVirtual())
+      unequipItem(equippedItem);
+  }
+}
+
 void Inventory::unequipItem(const QString &slotName, bool dropped)
 {
   if (itemSlots.contains(slotName))
@@ -397,8 +406,11 @@ void Inventory::transferTo(Inventory* other)
 
   for (InventoryItem* item : list)
   {
-    removeItem(item);
-    other->addItem(item);
+    if (!item->isVirtual())
+    {
+      removeItem(item);
+      other->addItem(item);
+    }
   }
   items.clear();
   emit itemsChanged();
