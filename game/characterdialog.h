@@ -67,6 +67,7 @@ private slots:
   void onBarterEnded();
 
 protected:
+  void prepareDialogWithCharacter();
   virtual void loadOption(const QString& answer);
   QString getNextState(const QString& answer);
   QString getEntryPoint();

@@ -20,6 +20,15 @@ CharacterDialog::~CharacterDialog()
     delete script;
 }
 
+void CharacterDialog::prepareDialogWithCharacter()
+{
+  Character* character = reinterpret_cast<Character*>(npc);
+
+  barter->initialize(script, player, character);
+  character->getFieldOfView()->setCharacterDetected(player);
+  player->getFieldOfView()->setCharacterDetected(character);
+}
+
 bool CharacterDialog::load(const QString& name, Character* player, DynamicObject* npc, const QString& state)
 {
   QFile file(SCRIPTS_PATH + "/dialogs/" + name + ".json");
@@ -32,7 +41,7 @@ bool CharacterDialog::load(const QString& name, Character* player, DynamicObject
     data.load(QJsonDocument::fromJson(file.readAll()).object());
     script = new ScriptController(SCRIPTS_PATH + "dialogs/" + name + ".mjs");
     if (npc->isCharacter())
-      barter->initialize(script, player, reinterpret_cast<Character*>(npc));
+      prepareDialogWithCharacter();
     connect(npc, &DynamicObject::objectNameChanged, this, &CharacterDialog::nameChanged);
     script->initialize(this);
     loadState(state.isEmpty() ? getEntryPoint() : state);
