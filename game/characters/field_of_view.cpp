@@ -261,7 +261,10 @@ void FieldOfView::setEnemyDetected(Character* enemy)
 
 void FieldOfView::setCharacterDetected(Character* character)
 {
-  InsertOrUpdateCharacterInList(*character, detected_characters);
+  if (this->character.isEnemy(character))
+    setEnemyDetected(character);
+  else
+    InsertOrUpdateCharacterInList(*character, detected_characters);
 }
 
 void FieldOfView::InsertOrUpdateCharacterInList(Character& character, std::list<Entry>& list)
