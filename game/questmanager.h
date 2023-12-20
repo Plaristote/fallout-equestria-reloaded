@@ -15,8 +15,8 @@ class QuestManager : public QObject
 public:
   enum QuestFlags
   {
-    NormalQuest = 0,
-    HiddenQuest = 1
+    NormalQuest = 1,
+    HiddenQuest = 2
   };
   Q_ENUM(QuestFlags)
 
