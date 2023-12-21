@@ -296,7 +296,7 @@ void TileLayer::renderToImage(QImage &image, QPoint offset)
     {
       Tile* tile = getTile(x, y);
 
-      if (tile)
+      if (tile && !tile->getImage().isEmpty())
       {
         QRect renderRect = tile->getRenderRect();
         QRect relativeRect(renderRect.topLeft() - offset, renderRect.size());

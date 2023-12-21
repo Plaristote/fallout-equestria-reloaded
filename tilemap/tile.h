@@ -3,6 +3,7 @@
 
 # include <QObject>
 # include <QRect>
+# include <QImage>
 
 class Tileset;
 
@@ -17,14 +18,15 @@ class Tile : public QObject
 public:
   explicit Tile(QObject* parent = nullptr);
 
+  void prepareTilePosition(QPoint offset, QPoint position, QSize tileSize);
   void prepare(QPoint offset, const Tileset*, int tid, QPoint position);
   void setRect(const QRect& value) { rect = value; }
   void setPosition(const QPoint& value) { position = value; }
   void setRenderPosition(const QPoint& value) { renderPosition = value; }
   void setImage(const QString* value) { image = value; }
   void setTexture(const QImage* value) { texture = value; }
-  inline const QImage& getTexture() const { return *texture; }
-  inline const QString& getImage() const { return *image; }
+  inline const QImage& getTexture() const { return texture ? *texture : emptyTexture; }
+  inline const QString& getImage() const { return image ? *image : emptyTextureName; }
   inline const QRect& getRect() const { return rect; }
   inline const QPoint& getPosition() const { return position; }
   inline const QPoint& getRenderPosition() const { return renderPosition; }
@@ -39,6 +41,8 @@ private:
   QRect          rect;
   QPoint         position;
   QPoint         renderPosition;
+  static const QImage  emptyTexture;
+  static const QString emptyTextureName;
 };
 
 #endif // TILE_H

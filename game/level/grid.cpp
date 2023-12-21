@@ -348,13 +348,17 @@ QVector<DynamicObject*> GridComponent::getDynamicObjectsAt(Point position) const
   );
 }
 
+QPoint makeRenderPosition(QPoint offset, QPoint currentPosition, QSize tileSize);
+
 QPoint GridComponent::getRenderPositionForTile(int x, int y, unsigned char z)
 {
   auto* grid  = z != NULL_FLOOR ? getFloorGrid(z) : getGrid();
   auto* layer = grid  ? grid->getTilemap()->getLayer("ground") : nullptr;
   auto* tile  = layer ? layer->getTile(x, y) : nullptr;
 
-  return tile ? tile->getRenderPosition() : QPoint();
+  if (!tile)
+    return makeRenderPosition(QPoint(), QPoint(x, y), grid->getTilemap()->getTileSize());
+  return tile->getRenderPosition();
 }
 
 float GridComponent::getDistance(QPoint pa, QPoint pb) const
