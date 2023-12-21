@@ -25,6 +25,7 @@
         <file>editor/level/SaveTemplateDialog.qml</file>
         <file>editor/level/AmbientLightDialog.qml</file>
         <file>editor/level/ObjectGroupForm.qml</file>
+        <file>editor/level/ResourcePicker.qml</file>
         <file>editor/level/ScriptPicker.qml</file>
         <file>editor/level/SpritePicker.qml</file>
         <file>editor/level/ScriptInputField.qml</file>
