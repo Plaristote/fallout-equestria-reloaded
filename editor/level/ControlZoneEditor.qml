@@ -58,10 +58,10 @@ ColumnLayout {
 
   spacing: 5
 
-  TerminalLabel { text: "> Control zone"; font.pointSize: 13 }
+  TerminalLabel { text: `> ${i18n.t("game-editor.levels.control-zone")}`; font.pointSize: 13 }
 
   TerminalButton {
-    text: "Add a control zone"
+    text: i18n.t("game-editor.levels.control-zones.add")
     visible: !hasControlZone
     width: parent.width
     height: 20
@@ -69,7 +69,7 @@ ColumnLayout {
   }
 
   TerminalButton {
-    text: !canvas.editingZone ? "Edit control zone" : "End control zone edit"
+    text: i18n.t("game-editor.levels.control-zones." + (!canvas.editingZone ? "edit" : "end-edit"))
     visible: hasControlZone
     width: parent.width
     height: 20
@@ -78,14 +78,14 @@ ColumnLayout {
 
   TerminalCheckBox {
     id: pathBlockedInput
-    text: "Path blocked"
+    text: i18n.t("game-editor.levels.control-zones.blocks-path")
     visible: hasControlZone
     checked: selectedObject && selectedObject.zoneBlocked
     onCheckedChanged: { selectedObject.zoneBlocked = checked; }
   }
 
   TerminalButton {
-    text: "Remove control zone"
+    text: i18n.t("game-editor.levels.control-zones.remove")
     visible: hasControlZone
     width: parent.width
     height: 20

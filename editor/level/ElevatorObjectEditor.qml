@@ -41,7 +41,7 @@ DynamicObjectEditor {
   }
 
   fields: [
-    TerminalLabel { text: "Position A" },
+    TerminalLabel { text: i18n.t("game-editor.levels.elevators.position-a") },
     Row {
       Layout.fillWidth: true
       visible: objectEditor.model.floating
@@ -49,10 +49,10 @@ DynamicObjectEditor {
       TerminalField { id: posAYInput; onTextChanged: elevatorEditor.elevatorPositionChanged(); width: parent.width / 2 }
     },
 
-    TerminalLabel { text: "Floor A" },
+    TerminalLabel { text: i18n.t("game-editor.levels.elevators.floor-a") },
     TerminalField { id: floorAInput; onTextChanged: elevatorEditor.elevatorPositionChanged(); },
 
-    TerminalLabel { text: "Position B" },
+    TerminalLabel { text: i18n.t("game-editor.levels.elevators.position-b") },
     Row {
       Layout.fillWidth: true
       visible: objectEditor.model.floating
@@ -60,7 +60,7 @@ DynamicObjectEditor {
       TerminalField { id: posBYInput; onTextChanged: elevatorEditor.elevatorPositionChanged(); width: parent.width / 2 }
     },
 
-    TerminalLabel { text: "Floor B" },
+    TerminalLabel { text: i18n.t("game-editor.levels.elevators.floor-b") },
     TerminalField { id: floorBInput; onTextChanged: elevatorEditor.elevatorPositionChanged(); }
   ]
 }

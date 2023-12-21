@@ -8,14 +8,14 @@ UiStyle.CustomDialog {
   property QtObject inventory
   property QtObject selectedObject
 
-  title: "Remove items"
+  title: i18n.t("game-editor.inventories.remove-items")
   modal: true
   anchors.centerIn: parent
   standardButtons: Dialog.Ok | Dialog.Cancel
   GridLayout {
     width: parent.width
     columns: 2
-    CustomLabel { text: "How much" }
+    CustomLabel { text: i18n.t("How much ?") }
     CustomTextField {
       id: removeItemQuantityInput
       text: "1"

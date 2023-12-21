@@ -73,8 +73,8 @@ UiStyle.CustomDialog {
         Repeater {
           model: additionalFields.length * 2
           delegate: Loader {
-            Layout.fillWidth: (index % 2) == 0
-            sourceComponent: (index % 2) == 1 ? additionalFieldLabel : additionalFields[Math.floor(index / 2)].component
+            Layout.fillWidth: (index % 2) == 1
+            sourceComponent: (index % 2) == 0 ? additionalFieldLabel : additionalFields[Math.floor(index / 2)].component
             Component {
               id: additionalFieldLabel
               TerminalLabel { text: additionalFields[Math.floor(index / 2)].label }

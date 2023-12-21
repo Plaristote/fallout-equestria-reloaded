@@ -34,7 +34,7 @@ WorldmapListEditor {
   }
 
   addDialog:  TextPromptDialog {
-    title: "Add zone"
+    title: i18n.t("game-editor.worldmap.zones.add")
     parent: Overlay
     anchors.centerIn: application
     onAccepted: {

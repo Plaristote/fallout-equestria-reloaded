@@ -9,7 +9,7 @@ UiStyle.CustomDialog {
   id: root
   property QtObject levelController
 
-  title: "Ambient Light"
+  title: i18n.t("game-editor.levels.ambient-light")
   modal: true
   anchors.centerIn: parent
   standardButtons: Dialog.Ok
@@ -17,7 +17,7 @@ UiStyle.CustomDialog {
   GridLayout {
     width: parent.width
     columns: 2
-    TerminalLabel { text: "Ambient light" }
+    TerminalLabel { text: i18n.t("game-editor.levels.ambient-light") }
     TerminalComboBox {
       Layout.fillWidth: true
       onCurrentIndexChanged: {
@@ -36,12 +36,16 @@ UiStyle.CustomDialog {
       }
       Component.onCompleted: {
         const index  = levelController.useAmbientLight ? (levelController.useDaylight ? 2 : 1) : 0;
-        model        = ["None", "Ambient light", "Daylight"];
+        model        = [
+          i18n.t("game-editor.levels.ambient-light-types.none"),
+          i18n.t("game-editor.levels.ambient-light-types.ambient"),
+          i18n.t("game-editor.levels.ambient-light-types.daylight")
+        ];
         currentIndex = index;
       }
     }
 
-    TerminalLabel { text: "Ambient color" }
+    TerminalLabel { text: i18n.t("game-editor.levels.ambient-color") }
     TerminalColorButton {
       Component.onCompleted: value = levelController.ambientColor;
       onValueChanged: levelController.ambientColor = value;

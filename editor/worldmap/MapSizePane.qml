@@ -10,13 +10,13 @@ Pane {
   Column {
     TerminalLabel {
       anchors.horizontalCenter: parent.horizontalCenter
-      text: "Worldmap Dimensions"
+      text: i18n.t("game-editor.worldmap.pixel-size")
     }
 
     Grid {
       columns: 3
       TerminalLabel {
-        text: "Map size"
+        text: i18n.t("game-editor.worldmap.map-size")
       }
       TerminalField {
         id: mapSizeWidthInput
@@ -29,7 +29,7 @@ Pane {
         onTextChanged: model.mapSize.height = parseInt(text)
       }
       TerminalLabel {
-        text: "Case size"
+        text: i18n.t("game-editor.worldmap.case-size")
       }
       TerminalField {
         id: caseWidthInput

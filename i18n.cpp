@@ -84,8 +84,12 @@ static QStringList getSourcesForLocale(const QString& locale, const QString& bas
 
 static void loadLocale(const QString& locale, QJsonObject& data)
 {
+  QStringList sources;
+
   while (data.begin() != data.end()) data.erase(data.begin());
-  for (const QString& filename : getSourcesForLocale(locale))
+  sources << getSourcesForLocale(locale, ":/assets/locales/")
+          << getSourcesForLocale(locale);
+  for (const QString& filename : sources)
   {
     QFile file(filename);
 

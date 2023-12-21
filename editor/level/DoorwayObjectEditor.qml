@@ -13,7 +13,7 @@ DynamicObjectEditor {
   readOnlyAnimation: true
 
   fields: [
-    TerminalLabel { text: "Opened" },
+    TerminalLabel { text: i18n.t("game-editor.levels.doors.opened") },
     TerminalCheckBox {
       checked: model.opened
       onCheckedChanged: {
@@ -21,7 +21,7 @@ DynamicObjectEditor {
       }
     },
 
-    TerminalLabel { text: "Locked" },
+    TerminalLabel { text: i18n.t("game-editor.levels.doors.locked") },
     TerminalCheckBox {
       checked: model.locked
       onCheckedChanged: {
@@ -29,7 +29,7 @@ DynamicObjectEditor {
       }
     },
 
-    TerminalLabel { text: "Key name" },
+    TerminalLabel { text: i18n.t("game-editor.levels.doors.key") },
     TerminalField {
       Layout.fillWidth: true
       text: model.keyName
@@ -38,7 +38,7 @@ DynamicObjectEditor {
       }
     },
 
-    TerminalLabel { text: "Lock level" },
+    TerminalLabel { text: i18n.t("game-editor.levels.doors.lock-difficulty") },
     TerminalField {
       Layout.fillWidth: true
       text: model.lockpickLevel

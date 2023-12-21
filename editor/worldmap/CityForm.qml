@@ -22,7 +22,7 @@ Pane {
     spacing: 5
 
     TerminalButton {
-      text: "< Previous"
+      text: `< ${i18n.t("game-editor.previous")}`
       onClicked: previousClicked()
       height: 20
       width: parent.width
@@ -33,7 +33,7 @@ Pane {
       columns: 2
 
       TerminalLabel {
-        text: "Name"
+        text: i18n.t("game-editor.cities.name")
       }
 
       TerminalField {
@@ -46,7 +46,7 @@ Pane {
       }
 
       TerminalLabel {
-        text: "Level"
+        text: i18n.t("game-editor.cities.level")
       }
 
       LevelPicker {
@@ -56,7 +56,7 @@ Pane {
       }
 
       TerminalLabel {
-        text: "Position"
+        text: i18n.t("game-editor.cities.position")
       }
 
       Row {
@@ -85,14 +85,14 @@ Pane {
     }
 
     TerminalButton {
-      text: "Splashscreen"
+      text: i18n.t("game-editor.cities.splashscreen")
       onClicked: splashscreenClicked()
       width: parent.width
       height: 25
     }
 
     TerminalButton {
-      text: "Delete city"
+      text: i18n.t("game-editor.cities.remove")
       onClicked: destroyClicked()
       width: parent.width
       height: 25

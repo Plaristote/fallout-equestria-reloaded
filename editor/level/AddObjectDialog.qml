@@ -30,7 +30,7 @@ UiStyle.CustomDialog {
     return error.length === 0;
   }
 
-  title: "New object"
+  title: i18n.t("game-editor.levels.add-object")
   modal: true
   anchors.centerIn: parent
   standardButtons: Dialog.Ok | Dialog.Cancel
@@ -39,15 +39,24 @@ UiStyle.CustomDialog {
   GridLayout {
     columns: 2
     width: parent.width
-    CustomLabel { text: "Type" }
+    CustomLabel { text: i18n.t("game-editor.levels.object-type") }
     SelectBox {
       id: objectTypeInput
-      model: ["character", "storage", "door", "elevator", "item", "other"]
+      valueRole: "value"
+      textRole: "text"
+      model: [
+        {value: "character", text: i18n.t("game-editor.levels.objects.types.character")},
+        {value: "storage", text: i18n.t("game-editor.levels.objects.types.storage")},
+        {value: "door", text: i18n.t("game-editor.levels.objects.types.door")},
+        {value: "elevator", text: i18n.t("game-editor.levels.objects.types.elevator")},
+        {value: "item", text: i18n.t("game-editor.levels.objects.types.item")},
+        {value: "other", text: i18n.t("game-editor.levels.objects.types.other")}
+      ]
       Layout.fillWidth: true
       Layout.preferredHeight: 40
     }
 
-    CustomLabel { text: "Name" }
+    CustomLabel { text: i18n.t("game-editor.levels.object-name") }
     CustomTextField {
       id: objectNameInput
       Layout.fillWidth: true
@@ -55,12 +64,12 @@ UiStyle.CustomDialog {
     }
 
     // Character inputs
-    CustomLabel { text: "Character sheet"; visible: objectTypeInput.currentText === "character" }
+    CustomLabel { text: i18n.t("game-editor.levels.characters.sheet"); visible: objectTypeInput.currentValue === "character" }
     TerminalButton {
       id: sheetInput
       Layout.fillWidth: true
       Layout.preferredHeight: 40
-      visible: objectTypeInput.currentText === "character"
+      visible: objectTypeInput.currentValue === "character"
       onClicked: sheetPicker.startPicking(text)
       LevelEditor.CharacterSheetPicker {
         id: sheetPicker
@@ -71,15 +80,15 @@ UiStyle.CustomDialog {
     }
 
     // InventoryItem inputs
-    CustomLabel { text: "Item"; visible: objectTypeInput.currentText === "item" }
+    CustomLabel { text: i18n.t("game-editor.item"); visible: objectTypeInput.currentValue === "item" }
     SelectBox {
       id: itemTypeInput
-      visible: objectTypeInput.currentText === "item"
+      visible: objectTypeInput.currentValue === "item"
       Layout.fillWidth: true
       Layout.preferredHeight: 40
     }
 
-    CustomLabel { text: "Error"; visible: error.length > 0 }
+    CustomLabel { text: i18n.t("game-editor.error"); visible: error.length > 0 }
     CustomLabel { text: error; visible: error.length > 0 }
   }
 
@@ -87,15 +96,15 @@ UiStyle.CustomDialog {
     const factory = objectGroup.factory();
     var newObject;
 
-    if (objectTypeInput.currentText === "character")
+    if (objectTypeInput.currentValue === "character")
       newObject = factory.generateCharacter(objectNameInput.text, sheetInput.text.replace(".json", ""));
-    else if (objectTypeInput.currentText == "storage")
+    else if (objectTypeInput.currentValue == "storage")
       newObject = factory.generateStorageObject(objectNameInput.text);
-    else if (objectTypeInput.currentText == "door")
+    else if (objectTypeInput.currentValue == "door")
       newObject = factory.generateDoorway(objectNameInput.text);
-    else if (objectTypeInput.currentText == "elevator")
+    else if (objectTypeInput.currentValue == "elevator")
       newObject = factory.generateElevator(objectNameInput.text);
-    else if (objectTypeInput.currentText == "item")
+    else if (objectTypeInput.currentValue == "item")
       newObject = factory.generateInventoryItem(objectNameInput.text, itemTypeInput.currentText, 1);
     else
       newObject = factory.generateDynamicObject(objectNameInput.text);

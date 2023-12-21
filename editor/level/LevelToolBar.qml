@@ -18,28 +18,28 @@ RowLayout {
   // Actions
   Action {
     id: addObjectAction
-    text: "Add object"
+    text: i18n.t("game-editor.levels.add-object")
     shortcut: Shortcut { sequence: "Ctrl+A"; onActivated: addObjectAction.trigger() }
     onTriggered: newObjectClicked()
   }
 
   Action {
     id: addGroupAction
-    text: "Add group"
+    text: i18n.t("game-editor.levels.add-group")
     shortcut: Shortcut { sequence: "Ctrl+N"; onActivated: addGroupAction.trigger() }
     onTriggered: newGroupClicked()
   }
 
   Action {
     id: removeAction
-    text: "Remove"
+    text: i18n.t("game-editor.remove")
     shortcut: Shortcut { sequence: "Ctrl+Del"; onActivated: addGroupAction.trigger() }
     onTriggered: removeClicked(currentObject || currentGroup)
   }
 
   Action {
     id: cutAction
-    text: "Cut"
+    text: i18n.t("game-editor.cut")
     shortcut: Shortcut { sequence: "Ctrl+X"; onActivated: cutAction.trigger() }
     onTriggered: {
       if (currentObject) {
@@ -61,7 +61,7 @@ RowLayout {
 
   Action {
     id: copyAction
-    text: "Copy"
+    text: i18n.t("game-editor.copy")
     shortcut: Shortcut { sequence: "Ctrl+C"; onActivated: copyAction.trigger() }
     onTriggered: {
       console.log("LevelToolBar: copy", currentObject || currentGroup);
@@ -71,7 +71,7 @@ RowLayout {
 
   Action {
     id: pasteAction
-    text: "Paste"
+    text: i18n.t("game-editor.paste")
     enabled: gameController.level.clipperFilled
     shortcut: Shortcut { sequence: "Ctrl+V"; onActivated: pasteAction.trigger() }
     onTriggered: {
@@ -82,7 +82,7 @@ RowLayout {
 
   Action {
     id: showAction
-    text: "Show"
+    text: i18n.t("game-editor.show")
     shortcut: Shortcut { sequence: "Ctrl+V"; onActivated: showAction.trigger() }
     onTriggered: showClicked(currentObject)
   }

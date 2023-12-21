@@ -57,7 +57,7 @@ Item {
         RowLayout {
           CheckBox {
             id: displayRoofCheckbox
-            text: "Display roofs"
+            text: i18n.t("game-editor.levels.display-roofs")
             checked: true
             onCheckedChanged: canvas.renderTarget.renderRoofs = checked
             contentItem: Text {
@@ -69,7 +69,7 @@ Item {
 
           CheckBox {
             id: displayWallsCheckbox
-            text: "Display walls"
+            text: i18n.t("game-editor.levels.display-walls")
             checked: true
             onCheckStateChanged: canvas.renderTarget.renderWalls = checked
             contentItem: Text {
@@ -80,7 +80,7 @@ Item {
           }
 
           Label {
-            text: "Floor"
+            text: i18n.t("game-editor.levels.floor")
             color: "white"
           }
 
@@ -100,7 +100,7 @@ Item {
             background: UiStyle.Label { style: parent.down ? "dark" : "base" }
             contentItem: Text {
               color: "white"
-              text: "Ambient Light"
+              text: i18n.t("game-editor.levels.ambient-light")
             }
             onClicked: ambientLightDialog.open();
           }

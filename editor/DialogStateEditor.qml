@@ -27,7 +27,7 @@ ColumnLayout {
           font.pointSize: 13
         }
 
-        TerminalLabel { text: "Text reference" }
+        TerminalLabel { text: i18n.t("game-editor.dialogs.states.text") }
 
         TranslationInputField {
           Layout.fillWidth: true
@@ -39,7 +39,7 @@ ColumnLayout {
           onUpdated: controller.loadState(controller.stateReference)
         }
 
-        TerminalLabel { text: "Trigger callback" }
+        TerminalLabel { text: i18n.t("game-editor.dialogs.states.trigger") }
         TerminalField {
           Layout.fillWidth: true
           id: stateHookInput
@@ -47,7 +47,7 @@ ColumnLayout {
           onTextChanged: { controller.stateHook = text }
         }
 
-        TerminalLabel { text: "Mood" }
+        TerminalLabel { text: i18n.t("game-editor.dialogs.states.mood") }
         TerminalField {
           Layout.fillWidth: true
           id: stateMoodInput
@@ -58,7 +58,7 @@ ColumnLayout {
         TerminalButton {
           Layout.columnSpan: 2
           Layout.alignment: Qt.AlignRight
-          text: "Remove"
+          text: i18n.t("game-editor.remove")
           height: 29
           onClicked: removeStateDialog.open()
         }
@@ -73,7 +73,7 @@ ColumnLayout {
         width: parent.width
         columns: 2
         TerminalLabel {
-          text: "Answer"
+          text: i18n.t("game-editor.dialogs.answer")
           font.pointSize: 13
         }
         TerminalLabel {
@@ -81,7 +81,7 @@ ColumnLayout {
           font.pointSize: 11
         }
 
-        TerminalLabel { text: "Text reference" }
+        TerminalLabel { text: i18n.t("game-editor.dialogs.states.text") }
 
         TranslationInputField {
           Layout.fillWidth: true
@@ -93,7 +93,7 @@ ColumnLayout {
           onUpdated: controller.optionsChanged()
         }
 
-        TerminalLabel { text: "To state" }
+        TerminalLabel { text: i18n.t("game-editor.dialogs.answers.target") }
         TerminalComboBox {
           id: optionstateInput
           Layout.fillWidth: true
@@ -109,21 +109,21 @@ ColumnLayout {
           }
         }
 
-        TerminalLabel { text: "Text callback" }
+        TerminalLabel { text: i18n.t("game-editor.dialogs.states.text") }
         TerminalField {
           Layout.fillWidth: true
           text: controller.optionTextHook
           onTextChanged: { controller.optionTextHook = text }
         }
 
-        TerminalLabel { text: "Trigger callback" }
+        TerminalLabel { text: i18n.t("game-editor.dialogs.states.trigger") }
         TerminalField {
           Layout.fillWidth: true
           text: controller.optionHook
           onTextChanged: { controller.optionHook = text }
         }
 
-        TerminalLabel { text: "Available callback" }
+        TerminalLabel { text: i18n.t("game-editor.dialogs.answers.available-callback") }
         TerminalField {
           Layout.fillWidth: true
           text: controller.optionAvailableHook
@@ -156,7 +156,7 @@ ColumnLayout {
       TerminalButton {
         width: parent.width - 15
         height: 20
-        text: "+ Add answer"
+        text: `+ ${i18n.t("game-editor.dialogs.answers.add")}`
         onClicked: addAnswerDialog.open()
       }
 

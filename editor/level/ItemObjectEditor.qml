@@ -15,7 +15,7 @@ DynamicObjectEditor {
   readOnlyScript: true
 
   fields: [
-    TerminalLabel { text: "Type" },
+    TerminalLabel { text: i18n.t("game-editor.items.type") },
     TerminalComboBox {
       Layout.fillWidth: true
       model: itemLibrary.getObjectList()
@@ -25,7 +25,7 @@ DynamicObjectEditor {
       }
     },
 
-    TerminalLabel { text: "Quantity" },
+    TerminalLabel { text: i18n.t("game-editor.items.quantity") },
     TerminalField {
       Layout.fillWidth: true
       text: model.quantity.toString()

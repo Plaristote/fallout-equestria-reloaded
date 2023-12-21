@@ -18,7 +18,7 @@ Item {
 
   TextPromptDialog {
     id: newGroupDialog
-    title: "New sprite group"
+    title: i18n.t("game-editor.sprites.add")
     anchors.centerIn: parent
 
     onAccepted: {
@@ -30,13 +30,12 @@ Item {
   BiDialog.FileDialog {
     property var target
     id: filePicker
-    title: "Please chose a file"
+    title: i18n.t("game-editor.file-picker-title")
     folder: rootPath + "assets/sprites"
     nameFilters: ["Image files (*.jpg, *.png, *.webp)"]
 
     onAccepted: {
       const path = filePicker.fileUrl.toString().replace(/.*\/assets\/sprites\//, "")
-      console.log("File selected", path);
       target.text = path;
     }
   }

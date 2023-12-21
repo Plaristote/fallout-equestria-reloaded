@@ -52,18 +52,18 @@ Pane {
       }
 
       MenuButton {
-        text: "Add item"
+        text: i18n.t("game-editor.inventories.add-item")
         onClicked: root.addObject()
       }
 
       MenuButton {
-        text: "Remove item"
+        text: i18n.t("game-editor.inventories.remove-item")
         enabled: root.selectedObject !== null
         onClicked: root.removeObject()
       }
 
       MenuButton {
-        text: "Close"
+        text: i18n.t("game-editor.exit")
         onClicked: {
           root.inventory = null;
           root.visible = false;

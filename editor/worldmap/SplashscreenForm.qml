@@ -19,7 +19,7 @@ Pane {
     spacing: 5
 
     TerminalButton {
-      text: "< Previous"
+      text: `< ${i18n.t("game-editor.previous")}`
       onClicked: previousClicked()
       height: 20
       width: parent.width
@@ -30,7 +30,7 @@ Pane {
       width: parent.width
 
       TerminalLabel {
-        text: "Image"
+        text: i18n.t("game-editor.cities.splashscreen-image")
       }
       TerminalField {
         Layout.fillWidth: true
@@ -40,7 +40,7 @@ Pane {
       TerminalButton {
         Layout.fillWidth: true
         Layout.columnSpan: 2
-        text: "Add entry point"
+        text: i18n.t("game-editor.cities.add-entry-point")
         onClicked: splashscreenModel.addEntryPoint("")
       }
     }
@@ -58,7 +58,7 @@ Pane {
           color: "green"
         }
         TerminalLabel {
-          text: "Level"
+          text: i18n.t("game-editor.cities.level")
         }
         LevelPicker {
           Layout.fillWidth: true
@@ -67,7 +67,7 @@ Pane {
           onValueChanged: splashscreenModel.setEntryPointAt(entryPoint, value)
         }
         TerminalLabel {
-          text: "Position"
+          text: i18n.t("game-editor.cities.position")
         }
         TerminalField {
           id: xInput
@@ -87,7 +87,7 @@ Pane {
         TerminalButton {
           Layout.fillWidth: true
           Layout.columnSpan: 3
-          text: "Delete entry point"
+          text: i18n.t("game-editor.cities.remove-entry-point")
           height: 25
           onClicked: splashscreenModel.removeEntryPoint(entryPoint)
         }

@@ -5,7 +5,7 @@ import "../../ui"
 
 CharacterInventory {
   id: characterInventory
-  title: "Inventory - " + character.objectName
+  title: `${i18n.t("game-editor.inventory")} - ${character.objectName}`
 
   function open(value) {
     characterInventory.visible = true;
@@ -25,8 +25,8 @@ CharacterInventory {
   }
 
   additionalControls: [
-    {label: "Add", callback: characterInventory.addObject},
-    {label: "Remove", callback: characterInventory.removeObject}
+    {label: i18n.t("game-editor.inventories.add-item"), callback: characterInventory.addObject},
+    {label: i18n.t("game-editor.inventories.remove-item"), callback: characterInventory.removeObject}
   ]
 
   onClosed: { character = null; visible = false }

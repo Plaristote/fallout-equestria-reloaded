@@ -1,6 +1,7 @@
 <!DOCTYPE RCC>
 <RCC version="1.0">
     <qresource prefix="/">
+        <file>assets/locales/game-editor.en.json</file>
         <file>editor/level/LevelToolBar.qml</file>
         <file>editor/level/Breadcrumbs.qml</file>
         <file>editor/level/TreeEditorPanel.qml</file>

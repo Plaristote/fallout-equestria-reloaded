@@ -45,7 +45,7 @@ Pane {
       width: parent.width
 
       TerminalLabel {
-        text: "name"
+        text: i18n.t("game-editor.sprites.name")
       }
 
       TerminalField {
@@ -55,7 +55,7 @@ Pane {
       }
 
       TerminalLabel {
-        text: "source"
+        text: i18n.t("game-editor.sprites.source")
       }
 
       RowLayout {
@@ -74,7 +74,7 @@ Pane {
         }
 
         TerminalButton {
-          text: "Pick"
+          text: i18n.t("game-editor.pick")
           onClicked: {
             filePicker.target = sourceInput;
             filePicker.open();
@@ -83,7 +83,7 @@ Pane {
       }
 
       TerminalLabel {
-        text: "offset"
+        text: i18n.t("game-editor.sprites.offset")
       }
 
       Row {
@@ -99,7 +99,7 @@ Pane {
       }
 
       TerminalLabel {
-        text: "size"
+        text: i18n.t("game-editor.sprites.size")
       }
 
       Row {
@@ -115,7 +115,7 @@ Pane {
         }
         TerminalLabel {
           color: "gray"
-          text: "Source size:"
+          text: i18n.t("game-editor.sprites.source-size")
         }
         TerminalLabel {
           color: "lightgray"
@@ -124,7 +124,7 @@ Pane {
       }
 
       TerminalLabel {
-        text: "frame count"
+        text: i18n.t("game-editor.sprites.frame-count")
       }
 
       TerminalField {
@@ -135,7 +135,7 @@ Pane {
       }
 
       TerminalLabel {
-        text: "interval"
+        text: i18n.t("game-editor.sprites.interval")
       }
 
       TerminalField {
@@ -146,7 +146,7 @@ Pane {
       }
 
       TerminalLabel {
-        text: "repeat"
+        text: i18n.t("game-editor.sprites.repeat")
       }
 
       TerminalCheckBox {
@@ -156,7 +156,7 @@ Pane {
       }
 
       TerminalLabel {
-        text: "reverse"
+        text: i18n.t("game-editor.sprites.reverse")
       }
 
       TerminalCheckBox {

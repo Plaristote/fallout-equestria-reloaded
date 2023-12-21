@@ -22,11 +22,11 @@ Item {
 
   TextPromptDialog {
     id: newObjectDialog
-    title: "New item"
+    title: i18n.t("game-editor.items.add")
     anchors.centerIn: parent
     function validate() {
       if (objectNames.indexOf(value) >= 0)
-        validationError = value + " already exists.";
+        validationError = i18n.t("game-editor.validations.uniqueness", {value: value});
       else
         validationError = "";
       return validationError === "";
@@ -70,7 +70,7 @@ Item {
       MenuButton {
         Layout.alignment: Qt.AlignRight
         id: saveButton
-        text: "Save"
+        text: i18n.t("game-editor.save")
         onClicked: objectForm.save()
       }
     }

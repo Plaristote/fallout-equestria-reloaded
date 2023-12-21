@@ -27,7 +27,7 @@ UiStyle.CustomDialog {
     return error.length === 0;
   }
 
-  title: "New group"
+  title: i18n.t("game-editor.levels.add-group")
   modal: true
   anchors.centerIn: parent
   standardButtons: Dialog.Ok | Dialog.Cancel
@@ -40,7 +40,7 @@ UiStyle.CustomDialog {
       columns: 2
       width: parent.width
 
-      TerminalLabel { text: "Name" }
+      TerminalLabel { text: i18n.t("game-editor.levels.group-name") }
       TerminalField {
         id: objectNameInput
         Layout.fillWidth: true
@@ -48,7 +48,7 @@ UiStyle.CustomDialog {
         onAccepted: dialogAddObject.accept()
       }
 
-      TerminalLabel { text: "Error"; visible: error.length > 0 }
+      TerminalLabel { text: i18n.t("game-editor.error"); visible: error.length > 0 }
       TerminalLabel { text: error; visible: error.length > 0 }
     }
   }

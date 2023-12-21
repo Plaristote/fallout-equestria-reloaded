@@ -59,7 +59,7 @@ Item {
       TabRow {
         id: tabRow
         tabs: ["cities", "zones"]
-        labels: ["Cities", "Zones"]
+        labels: tabs.map(tab => i18n.t(`game-editor.worldmap-tabs.${tab}`))
         currentTab: tabs[0]
         onCurrentTabChanged: {
           selectedZone = null;
@@ -79,7 +79,7 @@ Item {
     id: formControls
     anchors.bottom: parent.bottom
     anchors.right: parent.right
-    text: "Save"
+    text: i18n.t("game-editor.save")
     onClicked: {
       gameController.save();
       gameController.getDataEngine().saveToFile("./assets/game.json");

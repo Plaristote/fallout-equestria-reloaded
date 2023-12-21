@@ -1,0 +1,213 @@
+{
+  "game-editor": {
+    "exit": "Exit",
+    "save": "Save",
+    "previous": "Previous",
+    "add": "Add",
+    "remove": "Remove",
+    "sprite": "Sprite",
+    "script": "Script",
+    "item": "Item",
+    "cut": "Cut",
+    "copy": "Copy",
+    "paste": "Paste",
+    "show": "Show",
+    "error": "Error",
+    "filter": "Filter",
+    "filter-placeholder": "Filter...",
+    "file-picker-title": "Please chose a file",
+    "pick": "Pick",
+    "translation-key": "Translation key",
+    "inventory": "Inventory",
+    "validations": {
+      "uniqueness": "{{value}} already exists.",
+      "invalid-name": "Invalid or reserved name"
+    },
+    "inventories": {
+      "add-item": "Add item",
+      "remove-item": "Remove item",
+      "remove-items": "Remove items"
+    },
+    "tabs": {
+      "worldmap": "Worldmap",
+      "levels": "Levels",
+      "npcs": "NPCs",
+      "dialogs": "Dialogs",
+      "diplomacy": "Diplomacy",
+      "objects": "Items",
+      "sprites": "Sprites"
+    },
+    "levels": {
+      "add-object": "Add object",
+      "add-group": "Add group",
+      "object-type": "Type",
+      "object-name": "Name",
+      "cut": "Cut",
+      "new-object": "New object",
+      "object-group": "Group",
+      "group-name": "Name",
+      "offset": "Offset",
+      "floor": "Floor",
+      "display-roofs": "Display roofs",
+      "display-walls": "Display walls",
+      "ambient-light": "Ambient light",
+      "ambient-color": "Ambient color",
+      "ambient-light-types": {
+        "none": "None",
+        "ambient": "Ambient light",
+        "daylight": "Daylight"
+      },
+      "control-zone": "Control zone",
+      "characters": {
+        "sheet": "Character Sheet",
+        "dialog": "Dialog",
+        "faction": "Faction",
+        "is-unique": "Unique"
+      },
+      "control-zones": {
+        "add": "Add a control zone",
+        "remove": "Remove control zone",
+        "blocks-path": "Path blocked",
+        "edit": "Edit control zone",
+        "end-edit": "End control zone edit"
+      },
+      "elevators": {
+        "position-a": "Position A",
+        "position-b": "Position B",
+        "floor-a": "Floor A",
+        "floor-b": "Floor B"
+      },
+      "doors": {
+        "opened": "Opened",
+        "locked": "Locked",
+        "key": "Key name",
+        "lock-difficulty": "Lock level"
+      },
+      "directions": {
+        "none": "None",
+        "left": "Left",
+        "up": "Up",
+        "right": "Right",
+        "bottom": "Bottom"
+      },
+      "objects": {
+        "types": {
+          "character": "Character",
+          "storage": "Storage",
+          "door": "Door",
+          "elevator": "Elevator",
+          "item": "Item",
+          "other": "Other"
+        },
+        "name": "Name",
+        "orientation": "Orientation",
+        "is-interactive": "Interactive",
+        "blocks-path": "Blocks path",
+        "cover": "Cover",
+        "behaviour": "Behaviour",
+        "render-position": "Render position",
+        "grid-position": "Grid position",
+        "positionning-type": "Positionning",
+        "positionning": {
+          "tile": "Tile-based",
+          "float": "Floating"
+        }
+      }
+    },
+    "worldmap-tabs": {
+      "cities": "Cities",
+      "zones": "Zones"
+    },
+    "worldmap": {
+      "pixel-size": "Worldmap Dimensions",
+      "map-size": "Map size",
+      "case-size": "Case size",
+      "zones": {
+        "add": "Add zone",
+        "name": "Name",
+        "movement-speed": "Mov.speed",
+        "remove": "Delete zone"
+      }
+    },
+    "cities": {
+      "add": "Add city",
+      "remove": "Delete city",
+      "name": "Name",
+      "position": "Position",
+      "level": "Level",
+      "splashscreen": "Splashscreen",
+      "splashscreen-image": "Image",
+      "add-entry-point": "Add entry point",
+      "remove-entry-point": "Delete entry point"
+    },
+    "dialogs": {
+      "add": "New dialog",
+      "answer": "Answer",
+      "states": {
+        "add": "New dialog state",
+        "remove": "Remove dialog state",
+        "initial": "Initial state",
+        "text": "Text reference",
+        "trigger": "Trigger callack",
+        "mood": "Mood",
+        "text-callback": "Text callback"
+      },
+      "answers": {
+        "add": "New answer",
+        "remove": "Remove answer",
+        "target": "To state",
+        "available-callback": "Available callback"
+      }
+    },
+    "factions": {
+      "add": "New faction",
+      "add-enemy": "Add enemy",
+      "name": "Name",
+      "with-reputation": "Enable reputation"
+    },
+    "ncps": {
+      "add": "New character"
+    },
+    "items": {
+      "add": "New item",
+      "icon": "Icon",
+      "groupable": "Groupable",
+      "value": "Value",
+      "weight": "Weight",
+      "type": "Type",
+      "quantity": "Quantity"
+    },
+    "sprites": {
+      "add": "New sprite group",
+      "name": "Name",
+      "source": "Source",
+      "size": "Size",
+      "source-size": "Source size",
+      "frame-count": "Frame count",
+      "interval": "Interval",
+      "repeat": "Repeat",
+      "reverse": "Reverse",
+      "add-animation": "New sprite",
+      "default-source": "Default source",
+      "animation": "Animation"
+    },
+    "script-category": {
+      "behaviour": "Behaviour",
+      "pnjs": "NPCs",
+      "npcs": "NPCs",
+      "quests": "Quests",
+      "dialogs": "Dialogs",
+      "buffs": "Buffs",
+      "items": "Inventory items",
+      "levels": "Levels",
+      "scenes": "Scenes",
+      "spells": "Spells"
+    },
+    "resource-picker": {
+      "adding-script": "Adding {{category}} script",
+      "empty-choice": "Nothing",
+      "script-type": "Script type",
+      "filter": "Filter"
+    }
+  }
+}

@@ -22,7 +22,7 @@ Pane {
 
   function save() {
     currentObject = {
-      type: typeInput.currentText,
+      type: typeInput.currentValue,
       weight: parseInt(weightInput.text),
       value: parseInt(valueInput.text),
       sprite: spriteInput.currentText,
@@ -43,18 +43,27 @@ Pane {
     columns: 2
 
     TerminalLabel {
-      text: "type"
+      text: i18n.t("game-editor.items.type")
     }
 
     TerminalComboBox {
       Layout.fillWidth: true
       id: typeInput
-      model: ["weapon","armor","ammo","consommables","keys","misc"]
-      currentIndex: model.indexOf(currentObject.type)
+      valueRole: "value"
+      textRole: "text"
+      model: [
+        { value: "weapon", text: i18n.t("item-type.weapon") },
+        { value: "armor", text: i18n.t("item-type.armor") },
+        { value: "ammo", text: i18n.t("item-type.ammo") },
+        { value: "consommables", text: i18n.t("item-type.consommables") },
+        { value: "keys", text: i18n.t("item-type.keys") },
+        { value: "misc", text: i18n.t("item-type.misc") }
+      ]
+      currentIndex: indexOfValue(currentObject.type)
     }
 
     TerminalLabel {
-      text: "weight"
+      text: i18n.t("game-editor.items.weight")
     }
 
     TerminalField {
@@ -64,7 +73,7 @@ Pane {
     }
 
     TerminalLabel {
-      text: "value"
+      text: i18n.t("game-editor.items.value")
     }
 
     TerminalField {
@@ -74,7 +83,7 @@ Pane {
     }
 
     TerminalLabel {
-      text: "groupable"
+      text: i18n.t("game-editor.items.groupable")
     }
 
     TerminalCheckBox {
@@ -83,7 +92,7 @@ Pane {
     }
 
     TerminalLabel {
-      text: "sprite"
+      text: i18n.t("game-editor.sprite")
     }
 
     RowLayout {
@@ -111,7 +120,7 @@ Pane {
     }
 
     TerminalLabel {
-      text: "icon"
+      text: i18n.t("game-editor.items.icon")
     }
 
     RowLayout {
@@ -123,7 +132,7 @@ Pane {
         readOnly: true
       }
       TerminalButton {
-        text: "Pick"
+        text: i18n.t("game-editor.pick")
         onClicked: iconPicker.open()
       }
       Image {
@@ -149,13 +158,12 @@ Pane {
   BiDialog.FileDialog {
     property var target: iconInput
     id: iconPicker
-    title: "Please chose a file"
+    title: i18n.t("game-editor.file-picker-title")
     folder: rootPath + "assets/icons"
     nameFilters: ["Image files (*.jpg, *.png, *.webp)"]
 
     onAccepted: {
       const path = iconPicker.fileUrl.toString().replace(/.*\/assets\/icons\//, "")
-      console.log("File selected", path);
       target.text = path;
     }
   }

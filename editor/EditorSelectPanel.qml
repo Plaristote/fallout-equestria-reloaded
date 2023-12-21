@@ -27,7 +27,7 @@ Pane {
   Component {
     id: defaultGlobalControls
     TerminalButton {
-      text: "+ Add"
+      text: `+ ${i18n.t("game-editor.add")}`
       onClicked: newClicked()
       height: 20
     }
@@ -67,7 +67,7 @@ Pane {
         visible: model && model.length > 0
         Layout.fillWidth: true
         Layout.bottomMargin: 5
-        placeholderText: "Filter..."
+        placeholderText: i18n.t("game-editor.filter-placeholder")
       }
 
       Repeater {

@@ -16,7 +16,7 @@ DynamicObjectEditor {
       Layout.columnSpan: 2
       Layout.fillWidth: true
       Layout.preferredHeight: 40
-      text: "Inventory"
+      text: i18n.t("game-editor.inventory")
       iconName: "item"
       onClicked: openStorageClicked();
       padding: 20

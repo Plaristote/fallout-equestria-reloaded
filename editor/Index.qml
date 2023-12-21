@@ -36,7 +36,7 @@ Pane {
     anchors.left: parent.left
     anchors.right: parent.right
     tabs: ["worldmap", "levels", "npcs", "dialogs", "diplomacy", "objects", "sprites"]
-    labels: ["Worldmap", "Levels", "NPCs", "Dialogs", "Diplomacy", "Items", "Sprites"]
+    labels: tabs.map(tabname => i18n.t(`game-editor.tabs.${tabname}`));
     currentTab: tabs[0]
   }
 
@@ -46,7 +46,7 @@ Pane {
     anchors.top: parent.top
     contentItem: Text {
       color: "white"
-      text: "Exit"
+      text: i18n.t("game-editor.exit")
     }
     onClicked: application.popView()
   }

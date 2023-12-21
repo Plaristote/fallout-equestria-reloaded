@@ -28,7 +28,7 @@ Item {
 
   TextPromptDialog {
     id: newFactionDialog
-    title: "New faction"
+    title: i18n.t("game-editor.factions.add")
     anchors.centerIn: parent
     onAccepted: {
       dataEngine.registerFaction(newFactionDialog.value);

@@ -16,7 +16,7 @@ Item {
 
   TextPromptDialog {
     id: newCharacterDialog
-    title: "New character"
+    title: i18n.t("game-editor.npcs.add")
     anchors.centerIn: parent
     function validate() {
       validationError = list.indexOf(value + ".json") >= 0 ? `${value} already exists.` : "";

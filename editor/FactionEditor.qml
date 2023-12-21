@@ -24,13 +24,13 @@ Pane {
 
   UiStyle.CustomDialog {
     id: newEnemyDialog
-    title: "Add enemy"
+    title: i18n.t("game-editor.factions.add-enemy")
     modal: true
     anchors.centerIn: parent
     standardButtons: Dialog.Ok | Dialog.Cancel
     RowLayout {
       anchors.fill: parent
-      Label { text: "Name"; color: "white"; font.family: application.titleFontName }
+      Label { text: i18n.t("game-editor.factions.name"); color: "white"; font.family: application.titleFontName }
       SelectBox {
         id: newEnemySelect
         model: factionSelect.model
@@ -88,7 +88,7 @@ Pane {
       background: UiStyle.TerminalPane {}
       Layout.fillWidth: true
       GridLayout {
-        TerminalLabel { text: "Enable reputation" }
+        TerminalLabel { text: i18n.t("game-editor.factions.with-reputation") }
         TerminalCheckBox {
           id: reputationCheckbox
           onCheckedChanged: dataEngine.setFactionReputationEnabled(currentFaction, checked)
@@ -111,7 +111,7 @@ Pane {
           TerminalButton {
             Layout.fillWidth: true
             Layout.preferredHeight: 30
-            text: "Add enemy"
+            text: i18n.t("game-editor.factions.add-enemy")
             onClicked: newEnemyDialog.open()
           }
 

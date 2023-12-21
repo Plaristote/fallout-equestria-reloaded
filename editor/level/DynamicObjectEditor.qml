@@ -73,25 +73,30 @@ ColumnLayout {
     columns: 2
     Layout.fillWidth: true
 
-      TerminalLabel { text: "Name" }
+      TerminalLabel { text: i18n.t("game-editor.levels.objects.name") }
       TerminalField {
         id: nameInput
         onTextChanged: if (objectEditor.model.objectName !== text) { objectEditor.model.objectName = text; }
         Layout.fillWidth: true
       }
 
-      TerminalLabel { text: "Positionning"; visible: !objectEditor.readOnlyPositionType }
+      TerminalLabel { text: i18n.t("game-editor.levels.objects.positionning-type"); visible: !objectEditor.readOnlyPositionType }
       TerminalComboBox {
         Layout.fillWidth: true
         id: positioningInput
         visible: !objectEditor.readOnlyPositionType
-        model: ["Tile-based", "Floating"]
+        model: [
+          {value: "tile", text: i18n.t("game-editor.levels.objects.positionning.tile") },
+          {value: "float", text: i18n.t("game-editor.levels.objects.positionning.float") }
+        ]
+        valueRole: "value"
+        textRole: "text"
         currentIndex: objectEditor.model.floating ? 1 : 0
-        onCurrentTextChanged: {
-          objectEditor.model.floating = currentText == "Floating"
+        onCurrentValueChanged: {
+          objectEditor.model.floating = currentValue == "float"
         }
       }
-      TerminalLabel { text: "Render position"; visible: objectEditor.model.floating }
+      TerminalLabel { text: i18n.t("game-editor.levels.objects.render-position"); visible: objectEditor.model.floating }
       Row {
         Layout.fillWidth: true
         visible: objectEditor.model.floating
@@ -99,14 +104,14 @@ ColumnLayout {
         TerminalField { id: renderYInput; onTextChanged: objectEditor.renderPositionChanged(); width: parent.width / 2 }
       }
 
-      TerminalLabel { text: "Grid position" }
+      TerminalLabel { text: i18n.t("game-editor.levels.objects.grid-position") }
       Row {
         Layout.fillWidth: true
         TerminalField { id: gridXInput; onTextChanged: objectEditor.positionChanged(); width: parent.width / 2 }
         TerminalField { id: gridYInput; onTextChanged: objectEditor.positionChanged(); width: parent.width / 2 }
       }
 
-      TerminalLabel { text: "Floor"; visible: withFloor }
+      TerminalLabel { text: i18n.t("game-editor.levels.floor"); visible: withFloor }
       TerminalField {
         id: floorInput
         visible: withFloor
@@ -117,7 +122,7 @@ ColumnLayout {
         }
       }
 
-      TerminalLabel { text: "Script"; visible: !readOnlyScript }
+      TerminalLabel { text: i18n.t("game-editor.script"); visible: !readOnlyScript }
       ScriptInputField {
         Layout.fillWidth: true
         scriptCategory: objectEditor.scriptCategory
@@ -125,7 +130,7 @@ ColumnLayout {
         visible: !readOnlyScript
       }
 
-      TerminalLabel { text: "Sprite"; visible: !readOnlySprite }
+      TerminalLabel { text: i18n.t("game-editor.sprite"); visible: !readOnlySprite }
       SpriteInputField {
         Layout.fillWidth: true
         visible: !readOnlySprite
@@ -133,7 +138,7 @@ ColumnLayout {
         onRequestSpriteView: root.requestSpriteView(group)
       }
 
-      TerminalLabel { text: "Animation"; visible: !readOnlyAnimation }
+      TerminalLabel { text: i18n.t("game-editor.sprites.animation"); visible: !readOnlyAnimation }
       TerminalComboBox {
         Layout.fillWidth: true
         id: animationInput
@@ -146,12 +151,20 @@ ColumnLayout {
         }
       }
 
-      TerminalLabel { text: "Orientation"; visible: withOrientation }
+      TerminalLabel { text: i18n.t("game-editor.levels.objects.orientation"); visible: withOrientation }
       TerminalComboBox {
         id: orientationInput
         Layout.fillWidth: true
         visible: withOrientation
-        model: ["none", "left", "up", "right", "bottom"]
+        valueRole: "value"
+        textRole: "text"
+        model: [
+          {value: "none", text: i18n.t("game-editor.levels.directions.none") },
+          {value: "left", text: i18n.t("game-editor.levels.directions.left") },
+          {value: "up", text: i18n.t("game-editor.levels.directions.up") },
+          {value: "right", text: i18n.t("game-editor.levels.directions.right") },
+          {value: "bottom", text: i18n.t("game-editor.levels.directions.bottom") }
+        ]
         currentIndex: {
           console.log("Updating current index", objectEditor.model.orientation);
           directions.indexOf(objectEditor.model.orientation)
@@ -162,7 +175,7 @@ ColumnLayout {
         }
       }
 
-      TerminalLabel { text: "Interactive"; visible: withInteractive }
+      TerminalLabel { text: i18n.t("game-editor.levels.objects.is-interactive"); visible: withInteractive }
       TerminalCheckBox {
         id: interactiveInput
         visible: withInteractive
@@ -170,7 +183,7 @@ ColumnLayout {
         onCheckedChanged: objectEditor.model.interactive = checked
       }
 
-      TerminalLabel { text: "Blocks path"; visible: withPathBlocking }
+      TerminalLabel { text: i18n.t("game-editor.levels.objects.blocks-path"); visible: withPathBlocking }
       TerminalCheckBox {
         id: pathBlockInput
         visible: withPathBlocking
@@ -178,7 +191,7 @@ ColumnLayout {
         onCheckedChanged: objectEditor.model.blocksPath = checked
       }
 
-      TerminalLabel { text: "Cover"; visible: withCover }
+      TerminalLabel { text: i18n.t("game-editor.levels.objects.cover"); visible: withCover }
       TerminalField {
         id: coverInput
         visible: withCover
@@ -187,7 +200,7 @@ ColumnLayout {
       }
     }
 
-  TerminalLabel { text: "> Behaviour"; font.pointSize: 13 }
+  TerminalLabel { text: `> ${i18n.t("game-editor.levels.objects.behaviour")}`; font.pointSize: 13 }
 
   GridLayout {
     id: additionalFields

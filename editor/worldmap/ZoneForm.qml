@@ -21,7 +21,7 @@ Pane {
     spacing: 5
 
     TerminalButton {
-      text: "< Previous"
+      text: `< ${i18n.t("game-editor.previous")}`
       onClicked: previousClicked()
       height: 20
       width: parent.width
@@ -32,7 +32,7 @@ Pane {
       columns: 2
 
       TerminalLabel {
-        text: "Name"
+        text: i18n.t("game-editor.worldmap.zones.name")
       }
 
       TerminalField {
@@ -45,7 +45,7 @@ Pane {
       }
 
       TerminalLabel {
-        text: "Mov.speed"
+        text: i18n.t("game-editor.worldmap.zones.movement-speed")
       }
 
       TerminalField {
@@ -56,7 +56,7 @@ Pane {
     }
 
     TerminalButton {
-      text: "Delete zone"
+      text: i18n.t("game-editor.worldmap.zones.remove")
       onClicked: destroyClicked()
       width: parent.width
       height: 25

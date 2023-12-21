@@ -14,7 +14,7 @@ EditorSelectPanel {
     Layout.preferredHeight: 20
 
     TerminalButton {
-      text: "+ New object"
+      text: `+ ${i18n.t("game-editor.levels.new-object")}`
       onClicked: root.newClicked()
       Layout.alignment: Qt.AlignLeft
     }

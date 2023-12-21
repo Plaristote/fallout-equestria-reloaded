@@ -17,12 +17,12 @@ RowLayout {
 
   TextPromptDialog {
     id: newSpriteDialog
-    title: "New Sprite"
+    title: i18n.t("game-editor.sprites.add-animation")
     anchors.centerIn: parent
 
     function validate() {
       if (value.length === 0 || value === "defaultSource")
-        validationError = "Invalid or reserved name.";
+        validationError = i18n.t("game-editor.validations.invalid-name");
       else
         validationError = "";
       return validationError === "";
@@ -47,7 +47,7 @@ RowLayout {
       ColumnLayout {
         width: parent.width
         TerminalLabel {
-          text: "Default source"
+          text: i18n.t("game-editor.sprites.default-source")
         }
         RowLayout {
           TerminalField {
@@ -60,7 +60,7 @@ RowLayout {
             }
           }
           TerminalButton {
-            text: "Pick"
+            text: i18n.t("game-editor.pick")
             onClicked: {
               filePicker.target = defaultSourceInput
               filePicker.open()
@@ -108,7 +108,7 @@ RowLayout {
         anchors.right: parent.right
 
         MenuButton {
-          text: "Remove"
+          text: i18n.t("game-editor.remove")
           enabled: animationName
           onClicked: {
             animationLibrary.remove(root.animationGroup, root.animationName);
@@ -118,7 +118,7 @@ RowLayout {
         }
 
         MenuButton {
-          text: "Save"
+          text: i18n.t("game-editor.save")
           enabled: spriteForm.model.hasChanged
           onClicked: {
             console.log("save clicked");

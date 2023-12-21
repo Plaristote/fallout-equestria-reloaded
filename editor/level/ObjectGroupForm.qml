@@ -15,8 +15,8 @@ GridLayout {
     groupFloorInput.text   = currentGroup.floor;
   }
 
-  TerminalLabel { text: "> Group"; Layout.columnSpan: 3; font.pointSize: 13; }
-  TerminalLabel { text: "Name" }
+  TerminalLabel { text: `> ${i18n.t("game-editor.levels.object-group")}`; Layout.columnSpan: 3; font.pointSize: 13; }
+  TerminalLabel { text: i18n.t("game-editor.levels.group-name") }
   TerminalField {
     Layout.columnSpan: 2
     Layout.fillWidth: true
@@ -24,7 +24,7 @@ GridLayout {
     onTextChanged: if (currentGroup.name !== text) { currentGroup.name = text }
   }
 
-  TerminalLabel { text: "Offset" }
+  TerminalLabel { text: i18n.t("game-editor.levels.offset") }
   TerminalField {
     id: groupOffsetXInput
     Layout.fillWidth: true
@@ -42,7 +42,7 @@ GridLayout {
     }
   }
 
-  TerminalLabel { text: "Floor"; visible: withFloor }
+  TerminalLabel { text: i18n.t("game-editor.levels.floor"); visible: withFloor }
   TerminalField {
     id: groupFloorInput
     Layout.fillWidth: true
@@ -54,7 +54,7 @@ GridLayout {
     }
   }
 
-  TerminalLabel { text: "Script"; visible: !readOnlyScript }
+  TerminalLabel { text: i18n.t("game-editor.script"); visible: !readOnlyScript }
   ScriptInputField {
     Layout.fillWidth: true
     Layout.columnSpan: 2

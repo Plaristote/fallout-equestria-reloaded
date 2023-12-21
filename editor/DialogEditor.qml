@@ -58,7 +58,7 @@ Item {
 
   TextPromptDialog {
     id: addDialogDialog
-    title: "New dialog"
+    title: i18n.t("game-editor.dialogs.add")
     anchors.centerIn: parent
     onAccepted: {
       scriptController.newDialog(value);
@@ -68,14 +68,14 @@ Item {
 
   TextPromptDialog {
     id: addAnswerDialog
-    title: "New answer"
+    title: i18n.t("game-editor.dialogs.answers.add")
     anchors.centerIn: parent
     onAccepted: controller.newAnswer(value);
   }
 
   TextPromptDialog {
     id: newStateDialog
-    title: "New dialog State"
+    title: i18n.t("game-editor.dialogs.states.add")
     anchors.centerIn: parent
     onAccepted: {
       controller.newState(value);
@@ -85,7 +85,7 @@ Item {
 
   ConfirmDialog {
     id: removeStateDialog
-    text: "Remove dialog State"
+    text: i18n.t("game-editor.dialogs.states.remove")
     anchors.centerIn: parent
     onAccepted: {
       controller.removeState();
@@ -96,7 +96,7 @@ Item {
 
   ConfirmDialog {
     id: removeAnswerDialog
-    title: "Remove answer"
+    title: i18n.t("game-editor.dialogs.answers.remove")
     anchors.centerIn: parent
     onAccepted: controller.removeAnswer()
   }
@@ -121,7 +121,7 @@ Item {
         background: UiStyle.TerminalPane {}
         ColumnLayout {
           width: parent.width
-          TerminalLabel { text: "Initial state" }
+          TerminalLabel { text: i18n.t("game-editor.dialogs.states.initial") }
           TerminalComboBox {
             Layout.fillWidth: true
             id: entryPointInput
@@ -159,7 +159,7 @@ Item {
         id: formControls
         anchors.bottom: parent.bottom
         anchors.right: parent.right
-        text: "Save"
+        text: i18n.t("game-editor.save")
         onClicked: { controller.save(currentDialog.replace(".json", "")); }
       }
     }

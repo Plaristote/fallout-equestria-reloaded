@@ -18,13 +18,13 @@ DynamicObjectEditor {
   signal requestDialogView(string dialogName)
 
   fields: [
-    TerminalLabel { text: "Character Sheet" },
+    TerminalLabel { text: i18n.t("game-editor.levels.characters.sheet") },
     CharacterSheetInputField {
       Layout.fillWidth: true
       model: characterEditor.model
     },
 
-    TerminalLabel { text: "Dialog" },
+    TerminalLabel { text: i18n.t("game-editor.levels.characters.dialog") },
     RowLayout {
       Layout.fillWidth: true
       TerminalButton {
@@ -42,7 +42,7 @@ DynamicObjectEditor {
       }
     },
 
-    TerminalLabel { text: "Faction" },
+    TerminalLabel { text: i18n.t("game-editor.levels.characters.faction") },
     TerminalField {
       Layout.fillWidth: true
       text: model.statistics.faction
@@ -51,7 +51,7 @@ DynamicObjectEditor {
       }
     },
 
-    TerminalLabel { text: "Unique" },
+    TerminalLabel { text: i18n.t("game-editor.levels.characters.is-unique") },
     TerminalCheckBox {
       checked: model.isUnique
       onCheckedChanged: {

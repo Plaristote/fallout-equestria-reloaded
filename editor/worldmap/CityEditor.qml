@@ -34,7 +34,7 @@ WorldmapListEditor {
   }
 
   addDialog: TextPromptDialog {
-    title: "Add city"
+    title: i18n.t("game-editor.cities.add")
     parent: Overlay.overlay
     anchors.centerIn: parent
     onAccepted: {

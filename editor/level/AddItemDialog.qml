@@ -9,7 +9,7 @@ UiStyle.CustomDialog {
   property QtObject inventory
   property string currentItemType
 
-  title: "Add item"
+  title: i18n.t("game-editor.inventories.add-item")
   modal: true
   anchors.centerIn: parent
   standardButtons: Dialog.Ok | Dialog.Cancel
@@ -18,7 +18,7 @@ UiStyle.CustomDialog {
     width: parent.width
     columns: 2
 
-    CustomLabel { text: "Filter" }
+    CustomLabel { text: i18n.t("game-editor.filter") }
     CustomTextField {
       id: filterInput
       text: ""
@@ -75,7 +75,7 @@ UiStyle.CustomDialog {
       }
     }
 
-    CustomLabel { text: "Quantity" }
+    CustomLabel { text: i18n.t("game-editor.items.quantity") }
     CustomTextField {
       id: newItemQuantityInput
       text: "1"
