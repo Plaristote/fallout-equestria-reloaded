@@ -3,6 +3,7 @@ import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
 import "../../assets/ui" as UiStyle
 import "../../ui"
+import "." as LevelEditor
 import Game 1.0
 
 UiStyle.CustomDialog {
@@ -55,11 +56,18 @@ UiStyle.CustomDialog {
 
     // Character inputs
     CustomLabel { text: "Character sheet"; visible: objectTypeInput.currentText === "character" }
-    SelectBox {
-      id: sheetInput;
-      visible: objectTypeInput.currentText === "character"
+    TerminalButton {
+      id: sheetInput
       Layout.fillWidth: true
-      Layout.preferredWidth: 40
+      Layout.preferredHeight: 40
+      visible: objectTypeInput.currentText === "character"
+      onClicked: sheetPicker.startPicking(text)
+      LevelEditor.CharacterSheetPicker {
+        id: sheetPicker
+        parent: Overlay.overlay
+        anchors.centerIn: parent
+        onAccepted: sheetInput.text = pickedOption
+      }
     }
 
     // InventoryItem inputs
@@ -80,7 +88,7 @@ UiStyle.CustomDialog {
     var newObject;
 
     if (objectTypeInput.currentText === "character")
-      newObject = factory.generateCharacter(objectNameInput.text, sheetInput.currentText.replace(".json", ""));
+      newObject = factory.generateCharacter(objectNameInput.text, sheetInput.text.replace(".json", ""));
     else if (objectTypeInput.currentText == "storage")
       newObject = factory.generateStorageObject(objectNameInput.text);
     else if (objectTypeInput.currentText == "door")
