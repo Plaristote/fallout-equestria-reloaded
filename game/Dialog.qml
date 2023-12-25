@@ -149,6 +149,7 @@ Item {
           delegate: Button {
             text: "> " + root.controller.getOptionText(controller.options[index])
             font.family: application.consoleFontName
+            font.pointSize: application.consoleFont.bigSize
             hoverEnabled: true
             contentItem: Text { color: parent.hovered ? "white" : "green"; text: parent.text; font: parent.font; wrapMode: Text.WordWrap }
             background: Rectangle { color: "transparent" }
