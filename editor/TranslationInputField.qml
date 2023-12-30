@@ -1,6 +1,7 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
+import "qrc:/assets/ui" as UiStyle
 import "../ui"
 
 RowLayout {
@@ -54,13 +55,17 @@ RowLayout {
   }
 
   TerminalButton {
+    id: button
     text: translationKey
     onClicked: keyPickerDialog.open()
+    clip: true
+    implicitWidth: 150
+    UiStyle.TerminalToolTip { target: button }
     TextPromptDialog {
       id: keyPickerDialog
       parent: Overlay.overlay
       anchors.centerIn: parent
-      title: "Translation key: " + prefix
+      title: `${i18n.t("game-editor.translation-key")}: ${prefix}`
       value: root.translationKey
       onAccepted: requireKeyChange(value)
     }
