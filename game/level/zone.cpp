@@ -145,7 +145,14 @@ void ZoneComponent::onZoneExited(DynamicObject* object, TileZone* zone)
   }
 }
 
-QJSValue ZoneComponent::getZoneOccupants(TileZone* zone)
+bool ZoneComponent::isInsideZone(const TileZone* zone, const DynamicObject* object) const
+{
+  return zone && object
+      && zone->getFloor() == object->getCurrentFloor()
+      && zone->getPositions().indexOf(object->getPosition()) >= 0;
+}
+
+QJSValue ZoneComponent::getZoneOccupants(const TileZone* zone) const
 {
   auto*    game = Game::get();
   auto&    scriptEngine = game->getScriptEngine();

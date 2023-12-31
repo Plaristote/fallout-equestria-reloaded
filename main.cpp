@@ -125,6 +125,7 @@ int main(int argc, char *argv[])
   qRegisterMetaType<Character*>("const Character*");
   qRegisterMetaType<CharacterDiplomacy*>("const CharacterDiplomacy*");
   qRegisterMetaType<DynamicObject*>("const DynamicObject*");
+  qRegisterMetaType<TileZone*>("const TileZone*");
   qRegisterMetaType<ObjectFactory*>("ObjectFactory*");
   qRegisterMetaType<ObjectGroup*>("const ObjectGroup*");
   qRegisterMetaType<GridComponent*>("GridComponent*");

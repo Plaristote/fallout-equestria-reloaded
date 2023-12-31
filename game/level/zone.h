@@ -17,7 +17,8 @@ public:
   void registerZoneController(ControlZoneComponent*) override;
   void unregisterZoneController(ControlZoneComponent*) override;
 
-  Q_INVOKABLE QJSValue getZoneOccupants(TileZone* zone);
+  Q_INVOKABLE bool isInsideZone(const TileZone*, const DynamicObject*) const;
+  Q_INVOKABLE QJSValue getZoneOccupants(const TileZone* zone) const;
 
 signals:
   void exitZoneEntered(TileZone*);
