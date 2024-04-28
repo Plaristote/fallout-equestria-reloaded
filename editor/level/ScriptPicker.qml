@@ -39,7 +39,7 @@ ResourcePicker {
     anchors.centerIn: parent
     onAccepted: {
       var newName = newScriptDialog.value;
-      if (availableScripts.indexOf(newName) < 0) {
+      if (availableItems.indexOf(newName) < 0) {
         newName = scriptController.setScript(scriptCategory, newName, "");
         root.scriptCategoryChanged() // should refresh availableItems
       }
