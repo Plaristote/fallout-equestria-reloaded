@@ -98,6 +98,21 @@ void ZoneComponent::unregisterZone(TileZone* zone)
   }
 }
 
+TileZone * ZoneComponent::getZoneFromName(const QString& name) const
+{
+  for (unsigned char i = 0 ; i < getFloorCount() ; ++i)
+  {
+    LevelGrid* floor = getFloorGrid(i);
+
+    for (TileZone* zone : floor->getZones())
+    {
+      if (zone->getName() == name)
+        return zone;
+    }
+  }
+  return nullptr;
+}
+
 void ZoneComponent::onZoneChangedFloor(TileZone* zone)
 {
   qDebug() << "onZoneChangedFloor" << zone;
