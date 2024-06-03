@@ -155,6 +155,16 @@ static std::function<void(OBJECT_TYPE*)> makeFilterLambda(QJSValue filter, QJSVa
   };
 }
 
+template<typename OBJECT_TYPE>
+static std::function<void(OBJECT_TYPE*)> makeExpressionLambda(const ObjectGroup* group, const QRegularExpression& regex, QJSValue& result, QJSValue& push)
+{
+  return [&regex, &result, &push, group](OBJECT_TYPE* object)
+  {
+    if (regex.match(object->getRelativePath(*group)).hasMatch())
+      push.callWithInstance(result, QJSValueList() << object->asJSValue());
+  };
+}
+
 QJSValue ObjectGroup::findFromFilter(QJSValue filter) const
 {
   QJSValue result = Game::get()->getScriptEngine().newArray();
@@ -175,16 +185,8 @@ QJSValue ObjectGroup::findFromExpression(QString expression) const
   QJSValue result = Game::get()->getScriptEngine().newArray();
   QJSValue push = result.property("push");
 
-  eachGroup([this, regex, &push, &result](ObjectGroup* group)
-  {
-    if (regex.match(group->getRelativePath(*this)).hasMatch())
-      push.callWithInstance(result, QJSValueList() << group->asJSValue());
-  });
-  eachObject([this, regex, &push, &result](DynamicObject* object)
-  {
-    if (regex.match(object->getRelativePath(*this)).hasMatch())
-      push.callWithInstance(result, QJSValueList() << object->asJSValue());
-  });
+  eachGroup(makeExpressionLambda<ObjectGroup>(this, regex, result, push));
+  eachObject(makeExpressionLambda<DynamicObject>(this, regex, result, push));
   return result;
 }
 
