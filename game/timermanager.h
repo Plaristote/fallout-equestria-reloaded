@@ -10,12 +10,13 @@ class TimeManager : public QObject
 {
   Q_OBJECT
 
-  Q_PROPERTY(int year   READ getYear   NOTIFY dateChanged)
-  Q_PROPERTY(int month  READ getMonth  NOTIFY dateChanged)
-  Q_PROPERTY(int day    READ getDay    NOTIFY dateChanged)
-  Q_PROPERTY(int hour   READ getHour   NOTIFY dateChanged)
-  Q_PROPERTY(int minute READ getMinute NOTIFY dateChanged)
-  Q_PROPERTY(int second READ getSecond NOTIFY dateChanged)
+  Q_PROPERTY(int year    READ getYear    NOTIFY dateChanged)
+  Q_PROPERTY(int month   READ getMonth   NOTIFY dateChanged)
+  Q_PROPERTY(int day     READ getDay     NOTIFY dateChanged)
+  Q_PROPERTY(int hour    READ getHour    NOTIFY dateChanged)
+  Q_PROPERTY(int minute  READ getMinute  NOTIFY dateChanged)
+  Q_PROPERTY(int second  READ getSecond  NOTIFY dateChanged)
+  Q_PROPERTY(int weekDay READ getWeekDay NOTIFY dateChanged)
 public:
   struct TimePoint
   {
@@ -53,6 +54,7 @@ public:
   int getHour()   const { return dateTime.GetHour(); }
   int getMinute() const { return dateTime.GetMinute(); }
   int getSecond() const { return dateTime.GetSecond(); }
+  int getWeekDay() const { return dateTime.GetDayOfTheWeek(); }
 
 signals:
   void dateChanged();
