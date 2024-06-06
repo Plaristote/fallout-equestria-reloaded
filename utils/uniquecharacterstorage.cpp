@@ -199,7 +199,8 @@ bool UniqueCharacterStorage::loadCharacterToZone(const QString& characterSheet, 
 
   if (position.isInvalid())
   {
-    qDebug() << "UniqueCharacterStorage: cannot find space to insert" << characterSheet << "into zone" << tileZone->getName();
+    QString tileZoneName = tileZone ? tileZone->getName() : "undefined";
+    qDebug() << "UniqueCharacterStorage: cannot find space to insert" << characterSheet << "into zone" << tileZoneName;
     return false;
   }
   return loadCharacterToCurrentLevel(characterSheet, position.x, position.y, position.z);
