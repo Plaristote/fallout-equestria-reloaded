@@ -31,6 +31,7 @@ void CharacterDiplomacy::initializeFaction()
   }
   else
     faction = nullptr;
+  emit diplomacyUpdated();
 }
 
 bool CharacterDiplomacy::isAlly(const CharacterDiplomacy* other) const
