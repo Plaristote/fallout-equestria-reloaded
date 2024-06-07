@@ -115,6 +115,11 @@ LevelGrid::CaseContent* LevelGrid::getGridCase(int x, int y, unsigned char z)
   return targetGrid ? targetGrid->getGridCase(x, y) : nullptr;
 }
 
+QList<TileZone*> LevelGrid::getZones() const
+{
+  return zoneListener.keys();
+}
+
 QVector<TileZone*> LevelGrid::getZonesAt(QPoint position)
 {
   auto* gridCase = getGridCase(position.x(), position.y());

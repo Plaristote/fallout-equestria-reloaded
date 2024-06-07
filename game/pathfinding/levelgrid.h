@@ -102,6 +102,7 @@ public:
   CaseContent* getGridCase(int x, int y);
   CaseContent* getGridCase(int x, int y, unsigned char z);
   QVector<TileZone*> getZonesAt(QPoint);
+  QList<TileZone*> getZones() const;
 
 private:
   static void setCaseOccupant(CaseContent&, DynamicObject*);
