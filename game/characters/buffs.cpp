@@ -17,6 +17,7 @@ void CharacterBuffs::load(const QJsonObject& data)
 {
   const QJsonArray buffArray = data["buffs"].toArray();
 
+  ParentType::load(data);
   for (const QJsonValue& buffData : buffArray)
   {
     Buff* buff = new Buff(reinterpret_cast<Character*>(this));
@@ -25,7 +26,6 @@ void CharacterBuffs::load(const QJsonObject& data)
     buffs.push_back(buff);
     onBuffAdded(buff);
   }
-  ParentType::load(data);
 }
 
 void CharacterBuffs::save(QJsonObject& data) const
