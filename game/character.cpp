@@ -35,7 +35,7 @@ void Character::update(qint64 delta)
 bool Character::shouldJoinFight() const
 {
   auto* level = Game::get()->getLevel();
-  bool canJoin = attacksOnSight || (level && level->isCombatEnabled());
+  bool canJoin = attacksOnSight || (level && level->alreadyInCombat());
 
   return canJoin && !unconscious && morale > 0 && hasLivingEnemiesInSight();
 }

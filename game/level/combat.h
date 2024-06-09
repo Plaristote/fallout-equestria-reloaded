@@ -39,6 +39,7 @@ public:
   Q_INVOKABLE bool tryToEndCombat();
   Q_INVOKABLE void passTurn(Character* character);
 
+  bool alreadyInCombat() const { return combat; }
   bool isCombatEnabled() const;
   bool nothingHappenedInCombatTurn() const;
 
