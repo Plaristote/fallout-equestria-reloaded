@@ -19,7 +19,7 @@ ItemIcon {
     id: itemMouseArea
     anchors.fill: parent
     drag.target: parent
-    onReleased: parent.Drag.target.receiveInventoryItem(model);
+    onReleased: parent.Drag.target ? parent.Drag.target.receiveInventoryItem(model) : null;
     onClicked: itemIcon.clicked(mouse)
   }
 }

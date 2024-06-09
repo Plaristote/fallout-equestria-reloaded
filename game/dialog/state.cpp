@@ -22,8 +22,9 @@ void DialogStateData::load(const QString& symbol, const QJsonObject& object)
 void DialogStateData::save(QJsonObject& object) const
 {
   object["text"] = localTranslationPath;
-  object["mood"] = mood;
   object["answers"] = QJsonValue::fromVariant(QVariant::fromValue(defaultAnswers));
+  if (mood.length() > 0)
+    object["mood"] = mood;
   if (triggerHook.isString())
     object["hook"] = triggerHook.toString();
 }

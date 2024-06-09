@@ -81,9 +81,9 @@ void CharacterParty::removeCharacter(Character* character)
   }
 }
 
-bool CharacterParty::containsCharacter(Character* character) const
+bool CharacterParty::containsCharacter(const Character* character) const
 {
-  return list.count(character) > 0;
+  return list.count(const_cast<Character*>(character)) > 0;
 }
 
 Character* CharacterParty::find(QJSValue callback) const
