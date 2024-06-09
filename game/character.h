@@ -17,6 +17,7 @@ class Character : public CharacterBuffs
   Q_PROPERTY(QObject* actionQueue READ qpropertyActionQueue CONSTANT)
   Q_PROPERTY(int actionPoints MEMBER actionPoints NOTIFY actionPointsChanged)
   Q_PROPERTY(int morale MEMBER morale NOTIFY moraleChanged)
+  Q_PROPERTY(bool attacksOnSight MEMBER attacksOnSight NOTIFY attacksOnSightChanged)
 public:
   explicit Character(QObject *parent = nullptr);
 
@@ -64,6 +65,7 @@ signals:
   void requireJoinCombat();
   void characterKill(Character* victim, Character* killer);
   void moraleChanged();
+  void attacksOnSightChanged();
 
 private slots:
   void onActionQueueCompleted();
@@ -77,6 +79,7 @@ private:
   bool unconscious = false;
   int actionPoints = 0;
   int morale = CHARACTER_MAX_MORALE;
+  bool attacksOnSight = true;
   QJSValue jsActionQueue;
 };
 

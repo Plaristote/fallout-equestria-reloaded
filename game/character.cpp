@@ -34,7 +34,10 @@ void Character::update(qint64 delta)
 
 bool Character::shouldJoinFight() const
 {
-  return Game::get()->getPlayer() != this && !unconscious && hasLivingEnemiesInSight() && morale > 0;
+  auto* level = Game::get()->getLevel();
+  bool canJoin = attacksOnSight || (level && level->isCombatEnabled());
+
+  return canJoin && !unconscious && morale > 0 && hasLivingEnemiesInSight();
 }
 
 void Character::onActionQueueCompleted()
@@ -308,9 +311,10 @@ void Character::resetActionPoints()
 
 void Character::load(const QJsonObject& data)
 {
-  actionPoints = data["ap"].toInt();
-  unconscious  = !(data["ko"].toBool(true));
-  morale       = data["morale"].toInt(CHARACTER_MAX_MORALE);
+  actionPoints   = data["ap"].toInt();
+  unconscious    = !(data["ko"].toBool(true));
+  morale         = data["morale"].toInt(CHARACTER_MAX_MORALE);
+  attacksOnSight = data["attacksOnSight"].toBool(true);
   ParentType::load(data);
 }
 
@@ -321,6 +325,8 @@ void Character::save(QJsonObject& data) const
     data["ko"] = unconscious;
   if (morale != CHARACTER_MAX_MORALE)
     data["morale"] = morale;
+  if (!attacksOnSight)
+    data["attacksOnSight"] = attacksOnSight;
   ParentType::save(data);
 }
 

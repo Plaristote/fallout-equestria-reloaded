@@ -88,6 +88,7 @@ void Game::newPlayerParty(StatModel* statistics)
   player->setObjectName("player");
   player->setStatistics(statistics);
   player->setScript("player.mjs");
+  player->setProperty("attacksOnSight", false);
   playerParty->addCharacter(player);
   initializeEvents();
   initializeScript();
