@@ -44,9 +44,11 @@ bool CharacterDialog::load(const QString& name, Character* player, DynamicObject
       prepareDialogWithCharacter();
     connect(npc, &DynamicObject::objectNameChanged, this, &CharacterDialog::nameChanged);
     script->initialize(this);
-    loadState(state.isEmpty() ? getEntryPoint() : state);
-    emit ready();
-    return true;
+    if (loadState(state.isEmpty() ? getEntryPoint() : state))
+    {
+      emit ready();
+      return true;
+    }
   }
   else
     qDebug() << "Could not load dialog file " << (SCRIPTS_PATH + "/dialogs/" + name + ".json");
@@ -76,7 +78,7 @@ void CharacterDialog::loadOption(const QString &answer)
     options.push_back(answer);
 }
 
-void CharacterDialog::loadState(const QString& reference)
+bool CharacterDialog::loadState(const QString& reference)
 {
   const auto& stateData = data.findState(reference);
   DialogState state;
@@ -99,9 +101,11 @@ void CharacterDialog::loadState(const QString& reference)
     emit textChanged();
     emit optionsChanged();
     emit moodChanged();
+    return true;
   }
   else
     emit dialogEnded();
+  return false;
 }
 
 void CharacterDialog::selectOption(const QString& answerSymbol)

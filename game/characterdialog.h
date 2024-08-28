@@ -31,7 +31,7 @@ public:
   virtual ~CharacterDialog();
 
   Q_INVOKABLE bool load(const QString& name, Character* player, DynamicObject* npc, const QString& state = "");
-  Q_INVOKABLE void loadState(const QString& reference);
+  Q_INVOKABLE bool loadState(const QString& reference);
   void setAmbiance(const QString& value) { ambiance = value; emit ambianceChanged(); }
   Q_INVOKABLE QJSValue getScriptObject() const { return script ? script->getObject() : QJSValue(); }
   ScriptController* getScript() const { return script; }
