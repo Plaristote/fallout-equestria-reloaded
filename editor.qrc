@@ -61,5 +61,6 @@
         <file>editor/ScriptInputField.qml</file>
         <file>editor/TranslationInputField.qml</file>
         <file>editor/DialogStateEditor.qml</file>
+        <file>editor/TreeTextPromptDialog.qml</file>
     </qresource>
 </RCC>

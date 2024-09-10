@@ -14,18 +14,19 @@ Item {
     characterSheetView.sourceComponent = characterSheetEditor;
   }
 
-  TextPromptDialog {
+  TreeTextPromptDialog {
     id: newCharacterDialog
+    tree: characterSheetSelect
     title: i18n.t("game-editor.npcs.add")
     anchors.centerIn: parent
     function validate() {
-      validationError = list.indexOf(value + ".json") >= 0 ? `${value} already exists.` : "";
+      validationError = list.indexOf(jsonPath) >= 0 ? `${path} already exists.` : "";
       return validationError === "";
     }
     onAccepted: {
-      list.push(value + ".json");
+      list.push(jsonPath);
       listChanged();
-      currentCharacter = value + ".json";
+      currentCharacter = jsonPath;
     }
   }
 
