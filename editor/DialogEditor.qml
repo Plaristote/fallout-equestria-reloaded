@@ -56,12 +56,13 @@ Item {
       dialogStateEditor.sourceComponent = null
   }
 
-  TextPromptDialog {
+  TreeTextPromptDialog {
     id: addDialogDialog
+    tree: dialogSelect
     title: i18n.t("game-editor.dialogs.add")
     anchors.centerIn: parent
     onAccepted: {
-      scriptController.newDialog(value);
+      scriptController.newDialog(path);
       dialogSelect.treeModel = scriptController.getDialogs();
     }
   }
@@ -73,13 +74,14 @@ Item {
     onAccepted: controller.newAnswer(value);
   }
 
-  TextPromptDialog {
+  TreeTextPromptDialog {
     id: newStateDialog
+    tree: stateSelect
     title: i18n.t("game-editor.dialogs.states.add")
     anchors.centerIn: parent
     onAccepted: {
-      controller.newState(value);
-      currentState = value;
+      controller.newState(path);
+      currentState = path;
     }
   }
 
