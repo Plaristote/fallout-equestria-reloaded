@@ -2,6 +2,7 @@
 #define SCRIPTEDITORCONTROLLER_H
 
 #include <QObject>
+#include <QJSValue>
 #include "cmap/statmodel.h"
 
 class ScriptEditorController : public QObject
@@ -21,6 +22,8 @@ public:
   Q_INVOKABLE QStringList getLevels();
   Q_INVOKABLE QStringList getFactions();
   Q_INVOKABLE QStringList getDialogs();
+
+  Q_INVOKABLE QStringList getFunctionsFromScript(QJSValue);
 
   Q_INVOKABLE void newDialog(const QString& name);
 

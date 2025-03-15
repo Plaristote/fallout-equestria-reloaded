@@ -4,6 +4,7 @@
 #include <QFile>
 #include <QDebug>
 #include <QJsonDocument>
+#include <QJSValueIterator>
 #include "game.h"
 #include "i18n.h"
 
@@ -269,4 +270,18 @@ void ScriptEditorController::setTranslation(const QString &key, const QString &t
     file.close();
     I18n::get()->loadCurrentLocale();
   }
+}
+
+QStringList ScriptEditorController::getFunctionsFromScript(QJSValue script)
+{
+  QJSValueIterator it(script);
+  QStringList functionList;
+
+  qDebug() << "Looking for functions in script" << script.toString();
+  while (it.hasNext())
+  {
+    if (it.value().isCallable() && script.hasOwnProperty(it.name()))
+      functionList.append(it.name());
+  }
+  return functionList;
 }
