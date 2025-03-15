@@ -2,6 +2,11 @@
 #include "candidatesolution.h"
 #include "caselocker.h"
 #include "tilemap/tilemap.h"
+#ifdef PATHFINDING_DEBUG
+# define PATHDEBUG(message) qDebug() << message;
+#else
+# define PATHDEBUG(message)
+#endif
 
 typedef AstarPathfinding<LevelGrid::CaseContent>  CasePathfinder;
 typedef AstarPathfinding<PathZone>                ZonePathfinder;
@@ -55,10 +60,10 @@ static bool findPathToZone(
       return true;
     }
     else
-      qDebug() << "-> findPathToZone found an exit towards target zone, but couldn't reach it.";
+    { PATHDEBUG("-> findPathToZone found an exit towards target zone, but couldn't reach it.") }
   }
   else
-    qDebug() << "-> findPathToZone found no available exits towards target zone";
+  { PATHDEBUG("-> findPathToZone found no available exits towards target zone") }
   return false;
 }
 
@@ -76,7 +81,7 @@ static bool findZonePathToZone(
   ZonePathfinder::Solution* solution;
   unsigned short            iterationCount = 0;
 
-  qDebug() << "-> AStar looking for path between" << fromZone->rect << "and" << toZone->rect;
+  PATHDEBUG("-> AStar looking for path between" << fromZone->rect << "and" << toZone->rect)
   astar.SetStartAndGoalStates(*fromZone, {*toZone});
   while (astar.SearchStep() == ZonePathfinder::Searching && iterationCount < 250);
   solution = astar.GetBestSolution();
@@ -104,7 +109,7 @@ static bool findZonePathToZone(
     return stepIt == solution->end();
   }
   else
-    qDebug() << "-> AStar claims there's no way";
+  { PATHDEBUG("-> AStar claims there's no way") }
   return false;
 }
 
@@ -119,7 +124,7 @@ bool ZoneGrid::findPath(Point from, const QVector<Point> &to, QList<Point> &path
   CaseSorter                         heuristic = std::bind(&sortCasesByProximity, *targetCase, std::placeholders::_1, std::placeholders::_2);
   CaseLocker                         caseLock(fromCase);
 
-  qDebug() << character << "findPath" << candidates.length();
+  PATHDEBUG(character << "findPath" << candidates.length())
   while ((candidate = candidates.nextCandidate()) != candidates.end())
   {
     if (candidate->state == CandidateSolution::Pending)
@@ -127,16 +132,16 @@ bool ZoneGrid::findPath(Point from, const QVector<Point> &to, QList<Point> &path
       QList<Point> currentPath;
       bool         failed = false;
 
-      qDebug() << "-> trying candidate Zone" << candidate->zone->id << " Position" << candidate->target->position;
+      PATHDEBUG("-> trying candidate Zone" << candidate->zone->id << " Position" << candidate->target->position)
       if (fromZone->id != candidate->zone->id)
       {
-        qDebug() << "-> finding path towards zone";
+        PATHDEBUG("-> finding path towards zone")
         failed = !findZonePathToZone(*this,
                                         fromZone, fromCase, candidate->zone,
                                         heuristic, currentPath, character);
       }
       else
-        qDebug() << "-> skipping zone pathvinding (target is in start zone)";
+      { PATHDEBUG("-> skipping zone pathvinding (target is in start zone)") }
       if (!failed)
       {
         CasePathfinder            astar(character);
@@ -154,25 +159,25 @@ bool ZoneGrid::findPath(Point from, const QVector<Point> &to, QList<Point> &path
         {
           for (auto it = ++solution->begin() ; it != solution->end() ; ++it)
             currentPath.push_back(it->position);
-          qDebug() << "-> path to target case found" << currentPath.size();
+          PATHDEBUG("-> path to target case found" << currentPath.size())
         }
         else
         {
-          qDebug() << "-> /!\\ path to target case not found";
+          PATHDEBUG("-> /!\\ path to target case not found")
           failed = true;
         }
       }
       else
-        qDebug() << "-> /!\\ path to zone not found";
+      { PATHDEBUG("-> /!\\ path to zone not found") }
       candidates.addSolution(candidate->zone, !failed ? currentPath : QList<Point>());
     }
     else
     {
       path = candidate->path;
-      qDebug() << "(!) Pathfinding success. Path size:" << path.size();
+      PATHDEBUG("(!) Pathfinding success. Path size:" << path.size())
       return true;
     }
   }
-  qDebug() << "(!) Pathfinding failure...";
+  PATHDEBUG("(!) Pathfinding failure...")
   return false;
 }
