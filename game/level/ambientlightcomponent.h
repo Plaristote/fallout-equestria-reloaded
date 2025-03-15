@@ -14,6 +14,8 @@ class AmbientLightComponent : public CameraComponent
 public:
   explicit AmbientLightComponent(QObject *parent = nullptr);
 
+  // TODO disable daylight on underground floors
+
   inline bool usesDaylight() const { return useAmbientLight && useDaylight; }
 
   void load(const QJsonObject&);
