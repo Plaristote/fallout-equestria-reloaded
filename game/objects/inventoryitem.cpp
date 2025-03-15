@@ -261,13 +261,15 @@ bool InventoryItem::isValidTarget(DynamicObject* target)
 
 QJSValue InventoryItem::useOn(DynamicObject* target)
 {
-  if (script && script->hasMethod("attemptToUseOn"))
+  if (script)
   {
-    if (this->requiresTarget() || target)
+    QJSValueList params;
+
+    if (target)
+      params << target->asJSValue();
+    if (script->hasMethod("attemptToUseOn"))
     {
-      if (target && isValidTarget(target))
-        return script->call("attemptToUseOn", QJSValueList() << target->asJSValue());
-      else
+      if (this->requiresTarget() && (!target || !isValidTarget(target)))
       {
         const DynamicObject* owner = getOwner();
         Game* game = Game::get();
@@ -276,11 +278,12 @@ QJSValue InventoryItem::useOn(DynamicObject* target)
           game->appendToConsole(I18n::get()->t("messages.invalid-target"));
         return false;
       }
+      return script->call("attemptToUseOn", params);
     }
-    else
-      return script->call("attemptToUseOn");
+    else if (script->hasMethod("useOn"))
+      return script->call("useOn", params);
   }
-  return script && script->hasMethod("useOn");
+  return false;
 }
 
 void InventoryItem::useReload(bool refill)
