@@ -53,7 +53,7 @@ int Doorway::getCoverValue() const
 
 void Doorway::removeTileConnections()
 {
-  for (void* caseContent : qAsConst(tileConnections))
+  for (void* caseContent : std::as_const(tileConnections))
     reinterpret_cast<LevelGrid::CaseConnection*>(caseContent)->doorway = nullptr;
   tileConnections.clear();
 }

@@ -117,7 +117,7 @@ void TileLayer::loadTiles(const QJsonArray& tileArray, const QVector<Tileset*>& 
   QPoint currentPosition(0, 0);
 
   tiles.reserve(tileArray.size());
-  for (const QJsonValue& value : qAsConst(tileArray))
+  for (const QJsonValue& value : std::as_const(tileArray))
   {
     int tid = value.toInt();
     bool success = false;

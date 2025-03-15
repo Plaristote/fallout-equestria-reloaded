@@ -33,7 +33,7 @@ void VisualEffectsComponent::updateVisualEffects(qint64 delta)
 
 void VisualEffectsComponent::updateSprites(qint64 delta)
 {
-  for (Sprite* sprite : qAsConst(visualEffects))
+  for (Sprite* sprite : std::as_const(visualEffects))
     sprite->update(delta);
 }
 
@@ -58,7 +58,7 @@ void VisualEffectsComponent::updateRunningAnimations()
         callbacks << callback;
     }
   }
-  for (QJSValue callback : qAsConst(callbacks))
+  for (QJSValue callback : std::as_const(callbacks))
     callback.call();
 }
 

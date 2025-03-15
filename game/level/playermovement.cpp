@@ -69,7 +69,7 @@ QJSValue PlayerMovementComponent::previewPathTo(int x, int y)
 
   if (actionPoints > 0 && grid.findPath(getPlayer()->getPoint(), target, path, player))
   {
-    for (const auto& point : qAsConst(path))
+    for (const auto& point : std::as_const(path))
     {
       int cost = grid.actionPointCost(lastPosition, point);
       QJSValue position = scriptEngine.newObject();

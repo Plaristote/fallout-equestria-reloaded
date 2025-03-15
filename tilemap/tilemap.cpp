@@ -296,7 +296,7 @@ Tileset* TileMap::getTileset(const QString &name) const
 
 TileLayer* TileMap::getLayer(const QString &name)
 {
-  for (TileLayer* layer : qAsConst(layers))
+  for (TileLayer* layer : std::as_const(layers))
   {
     if (layer->getName() == name)
       return layer;
@@ -306,7 +306,7 @@ TileLayer* TileMap::getLayer(const QString &name)
 
 TileLayer* TileMap::getRoofLayer(const QString &name)
 {
-  for (TileLayer* layer : qAsConst(roofs))
+  for (TileLayer* layer : std::as_const(roofs))
   {
     if (layer->getName() == name)
       return layer;
@@ -316,7 +316,7 @@ TileLayer* TileMap::getRoofLayer(const QString &name)
 
 TileLayer* TileMap::getLightLayer(const QString &name)
 {
-  for (TileLayer* layer : qAsConst(lights))
+  for (TileLayer* layer : std::as_const(lights))
   {
     if (layer->getName() == name)
       return layer;
@@ -342,7 +342,7 @@ TileZone* TileMap::getZone(const QString& name)
 
 TileMap* TileMap::getFloor(const QString& name)
 {
-  for (FloorLayer* floor : qAsConst(floors))
+  for (FloorLayer* floor : std::as_const(floors))
   {
     if (floor->getName() == name)
       return floor->getTileMap();

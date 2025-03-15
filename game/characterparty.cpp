@@ -116,7 +116,7 @@ Character* CharacterParty::get(const QString& name)
 
 void CharacterParty::grantXp(unsigned int value)
 {
-  for (auto* character : qAsConst(list))
+  for (auto* character : std::as_const(list))
     character->getStatistics()->addExperience(static_cast<int>(value));
 }
 

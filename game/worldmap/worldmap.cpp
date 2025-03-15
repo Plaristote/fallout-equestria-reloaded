@@ -375,7 +375,7 @@ WorldMapZone* WorldMap::getCurrentZone() const
 {
   QPoint currentCase = getCaseAt(currentPosition.toPoint());
 
-  for (WorldMapZone* zone : qAsConst(zones))
+  for (WorldMapZone* zone : std::as_const(zones))
   {
     if (zone->containsCase(currentCase.x(), currentCase.y()))
       return zone;
@@ -398,7 +398,7 @@ QVector<WorldMapZone*> WorldMap::getCurrentZoneList() const
   QVector<WorldMapZone*> list;
   QPoint currentCase = getCaseAt(currentPosition.toPoint());
 
-  for (WorldMapZone* zone : qAsConst(zones))
+  for (WorldMapZone* zone : std::as_const(zones))
   {
     if (zone->containsCase(currentCase.x(), currentCase.y()))
       list.push_back(zone);

@@ -67,7 +67,7 @@ void GridComponent::onRoofVisibilityChanged(TileLayer* layer)
 {
   TileMask* mask = getTileMap()->getMaskLayerFor(layer);
 
-  for (DynamicObject* object : qAsConst(objects))
+  for (DynamicObject* object : std::as_const(objects))
   {
     QPoint position = object->getPosition();
 

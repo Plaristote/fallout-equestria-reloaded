@@ -50,7 +50,7 @@ QString jsErrorBacktrace(QJSValue retval);
 
 void TimePasser::triggerCallbacks()
 {
-  for (auto callback : qAsConst(callbacks))
+  for (auto callback : std::as_const(callbacks))
   {
     auto retval = callback.call();
 

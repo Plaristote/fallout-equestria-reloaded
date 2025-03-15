@@ -54,6 +54,6 @@ void TileMap::renderToImage(QImage& image, QPoint offset)
   if (ground)
     ground->renderToImage(image, renderOffset);
   renderTilemapWalls(*this, image, renderOffset);
-  for (TileLayer* roof : qAsConst(roofs))
+  for (TileLayer* roof : std::as_const(roofs))
     roof->renderToImage(image, renderOffset);
 }

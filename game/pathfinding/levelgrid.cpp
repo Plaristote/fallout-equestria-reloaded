@@ -189,7 +189,7 @@ DynamicObject* LevelGrid::getOccupant(int x, int y)
   {
     if (gridCase->occupant)
       return gridCase->occupant;
-    for (auto* zone : qAsConst(gridCase->zones))
+    for (auto* zone : std::as_const(gridCase->zones))
     {
       if (zone->getAccessBlocked() && zone->getOwner())
         return zone->getOwner();
@@ -206,7 +206,7 @@ void LevelGrid::removeObject(DynamicObject* object)
   if (gridCase)
   {
     extractObject(object);
-    for (auto* zone : qAsConst(gridCase->zones))
+    for (auto* zone : std::as_const(gridCase->zones))
     {
       if (object->isCharacter())
         reinterpret_cast<Character*>(object)->onZoneExited(zone);

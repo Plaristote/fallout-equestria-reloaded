@@ -13,7 +13,7 @@ Inventory::Inventory(QObject *parent) : QObject(parent)
 
 void Inventory::addItem(InventoryItem* item)
 {
-  for (auto* inventoryItem : qAsConst(items))
+  for (auto* inventoryItem : std::as_const(items))
   {
     if (inventoryItem->getItemType() == item->getItemType() && inventoryItem->isGroupable(item))
     {
@@ -101,7 +101,7 @@ InventoryItem* Inventory::addItemOfType(const QString &name, int quantity)
 {
   InventoryItem* item;
 
-  for (auto* inventoryItem : qAsConst(items))
+  for (auto* inventoryItem : std::as_const(items))
   {
     if (inventoryItem->getItemType() == name && inventoryItem->isGroupable())
     {

@@ -26,7 +26,7 @@ Quest* QuestManager::addQuest(const QString& name, int flags)
 
 Quest* QuestManager::getQuest(const QString& name) const
 {
-  for (Quest* quest : qAsConst(list))
+  for (Quest* quest : std::as_const(list))
   {
     if (quest->property("name").toString() == name)
       return quest;
@@ -68,7 +68,7 @@ QJsonObject QuestManager::save() const
 
 void QuestManager::onCharacterKilled(Character* victim, Character* killer)
 {
-  for (Quest* quest : qAsConst(list))
+  for (Quest* quest : std::as_const(list))
   {
     if (quest->inProgress())
       quest->onCharacterKilled(victim, killer);
@@ -77,7 +77,7 @@ void QuestManager::onCharacterKilled(Character* victim, Character* killer)
 
 void QuestManager::onItemPicked(InventoryItem* item)
 {
-  for (Quest* quest : qAsConst(list))
+  for (Quest* quest : std::as_const(list))
   {
     if (quest->inProgress())
       quest->onItemPicked(item);
@@ -86,7 +86,7 @@ void QuestManager::onItemPicked(InventoryItem* item)
 
 void QuestManager::onLevelChanged()
 {
-  for (Quest* quest : qAsConst(list))
+  for (Quest* quest : std::as_const(list))
   {
     if (quest->inProgress())
       quest->onLevelChanged();

@@ -81,7 +81,7 @@ DynamicObject* CursorComponent::getObjectAt(int posX, int posY) const
       list.push_back(object);
   });
   sortByRenderOrder(list);
-  for (DynamicObject* object : qAsConst(list))
+  for (DynamicObject* object : std::as_const(list))
   {
     if (isPotentialTarget(*object))
     {

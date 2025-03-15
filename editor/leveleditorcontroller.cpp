@@ -36,7 +36,7 @@ DynamicObject* LevelEditorController::generateFromTemplate(const QString& templa
 QQmlListProperty<DynamicObject> LevelEditorController::getQmlVisibleObjects()
 {
   visibleObjects.clear();
-  for (auto* object : qAsConst(attachedObjects))
+  for (auto* object : std::as_const(attachedObjects))
   {
     if (!object->isCharacter() && object->getCurrentFloor() == getCurrentFloor())
       visibleObjects << reinterpret_cast<Character*>(object);
@@ -47,7 +47,7 @@ QQmlListProperty<DynamicObject> LevelEditorController::getQmlVisibleObjects()
 QQmlListProperty<Character> LevelEditorController::getQmlVisibleCharacters()
 {
   visibleCharacters.clear();
-  for (auto* object : qAsConst(attachedObjects))
+  for (auto* object : std::as_const(attachedObjects))
   {
     if (object->isCharacter() && object->getCurrentFloor() == getCurrentFloor())
       visibleCharacters << reinterpret_cast<Character*>(object);
@@ -75,7 +75,7 @@ void LevelEditorController::update()
 {
   qint64 delta = clock.restart();
 
-  for (DynamicObject* object : qAsConst(objects))
+  for (DynamicObject* object : std::as_const(objects))
     object->update(delta);
   emit updated();
 }

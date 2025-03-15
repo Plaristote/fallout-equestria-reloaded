@@ -143,7 +143,7 @@ void ActionQueue::reset()
     std::for_each(++it, queue.end(), [](ActionBase* action) { action->canceled(); });
   }
   stash.reserve(queue.size());
-  for (auto* entry : qAsConst(queue))
+  for (auto* entry : std::as_const(queue))
     stash << entry;
   queue.clear();
   resetFlag = true;
