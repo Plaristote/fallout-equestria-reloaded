@@ -296,10 +296,14 @@ FieldOfView::CharacterList FieldOfView::GetCharactersInRange() const
   float field_of_view_radius = GetRadius();
   auto* level = Game::get()->getLevel();
 
-  return level->findCharacters([this, field_of_view_radius](Character& other) -> bool
+  if (level)
   {
-    return (&other != &character && other.getDistance(&character) < field_of_view_radius);
-  });
+    return level->findCharacters([this, field_of_view_radius](Character& other) -> bool
+    {
+      return (&other != &character && other.getDistance(&character) < field_of_view_radius);
+    });
+  }
+  return CharacterList();
 }
 
 void FieldOfView::LoseTrackOfCharacters(std::list<Entry>& entries)
