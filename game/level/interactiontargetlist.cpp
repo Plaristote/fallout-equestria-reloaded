@@ -80,6 +80,20 @@ void InteractionTargetList::findNearbyTargets(const QVector<DynamicObject*> obje
     afterTargetUpdate();
 }
 
+template<typename LIST>
+void remove_matching_entries(LIST& list, std::function<bool (typename LIST::value_type)> callback)
+{
+  auto it = list.begin();
+
+  while (it != list.end())
+  {
+    if (callback(*it))
+      it = list.erase(it);
+    else
+      ++it;
+  }
+}
+
 void InteractionTargetList::afterTargetUpdate()
 {
   Character* player = Game::get()->getPlayer();
@@ -87,7 +101,7 @@ void InteractionTargetList::afterTargetUpdate()
 
   if (level)
   {
-    std::remove_if(targets.begin(), targets.end(), [level](DynamicObject* object)
+    remove_matching_entries(targets, [level](DynamicObject* object)
     {
       QPoint pos        = level->getAdjustedOffsetFor(object);
       QPoint offset     = level->property("canvasOffset").toPoint();
