@@ -26,8 +26,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 #    endif()
 #endif()
 
-find_package(QT NAMES Qt6 Qt5 COMPONENTS Core Quick Gui REQUIRED)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Quick Gui OPTIONAL_COMPONENTS Gamepad Core5Compat)
+find_package(QT NAMES Qt6 COMPONENTS Core Quick Gui REQUIRED)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Quick Gui OPTIONAL_COMPONENTS Gamepad)
 find_package(Qt${QT_VERSION_MAJOR}Multimedia REQUIRED)
 
 set(QT_USE_QTMULTIMEDIA TRUE)
@@ -301,7 +301,7 @@ set(FOT_SPRITE_IMPORT_SOURCES
 )
 
 if (GAME_EDITOR)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DGAME_EDITOR")
+  add_compile_definitions(-DGAME_EDITOR)
   set(PROJECT_SOURCES ${PROJECT_SOURCES}
         editor/scripteditorcontroller.h
         editor/scripteditorcontroller.cpp
@@ -315,27 +315,15 @@ if (GAME_EDITOR)
   )
 endif()
 
-if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
-  if (WIN32)
-    qt_add_executable(falloutequestria WIN32 ${PROJECT_SOURCES})
-  else()
-    qt_add_executable(falloutequestria ${PROJECT_SOURCES})
-  endif()
-  qt_add_executable(fotspriteimport ${FOT_SPRITE_IMPORT_SOURCES})
+if (WIN32)
+  qt_add_executable(falloutequestria WIN32 ${PROJECT_SOURCES})
 else()
-  if(ANDROID)
-    add_library(falloutequestria SHARED ${PROJECT_SOURCES})
-  elseif(WIN32)
-    add_executable(falloutequestria WIN32 ${PROJECT_SOURCES})
-  else()
-    add_executable(falloutequestria ${PROJECT_SOURCES})
-  endif()
-  add_executable(fotspriteimport ${FOT_SPRITE_IMPORT_SOURCES})
+  qt_add_executable(falloutequestria ${PROJECT_SOURCES})
 endif()
+qt_add_executable(fotspriteimport ${FOT_SPRITE_IMPORT_SOURCES})
 
 set(ENGINE_LINK_LIBRARIES 
           Qt${QT_VERSION_MAJOR}::Core
-          Qt${QT_VERSION_MAJOR}::Core5Compat
           Qt${QT_VERSION_MAJOR}::Quick
           Qt${QT_VERSION_MAJOR}::Gui
           Qt${QT_VERSION_MAJOR}::Multimedia)
@@ -356,3 +344,6 @@ target_link_libraries(fotspriteimport
   PRIVATE Qt${QT_VERSION_MAJOR}::Core
           Qt${QT_VERSION_MAJOR}::Multimedia
 )
+
+qt_import_qml_plugins(falloutequestria)
+qt_finalize_executable(falloutequestria)
