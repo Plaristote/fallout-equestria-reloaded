@@ -1,4 +1,5 @@
-import QtQuick 2.15
+import QtQuick
+import QtQuick.Effects
 
 Image {
   id: root
@@ -65,14 +66,14 @@ Image {
       duration: breathingSpeed * 1.42
       onFinished: breathingInhale.running = true
     }
-/*
-    ColorOverlay {
-      visible: coloured
+
+    MultiEffect {
+      colorization: coloured ? 1 : 0
       anchors.fill: parent
       source: parent
-      color: root.color
+      colorizationColor: root.color
     }
-*/
+
     Image {
       id: faceOverlay
       anchors.fill: parent
@@ -91,13 +92,11 @@ Image {
       id: eyesColor
       anchors.fill: parent
       source: basePath + '/' + theme + '/eye-colors/' + moodSource + '.png'
-/*
-      ColorOverlay {
-        anchors.fill: parent
-        source: parent
-        color: Qt.rgba(eyeColor.r, eyeColor.g, eyeColor.b, 0.5)
+      layer.enabled: true
+      layer.effect: MultiEffect {
+        colorization: 1
+        colorizationColor: eyeColor
       }
-*/
     }
 
     Item {
@@ -109,13 +108,12 @@ Image {
         source: basePath + '/' + theme + '/eyes/' + moodSource + '.png'
         anchors { top: parent.top; left: parent.left; right: parent.right }
         height: eyes.height
-/*
-        ColorOverlay {
-          anchors.fill: parent
-          source: parent
-          color: Qt.rgba(root.color.r, root.color.g, root.color.b, 1)
+        layer.enabled: true
+        layer.effect: MultiEffect {
+          colorization: 1
+          colorizationColor: root.color
+          contrast: -1
         }
-*/
       }
 
       PropertyAnimation on height {
@@ -145,14 +143,11 @@ Image {
       anchors.fill: parent
       source: basePath + '/' + theme + '/mouthes/' + moodSource + '.png'
       fillMode: Image.Stretch
-/*
-      ColorOverlay {
-        visible: coloured
-        anchors.fill: parent
-        source: parent
-        color: root.color
+      layer.enabled: coloured
+      layer.effect: MultiEffect {
+        colorization: 1
+        colorizationColor: root.color
       }
-*/
     }
 
     Repeater {
@@ -174,14 +169,11 @@ Image {
       Image {
         source: basePath + '/' + theme + '/hairstyles/' + hairStyle + '.png'
         fillMode: Image.Stretch
-/*
-        ColorOverlay {
-          visible: coloured
-          anchors.fill: parent
-          source: parent
-          color: Qt.rgba(hairColor.r, hairColor.g, hairColor.b, 0.5)
+        layer.enabled: coloured
+        layer.effect: MultiEffect {
+          colorization: 1
+          colorizationColor: hairColor
         }
-*/
       }
     }
   }

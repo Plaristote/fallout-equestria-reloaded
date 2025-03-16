@@ -1,4 +1,5 @@
 import QtQuick 2.15
+import QtQuick.Effects
 
 BorderImage {
   property bool pressed: parent.down
@@ -15,12 +16,9 @@ BorderImage {
 
   horizontalTileMode: BorderImage.Repeat
   verticalTileMode: BorderImage.Repeat
-/*
-  ColorOverlay {
-    anchors.fill: parent
-    source: parent
-    color: Qt.rgba(220, 220, 220, 0.4)
-    visible: !parent.parent.enabled
+
+  layer.enabled: !parent.enabled
+  layer.effect: MultiEffect {
+    saturation: -1
   }
-*/
 }

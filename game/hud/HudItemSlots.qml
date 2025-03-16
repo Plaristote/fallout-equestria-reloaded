@@ -1,5 +1,6 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+import QtQuick.Effects
 import "qrc:/assets/ui" as UiStyle
 import "../../ui"
 
@@ -41,6 +42,7 @@ Item {
       id: itemSlotsRepeater
       model: itemSlotsPane.inventory.slotNames
       delegate: BorderImage {
+        id: itemSlotRoot
         property string slotName: itemSlotsRepeater.model[index]
         property QtObject slotItem: itemSlotsPane.inventory.getEquippedItem(slotName)
         property bool activated: activeItem === slotItem
@@ -50,6 +52,16 @@ Item {
         source: "qrc:/assets/ui/itemSlot.png"
         border { left: 4; bottom: 4; right: 4; top: 4 }
         clip: true
+        layer.enabled: true
+        layer.effect: MultiEffect {
+          brightness: {
+            if (itemSlotRoot.activated && mouseArea.containsMouse)
+              return 0.4;
+            if (itemSlotRoot.activated || mouseArea.containsMouse)
+              return 0.2;
+            return -0.2;
+          }
+        }
 
         DropArea {
           anchors.fill: parent
@@ -76,26 +88,7 @@ Item {
             }
           }
         }
-/*
-        ColorOverlay {
-          anchors.fill: parent
-          source: parent
-          visible: mouseArea.containsMouse && !parent.activated
-          color: Qt.rgba(155, 155, 155, 0.1)
-        }
-        ColorOverlay {
-          anchors.fill: parent
-          source: parent
-          visible: parent.activated && !mouseArea.containsMouse
-          color: Qt.rgba(155, 155, 155, 0.2)
-        }
-        ColorOverlay {
-          anchors.fill: parent
-          source: parent
-          visible: parent.activated && mouseArea.containsMouse
-          color: Qt.rgba(155, 155, 155, 0.3)
-        }
-*/
+
         Item {
           anchors.centerIn: parent
           width: itemIcon.width
