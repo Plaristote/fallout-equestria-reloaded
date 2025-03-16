@@ -87,8 +87,8 @@ Pane {
         Layout.fillWidth: true
         from: 0
         to: 100
-        Component.onCompleted: { value = musicManager.defaultVolume; }
-        onValueChanged: { musicManager.defaultVolume = value; }
+        Component.onCompleted: { value = musicManager.defaultVolume * 100; }
+        onValueChanged: { musicManager.defaultVolume = value / 100; }
       }
 
       TerminalLabel { text: i18n.t("options.soundEffectsVolume") }

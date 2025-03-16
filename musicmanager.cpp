@@ -3,26 +3,7 @@
 #include <QJsonDocument>
 #include <QSettings>
 #include <QDebug>
-
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-# define NEW_MEDIA_PLAYER \
-  audioManager = new QMediaPlayer(this);
-# define PLAYBACK_SIGNAL &QMediaPlayer::stateChanged
-# define GET_PLAYBACK_STATE audioManager->state()
-# define GET_VOLUME audioManager->volume()
-# define SET_VOLUME(value) audioManager->setVolume(value)
-# define SET_SOURCE(value) audioManager->setMedia(value)
-#else
-# include <QAudioOutput>
-# define NEW_MEDIA_PLAYER \
-  audioManager = new QMediaPlayer(this); \
-  audioManager->setAudioOutput(new QAudioOutput(audioManager));
-# define PLAYBACK_SIGNAL &QMediaPlayer::playbackStateChanged
-# define GET_PLAYBACK_STATE audioManager->playbackState()
-# define GET_VOLUME audioManager->audioOutput()->volume()
-# define SET_VOLUME(value) audioManager->audioOutput()->setVolume(value)
-# define SET_SOURCE(value) audioManager->setSource(value)
-#endif
+#include <QAudioOutput>
 
 using namespace std;
 
@@ -30,14 +11,16 @@ MusicManager* MusicManager::_global_ptr = nullptr;
 
 MusicManager::MusicManager(QObject* parent) : QObject(parent)
 {
-  NEW_MEDIA_PLAYER
+  audioOutput  = new QAudioOutput(this);
+  audioManager = new QMediaPlayer(this);
+  audioManager->setAudioOutput(audioOutput);
   _global_ptr  = this;
   fadingOut    = false;
   loadDataTree();
   fadingTimer.setInterval(50);
   fadingTimer.setSingleShot(false);
   connect(&fadingTimer, &QTimer::timeout, this, &MusicManager::fadeVolume);
-  connect(audioManager, PLAYBACK_SIGNAL, this, &MusicManager::onStateChanged);
+  connect(audioManager, &QMediaPlayer::playbackStateChanged, this, &MusicManager::onStateChanged);
   connect(this, &MusicManager::defaultVolumeChanged, [this]() { setVolumeToDefault(); });
   setVolumeToDefault();
 }
@@ -83,7 +66,7 @@ void MusicManager::play(const QString& scategory, const QString& name)
   if (category.isUndefined()) return ;
   track = category[name];
   if (track.isUndefined())    return ;
-  if (GET_PLAYBACK_STATE == QMediaPlayer::PlayingState)
+  if (audioManager->playbackState() == QMediaPlayer::PlayingState)
   {
     nextTrack = track.toString();
     fadeOut();
@@ -124,16 +107,17 @@ void MusicManager::startTrack(const QString& filename)
   nextTrack    = currentTrack;
   if (audioManager)
   {
-    disconnect(audioManager, PLAYBACK_SIGNAL, this, &MusicManager::onStateChanged);
+    disconnect(audioManager, &QMediaPlayer::playbackStateChanged, this, &MusicManager::onStateChanged);
     audioManager->deleteLater();
   }
-  NEW_MEDIA_PLAYER
-  SET_SOURCE(QUrl::fromLocalFile(ASSETS_PATH + "audio/" + currentTrack));
+  audioManager = new QMediaPlayer(this);
+  audioManager->setAudioOutput(audioOutput);
+  audioManager->setSource(QUrl::fromLocalFile(ASSETS_PATH + "audio/" + currentTrack));
 #ifndef _WIN32
   audioManager->play();
 #endif
   setVolumeToDefault();
-  connect(audioManager, PLAYBACK_SIGNAL, this, &MusicManager::onStateChanged);
+  connect(audioManager, &QMediaPlayer::playbackStateChanged, this, &MusicManager::onStateChanged);
 }
 
 void MusicManager::onStateChanged(PlaybackState state)
@@ -151,21 +135,21 @@ void MusicManager::onStateChanged(PlaybackState state)
 
 void MusicManager::fadeVolume()
 {
-  int volume = GET_VOLUME;
+  double volume = audioOutput->volume();
 
   if (volume > volumeGoal)
   {
-    volume -= 5;
+    volume -= 0.05;
     if (volume < volumeGoal)
       volume = volumeGoal;
   }
   else
   {
-    volume += 5;
+    volume += 0.05;
     if (volume > volumeGoal)
       volume = volumeGoal;
   }
-  SET_VOLUME(volume);
+  audioOutput->setVolume(volume);
   if (volume == volumeGoal)
   {
     fadingTimer.stop();
@@ -176,7 +160,7 @@ void MusicManager::fadeVolume()
 
 void MusicManager::fadeOut()
 {
-  int volume = GET_VOLUME;
+  double volume = audioOutput->volume();
 
   volumeGoal = 0;
   if (volume == volumeGoal)
@@ -189,10 +173,10 @@ void MusicManager::fadeOut()
     fadingTimer.start();
 }
 
-void MusicManager::setVolume(int volume)
+void MusicManager::setVolume(double volume)
 {
   volumeGoal = volume;
-  SET_VOLUME(volume);
+  audioOutput->setVolume(volume);
 }
 
 void MusicManager::setVolumeToDefault()
@@ -200,7 +184,7 @@ void MusicManager::setVolumeToDefault()
   setVolume(getDefaultVolume());
 }
 
-void MusicManager::setDefaultVolume(int value)
+void MusicManager::setDefaultVolume(double value)
 {
   QSettings settings;
 
@@ -208,7 +192,7 @@ void MusicManager::setDefaultVolume(int value)
   emit defaultVolumeChanged();
 }
 
-int MusicManager::getDefaultVolume() const
+double MusicManager::getDefaultVolume() const
 {
-  return QSettings().value("audio/volume", 100).toInt();
+  return QSettings().value("audio/volume", 1).toDouble();
 }

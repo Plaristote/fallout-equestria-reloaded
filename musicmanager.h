@@ -12,15 +12,9 @@ class MusicManager : public QObject
   static MusicManager* _global_ptr;
 
   Q_OBJECT
+  Q_PROPERTY(double defaultVolume READ getDefaultVolume WRITE setDefaultVolume NOTIFY defaultVolumeChanged)
 
-  Q_PROPERTY(int defaultVolume READ getDefaultVolume WRITE setDefaultVolume NOTIFY defaultVolumeChanged)
-
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-  typedef QMediaPlayer::State PlaybackState;
-#else
   typedef QMediaPlayer::PlaybackState PlaybackState;
-#endif
-
 public:
   explicit MusicManager(QObject* parent = nullptr);
   ~MusicManager();
@@ -31,10 +25,10 @@ public:
   Q_INVOKABLE void     play(const QString& category, const QString& name);
   Q_INVOKABLE void     pause(bool paused);
   Q_INVOKABLE void     playNext(void);
-  Q_INVOKABLE void     setVolume(int volume);
+  Q_INVOKABLE void     setVolume(double volume);
   Q_INVOKABLE void     setVolumeToDefault(void);
-  void                 setDefaultVolume(int);
-  int                  getDefaultVolume() const;
+  void                 setDefaultVolume(double);
+  double               getDefaultVolume() const;
 
 signals:
   void defaultVolumeChanged();
@@ -54,9 +48,9 @@ private:
   QString              currentCategory;
   QTimer               fadingTimer;
   bool                 fadingOut;
-  int                  volumeGoal;
-  int                  volumeRef;
+  double               volumeGoal;
   QMediaPlayer*        audioManager = nullptr;
+  QAudioOutput*        audioOutput = nullptr;
   QString              currentTrack, nextTrack;
 };
 
