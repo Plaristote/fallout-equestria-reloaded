@@ -8,7 +8,8 @@ TerminalButton {
   id: colorButton
   property alias title: dialog.title
   property bool showAlphaChannel: true
-  property color value
+  property alias value: dialog.selectedColor
+  property color backupColor
 
   signal updated();
 
@@ -18,12 +19,24 @@ TerminalButton {
   }
   onClicked: dialog.open()
 
+  Timer {
+    id: updateThrottle
+    interval: 100
+    repeat: false
+    onTriggered: colorButton.updated()
+  }
+
   WindowDialogs.ColorDialog {
     id: dialog
     options: colorButton.showAlphaChannel ? WindowDialogs.ColorDialog.ShowAlphaChannel : 0
-    onAccepted: {
-      colorButton.value = color;
-      colorButton.updated();
+    onSelectedColorChanged: updateThrottle.running = true
+    onVisibleChanged: {
+        if (visible)
+          colorButton.backupColor = colorButton.value
+    }
+    onRejected: {
+        colorButton.value = colorButton.backupColor
+        colorButton.updated();
     }
   }
 }
