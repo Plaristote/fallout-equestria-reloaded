@@ -1,6 +1,8 @@
 import QtQuick 2.15
+import QtQuick.Effects
 
 Image {
+  id: self
   property string name
   property string objectType
   property real lightness: 1
@@ -23,11 +25,7 @@ Image {
     }
     return "object";
   }
-/*
-  Colorize {
-    anchors.fill: parent
-    source: parent
-    lightness: parent.lightness
-  }
-*/
+
+  layer.enabled: true
+  layer.effect: MultiEffect { brightness: self.lightness }
 }
