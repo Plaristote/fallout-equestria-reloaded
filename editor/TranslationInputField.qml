@@ -41,7 +41,7 @@ RowLayout {
     }
   }
 
-  TerminalField {
+  TerminalTextArea {
     id: textInput
     Layout.fillWidth: true
     implicitHeight: focus ? 120 : 40

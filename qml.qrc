@@ -93,6 +93,7 @@
         <file>ui/SavedGameListItem.qml</file>
         <file>ui/SaveGameUi.qml</file>
         <file>ui/TerminalField.qml</file>
+        <file>ui/TerminalTextArea.qml</file>
         <file>ui/TerminalButton.qml</file>
         <file>ui/TerminalComboBox.qml</file>
         <file>ui/InventoryItemPreview.qml</file>
