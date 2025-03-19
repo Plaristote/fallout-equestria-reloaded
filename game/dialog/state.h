@@ -24,7 +24,7 @@ public:
 
   const QString& getSymbol() const { return symbol; }
   void setSymbol(const QString& value) { symbol = value; }
-  DialogState setAsCurrentState(CharacterDialog&);
+  DialogState setAsCurrentState(const CharacterDialog&);
   void setLocalTranslationPath(const QString& value) { localTranslationPath = value; }
   void setDefaultAnswers(const QStringList& value) { defaultAnswers = value; }
   void setMood(const QString& value) { mood = value; }
@@ -35,7 +35,7 @@ public:
   const QStringList& getDefaultAnswers() const { return defaultAnswers; }
 
 private:
-  DialogState loadStateFromScriptObject(DialogState, QJSValue);
+  DialogState loadStateFromScriptObject(const CharacterDialog&, DialogState, QJSValue);
 
   DialogData& data;
   QString     symbol;

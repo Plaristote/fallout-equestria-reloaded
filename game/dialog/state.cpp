@@ -29,14 +29,17 @@ void DialogStateData::save(QJsonObject& object) const
     object["hook"] = triggerHook.toString();
 }
 
-DialogState DialogStateData::loadStateFromScriptObject(DialogState state, QJSValue retval)
+DialogState DialogStateData::loadStateFromScriptObject(const CharacterDialog& dialog, DialogState state, QJSValue retval)
 {
+  QJSValue textKey = retval.property("textKey");
   QJSValue text = retval.property("text");
   QJSValue answers = retval.property("answers");
   QJSValue mood = retval.property("mood");
 
   if (!text.isUndefined())
     state.text = text.isCallable() ? text.call().toString() : text.toString();
+  else if (textKey.isString())
+    state.text = dialog.t(textKey.toString());
   if (mood.isString())
     state.mood = mood.toString();
   if (answers.isArray())
@@ -53,7 +56,7 @@ DialogState DialogStateData::loadStateFromScriptObject(DialogState state, QJSVal
   return state;
 }
 
-DialogState DialogStateData::setAsCurrentState(CharacterDialog& dialog)
+DialogState DialogStateData::setAsCurrentState(const CharacterDialog& dialog)
 {
   DialogState state;
   QJSValue    retval;
@@ -72,6 +75,6 @@ DialogState DialogStateData::setAsCurrentState(CharacterDialog& dialog)
   if (retval.isString())
     state.text = retval.toString();
   else if (retval.isObject())
-    return loadStateFromScriptObject(state, retval);
+    return loadStateFromScriptObject(dialog, state, retval);
   return state;
 }

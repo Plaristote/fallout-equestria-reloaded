@@ -112,6 +112,7 @@ void CharacterDialog::selectOption(const QString& answerSymbol)
 {
   QString nextState;
 
+  answerHistory.push_front(answerSymbol);
   if (answerSymbol != "exit")
     nextState = getNextState(answerSymbol);
   if (!nextState.isEmpty())
@@ -134,7 +135,7 @@ QString CharacterDialog::getName() const
   return npc->getDisplayName();
 }
 
-QString CharacterDialog::t(const QString &name, const QVariantMap& options)
+QString CharacterDialog::t(const QString &name, const QVariantMap& options) const
 {
   QString translationPath = translationGroup + '.' + name;
   QVariantMap parameters{

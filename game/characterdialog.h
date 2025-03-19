@@ -25,6 +25,9 @@ class CharacterDialog : public QObject
   Q_PROPERTY(QStringList       answerList     READ   getAnswerList NOTIFY answerListChanged)
   Q_PROPERTY(BarterController* barter         READ   getBarterController NOTIFY barterControllerChanged)
   Q_PROPERTY(QStringList       stateHistory   READ   getStateHistory NOTIFY stateReferenceChanged)
+  Q_PROPERTY(QStringList       answerHistory  READ   getAnswerHistory NOTIFY stateReferenceChanged)
+  Q_PROPERTY(QString           previousState  READ   getPreviousState NOTIFY stateReferenceChanged)
+  Q_PROPERTY(QString           previousAnswer READ   getPreviousAnswer NOTIFY stateReferenceChanged)
   Q_PROPERTY(QJSValue          script         READ   getScriptObject NOTIFY ready)
 public:
   explicit CharacterDialog(QObject *parent = nullptr);
@@ -43,10 +46,13 @@ public:
   QStringList         getAnswerList() const;
   QString             getName() const;
   const QStringList&  getStateHistory() const { return stateHistory; }
+  QString             getPreviousState() const { return stateHistory.size() ? stateHistory.first() : QString(); }
+  const QStringList&  getAnswerHistory() const { return answerHistory; }
+  QString             getPreviousAnswer() const { return answerHistory.size() ? answerHistory.first() : QString(); }
   BarterController*   getBarterController() const { return barter; }
   Q_INVOKABLE bool    tryToBarter();
 
-  Q_INVOKABLE QString t(const QString& name, const QVariantMap& = {});
+  Q_INVOKABLE QString t(const QString& name, const QVariantMap& = {}) const;
 
 signals:
   void stateReferenceChanged();
@@ -82,7 +88,7 @@ protected:
   QStringList       options;
   QString           mood, ambiance;
   QString           translationGroup;
-  QStringList       stateHistory;
+  QStringList       stateHistory, answerHistory;
 };
 
 #endif // CHARACTERDIALOG_H
