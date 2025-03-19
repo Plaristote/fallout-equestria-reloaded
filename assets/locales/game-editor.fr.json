@@ -1,0 +1,213 @@
+{
+  "game-editor": {
+    "exit": "Quitter",
+    "save": "Enregistrer",
+    "previous": "Précédent",
+    "add": "Ajouter",
+    "remove": "Supprimer",
+    "sprite": "Sprite",
+    "script": "Script",
+    "item": "Item",
+    "cut": "Couper",
+    "copy": "Copier",
+    "paste": "Coller",
+    "show": "Voir",
+    "error": "Erreur",
+    "filter": "Filtre",
+    "filter-placeholder": "Filtrer...",
+    "file-picker-title": "Choisissez un fichier",
+    "pick": "Choisir",
+    "translation-key": "Clé de traduction",
+    "inventory": "Inventaire",
+    "validations": {
+      "uniqueness": "{{value}} existe déjà",
+      "invalid-name": "Nom invalide ou réservé"
+    },
+    "inventories": {
+      "add-item": "Ajout d'item",
+      "remove-item": "Retrait d'item",
+      "remove-items": "Retrait d'items"
+    },
+    "tabs": {
+      "worldmap": "Mappemonde",
+      "levels": "Niveaux",
+      "npcs": "PNJs",
+      "dialogs": "Dialogues",
+      "diplomacy": "Factions",
+      "objects": "Items",
+      "sprites": "Sprites"
+    },
+    "levels": {
+      "add-object": "Ajout d'objet",
+      "add-group": "Ajout de goupe",
+      "object-type": "Type",
+      "object-name": "Nom",
+      "cut": "Couper",
+      "new-object": "Nouvel objet",
+      "object-group": "Groupe",
+      "group-name": "Nom",
+      "offset": "Offset",
+      "floor": "Étage",
+      "display-roofs": "Afficher toîts",
+      "display-walls": "Afficher murs",
+      "ambient-light": "Lumière d'ambiance",
+      "ambient-color": "Couleur d'ambiance",
+      "ambient-light-types": {
+        "none": "Aucun",
+        "ambient": "Lumière d'ambiance",
+        "daylight": "Lumière du jour"
+      },
+      "control-zone": "Zone de contrôle",
+      "characters": {
+        "sheet": "Fiche de personnage",
+        "dialog": "Dialogue",
+        "faction": "Faction",
+        "is-unique": "Unique"
+      },
+      "control-zones": {
+        "add": "Ajouter zone de contrôle",
+        "remove": "Retirer zone de contrôle",
+        "blocks-path": "Déplacement bloqué",
+        "edit": "Éditer zone de contrôle",
+        "end-edit": "Terminer l'édition de la zone"
+      },
+      "elevators": {
+        "position-a": "Position A",
+        "position-b": "Position B",
+        "floor-a": "Étage A",
+        "floor-b": "Étage B"
+      },
+      "doors": {
+        "opened": "Ouverte",
+        "locked": "Vérouillée",
+        "key": "Nom de la clef",
+        "lock-difficulty": "Niveau de verouillage"
+      },
+      "directions": {
+        "none": "Aucune",
+        "left": "Gauche",
+        "up": "Haut",
+        "right": "Droite",
+        "bottom": "Bas"
+      },
+      "objects": {
+        "types": {
+          "character": "Personnage",
+          "storage": "Stockage",
+          "door": "Porte",
+          "elevator": "Ascenseur",
+          "item": "Item",
+          "other": "Autre"
+        },
+        "name": "Nom",
+        "orientation": "Orientation",
+        "is-interactive": "Interactif",
+        "blocks-path": "Bloque le déplacement",
+        "cover": "Couverture",
+        "behaviour": "Comportement",
+        "render-position": "Position de rendu",
+        "grid-position": "Position sur la grille",
+        "positionning-type": "Positionement",
+        "positionning": {
+          "tile": "Selon la tuile",
+          "float": "Flottant"
+        }
+      }
+    },
+    "worldmap-tabs": {
+      "cities": "Villes",
+      "zones": "Zones"
+    },
+    "worldmap": {
+      "pixel-size": "Taille de la mappemonde",
+      "map-size": "Nombre de cases",
+      "case-size": "Taille des cases",
+      "zones": {
+        "add": "Ajouter zone",
+        "name": "Nom",
+        "movement-speed": "Vit.mouvement",
+        "remove": "Supprimer zone"
+      }
+    },
+    "cities": {
+      "add": "Ajouter ville",
+      "remove": "Supprimer ville",
+      "name": "Nom",
+      "position": "Position",
+      "level": "Niveau",
+      "splashscreen": "Écran d'accueil",
+      "splashscreen-image": "Image",
+      "add-entry-point": "Ajouter point d'entrée",
+      "remove-entry-point": "Supprimer point d'entrée"
+    },
+    "dialogs": {
+      "add": "Nouveau dialogue",
+      "answer": "Réponse",
+      "states": {
+        "add": "Nouvel état",
+        "remove": "Supprimer l'état",
+        "initial": "État initial",
+        "text": "Texte de référence",
+        "trigger": "Callback de déclenchement",
+        "mood": "Humeur",
+        "text-callback": "Callback de texte"
+      },
+      "answers": {
+        "add": "Nouvelle réponse",
+        "remove": "Supprimer réponse",
+        "target": "Vers  l'état",
+        "available-callback": "Callback de visibilité"
+      }
+    },
+    "factions": {
+      "add": "Nouvelle faction",
+      "add-enemy": "Ajouter ennemi",
+      "name": "Nom",
+      "with-reputation": "Réputation activée"
+    },
+    "ncps": {
+      "add": "Nouveau personnage"
+    },
+    "items": {
+      "add": "Nouvel item",
+      "icon": "Icone",
+      "groupable": "Groupable",
+      "value": "Valeur",
+      "weight": "Poids",
+      "type": "Type",
+      "quantity": "Quantité"
+    },
+    "sprites": {
+      "add": "Nouveau groupe de sprite",
+      "name": "Nom",
+      "source": "Source",
+      "size": "Dimensions",
+      "source-size": "Dimensions de la source",
+      "frame-count": "Décompte de frames",
+      "interval": "Intervalle",
+      "repeat": "Répétition",
+      "reverse": "Inversée",
+      "add-animation": "Nouveau sprite",
+      "default-source": "Source par défaut",
+      "animation": "Animation"
+    },
+    "script-category": {
+      "behaviour": "Comportement",
+      "pnjs": "PNGs",
+      "npcs": "PNGs",
+      "quests": "Quêtes",
+      "dialogs": "Dialogues",
+      "buffs": "Buffs",
+      "items": "Items d'inventaire",
+      "levels": "Niveaux",
+      "scenes": "Scenes",
+      "spells": "Sorts"
+    },
+    "resource-picker": {
+      "adding-script": "Ajouter un script de {{category}}",
+      "empty-choice": "Rien",
+      "script-type": "Type de script",
+      "filter": "Filtre"
+    }
+  }
+}
