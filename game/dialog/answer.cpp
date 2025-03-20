@@ -38,7 +38,7 @@ void DialogAnswer::save(QJsonObject& data) const
   if (availableHook.isString() && !availableHook.toString().isEmpty())
     data["availableHook"] = availableHook.toString();
   if (textHook.isString() && !textHook.toString().isEmpty())
-    data["textHook"] = availableHook.toString();
+    data["textHook"] = textHook.toString();
   if (triggerHook.isString() && !triggerHook.toString().isEmpty())
     data["hook"] = triggerHook.toString();
 }
