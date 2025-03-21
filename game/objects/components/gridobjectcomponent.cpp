@@ -38,3 +38,9 @@ QJSValue GridObjectComponent::positionSplat() const
   array.setProperty(2, QJSValue(static_cast<int>(floor)));
   return array;
 }
+
+void GridObjectComponent::setCurrentFloor(unsigned int value)
+{
+  floor = static_cast<unsigned short>(value);
+  emit floorChanged();
+}

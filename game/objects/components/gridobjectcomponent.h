@@ -21,7 +21,7 @@ public:
   virtual Point  getPoint() const { return {position.x(), position.y(), floor}; }
   virtual void   setPosition(QPoint value) { position = value; emit positionChanged(); }
   unsigned int   getCurrentFloor() const { return floor; }
-  virtual void   setCurrentFloor(unsigned int value) { floor = static_cast<unsigned short>(value); emit floorChanged(); }
+  virtual void   setCurrentFloor(unsigned int value);
   virtual int    getCoverValue() const { return cover; }
 
   Q_INVOKABLE QJSValue positionSplat() const;
