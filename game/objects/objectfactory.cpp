@@ -59,6 +59,7 @@ ObjectGroup* ObjectFactory::generateGroup(const QString &name) const
   ObjectGroup* group = new ObjectGroup(root);
 
   group->setProperty("name", name);
+  group->setCurrentFloor(root->getCurrentFloor());
   root->appendGroup(group);
   return group;
 }
