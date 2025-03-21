@@ -202,6 +202,9 @@ void Game::setupPlayerPartyIntoLevel(const QString& targetZone)
       if (currentLevel->insertPartyIntoZone(playerParty, targetZone))
         return ;
       qDebug() << "Game::loadLevel: failed to insert player party into `" << targetZone << '`';
+      if (currentLevel->insertPartyIntoZone(playerParty))
+        return ;
+      qDebug() << "Game::loadLevel: failed to insert player party into the default entry zone";
     }
     playerParty->loadIntoLevel(currentLevel);
   }
