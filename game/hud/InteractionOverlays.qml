@@ -1,3 +1,5 @@
+pragma ComponentBehavior: Bound
+
 import QtQuick 2.15
 import "../Interaction.mjs" as Interaction;
 
@@ -12,16 +14,17 @@ Item {
   opacity: 0.6
 
   Loader {
-    sourceComponent: interactionMode ? interactionOverlayComponent : null
+    sourceComponent: parent.interactionMode ? interactionOverlayComponent : null
   }
 
   Loader {
-    sourceComponent: targetMode || interactionMode ? characterInteractionOverlayComponent : characterOverlayComponent
+    sourceComponent: parent.targetMode || parent.interactionMode ? characterInteractionOverlayComponent : characterOverlayComponent
   }
 
   Component {
     id: interactionOverlayComponent
     InteractionOverlay {
+      name:            "object-overlay"
       levelController: root.levelController
       model:           levelController.visibleObjects
       filter:          function(item) { return item.hasInteractionOverlay(); }
@@ -33,6 +36,7 @@ Item {
   Component {
     id: characterInteractionOverlayComponent
     InteractionOverlay {
+      name:             "character-interaction-overlay"
       levelController:  root.levelController
       filter:           function(item) { return item.floor === levelController.currentFloor && item.isAlive() && item !== levelController.player; }
       model:            levelController.visibleCharacters
@@ -46,6 +50,7 @@ Item {
   Component {
     id: characterOverlayComponent
     InteractionOverlay {
+      name:             "character-overlay"
       levelController:  root.levelController
       filter:           function(item) { return item.floor === levelController.currentFloor && item.isAlive() }
       model:            levelController.visibleCharacters

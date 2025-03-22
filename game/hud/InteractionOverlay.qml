@@ -2,6 +2,7 @@ import QtQuick 2.15
 
 Repeater {
   id: root
+  property string   name
   property QtObject levelController
   property var      filter: function() { return true; }
   property bool     withColorOverlay: true
@@ -19,7 +20,10 @@ Repeater {
       dynamicObjectLayer.visible = root.filter(dynamicObject);
     }
 
-    Component.onCompleted: updateVisibility()
+    Component.onCompleted: {
+      //console.log("Created InteractionOverlay", name);
+      updateVisibility()
+    }
     onSourceClipRectChanged: offset = levelController.getAdjustedOffsetFor(dynamicObject)
 
     Timer {
