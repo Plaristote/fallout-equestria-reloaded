@@ -64,7 +64,6 @@ QJsonObject WorldMap::save() const
   data.insert("caseWidth",  caseSize.width());
   data.insert("caseHeight", caseSize.height());
   data.insert("visible",    QJsonValue::fromVariant(QVariant::fromValue(discoveredCities)));
-  qDebug() << "Saving worldmap" << QJsonDocument(data).toJson();
   return data;
 }
 
