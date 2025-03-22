@@ -1,6 +1,6 @@
 import QtQuick 2.12
 
-Item {
+QtObject {
   property bool paused: false
 
   onPausedChanged: {
