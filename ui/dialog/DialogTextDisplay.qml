@@ -27,9 +27,10 @@ BorderImage {
       id: dialogContent
       color: "white"
       text: textDisplay.text
+      textFormat: Text.StyledText
       wrapMode: Text.WordWrap
       horizontalAlignment: Qt.AlignJustify
-      width: parent.width - 15
+      width: parent.width - 30
       font.family: application.consoleFontName
       font.pointSize: application.consoleFont.bigSize
     }
