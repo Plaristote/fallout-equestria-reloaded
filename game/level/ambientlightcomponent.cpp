@@ -6,19 +6,16 @@ QColor     jsonToColor(QJsonValue value);
 QJsonArray colorToJson(QColor color);
 
 static QMap<int, QColor> daylightColors = {
-  {0,  QColor("#00004F")},
-  {6,  QColor("#6F202F")},
-  {7,  QColor("#5F3F2F")},
-  {8,  QColor("#3F3F3F")},
-  {10, QColor("#4F4F4F")},
-  {18, QColor("#3F3F4F")},
-  {21, QColor("#2F1F4F")},
-  {22, QColor("#00004F")}
+  {0,  QColor("#89061862")},
+  {6,  QColor("#634b341e")},
+  {8,  QColor("#00ffffff")},
+  {20, QColor("#3958c8dc")},
+  {22, QColor("#52082185")}
 };
 
 AmbientLightComponent::AmbientLightComponent(QObject *parent) : ParentType(parent)
 {
-  ambientColor = QColor(255, 255, 255, 0);
+  ambientColor = QColor(255, 255, 255, 0.0);
 }
 
 void AmbientLightComponent::update(qint64 delta)
