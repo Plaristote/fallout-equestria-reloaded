@@ -145,7 +145,7 @@ Item {
     font.pointSize: 20
   }
 
-  Column {
+  ColumnLayout {
     anchors.verticalCenter: parent.verticalCenter
     anchors.left: parent.left
     spacing: 5
@@ -155,6 +155,7 @@ Item {
       text: i18n.t("tutorial.previous")
       enabled: currentIndex > 0
       onClicked: currentIndex > 0 ? currentIndex-- : null
+      Layout.fillWidth: true
     }
 
     MenuButton {
@@ -162,6 +163,7 @@ Item {
       text: i18n.t("tutorial.next")
       enabled: currentIndex < templates.length - 1
       onClicked: currentIndex < templates.length - 1 ? currentIndex++ : null
+      Layout.fillWidth: true
     }
   }
 

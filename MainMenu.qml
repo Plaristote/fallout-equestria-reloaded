@@ -1,5 +1,6 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+import QtQuick.Layouts
 import "qrc:/ui"
 
 Image {
@@ -56,7 +57,7 @@ Image {
     onTriggered: application.pushView("editor/Index.qml")
   }
 
-  Column {
+  ColumnLayout {
     anchors.top: parent.top
     anchors.left: parent.left
     anchors.margins: 50
@@ -64,7 +65,10 @@ Image {
 
     Repeater {
       model: menuEntries
-      delegate: MenuButton { action: modelData }
+      delegate: MenuButton {
+        Layout.fillWidth: true
+        action: modelData
+      }
     }
   }
 }

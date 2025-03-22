@@ -105,7 +105,7 @@ Pane {
       Layout.maximumWidth: 300
       Layout.fillHeight: true
 
-      Column {
+      ColumnLayout {
         anchors.fill: parent
         anchors.margins: 10
 
@@ -153,12 +153,16 @@ Pane {
           text: i18n.t("Take")
           action: takeAction
           anchors.horizontalCenter: parent.horizontalCenter
+          Layout.fillWidth: true
         }
         MenuButton {
           text: i18n.t("Leave")
           action: dropAction
           anchors.horizontalCenter: parent.horizontalCenter
+          Layout.fillWidth: true
         }
+
+        Item { Layout.fillHeight: true }
       }
     }
 

@@ -58,17 +58,20 @@ Pane {
       Pane {
         background: UiStyle.Pane {}
         Layout.alignment: Qt.AlignBottom | Qt.AlignCenter
-        Column {
+        ColumnLayout {
           Repeater {
             model: appNames
             delegate: MenuButton {
+              Layout.fillWidth: true
               text: i18n.t(`pipboy.${appNames[index]}`)
               textColor: appNames[index] === currentApp ? "yellow" : "white"
               onClicked: currentApp = appNames[index]
             }
           }
-
-          MenuButton { action: actions.close }
+          MenuButton {
+            Layout.fillWidth: true
+            action: actions.close
+          }
         }
       }
     }
