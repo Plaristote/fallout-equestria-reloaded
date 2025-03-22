@@ -1,5 +1,6 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+import QtQuick.Layouts
 import "./assets/ui" as UiStyle
 import "game/"
 import "game/slideshows/"
@@ -93,6 +94,42 @@ Item {
       errorDialog.text = message;
       errorDialog.open();
     }
+
+    function onPromptRequired(message) {
+      promptDialog.title = message;
+      promptDialog.options = gameManager.currentGame.promptDialog.options;
+      promptDialog.open();
+    }
+  }
+
+  UiStyle.CustomDialog {
+    property var options
+    id: promptDialog
+    modal: true
+    parent: Overlay.overlay
+    standardButtons: Dialog.NoButton
+    anchors.centerIn: parent
+    closePolicy: Popup.NoAutoClose
+
+    ColumnLayout {
+      anchors.horizontalCenter: parent.horizontalCenter
+      Repeater {
+        model: promptDialog.options
+        delegate: UiStyle.PushButton {
+          text: promptDialog.options[index]
+          onClicked: {
+            promptDialog.close();
+            gameManager.currentGame.promptDialog.pick(index);
+          }
+        }
+      }
+    }
+
+    PauseController {
+      paused: promptDialog.opened
+    }
+
+    footer: Item {}
   }
 
   UiStyle.CustomDialog {

@@ -196,6 +196,8 @@ set(PROJECT_SOURCES
         game/timepasser.cpp
         game/spell.h
         game/spell.cpp
+        game/promptdialog.h
+        game/promptdialog.cpp
         game/level/grid.h
         game/level/grid.cpp
         game/level/interaction.h

@@ -16,6 +16,7 @@
 # include "cmap/trait.h"
 # include "cmap/race.h"
 # include "game/timepasser.h"
+# include "game/promptdialog.h"
 
 class Game : public StorableObject
 {
@@ -38,6 +39,7 @@ class Game : public StorableObject
   Q_PROPERTY(bool saveLock MEMBER saveLock NOTIFY saveLockChanged)
   Q_PROPERTY(bool fastPassTime READ isFastPassingTime NOTIFY fastPassingChanged)
   Q_PROPERTY(bool isGameEditor MEMBER isGameEditor NOTIFY gameEditorEnabled)
+  Q_PROPERTY(PromptDialog* promptDialog READ getPromptDialog NOTIFY promptRequired)
 
   static Game* instance;
 public:
@@ -65,6 +67,7 @@ public:
   LevelTask* getLevel() const { return currentLevel; }
   TaskRunner* getTaskManager() const { return taskManager; }
   SoundManager* getSoundManager() const { return SoundManager::get(); }
+  PromptDialog* getPromptDialog() const { return promptDialog; }
   QJSEngine& getScriptEngine() { return scriptEngine; }
   QJSValue loadScript(const QString& path);
   QJSValue scriptCall(QJSValue callable, const QJSValueList& args, const QString& scriptName);
@@ -84,6 +87,7 @@ public:
   Q_INVOKABLE void       asyncAdvanceToHour(unsigned int hour, unsigned int minute = 0, QJSValue callback = QJSValue());
   bool                   isFastPassingTime() const { return timePasser.isActive(); }
   Q_INVOKABLE void       setFactionAsEnemy(const QString &faction, const QString &enemyFaction, bool set);
+  Q_INVOKABLE void       openPrompt(const QString& message, QJSValue options);
 
 signals:
   void gameEditorEnabled();
@@ -101,6 +105,7 @@ signals:
   void requireScreenshot(QString);
   void javascriptError(QString);
   void loadingScreenBackgroundChanged();
+  void promptRequired(const QString&);
 
 public slots:
   void onCityEntered(QString name);
@@ -144,6 +149,7 @@ private:
 
   QMap<QString, Trait> cmapTraits;
   QMap<QString, Race>  cmapRaces;
+  PromptDialog* promptDialog = nullptr;
 };
 
 #endif // GAME_H

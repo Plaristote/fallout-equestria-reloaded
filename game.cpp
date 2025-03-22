@@ -452,3 +452,11 @@ Character* Game::getCharacter(const QString& characterSheet) const
     match = currentLevel->findCharacter([characterSheet](Character& character) { return character.getCharacterSheet() == characterSheet; });
   return match ? match : uniqueCharacterStorage->getCharacter(characterSheet);
 }
+
+void Game::openPrompt(const QString& message, QJSValue options)
+{
+  if (promptDialog)
+    promptDialog->deleteLater();
+  promptDialog = new PromptDialog(message, options, this);
+  emit promptRequired(message);
+}
