@@ -1,11 +1,9 @@
 import QtQuick 2.15
+import QtQuick.Effects
 
-ShaderEffect {
-  property variant source
+MultiEffect {
   property color color
-
-  visible: enabled
-  anchors.fill: parent
-  vertexShader: "qrc:/game/level/Daylight.vert.qsb"
-  fragmentShader: "qrc:/game/level/Daylight.frag.qsb"
+  colorization: enabled
+  colorizationColor: color
+  anchors.fill: source
 }
