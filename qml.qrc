@@ -229,7 +229,6 @@
         <file>game/LevelFrameRate.qml</file>
         <file>game/LevelCursor.qml</file>
         <file>game/UsageSuccessHint.qml</file>
-        <file>game/LevelLightOverlay.qml</file>
         <file>game/Interaction.mjs</file>
         <file>game/Barter.qml</file>
         <file>game/LevelTextBubbles.qml</file>
