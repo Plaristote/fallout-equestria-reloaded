@@ -29,10 +29,12 @@ public slots:
   void refreshLightzone();
 
 private:
+  void onFloorChanged();
   void drawLightzone();
 
   int lightRadius = 0;
   TileLayer* lightZone = nullptr;
+  unsigned char currentLightFloor = 0;
 };
 
 #endif // LIGHTSOURCECOMPONENT_H

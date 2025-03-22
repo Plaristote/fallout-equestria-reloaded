@@ -6,6 +6,7 @@ LightSourceComponent::LightSourceComponent(QObject *parent) : ParentType(parent)
 {
   connect(this, &LightSourceComponent::lightRadiusChanged, this, &LightSourceComponent::reloadLightzone);
   connect(this, &LightSourceComponent::positionChanged,    this, &LightSourceComponent::refreshLightzone);
+  connect(this, &LightSourceComponent::floorChanged,       this, &LightSourceComponent::onFloorChanged);
 }
 
 void LightSourceComponent::load(const QJsonObject& data)
@@ -25,25 +26,44 @@ void LightSourceComponent::save(QJsonObject& data) const
 
 void LightSourceComponent::reloadLightzone()
 {
+  auto* level = Game::get()->getLevel();
+  auto* grid = level ? level->getFloorGrid(floor) : nullptr;
+
   if (lightRadius == 0 && lightZone)
   {
+    if (grid)
+      grid->getTilemap()->removeLightLayer(lightZone);
     emit lightZoneRemoved(lightZone);
     lightZone->deleteLater();
     lightZone = nullptr;
   }
   else if (lightRadius > 0)
   {
-    auto* level = Game::get()->getLevel();
     auto* tilemap = level ? level->getTileMap() : nullptr;
 
-    if (!lightZone && tilemap)
+    if (!lightZone && tilemap && grid)
     {
       lightZone = new TileLayer(this);
       lightZone->initialize(tilemap->getSize());
       lightZone->setProperty("offset", QPoint(0, 0));
+      grid->getTilemap()->addLightLayer(lightZone);
       emit lightZoneAdded(lightZone);
     }
     refreshLightzone();
+  }
+}
+
+void LightSourceComponent::onFloorChanged()
+{
+  auto* level = Game::get()->getLevel();
+
+  if (level && lightZone)
+  {
+    auto* gridA = level->getFloorGrid(currentLightFloor);
+    auto* gridB = level->getFloorGrid(floor);
+
+    gridA->getTilemap()->removeLightLayer(lightZone);
+    gridB->getTilemap()->addLightLayer(lightZone);
   }
 }
 
