@@ -134,7 +134,7 @@ bool CharacterParty::insertIntoZone(GridComponent* level, TileZone* zone) const
         Character* character = list.at(characterIt);
 
         level->appendObject(character);
-        level->setCharacterPosition(character, position.x(), position.y());
+        level->setCharacterPosition(character, position.x(), position.y(), zone->getFloor());
         if (++characterIt >= list.length())
           break ;
       }
