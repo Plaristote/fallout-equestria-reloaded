@@ -4,6 +4,7 @@ Loader {
   id: root
   property QtObject levelEditor
   property QtObject gameController: levelEditor.gameController
+  property var nextComponent: null
 
   signal showClicked()
   signal openInventory(QtObject model)
@@ -12,6 +13,15 @@ Loader {
   signal requestDialogView(string dialogName)
   signal previousClicked()
   signal saveTemplateClicked()
+
+  Timer {
+    interval: 50
+    running: nextComponent
+    onTriggered: {
+      root.sourceComponent = nextComponent;
+      root.nextComponent = null;
+    }
+  }
 
   Connections {
     target: levelEditor
@@ -41,7 +51,8 @@ Loader {
           break ;
         }
       }
-      root.sourceComponent = component;
+      root.sourceComponent = null;
+      root.nextComponent = component;
     }
 
     function onPickedTile(tileX, tileY) {
