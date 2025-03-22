@@ -26,8 +26,13 @@ CameraComponent::CameraComponent(QObject* parent) : ParentType(parent)
 
 void CameraComponent::updateRenderedTiles()
 {
-  renderedTiles = getRenderedTiles();
-  emit renderedTilesChanged();
+  QRect newRenderedTiles = getRenderedTiles();
+
+  if (newRenderedTiles != renderedTiles)
+  {
+    renderedTiles = newRenderedTiles;
+    emit renderedTilesChanged();
+  }
 }
 
 QRect CameraComponent::getRenderedTiles() const
