@@ -37,6 +37,12 @@ Item {
         visible: !gameManager.withPlayerCropCircle
       }
 
+      DaylightShader {
+        source:  image
+        color:   wallRenderer.levelController.ambientColor
+        enabled: wallRenderer.levelController.useAmbientLight
+      }
+
       PlayerCropCircle {
         source: image
         levelController: wallRenderer.levelController

@@ -119,6 +119,12 @@ Rectangle {
           source: mypic
           levelController: renderTarget.levelController
         }
+
+        DaylightShader {
+          source:  parent
+          color:   renderTarget.levelController.ambientColor
+          enabled: renderTarget.levelController.useAmbientLight
+        }
       }
     }
 
