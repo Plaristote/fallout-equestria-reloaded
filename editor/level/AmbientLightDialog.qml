@@ -26,7 +26,7 @@ UiStyle.CustomDialog {
           levelController.useAmbientLight = levelController.useDaylight = false;
           break ;
         case 1:
-          levelController.useDaylight = true;
+          levelController.useDaylight = false;
           levelController.useAmbientLight = true;
           break ;
         case 2:
