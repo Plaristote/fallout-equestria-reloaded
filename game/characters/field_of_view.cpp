@@ -104,13 +104,24 @@ void FieldOfView::runTask()
   LoseTrackOfCharacters(detected_characters);
   detectCharacters();
   timeLeft = interval;
+  propagateChanges();
   emit refreshed();
+}
+
+void FieldOfView::propagateChanges()
+{
+  if (hasChanges)
+  {
+    hasChanges = false;
+    emit changed();
+  }
 }
 
 void FieldOfView::reset()
 {
   detected_characters.clear();
   detected_enemies.clear();
+  hasChanges = true;
 }
 
 void FieldOfView::removeObject(DynamicObject* object)
@@ -127,6 +138,7 @@ void FieldOfView::removeCharacter(Character* character)
     if (it->character == character)
     {
       it = detected_characters.erase(it);
+      hasChanges = true;
       break ;
     }
     ++it;
@@ -136,6 +148,7 @@ void FieldOfView::removeCharacter(Character* character)
     if (it->character == character)
     {
       it = detected_enemies.erase(it);
+      hasChanges = true;
       break ;
     }
     ++it;
@@ -189,7 +202,7 @@ FieldOfView::CharacterList FieldOfView::GetDetectedAllies(void) const
   });
 }
 
-void FieldOfView::AppendEntriesToCharacterList(const std::list<Entry>& entries, CharacterList& list) const
+void FieldOfView::AppendEntriesToCharacterList(const EntryList& entries, CharacterList& list) const
 {
   for (auto it = entries.begin() ; it != entries.end() ; ++it)
   {
@@ -215,7 +228,7 @@ bool FieldOfView::isDetected(const Character* character_to_check) const
   return IsCharacterInList(character_to_check, detected_characters);
 }
 
-bool FieldOfView::IsCharacterInList(const Character* character_to_check, const std::list<Entry>& list) const
+bool FieldOfView::IsCharacterInList(const Character* character_to_check, const EntryList& list) const
 {
   return (find(list.begin(), list.end(), character_to_check) != list.end());
 }
@@ -267,7 +280,7 @@ void FieldOfView::setCharacterDetected(Character* character)
     InsertOrUpdateCharacterInList(*character, detected_characters);
 }
 
-void FieldOfView::InsertOrUpdateCharacterInList(Character& character, std::list<Entry>& list)
+void FieldOfView::InsertOrUpdateCharacterInList(Character& character, EntryList& list)
 {
   auto iterator = find(list.begin(), list.end(), &character);
 
@@ -275,6 +288,7 @@ void FieldOfView::InsertOrUpdateCharacterInList(Character& character, std::list<
     iterator->time_to_live = FOV_TTL;
   else
   {
+    hasChanges = true;
     list.push_back(&character);
     connect(&character, &DynamicObject::beforeDestroy, this, &FieldOfView::removeObject);
     emit characterDetected(&character);
@@ -306,7 +320,7 @@ FieldOfView::CharacterList FieldOfView::GetCharactersInRange() const
   return CharacterList();
 }
 
-void FieldOfView::LoseTrackOfCharacters(std::list<Entry>& entries)
+void FieldOfView::LoseTrackOfCharacters(EntryList& entries)
 {
   auto character = entries.begin();
 
@@ -314,7 +328,10 @@ void FieldOfView::LoseTrackOfCharacters(std::list<Entry>& entries)
   {
     character->time_to_live--;
     if (character->time_to_live < 0 || !(character->character->isAlive()))
+    {
       character = entries.erase(character);
+      hasChanges = true;
+    }
     else
       character++;
   }

@@ -31,6 +31,8 @@ class FieldOfView : public QObject
     char       time_to_live;
   };
 
+  typedef std::vector<Entry> EntryList;
+
 public:
   FieldOfView(Character& character);
   ~FieldOfView();
@@ -58,6 +60,7 @@ public:
 
   void                 update(qint64 delta);
   void                 runTask();
+  void                 propagateChanges();
   Q_INVOKABLE void     reset();
   void                 removeCharacter(Character*);
   void                 removeObject(DynamicObject*);
@@ -65,22 +68,24 @@ public:
 signals:
   void                 updated();
   void                 refreshed();
+  void                 changed();
   void                 characterDetected(Character*);
 
 protected:
-  void                 LoseTrackOfCharacters(std::list<Entry>&);
+  void                 LoseTrackOfCharacters(EntryList&);
   bool                 CheckIfEnemyIsDetected(Character& enemy)                  const;
   bool                 CheckIfSneakingEnemyIsDetected(Character& enemy)          const;
-  void                 InsertOrUpdateCharacterInList(Character&, std::list<Entry>&);
-  bool                 IsCharacterInList(const Character*, const std::list<Entry>&)    const;
-  void                 AppendEntriesToCharacterList(const std::list<Entry>&, CharacterList&) const;
+  void                 InsertOrUpdateCharacterInList(Character&, EntryList&);
+  bool                 IsCharacterInList(const Character*, const EntryList&)    const;
+  void                 AppendEntriesToCharacterList(const EntryList&, CharacterList&) const;
   CharacterList        GetDetectedCharactersMatching(std::function<bool (Character*)>) const;
 
 private:
-  qint64               interval, timeLeft;
-  Character&           character;
-  std::list<Entry>     detected_enemies;
-  std::list<Entry>     detected_characters;
+  qint64      interval, timeLeft;
+  Character&  character;
+  EntryList   detected_enemies;
+  EntryList   detected_characters;
+  bool hasChanges;
 };
 
 #endif

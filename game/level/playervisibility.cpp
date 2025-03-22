@@ -31,7 +31,7 @@ void PlayerVisibilityComponent::load(const QJsonObject& data)
   {
     FieldOfView* fov = getPlayer()->getFieldOfView();
 
-    connect(fov, &FieldOfView::refreshed, this, &PlayerVisibilityComponent::visibleCharactersChanged);
+    connect(fov, &FieldOfView::changed,   this, &PlayerVisibilityComponent::visibleCharactersChanged);
     connect(fov, &FieldOfView::refreshed, this, &PlayerVisibilityComponent::refreshHiddenObjectsDetection);
     connect(fov, &FieldOfView::updated,   this, &PlayerVisibilityComponent::refreshCharacterDetection);
   }
@@ -69,8 +69,9 @@ QQmlListProperty<DynamicObject> PlayerVisibilityComponent::getQmlVisibleObjects(
 
 void PlayerVisibilityComponent::refreshCharacterDetection()
 {
-  getPlayer()->getFieldOfView()->detectCharacters();
-  emit visibleCharactersChanged();
+  FieldOfView* fov = getPlayer()->getFieldOfView();
+  fov->detectCharacters();
+  fov->propagateChanges();
 }
 
 void PlayerVisibilityComponent::refreshHiddenObjectsDetection()
