@@ -33,6 +33,11 @@ public:
   Q_INVOKABLE void grantXp(unsigned int value);
   Q_INVOKABLE Character* find(QJSValue callback) const;
 
+  Q_INVOKABLE Character* mostSkilledAt(const QByteArray& stat) const;
+  Q_INVOKABLE Character* leastSkilledAt(const QByteArray& stat) const;
+  Q_INVOKABLE int highestStatistic(const QByteArray& stat) const;
+  Q_INVOKABLE int lowestStatistic(const QByteArray& stat) const;
+
   bool insertIntoZone(GridComponent*, TileZone*) const;
   bool insertIntoZone(GridComponent*, const QString& zoneName) const;
   Q_INVOKABLE bool insertIntoZone(GridComponent*, QJSValue) const;

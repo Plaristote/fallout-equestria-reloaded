@@ -104,6 +104,52 @@ Character* CharacterParty::find(QJSValue callback) const
   return iterator != list.end() ? *iterator : nullptr;
 }
 
+Character* CharacterParty::mostSkilledAt(const QByteArray& stat) const
+{
+  Character* result = nullptr;
+  int max = 0;
+
+  for (Character* character : list)
+  {
+    int value = character->getStatistics()->property(stat).toInt();
+    if (value > max || !result)
+    {
+      result = character;
+      max = value;
+    }
+  }
+  return result;
+}
+
+Character* CharacterParty::leastSkilledAt(const QByteArray& stat) const
+{
+  Character* result = nullptr;
+  int min = 0;
+
+  for (Character* character : list)
+  {
+    int value = character->getStatistics()->property(stat).toInt();
+    if (value < min || !result)
+    {
+      result = character;
+      min = value;
+    }
+  }
+  return result;
+}
+
+int CharacterParty::highestStatistic(const QByteArray& name) const
+{
+  Character* character = mostSkilledAt(name);
+  return character ? character->getStatistics()->property(name).toInt() : 0;
+}
+
+int CharacterParty::lowestStatistic(const QByteArray& name) const
+{
+  Character* character = leastSkilledAt(name);
+  return character ? character->getStatistics()->property(name).toInt() : 0;
+}
+
 Character* CharacterParty::get(const QString& name)
 {
   for (auto it = list.begin() ; it != list.end() ; ++it)
