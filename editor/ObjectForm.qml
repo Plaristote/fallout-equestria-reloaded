@@ -160,10 +160,10 @@ Pane {
     id: iconPicker
     title: i18n.t("game-editor.file-picker-title")
     currentFolder: rootPath + "assets/icons"
-    nameFilters: ["Image files (*.jpg, *.png, *.webp)"]
+    nameFilters: ["Image files (*.jpg *.png *.webp)"]
 
     onAccepted: {
-      const path = iconPicker.fileUrl.toString().replace(/.*\/assets\/icons\//, "")
+      const path = iconPicker.selectedFile.toString().replace(/.*\/assets\/icons\//, "")
       target.text = path;
     }
   }

@@ -32,10 +32,10 @@ Item {
     id: filePicker
     title: i18n.t("game-editor.file-picker-title")
     currentFolder: rootPath + "assets/sprites"
-    nameFilters: ["Image files (*.jpg, *.png, *.webp)"]
+    nameFilters: ["Image files (*.jpg *.png *.webp)"]
 
     onAccepted: {
-      const path = filePicker.fileUrl.toString().replace(/.*\/assets\/sprites\//, "")
+      const path = filePicker.selectedFile.toString().replace(/.*\/assets\/sprites\//, "")
       target.text = path;
     }
   }
