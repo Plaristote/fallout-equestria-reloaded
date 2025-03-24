@@ -148,7 +148,7 @@ bool DynamicObject::isDestructible() const
 void DynamicObject::onBlocksPathChanged()
 {
   auto* level = Game::get()->getLevel();
-  auto* grid  = level ? level->getGrid() : nullptr;
+  auto* grid  = level ? level->getFloorGrid(floor) : nullptr;
 
   if (grid)
   {
