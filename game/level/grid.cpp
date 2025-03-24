@@ -37,8 +37,9 @@ void GridComponent::load(const QJsonObject& data)
         throw std::runtime_error("Missing ground layer in tilemap");
       floors.push_back(floorGrid);
     }
-    currentFloor = static_cast<unsigned char>(data["currentFloor"].toInt(0));
-    emit floorChanged();
+    setCurrentFloor(data["currentFloor"].toInt(0));
+    if (currentFloor == 0)
+      emit floorChanged();
     pathfinding.prepareZoneGrid(floors);
     ParentType::load(data);
   }
