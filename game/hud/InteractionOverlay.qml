@@ -48,7 +48,7 @@ Repeater {
     }
 
     enabled: visible
-    source: "file:" + dynamicObject.spriteSource
+    source: fileProtocol + dynamicObject.spriteSource
     sourceClipRect: dynamicObject.clippedRect
     x: offset.x + root.offsetX
     y: offset.y + root.offsetY
