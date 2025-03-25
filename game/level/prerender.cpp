@@ -62,6 +62,64 @@ void PreRenderComponent::preRenderTilemap(TileMap* tilemap, const QString& prefi
   preRenderGround(tilemap, prefix);
   preRenderLayers(tilemap->getRoofs(), prefix + "_roof");
   preRenderLayers(tilemap->getLights(), prefix + "_lights");
+  preRenderWallVectors(tilemap, prefix + "_wall");
+}
+
+void renderWallGroup(WallGroup&);
+
+void PreRenderComponent::preRenderWallVectors(TileMap* tilemap, const QString& prefix)
+{
+  return prepareWallVectors(tilemap, prefix, true);
+}
+
+void PreRenderComponent::prepareWallVectors()
+{
+  unsigned int i = 0;
+
+  for (LevelGrid* grid : getFloors())
+  {
+    prepareWallVectors(grid->getTilemap(), "floor" + QString::number(i) + "_wall");
+    ++i;
+  }
+}
+
+void PreRenderComponent::prepareWallVectors(TileMap* tilemap, const QString& prefix, bool render)
+{
+  TileLayer* blocks = tilemap->getLayer("blocks");
+  TileLayer* hWalls = tilemap->getLayer("walls-h");
+
+  for (WallGroup& wallGroup : tilemap->getWallGroups())
+  {
+    QPoint position = wallGroup.endPosition();
+    Tile* tile = wallGroup.wallTiles.last();
+    QPoint renderPosition = tile->getRenderPosition();
+
+    wallGroup.prerenderPath = getPreRenderPath() + prefix + '_' + QString::number(position.x()) + '_' + QString::number(position.y()) + ".png";
+    for (QPoint position : wallGroup.positions())
+    {
+      for (TileLayer* layer : QList<TileLayer*>{blocks, hWalls})
+      {
+        if (layer)
+        {
+          Tile* positionTile = layer->getTile(position.x(), position.y());
+          if (positionTile != tile)
+            layer->setTileIdAt(position.x(), position.y(), nullptr, 0);
+        }
+      }
+    }
+
+    if (render)
+      renderWallGroup(wallGroup);
+    else
+      wallGroup.image = QImage(wallGroup.prerenderPath);
+
+    renderPosition.setX(renderPosition.x() - (wallGroup.image.width() * 2  - tile->getRect().width()));
+    renderPosition.setY(renderPosition.y() - (wallGroup.image.height() * 2 - tile->getRect().height()));
+    tile->setImage(&wallGroup.prerenderPath);
+    tile->setTexture(&wallGroup.image);
+    tile->setRect(wallGroup.image.rect());
+    tile->setRenderPosition(renderPosition);
+  }
 }
 
 void PreRenderComponent::preRenderGround(TileMap* tilemap, const QString& prefix)

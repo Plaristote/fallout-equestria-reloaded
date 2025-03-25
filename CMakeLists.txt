@@ -62,6 +62,9 @@ set(PROJECT_SOURCES
         tilemap/tilemap.cpp
         tilemap/tilemask.h
         tilemap/tilemask.cpp
+        tilemap/wallvector.h
+        tilemap/wallvector.cpp
+        tilemap/wallvector_render.cpp
         tilemap/properties.cpp
         tilemap/painter.cpp
         cmap/statmodel.h

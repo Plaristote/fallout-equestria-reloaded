@@ -12,6 +12,7 @@
 # include <QJsonObject>
 # include <QStringList>
 # include "globals.h"
+# include "wallvector.h"
 
 class TileMap : public QObject
 {
@@ -40,6 +41,7 @@ public:
   inline int getPixelWidth() const { return (mapSize.width() - 1) * tileSize.width();}
   inline const QSize& getTileSize() const { return tileSize; }
   QList<TileZone*>& getZones() { return zones; }
+  QList<WallGroup>& getWallGroups() { return wallGroups; }
   const QList<TileLayer*>& getRoofs() const { return roofs; }
   const QList<TileLayer*>& getLights() const { return lights; }
   const QVector<TileLayer*>& getLayers() const { return layers; }
@@ -92,6 +94,7 @@ private:
   QList<TileLayer*>   roofs;
   QList<TileLayer*>   lights;
   QList<TileZone*>    pathfindindingZones;
+  QList<WallGroup>    wallGroups;
   QStringList         textureList;
   unsigned char       floor = 0;
 };

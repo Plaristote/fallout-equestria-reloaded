@@ -18,9 +18,23 @@ Item {
   visible: rendered
 
   //Text { color: "white"; font.bold: true; text: parent.z }
-  Loader { readonly property var wall: block; sourceComponent: wall && rendered ? wallComponent : null; y: -renderTarget.wallHeight }
-  Loader { readonly property var wall: vwall; sourceComponent: wall && rendered ? wallComponent : null; y: -renderTarget.wallHeight }
-  Loader { readonly property var wall: hwall; sourceComponent: wall && rendered ? wallComponent : null; y: -renderTarget.wallHeight }
+  Loader {
+    readonly property var wall: block;
+    sourceComponent: wall && rendered ? wallComponent : null;
+    x: wall ? renderTarget.tileSize.width - block.clippedRect.width : 0
+    y: wall ? renderTarget.tileSize.height - block.clippedRect.height : -renderTarget.wallHeight
+  }
+  Loader {
+    readonly property var wall: vwall;
+    sourceComponent: wall && rendered ? wallComponent : null;
+    y: -renderTarget.wallHeight
+  }
+  Loader {
+    readonly property var wall: hwall;
+    sourceComponent: wall && rendered ? wallComponent : null;
+    x: wall ? renderTarget.tileSize.width - hwall.clippedRect.width : 0
+    y: wall ? renderTarget.tileSize.height - hwall.clippedRect.height : -renderTarget.wallHeight
+  }
 
   Component {
     id: wallComponent

@@ -141,6 +141,8 @@ void TileMap::loadLayers(const QJsonArray& layersData)
         (this->**loader)(layerData);
     }
   }
+  // Must be run after the walls folder and blocks layer have been loaded
+  wallGroups = WallGroup::factory(*this);
 }
 
 void TileMap::loadLightFolder(const QJsonObject& layerData)

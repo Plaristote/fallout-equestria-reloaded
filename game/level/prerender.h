@@ -22,8 +22,11 @@ private:
   void    preRenderAllTilemaps();
   void    preRenderTilemap(TileMap*, const QString& prefix);
   void    preRenderGround(TileMap*, const QString& prefix);
+  void    preRenderWallVectors(TileMap*, const QString& prefix);
   void    preRenderLayers(const QList<TileLayer*>&, const QString& prefix);
   QString getPreRenderPath() const;
+  void    prepareWallVectors();
+  void    prepareWallVectors(TileMap*, const QString& prefix, bool render = false);
 };
 
 #endif // PRERENDERCOMPONENT_H
