@@ -24,7 +24,8 @@ void PlayerMovementComponent::setDefaultMovementMode()
 
 void PlayerMovementComponent::movePlayerTo(int x, int y)
 {
-  DynamicObject* occupant = getFloorGrid(getPlayer()->getCurrentFloor())->getOccupant(x, y);
+  LevelGrid* grid = getFloorGrid(getPlayer()->getCurrentFloor()); 
+  DynamicObject* occupant = grid->getOccupant(x, y);
   auto* actions = getPlayer()->getActionQueue();
   QPoint oldTarget(-1, -1);
 

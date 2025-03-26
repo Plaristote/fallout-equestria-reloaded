@@ -84,6 +84,11 @@ void Doorway::updateTileConnections()
   LevelGrid::CaseContent*      doorwayCase = grid ? grid->getGridCase(origin) : nullptr;
 
   removeTileConnections();
+  if (!grid)
+  {
+    qDebug() << "GameObject `" << getPath() << "` has an invalid floor property";
+    return ;
+  }
   for (const QPoint& target : getTileConnectionTargets(getOrientation()))
   {
     LevelGrid::CaseContent*    targetCase = grid->getGridCase(origin + target);

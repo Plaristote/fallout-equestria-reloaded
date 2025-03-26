@@ -119,6 +119,7 @@ void ControlZoneComponent::updateCover()
   {
     LevelGrid* grid = Game::get()->getLevel()->getFloorGrid(getCurrentFloor());
 
+    if (!grid) return ;
     for (QPoint position : controlZone->getPositions())
     {
       auto* gridCase = grid->getGridCase(position + controlZone->getOffset());

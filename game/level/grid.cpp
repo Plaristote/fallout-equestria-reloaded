@@ -263,12 +263,18 @@ void GridComponent::setGridObjectPosition(DynamicObject* object, int x, int y, u
   LevelGrid* grid = getFloorGrid(objectFloor);
   LevelGrid* lastGrid;
 
+  if (!grid)
+  {
+    qDebug() << getPath() << "::setGridObjectPosition: unvalid floor" << static_cast<int>(objectFloor);
+    return ;
+  }
   if (object->getCurrentFloor() == objectFloor)
     grid->moveObject(object, x, y);
   else
   {
     lastGrid = getFloorGrid(object->getCurrentFloor());
-    lastGrid->removeObject(object);
+    if (lastGrid)
+      lastGrid->removeObject(object);
     grid->insertObject(object, x, y);
   }
   grid->triggerZone(object, x, y);
@@ -276,12 +282,16 @@ void GridComponent::setGridObjectPosition(DynamicObject* object, int x, int y, u
 
 void GridComponent::setRenderObjectPosition(DynamicObject* object, int x, int y)
 {
-  LevelGrid *grid = getFloorGrid(object->getCurrentFloor());
-  QPoint renderPosition = getRenderPositionForTile(x, y, static_cast<unsigned char>(object->getCurrentFloor()));
+  LevelGrid* grid = getFloorGrid(object->getCurrentFloor());
 
-  if (object->isCharacter())
-    renderPosition.ry() -= grid->getTilemap()->getTileSize().height() / 4;
-  object->setRenderPosition(renderPosition);
+  if (grid)
+  {
+    QPoint renderPosition = getRenderPositionForTile(x, y, static_cast<unsigned char>(object->getCurrentFloor()));
+
+    if (object->isCharacter())
+      renderPosition.ry() -= grid->getTilemap()->getTileSize().height() / 4;
+    object->setRenderPosition(renderPosition);
+  }
 }
 
 QPoint GridComponent::getAdjustedOffsetFor(const DynamicObject* object) const
