@@ -165,8 +165,6 @@
         <file>game/level/ZoneRenderer.qml</file>
         <file>game/level/WallRenderer.qml</file>
         <file>game/level/DaylightShader.qml</file>
-        <file alias="game/level/Daylight.frag.qsb">build/game/level/Daylight.frag.qsb</file>
-        <file alias="game/level/Daylight.vert.qsb">build/game/level/Daylight.vert.qsb</file>
         <file>game/level/ScreenEdges.qml</file>
         <file>game/level/LevelRenderTarget.qml</file>
         <file>game/level/LevelMouseArea.qml</file>
