@@ -44,3 +44,36 @@ void GridObjectComponent::setCurrentFloor(unsigned int value)
   floor = static_cast<unsigned short>(value);
   emit floorChanged();
 }
+
+QVector<QPoint> GridObjectComponent::getAvailableSurroundingCases() const
+{
+  QVector<QPoint> candidates;
+  auto* level = LevelTask::get();
+  auto* grid = level ? level->getGrid() : nullptr;
+
+  if (grid)
+  {
+    for (int x = position.x() - 1 ; x <= position.x() + 1 ; ++x)
+    {
+      for (int y = position.y() - 1 ; y <= position.y() + 1 ; ++y)
+      {
+        auto* caseContent = grid->getGridCase(x, y);
+
+        if (caseContent && !caseContent->isBlocked())
+          candidates << QPoint(x, y);
+      }
+    }
+  }
+  return candidates;
+}
+
+QJSValue GridObjectComponent::getAvailableSurroundingCoordinates() const
+{
+  auto cases = getAvailableSurroundingCases();
+  auto& scriptEngine = Game::get()->getScriptEngine();
+  QJSValue array = scriptEngine.newArray(cases.size());
+
+  for (int i = 0 ; i < cases.size() ; ++i)
+    array.setProperty(i, scriptEngine.toScriptValue(cases.at(i)));
+  return array;
+}

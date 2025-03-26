@@ -119,24 +119,6 @@ int Character::getSneakAbility() const
   return statistics ? statistics->get_sneak() : DetectableComponent::getSneakAbility();
 }
 
-QVector<QPoint> Character::getAvailableSurroundingCases() const
-{
-  QVector<QPoint> candidates;
-  auto* grid = Game::get()->getLevel()->getGrid();
-
-  for (int x = position.x() - 1 ; x <= position.x() + 1 ; ++x)
-  {
-    for (int y = position.y() - 1 ; y <= position.y() + 1 ; ++y)
-    {
-      auto* caseContent = grid->getGridCase(x, y);
-
-      if (caseContent && !caseContent->isBlocked())
-        candidates << QPoint(x, y);
-    }
-  }
-  return candidates;
-}
-
 void Character::moveAway(Character* target)
 {
   auto* level = Game::get()->getLevel();

@@ -17,14 +17,16 @@ class GridObjectComponent : public ScriptableComponent
 public:
   explicit GridObjectComponent(QObject *parent = nullptr);
 
-  virtual QPoint getPosition() const { return position; }
-  virtual Point  getPoint() const { return {position.x(), position.y(), floor}; }
-  virtual void   setPosition(QPoint value) { position = value; emit positionChanged(); }
-  unsigned int   getCurrentFloor() const { return floor; }
-  virtual void   setCurrentFloor(unsigned int value);
-  virtual int    getCoverValue() const { return cover; }
+  virtual QPoint  getPosition() const { return position; }
+  virtual Point   getPoint() const { return {position.x(), position.y(), floor}; }
+  virtual void    setPosition(QPoint value) { position = value; emit positionChanged(); }
+  unsigned int    getCurrentFloor() const { return floor; }
+  virtual void    setCurrentFloor(unsigned int value);
+  virtual int     getCoverValue() const { return cover; }
+  QVector<QPoint> getAvailableSurroundingCases() const;
 
   Q_INVOKABLE QJSValue positionSplat() const;
+  Q_INVOKABLE QJSValue getAvailableSurroundingCoordinates() const;
 
   void load(const QJsonObject&);
   void save(QJsonObject&) const;
