@@ -8,7 +8,9 @@
 
 SpriteAnimationPart::~SpriteAnimationPart()
 {
-  if (Game::get()->getLevel() == level)
+  auto* game = Game::get();
+
+  if (game && game->getLevel() == level)
     level->unregisterVisualEffect(sprite);
   delete sprite;
 }
