@@ -111,8 +111,7 @@ Pane {
 
         Pane {
           background: UiStyle.TerminalPane {}
-          anchors.left: parent.left
-          anchors.right: parent.right
+          Layout.fillWidth: true
 
           ColumnLayout {
             anchors.left: parent.left
@@ -145,20 +144,18 @@ Pane {
         }
 
         Loader {
-          anchors { left: parent.left; right: parent.right }
+          Layout.fillWidth: true
           sourceComponent: selectedObject ? itemPreviewComponent : null
         }
 
         MenuButton {
           text: i18n.t("Take")
           action: takeAction
-          anchors.horizontalCenter: parent.horizontalCenter
           Layout.fillWidth: true
         }
         MenuButton {
           text: i18n.t("Leave")
           action: dropAction
-          anchors.horizontalCenter: parent.horizontalCenter
           Layout.fillWidth: true
         }
 
