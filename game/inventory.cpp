@@ -29,6 +29,8 @@ void Inventory::addItem(InventoryItem* item)
   emit totalWeightChanged();
   emit totalValueChanged();
   emit itemPicked(item);
+  if (user)
+      item->scriptCall("onAddedToInventory", QJSValueList() << user->asJSValue());
 }
 
 void Inventory::removeItem(InventoryItem *item)
@@ -41,6 +43,8 @@ void Inventory::removeItem(InventoryItem *item)
   emit totalWeightChanged();
   emit totalValueChanged();
   emit itemsChanged();
+  if (user)
+      item->scriptCall("onRemovedFromInventory", QJSValueList() << user->asJSValue());
 }
 
 void Inventory::destroyItem(InventoryItem *item, int quantity)
