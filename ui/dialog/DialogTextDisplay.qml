@@ -33,6 +33,7 @@ BorderImage {
       width: parent.width - 30
       font.family: application.consoleFontName
       font.pointSize: application.consoleFont.bigSize
+      onTextChanged: flickable.contentY = 0
     }
   }
 }
