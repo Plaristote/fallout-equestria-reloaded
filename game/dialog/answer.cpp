@@ -107,5 +107,7 @@ bool DialogAnswer::isAvailable(CharacterDialog& dialog)
     else if (property.isBool())
       return property.toBool();
   }
+  else if (availableHook.isBool())
+    return availableHook.toBool();
   return true;
 }
