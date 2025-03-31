@@ -1,5 +1,6 @@
 #include "gamemanager.h"
 #include <QDir>
+#include <QStandardPaths>
 #include <QDebug>
 
 GameManager::GameManager(QObject *parent) : QObject(parent), currentGame(nullptr)
@@ -16,7 +17,7 @@ bool GameManager::hasContinueGame() const
 
 QStringList GameManager::getSavedGames() const
 {
-  QDir directory("./saves");
+  QDir directory(getSaveDirectoryPath());
   QStringList list;
 
   if (directory.exists())
@@ -64,17 +65,19 @@ void GameManager::launchNewGame()
 
 void GameManager::loadGame(const QString& path)
 {
+  QString savePath = getSaveDirectoryPath() + '/' + path;
   endGame();
   currentGame = new Game(this);
-  currentGame->getDataEngine()->loadFromFile(path + ".json");
+  currentGame->getDataEngine()->loadFromFile(savePath + ".json");
   currentGame->loadFromDataEngine([this]() { emit gameLoaded(); });
 }
 
 void GameManager::saveGame(const QString& path)
 {
-  emit currentGame->requireScreenshot("./saves/" + path + ".png");
+  QString savePath = getSaveDirectoryPath() + '/' + path;
+  emit currentGame->requireScreenshot(savePath + ".png");
   currentGame->save();
-  currentGame->getDataEngine()->saveToFile(path + ".json");
+  currentGame->getDataEngine()->saveToFile(savePath + ".json");
 }
 
 void GameManager::endGame()
@@ -128,4 +131,9 @@ void GameManager::setWithPlayerCropCircle(bool value)
     LevelTask::withPlayerCropCircle = value;
     emit withPlayerCropCircleChanged();
   }
+}
+
+QString GameManager::getSaveDirectoryPath()
+{
+  return QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/saves";
 }

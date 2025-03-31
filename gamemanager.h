@@ -23,6 +23,8 @@ public:
   Q_INVOKABLE void endGame();
   Q_INVOKABLE QStringList getSavedGames() const;
 
+  static QString getSaveDirectoryPath();
+
 signals:
   void newGameStarted();
   void gameLoaded();

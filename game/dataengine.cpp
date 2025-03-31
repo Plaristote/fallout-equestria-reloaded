@@ -171,7 +171,7 @@ void DataEngine::setWorldmap(const QJsonObject& worldmapData)
 
 void DataEngine::loadFromFile(const QString &path)
 {
-  QFile in(path == "" ? QString(initialGamePath) : "./saves/" + path);
+  QFile in(path == "" ? QString(initialGamePath) : path);
 
   if (in.open(QIODevice::ReadOnly))
   {
@@ -193,7 +193,7 @@ void DataEngine::loadFromFile(const QString &path)
 
 void DataEngine::saveToFile(const QString &path)
 {
-  QFile out(path.startsWith("./assets") ? path : "./saves/" + path);
+  QFile out(path);
 
   data.insert("diplomacy", diplomacy);
   data.insert("quests", quests);

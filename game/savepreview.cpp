@@ -5,6 +5,7 @@
 #include <QFile>
 #include <QDir>
 #include <QDebug>
+#include "gamemanager.h"
 
 SavePreview::SavePreview(QObject *parent) : QObject(parent)
 {
@@ -15,7 +16,7 @@ void SavePreview::update()
 {
   if (name.length() > 0)
   {
-    QFile source("./saves/" + name + ".json");
+    QFile source(GameManager::getSaveDirectoryPath() + '/' + name + ".json");
 
     if (source.open(QIODevice::ReadOnly))
       loadFromJson(source.readAll());
@@ -42,10 +43,9 @@ void SavePreview::loadFromJson(const QByteArray& json)
   time           = QString::number(timeData["h"].toInt()) + ':' + QString::number(timeData["m"].toInt()) + ':' + QString::number(timeData["s"].toInt());
   qDebug() << "loading avepreview with date" << date << time;
   qDebug() << "time data being" << timeData.toVariantMap();
-
 }
 
 QString SavePreview::screenshotPath() const
 {
-  return "file:/" + QDir::currentPath() + "/saves/" + name + ".png";
+  return "file:/" + GameManager::getSaveDirectoryPath() + '/' + name + ".png";
 }
