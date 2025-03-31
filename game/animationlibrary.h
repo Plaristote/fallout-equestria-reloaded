@@ -77,6 +77,8 @@ public:
   virtual ~AnimationLibrary() override;
 
   static AnimationLibrary* get() { return self; }
+  static const QString& prerenderPath();
+
   void initialize();
   SpriteAnimation getAnimation(const QString& group, const QString& animation) const;
   bool            hasAnimation(const QString& group, const QString& name) const;
@@ -110,7 +112,6 @@ private:
   QStringList           textures;
   QMap<QString, QImage> images;
   QJsonObject           data;
-  static const QString  prerenderPath;
 };
 
 #endif // ANIMATIONLIBRARY_H

@@ -45,6 +45,8 @@
 
 QJSEngine* qmlJsEngine = nullptr;
 
+QString preRenderRoot();
+
 void registerQmlTilemap() {
   qmlRegisterType<TileMap>  ("Tiles", 1,0, "TileMap");
   qmlRegisterType<TileLayer>("Tiles", 1,0, "TileLayer");
@@ -69,6 +71,11 @@ int main(int argc, char *argv[])
   QResource::registerResource("editor.rcc");
 #endif
 
+  QGuiApplication app(argc, argv);
+  QQmlApplicationEngine engine;
+
+  qDebug() << "Using prerender directory " << preRenderRoot();
+
   AnimationLibrary animationLibrary;
   animationLibrary.initialize();
 
@@ -77,8 +84,6 @@ int main(int argc, char *argv[])
 
   ScriptEditorController scriptEditorController;
 
-  QGuiApplication app(argc, argv);
-  QQmlApplicationEngine engine;
   MouseCursor* cursor = new MouseCursor(&app);
   GamepadController* gamepad = new GamepadController(&app);
 

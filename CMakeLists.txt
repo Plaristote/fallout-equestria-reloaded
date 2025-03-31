@@ -87,6 +87,7 @@ set(PROJECT_SOURCES
         game/scriptcontroller.cpp
         game/dataengine.h
         game/dataengine.cpp
+        game/prerender.cpp
         game/level/levelbase.cpp
         game/level/levelbase.h
         game/level/metrics.h

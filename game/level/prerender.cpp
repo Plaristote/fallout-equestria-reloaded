@@ -3,6 +3,8 @@
 #include "tilemap/tilemap.h"
 #include <QDir>
 
+QString preRenderRoot();
+
 PreRenderComponent::PreRenderComponent(QObject* parent) : ParentType(parent)
 {
 }
@@ -27,13 +29,15 @@ void PreRenderComponent::load(const QJsonObject& data)
 #endif
   if (!dir.exists(getPreRenderPath()))
     preRenderAllTilemaps();
+  else
+    prepareWallVectors();
   for (TileLayer* layer : layers)
     layer->setProperty("prerendered", true);
 }
 
 QString PreRenderComponent::getPreRenderPath() const
 {
-  return QDir::currentPath() + "/.prerender/" + name + '/';
+  return preRenderRoot() + name + '/';
 }
 
 bool PreRenderComponent::clearCache() const

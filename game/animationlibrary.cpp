@@ -6,6 +6,8 @@
 #include <QJsonDocument>
 #include <QDebug>
 
+QString preRenderRoot();
+
 QmlSpriteAnimation::QmlSpriteAnimation(QObject* parent) : QObject(parent)
 {
   connect(this, &QmlSpriteAnimation::frameCountChanged, this, &QmlSpriteAnimation::animationChanged);
@@ -200,9 +202,13 @@ SpriteAnimation AnimationLibrary::getAnimation(const QString &group, const QStri
   {
     QString relativeSource = animationData["source"].toString();
 
+    if (relativeSource.isEmpty())
+      relativeSource = defaultSource;
     object.name          = animation;
-    object.source        = ASSETS_PATH + "sprites/";
-    object.source       += relativeSource.length() > 0 ? relativeSource : defaultSource;
+    if (QFileInfo(relativeSource).isAbsolute())
+      object.source      = relativeSource;
+    else
+      object.source      = ASSETS_PATH + "sprites/" + relativeSource;
     object.repeat        = animationData["repeat"].toBool(false);
     object.frameCount    = animationData["frameCount"].toInt(1);
     object.frameInterval = animationData["frameInterval"].toInt(100);
@@ -345,10 +351,15 @@ QStringList AnimationLibrary::getAnimationList(const QString& group) const
   return list;
 }
 
+const QString& AnimationLibrary::prerenderPath()
+{
+  static const QString value = preRenderRoot() + "spritesheets/";
+  return value;
+}
+
 void registerPrerenderedSpritesheet(const QString& baseName, const QString& cloneOf)
 {
   const QDir    armors(ASSETS_PATH + "sprites/armors");
-  const QString prerenderPath(".prerender/spritesheets");
 
   for (const QString& armorSource : armors.entryList())
   {
@@ -357,13 +368,11 @@ void registerPrerenderedSpritesheet(const QString& baseName, const QString& clon
 
     QJsonObject spriteData;
 
-    spriteData["defaultSource"] = prerenderPath + '/' + finalName + ".png";
+    spriteData["defaultSource"] = AnimationLibrary::prerenderPath() + finalName + ".png";
     spriteData["cloneOf"] = cloneOf;
-
+    qDebug() << "registerPrerenderedSpritesheet" << spriteData["defaultSource"].toString();
   }
 }
-
-const QString AnimationLibrary::prerenderPath = QString(".prerender/spritesheets");
 
 QString AnimationLibrary::getCharacterSpriteName(const CharacterSpriteDescriptor& descriptor) const
 {
@@ -380,7 +389,7 @@ QString AnimationLibrary::getCharacterSpriteName(const CharacterSpriteDescriptor
 
 QString AnimationLibrary::getCharacterSpriteFilepath(const CharacterSpriteDescriptor& descriptor) const
 {
-  return prerenderPath + '/' + getCharacterSpriteName(descriptor) + '.' + getCharacterSpriteFormat();
+  return prerenderPath() + getCharacterSpriteName(descriptor) + '.' + getCharacterSpriteFormat();
 }
 
 bool AnimationLibrary::hasSpriteSheetBeenPreRendered(const CharacterSpriteDescriptor& descriptor) const
@@ -424,7 +433,7 @@ void AnimationLibrary::prerenderCharacterSpriteSheet(const CharacterSpriteDescri
     spritesheet.addLayer(overLayer);
     spritesheet.addColorLayer(descriptor.bodyColor, overLayer);
   }
-  QDir::current().mkpath(prerenderPath);
+  QDir::current().mkpath(prerenderPath());
   spritesheet.save(getCharacterSpriteFilepath(descriptor));
 }
 
@@ -435,14 +444,17 @@ void AnimationLibrary::registerCharacterSpriteSheet(const CharacterSpriteDescrip
   if (!data[name].isObject())
   {
     QString filePath = getCharacterSpriteFilepath(descriptor);
+    QString preRenderPath;
     QJsonObject spriteData;
 
     if (!hasSpriteSheetBeenPreRendered(descriptor))
       prerenderCharacterSpriteSheet(descriptor);
-    spriteData["defaultSource"] = "../../" + getCharacterSpriteFilepath(descriptor);
+    preRenderPath               = getCharacterSpriteFilepath(descriptor);
+    spriteData["defaultSource"] = preRenderPath;
     spriteData["cloneOf"]       = descriptor.cloneOf;
     data[name] = spriteData;
     textures << spriteData["defaultSource"].toString();
-    images.insert(ASSETS_PATH + "sprites/" + spriteData["defaultSource"].toString(), QImage(filePath));
+    images.insert(preRenderPath, QImage(filePath)); // WTF is this ? Probably does not work as is.
+    //images.insert(ASSETS_PATH + "sprites/" + spriteData["defaultSource"].toString(), QImage(filePath));
   }
 }
