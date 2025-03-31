@@ -8,6 +8,7 @@ ShaderEffect {
   property color color: "transparent"
   property int   animState: 0
   property int   animDuration: 500
+  property size  textureSize: Qt.size(width, height)
 
   width: source.width
   height: source.height
