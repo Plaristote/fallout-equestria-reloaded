@@ -261,6 +261,8 @@ bool InventoryItem::isValidTarget(DynamicObject* target)
 
 QJSValue InventoryItem::useOn(DynamicObject* target)
 {
+  DynamicObject* owner = getOwner();
+
   if (script)
   {
     QJSValueList params;
@@ -271,7 +273,6 @@ QJSValue InventoryItem::useOn(DynamicObject* target)
     {
       if (this->requiresTarget() && (!target || !isValidTarget(target)))
       {
-        const DynamicObject* owner = getOwner();
         Game* game = Game::get();
 
         if (owner && owner == game->getPlayer())
@@ -283,6 +284,8 @@ QJSValue InventoryItem::useOn(DynamicObject* target)
     else if (script->hasMethod("useOn"))
       return script->call("useOn", params);
   }
+  if (target && target->scriptProperty("onUseItem").isCallable())
+      return target->scriptCall("onUseItem", QJSValueList() << (owner ? owner->asJSValue() : QJSValue()) << this->asJSValue());
   return false;
 }
 
