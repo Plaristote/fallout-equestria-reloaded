@@ -68,7 +68,7 @@ public:
   void   setSpriteOffset(QPoint);
 
   Q_INVOKABLE virtual bool triggerInteraction(Character*, const QString& interactionType);
-  Q_INVOKABLE virtual bool triggerSkillUse(Character* user, const QString& skillName);
+  Q_INVOKABLE virtual bool triggerSkillUse(Character* user, const QString& skillName, std::function<bool()> fallback = std::function<bool()>());
   Q_INVOKABLE void playSound(const QString&, qreal volume = 1.f) const;
 
   void deleteLater() { emit beforeDestroy(this); QObject::deleteLater(); }

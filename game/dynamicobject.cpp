@@ -110,23 +110,32 @@ QString DynamicObject::getDisplayName() const
   return i18n->t("objects." + getBaseName());
 }
 
-bool DynamicObject::triggerSkillUse(Character *user, const QString &skillName)
+bool DynamicObject::triggerSkillUse(Character *user, const QString &skillName, std::function<bool()> fallback)
 {
   QString methodName = skillName;
   const I18n* i18n = I18n::get();
+  bool result = false;
 
   methodName[0] = methodName[0].toUpper();
   methodName = "onUse" + methodName;
   qDebug() << "Trying to call" << methodName;
   if (user && script && script->hasMethod(methodName))
-    return script->call(methodName, QJSValueList() << user->asJSValue()).toBool();
-  else if (user == Game::get()->getPlayer())
+    result = script->call(methodName, QJSValueList() << user->asJSValue()).toBool();
+  if (!result)
   {
-    Game::get()->appendToConsole(
-      i18n->t("messages.use-skill-does-nothing", {{"skillName", skillName}, {"target", getDisplayName()}})
-    );
+    if (fallback)
+      result = fallback();
+    else if (user == Game::get()->getPlayer())
+    {
+      Game::get()->appendToConsole(
+        i18n->t("messages.use-skill-does-nothing", {
+          {"skillName", i18n->t("cmap." + skillName)},
+          {"target", getDisplayName()
+        }})
+      );
+    }
   }
-  return false;
+  return result;
 }
 
 void DynamicObject::setVisible(bool value)

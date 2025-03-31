@@ -2,6 +2,7 @@
 #include "game.h"
 #include "game/leveltask.h"
 #include "game/animationSequence/objectanimationpart.h"
+#include "i18n.h"
 
 bool SkillAction::trigger()
 {
@@ -33,23 +34,29 @@ void SkillAction::update()
 
 void SkillAction::performAction()
 {
+  auto* i18n = I18n::get();
   auto* level = Game::get()->getLevel();
   bool  isInCombat = level && level->isInCombat(character);
   bool  success = false;
+  std::function<bool()> fallback;
 
   if (skillName == "steal")
-    success = performSteal();
-  else if (skillName == "sneak")
+    fallback = std::bind(&SkillAction::performSteal, this);
+  if (skillName == "sneak")
     success = level->useSneak(character);
   else if (!isInCombat || getApCost() <= character->getActionPoints())
-    success = target->triggerSkillUse(character, skillName);
+  {
+    success = target->triggerSkillUse(character, skillName, fallback);
+    character->useActionPoints(getApCost(), "skill-" + skillName);
+  }
   else if (character == level->getPlayer())
-    emit level->displayConsoleMessage("Not enough action points.");
+    emit level->displayConsoleMessage(i18n->t("messages.not-enough-ap"));
   state = success ? Done : Interrupted;
 }
 
 bool SkillAction::performSteal()
 {
+  auto* i18n = I18n::get();
   auto* level = Game::get()->getLevel();
   bool  isInCombat = level && level->isInCombat(character);
 
@@ -63,10 +70,10 @@ bool SkillAction::performSteal()
       return true;
     }
     else
-      emit level->displayConsoleMessage("Invalid target.");
+      emit level->displayConsoleMessage(i18n->t("messages.invalid-target"));
   }
   else
-    emit level->displayConsoleMessage("Not available in combat.");
+    emit level->displayConsoleMessage(i18n->t("messages.not-available-in-combat"));
   return false;
 }
 
@@ -74,5 +81,5 @@ int SkillAction::getApCost() const
 {
   if (skillName == "sneak" || skillName == "medicine")
     return 0;
-  return 2;
+  return 4;
 }

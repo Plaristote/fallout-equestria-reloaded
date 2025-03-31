@@ -18,6 +18,7 @@ public:
 protected:
   void performAction();
   bool performSteal();
+  void onSkillDoesNothing();
 
   DynamicObject*    target;
   QString           skillName;
