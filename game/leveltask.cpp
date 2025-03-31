@@ -29,6 +29,12 @@ LevelTask::~LevelTask()
   qDebug() << "LevelTask::destroyed";
 }
 
+LevelTask* LevelTask::get()
+{
+  auto* game = Game::get();
+  return game ? game->getLevel() : nullptr;
+}
+
 void LevelTask::deleteLater()
 {
   updateTimer.stop();

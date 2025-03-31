@@ -70,7 +70,7 @@ QList<StorageSlot*>& UniqueCharacterStorage::requireLevelStorage(const QString& 
 
 void UniqueCharacterStorage::saveCharacterFromCurrentLevel(Character* character)
 {
-  LevelTask* level = Game::get()->getLevel();
+  LevelTask* level = LevelTask::get();
 
   if (level && character)
   {
@@ -111,7 +111,7 @@ int UniqueCharacterStorage::loadUniqueCharactersToLevel(LevelTask* level)
 
 void UniqueCharacterStorage::detachCharacter(Character* character)
 {
-  LevelTask* level = Game::get()->getLevel();
+  LevelTask* level = LevelTask::get();
   QList<StorageSlot*>& storage = requireLevelStorage("__no_level__");
 
   saveCharacterIntoStorage(level, character, storage) || swapCharacterToStorage(character, storage);
@@ -175,7 +175,7 @@ bool UniqueCharacterStorage::loadCharacterToCurrentLevel(const QString& characte
   // if found
   if(characterSlot)
   {
-    LevelTask* level = Game::get()->getLevel();
+    LevelTask* level = LevelTask::get();
     Point position;
     position.x = x;
     position.y = y;
@@ -194,7 +194,7 @@ bool UniqueCharacterStorage::loadCharacterToCurrentLevel(const QString& characte
 
 bool UniqueCharacterStorage::loadCharacterToZone(const QString& characterSheet, const TileZone* tileZone)
 {
-  LevelTask* level = Game::get()->getLevel();
+  LevelTask* level = LevelTask::get();
   Point position = level->getRandomUnoccupiedTileFromZone(tileZone);
 
   if (position.isInvalid())

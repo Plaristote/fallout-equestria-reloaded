@@ -1,5 +1,4 @@
 #include "skillUse.h"
-#include "game.h"
 #include "game/leveltask.h"
 #include "game/animationSequence/objectanimationpart.h"
 #include "i18n.h"
@@ -35,7 +34,7 @@ void SkillAction::update()
 void SkillAction::performAction()
 {
   auto* i18n = I18n::get();
-  auto* level = Game::get()->getLevel();
+  auto* level = LevelTask::get();
   bool  isInCombat = level && level->isInCombat(character);
   bool  success = false;
   std::function<bool()> fallback;
@@ -57,7 +56,7 @@ void SkillAction::performAction()
 bool SkillAction::performSteal()
 {
   auto* i18n = I18n::get();
-  auto* level = Game::get()->getLevel();
+  auto* level = LevelTask::get();
   bool  isInCombat = level && level->isInCombat(character);
 
   if (!isInCombat)

@@ -96,8 +96,9 @@ void remove_matching_entries(LIST& list, std::function<bool (typename LIST::valu
 
 void InteractionTargetList::afterTargetUpdate()
 {
-  Character* player = Game::get()->getPlayer();
-  LevelTask* level = Game::get()->getLevel();
+  auto* game = Game::get();
+  Character* player = game->getPlayer();
+  LevelTask* level = game->getLevel();
 
   if (level)
   {

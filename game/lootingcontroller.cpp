@@ -1,5 +1,5 @@
 #include "lootingcontroller.h"
-#include "game.h"
+#include "game/leveltask.h"
 
 LootingController::LootingController(QObject *parent) : QObject(parent)
 {
@@ -16,7 +16,7 @@ void LootingController::initialize(Character* c, StorageObject* t)
 
 void LootingController::initializeAvailableTargets(StorageObject* t)
 {
-  auto* currentLevel = Game::get()->getLevel();
+  auto* currentLevel = LevelTask::get();
   QVector<DynamicObject*> allTargets{reinterpret_cast<DynamicObject*>(t)};
 
   if (currentLevel)

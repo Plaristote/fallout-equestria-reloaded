@@ -1,9 +1,9 @@
 #include "movement.h"
-#include "game.h"
+#include "game/leveltask.h"
 
 bool MovementAction::trigger()
 {
-  ZoneGrid& grid = Game::get()->getLevel()->getPathfinder();
+  ZoneGrid& grid = LevelTask::get()->getPathfinder();
 
   if (character->getPoint() == target)
     state = Done;
@@ -49,7 +49,7 @@ bool MovementAction::canMakeNextMovement() const
 {
   if (character->getCurrentPath().length() > 0)
   {
-    auto*  level = Game::get()->getLevel();
+    auto*  level = LevelTask::get();
 
     if (level->isInCombat(character))
     {
@@ -72,7 +72,7 @@ void MovementAction::triggerNextMovement()
   if (character->getCurrentPath().length() > 0)
   {
     Point  nextPosition = character->rcurrentPath().front();
-    auto*  level        = Game::get()->getLevel();
+    auto*  level        = LevelTask::get();
     auto*  grid         = level->getFloorGrid(character->getCurrentFloor());
     auto*  currentCase  = grid->getGridCase(character->getPoint());
     auto*  nextCase     = grid->getGridCase(nextPosition);
@@ -109,7 +109,7 @@ void MovementAction::interrupt()
 
 void MovementAction::onMovementFinished()
 {
-  auto* level = Game::get()->getLevel();
+  auto* level = LevelTask::get();
   auto* grid  = level->getFloorGrid(character->getCurrentFloor());
 
   if (grid)

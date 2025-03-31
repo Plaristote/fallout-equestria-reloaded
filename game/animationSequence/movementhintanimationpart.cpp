@@ -7,7 +7,7 @@ MovementHintAnimationPart::MovementHintAnimationPart(QPoint position)
   Tile*      tile;
 
   sprite = new Sprite();
-  level  = Game::get()->getLevel();
+  level  = LevelTask::get();
   layer  = level->getTileMap()->getLayer("ground");
   tile   = layer->getTile(position.x(), position.y());
   sprite->setProperty("floating", false);

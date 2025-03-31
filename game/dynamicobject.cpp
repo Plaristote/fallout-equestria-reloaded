@@ -156,7 +156,7 @@ bool DynamicObject::isDestructible() const
 
 void DynamicObject::onBlocksPathChanged()
 {
-  auto* level = Game::get()->getLevel();
+  auto* level = LevelTask::get();
   auto* grid  = level ? level->getFloorGrid(floor) : nullptr;
 
   if (grid)
@@ -170,7 +170,7 @@ void DynamicObject::onBlocksPathChanged()
 
 QPoint DynamicObject::getSpriteOffset() const
 {
-  GridComponent* level = Game::get()->getLevel();
+  GridComponent* level = LevelTask::get();
 
   if (level)
     return getSpritePosition() - level->getTilePosition(getPosition());
@@ -179,7 +179,7 @@ QPoint DynamicObject::getSpriteOffset() const
 
 void DynamicObject::setSpriteOffset(QPoint offset)
 {
-  GridComponent* level = Game::get()->getLevel();
+  GridComponent* level = LevelTask::get();
 
   if (level)
   {

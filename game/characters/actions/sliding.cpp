@@ -1,5 +1,5 @@
 #include "sliding.h"
-#include "game.h"
+#include "game/leveltask.h"
 
 SlidingAction::SlidingAction(Character* character, QPoint target) : ActionBase(character), target(target)
 {
@@ -12,7 +12,7 @@ bool SlidingAction::trigger()
 
   if (origin != coordinates)
   {
-    auto* grid = Game::get()->getLevel()->getFloorGrid(character->getCurrentFloor());
+    auto* grid = LevelTask::get()->getFloorGrid(character->getCurrentFloor());
 
     character->moveToCoordinates(coordinates);
     grid->moveObject(character, target.x(), target.y());
@@ -39,7 +39,7 @@ void SlidingAction::interrupt()
 
 void SlidingAction::onFinished()
 {
-  auto* grid = Game::get()->getLevel()->getFloorGrid(character->getCurrentFloor());
+  auto* grid = LevelTask::get()->getFloorGrid(character->getCurrentFloor());
 
   if (!character->isUnconscious())
     character->wakeUp();
@@ -53,7 +53,7 @@ bool SlidingAction::animationRunning() const
 
 QPoint SlidingAction::getTargetCoordinates() const
 {
-  auto* level = Game::get()->getLevel();
+  auto* level = LevelTask::get();
 
   return level->getRenderPositionForTile(target.x(), target.y());
 }

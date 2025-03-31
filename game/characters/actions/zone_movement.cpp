@@ -1,12 +1,12 @@
 #include "zone_movement.h"
 #include <QRandomGenerator>
-#include "game.h"
+#include "game/leveltask.h"
 #include "game/pathfinding/levelgrid.h"
 
 bool ZoneMovementAction::trigger()
 {
   QRandomGenerator* random = QRandomGenerator::global();
-  LevelGrid*        floorGrid = Game::get()->getLevel()->getFloorGrid(zone->getFloor());
+  LevelGrid*        floorGrid = LevelTask::get()->getFloorGrid(zone->getFloor());
   QList<QPoint>     candidates = zone->getPositions();
 
   while (candidates.size())

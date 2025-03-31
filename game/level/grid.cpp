@@ -8,7 +8,7 @@
 
 LevelGrid* getFloorGrid(unsigned char floor)
 {
-  auto* level = Game::get()->getLevel();
+  auto* level = LevelTask::get();
 
   return level ? level->getFloorGrid(floor) : nullptr;
 }

@@ -115,9 +115,11 @@ void ControlZoneComponent::updateZoneBlock()
 
 void ControlZoneComponent::updateCover()
 {
-  if (controlZone && Game::get()->getLevel())
+  auto* level = LevelTask::get();
+
+  if (controlZone && level)
   {
-    LevelGrid* grid = Game::get()->getLevel()->getFloorGrid(getCurrentFloor());
+    LevelGrid* grid = level->getFloorGrid(getCurrentFloor());
 
     if (!grid) return ;
     for (QPoint position : controlZone->getPositions())

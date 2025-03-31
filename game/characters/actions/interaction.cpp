@@ -1,6 +1,6 @@
 #include "interaction.h"
-#include "game.h"
 #include "game/animationSequence/objectanimationpart.h"
+#include "game/leveltask.h"
 
 bool InteractionAction::trigger()
 {
@@ -29,7 +29,7 @@ void InteractionAction::update()
 
 void InteractionAction::performAction()
 {
-  auto* level = Game::get()->getLevel();
+  auto* level = LevelTask::get();
   bool handledByScript = target->triggerInteraction(character, actionName);
 
   if (!handledByScript && character == level->getPlayer())

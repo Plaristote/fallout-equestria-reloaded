@@ -55,7 +55,7 @@ void LightSourceComponent::reloadLightzone()
 
 void LightSourceComponent::onFloorChanged()
 {
-  auto* level = Game::get()->getLevel();
+  auto* level = LevelTask::get();
 
   if (level && lightZone)
   {
@@ -69,7 +69,7 @@ void LightSourceComponent::onFloorChanged()
 
 void LightSourceComponent::refreshLightzone()
 {
-  auto* level = Game::get()->getLevel();
+  auto* level = LevelTask::get();
 
   if (level && lightZone)
   {

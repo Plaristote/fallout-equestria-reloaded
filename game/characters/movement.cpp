@@ -1,5 +1,5 @@
 #include "movement.h"
-#include "game.h"
+#include "game/leveltask.h"
 #include <QJsonArray>
 #include <QJsonObject>
 
@@ -29,7 +29,7 @@ void CharacterMovement::lookTo(int x, int y)
 
 void CharacterMovement::moveTo(Point target)
 {
-  auto* level      = Game::get()->getLevel();
+  auto* level      = LevelTask::get();
   auto* originGrid = level ? level->getFloorGrid(getCurrentFloor()) : nullptr;
   auto* targetGrid = level ? level->getFloorGrid(target.z) : nullptr;
 

@@ -1,16 +1,15 @@
 #include "spriteanimationpart.h"
 #include <QJSValue>
 #include <QDebug>
-#include "game.h"
 #include "game/leveltask.h"
 #include "game/objects/components/sprite.h"
 #include <cmath>
 
 SpriteAnimationPart::~SpriteAnimationPart()
 {
-  auto* game = Game::get();
+  auto* currentLevel = LevelTask::get();
 
-  if (game && game->getLevel() == level)
+  if (currentLevel == level)
     level->unregisterVisualEffect(sprite);
   delete sprite;
 }
@@ -23,7 +22,7 @@ bool SpriteAnimationPart::matches(const QJSValue& descriptor)
 void SpriteAnimationPart::initialize(QJSValue &value)
 {
   sprite = new Sprite();
-  level  = Game::get()->getLevel();
+  level  = LevelTask::get();
   sprite->setProperty("floating", true);
   sprite->setSpriteName(value.property("name").toString());
   sprite->setAnimation(value.property("animation").toString());

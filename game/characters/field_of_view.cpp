@@ -308,7 +308,7 @@ float FieldOfView::GetRadius() const
 FieldOfView::CharacterList FieldOfView::GetCharactersInRange() const
 {
   float field_of_view_radius = GetRadius();
-  auto* level = Game::get()->getLevel();
+  auto* level = LevelTask::get();
 
   if (level)
   {

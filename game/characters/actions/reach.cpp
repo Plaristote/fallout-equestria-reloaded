@@ -1,5 +1,5 @@
 #include "reach.h"
-#include "game.h"
+#include "game/leveltask.h"
 #include <cmath>
 #include <functional>
 
@@ -38,7 +38,6 @@ QVector<Point> ReachAction::getCandidates(int caseDistance) const
 {
   Point position = getTargetPosition();
   QVector<Point> candidates;
-  Game* game = Game::get();
   std::function<bool (Point, Point)> compare;
 
   candidates.reserve(caseDistance * caseDistance);
@@ -47,7 +46,7 @@ QVector<Point> ReachAction::getCandidates(int caseDistance) const
     for (int y = position.y - caseDistance ; y <= position.y + caseDistance ; ++y)
     {
       Point candidatePosition{x, y, position.z};
-      LevelGrid* grid = game->getLevel()->getFloorGrid(candidatePosition.z);
+      LevelGrid* grid = LevelTask::get()->getFloorGrid(candidatePosition.z);
 
       if (candidatePosition != position && !grid->isOccupied(candidatePosition.x, candidatePosition.y) && character->hasSightFrom(position, candidatePosition))
         candidates << candidatePosition;
@@ -84,7 +83,7 @@ int ReachAction::getApCost() const
 int ReachAction::getApCostForCandidates(const QVector<Point> &candidates, bool quickMode) const
 {
   QList<Point> path;
-  auto& grid = Game::get()->getLevel()->getPathfinder();
+  auto& grid = LevelTask::get()->getPathfinder();
 
   if (grid.findPath(character->getPoint(), candidates, path, character, quickMode))
     return pathApCost(path);
@@ -107,7 +106,7 @@ bool ReachAction::trigger()
     state = Done;
   else
   {
-    auto& grid = Game::get()->getLevel()->getPathfinder();
+    auto& grid = LevelTask::get()->getPathfinder();
     int caseDistance = static_cast<int>(std::floor(range));
     auto candidates = getCandidates(caseDistance);
 
@@ -123,7 +122,7 @@ void ReachAction::triggerNextMovement()
   MovementAction::triggerNextMovement();
   if (state == Interrupted)
   {
-    auto* level = Game::get()->getLevel();
+    auto* level = LevelTask::get();
 
     if (!level->isInCombat(character) || character->getActionPoints() > 0)
       trigger();

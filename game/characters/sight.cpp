@@ -1,5 +1,5 @@
 #include "sight.h"
-#include "game.h"
+#include "game/leveltask.h"
 #include <cmath>
 
 CharacterSight::CharacterSight(QObject *parent) : ParentType(parent)
@@ -34,7 +34,7 @@ bool CharacterSight::hasLineOfSight(Point target) const
 
 bool CharacterSight::hasSightFrom(Point target, Point pos)
 {
-  auto* level = Game::get()->getLevel();
+  auto* level = LevelTask::get();
 
   if (target.z == pos.z && level)
   {
@@ -65,7 +65,7 @@ float CharacterSight::getDistance(QPoint other) const
 
 void CharacterSight::refreshFieldOfView()
 {
-  if (fieldOfView && Game::get()->getLevel())
+  if (fieldOfView && LevelTask::get())
   {
     fieldOfView->reset();
     fieldOfView->runTask();

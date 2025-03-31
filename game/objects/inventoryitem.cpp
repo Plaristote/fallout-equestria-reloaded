@@ -72,7 +72,7 @@ bool InventoryItem::triggerInteraction(Character *character, const QString &inte
 
   if (!result && interactionType == "use")
   {
-    Game::get()->getLevel()->pickUpItem(character, this);
+    LevelTask::get()->pickUpItem(character, this);
     return true;
   }
   return result;
@@ -273,10 +273,8 @@ QJSValue InventoryItem::useOn(DynamicObject* target)
     {
       if (this->requiresTarget() && (!target || !isValidTarget(target)))
       {
-        Game* game = Game::get();
-
-        if (owner && owner == game->getPlayer())
-          game->appendToConsole(I18n::get()->t("messages.invalid-target"));
+        if (owner && owner == Game::get()->getPlayer())
+          Game::get()->appendToConsole(I18n::get()->t("messages.invalid-target"));
         return false;
       }
       return script->call("attemptToUseOn", params);
@@ -400,7 +398,7 @@ int InventoryItem::getUseAtSuccessRate(int x, int y)
       QPoint position = owner->getPosition();
       QPoint targetPosition(x, y);
 
-      if (getRange() >= Game::get()->getLevel()->getDistance(position, targetPosition))
+      if (getRange() >= LevelTask::get()->getDistance(position, targetPosition))
         return 95;
     }
   }

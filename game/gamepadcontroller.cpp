@@ -273,7 +273,7 @@ void GamepadController::movementAxisClicked(bool pressed)
   if (!pressed)
   {
     if (isLevelMode())
-      Game::get()->getLevel()->swapMouseMode();
+      LevelTask::get()->swapMouseMode();
   }
 }
 

@@ -161,7 +161,7 @@ void ActionQueue::pushMovement(int x, int y)
 
 int ActionQueue::getMovementApCost(Point target) const
 {
-  ZoneGrid& grid = Game::get()->getLevel()->getPathfinder();
+  ZoneGrid& grid = LevelTask::get()->getPathfinder();
   QList<Point> path;
   Point from = character->getPoint();
 
@@ -179,7 +179,7 @@ int ActionQueue::getMovementApCost(int x, int y) const
 
 void ActionQueue::pushMoveToZone(const QString& zoneName)
 {
-  pushMoveToZone(Game::get()->getLevel()->getTileZone(zoneName));
+  pushMoveToZone(LevelTask::get()->getTileZone(zoneName));
 }
 
 void ActionQueue::pushMoveToZone(const TileZone* zone)
@@ -229,7 +229,7 @@ void ActionQueue::pushReachCase(int x, int y, int z, float range, QJSValue caseC
 void ActionQueue::pushReachNear(int x, int y, int z, int range)
 {
   QVector<Point> choices;
-  LevelGrid*     grid = Game::get()->getLevel()->getFloorGrid(static_cast<unsigned char>(z));
+  LevelGrid*     grid = LevelTask::get()->getFloorGrid(static_cast<unsigned char>(z));
   QPoint         position = character->getPosition();
 
   choices.reserve((range + 1) * (range + 1) - 1);

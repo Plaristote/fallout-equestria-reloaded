@@ -5,7 +5,7 @@
 #include "bloodstain.h"
 #include "doorway.h"
 #include "elevator.h"
-#include "game.h"
+#include "game/leveltask.h"
 
 #define GAME_OBJECT_CONSTRUCTOR(TYPENAME) \
   {#TYPENAME, [](QObject* parent) { return new TYPENAME(parent); }}
@@ -32,7 +32,7 @@ DynamicObject* ObjectFactory::loadFromJson(const QJsonObject& data) const
   if (constructor != constructors.end())
   {
     DynamicObject* object = constructor.value()(root);
-    auto* level = Game::get()->getLevel();
+    auto* level = LevelTask::get();
 
     object->load(data);
     if (level)
@@ -131,7 +131,7 @@ DynamicObject* ObjectFactory::generateDynamicObject(const QString &name) const
 DynamicObject* ObjectFactory::addBloodStainAt(QPoint position, unsigned char floor) const
 {
   BloodStain* object = new BloodStain(root);
-  LevelTask* level = Game::get()->getLevel();
+  LevelTask* level = LevelTask::get();
   QPoint offset = root->getPosition();
 
   root->appendObject(object);

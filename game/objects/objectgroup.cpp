@@ -251,7 +251,7 @@ void ObjectGroup::setOffset(QPoint newOffset)
   if (newOffset != offset)
   {
     QPoint     diff = newOffset - offset;
-    LevelTask* level = Game::get()->getLevel();
+    LevelTask* level = LevelTask::get();
     auto       objectAdjustStrategy = level
       ? function<void (DynamicObject*)>(bind(&adjustOffsetWithLevel, level, placeholders::_1, diff))
       : function<void (DynamicObject*)>(bind(&adjustOffsetWithoutLevel, placeholders::_1, diff));

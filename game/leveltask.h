@@ -34,6 +34,8 @@ public:
   explicit LevelTask(QObject *parent = nullptr);
   virtual ~LevelTask() override;
 
+  static LevelTask* get();
+
   void setPaused(bool value) { paused = value; emit pausedChanged(); }
   bool isPaused() const { return paused; }
 

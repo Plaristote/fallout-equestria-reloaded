@@ -1,5 +1,5 @@
 #include "elevator.h"
-#include "game.h"
+#include "game/leveltask.h"
 
 Elevator::Elevator(QObject *parent) : DynamicObject(parent)
 {
@@ -35,7 +35,7 @@ void Elevator::disconnectCases()
 {
   if (isValid())
   {
-    auto& pathfinder = Game::get()->getLevel()->getPathfinder();
+    auto& pathfinder = LevelTask::get()->getPathfinder();
 
     pathfinder.disconnectCases(
       {positionA.x(), positionA.y(), floorA},
@@ -48,7 +48,7 @@ void Elevator::connectCases()
 {
   if (isValid())
   {
-    auto& pathfinder = Game::get()->getLevel()->getPathfinder();
+    auto& pathfinder = LevelTask::get()->getPathfinder();
 
     pathfinder.connectCases(
       {positionA.x(), positionA.y(), floorA},
@@ -59,7 +59,7 @@ void Elevator::connectCases()
 
 void Elevator::onLevelFloorChanged()
 {
-  auto activeFloor = static_cast<unsigned char>(Game::get()->getLevel()->getCurrentFloor());
+  auto activeFloor = static_cast<unsigned char>(LevelTask::get()->getCurrentFloor());
 
   if (activeFloor == floorA || activeFloor == floorB)
   {
@@ -74,7 +74,7 @@ bool Elevator::triggerInteraction(Character* character, const QString& interacti
 
   if (!handled && interactionType == "use")
   {
-    LevelTask* level = Game::get()->getLevel();
+    LevelTask* level = LevelTask::get();
 
     if (character->getCurrentFloor() == floorA)
       level->setCharacterPosition(character, positionB.x(), positionB.y(), floorB);

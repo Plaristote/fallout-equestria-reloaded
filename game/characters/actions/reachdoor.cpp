@@ -1,5 +1,5 @@
 #include "reachdoor.h"
-#include "game.h"
+#include "game/leveltask.h"
 
 bool ReachDoorAction::trigger()
 {
@@ -24,7 +24,7 @@ bool ReachDoorAction::trigger()
 
 QList<Point> ReachDoorAction::getPath() const
 {
-  auto& grid = Game::get()->getLevel()->getPathfinder();
+  auto& grid = LevelTask::get()->getPathfinder();
   QList<Point> shortestPath;
 
   for (Point candidate : candidates)

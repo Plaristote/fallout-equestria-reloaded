@@ -1,5 +1,4 @@
 #include "speak.h"
-#include "game.h"
 #include "game/leveltask.h"
 
 SpeakAction::SpeakAction(Character* character, const QString& content, unsigned int duration, const QString& color)
@@ -9,7 +8,7 @@ SpeakAction::SpeakAction(Character* character, const QString& content, unsigned 
 
 bool SpeakAction::trigger()
 {
-  auto* level = Game::get()->getLevel();
+  auto* level = LevelTask::get();
 
   level->addTextBubble(character, content, duration, color);
   return true;

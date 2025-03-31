@@ -68,7 +68,7 @@ void Inventory::dropItem(InventoryItem *item, int quantity)
   if (item && !item->isVirtual())
   {
     int amount = item->getQuantity();
-    auto* level = Game::get()->getLevel();
+    auto* level = LevelTask::get();
     InventoryItem* droppedItem = item;
     const auto currentSlot = getEquippedItemSlot(item);
 

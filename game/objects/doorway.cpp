@@ -80,7 +80,7 @@ static const QVector<QPoint> getTileConnectionTargets(OrientedSprite::Direction 
 void Doorway::updateTileConnections()
 {
   QPoint                       origin = getPosition();
-  LevelGrid*                   grid = Game::get()->getLevel()->getFloorGrid(getCurrentFloor());
+  LevelGrid*                   grid = LevelTask::get()->getFloorGrid(getCurrentFloor());
   LevelGrid::CaseContent*      doorwayCase = grid ? grid->getGridCase(origin) : nullptr;
 
   removeTileConnections();
@@ -108,7 +108,7 @@ void Doorway::updateAccessPath()
     toggleZoneBlocked(!opened);
   else
   {
-    LevelGrid*              grid = Game::get()->getLevel()->getFloorGrid(getCurrentFloor());
+    LevelGrid*              grid = LevelTask::get()->getFloorGrid(getCurrentFloor());
     LevelGrid::CaseContent* doorwayCase = grid ? grid->getGridCase(getPosition()) : nullptr;
 
     if (doorwayCase)

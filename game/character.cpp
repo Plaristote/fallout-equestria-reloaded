@@ -25,7 +25,7 @@ void Character::update(qint64 delta)
   ParentType::update(delta);
   if (isAlive())
   {
-    auto* level = Game::get()->getLevel();
+    auto* level = LevelTask::get();
 
     if (level && shouldJoinFight())
       level->joinCombat(this);
@@ -34,7 +34,7 @@ void Character::update(qint64 delta)
 
 bool Character::shouldJoinFight() const
 {
-  auto* level = Game::get()->getLevel();
+  auto* level = LevelTask::get();
   bool canJoin = attacksOnSight || (level && level->alreadyInCombat());
 
   return canJoin && !unconscious && morale > 0 && hasLivingEnemiesInSight();
@@ -53,7 +53,7 @@ void Character::afterDeathAnimation()
   {
     unequipUseSlots();
     setAnimation("dead");
-    Game::get()->getLevel()->addBloodStainAt(getPosition(), static_cast<unsigned char>(getCurrentFloor()));
+    LevelTask::get()->addBloodStainAt(getPosition(), static_cast<unsigned char>(getCurrentFloor()));
   }
   else if (getAnimation().startsWith("get-up"))
     setAnimation("idle");
@@ -121,7 +121,7 @@ int Character::getSneakAbility() const
 
 void Character::moveAway(Character* target)
 {
-  auto* level = Game::get()->getLevel();
+  auto* level = LevelTask::get();
   QVector<QPoint> candidates = getAvailableSurroundingCases();
 
   if (!actionQueue->isEmpty() || (level->isInCombat(this) && getActionPoints() == 0))
@@ -152,7 +152,7 @@ unsigned int Character::getXpValue() const
 
 bool Character::useActionPoints(int amount, const QString& actionType)
 {
-  auto* level = Game::get()->getLevel();
+  auto* level = LevelTask::get();
 
   if (level && level->isInCombat(this))
   {
@@ -209,7 +209,7 @@ void Character::fall(int distance, Direction direction)
 
   if (direction != NoDir)
   {
-    auto* level = Game::get()->getLevel();
+    auto* level = LevelTask::get();
     auto* grid  = level->getGrid();
 
     while (distance > 0)
