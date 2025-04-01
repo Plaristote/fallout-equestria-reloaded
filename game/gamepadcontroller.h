@@ -91,6 +91,7 @@ private:
   CursorTimer cursorTimer, cameraTimer;
   double    xMovement, yMovement;
   bool hoverScrollable = false;
+  bool initialized = false;
 
   QTimer windowsWorkaroundTimer;
 };

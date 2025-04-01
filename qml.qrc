@@ -1,6 +1,7 @@
 <RCC>
     <qresource prefix="/">
         <file>main.qml</file>
+        <file>GamePicker.qml</file>
         <file>MainMenu.qml</file>
         <file>Game.qml</file>
         <file>NewGame.qml</file>

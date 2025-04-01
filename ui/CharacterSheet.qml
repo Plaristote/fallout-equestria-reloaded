@@ -67,7 +67,7 @@ Pane {
   }
 
   Timer {
-    running: true
+    running: developmentEdition
     repeat: true
     interval: 100
     onTriggered: {

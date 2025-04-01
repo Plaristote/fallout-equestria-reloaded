@@ -17,6 +17,8 @@ GamepadController::GamepadController(QObject *parent) : QObject(parent)
 void GamepadController::initialize()
 {
 #ifdef WITH_GAMEPAD
+  if (initialized) return ;
+  initialized = true;
 # ifdef _WIN32
   windowsWorkaroundTimer.setInterval(2500);
   windowsWorkaroundTimer.setSingleShot(false);

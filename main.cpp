@@ -5,9 +5,9 @@
 
 #include "globals.h"
 #include "i18n.h"
+#include "gamepackages.h"
 #include "credits.h"
-#include "game/animationlibrary.h"
-#include "game/inventoryitemlibrary.h"
+#include "gamecontext.h"
 
 #include "tilemap/tilemap.h"
 #include "tilemap/tilelayer.h"
@@ -45,9 +45,8 @@
 
 QJSEngine* qmlJsEngine = nullptr;
 
-QString preRenderRoot();
-
-void registerQmlTilemap() {
+void registerQmlTilemap()
+{
   qmlRegisterType<TileMap>  ("Tiles", 1,0, "TileMap");
   qmlRegisterType<TileLayer>("Tiles", 1,0, "TileLayer");
   qmlRegisterType<Tile>     ("Tiles", 1,0, "Tile");
@@ -56,34 +55,17 @@ void registerQmlTilemap() {
 
 int main(int argc, char *argv[])
 {
-  auto fileProtocol = FILE_PROTOCOL;
-  auto rootPath     = FILE_PROTOCOL + ROOT_PATH;
-  auto scriptPath   = FILE_PROTOCOL + SCRIPTS_PATH;
-  auto assetPath    = FILE_PROTOCOL + ASSETS_PATH;
-
-  QCoreApplication::setOrganizationName("Ile Noire Dev");
-  QCoreApplication::setOrganizationDomain("ile-noire.fr");
-  QCoreApplication::setApplicationName("Fallout Equestria RPG");
-
   Dices::Initialize();
 
 #ifdef GAME_EDITOR
   QResource::registerResource("editor.rcc");
+  ScriptEditorController scriptEditorController;
 #endif
 
   QGuiApplication app(argc, argv);
   QQmlApplicationEngine engine;
-
-  qDebug() << "Using prerender directory " << preRenderRoot();
-
-  AnimationLibrary animationLibrary;
-  animationLibrary.initialize();
-
-  InventoryItemLibrary itemLibrary;
-  itemLibrary.initialize();
-
-  ScriptEditorController scriptEditorController;
-
+  GamePackages* gamePackages = new GamePackages(&app);
+  GameContext* gameContext = nullptr;
   MouseCursor* cursor = new MouseCursor(&app);
   GamepadController* gamepad = new GamepadController(&app);
 
@@ -133,9 +115,12 @@ int main(int argc, char *argv[])
   qRegisterMetaType<GridComponent*>("GridComponent*");
   qRegisterMetaType<WorldDiplomacy*>("WorldDiplomacy*");
   qRegisterMetaType<TileZone*>("const TileZone*");
+  qRegisterMetaType<GamePackage*>("GamePackage*");
+  qRegisterMetaType<GamePackage*>("const GamePackage*");
 
   registerQmlTilemap();
-  // GAME EDITOR
+
+#ifdef GAME_EDITOR
   qmlRegisterType<QmlSpriteAnimation>("Game", 1,0, "SpriteAnimation");
   qmlRegisterType<CharacterDialogEditor>("Game", 1,0, "CharacterDialogEditor");
   qmlRegisterType<LevelEditorController>("Game", 1,0, "LevelEditorController");
@@ -143,27 +128,16 @@ int main(int argc, char *argv[])
   GameObjectTemplates* got = new GameObjectTemplates(&app);
   got->initialize();
   engine.rootContext()->setContextProperty("gameObjectTemplates", got);
-  // END GAME EDITOR
+  engine.rootContext()->setContextProperty("scriptController", &scriptEditorController);
+#endif
 
-  MusicManager* musicManager = new MusicManager(&app);
-  SoundManager* soundManager = new SoundManager(&app);
-  GameManager*  gameManager = new GameManager();
-  I18n*         i18n = new I18n(&app);
+  I18n* i18n = new I18n(&app);
 
   qmlJsEngine = &engine;
   engine.rootContext()->setContextProperty("i18n", i18n);
-  engine.rootContext()->setContextProperty("gameManager", gameManager);
-  engine.rootContext()->setContextProperty("musicManager", musicManager);
-  engine.rootContext()->setContextProperty("soundManager", soundManager);
-  engine.rootContext()->setContextProperty("animationLibrary", &animationLibrary);
-  engine.rootContext()->setContextProperty("itemLibrary", &itemLibrary);
-  engine.rootContext()->setContextProperty("fileProtocol", fileProtocol);
-  engine.rootContext()->setContextProperty("rootPath", rootPath);
-  engine.rootContext()->setContextProperty("scriptPath", scriptPath);
-  engine.rootContext()->setContextProperty("assetPath", assetPath);
-  engine.rootContext()->setContextProperty("scriptController", &scriptEditorController);
   engine.rootContext()->setContextProperty("gamepad", gamepad);
   engine.rootContext()->setContextProperty("mouseCursor", cursor);
+  engine.rootContext()->setContextProperty("gamePackages", gamePackages);
 #ifdef GAME_EDITOR
   engine.rootContext()->setContextProperty("developmentEdition", true);
 #else
@@ -175,10 +149,12 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("i18n", i18n);
   });
 
-  const QUrl url(QStringLiteral("qrc:/main.qml"));
-  QObject::connect(&engine, &QQmlApplicationEngine::objectCreated, &app, [url, cursor, gamepad](QObject *obj, const QUrl &objUrl)
+  const QUrl mainUrl(QStringLiteral("qrc:/main.qml"));
+  const QUrl gamePickerUrl(QStringLiteral("qrc:/GamePicker.qml"));
+
+  QObject::connect(&engine, &QQmlApplicationEngine::objectCreated, &app, [mainUrl, gamePickerUrl, cursor, gamepad](QObject *obj, const QUrl &objUrl)
   {
-    if (!obj && url == objUrl)
+    if (!obj && (mainUrl == objUrl || gamePickerUrl == objUrl))
       QCoreApplication::exit(-1);
     else
     {
@@ -186,6 +162,28 @@ int main(int argc, char *argv[])
       cursor->setWindow(obj);
     }
   }, Qt::QueuedConnection);
-  engine.load(url);
+
+  auto loadPackage = [&gameContext, &engine, &app, mainUrl](const GamePackage* package)
+  {
+    if (package)
+    {
+      if (gameContext)
+        delete gameContext;
+      gameContext = new GameContext(&app);
+      gameContext->load(*package);
+      gameContext->initializeQmlProperties(engine);
+      engine.load(mainUrl);
+    }
+  };
+
+  if (gamePackages->getPackages().size() == 1)
+  {
+    loadPackage(gamePackages->getPackages().first());
+  }
+  else
+  {
+    QObject::connect(gamePackages, &GamePackages::pickedPackage, &app, loadPackage, Qt::QueuedConnection);
+    engine.load(gamePickerUrl);
+  }
   return app.exec();
 }

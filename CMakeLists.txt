@@ -291,6 +291,10 @@ set(PROJECT_SOURCES
         game/pathfinding/pathzone.cpp
         game/pathfinding/candidatesolution.h
         game/pathfinding/candidatesolution.cpp
+        gamepackages.h
+        gamepackages.cpp
+        gamecontext.h
+        gamecontext.cpp
         gamemanager.h
         gamemanager.cpp
         musicmanager.h
