@@ -35,10 +35,6 @@ Thumbs.db
 /.qmake.cache
 /.qmake.stash
 
-# foe files
-saves/
-.prerender/
-
 # qtcreator generated files
 *.pro.user*
 CMakeLists.txt.user
@@ -48,6 +44,7 @@ CMakeLists.txt.user
 
 # Vim temporary files
 .*.swp
+.*.swo
 
 # Visual Studio generated files
 *.ib_pdb_index
