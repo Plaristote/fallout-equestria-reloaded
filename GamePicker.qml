@@ -93,8 +93,15 @@ Window {
 
   Component {
     id: packageIconComponent
-    Image {
-      source: "file:" + model.logoPath
+    Item {
+      width: 100
+      height: 100
+      Image {
+        source: "file:" + model.logoPath
+        width: Math.min(sourceSize.width, parent.width)
+        height: Math.min(sourceSize.height, parent.height)
+        anchors.centerIn: parent
+      }
     }
   }
 
@@ -119,10 +126,19 @@ Window {
 
   Component {
     id: buttonComponent
-    Button {
+    TerminalToolButton {
       text: i18n.t("Play")
       onClicked: pickPackage(model)
-      icon.name: "media-playback-start"
+      iconName: "play"
+    }
+  }
+
+  ColumnLayout {
+    anchors.right: parent.right
+    anchors.bottom: parent.bottom
+    MenuButton {
+      text: i18n.t("Exit")
+      onClicked: application.close()
     }
   }
 }
