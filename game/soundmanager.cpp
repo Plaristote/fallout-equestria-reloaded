@@ -81,7 +81,7 @@ void SoundManager::play(const QString& name, qreal volume)
   if (soundLibrary.contains(name))
   {
     auto volumeLevel = QSettings().value(volumeOption, 100).toInt();
-    auto sound = QSharedPointer<QSoundEffect>(new QSoundEffect);
+    auto sound = QSharedPointer<QSoundEffect>(new QSoundEffect, &QSoundEffect::deleteLater);
 
     sound->setSource(soundLibrary[name]);
     sound->setLoopCount(1);
