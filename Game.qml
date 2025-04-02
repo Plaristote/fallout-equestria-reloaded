@@ -73,6 +73,7 @@ Item {
     }
 
     function onLevelChanged() {
+      promptDialog.close();
       if (gameManager.currentGame.level)
         openLevelView();
       else
@@ -81,6 +82,7 @@ Item {
 
     function onGameOver() {
       console.log("Game.qml onGameOver has been called");
+      promptDialog.close();
       deferredGameOverScreen.running = true;
     }
 
