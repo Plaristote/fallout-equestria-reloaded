@@ -15,4 +15,11 @@ Button {
     source: "qrc:/assets/ui/hud.png"
     sourceClipRect: !button.down ? Qt.rect(374, 32, 30, 30) : Qt.rect(404, 32, 30, 30)
   }
+  Connections {
+    target: button
+    function onClicked() {
+      if (typeof soundManager != "undefined")
+        soundManager.play("ui/tiny-btn-click");
+    }
+  }
 }

@@ -21,4 +21,11 @@ Button {
     color: backgroundColor
     radius: 5
   }
+  Connections {
+    target: button
+    function onClicked() {
+      if (typeof soundManager != "undefined")
+        soundManager.play("ui/term-btn-click");
+    }
+  }
 }

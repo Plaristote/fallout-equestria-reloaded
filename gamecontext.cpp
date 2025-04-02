@@ -17,6 +17,9 @@ GameContext::GameContext(QObject *parent)
 
 void GameContext::load(const GamePackage& package)
 {
+  QCoreApplication::setOrganizationName(package.getOrganizationName());
+  QCoreApplication::setOrganizationDomain(package.getOrganizationDomain());
+  QCoreApplication::setApplicationName(package.getApplicationName());
   QDir::setCurrent(package.getGamePath());
   animationLibrary.initialize();
   itemLibrary.initialize();
@@ -28,9 +31,7 @@ void GameContext::load(const GamePackage& package)
   musicManager = new MusicManager(this);
   soundManager = new SoundManager(this);
   gameManager  = new GameManager(this);
-  QCoreApplication::setOrganizationName(package.getOrganizationName());
-  QCoreApplication::setOrganizationDomain(package.getOrganizationDomain());
-  QCoreApplication::setApplicationName(package.getApplicationName());
+  soundManager->initialize();
   qDebug() << "Current directory: " << QDir::currentPath();
   qDebug() << "Using prerender directory " << preRenderRoot();
 }

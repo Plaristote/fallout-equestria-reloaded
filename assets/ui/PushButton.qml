@@ -42,5 +42,9 @@ Item {
     id: mouseArea
     anchors.fill: parent
     onClicked: root.clicked()
+    onContainsPressChanged: {
+      if (typeof soundManager != "undefined")
+        soundManager.play(`ui/push-button-${containsPress ? "in" : "out"}`)
+    }
   }
 }
