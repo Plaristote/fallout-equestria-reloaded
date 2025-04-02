@@ -36,4 +36,9 @@ Button {
     }
   }
   background: UiStyle.MenuButton {}
+
+  onDownChanged: {
+    if (typeof soundManager != "undefined")
+      soundManager.play(`ui/button-${down ? "in" : "out"}`)
+  }
 }

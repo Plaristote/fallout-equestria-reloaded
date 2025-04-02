@@ -23,8 +23,8 @@ Button {
   }
   Connections {
     target: button
-    function onClicked() {
-      if (typeof soundManager != "undefined")
+    function onDownChanged() {
+      if (!button.down && typeof soundManager != "undefined")
         soundManager.play("ui/term-btn-click");
     }
   }
