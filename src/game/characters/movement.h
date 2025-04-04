@@ -13,8 +13,8 @@ class CharacterMovement : public StorageObject
 public:
   explicit CharacterMovement(QObject *parent = nullptr);
 
-  virtual void load(const QJsonObject&);
-  virtual void save(QJsonObject&) const;
+  virtual void load(const QJsonObject&) override;
+  virtual void save(QJsonObject&) const override;
 
   void                      moveTo(Point);
   Q_INVOKABLE void          lookAt(const DynamicObject* object) { if (object) { lookTo(object->getPosition()); } }

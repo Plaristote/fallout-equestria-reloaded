@@ -8,9 +8,9 @@ class SlidingAction : public ActionBase
 public:
   SlidingAction(Character* character, QPoint target);
 
-  int  getApCost() const { return 0; }
+  int  getApCost() const override { return 0; }
   void update() override;
-  bool trigger();
+  bool trigger() override;
   void interrupt() override;
   bool canInterrupt() const override { return false; }
 

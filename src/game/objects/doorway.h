@@ -18,14 +18,14 @@ class Doorway : public DynamicObject
 public:
   Doorway(QObject* parent = nullptr);
 
-  void save(QJsonObject&) const;
-  void load(const QJsonObject&);
+  void save(QJsonObject&) const override;
+  void load(const QJsonObject&) override;
 
   QVector<Point> getInteractionPositions() const;
   int getInteractionDistance() const override { return 0; }
   QStringList getAvailableInteractions() override;
   Q_INVOKABLE bool bustOpen(int damage);
-  bool isBlockingPath() const { return false; }
+  bool isBlockingPath() const override { return false; }
   bool triggerInteraction(Character* character, const QString& interactionType) override;
   int getCoverValue() const override;
   int getZIndex() const override { return 2; }

@@ -9,7 +9,7 @@ class WaitAction : public ActionBase
 public:
   WaitAction(Character* character, unsigned int interval);
 
-  int getApCost() const { return 0; }
+  int getApCost() const override { return 0; }
   void update() override;
   bool trigger() override;
 

@@ -38,8 +38,8 @@ public:
 
   virtual void update(qint64 v) { ParentType::update(v); }
   virtual void updateTasks(qint64 v);
-  virtual void load(const QJsonObject&);
-  virtual void save(QJsonObject&) const;
+  virtual void load(const QJsonObject&) override;
+  virtual void save(QJsonObject&) const override;
   virtual void setScript(const QString& name) override;
 
   inline bool isCharacter() const { return getObjectType() == "Character"; }

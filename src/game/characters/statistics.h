@@ -17,8 +17,8 @@ class CharacterStatistics : public CharacterMovement
 public:
   explicit CharacterStatistics(QObject *parent = nullptr);
 
-  void load(const QJsonObject&);
-  void save(QJsonObject&) const;
+  void load(const QJsonObject&) override;
+  void save(QJsonObject&) const override;
 
   Q_INVOKABLE bool isAlive() const { return statistics ? statistics->getHitPoints() > 0 : true; }
   virtual bool isUnconscious() const { return !isAlive(); }

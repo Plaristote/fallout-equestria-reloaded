@@ -15,8 +15,8 @@ class LightSourceComponent : public DetectableComponent
 public:
   explicit LightSourceComponent(QObject *parent = nullptr);
 
-  void load(const QJsonObject&);
-  void save(QJsonObject&) const;
+  void load(const QJsonObject&) override;
+  void save(QJsonObject&) const override;
 
   TileLayer* getLightZone() const { return lightZone; }
 

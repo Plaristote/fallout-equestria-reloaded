@@ -31,7 +31,7 @@ public:
   unsigned int getXpValue() const;
   int              getMorale() const { return morale; }
   bool             shouldJoinFight() const;
-  Q_INVOKABLE bool isMoving() const { return Sprite::isMoving() || currentPath.size() > 0; }
+  Q_INVOKABLE bool isMoving() const override { return Sprite::isMoving() || currentPath.size() > 0; }
   bool         isSpriteMoving() const { return Sprite::isMoving(); }
   int          getZIndex() const override { return isAlive() ? 2 : 1; }
   int          getCoverValue() const override { return 10; }

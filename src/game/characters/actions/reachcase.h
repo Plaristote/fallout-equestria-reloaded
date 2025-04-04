@@ -18,7 +18,7 @@ public:
   }
 
 protected:
-  bool alreadyReached() const;
+  bool alreadyReached() const override;
   Point getTargetPosition() const override { return target; }
 };
 

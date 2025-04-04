@@ -28,8 +28,8 @@ class InventoryItem : public DynamicObject
 public:
   explicit InventoryItem(QObject* parent = nullptr);
 
-  void load(const QJsonObject&);
-  void save(QJsonObject&) const;
+  void load(const QJsonObject&) override;
+  void save(QJsonObject&) const override;
 
   void setItemType(const QString& value) { itemType = value; emit itemTypeChanged(); }
   const QString& getItemType() const { return itemType; }

@@ -28,7 +28,7 @@ signals:
   void diplomacyUpdated();
 
 private slots:
-  void initializeFaction();
+  void initializeFaction() override;
 
 protected:
   WorldDiplomacy::Faction* faction = nullptr;

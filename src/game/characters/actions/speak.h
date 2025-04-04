@@ -8,7 +8,7 @@ class SpeakAction : public ActionBase
 public:
   SpeakAction(Character* character, const QString& content, unsigned int duration, const QString& color);
 
-  int getApCost() const{ return 0; }
+  int getApCost() const override { return 0; }
   void update() override;
   bool trigger() override;
 

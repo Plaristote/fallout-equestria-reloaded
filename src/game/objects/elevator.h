@@ -16,8 +16,8 @@ class Elevator : public DynamicObject
 public:
   explicit Elevator(QObject *parent = nullptr);
 
-  void load(const QJsonObject&);
-  void save(QJsonObject&) const;
+  void load(const QJsonObject&) override;
+  void save(QJsonObject&) const override;
 
   QStringList getAvailableInteractions() override;
   Q_INVOKABLE void setPositionA(int x, int y, unsigned int z) { setPositionA({x,y}, static_cast<unsigned char>(z)); }

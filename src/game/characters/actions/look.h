@@ -8,7 +8,7 @@ class LookAction : public ActionBase
 public:
   LookAction(Character*, QPoint);
 
-  int getApCost() const { return 0; }
+  int getApCost() const override { return 0; }
   void update() override;
   bool trigger() override;
 

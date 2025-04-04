@@ -13,12 +13,12 @@ class StorageObject : public DynamicObject
 public:
   explicit StorageObject(QObject* parent = nullptr);
 
-  virtual void load(const QJsonObject&);
-  virtual void save(QJsonObject&) const;
+  virtual void load(const QJsonObject&) override;
+  virtual void save(QJsonObject&) const override;
 
-  virtual void updateTasks(qint64 delta);
+  virtual void updateTasks(qint64 delta) override;
   Inventory* getInventory() { return inventory; }
-  virtual QStringList getAvailableInteractions();
+  virtual QStringList getAvailableInteractions() override;
 
   Q_INVOKABLE bool onInspectInventory(Character*);
   Q_INVOKABLE bool onTakeItem(Character*, InventoryItem*, int quantity = 1);
