@@ -116,7 +116,7 @@ Rectangle {
 
         PlayerCropCircle {
           source: mypic
-          levelController: renderTarget.levelController
+          player: renderTarget.levelController.player
         }
 
         DaylightShader {

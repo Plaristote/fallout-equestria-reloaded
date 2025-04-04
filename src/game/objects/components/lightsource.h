@@ -11,6 +11,7 @@ class LightSourceComponent : public DetectableComponent
   typedef DetectableComponent ParentType;
 
   Q_PROPERTY(int lightRadius MEMBER lightRadius NOTIFY lightRadiusChanged)
+  Q_PROPERTY(QColor lightColor READ getLightColor WRITE setLightColor NOTIFY lightColorChanged)
 public:
   explicit LightSourceComponent(QObject *parent = nullptr);
 
@@ -19,8 +20,12 @@ public:
 
   TileLayer* getLightZone() const { return lightZone; }
 
+  QColor getLightColor() const;
+  void setLightColor(QColor);
+
 signals:
   void lightRadiusChanged();
+  void lightColorChanged();
   void lightZoneRemoved(TileLayer*);
   void lightZoneAdded(TileLayer*);
 

@@ -2,21 +2,16 @@ import QtQuick 2.15
 
 ShaderEffect {
   property variant source
-  property QtObject levelController
-  property QtObject player:   levelController.player
+  property variant src: source
+  property QtObject player
   property point    lastPlayerPosition
   property point    position: Qt.point(0, 0)
-  property real     diameter: 90
+  property real     radius: 90 * 2
+  property real     smoothEdge: 10
   property real     offzetX: parent.x
   property real     offzetY: parent.y
-  property real     centerX: 0
-  property real     centerY: 0
+  property point    centerPoint: Qt.point(0, 0)
   property bool     withClipping:     player
-  property bool     withAmbientColor: levelController.useAmbientLight
-  property color    ambientColor:     levelController.ambientColor
-
-  readonly property int shWithClipping:     withClipping ? 1 : 0
-  readonly property int shWithAmbientColor: withAmbientColor ? 1 : 0
 
   signal positionRefreshed()
 
@@ -33,8 +28,10 @@ ShaderEffect {
   }
 
   function updateCenter() {
-    centerX = player.spritePosition.x - offzetX + 35;
-    centerY = player.spritePosition.y - offzetY + 10;
+    centerPoint = Qt.point(
+      player.spritePosition.x - offzetX + 35,
+      player.spritePosition.y - offzetY + 10
+    );
   }
 
   anchors.fill: parent

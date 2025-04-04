@@ -59,7 +59,7 @@ Item {
 
       PlayerCropCircle {
         source: image
-        levelController: wallRenderer.levelController
+        player: wallRenderer.levelController.player
         offzetX: wallRenderer.x
         offzetY: wallRenderer.y - renderTarget.wallHeight
         onPositionRefreshed: {

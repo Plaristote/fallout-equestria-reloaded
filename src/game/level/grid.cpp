@@ -241,6 +241,7 @@ bool GridComponent::insertPartyIntoZone(CharacterParty* party, const QString& zo
     zone = getTileZone([](const TileZone& candidate) { return candidate.getIsDefault(); });
   else
     zone = getTileZone([zoneName](const TileZone& candidate) { return candidate.getName() == zoneName; });
+  qDebug() << "GridComponent::insertPartyIntoZone" << party << zoneName << zone;
   return zone && party->insertIntoZone(this, zone);
 }
 

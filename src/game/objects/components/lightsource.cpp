@@ -1,6 +1,10 @@
 #include "lightsource.h"
 #include "tilemap/tilelayer.h"
 #include "game.h"
+#include <QJsonArray>
+
+QColor     jsonToColor(QJsonValue value);
+QJsonArray colorToJson(QColor color);
 
 LightSourceComponent::LightSourceComponent(QObject *parent) : ParentType(parent)
 {
@@ -14,19 +18,36 @@ void LightSourceComponent::load(const QJsonObject& data)
   lightRadius = data["lightRadius"].toInt(0);
   ParentType::load(data);
   emit lightRadiusChanged();
+  if (!data["lightColor"].isNull())
+    setLightColor(jsonToColor(data["lightColor"]));
 }
 
 void LightSourceComponent::save(QJsonObject& data) const
 {
-  if (lightRadius > 0) {
+  if (lightRadius > 0)
+  {
     data["lightRadius"] = lightRadius;
+    data["lightColor"] = colorToJson(lightZone->getColor());
   }
   ParentType::save(data);
 }
 
+void LightSourceComponent::setLightColor(QColor color)
+{
+  if (lightZone)
+    lightZone->setColor(color);
+}
+
+QColor LightSourceComponent::getLightColor() const
+{
+  if (lightZone)
+    return lightZone->getColor();
+  return QColor(255, 255, 255, 0);
+}
+
 void LightSourceComponent::reloadLightzone()
 {
-  auto* level = Game::get()->getLevel();
+  auto* level = LevelTask::get();
   auto* grid = level ? level->getFloorGrid(floor) : nullptr;
 
   if (lightRadius == 0 && lightZone)

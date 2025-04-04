@@ -189,6 +189,7 @@ QVariantList Quest::getObjectives() const
     return script->call("getObjectives").toVariant().toList();
   else
     qDebug() << "Quest" << name << ": missing `getObjectives` method";
+  qDebug() << "getRawObjectives:" << objectives.values();
   return objectives.values();
 }
 

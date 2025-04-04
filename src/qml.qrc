@@ -174,8 +174,8 @@
         <file>game/level/CursorRenderer.qml</file>
         <file>game/level/LevelDisplay.qml</file>
         <file>game/level/PlayerCropCircle.qml</file>
-        <file alias="game/level/PlayerCropCircle.shader.frag.qsb">build/game/level/PlayerCropCircle.shader.frag.qsb</file>
-        <file alias="game/level/PlayerCropCircle.shader.vert.qsb">build/game/level/PlayerCropCircle.shader.vert.qsb</file>
+        <file alias="game/level/PlayerCropCircle.shader.frag.qsb">../build/src/game/level/PlayerCropCircle.shader.frag.qsb</file>
+        <file alias="game/level/PlayerCropCircle.shader.vert.qsb">../build/src/game/level/PlayerCropCircle.shader.vert.qsb</file>
         <file>game/level/LayerRenderer.qml</file>
         <file>game/hud/Menu.qml</file>
         <file>game/hud/HudItemSlots.qml</file>
@@ -188,8 +188,8 @@
         <file>game/hud/InteractionMenu.qml</file>
         <file>game/hud/InteractionOverlay.qml</file>
         <file>game/hud/InteractionColorOverlay.qml</file>
-        <file alias="game/hud/InteractionColorOverlay.shader.frag.qsb">build/game/hud/InteractionColorOverlay.shader.frag.qsb</file>
-        <file alias="game/hud/InteractionColorOverlay.shader.vert.qsb">build/game/hud/InteractionColorOverlay.shader.vert.qsb</file>
+        <file alias="game/hud/InteractionColorOverlay.shader.frag.qsb">../build/src/game/hud/InteractionColorOverlay.shader.frag.qsb</file>
+        <file alias="game/hud/InteractionColorOverlay.shader.vert.qsb">../build/src/game/hud/InteractionColorOverlay.shader.vert.qsb</file>
         <file>game/hud/InteractionOverlay.qml</file>
         <file>game/hud/InteractionOverlays.qml</file>
         <file>game/hud/CombatPreview.qml</file>

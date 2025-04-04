@@ -33,6 +33,8 @@ public:
   const QString& getName() const { return name; }
   const QString& getZoneName() const { return zoneName; }
   const QSize& getSize() const { return size; }
+  const QColor& getColor() const { return color; }
+  void setColor(QColor value) { color = value; emit colorChanged(); }
   void setVisible(bool value) { if (visible != value) { visible = value; emit visibleChanged(); } }
   bool isVisible() const { return visible; }
   void renderToFile(const QString& file);
@@ -53,6 +55,7 @@ public:
 signals:
   void visibleChanged();
   void tilesChanged();
+  void colorChanged();
 
 protected:
   void loadTiles(const QJsonArray&, const QVector<Tileset*>& tilesets);

@@ -130,8 +130,8 @@ bool DynamicObject::triggerSkillUse(Character *user, const QString &skillName, s
       Game::get()->appendToConsole(
         i18n->t("messages.use-skill-does-nothing", {
           {"skillName", i18n->t("cmap." + skillName)},
-          {"target", getDisplayName()
-        }})
+          {"target", getDisplayName()}
+        })
       );
     }
   }
