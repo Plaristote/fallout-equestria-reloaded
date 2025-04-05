@@ -30,23 +30,19 @@ static QString pathToClassName(const QString& path)
 
 void ScriptController::initialize(QObject* object)
 {
-  QJSValue createCallback;
   QString objectName = pathToClassName(path);
   QJSValueList parameters;
 
   model = engine.newQObject(object);
   parameters << model;
-  createCallback = module.property(objectName);
-  if (createCallback.isCallable())
-    instance = callConstructor(createCallback, parameters);
+  if (module.property("default").isCallable())
+    instance = callConstructor(module.property("default"), parameters);
+  else if (module.property(objectName).isCallable())
+    instance = callConstructor(module.property(objectName), parameters);
+  else if (module.property("create").isCallable())
+    instance = callFunction(module.property("create"), parameters);
   else
-  {
-    createCallback = module.property("create");
-    if (createCallback.isCallable())
-      instance = callFunction(createCallback, parameters);
-    else
-      qDebug() << "ScriptController: Cannot find" << objectName << " in " << path;
-  }
+    qDebug() << "ScriptController: Cannot find" << objectName << " in " << path;
 }
 
 bool ScriptController::hasMethod(const QString &method)
