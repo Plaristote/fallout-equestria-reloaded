@@ -193,8 +193,10 @@ void DataEngine::loadFromFile(const QString &path)
 
 void DataEngine::saveToFile(const QString &path)
 {
+  QFileInfo fileInfo(path);
   QFile out(path);
 
+  QDir().mkpath(fileInfo.dir().path());
   data.insert("diplomacy", diplomacy);
   data.insert("quests", quests);
   if (out.open(QIODevice::WriteOnly))
