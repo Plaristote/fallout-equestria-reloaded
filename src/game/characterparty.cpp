@@ -65,10 +65,13 @@ void CharacterParty::createCharacter(const QString& name, const QVariantMap& att
 
 void CharacterParty::addCharacter(Character* character)
 {
-  connect(character, &DynamicObject::beforeDestroy, this, [this, character]() { removeCharacter(character); });
-  character->setParent(this);
-  list.push_back(character);
-  emit partyChanged();
+  if (character)
+  {
+    connect(character, &DynamicObject::beforeDestroy, this, [this, character]() { removeCharacter(character); });
+    character->setParent(this);
+    list.push_back(character);
+    emit partyChanged();
+  }
 }
 
 void CharacterParty::removeCharacter(Character* character)
