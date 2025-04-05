@@ -69,6 +69,9 @@ signals:
   void diplomacyUpdated();
 
 private:
+  QJsonObject dataFromFile(const QString&) const;
+  QJsonObject initialData() const;
+
   QJsonObject data;
   QJsonObject levels, characters, time, diplomacy, quests, worldmap, variables;
   bool isGameEditor = false;

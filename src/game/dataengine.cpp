@@ -169,26 +169,34 @@ void DataEngine::setWorldmap(const QJsonObject& worldmapData)
   data.insert("worldmap", worldmap);
 }
 
-void DataEngine::loadFromFile(const QString &path)
+QJsonObject DataEngine::dataFromFile(const QString& path) const
 {
-  QFile in(path == "" ? QString(initialGamePath) : path);
+  QFile in(path);
 
   if (in.open(QIODevice::ReadOnly))
-  {
-    auto document = QJsonDocument::fromJson(in.readAll());
-
-    data       = document.object();
-    levels     = data["levels"].toObject();
-    characters = data["characters"].toObject();
-    time       = data["time"].toObject();
-    diplomacy  = data["diplomacy"].toObject();
-    quests     = data["quests"].toObject();
-    worldmap   = data["worldmap"].toObject();
-    variables  = data["vars"].toObject();
-    emit diplomacyUpdated();
-  }
+    return QJsonDocument::fromJson(in.readAll()).object();
   else
     qDebug() << "/!\\ Could not load save file" << path;
+  return QJsonObject();
+}
+
+QJsonObject DataEngine::initialData() const
+{
+  return dataFromFile(initialGamePath);
+}
+
+void DataEngine::loadFromFile(const QString &path)
+{
+  data       = path.isEmpty() ? initialData() : dataFromFile(path);
+  if (!path.isEmpty() || isGameEditor)
+    levels   = data["levels"].toObject();
+  characters = data["characters"].toObject();
+  time       = data["time"].toObject();
+  diplomacy  = data["diplomacy"].toObject();
+  quests     = data["quests"].toObject();
+  worldmap   = data["worldmap"].toObject();
+  variables  = data["vars"].toObject();
+  emit diplomacyUpdated();
 }
 
 void DataEngine::saveToFile(const QString &path)
@@ -254,7 +262,13 @@ bool DataEngine::hasLevelBeenVisited(const QString& name) const
 
 QJsonObject DataEngine::getLevelData(const QString& name)
 {
-  return data["levels"].toObject()[name].toObject();
+  QJsonObject levelData;
+
+  if (hasLevelBeenVisited(name))
+    levelData = data["levels"].toObject();
+  else
+    levelData = initialData()["levels"].toObject();
+  return levelData[name].toObject();
 }
 
 void DataEngine::setLevelData(const QString& name, const QJsonObject& levelData)
