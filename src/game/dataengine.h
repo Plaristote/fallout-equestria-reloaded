@@ -12,6 +12,8 @@ class DataEngine : public QObject
 public:
   explicit DataEngine(QObject *parent = nullptr);
 
+  void enableGameEditorMode(bool value) { isGameEditor = value; }
+
   Q_INVOKABLE void loadFromFile(const QString& path);
   Q_INVOKABLE void saveToFile(const QString &path);
 
@@ -69,6 +71,7 @@ signals:
 private:
   QJsonObject data;
   QJsonObject levels, characters, time, diplomacy, quests, worldmap, variables;
+  bool isGameEditor = false;
 };
 
 #endif // DATAENGINE_H

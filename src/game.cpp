@@ -51,6 +51,7 @@ Game::Game(QObject *parent) : StorableObject(parent), timePasser(this)
   connect(&timePasser, &TimePasser::stateChanged, this, &Game::fastPassingChanged);
   connect(this, &Game::gameOver, this, &Game::onGameOver);
   connect(this, &Game::levelChanged, this, &Game::onLevelChanged);
+  connect(this, &Game::gameEditorEnabled, dataEngine, [this]() { dataEngine->enableGameEditorMode(isGameEditor); });
 }
 
 Game::~Game()
