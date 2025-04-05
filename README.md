@@ -16,12 +16,13 @@ You may then download a build of the engine (or build it yourself), launch it fr
 on this topic are available in the [Game Editor tutorial](https://plaristote.github.io/fallout-equestria-reloaded/index.html).
 
 ## Building on Windows
-- Install QtCreator and Qt5.15 by downloading the Qt installer at [Qt.io](https://www.qt.io/download-open-source).
+- Install QtCreator and Qt6 by downloading the Qt installer at [Qt.io](https://www.qt.io/download-open-source).
+- Edit build-shaders.bat script so the qsb variable points to the qsb.exe file in your Qt installation
 - Open `CMakeLists.txt` with QtCreator
 - Set the running directory to your game's asset directory (see `boilerplate`).
 
 ## Building on Linux
-You will need to install Qt 5.15 before building.
+You will need to install Qt6 before building.
 
 ```
   mkdir build
