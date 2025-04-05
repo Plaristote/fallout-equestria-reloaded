@@ -121,7 +121,10 @@ void Game::initializeEvents()
 void Game::loadFromDataEngine(std::function<void()> callback)
 {
   QString currentLevelName = dataEngine->getCurrentLevel();
+  const QJsonObject& variables = dataEngine->getVariables();
 
+  StorableObject::load(variables);
+  taskManager->load(variables);
   diplomacy->initialize();
   timeManager->load(dataEngine->getTimeData());
   playerParty->load(dataEngine->getPlayerParty());
@@ -135,7 +138,6 @@ void Game::loadFromDataEngine(std::function<void()> callback)
     loadLevel(currentLevelName, nullTargetZone, callback);
   else
     emit levelChanged();
-  dataStore = dataEngine->getVariables();
   initializeScript();
   if (currentLevelName.isEmpty())
     callback();
@@ -360,8 +362,10 @@ void Game::changeZone(TileZone* tileZone)
 
 void Game::save()
 {
-  QJsonObject partyData, timeData, uniqueCharactersData;
+  QJsonObject partyData, timeData, uniqueCharactersData, variables;
 
+  StorableObject::save(variables);
+  taskManager->save(variables);
   timeManager->save(timeData);
   playerParty->save(partyData);
   uniqueCharacterStorage->save(uniqueCharactersData);
@@ -372,7 +376,7 @@ void Game::save()
   dataEngine->setWorldmap(worldmap->save());
   dataEngine->setPlayerParty(partyData);
   dataEngine->setUniqueCharacterStorage(uniqueCharactersData);
-  dataEngine->setVariables(dataStore);
+  dataEngine->setVariables(variables);
 }
 
 void Game::setFactionAsEnemy(const QString& a, const QString& b, bool set)
