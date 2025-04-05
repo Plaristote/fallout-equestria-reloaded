@@ -122,8 +122,8 @@ void WorldMap::load(const QJsonObject& data)
     zones << zone;
   }
 
-  currentPosition.setX(data["playerX"].toInt(0));
-  currentPosition.setY(data["playerY"].toInt(0));
+  currentPosition.setX(data["playerX"].toDouble(0));
+  currentPosition.setY(data["playerY"].toDouble(0));
   targetPosition = currentPosition.toPoint();
 
   emit mapSizeChanged();
