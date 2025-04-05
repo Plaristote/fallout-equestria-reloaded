@@ -23,6 +23,7 @@ class Game : public StorableObject
   Q_OBJECT
 
   Q_PROPERTY(QStringList     consoleMessages MEMBER consoleMessages NOTIFY consoleUpdated)
+  Q_PROPERTY(QJSValue        script      READ getScriptObject CONSTANT)
   Q_PROPERTY(LevelTask*      level       MEMBER currentLevel NOTIFY levelChanged)
   Q_PROPERTY(WorldMap*       worldmap    MEMBER worldmap CONSTANT)
   Q_PROPERTY(Character*      player      MEMBER player CONSTANT)
