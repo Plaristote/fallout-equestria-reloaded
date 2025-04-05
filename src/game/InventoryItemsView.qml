@@ -44,7 +44,7 @@ Pane {
   TerminalComboBox {
     id: categoryFilter
     anchors { left: parent.left; right: parent.right; top: parent.top }
-    model: inventory.categoryList
+    model: inventory ? inventory.categoryList : []
   }
 
   CustomFlickable {

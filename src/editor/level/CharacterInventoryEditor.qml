@@ -5,7 +5,7 @@ import "../../ui"
 
 CharacterInventory {
   id: characterInventory
-  title: `${i18n.t("game-editor.inventory")} - ${character.objectName}`
+  title: `${i18n.t("game-editor.inventory")} - ${character ? character.objectName : 'undefined'}`
 
   function open(value) {
     characterInventory.visible = true;
@@ -33,12 +33,12 @@ CharacterInventory {
 
   AddItemDialog {
     id: addItemDialog
-    inventory: characterInventory.character.inventory
+    inventory: characterInventory.character ? characterInventory.character.inventory : null
   }
 
   RemoveItemDialog {
     id: removeItemDialog
-    inventory: characterInventory.character.inventory
+    inventory: characterInventory.character ? characterInventory.character.inventory : null
     selectedObject: characterInventory.selectedObject
   }
 }

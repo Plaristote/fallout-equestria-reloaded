@@ -160,7 +160,7 @@ Pane {
         Layout.fillHeight: true
         Layout.fillWidth: true
         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-        sourceComponent: slotLayout === null ? gridInventorySlots : customInventorySlots
+        sourceComponent: root.character ? (slotLayout === null ? gridInventorySlots : customInventorySlots) : null
       }
     } // END Column
   } // END RowLayout
@@ -177,7 +177,7 @@ Pane {
     id: gridInventorySlots
     GridInventorySlots {
       canEditArmor: root.canEditArmor
-      inventory: root.character.inventory
+      inventory: root.character?.inventory
       selectedObject: root.selectedObject
       dragZone: root
     }
@@ -187,7 +187,7 @@ Pane {
     id: customInventorySlots
     CharacterInventorySlots {
       canEditArmor: root.canEditArmor
-      inventory: root.character.inventory
+      inventory: root.character?.inventory
       selectedObject: root.selectedObject
       layout: slotLayout
       dragZone: root
@@ -195,7 +195,8 @@ Pane {
   }
 
   Connections {
-    target: root.character.inventory
+    target: root.character ? root.character.inventory : root
+    ignoreUnknownSignals: root.character == null
     function onEquippedItemsChanged() {
       root.selectedObject = null;
       slotsView.item.updateSlots();
