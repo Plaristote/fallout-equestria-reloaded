@@ -4,6 +4,8 @@
 #include <QDebug>
 #include <algorithm>
 
+const QString originalFactionVarname("_originalFaction");
+
 static bool findWithCallback(Character* character, QJSValue callback)
 {
   return callback.call(QJSValueList() << character->asJSValue()).toBool();
@@ -16,7 +18,7 @@ static bool findByObjectName(Character* character, const QString& name)
 
 CharacterParty::CharacterParty(QObject *parent) : QObject(parent)
 {
-
+  connect(this, &CharacterParty::factionNameChanged, this, &CharacterParty::updateFaction);
 }
 
 CharacterParty* CharacterParty::factory(const QVariantMap& parameters, QObject* parent)
@@ -25,7 +27,10 @@ CharacterParty* CharacterParty::factory(const QVariantMap& parameters, QObject* 
   CharacterParty*    party = new CharacterParty(parent);
   unsigned int       it = 1;
 
+  qDebug() << "CharacterParty::factory" << parameters;
   party->setProperty("name", parameters["name"]);
+  if (!parameters["faction"].isNull())
+    party->setProperty("factionName", parameters["faction"].toString());
   for (const QVariant& entry : members)
   {
     const QVariantMap characterData = entry.toMap();
@@ -60,7 +65,47 @@ void CharacterParty::createCharacter(const QString& name, const QVariantMap& att
   if (!attributes.value("inventory").isNull())
     inventory->load(QJsonObject::fromVariantMap(attributes.value("inventory").toMap()));
   character->updateSpriteSheet();
+  if (factionName.isEmpty())
+    useCharacterFaction(character);
   addCharacter(character);
+}
+
+void CharacterParty::useCharacterFaction(const Character* character)
+{
+  if (character)
+  {
+    QString newFaction = character->getStatistics()->getFaction();
+
+    if (newFaction != factionName)
+      setFactionName(newFaction);
+  }
+}
+
+void CharacterParty::updateFaction()
+{
+  for (Character* character : list)
+    enforceFactionOn(character);
+}
+
+void CharacterParty::enforceFactionOn(Character* character)
+{
+  QString originalFaction = character->getStatistics()->getFaction();
+
+  if (originalFaction != factionName)
+  {
+    character->getStatistics()->setProperty("faction", factionName);
+    if (!character->hasVariable(originalFactionVarname))
+      character->setVariable(originalFactionVarname, originalFaction);
+  }
+}
+
+void CharacterParty::rollbackFactionOn(Character* character)
+{
+  if (character->hasVariable(originalFactionVarname))
+  {
+    character->getStatistics()->setProperty("faction", character->getVariable(originalFactionVarname));
+    character->unsetVariable(originalFactionVarname);
+  }
 }
 
 void CharacterParty::addCharacter(Character* character)
@@ -68,7 +113,9 @@ void CharacterParty::addCharacter(Character* character)
   if (character)
   {
     connect(character, &DynamicObject::beforeDestroy, this, [this, character]() { removeCharacter(character); });
+    connect(character, &Character::joinedCombat, this, &CharacterParty::joinCombat);
     character->setParent(this);
+    enforceFactionOn(character);
     list.push_back(character);
     emit partyChanged();
   }
@@ -78,7 +125,9 @@ void CharacterParty::removeCharacter(Character* character)
 {
   if (character)
   {
+    disconnect(character, &Character::joinedCombat, this, &CharacterParty::joinCombat);
     list.removeAll(character);
+    rollbackFactionOn(character);
     emit partyChanged();
     qDebug() << "removing character vrom party" << character->getDisplayName() << "(remaining characters" << list.length() << ')';
   }
@@ -163,7 +212,7 @@ Character* CharacterParty::get(const QString& name)
   return nullptr;
 }
 
-void CharacterParty::grantXp(unsigned int value)
+void CharacterParty::addExperience(unsigned int value)
 {
   for (auto* character : std::as_const(list))
     character->getStatistics()->addExperience(static_cast<int>(value));
@@ -270,4 +319,20 @@ void CharacterParty::loadIntoLevel(GridComponent* level)
     grid->moveObject(character, character->getPosition().x(), character->getPosition().y());
     level->appendObject(character);
   }
+}
+
+void CharacterParty::requireJoinCombat()
+{
+  Character* character = mostSkilledAt("sequence");
+
+  if (character)
+    character->requireJoinCombat();
+}
+
+void CharacterParty::joinCombat()
+{
+  CombatComponent* level = LevelTask::get();
+
+  for (Character* character : list)
+    level->joinCombat(character);
 }

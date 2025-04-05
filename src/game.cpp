@@ -30,6 +30,7 @@ Game::Game(QObject *parent) : StorableObject(parent), timePasser(this)
   timeManager = new TimeManager(this);
   diplomacy = new WorldDiplomacy(*dataEngine);
   playerParty = new CharacterParty(this);
+  playerParty->setFactionName("player");
   worldmap = new WorldMap(this);
   randomEncounters = new RandomEncounterController(this);
   uniqueCharacterStorage = new UniqueCharacterStorage(this);
@@ -45,7 +46,6 @@ Game::Game(QObject *parent) : StorableObject(parent), timePasser(this)
   Race::initialize();
   Trait::initialize();
   Perk::initialize();
-  scriptEngine.evaluate("level.displayConsoleMessage(\"Coucou Script Engine\")");
 
   connect(worldmap, &WorldMap::cityEntered, this, &Game::onCityEntered);
   connect(&timePasser, &TimePasser::stateChanged, this, &Game::fastPassingChanged);

@@ -63,6 +63,7 @@ public:
 signals:
   void actionPointsChanged();
   void requireJoinCombat();
+  void joinedCombat();
   void characterKill(Character* victim, Character* killer);
   void moraleChanged();
   void attacksOnSightChanged();

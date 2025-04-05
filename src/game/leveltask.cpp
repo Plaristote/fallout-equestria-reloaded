@@ -109,7 +109,7 @@ void LevelTask::onCharacterKill(Character* victim, Character* killer)
     const unsigned int xp         = victim->getXpValue();
     const QString      victimName = victimSheet->getName();
 
-    playerParty->grantXp(xp);
+    playerParty->addExperience(xp);
     displayConsoleMessage(I18n::get()->t("messages.killed", {{"victimName",victimName},{"xp",xp}}));
   }
 }

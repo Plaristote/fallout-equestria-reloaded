@@ -67,9 +67,8 @@ void CombatComponent::joinCombat(Character* character)
     combattants << character;
     if (combat == false)
       startCombat(character);
+    emit character->joinedCombat();
     emit combattantsChanged();
-    for (auto* playerPartyMember : playerParty->getCharacters())
-      joinCombat(playerPartyMember);
   }
 }
 
