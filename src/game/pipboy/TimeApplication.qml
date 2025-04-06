@@ -105,7 +105,10 @@ Column {
         font.underline: parent.hovered
       }
 
-      onClicked: triggerWaitFor(intervalData.interval)
+      onClicked: {
+        triggerWaitFor(intervalData.interval);
+        soundManager.play("ui/term-btn-click");
+      }
     }
   }
 

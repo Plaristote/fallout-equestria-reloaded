@@ -15,7 +15,10 @@ Item {
     id: questListView
     anchors.fill: parent
     questManager: root.questManager
-    onSelected: root.selectedQuest = quest
+    onSelected: function (quest) {
+      root.selectedQuest = quest;
+      soundManager.play("ui/term-btn-click");
+    }
     visible: selectedQuest == null
   }
 
