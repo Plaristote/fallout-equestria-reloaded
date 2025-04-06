@@ -153,7 +153,10 @@ Item {
             hoverEnabled: true
             contentItem: Text { color: parent.hovered ? "white" : "green"; text: parent.text; font: parent.font; wrapMode: Text.WordWrap }
             background: Rectangle { color: "transparent" }
-            onClicked: root.controller.selectOption(controller.options[index])
+            onClicked: {
+              root.controller.selectOption(controller.options[index])
+              if (typeof soundManager != "undefined") soundManager.play("ui/term-btn-click");
+            }
             width: answersList.width - 10
           }
         }

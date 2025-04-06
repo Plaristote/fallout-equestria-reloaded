@@ -173,7 +173,10 @@ ColumnLayout {
           hoverEnabled: true
           contentItem: Text { color: parent.hovered ? "white" : parent.myColor; text: parent.text; font: parent.font; wrapMode: Text.WordWrap }
           background: Rectangle { color: "transparent" }
-          onClicked: controller.currentOption = controller.options[index]
+          onClicked: {
+            controller.currentOption = controller.options[index]
+            soundManager.play("ui/term-btn-click");
+          }
           width: answersList.width - 10
 
           Column {
