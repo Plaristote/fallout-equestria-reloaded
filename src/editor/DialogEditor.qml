@@ -137,6 +137,16 @@ Item {
               onClicked: Qt.openUrlExternally(scriptPath + "dialogs/" + currentDialog.replace(".json", ".mjs"))
             }
           }
+          TerminalLabel { text: i18n.t("options.locale") }
+          TerminalComboBox {
+            Layout.fillWidth: true
+            model: i18n.getAvailableLocales()
+            onCurrentIndexChanged: {
+              const newLocale = i18n.getAvailableLocales()[currentIndex];
+              if (i18n.currentLocale !== newLocale)
+                i18n.currentLocale = newLocale;
+            }
+          }
         }
       }
 
