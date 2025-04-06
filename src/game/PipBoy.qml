@@ -9,6 +9,7 @@ Pane {
   id: root
   property QtObject gameController:  gameManager.currentGame
   property QtObject levelController: gameController.level
+  property bool     inCombat: levelController ? levelController.combat : false
   property var      appNames:      ["Clock", "Quests", "Archives", "Automap"]
   property var      appComponents: [waitApplication, questsApplication, archiveApplication]
   property string   currentApp:    "Quests"
@@ -21,10 +22,16 @@ Pane {
     contentApplication.sourceComponent = appComponents[appNames.indexOf(currentApp)];
   }
 
-  onCurrentAppChanged: {
+  function loadApplication() {
     const index = appNames.indexOf(currentApp);
-    contentApplication.sourceComponent = appComponents[index];
+    let application = appComponents[index];
+    if (application == waitApplication && inCombat)
+      application = waitApplicationDisabled;
+    contentApplication.sourceComponent = application;
   }
+
+  onCurrentAppChanged: loadApplication();
+  onInCombatChanged: loadApplication();
 
   PauseController { id: pauseController }
 
@@ -99,6 +106,19 @@ Pane {
     }
 
     Component {
+      id: waitApplicationDisabled
+      Item {
+        Text {
+          anchors.centerIn: parent
+          text: i18n.t("pipboy.clock-disabled")
+          color: "yellow"
+          font.family: application.consoleFont.name
+          font.pointSize: application.consoleFont.bigSize
+        }
+      }
+    }
+
+    Component {
       id: questsApplication
       PipBoyUi.QuestsApplication {
         questManager: root.gameController.getQuestManager()
@@ -107,8 +127,14 @@ Pane {
 
     Component {
       id: archiveApplication
-      Text {
-        text: "Nothing here yet !"
+      Item {
+        Text {
+          anchors.centerIn: parent
+          text: "Nothing here yet !"
+          color: "yellow"
+          font.family: application.consoleFont.name
+          font.pointSize: application.consoleFont.bigSize
+        }
       }
     }
 
