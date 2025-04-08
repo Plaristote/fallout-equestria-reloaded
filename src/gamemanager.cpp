@@ -120,8 +120,7 @@ void GameManager::setCombatSpeedOption(double value)
 
 bool GameManager::getWithPlayerCropCircle() const
 {
-  return false;
-  //return LevelTask::withPlayerCropCircle;
+  return LevelTask::withPlayerCropCircle;
 }
 
 void GameManager::setWithPlayerCropCircle(bool value)

@@ -5,13 +5,14 @@ ShaderEffect {
   property variant src: source
   property QtObject player
   property point    lastPlayerPosition
-  property point    position: Qt.point(0, 0)
-  property real     radius: 90 * 2
-  property real     smoothEdge: 10
-  property real     offzetX: parent.x
-  property real     offzetY: parent.y
-  property point    centerPoint: Qt.point(0, 0)
-  property bool     withClipping:     player
+  property point    position:     Qt.point(0, 0)
+  property size     texSize:      Qt.size(width, height)
+  property real     radius:       47 * 1.5
+  property real     smoothEdge:   radius * 0.4
+  property real     offzetX:      parent.x
+  property real     offzetY:      parent.y
+  property point    centerPoint:  Qt.point(0, 0)
+  property bool     withClipping: player
 
   signal positionRefreshed()
 

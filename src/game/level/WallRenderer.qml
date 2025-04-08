@@ -48,25 +48,23 @@ Item {
         id: image
         source: fileProtocol + wall.image
         sourceClipRect: wall.clippedRect
-        visible: !gameManager.withPlayerCropCircle
-      }
-
-      DaylightShader {
-        source:  image
-        color:   wallRenderer.levelController.ambientColor
-        enabled: wallRenderer.levelController.useAmbientLight
+        visible: !(gameManager.withPlayerCropCircle || wallRenderer.levelController.useAmbientLight)
       }
 
       PlayerCropCircle {
+        id: pcc
         source: image
         player: wallRenderer.levelController.player
-        offzetX: wallRenderer.x
-        offzetY: wallRenderer.y - renderTarget.wallHeight
+        offzetX: wallRenderer.x - (image.width - renderTarget.tileSize.width)
+        offzetY: wallRenderer.y - (image.height - renderTarget.wallHeight) - renderTarget.tileSize.height
         onPositionRefreshed: {
-          withClipping = levelController.player &&
-            ((tx >= levelController.player.position.x && ty >= levelController.player.position.y) ||
-             (wall === hwall && tx === levelController.player.position.x - 1 && ty === levelController.player.position.y) ||
-             (wall === vwall && ty === levelController.player.position.y - 1 && tx === levelController.player.position.x));
+          // That doesn't seem to be working no more
+          const { tx, ty } = wallRenderer;
+          const { x, y }   = levelController.player ? levelController.player.position : { x: 0, y: 0 };
+          withClipping =
+            ((tx >= x && ty >= y) ||
+             (wall === hwall && tx === x - 1 && ty === y) ||
+             (wall === vwall && ty === y - 1 && tx === x));
         }
       }
     }

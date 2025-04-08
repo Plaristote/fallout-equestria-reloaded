@@ -76,6 +76,11 @@ Rectangle {
       model: renderTarget.mapSize.width * renderTarget.mapSize.height
       delegate: WallRenderer {
         levelController: renderTarget.levelController
+        DaylightShader {
+          source:  parent
+          color:   renderTarget.levelController.ambientColor
+          enabled: renderTarget.levelController.useAmbientLight
+        }
       }
     }
 
@@ -111,7 +116,7 @@ Rectangle {
         Image {
           id: mypic
           source: `file:///${levelController.preRenderPath}floor${renderTarget.levelController.currentFloor}_roof_${roof.name}.png`
-          visible: !gameManager.withPlayerCropCircle
+          visible: !(gameManager.withPlayerCropCircle || renderTarget.levelController.useAmbientLight)
         }
 
         PlayerCropCircle {
