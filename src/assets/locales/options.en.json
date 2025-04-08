@@ -1,0 +1,18 @@
+{
+  "options": {
+    "combatSpeed": "Combat speed",
+    "fullscreen": "Full screen",
+    "locale": "Language",
+    "movement": {
+        "alwaysRun": "Always run",
+        "alwaysWalk": "Always walk",
+        "mixed": "Run on double-click"
+    },
+    "movementCursor": "Movement cursor",
+    "movementMode": "Movement mode",
+    "musicVolume": "Music volume",
+    "soundEffectsVolume": "Sound effects volume",
+    "withCameraTracking": "Camera tracks the player",
+    "withPlayerCropCircle": "Crop walls around the player"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "options": {
+    "combatSpeed": "Vitesse des combats",
+    "fullscreen": "Plein écran",
+    "locale": "Langue",
+    "movement": {
+        "alwaysRun": "Toujours courrir",
+        "alwaysWalk": "Toujours marcher",
+        "mixed": "Double-clique pour courrir"
+    },
+    "movementCursor": "Curseur de mouvement",
+    "movementMode": "Mode de déplacement",
+    "musicVolume": "Volume de la musique",
+    "soundEffectsVolume": "Volume des effets sonores",
+    "title": {
+      "interface": "Interface",
+      "sounds": "Audio",
+      "gameplay": "Options de jeu"
+    },
+    "withCameraTracking": "Suivre le joueur avec la caméra",
+    "withPlayerCropCircle": "Invisibiliser les murs autour du joueur"
+  }
+}

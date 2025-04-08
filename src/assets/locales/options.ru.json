@@ -1,0 +1,21 @@
+{
+  "options": {
+    "combatSpeed": "Скорость боя",
+    "fullscreen": "Полноэкранный режим",
+    "locale": "Язык",
+    "movement": {
+      "alwaysRun": "Всегда бегать",
+      "alwaysWalk": "Всегда ходить",
+      "mixed": "Бег на двойной щелчок"
+    },
+		"movementCursor": "Новый курсор перемещения",
+    "movementMode": "Режим передвижения",
+    "musicVolume": "Громкость музыки",
+    "soundEffectsVolume": "Громкость эффектов",
+    "title": {
+      "interface": "Интерфейс",
+      "sounds": "Звуки",
+      "gameplay": "Игровой процесс"
+    }
+  }
+}
