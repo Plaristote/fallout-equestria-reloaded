@@ -1,6 +1,7 @@
 #include "gamemanager.h"
 #include <QDir>
 #include <QStandardPaths>
+#include <QSettings>
 #include <QDebug>
 
 GameManager::GameManager(QObject *parent) : QObject(parent), currentGame(nullptr)
@@ -130,6 +131,17 @@ void GameManager::setWithPlayerCropCircle(bool value)
     LevelTask::withPlayerCropCircle = value;
     emit withPlayerCropCircleChanged();
   }
+}
+
+bool GameManager::getWithCameraTracking() const
+{
+  return QSettings().value("withCameraTracking").toBool();
+}
+
+void GameManager::setWithCameraTracking(bool value)
+{
+  QSettings().setValue("withCameraTracking", value);
+  emit withCameraTrackingChanged();
 }
 
 QString GameManager::getSaveDirectoryPath()

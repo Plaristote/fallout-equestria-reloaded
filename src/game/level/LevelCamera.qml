@@ -4,6 +4,7 @@ Item {
   id: camera
   property QtObject levelController: parent.levelController
   property point origin
+  property bool overrideCameraTracking: false
   onOriginChanged: levelController.canvasOffset = origin
 
   function getLimits() {
@@ -47,7 +48,9 @@ Item {
   }
 
   function moveToObject(object) {
-    if (object) {
+    const enforceCameraTracking = gameManager.withCameraTracking && !overrideCameraTracking;
+
+    if (object && (!enforceCameraTracking || object == levelController.player)) {
       const position = object.getSpritePosition();
 
       position.x -= camera.width / 2;
@@ -58,7 +61,13 @@ Item {
 
   Shortcut {
     sequence: "c"
-    onActivated: moveToObject(levelController.player)
+    onActivated: {
+      if (gameManager.withCameraTracking) {
+        overrideCameraTracking = !overrideCameraTracking;
+      } else {
+        moveToObject(levelController.player)
+      }
+    }
   }
 
   Connections {
@@ -73,5 +82,13 @@ Item {
 
   Timer {
     id: afterLoadCameraCenter; running: true; interval: 100; onTriggered: camera.moveToObject(camera.levelController.player);
+  }
+
+  Timer {
+    id: centerOnPlayerTimer
+    running: gameManager.withCameraTracking && !overrideCameraTracking
+    repeat: true
+    interval: 150
+    onTriggered: camera.moveToObject(camera.levelController.player);
   }
 }

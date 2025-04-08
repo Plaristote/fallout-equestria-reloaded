@@ -108,6 +108,13 @@ Pane {
         Layout.topMargin: 20
       }
 
+      TerminalLabel { text: i18n.t("options.withCameraTracking") }
+      TerminalCheckBox {
+        id: centerOnPlayerInput
+        checked: gameManager.withCameraTracking
+        onCheckedChanged: gameManager.withCameraTracking = checked
+      }
+
       TerminalLabel { text: i18n.t("options.movementMode") }
       TerminalComboBox {
         id: movementInput

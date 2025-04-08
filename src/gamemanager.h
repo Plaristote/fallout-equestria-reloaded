@@ -12,6 +12,7 @@ class GameManager : public QObject
   Q_PROPERTY(int movementModeOption READ getMovementOption WRITE setMovementOption NOTIFY movementOptionChanged)
   Q_PROPERTY(double combatSpeedOption READ getCombatSpeedOption WRITE setCombatSpeedOption NOTIFY combatSpeedOptionChanged)
   Q_PROPERTY(bool withPlayerCropCircle READ getWithPlayerCropCircle WRITE setWithPlayerCropCircle NOTIFY withPlayerCropCircleChanged)
+  Q_PROPERTY(bool withCameraTracking READ getWithCameraTracking WRITE setWithCameraTracking NOTIFY withCameraTrackingChanged)
 public:
   explicit GameManager(QObject *parent = nullptr);
 
@@ -33,6 +34,7 @@ signals:
   void movementOptionChanged();
   void combatSpeedOptionChanged();
   void withPlayerCropCircleChanged();
+  void withCameraTrackingChanged();
 
 private:
   int getMovementOption() const;
@@ -41,6 +43,8 @@ private:
   void setCombatSpeedOption(double);
   bool getWithPlayerCropCircle() const;
   void setWithPlayerCropCircle(bool);
+  bool getWithCameraTracking() const;
+  void setWithCameraTracking(bool);
 
   Game* currentGame;
 };
