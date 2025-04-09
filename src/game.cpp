@@ -36,12 +36,14 @@ Game::Game(QObject *parent) : StorableObject(parent), timePasser(this)
   uniqueCharacterStorage = new UniqueCharacterStorage(this);
   quests = new QuestManager(this);
   taskManager = new TaskRunner(this);
+  dices = new BalancedDiceRoller(this);
   SoundManager::get()->initialize();
   scriptEngine.installExtensions(QJSEngine::ConsoleExtension);
   scriptEngine.globalObject().setProperty("game", scriptEngine.newQObject(this));
   scriptEngine.globalObject().setProperty("worldmap", scriptEngine.newQObject(worldmap));
   scriptEngine.globalObject().setProperty("quests", scriptEngine.newQObject(quests));
   scriptEngine.globalObject().setProperty("musicManager", scriptEngine.newQObject(MusicManager::get()));
+  scriptEngine.globalObject().setProperty("dices", scriptEngine.newQObject(dices));
   scriptEngine.globalObject().setProperty("i18n", scriptEngine.newQObject(I18n::get()));
   Race::initialize();
   Trait::initialize();

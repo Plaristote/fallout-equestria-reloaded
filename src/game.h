@@ -17,6 +17,7 @@
 # include "cmap/race.h"
 # include "game/timepasser.h"
 # include "game/promptdialog.h"
+# include "game/dices.hpp"
 
 class Game : public StorableObject
 {
@@ -41,6 +42,7 @@ class Game : public StorableObject
   Q_PROPERTY(bool fastPassTime READ isFastPassingTime NOTIFY fastPassingChanged)
   Q_PROPERTY(bool isGameEditor MEMBER isGameEditor NOTIFY gameEditorEnabled)
   Q_PROPERTY(PromptDialog* promptDialog READ getPromptDialog NOTIFY promptRequired)
+  Q_PROPERTY(BalancedDiceRoller* dices READ getDices CONSTANT)
 
   static Game* instance;
 public:
@@ -69,6 +71,7 @@ public:
   TaskRunner* getTaskManager() const { return taskManager; }
   SoundManager* getSoundManager() const { return SoundManager::get(); }
   PromptDialog* getPromptDialog() const { return promptDialog; }
+  BalancedDiceRoller* getDices() const { return dices; }
   QJSEngine& getScriptEngine() { return scriptEngine; }
   QJSValue loadScript(const QString& path);
   QJSValue scriptCall(QJSValue callable, const QJSValueList& args, const QString& scriptName);
@@ -151,6 +154,7 @@ private:
   QMap<QString, Trait> cmapTraits;
   QMap<QString, Race>  cmapRaces;
   PromptDialog* promptDialog = nullptr;
+  BalancedDiceRoller* dices = nullptr;
 };
 
 #endif // GAME_H

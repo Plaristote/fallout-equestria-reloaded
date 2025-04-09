@@ -43,6 +43,8 @@ set(PROJECT_SOURCES
         cmap/race.cpp
         cmap/perk.h
         cmap/perk.cpp
+        game/dices.hpp
+        game/dices.cpp
         game/savepreview.h
         game/savepreview.cpp
         game/mousecursor.h
