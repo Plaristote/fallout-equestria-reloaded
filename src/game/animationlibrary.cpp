@@ -137,7 +137,13 @@ void AnimationLibrary::initialize()
       }
     }
     for (const auto& texture : textures)
-      images.insert(ASSETS_PATH + "sprites/" + texture, QImage(ASSETS_PATH + "sprites/" + texture));
+    {
+      const QString texturePath(ASSETS_PATH + "sprites/" + texture);
+      if (QFile::exists(texturePath))
+        images.insert(texturePath, QImage(texturePath));
+      else
+        qDebug() << "!! Missing texture" << texturePath;
+    }
     emit initialized();
   }
   else
@@ -454,7 +460,6 @@ void AnimationLibrary::registerCharacterSpriteSheet(const CharacterSpriteDescrip
     spriteData["cloneOf"]       = descriptor.cloneOf;
     data[name] = spriteData;
     textures << spriteData["defaultSource"].toString();
-    images.insert(preRenderPath, QImage(filePath)); // WTF is this ? Probably does not work as is.
-    //images.insert(ASSETS_PATH + "sprites/" + spriteData["defaultSource"].toString(), QImage(filePath));
+    images.insert(preRenderPath, QImage(filePath));
   }
 }
