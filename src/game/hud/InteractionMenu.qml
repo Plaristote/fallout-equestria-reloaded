@@ -19,6 +19,12 @@ Item {
     return interactionPosition.y;
   }
 
+  onVisibleChanged: {
+    if (visible && typeof soundManager != "undefined") {
+      soundManager.play("ui/int-menu");
+    }
+  }
+
   Column {
     id: menuColumn
     Repeater {
@@ -31,6 +37,12 @@ Item {
         background: Image {
           property string bgType: parent.down ? 'pressed' : (parent.hovered ? 'active' : 'normal')
           source: "qrc:/assets/ui/interactions/" + interactionType + '-' + bgType + '.png'
+        }
+
+        onDownChanged: {
+          if (typeof soundManager != "undefined") {
+            soundManager.play(down ? "ui/push-button-in" : "ui/push-button-out");
+          }
         }
 
         onClicked:{

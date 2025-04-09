@@ -24,8 +24,8 @@ Button {
   Connections {
     target: button
     function onDownChanged() {
-      if (!button.down && typeof soundManager != "undefined")
-        soundManager.play("ui/term-btn-click");
+      if (typeof soundManager != "undefined")
+        soundManager.play(button.down ? "ui/term-btn-in" : "ui/term-btn-out");
     }
   }
 }
