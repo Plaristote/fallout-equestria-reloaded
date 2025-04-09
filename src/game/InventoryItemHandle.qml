@@ -24,6 +24,10 @@ Rectangle {
   radius: 5
   color: itemMouseArea.drag.active ? "black" : "transparent"
   Drag.active: itemMouseArea.drag.active
+  Drag.onActiveChanged: {
+    if (typeof soundManager != "undefined")
+      soundManager.play(Drag.active ? "pick-up" : "put-down");
+  }
   Drag.hotSpot.x: width / 2
   Drag.hotSpot.y: height / 2
   Drag.keys: ["InventoryItem"]

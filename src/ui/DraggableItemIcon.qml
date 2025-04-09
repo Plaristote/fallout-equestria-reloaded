@@ -9,6 +9,15 @@ ItemIcon {
   Drag.active: itemMouseArea.drag.active
   Drag.hotSpot: Qt.point(width / 2, height / 2)
   Drag.keys: ["InventoryItem"]
+  Drag.onActiveChanged: {
+    if (typeof soundManager != "undefined")
+      soundManager.play(Drag.active ? "pick-up" : "put-down");
+  }
+
+  Component.onDestruction: {
+    if (Drag.active && typeof soundManager != "undefined")
+      soundManager.play("put-down");
+  }
 
   states: State {
     when: itemMouseArea.drag.active

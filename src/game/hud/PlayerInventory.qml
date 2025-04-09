@@ -15,6 +15,8 @@ Rectangle {
     keys: ["InventoryItem"]
     function receiveInventoryItem(inventoryItem) {
       gameManager.currentGame.player.inventory.dropItem(inventoryItem)
+      if (typeof soundManager != "undefined")
+        soundManager.play("put-down");
     }
   }
 

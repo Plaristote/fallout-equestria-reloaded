@@ -228,7 +228,9 @@ void ActionsComponent::pickUpItem(Character* character, InventoryItem* item)
   {
     detachObject(item);
     inventory->addItem(item);
+    if (character == getPlayer())
+      Game::get()->getSoundManager()->play("pick-up");
   }
-  else
+  else if (character == getPlayer())
     Game::get()->appendToConsole(I18n::get()->t("message.cannot-carry-more"));
 }
