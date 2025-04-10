@@ -76,11 +76,6 @@ Rectangle {
       model: renderTarget.mapSize.width * renderTarget.mapSize.height
       delegate: WallRenderer {
         levelController: renderTarget.levelController
-        DaylightShader {
-          source:  parent
-          color:   renderTarget.levelController.ambientColor
-          enabled: renderTarget.levelController.useAmbientLight
-        }
       }
     }
 

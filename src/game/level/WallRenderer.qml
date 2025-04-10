@@ -67,6 +67,12 @@ Item {
              (wall === vwall && ty === y - 1 && tx === x));
         }
       }
+
+      DaylightShader {
+        source:  gameManager.withPlayerCropCircle ? pcc : image
+        color:   wallRenderer.levelController.ambientColor
+        enabled: wallRenderer.levelController.useAmbientLight
+      }
     }
   }
 }
