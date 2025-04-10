@@ -1,4 +1,5 @@
 import QtQuick 2.15
+import GameRenderer 1.0
 
 Rectangle {
   property QtObject levelController: parent.levelController
@@ -72,10 +73,41 @@ Rectangle {
     }
 
     Repeater {
-      id: wallsRenderer
+      id: caseRenderings
       model: renderTarget.mapSize.width * renderTarget.mapSize.height
-      delegate: WallRenderer {
-        levelController: renderTarget.levelController
+      delegate: Item {
+        property alias controller: caseRendering
+        property alias wallRenderer: wallRenderer
+        property int tx: index % renderTarget.mapSize.width
+        property int ty: Math.round(index / renderTarget.mapSize.width)
+
+        CaseRendering {
+          id: caseRendering
+          position: Qt.point(tx, ty)
+          Component.onDestruction: levelController.removeCaseRendering(caseRendering)
+        }
+
+        WallRenderer {
+          id: wallRenderer
+          tx: parent.tx
+          ty: parent.ty
+          levelController: renderTarget.levelController
+          rendered: !caseRendering.culled
+        }
+      }
+
+      onItemAdded: function (index, item) {
+        levelController.insertCaseRendering(index, item.controller);
+      }
+    }
+
+    Connections {
+      target: renderTarget.levelController
+      function onCulledTilesChanged() {
+        wallRendererCropCircleUpdater.updateCulling(
+          renderTarget.levelController.culledInTiles,
+          renderTarget.levelController.culledOutTiles,
+        );
       }
     }
 

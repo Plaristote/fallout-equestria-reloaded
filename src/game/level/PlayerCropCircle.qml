@@ -11,20 +11,28 @@ ShaderEffect {
   property real     smoothEdge:   radius * 0.4
   property real     offzetX:      parent.x
   property real     offzetY:      parent.y
+  property point    offset:       Qt.point(offzetX, offzetY)
   property point    centerPoint:  Qt.point(0, 0)
   property bool     withClipping: player
+  property bool     autoRefresh:  true
 
   signal positionRefreshed()
 
-  Timer {
+  Loader {
+    sourceComponent: autoRefresh ? positionUpdateTimer : null
+  }
+
+  Component {
     id: positionUpdateTimer
-    interval: 10 + Math.random() * 50
-    repeat: false
-    running: gameManager.withPlayerCropCircle && player && player.spritePosition != lastPlayerPosition
-    onTriggered: {
-      lastPlayerPosition = player.spritePosition;
-      updateCenter();
-      positionRefreshed();
+    Timer {
+      interval: 10 + Math.random() * 50
+      repeat: false
+      running: gameManager.withPlayerCropCircle && player && player.spritePosition != lastPlayerPosition
+      onTriggered: {
+        lastPlayerPosition = player.spritePosition;
+        updateCenter();
+        positionRefreshed();
+      }
     }
   }
 

@@ -18,6 +18,7 @@ static QRect screenRect(QPoint offset, QSize size)
 
 CameraComponent::CameraComponent(QObject* parent) : ParentType(parent)
 {
+  connect(this, &CameraComponent::renderedTilesChanged, this, &CameraComponent::updateCulledTiles);
   connect(this, &CameraComponent::cameraMoved,       &updateTimer, [this]() { updateTimer.start(); });
   connect(this, &CameraComponent::cameraSizeChanged, &updateTimer, [this]() { updateTimer.start(); });
   connect(&updateTimer, &QTimer::timeout, this, &CameraComponent::updateRenderedTiles);
@@ -31,7 +32,7 @@ void CameraComponent::updateRenderedTiles()
   if (newRenderedTiles != renderedTiles)
   {
     renderedTiles = newRenderedTiles;
-    emit renderedTilesChanged();
+    emit renderedTilesChanged(renderedTiles);
   }
 }
 
@@ -41,18 +42,24 @@ QRect CameraComponent::getRenderedTiles() const
 
   if (tilemap)
   {
-    QSize       tileSize    = tilemap->getTileSize();
-    QRect       rect        = screenRect(offset, size);
-    QPoint      topLeft     = getCaseAt(tileSize, rect.left(),  rect.top());
-    QPoint      topRight    = getCaseAt(tileSize, rect.right(), rect.top());
-    QPoint      bottomRight = getCaseAt(tileSize, rect.right(), rect.bottom());
-    QPoint      bottomLeft  = getCaseAt(tileSize, rect.left(),  rect.bottom());
-    vector<int> xs{topLeft.x(), topRight.x(), bottomRight.x(), bottomLeft.x()};
-    vector<int> ys{topLeft.y(), topRight.y(), bottomRight.y(), bottomLeft.y()};
+    const QSize       tileSize    = tilemap->getTileSize();
+    const QRect       rect        = screenRect(offset, size);
+    const QPoint      topLeft     = getCaseAt(tileSize, rect.left(),  rect.top());
+    const QPoint      topRight    = getCaseAt(tileSize, rect.right(), rect.top());
+    const QPoint      bottomRight = getCaseAt(tileSize, rect.right(), rect.bottom());
+    const QPoint      bottomLeft  = getCaseAt(tileSize, rect.left(),  rect.bottom());
+    const vector<int> xs{topLeft.x(), topRight.x(), bottomRight.x(), bottomLeft.x()};
+    const vector<int> ys{topLeft.y(), topRight.y(), bottomRight.y(), bottomLeft.y()};
 
     return QRect(
-      QPoint(*min_element(xs.begin(), xs.end()), *min_element(ys.begin(), ys.end())),
-      QPoint(*max_element(xs.begin(), xs.end()), *max_element(ys.begin(), ys.end()))
+      QPoint(
+        *min_element(xs.begin(), xs.end()),
+        *min_element(ys.begin(), ys.end())
+      ),
+      QPoint(
+        *max_element(xs.begin(), xs.end()),
+        *max_element(ys.begin(), ys.end())
+      )
     );
   }
   return QRect();

@@ -2,6 +2,7 @@ set(PROJECT_SOURCES
         main.cpp
         credits.h
         credits.cpp
+        debounce.h
         utils/storableobject.h
         utils/storableobject.cpp
         utils/datetime.hpp
@@ -68,6 +69,8 @@ set(PROJECT_SOURCES
         game/level/save.cpp
         game/level/camera.h
         game/level/camera.cpp
+        game/level/caserendering.h
+        game/level/caserendering.cpp
         game/leveltask.h
         game/leveltask.cpp
         game/dynamicobject.h

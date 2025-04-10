@@ -1,12 +1,12 @@
 #ifndef  CAMERACOMPONENT_H
 # define CAMERACOMPONENT_H
 
-# include "prerender.h"
+# include "caserendering.h"
 
-class CameraComponent : public PreRenderComponent
+class CameraComponent : public CaseRenderingComponent
 {
   Q_OBJECT
-  typedef PreRenderComponent ParentType;
+  typedef CaseRenderingComponent ParentType;
 
   Q_PROPERTY(QPoint canvasOffset MEMBER offset NOTIFY cameraMoved)
   Q_PROPERTY(QSize  canvasSize   MEMBER size   NOTIFY cameraSizeChanged)
@@ -22,7 +22,7 @@ public:
 signals:
   void cameraMoved();
   void cameraSizeChanged();
-  void renderedTilesChanged();
+  void renderedTilesChanged(QRect);
 
 private slots:
   void updateRenderedTiles();
