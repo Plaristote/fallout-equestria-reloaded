@@ -1,4 +1,5 @@
 #include "dices.hpp"
+#include <QDebug>
 
 int BalancedDiceRoller::random(int max)
 {
@@ -35,7 +36,8 @@ int BalancedDiceRoller::roll(int max)
         upperBound = max;
 
       // Generate a number within that segment
-      result = m_generator->bounded(lowerBound, upperBound + 1);
+      qDebug() << "Segment:" << lowerBound << upperBound;
+      result = m_generator->bounded(lowerBound, qMax(lowerBound, upperBound) + 1);
     } else
     {
       result = random(max);
@@ -70,11 +72,12 @@ QVector<int> BalancedDiceRoller::findUnderrepresentedSegments(const QVector<doub
 QVector<int> BalancedDiceRoller::countSegments(const QVector<int>& history, int max) const
 {
   QVector<int> segments(m_segmentCount, 0);
-  int binSize = max / m_segmentCount;
+  int segmentSize = max / m_segmentCount;
 
+  if (segmentSize < 1) segmentSize = 1;
   for (int value : history)
   {
-    int segmentIndex = (value - 1) / binSize;
+    int segmentIndex = (value - 1) / segmentSize;
     if (segmentIndex >= m_segmentCount)
       segmentIndex = m_segmentCount - 1;
     segments[segmentIndex]++;
