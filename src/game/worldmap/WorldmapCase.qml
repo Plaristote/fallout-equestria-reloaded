@@ -9,11 +9,11 @@ Rectangle {
   property int indexY
   property QtObject controller
 
-  height: controller.caseSize.height
-  width:  controller.caseSize.width
+  height: controller?.caseSize?.height
+  width:  controller?.caseSize?.width
   border.width: 1
   border.color: "green"
-  color: controller.isVisible(indexX, indexY) ? "transparent" : "black"
+  color: controller && controller.isVisible(indexX, indexY) ? "transparent" : "black"
   Connections {
     target: controller
     function onCaseRevealed(caseX, caseY) {

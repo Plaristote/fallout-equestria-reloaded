@@ -21,8 +21,8 @@ CustomFlickable {
   Image {
     id: mapImage
     source: assetPath + "worldmap.png"
-    height: controller.mapSize.height
-    width: controller.mapSize.width
+    height: controller ? controller.mapSize.height : 0
+    width:  controller ? controller.mapSize.width : 0
 
     Item {
       id: beforeCases
@@ -31,11 +31,11 @@ CustomFlickable {
 
     Column {
       Repeater {
-        model: controller.caseCount.height
+        model: root.controller?.caseCount.height
         delegate: Row {
           property int indexY_: index
           Repeater {
-            model: controller.caseCount.width
+            model: root.controller?.caseCount.width
             delegate: WorldmapCase {
               indexX: index
               indexY: indexY_

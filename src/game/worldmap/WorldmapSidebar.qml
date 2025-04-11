@@ -30,9 +30,9 @@ Pane {
         width: parent.width
         spacing: 5
         Repeater {
-          model: controller.discoveredCities
+          model: controller?.discoveredCities
           delegate: RowLayout {
-            property QtObject city: controller.getCity(controller.discoveredCities[index]);
+            property QtObject city: controller ? controller.getCity(controller.discoveredCities[index]) : null;
 
             Layout.fillWidth: true
             UiStyle.TinyButton {
@@ -42,7 +42,7 @@ Pane {
             Label {
               Layout.fillWidth: true
               height: cityButton.height
-              text: i18n.t(`locations.${city.name}`)
+              text: i18n.t(`locations.${city?.name}`)
               color: "white"
               padding: 5
               background: UiStyle.Label {}

@@ -9,7 +9,7 @@ import Game 1.0 as MyGame
 
 Item {
   property QtObject controller // WorldMap
-  property point movementStart: controller.currentPosition
+  property point movementStart: controller ? controller.currentPosition : Qt.point(0,0)
   property bool hasOverlay: inventoryViewContainer.visible || mainMenu.visible
   id: root
   state: "default"
@@ -116,13 +116,17 @@ Item {
         strokeWidth: 2
         strokeColor: "red"
         strokeStyle: ShapePath.DashLine
-        PathLine { x: controller.currentPosition.x; y: controller.currentPosition.y }
+        PathLine {
+          x: controller ? controller.currentPosition.x : 0;
+          y: controller ? controller.currentPosition.y : 0
+        }
       }
     }
 
     Shape {
       id: positionShape
-      x: controller.currentPosition.x - width / 2; y: controller.currentPosition.y - height / 2
+      x: controller ? controller.currentPosition.x - width / 2 : 0
+      y: controller ? controller.currentPosition.y - height / 2 : 0
       width: 24
       height: 12
       ShapePath {
@@ -146,7 +150,8 @@ Item {
     Rectangle {
       id: encounterShape
       visible: false
-      x: controller.currentPosition.x - width / 2; y: controller.currentPosition.y - height / 2
+      x: controller ? controller.currentPosition.x - width / 2 : 0
+      y: controller ? controller.currentPosition.y - height / 2 : 0
       width: 50
       height: 50
       radius: width * 0.5
