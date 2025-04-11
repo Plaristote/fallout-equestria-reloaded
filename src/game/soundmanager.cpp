@@ -18,6 +18,11 @@ SoundManager::SoundManager(QObject *parent) : QObject(parent)
   connect(&timer, &QTimer::timeout, this, &SoundManager::update);
 }
 
+SoundManager::~SoundManager()
+{
+  stop();
+}
+
 void SoundManager::initialize()
 {
   if (!initialized)

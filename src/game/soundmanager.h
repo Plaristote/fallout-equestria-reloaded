@@ -20,6 +20,7 @@ class SoundManager : public QObject
   Q_PROPERTY(int defaultVolume READ getDefaultVolume WRITE setDefaultVolume NOTIFY defaultVolumeChanged)
 public:
   explicit SoundManager(QObject *parent = nullptr);
+  ~SoundManager();
 
   static SoundManager* get(void) { return _global_ptr; }
 

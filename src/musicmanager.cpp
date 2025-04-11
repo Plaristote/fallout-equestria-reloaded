@@ -28,6 +28,11 @@ MusicManager::MusicManager(QObject* parent) : QObject(parent)
 MusicManager::~MusicManager()
 {
   _global_ptr = nullptr;
+  if (audioManager)
+  {
+    disconnect(audioManager, &QMediaPlayer::playbackStateChanged, this, &MusicManager::onStateChanged);
+    audioManager->stop();
+  }
 }
 
 void MusicManager::loadDataTree()
@@ -108,6 +113,8 @@ void MusicManager::startTrack(const QString& filename)
   if (audioManager)
   {
     disconnect(audioManager, &QMediaPlayer::playbackStateChanged, this, &MusicManager::onStateChanged);
+    audioManager->stop();
+    audioManager->setAudioOutput(nullptr);
     audioManager->deleteLater();
   }
   audioManager = new QMediaPlayer(this);
