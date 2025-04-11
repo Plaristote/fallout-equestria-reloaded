@@ -10,6 +10,7 @@ FieldOfView::FieldOfView(Character& character) : QObject(&character), character(
 {
   interval = 1;
   timeLeft = 0;
+  hasChanges = false;
 }
 
 FieldOfView::~FieldOfView()
