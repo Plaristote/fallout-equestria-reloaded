@@ -53,7 +53,7 @@ QJsonObject WorldMap::save() const
   }
   for (auto it = zones.begin() ; it != zones.end() ; ++it)
     zonesJson << (*it)->save();
-  if (!Game::get()->property("isGameEditor").toBool())
+  if (!Game::get()->getIsGameEditor())
     data.insert("discovered", discoveredJson);
   data.insert("cities",     citiesJson);
   data.insert("zones",      zonesJson);
@@ -88,7 +88,7 @@ void WorldMap::load(const QJsonObject& data)
     mapSize.width()  / std::max(caseSize.width(), 1),
     mapSize.height() / std::max(caseSize.height(), 1)
   );
-  if (!Game::get()->property("isGameEditor").toBool())
+  if (!Game::get()->getIsGameEditor())
   {
     if (data["discovered"].isUndefined())
     {

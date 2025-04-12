@@ -13,12 +13,12 @@ const QString nullTargetZone("_load");
 
 bool shouldSaveTasks()
 {
-  return Game::get() && !Game::get()->property("isGameEditor").toBool();
+  return Game::get() && !Game::get()->getIsGameEditor();
 }
 
 bool shouldSaveVariables()
 {
-  return !Game::get() || !Game::get()->property("isGameEditor").toBool();
+  return !Game::get() || !Game::get()->getIsGameEditor();
 }
 
 Game::Game(QObject *parent) : StorableObject(parent), timePasser(this)

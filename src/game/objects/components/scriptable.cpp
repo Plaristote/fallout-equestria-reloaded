@@ -3,7 +3,7 @@
 
 ScriptableComponent::ScriptableComponent(QObject *parent) : ParentType(parent)
 {
-  if (!Game::get()->property("isGameEditor").toBool())
+  if (!Game::get()->getIsGameEditor())
     connect(this, &ScriptableComponent::scriptNameChanged, this, &ScriptableComponent::initializeIfNeeded);
 }
 

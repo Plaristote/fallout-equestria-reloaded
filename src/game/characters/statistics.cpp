@@ -45,7 +45,7 @@ void CharacterStatistics::save(QJsonObject& data) const
 {
   data["charsheet"] = characterSheet;
   data["uniq"] = isUnique;
-  if (!(Game::get()->property("isGameEditor").toBool()))
+  if (!(Game::get()->getIsGameEditor()))
   {
     if (isUnique)
       Game::get()->getDataEngine()->saveStatModel(getObjectName(), statistics);

@@ -51,6 +51,7 @@ public:
 
   Q_INVOKABLE QStringList getCharacterTemplateList() const;
   Q_INVOKABLE void prepareEditor();
+  inline bool getIsGameEditor() const { return isGameEditor; }
   void loadFromDataEngine(std::function<void()> callback);
   Q_INVOKABLE void save();
   void newPlayerParty(StatModel*);

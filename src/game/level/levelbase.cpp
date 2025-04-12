@@ -10,7 +10,7 @@ LevelBase::LevelBase(QObject *parent) : ObjectGroup(parent)
 
 bool LevelBase::isGameEditor() const
 {
-  return Game::get()->property("isGameEditor").toBool();
+  return Game::get()->getIsGameEditor();
 }
 
 QString LevelBase::getScriptFilename(const QString& levelName) const

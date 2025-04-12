@@ -58,7 +58,7 @@ QStringList StatModel::getAvailableRaces() const
 {
   Game* game = Game::get();
 
-  if (!game->property("isGameEditor").toBool())
+  if (!game->getIsGameEditor())
   {
     QStringList races;
     const auto& allRaces = Race::getRaces();

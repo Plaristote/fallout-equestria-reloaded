@@ -7,7 +7,8 @@ ScriptController::ScriptController(const QString& modulePath) :
 {
   Game* game = Game::get();
 
-  module = game->loadScript(path);
+  if (!Game::get()->getIsGameEditor())
+    module = game->loadScript(path);
 }
 
 static QString pathToClassName(const QString& path)
