@@ -165,6 +165,8 @@ QStringList Game::getCharacterTemplateList() const
 void Game::prepareEditor()
 {
   getDataEngine()->loadFromFile("");
+  uniqueCharacterStorage->load(getDataEngine()->getUniqueCharacterStorage());
+  uniqueCharacterStorage->log();
   worldmap->load(dataEngine->getWorldmap());
 }
 
@@ -370,9 +372,22 @@ void Game::save()
   taskManager->save(variables);
   timeManager->save(timeData);
   playerParty->save(partyData);
-  uniqueCharacterStorage->save(uniqueCharactersData);
-  if (currentLevel)
+  if (isGameEditor && currentLevel)
+  {
+    // In GameEditor, the level is not "exited", so we need
+    // to extract unique characters back in their storage,
+    // and repop them in the level
+    uniqueCharacterStorage->saveUniqueCharactersFromLevel(currentLevel);
+    uniqueCharacterStorage->save(uniqueCharactersData);
     currentLevel->save(dataEngine);
+    uniqueCharacterStorage->loadUniqueCharactersToLevel(currentLevel);
+  }
+  else
+  {
+    uniqueCharacterStorage->save(uniqueCharactersData);
+    if (currentLevel)
+      currentLevel->save(dataEngine);
+  }
   dataEngine->setTimeData(timeData);
   dataEngine->setQuests(quests->save());
   dataEngine->setWorldmap(worldmap->save());

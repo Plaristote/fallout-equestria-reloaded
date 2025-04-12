@@ -4,7 +4,6 @@
 #include <QObject>
 #include <QQmlListProperty>
 #include "game/character.h"
-#include "game/level/grid.h"
 #include "game/leveltask.h"
 
 class StorageSlot;
@@ -14,9 +13,6 @@ class TileZone;
 class UniqueCharacterStorage : public QObject
 {
   Q_OBJECT
-
-  Q_PROPERTY(QMap<QString,QList<StorageSlot*>> levelToStorage MEMBER levelToStorage CONSTANT)
-
 public:
   explicit UniqueCharacterStorage(QObject *parent = nullptr);
 
