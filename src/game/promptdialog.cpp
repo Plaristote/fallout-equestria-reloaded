@@ -15,8 +15,8 @@ PromptDialog::PromptDialog(const QString& title, QJSValue object, QObject *paren
 
     if (label.isString())
     {
-      labels << value.property("label").toString();
-      callbacks << value.property("callback");
+      labels << label.toString();
+      callbacks << callback;
     }
     it.next();
   }
