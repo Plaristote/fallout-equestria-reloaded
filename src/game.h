@@ -53,6 +53,7 @@ public:
   Q_INVOKABLE void prepareEditor();
   inline bool getIsGameEditor() const { return isGameEditor; }
   void loadFromDataEngine(std::function<void()> callback);
+  UniqueCharacterStorage* getUniqueCharacterStorage() const { return uniqueCharacterStorage; }
   Q_INVOKABLE void save();
   void newPlayerParty(StatModel*);
 

@@ -43,6 +43,8 @@ void GameManager::startNewGame()
     currentGame->getDiplomacy()->initialize();
     connect(currentGame->getDiplomacy(), &WorldDiplomacy::update, currentGame, &Game::onDiplomacyUpdate);
     // TODO initialize other factions
+    // TODO figure out what I meant by "initialize other factions"
+    currentGame->getUniqueCharacterStorage()->load(currentGame->getDataEngine()->getUniqueCharacterStorage());
     currentGame->getWorldmap()->load(currentGame->getDataEngine()->getWorldmap());
     currentGame->getPlayer()->getStatistics()->setProperty("faction", "player");
     emit newGameStarted();
