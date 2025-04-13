@@ -77,6 +77,20 @@ Rectangle {
       delegate: WallRenderer {
         levelController: renderTarget.levelController
       }
+      onItemAdded: function (index, item) {
+        const row = Math.floor(index / renderTarget.mapSize.width);
+        const col = index % renderTarget.mapSize.width;
+        const wallMap = cropCircleUpdater.wallMap;
+
+        if (wallMap[col] == undefined)
+          wallMap[col] = [];
+        wallMap[col][row] = item;
+      }
+    }
+
+    WallRendererCropCircleUpdater {
+      id: cropCircleUpdater
+      player: levelController.player
     }
 
     Repeater {

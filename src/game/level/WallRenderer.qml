@@ -12,6 +12,9 @@ Item {
   property bool rendered: isRendered(levelController.renderedTiles)
   function isRendered() { return levelController.isCaseRendered(tx, ty); }
 
+  property bool withClippingH: false
+  property bool withClippingV: false
+
   x: renderPosition.x
   y: renderPosition.y
   z: (tx + ty * renderTarget.mapSize.width) * 4 + (vwall || hwall ? 2 : 0)
@@ -57,15 +60,9 @@ Item {
         player: wallRenderer.levelController.player
         offzetX: wallRenderer.x - (image.width - renderTarget.tileSize.width)
         offzetY: wallRenderer.y - (image.height - renderTarget.wallHeight) - renderTarget.tileSize.height
-        onPositionRefreshed: {
-          // That doesn't seem to be working no more
-          const { tx, ty } = wallRenderer;
-          const { x, y }   = levelController.player ? levelController.player.position : { x: 0, y: 0 };
-          withClipping =
-            ((tx >= x && ty >= y) ||
-             (wall === hwall && tx === x - 1 && ty === y) ||
-             (wall === vwall && ty === y - 1 && tx === x));
-        }
+        withClipping: (wallRenderer.withClippingH && wallRenderer.withClippingV)
+                   || (wallRenderer.withClippingH && wall === hwall)
+                   || (wallRenderer.withClippingV && wall === vwall)
       }
 
       DaylightShader {
