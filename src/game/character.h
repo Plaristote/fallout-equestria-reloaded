@@ -2,6 +2,7 @@
 # define CHARACTER_H
 
 # include "globals.h"
+# include "dices.hpp"
 # include "cmap/statmodel.h"
 # include "diplomacy.hpp"
 # include "characters/buffs.h"
@@ -18,6 +19,7 @@ class Character : public CharacterBuffs
   Q_PROPERTY(int actionPoints MEMBER actionPoints NOTIFY actionPointsChanged)
   Q_PROPERTY(int morale MEMBER morale NOTIFY moraleChanged)
   Q_PROPERTY(bool attacksOnSight MEMBER attacksOnSight NOTIFY attacksOnSightChanged)
+  Q_PROPERTY(BalancedDiceRoller* dices MEMBER dices CONSTANT)
 public:
   explicit Character(QObject *parent = nullptr);
 
@@ -81,6 +83,7 @@ private:
   int morale = CHARACTER_MAX_MORALE;
   bool attacksOnSight = true;
   QJSValue jsActionQueue;
+  BalancedDiceRoller* dices = nullptr;
 };
 
 #endif // CHARACTER_H

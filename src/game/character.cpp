@@ -7,6 +7,7 @@
 
 Character::Character(QObject *parent) : ParentType(parent)
 {
+  dices = new BalancedDiceRoller(this);
   setProperty("float", true);
   actionQueue = new ActionQueue(this);
   inventory->setUser(this);
