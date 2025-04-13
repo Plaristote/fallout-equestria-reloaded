@@ -59,12 +59,12 @@ void SaveComponent::passElapsedTime(int lastUpdate)
 
 void SaveComponent::persist()
 {
-  save(Game::get()->getDataEngine());
+  save(Game::get()->getDataEngine(), true);
 }
 
-void SaveComponent::save(DataEngine* dataEngine)
+void SaveComponent::save(DataEngine* dataEngine, bool isActive)
 {
-  if (persistent || isGameEditor())
+  if (persistent || isActive || isGameEditor())
   {
     Game* game = Game::get();
     QJsonObject levelData = dataEngine->getLevelData(name);
@@ -78,6 +78,8 @@ void SaveComponent::save(DataEngine* dataEngine)
       levelData.remove("init");
     dataEngine->setLevelData(name, levelData);
   }
+  else if (!persistent)
+    dataEngine->setLevelData(name, {});
   else
     qDebug() << "(!) Level is not persistent and it's current state has been discarded.";
 }

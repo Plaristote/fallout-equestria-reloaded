@@ -19,7 +19,7 @@ public:
   void load(const QString& levelName, DataEngine*);
   void passElapsedTime(int lastUpdate);
   void loadTutorial();
-  void save(DataEngine*);
+  void save(DataEngine*, bool isActive);
   bool canSave() const;
 
   Q_INVOKABLE void toggleSaveEnabled(bool);

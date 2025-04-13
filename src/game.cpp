@@ -330,7 +330,7 @@ void Game::exitLevel(bool silent)
       playerParty->extractFromLevel(currentLevel);
       uniqueCharacterStorage->saveUniqueCharactersFromLevel(currentLevel);
       currentLevel->onExit();
-      currentLevel->save(dataEngine);
+      currentLevel->save(dataEngine, false);
       destroyLevelTask();
       scriptObject.deleteProperty("level");
       dataEngine->exitLevel();
@@ -379,14 +379,14 @@ void Game::save()
     // and repop them in the level
     uniqueCharacterStorage->saveUniqueCharactersFromLevel(currentLevel);
     uniqueCharacterStorage->save(uniqueCharactersData);
-    currentLevel->save(dataEngine);
+    currentLevel->save(dataEngine, true);
     uniqueCharacterStorage->loadUniqueCharactersToLevel(currentLevel);
   }
   else
   {
     uniqueCharacterStorage->save(uniqueCharactersData);
     if (currentLevel)
-      currentLevel->save(dataEngine);
+      currentLevel->save(dataEngine, true);
   }
   dataEngine->setTimeData(timeData);
   dataEngine->setQuests(quests->save());
