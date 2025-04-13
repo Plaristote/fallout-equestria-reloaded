@@ -10,7 +10,7 @@
 
 const QRegularExpression jsExtensionExp("\\.m?js$");
 const QMap<QString, QPair<QString, QString> > scriptDefaultSuper = {
-  {"pnjs",  {"CharacterBehaviour", "character.mjs"}},
+  {"characters",  {"CharacterBehaviour", "character.mjs"}},
   {"items", {"ItemBehaviour", "item.mjs"}}
 };
 

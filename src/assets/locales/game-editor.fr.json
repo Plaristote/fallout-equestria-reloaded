@@ -193,8 +193,7 @@
     },
     "script-category": {
       "behaviour": "Comportement",
-      "pnjs": "PNGs",
-      "npcs": "PNGs",
+      "characters": "PNJs",
       "quests": "Quêtes",
       "dialogs": "Dialogues",
       "buffs": "Buffs",

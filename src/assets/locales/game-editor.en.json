@@ -193,8 +193,7 @@
     },
     "script-category": {
       "behaviour": "Behaviour",
-      "pnjs": "NPCs",
-      "npcs": "NPCs",
+      "characters": "NPCs",
       "quests": "Quests",
       "dialogs": "Dialogs",
       "buffs": "Buffs",

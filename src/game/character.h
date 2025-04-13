@@ -75,7 +75,7 @@ private slots:
   void afterDeathAnimation();
 
 private:
-  virtual QString getScriptPath() const override { return SCRIPTS_PATH + "pnjs"; }
+  virtual QString getScriptPath() const override { return SCRIPTS_PATH + "characters"; }
 
   ActionQueue* actionQueue;
   bool unconscious = false;

@@ -8,7 +8,7 @@ import Game 1.0
 
 DynamicObjectEditor {
   id: characterEditor
-  scriptCategory: "pnjs"
+  scriptCategory: "characters"
   withOrientation: true
   readOnlyAnimation: true
   readOnlyPositionType: true
