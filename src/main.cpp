@@ -1,6 +1,7 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
+#include <QQuickStyle>
 #include <QIcon>
 
 #include "globals.h"
@@ -68,6 +69,8 @@ int main(int argc, char *argv[])
   GameContext* gameContext = nullptr;
   MouseCursor* cursor = new MouseCursor(&app);
   GamepadController* gamepad = new GamepadController(&app);
+
+  QQuickStyle::setStyle("Basic");
 
   app.setWindowIcon(QIcon(":/assets/icon.ico"));
   cursor->updatePointerType();

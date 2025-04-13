@@ -33,7 +33,7 @@ else ()
 endif ()
 
 find_package(QT NAMES Qt6 COMPONENTS Core Quick Gui REQUIRED)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Quick Gui OPTIONAL_COMPONENTS Gamepad)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Quick QuickControls2 Gui OPTIONAL_COMPONENTS Gamepad)
 find_package(Qt${QT_VERSION_MAJOR}Multimedia REQUIRED)
 
 set(QT_USE_QTMULTIMEDIA TRUE)
