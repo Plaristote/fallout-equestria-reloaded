@@ -9,6 +9,15 @@ import Game 1.0
 Pane {
   property var scriptList: []
   property var currentObject: ({})
+  readonly property var itemTypeMap: [
+    { value: "weapon", text: i18n.t("item-type.weapon") },
+    { value: "armor", text: i18n.t("item-type.armor") },
+    { value: "ammo", text: i18n.t("item-type.ammo") },
+    { value: "consommables", text: i18n.t("item-type.consommables") },
+    { value: "keys", text: i18n.t("item-type.keys") },
+    { value: "quests", text: i18n.t("item-type.quests") },
+    { value: "misc", text: i18n.t("item-type.misc") }
+  ]
   background: UiStyle.TerminalPane {}
 
   Component.onCompleted: {
@@ -51,15 +60,8 @@ Pane {
       id: typeInput
       valueRole: "value"
       textRole: "text"
-      model: [
-        { value: "weapon", text: i18n.t("item-type.weapon") },
-        { value: "armor", text: i18n.t("item-type.armor") },
-        { value: "ammo", text: i18n.t("item-type.ammo") },
-        { value: "consommables", text: i18n.t("item-type.consommables") },
-        { value: "keys", text: i18n.t("item-type.keys") },
-        { value: "misc", text: i18n.t("item-type.misc") }
-      ]
-      currentIndex: indexOfValue(currentObject.type)
+      model: itemTypeMap
+      currentIndex: itemTypeMap.map(v => v.value).indexOf(currentObject.type)
     }
 
     TerminalLabel {
