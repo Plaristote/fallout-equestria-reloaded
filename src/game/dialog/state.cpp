@@ -25,7 +25,7 @@ void DialogStateData::save(QJsonObject& object) const
   object["answers"] = QJsonValue::fromVariant(QVariant::fromValue(defaultAnswers));
   if (mood.length() > 0)
     object["mood"] = mood;
-  if (triggerHook.isString())
+  if (triggerHook.isString() && !triggerHook.toString().isEmpty())
     object["hook"] = triggerHook.toString();
 }
 
