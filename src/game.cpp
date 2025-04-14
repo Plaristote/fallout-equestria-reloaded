@@ -172,14 +172,20 @@ void Game::prepareEditor()
 
 QJSValue Game::loadScript(const QString& path)
 {
-  QJSValue module = scriptEngine.importModule(path);
+  QJSValue module(false);
 
-  if (module.isError())
+  if (QFileInfo(path).exists())
   {
-    qDebug() << "Couldn't load module" << path << ": uncaught exception at line "
-             << module.property("lineNumber").toInt() << ":" << module.property("fileName").toString() << ":" << module.property("message").toString();
-    return false;
+    module = scriptEngine.importModule(path);
+    if (module.isError())
+    {
+      qDebug() << "Couldn't load module" << path << ": uncaught exception at line "
+               << module.property("lineNumber").toInt() << ":" << module.property("fileName").toString() << ":" << module.property("message").toString();
+      module = false;
+    }
   }
+  else
+    qDebug() << "Couldn't load module" << path << ": file does not exist";
   return module;
 }
 
