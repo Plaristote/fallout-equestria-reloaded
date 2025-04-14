@@ -105,6 +105,7 @@ Item {
     content: [
       WorldmapCities {
         model: controller ? controller.cities : []
+        discoveredCities: controller ? controller.discoveredCities : []
       }
     ]
 
