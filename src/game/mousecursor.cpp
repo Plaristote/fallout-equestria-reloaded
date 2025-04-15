@@ -164,6 +164,7 @@ bool MouseCursor::setRelativePosition(const QPoint& position)
 {
   QSize limits(windowSize());
 
+  if (position == this->position) return true;
   if (position.x() > 0 && position.y() > 0 && position.x() < limits.width() && position.y() < limits.height())
   {
     BoolLock simulationLock(simulatingEvent);
@@ -178,8 +179,7 @@ bool MouseCursor::setRelativePosition(const QPoint& position)
     emit positionChanged();
     if (!virtualPointerEnabled)
       enableVirtualPointer();
-    // TODO this would fix hover effects, but it breaks LevelMouseArea
-    //QCoreApplication::sendEvent(window, &event);
+    QCoreApplication::sendEvent(window, &event);
     return true;
   }
   return false;
