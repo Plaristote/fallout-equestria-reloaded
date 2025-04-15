@@ -13,7 +13,7 @@ ScriptController::ScriptController(const QString& modulePath) :
 
 static QString pathToClassName(const QString& path)
 {
-  QRegularExpression regex(".m?js$");
+  QRegularExpression regex("\\.m?js$");
   QRegularExpression separator("[-_.]+");
   QString name = path.split("/").last().replace(regex, "");
   QString result;
