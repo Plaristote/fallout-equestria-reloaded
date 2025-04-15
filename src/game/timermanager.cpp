@@ -53,12 +53,16 @@ long TimeManager::secondsUntilTime(const QVariantMap &timeData) const
 {
   DateTime nextTime(
     dateTime.GetYear(), dateTime.GetMonth(), dateTime.GetDay(),
-    timeData["hour"].toUInt(),
+    timeData.contains("hour")   ? timeData["hour"].toUInt()   : dateTime.GetHour(),
     timeData.contains("minute") ? timeData["minute"].toUInt() : 0,
     timeData.contains("second") ? timeData["second"].toUInt() : 0
   );
   std::time_t seconds;
 
+  if (timeData.contains("weeks"))
+      nextTime = nextTime + DateTime::Weeks(timeData["weeks"].toUInt());
+  if (timeData.contains("days"))
+      nextTime = nextTime + DateTime::Days(timeData["days"].toUInt());
   if (nextTime <= dateTime)
     nextTime = nextTime + DateTime::Days(1);
   seconds = (nextTime - dateTime).GetTimestamp();
