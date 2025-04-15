@@ -12,6 +12,11 @@
     "movementMode": "Movement mode",
     "musicVolume": "Music volume",
     "soundEffectsVolume": "Sound effects volume",
+    "title": {
+      "interface": "Interface",
+      "sounds": "Audio",
+      "gameplay": "Gameplay"
+    },
     "withCameraTracking": "Camera tracks the player",
     "withPlayerCropCircle": "Crop walls around the player"
   }
