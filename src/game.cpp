@@ -133,7 +133,6 @@ void Game::loadFromDataEngine(std::function<void()> callback)
   uniqueCharacterStorage->load(dataEngine->getUniqueCharacterStorage());
   worldmap->load(dataEngine->getWorldmap());
   quests->load(dataEngine->getQuests());
-  quests->addQuest("quest-test");
   player = playerParty->getCharacters().first();
   initializeEvents();
   if (!currentLevelName.isEmpty())
