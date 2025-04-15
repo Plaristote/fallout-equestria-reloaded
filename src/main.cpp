@@ -2,6 +2,7 @@
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 #include <QQuickStyle>
+#include <QQuickWindow>
 #include <QIcon>
 
 #include "globals.h"
@@ -162,7 +163,7 @@ int main(int argc, char *argv[])
     else
     {
       gamepad->initialize();
-      cursor->setWindow(obj);
+      cursor->setWindow(qobject_cast<QQuickWindow*>(obj));
     }
   }, Qt::QueuedConnection);
 

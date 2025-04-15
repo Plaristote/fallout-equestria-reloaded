@@ -16,6 +16,7 @@ GamepadController::GamepadController(QObject *parent) : QObject(parent)
 
 void GamepadController::initialize()
 {
+  cursor = MouseCursor::get();
 #ifdef WITH_GAMEPAD
   if (initialized) return ;
   initialized = true;
@@ -28,6 +29,8 @@ void GamepadController::initialize()
   connect(QGamepadManager::instance(), &QGamepadManager::connectedGamepadsChanged, this, &GamepadController::lookForController);
   lookForController();
 # endif
+#else
+  qDebug() << "Gamepad support was disabled at build";
 #endif
 }
 
@@ -144,12 +147,12 @@ void GamepadController::updateCameraOnYAxis(double value)
 
 void GamepadController::updateCursorPosition()
 {
-  QPoint p = QCursor::pos();
+  QPoint p = cursor->relativePosition();
   long ticks = cursorTimer.ticks();
 
   p.rx() += static_cast<int>(cursorTimer.x * 25) * ticks;
   p.ry() += static_cast<int>(cursorTimer.y * 25) * ticks;
-  QCursor::setPos(p);
+  cursor->setRelativePosition(p);
   cursorTimer.timer.restart();
 }
 
@@ -281,7 +284,7 @@ void GamepadController::movementAxisClicked(bool pressed)
 
 void GamepadController::clickEvent(bool pressed)
 {
-  MouseCursor::get()->click(pressed);
+  cursor->click(pressed);
 }
 
 void GamepadController::swapUseMode(const QString &slotName)

@@ -16,6 +16,8 @@ Window {
 
   property bool isFullScreen: true
 
+  VirtualPointerDisplay {}
+
   Settings {
     id: settings
     property alias x: application.x

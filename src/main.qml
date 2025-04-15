@@ -18,6 +18,8 @@ Window {
   property alias gameLoading: gameLoadManager.gameLoading
   property alias currentView: mainView.currentItem
 
+  VirtualPointerDisplay {}
+
   Settings {
     id: settings
     property alias x: application.x

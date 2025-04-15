@@ -6,6 +6,7 @@
 #include <QDebug>
 #include <QCursor>
 #include <QGuiApplication>
+#include <QQuickWindow>
 #include <QMouseEvent>
 
 static const QString cursorPath = ":/assets/ui/cursors/";
@@ -19,24 +20,45 @@ static bool hasHoveredTile(LevelTask* level)
   return rect.contains(level->getHoveredTilePosition());
 }
 
+static QPixmap makeEmptyPixmap()
+{
+  QPixmap view(5, 5);
+  view.fill(Qt::transparent);
+  return view;
+}
+
+template<bool NEW_VALUE = true>
+struct BoolLock
+{
+  bool& value;
+  BoolLock(bool& value) : value(value) { value = NEW_VALUE; }
+  ~BoolLock() { value = !NEW_VALUE; }
+};
+
 MouseCursor* MouseCursor::instance = nullptr;
 
-MouseCursor::MouseCursor(QGuiApplication* parent) : QObject(parent)
+MouseCursor::MouseCursor(QGuiApplication* parent) : QObject(parent), emptyView(makeEmptyPixmap())
 {
-  QPixmap pointerView(cursorPath + "interaction.png");
-  QPixmap activeView (cursorPath + "interaction-available.png");
-  QPixmap targetView (cursorPath + "target.png");
-  QPixmap moveView   (cursorPath + "move.png");
-  QPixmap emptyView(5, 5);
+  QString pointerView(cursorPath + "interaction.png");
+  QString activeView (cursorPath + "interaction-available.png");
+  QString targetView (cursorPath + "target.png");
+  QString moveView   (cursorPath + "move.png");
 
-  emptyView.fill(Qt::transparent);
   instance = this;
-  cursors.insert(NormalPointer, new AnimatedCursor(parent, pointerView.scaled(64, 50)));
-  cursors.insert(ActivePointer, new AnimatedCursor(parent, activeView.scaled(64, 50)));
-  cursors.insert(TargetPointer, new AnimatedCursor(parent, targetView.scaled(50, 50), QPoint(25, 25)));
-  cursors.insert(MovePointer,   new AnimatedCursor(parent, moveView.scaled(72, 36), QPoint(5, -5)));
+  cursors.insert(NormalPointer, new AnimatedCursor(parent, pointerView, QSize(64, 50)));
+  cursors.insert(ActivePointer, new AnimatedCursor(parent, activeView, QSize(64, 50)));
+  cursors.insert(TargetPointer, new AnimatedCursor(parent, targetView, QSize(50, 50), QPoint(25, 25)));
+  cursors.insert(MovePointer,   new AnimatedCursor(parent, moveView, QSize(72, 36), QPoint(5, -5)));
   cursors.insert(WaitPointer,   makeWaitCursor());
-  cursors.insert(EmptyPointer,  new AnimatedCursor(parent, emptyView));
+  cursors.insert(EmptyPointer,  new AnimatedCursor(parent));
+  cursors[EmptyPointer]->addFrame(emptyView);
+
+  connect(this, &MouseCursor::virtualPointerEnabledChanged, this, &MouseCursor::virtualPointerChanged);
+  connect(this, &MouseCursor::pointerTypeChanged,           this, &MouseCursor::virtualPointerChanged);
+
+  position = QPoint(0,0);
+  if (parent)
+    parent->installEventFilter(this);
 }
 
 AnimatedCursor* MouseCursor::makeWaitCursor() const
@@ -53,10 +75,24 @@ AnimatedCursor* MouseCursor::makeWaitCursor() const
   return waitCursor;
 }
 
+void MouseCursor::enableVirtualPointer()
+{
+  virtualPointerEnabled = true;
+  emit virtualPointerEnabledChanged();
+  cursors[currentPointer]->enable(false);
+  cursors[EmptyPointer]->enable(true);
+}
+
+void MouseCursor::disableVirtualPointer()
+{
+  virtualPointerEnabled = false;
+  emit virtualPointerEnabledChanged();
+  cursors[currentPointer]->enable(true);
+}
+
 void MouseCursor::updatePointerType()
 {
-  Game* game = Game::get();
-  LevelTask* level = game ? game->getLevel() : nullptr;
+  LevelTask* level = LevelTask::get();
 
   if (level && level->mapIncludesMouse() && !level->isPaused())
   {
@@ -83,13 +119,25 @@ void MouseCursor::updatePointerType()
     setCurrentPointer(NormalPointer);
 }
 
+void MouseCursor::onObjectHovered(QObject* object)
+{
+  LevelTask* level = LevelTask::get();
+
+  if (level->getMouseMode() == InteractionComponent::InteractionCursor)
+    setCurrentPointer(object ? ActivePointer : NormalPointer);
+}
+
 void MouseCursor::setCurrentPointer(PointerType type)
 {
   if (currentPointer != type)
   {
-    cursors[currentPointer]->enable(false);
-    cursors[type]->enable(true);
+    if (!virtualPointerEnabled)
+    {
+      cursors[currentPointer]->enable(false);
+      cursors[type]->enable(true);
+    }
     currentPointer = type;
+    emit pointerTypeChanged();
   }
 }
 
@@ -109,7 +157,7 @@ QSize MouseCursor::windowSize() const
 
 QPoint MouseCursor::relativePosition() const
 {
-  return QCursor::pos() - windowOffset();
+  return position;
 }
 
 bool MouseCursor::setRelativePosition(const QPoint& position)
@@ -118,7 +166,20 @@ bool MouseCursor::setRelativePosition(const QPoint& position)
 
   if (position.x() > 0 && position.y() > 0 && position.x() < limits.width() && position.y() < limits.height())
   {
-    QCursor::setPos(position + windowOffset());
+    BoolLock simulationLock(simulatingEvent);
+    QMouseEvent event(
+      QEvent::MouseMove,
+      QPointF(position),
+      window->mapToGlobal(position),
+      Qt::NoButton, Qt::NoButton, Qt::NoModifier
+    );
+
+    this->position = position;
+    emit positionChanged();
+    if (!virtualPointerEnabled)
+      enableVirtualPointer();
+    // TODO this would fix hover effects, but it breaks LevelMouseArea
+    //QCoreApplication::sendEvent(window, &event);
     return true;
   }
   return false;
@@ -130,15 +191,31 @@ void MouseCursor::click(bool pressed)
   {
     QMouseEvent event(
       pressed ? QEvent::MouseButtonPress : QEvent::MouseButtonRelease,
-      QCursor::pos() - windowOffset(),
-      QCursor::pos(),
+      QPointF(position),
+      window->mapToGlobal(position),
       Qt::LeftButton,
-      Qt::NoButton,
+      pressed ? Qt::LeftButton : Qt::NoButton,
       Qt::NoModifier
     );
 
-    QGuiApplication::sendEvent(window, &event);
+    QCoreApplication::sendEvent(window, &event);
   }
+}
+
+void MouseCursor::onSystemMouseMoved(const QMouseEvent* event)
+{
+  //position = event->pos();
+  position = (event->globalPosition() - windowOffset()).toPoint();
+  if (virtualPointerEnabled)
+      disableVirtualPointer();
+  emit positionChanged();
+}
+
+bool MouseCursor::eventFilter(QObject* watched, QEvent* event)
+{
+ if (!simulatingEvent && event->type() == QEvent::MouseMove)
+    onSystemMouseMoved(static_cast<QMouseEvent*>(event));
+  return QObject::eventFilter(watched, event);
 }
 
 AnimatedCursor::AnimatedCursor(QGuiApplication* parent) : QObject(parent), currentFrame(0)
@@ -147,9 +224,16 @@ AnimatedCursor::AnimatedCursor(QGuiApplication* parent) : QObject(parent), curre
   connect(&timer, &QTimer::timeout, this, &AnimatedCursor::moveToNextFrame);
 }
 
-AnimatedCursor::AnimatedCursor(QGuiApplication* parent, const QPixmap& pixmap, QPoint hotPoint) : QObject(parent), currentFrame(0)
+AnimatedCursor::AnimatedCursor(QGuiApplication* parent, const QString& texturePath, QSize size, QPoint hotPoint) : QObject(parent), currentFrame(0)
 {
-  addFrame(pixmap, hotPoint);
+  initialize(size, hotPoint);
+  addFrame(texturePath);
+}
+
+void AnimatedCursor::initialize(QSize a, QPoint b)
+{
+  this->cursorSize = a;
+  this->hotPoint = b;
 }
 
 void AnimatedCursor::enable(bool enabled)
@@ -164,9 +248,16 @@ void AnimatedCursor::enable(bool enabled)
     timer.stop();
 }
 
-void AnimatedCursor::addFrame(QPixmap pixmap, QPoint hotPoint)
+void AnimatedCursor::addFrame(const QString& texturePath)
 {
-  frames << QCursor(pixmap, hotPoint.x(), hotPoint.y());
+  QPixmap pixmap(texturePath);
+  framePaths << texturePath;
+  frames << QCursor(pixmap.scaled(cursorSize), hotPoint.x(), hotPoint.y());
+}
+
+void AnimatedCursor::addFrame(const QPixmap& pixmap)
+{
+  frames << QCursor(pixmap);
 }
 
 void AnimatedCursor::moveToNextFrame()
@@ -177,5 +268,6 @@ void AnimatedCursor::moveToNextFrame()
     if (currentFrame >= frames.size())
       currentFrame = 0;
     reinterpret_cast<QGuiApplication*>(parent())->setOverrideCursor(frames[currentFrame]);
+    emit currentFrameChanged();
   }
 }

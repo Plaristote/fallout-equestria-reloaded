@@ -6,6 +6,7 @@
 # include <QElapsedTimer>
 
 class QGamepad;
+class MouseCursor;
 
 class GamepadController : public QObject
 {
@@ -87,6 +88,7 @@ private:
   void triggerItemUse(const QString& slotName);
   void updateCursorTimerState();
 
+  MouseCursor* cursor = nullptr;
   QGamepad* gamepad = nullptr;
   CursorTimer cursorTimer, cameraTimer;
   double    xMovement, yMovement;

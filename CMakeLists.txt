@@ -38,6 +38,6 @@ find_package(Qt${QT_VERSION_MAJOR}Multimedia REQUIRED)
 
 set(QT_USE_QTMULTIMEDIA TRUE)
 
-#add_subdirectory(qtgamepadlegacy)
+add_subdirectory(qtgamepadlegacy)
 add_subdirectory(src)
 add_subdirectory(fotspriteimport)

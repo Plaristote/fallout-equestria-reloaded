@@ -10,8 +10,6 @@ MouseArea {
   anchors.fill: parent
   acceptedButtons: Qt.LeftButton | Qt.RightButton
   hoverEnabled: true
-  onMouseXChanged: mouseRefreshTimer.running = true
-  onMouseYChanged: mouseRefreshTimer.running = true
   onContainsMouseChanged: levelController.mouseInMap = containsMouse
   onPressed: {
     console.log("debug: MouseArea clicked", pressedButtons, pressedButtons & Qt.LeftButton, pressedButtons & Qt.RightButton);
@@ -21,11 +19,19 @@ MouseArea {
       onRightButtonClick();
   }
 
+  Connections {
+    target: mouseCursor
+    enabled: mouseArea.containsMouse
+    function onPositionChanged() {
+      mouseRefreshTimer.running = true;
+    }
+  }
+
   Timer {
     interval: 1500
     running: true
     onTriggered: {
-      if (mouseX !== 0 && mouseY !== 0)
+      if (mouseCursor.position.x !== 0 && mouseCursor.position.y !== 0)
         levelController.mouseInMap = true;
     }
   }
@@ -88,8 +94,8 @@ MouseArea {
 
   function getCursorCoordinates() {
     return [
-      mouseX - levelController.canvasOffset.x,
-      mouseY - levelController.canvasOffset.y
+      mouseCursor.position.x - levelController.canvasOffset.x,
+      mouseCursor.position.y - levelController.canvasOffset.y
     ];
   }
 

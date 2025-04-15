@@ -308,6 +308,12 @@ if (TARGET Qt${QT_VERSION_MAJOR}::Gamepad)
   add_definitions(-DWITH_GAMEPAD)
 endif()
 
+if (TARGET Qt${QT_VERSION_MAJOR}::GamepadLegacy)
+  set(ENGINE_LINK_LIBRARIES ${ENGINE_LINK_LIBRARIES}
+          Qt${QT_VERSION_MAJOR}::GamepadLegacy)
+  add_definitions(-DWITH_GAMEPAD)
+endif()
+
 target_compile_definitions(falloutequestria
   PRIVATE $<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:QT_QML_DEBUG>)
 target_link_libraries(falloutequestria

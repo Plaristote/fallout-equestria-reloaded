@@ -239,5 +239,6 @@
         <file>game/LevelLoaderView.qml</file>
         <file>game/InventoryItemHandle.qml</file>
         <file>game/InventoryItemDropArea.qml</file>
+        <file>ui/VirtualPointerDisplay.qml</file>
     </qresource>
 </RCC>
