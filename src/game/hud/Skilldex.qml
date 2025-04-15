@@ -1,6 +1,7 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
+import Game 1.0
 import "qrc:/assets/ui" as UiStyle
 import "../../ui"
 
@@ -35,7 +36,12 @@ SideBar {
             outline: "black"
             font.pointSize: application.titleFont.pointSize
           }
-          onClicked: root.pickedSkill(root.skills[index])
+          onClicked: {
+            root.pickedSkill(root.skills[index])
+            if (typeof soundManager != "undefined")
+              soundManager.play("ui/tiny-btn-click");
+          }
+          onHoveredChanged: mouseCursor.setCurrentPointer(hovered ? MouseCursor.ActivePointer : MouseCursor.NormalPointer)
         }
 
         Label {

@@ -1,6 +1,7 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import "../assets/ui" as UiStyle
+import Game 1.0
 
 Row {
   id: root
@@ -25,7 +26,14 @@ Row {
         rightPadding: 10
         color: "white"
       }
-      onClicked: currentTab = tabs[index]
+      onClicked: {
+        currentTab = tabs[index]
+        if (typeof soundManager != "undefined")
+          soundManager.play("ui/tab-change");
+      }
+      onHoveredChanged: {
+        mouseCursor.setCurrentPointer(hovered ? MouseCursor.ActivePointer : MouseCursor.NormalPointer)
+      }
     }
   }
 }

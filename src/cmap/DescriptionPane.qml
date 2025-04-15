@@ -8,6 +8,11 @@ Pane {
   id: descriptionPanel
   background: UiStyle.PaperPane {}
 
+  onSelectedPropertyChanged: {
+    if (selectedProperty.length && typeof soundManager != "undefined")
+      soundManager.play("ui/push-button-out");
+  }
+
   function getName(name) {
     switch (name.split('.')[0]) {
     case "factions":
