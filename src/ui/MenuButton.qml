@@ -1,6 +1,7 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import "qrc:/assets/ui" as UiStyle
+import Game 1.0
 
 Button {
   id: root
@@ -12,6 +13,10 @@ Button {
   font.family: application.titleFontName
   font.pointSize: application.titleFont.tinySize
   font.letterSpacing: 3
+
+  onHoveredChanged: {
+    mouseCursor.setCurrentPointer(hovered ? MouseCursor.ActivePointer : MouseCursor.NormalPointer)
+  }
 
   TextMetrics {
     id: textMetrics

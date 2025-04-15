@@ -108,6 +108,7 @@ MouseArea {
     hoveredObject = hoveredObjectEnabled
       ? levelController.getObjectAt(...getCursorCoordinates())
       : null;
+    mouseCursor.onObjectHovered(hoveredObject);
   }
 
   function getHoveredCase(posX, posY) {

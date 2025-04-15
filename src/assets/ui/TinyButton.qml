@@ -1,5 +1,6 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+import Game 1.0
 
 Button {
   id: button
@@ -14,6 +15,9 @@ Button {
   background: Image {
     source: "qrc:/assets/ui/hud.png"
     sourceClipRect: !button.down ? Qt.rect(374, 32, 30, 30) : Qt.rect(404, 32, 30, 30)
+  }
+  onHoveredChanged: {
+    mouseCursor.setCurrentPointer(hovered ? MouseCursor.ActivePointer : MouseCursor.NormalPointer)
   }
   Connections {
     target: button

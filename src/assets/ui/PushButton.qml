@@ -1,4 +1,5 @@
 import QtQuick 2.15
+import Game 1.0
 
 Item {
   id: root
@@ -19,6 +20,9 @@ Item {
 
   implicitWidth: image.implicitWidth
   implicitHeight: image.height + 20
+  onHoveredChanged: {
+    mouseCursor.setCurrentPointer(hovered ? MouseCursor.ActivePointer : MouseCursor.NormalPointer)
+  }
 
   Column {
     anchors.left: parent.left
