@@ -5,6 +5,7 @@ MouseArea {
   property QtObject hoveredObject
   property bool hoveredObjectEnabled: levelController.mouseMode === 1 || levelController.mouseMode === 2
   property var hoverTile
+  property QtObject display
 
   id: mouseArea
   anchors.fill: parent
@@ -93,9 +94,10 @@ MouseArea {
   }
 
   function getCursorCoordinates() {
+    const windowPosition = display.mapFromGlobal(mouseCursor.position)
     return [
-      mouseCursor.position.x - levelController.canvasOffset.x,
-      mouseCursor.position.y - levelController.canvasOffset.y
+      windowPosition.x - levelController.canvasOffset.x,
+      windowPosition.y - levelController.canvasOffset.y
     ];
   }
 

@@ -24,6 +24,7 @@ Item {
   LevelMouseArea {
     id: levelMouseArea
     onHoverTileChanged: levelController.hoveredTile = hoverTile ? Qt.point(...hoverTile) : Qt.point(-1, -1)
+    display: root
   }
 
   LevelCamera {
