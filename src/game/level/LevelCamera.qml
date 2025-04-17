@@ -59,20 +59,22 @@ Item {
     }
   }
 
+  function togglePlayerCamera() {
+    if (gameManager.withCameraTracking) {
+      overrideCameraTracking = !overrideCameraTracking;
+    } else {
+      moveToObject(levelController.player)
+    }
+  }
+
   Shortcut {
     sequence: "c"
-    onActivated: {
-      if (gameManager.withCameraTracking) {
-        overrideCameraTracking = !overrideCameraTracking;
-      } else {
-        moveToObject(levelController.player)
-      }
-    }
+    onActivated: togglePlayerCamera();
   }
 
   Connections {
     target: gamepad
-    function onCameraAxisClicked() { moveToObject(levelController.player) }
+    function onCameraAxisClicked() { togglePlayerCamera() }
   }
 
   Connections {
