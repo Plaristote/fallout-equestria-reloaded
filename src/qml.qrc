@@ -225,6 +225,7 @@
         <file>game/CharacterView.qml</file>
         <file>game/LevelView.qml</file>
         <file>game/Dialog.qml</file>
+        <file>game/DialogAnswersPane.qml</file>
         <file>game/Looting.qml</file>
         <file>game/InventoryItemsView.qml</file>
         <file>game/LevelHud.qml</file>

@@ -2,7 +2,6 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 import "../ui"
 import "../ui/dialog"
-import "qrc:/assets/ui" as UiStyle
 
 Item {
   id: root
@@ -108,60 +107,10 @@ Item {
     text: root.controller.text
   }
 
-  Item {
+  DialogAnswersPane {
     id: dialogMode
-    y: bottomPartY
-    height: bottomPartHeight
-    anchors { left: parent.left; right: parent.right }
-
-    Image {
-      id: leftPane
-      source: "qrc:/assets/ui/dialog/left.png"
-      anchors { top: parent.top; bottom: parent.bottom; left: parent.left; }
-      width: 135
-      fillMode: Image.Stretch
-    }
-
-    Image {
-      id: rightPane
-      source: "qrc:/assets/ui/dialog/right.png"
-      anchors { top: parent.top; bottom: parent.bottom; right: parent.right; }
-      width: 132
-      fillMode: Image.Stretch
-
-      UiStyle.PushButton {
-        anchors.top: parent.top
-        anchors.topMargin: 20
-        anchors.horizontalCenter: parent.horizontalCenter
-        text: i18n.t("Barter")
-        onClicked: controller.tryToBarter()
-      }
-    }
-
-    DialogAnswersDisplay {
-      id: answersPane
-      anchors { left: leftPane.right; top: parent.top; right: rightPane.left; bottom: parent.bottom }
-      sourceComponent: Column {
-        id: answersList
-        width: parent.width
-        Repeater {
-          model: root.controller.options
-          delegate: Button {
-            text: "> " + root.controller.getOptionText(controller.options[index])
-            font.family: application.consoleFontName
-            font.pointSize: application.consoleFont.bigSize
-            hoverEnabled: true
-            contentItem: Text { color: parent.hovered ? "white" : "green"; text: parent.text; font: parent.font; wrapMode: Text.WordWrap }
-            background: Rectangle { color: "transparent" }
-            onClicked: {
-              root.controller.selectOption(controller.options[index])
-              if (typeof soundManager != "undefined") soundManager.play("ui/term-btn-click");
-            }
-            width: answersList.width - 10
-          }
-        }
-      }
-    }
+    controller: root.controller
+    enabled: root.state == "dialog"
   }
 
   Loader {
