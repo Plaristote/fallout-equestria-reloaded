@@ -11,18 +11,20 @@ class ReachDoorAction : public ReachAction
 public:
   ReachDoorAction(Character* character, Doorway* object, float range) : ReachAction(character, object, range), doorway(object)
   {
-    candidates = doorway->getInteractionPositions();
+    candidates = getCandidates();
   }
 
   ReachDoorAction(Character* character, Doorway* object, float range, QJSValue callback) : ReachAction(character, object, range, callback), doorway(object)
   {
-    candidates = doorway->getInteractionPositions();
+    candidates = getCandidates();
   }
 
   bool trigger() override;
   int getApCost() const override;
 
 private:
+  QVector<Point> getCandidates() const;
+  QVector<Point> getCandidatesFromZone(TileZone*) const;
   bool alreadyReached() const override;
   QList<Point> getPath() const;
 

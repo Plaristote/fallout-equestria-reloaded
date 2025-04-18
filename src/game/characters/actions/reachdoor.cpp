@@ -22,6 +22,29 @@ bool ReachDoorAction::trigger()
   return ReachAction::trigger();
 }
 
+QVector<Point> ReachDoorAction::getCandidatesFromZone(TileZone* zone) const
+{
+  QVector<Point> candidates = ReachAction::getCandidates(1);
+
+  for (auto it = candidates.begin() ; it != candidates.end() ;)
+  {
+    if (zone->isInside(it->x, it->y, it->z))
+      it = candidates.erase(it);
+    else
+      it++;
+  }
+  return candidates;
+}
+
+QVector<Point> ReachDoorAction::getCandidates() const
+{
+  TileZone* zone = doorway->getControlZone();
+
+  return zone
+    ? getCandidatesFromZone(zone)
+    : doorway->getInteractionPositions();
+}
+
 QList<Point> ReachDoorAction::getPath() const
 {
   auto& grid = LevelTask::get()->getPathfinder();
