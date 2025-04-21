@@ -314,6 +314,28 @@ void Game::destroyLevelTask()
   currentLevel = nullptr;
 }
 
+void Game::exitLevel(QJSValue callback)
+{
+  auto function = [callback]() { callback.call(); };
+  static QMetaObject::Connection listener;
+
+  if (currentLevel)
+  {
+    if (exitingLevel)
+    {
+      disconnect(listener);
+      listener = connect(currentLevel, &QObject::destroyed, function);
+    }
+    else
+    {
+      listener = connect(currentLevel, &QObject::destroyed, function);
+      exitLevel(false);
+    }
+  }
+  else
+    function();
+}
+
 void Game::exitLevel(bool silent)
 {
   if (currentLevel)
@@ -324,6 +346,8 @@ void Game::exitLevel(bool silent)
     exitingLevel = true;
     timer->setInterval(500);
     timer->start();
+    if (!silent)
+      script->call("onExitingLevel");
     connect(timer, &QTimer::timeout, timer, &QObject::deleteLater);
     connect(timer, &QTimer::timeout, this, [this, silent]()
     {

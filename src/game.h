@@ -60,6 +60,7 @@ public:
   Q_INVOKABLE void appendToConsole(const QString&);
   Q_INVOKABLE void switchToLevel(const QString& name, const QString& targetZone = "", QJSValue callback = QJSValue());
   Q_INVOKABLE void switchToCity(const QString& name, const QString& levelName = "", const QString& targetZone = "", QJSValue callback = QJSValue());
+  Q_INVOKABLE void exitLevel(QJSValue callback);
   void exitLevel(bool silence = false);
 
   static Game* get() { return instance; }
