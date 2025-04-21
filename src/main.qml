@@ -56,7 +56,7 @@ Window {
   }
 
   function popView() {
-    mainView.pop();
+    return mainView.pop() != null;
   }
 
   function popAllViews() {

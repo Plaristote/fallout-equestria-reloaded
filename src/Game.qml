@@ -68,8 +68,10 @@ Item {
     target: gameManager.currentGame
 
     function onRequestLoadingScreen() {
-      while (root.StackView.status === StackView.Inactive)
-        application.popView();
+      while (root.StackView.status === StackView.Inactive) {
+        if (!application.popView() || application.currentView === root)
+          break ;
+      }
     }
 
     function onLevelChanged() {
