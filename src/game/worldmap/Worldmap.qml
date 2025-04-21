@@ -101,6 +101,11 @@ Item {
     anchors { top: parent.top; left: parent.left; bottom: parent.bottom; right: sidebar.left }
     controller: root.controller
     onMapClicked: clickedOnMap()
+    Component.onCompleted: centerOn(controller.currentPosition)
+
+    function centerOn(position) {
+      scrollTo(position.x - width / 2, position.y - height / 2);
+    }
 
     content: [
       WorldmapCities {

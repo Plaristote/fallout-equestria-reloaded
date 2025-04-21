@@ -16,10 +16,6 @@ Flickable {
       contentY = Math.min(maxContentY, Math.max(0, y));
   }
 
-  function centerOn(position) {
-    scrollTo(position.x * caseSize - width / 2, position.y * caseSize - height / 2);
-  }
-
   Connections {
     target: gamepad
     enabled: flickable.activated
