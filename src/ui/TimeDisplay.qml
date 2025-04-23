@@ -15,6 +15,20 @@ Pane {
 
     Rectangle {
       color: "black"
+      width: weekDayText.width
+      height: weekDayText.height
+      Text {
+        id: weekDayText
+        padding: 5
+        text: i18n.t(`weekdays.${timeManager.weekDay}`)
+        color: "white"
+        font.family: application.consoleFont.name
+        font.pointSize: application.consoleFont.normalSize
+      }
+    }
+
+    Rectangle {
+      color: "black"
       width: dayText.width
       height: dayText.height
       Text {
