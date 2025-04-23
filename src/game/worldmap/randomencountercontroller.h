@@ -18,6 +18,7 @@ public slots:
 
 private slots:
   void initializeEncounter();
+  void callCallback();
 
 private:
   QTimer      encounterTimer;

@@ -34,28 +34,39 @@ void RandomEncounterController::startEncounter(const QString &name, const QVaria
   scheduledEncounter = parameters;
   if (!game->getLevel())
     emit game->encounterTriggered(parameters.value("title", i18n->t("messages.encounter-unknown")).toString());
-  connect(game, &Game::levelChanged, this, &RandomEncounterController::initializeEncounter);
+  connect(game, &Game::levelChanged, this, &RandomEncounterController::initializeEncounter, Qt::SingleShotConnection);
   game->switchToLevel(name, entryZone);
 }
 
 void RandomEncounterController::initializeEncounter()
 {
-  Game* game = Game::get();
-  auto* level = game->getLevel();
+  auto* level = LevelTask::get();
   const QVariantList list = scheduledEncounter.value("parties").toList();
-  
-  disconnect(game, &Game::levelChanged, this, &RandomEncounterController::initializeEncounter);
+
   if (!level)
     return ;
   level->setProperty("persistent", scheduledEncounter.value("persistent", false));
   for (const QVariant& entry : list)
   {
     const QVariantMap partyData(entry.toMap());
-    CharacterParty*   party = CharacterParty::factory(partyData, game->getLevel());
+    CharacterParty*   party = CharacterParty::factory(partyData, level);
 
     if (party->getCharacters().size() > 0)
       party->insertIntoZone(level, partyData.value("zone").toString());
     else
       qDebug() << "RandomEncounterController::initializeEncounter: generated an empty CharacterParty";
+  }
+  callCallback();
+}
+
+void RandomEncounterController::callCallback()
+{
+  QVariant param = scheduledEncounter["callback"];
+
+  if (param.metaType() == QMetaType::fromType<QJSValue>())
+  {
+    QJSValue callback = qvariant_cast<QJSValue>(param);
+    if (callback.isCallable())
+      callback.call();
   }
 }
