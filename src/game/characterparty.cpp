@@ -21,11 +21,17 @@ CharacterParty::CharacterParty(QObject *parent) : QObject(parent)
   connect(this, &CharacterParty::factionNameChanged, this, &CharacterParty::updateFaction);
 }
 
+static Character* variantToCharacter(const QVariant& value)
+{
+  return value.typeId() == QMetaType::QObjectStar
+    ? qobject_cast<Character*>(qvariant_cast<QObject*>(value))
+    : nullptr;
+}
+
 CharacterParty* CharacterParty::factory(const QVariantMap& parameters, QObject* parent)
 {
   const QVariantList members(parameters["members"].toList());
   CharacterParty*    party = new CharacterParty(parent);
-  unsigned int       it = 1;
 
   qDebug() << "CharacterParty::factory" << parameters;
   party->setProperty("name", parameters["name"]);
@@ -33,24 +39,34 @@ CharacterParty* CharacterParty::factory(const QVariantMap& parameters, QObject* 
     party->setProperty("factionName", parameters["faction"].toString());
   for (const QVariant& entry : members)
   {
-    const QVariantMap characterData = entry.toMap();
-    unsigned int count = characterData.value("amount", 1).toUInt();
+    Character* character = variantToCharacter(entry);
 
-    if (characterData.contains("sheet"))
-    {
-      for (unsigned int i = 0 ; i < count ; ++i)
-      {
-        const QString defaultName = party->getName() + '#' + QString::number(it);
-        const QString name = characterData.value("name", defaultName).toString();
-
-        party->createCharacter(name, characterData);
-        it++;
-      }
-    }
+    if (character)
+      party->addCharacter(character);
+    else if (entry.typeId() == QMetaType::QVariantMap)
+      party->createCharacters(entry.toMap());
     else
-      qDebug() << "partyFactory: missing `sheet` property for character";
+      qDebug() << "CharacterParty::factory: invalid member value" << entry;
   }
   return party;
+}
+
+void CharacterParty::createCharacters(const QVariantMap& characterData)
+{
+  unsigned int count = characterData.value("amount", 1).toUInt();
+
+  if (characterData.contains("sheet"))
+  {
+    for (unsigned int i = 0 ; i < count ; ++i)
+    {
+      const QString defaultName = getName() + '#' + QString::number(list.length());
+      const QString name = characterData.value("name", defaultName).toString();
+
+      createCharacter(name, characterData);
+    }
+  }
+  else
+    qDebug() << "CharacterParty::createCharacters: missing `sheet` property for character";
 }
 
 void CharacterParty::createCharacter(const QString& name, const QVariantMap& attributes)
@@ -61,7 +77,7 @@ void CharacterParty::createCharacter(const QString& name, const QVariantMap& att
   character->setObjectName(name);
   character->setUnique(attributes.value("uniq", false).toBool());
   character->setCharacterSheet(attributes["sheet"].toString());
-  character->setScript(attributes.value("script", "character").toString());
+  character->setScript(attributes.value("script", "character.mjs").toString());
   if (!attributes.value("inventory").isNull())
     inventory->load(QJsonObject::fromVariantMap(attributes.value("inventory").toMap()));
   character->updateSpriteSheet();
