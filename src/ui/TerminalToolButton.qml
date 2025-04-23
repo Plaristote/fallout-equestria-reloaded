@@ -5,6 +5,7 @@ TerminalButton {
   id: root
   property string iconName
   property bool hideText: false
+  property int textRightPadding: 0
 
   padding: 0
   contentItem: Row {
@@ -23,6 +24,7 @@ TerminalButton {
 
     Text {
       anchors.verticalCenter: parent.verticalCenter
+      rightPadding: textRightPadding
       text: root.text
       color: "white"
       font.family: root.font.family

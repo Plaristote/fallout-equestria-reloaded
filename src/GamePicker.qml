@@ -132,6 +132,8 @@ Window {
       text: i18n.t("Play")
       onClicked: pickPackage(model)
       iconName: "play"
+      implicitHeight: 50
+      textRightPadding: 10
     }
   }
 
