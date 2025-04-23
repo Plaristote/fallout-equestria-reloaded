@@ -52,7 +52,9 @@ public:
   Q_INVOKABLE void   addPosition(QPoint);
   Q_INVOKABLE void   removePosition(QPoint);
   Q_INVOKABLE void   addRelativePosition(QPoint);
+  Q_INVOKABLE void   addRelativePosition(int x, int y) { addRelativePosition(QPoint(x, y)); }
   Q_INVOKABLE void   removeRelativePosition(QPoint);
+  Q_INVOKABLE void   removeRelativePosition(int x, int y) { removeRelativePosition(QPoint(x, y)); }
 
 signals:
   void enteredZone(DynamicObject*, TileZone*);
