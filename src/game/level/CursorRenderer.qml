@@ -54,7 +54,7 @@ Loader {
     Item {
       id: combatPathElement
       property var path: getPath()
-      property int length: path.positions.length
+      property int length: path?.positions?.length || 0
 
       function getPath() {
         return levelController.previewPathTo(...renderTarget.hoverTile);

@@ -176,7 +176,7 @@ bool MouseCursor::setRelativePosition(const QPoint& position)
     );
 
     this->position = position;
-    emit positionChanged();
+    emit positionChanged(position);
     if (!virtualPointerEnabled)
       enableVirtualPointer();
     QCoreApplication::sendEvent(window, &event);
@@ -208,7 +208,7 @@ void MouseCursor::onSystemMouseMoved(const QMouseEvent* event)
   position = (event->globalPosition() - windowOffset()).toPoint();
   if (virtualPointerEnabled)
       disableVirtualPointer();
-  emit positionChanged();
+  emit positionChanged(position);
 }
 
 bool MouseCursor::eventFilter(QObject* watched, QEvent* event)

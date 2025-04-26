@@ -97,7 +97,7 @@ public slots:
 signals:
   void withMoveCursorChanged();
   void virtualPointerEnabledChanged();
-  void positionChanged();
+  void positionChanged(QPoint);
   void pointerTypeChanged();
   void virtualPointerChanged();
 

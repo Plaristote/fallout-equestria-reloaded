@@ -6,14 +6,23 @@ MouseArea {
   property bool hoveredObjectEnabled: levelController.mouseMode === 1 || levelController.mouseMode === 2
   property var hoverTile
   property QtObject display
+  property bool containsMouseWorkaround: true
 
   id: mouseArea
   anchors.fill: parent
   acceptedButtons: Qt.LeftButton | Qt.RightButton
   hoverEnabled: true
-  onContainsMouseChanged: levelController.mouseInMap = containsMouse
+
+  // containsMouse is actually always false at start,
+  // regardless of whether the MouseArea does contain the
+  // mouse or not.
+  onContainsMouseChanged: {
+    containsMouseWorkaround = false;
+    levelController.mouseInMap = containsMouse;
+  }
+
   onPressed: {
-    console.log("debug: MouseArea clicked", pressedButtons, pressedButtons & Qt.LeftButton, pressedButtons & Qt.RightButton);
+    //console.log("debug: MouseArea clicked", pressedButtons, pressedButtons & Qt.LeftButton, pressedButtons & Qt.RightButton);
     if (pressedButtons & Qt.LeftButton)
       onLeftButtonClick();
     else if (pressedButtons & Qt.RightButton)
@@ -22,18 +31,9 @@ MouseArea {
 
   Connections {
     target: mouseCursor
-    enabled: mouseArea.containsMouse
+    enabled: mouseArea.containsMouse || containsMouseWorkaround
     function onPositionChanged() {
       mouseRefreshTimer.running = true;
-    }
-  }
-
-  Timer {
-    interval: 1500
-    running: true
-    onTriggered: {
-      if (mouseCursor.position.x !== 0 && mouseCursor.position.y !== 0)
-        levelController.mouseInMap = true;
     }
   }
 
