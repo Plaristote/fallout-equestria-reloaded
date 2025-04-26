@@ -26,6 +26,7 @@ void SaveComponent::load(const QString& levelName, DataEngine* dataEngine)
   levelData["script"] = getScriptFilename(levelName);
   levelData["init"]   = true; // Delay level initialization
   qDebug() << "LevelTask::load" << levelName;
+  persistent = levelData["persistent"].toBool(true);
   ParentType::load(levelData);
   registerAllDynamicObjects();
   taskRunner->setScriptController(script);
@@ -72,6 +73,8 @@ void SaveComponent::save(DataEngine* dataEngine, bool isActive)
     ParentType::save(levelData);
     levelData.remove("name");
     levelData.remove("script");
+    if (!persistent)
+      levelData["persistent"] = false;
     if (!isGameEditor())
       levelData["lastUpdate"] = static_cast<int>(game->getTimeManager()->getDateTime().GetTimestamp());
     else
