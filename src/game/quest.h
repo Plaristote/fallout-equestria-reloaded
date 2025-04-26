@@ -35,10 +35,11 @@ public:
   Q_INVOKABLE void completeObjective(const QString&);
   Q_INVOKABLE void failObjective(const QString&);
   Q_INVOKABLE QString objectiveNameAt(int) const;
-  Q_INVOKABLE bool isObjectiveCompleted(int index) const { return isObjectiveCompleted(objectiveNameAt(index)); }
+  Q_INVOKABLE QVariantMap getObjectiveAt(int index) const;
+  Q_INVOKABLE bool isObjectiveCompleted(int index) const;
   Q_INVOKABLE bool isObjectiveCompleted(const QString&) const;
   Q_INVOKABLE bool areObjectivesCompleted(const QStringList&) const;
-  Q_INVOKABLE bool isObjectiveFailed(int index) const { return isObjectiveFailed(objectiveNameAt(index)); }
+  Q_INVOKABLE bool isObjectiveFailed(int index) const;
   Q_INVOKABLE bool isObjectiveFailed(const QString&) const;
   inline bool inProgress() const { return !completed && !failed; }
   inline bool isHidden() const { return hidden; }

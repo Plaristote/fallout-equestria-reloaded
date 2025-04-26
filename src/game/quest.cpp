@@ -158,6 +158,25 @@ QString Quest::objectiveNameAt(int index) const
   return keys.size() > index ? keys[index] : QString();
 }
 
+QVariantMap Quest::getObjectiveAt(int index) const
+{
+  QVariantList objectives = getObjectives();
+
+  return objectives.size() > index ? objectives.at(index).toMap() : QVariantMap();
+}
+
+bool Quest::isObjectiveCompleted(int index) const
+{
+  QVariantMap objective = getObjectiveAt(index);
+  return objective.contains("success") && objective["success"].toBool();
+}
+
+bool Quest::isObjectiveFailed(int index) const
+{
+  QVariantMap objective = getObjectiveAt(index);
+  return objective.contains("failed") && objective["failed"].toBool();
+}
+
 void Quest::onCharacterKilled(Character* character, Character* killer)
 {
   if (!completed && script->hasMethod("onCharacterKilled"))
