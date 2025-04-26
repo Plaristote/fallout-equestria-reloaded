@@ -2,6 +2,14 @@
 #include "game.h"
 #include "tutorialcomponent.h"
 
+static void injectUniqueCharacters()
+{
+  // Must be inserted before the Level's TaskRunner gets adjusted to the world time,
+  // but *after* the level's objects gets adjusted to world time.
+  Game* game = Game::get();
+  game->getUniqueCharacterStorage()->loadUniqueCharactersToLevel(game->getLevel());
+}
+
 SaveComponent::SaveComponent(QObject *parent) : ParentType{parent}
 {
 
@@ -33,6 +41,8 @@ void SaveComponent::load(const QString& levelName, DataEngine* dataEngine)
   taskRunner->load(levelData["tasks"].toObject());
   if (!lastUpdate.isUndefined() && !lastUpdate.isNull())
     passElapsedTime(lastUpdate.toInt());
+  else
+    injectUniqueCharacters();
   if (!initialized)
     scriptCall("initialize");
   loadTutorial();
@@ -54,6 +64,7 @@ void SaveComponent::passElapsedTime(int lastUpdate)
     {
       object->getTaskManager()->update(elapsedTime * 1000);
     });
+    injectUniqueCharacters();
     taskRunner->update(elapsedTime * 1000);
   }
 }

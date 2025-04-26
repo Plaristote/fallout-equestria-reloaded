@@ -257,7 +257,6 @@ void Game::loadLevel(const QString &name, const QString& targetZone, std::functi
       currentLevel->load(name, dataEngine);
       currentLevel->setPaused(false);
       setupPlayerPartyIntoLevel(targetZone);
-      uniqueCharacterStorage->loadUniqueCharactersToLevel(currentLevel);
       if (!isGameEditor)
         currentLevel->scriptCall("onLoaded");
     }
