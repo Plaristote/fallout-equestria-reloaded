@@ -24,6 +24,10 @@ ColumnLayout {
       checked: true
       text: i18n.t("quests.ongoing")
       Layout.fillWidth: true
+      onCheckedChanged: {
+        if (checked)
+          completedEnabled.checked = failedEnabled.checked = false;
+      }
     }
 
     TerminalCheckBox {
@@ -31,6 +35,10 @@ ColumnLayout {
       checked: false
       text: i18n.t("quests.completed")
       Layout.fillWidth: true
+      onCheckedChanged: {
+        if (checked)
+          onGoingEnabled.checked = failedEnabled.checked = false;
+      }
     }
 
     TerminalCheckBox {
@@ -38,6 +46,10 @@ ColumnLayout {
       checked: false
       text: i18n.t("quests.failed")
       Layout.fillWidth: true
+      onCheckedChanged: {
+        if (checked)
+          onGoingEnabled.checked = completedEnabled.checked = false;
+      }
     }
   }
 
