@@ -69,11 +69,12 @@ void InteractionTargetList::findNearbyTargets(const QVector<DynamicObject*> obje
   reset();
   for (DynamicObject* object : objects)
   {
+    bool hasOverlay        = object->hasInteractionOverlay();
     bool isHiddenLevel     = object->getCurrentFloor() != player->getCurrentFloor();
     bool isHiddenCharacter = isHiddenLevel || (object->isCharacter() && !player->getFieldOfView()->isDetected(reinterpret_cast<Character*>(object)));
     bool isHiddenObject    = isHiddenCharacter || object->isHidden();
 
-    if (!isHiddenObject && player->getDistance(object) < 20)
+    if (!isHiddenObject && (hasOverlay || object->isCharacter()) && player->getDistance(object) < 20)
       targets.push_back(object);
   }
   if (targets.size() > 0)

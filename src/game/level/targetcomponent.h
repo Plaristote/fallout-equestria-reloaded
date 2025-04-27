@@ -24,10 +24,13 @@ public:
 
   virtual void registerDynamicObject(DynamicObject*) override;
   virtual void unregisterDynamicObject(DynamicObject*) override;
-  virtual void swapMouseMode() override;
   virtual int  getTargetMode() const { return AnyTarget; }
 
+private slots:
+  void updateTargetList();
+
 protected:
+  QVector<DynamicObject*> getPotentialTargets() const;
   bool isPotentialTarget(const DynamicObject&) const override;
   InteractionTargetList* getTargetList() { return &targetList; }
   InteractionTargetList targetList;

@@ -2,12 +2,21 @@
 
 TargetComponent::TargetComponent(QObject *parent) : ParentType(parent)
 {
-
+  connect(this, &CursorComponent::mouseModeChanged, this, &TargetComponent::updateTargetList);
 }
 
 void TargetComponent::registerDynamicObject(DynamicObject* object)
 {
   ParentType::registerDynamicObject(object);
+  switch (mouseMode)
+  {
+    case TargetCursor:
+    case InteractionCursor:
+      updateTargetList();
+      break ;
+    default:
+      break ;
+  }
 }
 
 void TargetComponent::unregisterDynamicObject(DynamicObject* object)
@@ -16,22 +25,29 @@ void TargetComponent::unregisterDynamicObject(DynamicObject* object)
   ParentType::unregisterDynamicObject(object);
 }
 
-void TargetComponent::swapMouseMode()
+void TargetComponent::updateTargetList()
 {
   switch (mouseMode)
   {
-    case WaitCursor:
-      return ;
-    case InteractionCursor:
-    case TargetCursor:
+    default:
       targetList.reset();
       break ;
-    default:
+    case TargetCursor:
+      targetList.findNearbyTargets(getPotentialTargets());
+      return ;
+    case InteractionCursor:
       targetList.findNearbyTargets(allDynamicObjects());
       break ;
   }
-  ParentType::swapMouseMode();
 }
+
+QVector<DynamicObject*> TargetComponent::getPotentialTargets() const
+{
+  return findDynamicObjects(
+    std::bind(&TargetComponent::isPotentialTarget, this, std::placeholders::_1)
+  );
+}
+
 
 bool TargetComponent::isPotentialTarget(const DynamicObject& object) const
 {
