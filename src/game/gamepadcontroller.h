@@ -53,6 +53,8 @@ signals:
   void bottomClicked();
   void leftTriggerClicked();
   void rightTriggerClicked();
+  void altLeftTriggerClicked();
+  void altRightTriggerClicked();
 
 public slots:
   void lookForController();

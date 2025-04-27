@@ -6,19 +6,27 @@ import "qrc:/assets/ui" as UiStyle
 import "../../ui"
 
 SideBar {
-  id: root
   property QtObject character
   property QtObject target
   property var skills: ["sneak", "steal", "explosives", "medicine", "lockpick", "repair", "science"]
+  id: root
+  title: i18n.t("cmap.skills")
+  width: 160 + 75 + 35
 
   signal pickedSkill(string skillName)
 
-  title: i18n.t("cmap.skills")
-  width: 160 + 75 + 35
   content: ColumnLayout {
     spacing: 5
 
+    ButtonNavigation {
+      id: buttonNavigation
+      buttonRepeater: repeater
+      enabled: root.visible
+      onEnabledChanged: currentIndex = -1
+    }
+
     Repeater {
+      id: repeater
       model: root.skills
       delegate: Row {
         spacing: 5

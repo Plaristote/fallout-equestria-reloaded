@@ -284,7 +284,7 @@ LevelDisplay {
 
   Hud.Menu {
     id: mainMenu
-    anchors.centerIn: parent
+    anchors.fill: parent
     activated: false
   }
 

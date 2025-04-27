@@ -57,6 +57,11 @@ Image {
     onTriggered: application.pushView("editor/Index.qml")
   }
 
+  ButtonNavigation {
+    buttonRepeater: repeater
+    currentIndex: -1
+  }
+
   ColumnLayout {
     anchors.top: parent.top
     anchors.left: parent.left
@@ -64,6 +69,7 @@ Image {
     spacing: 10
 
     Repeater {
+      id: repeater
       model: menuEntries
       delegate: MenuButton {
         Layout.fillWidth: true

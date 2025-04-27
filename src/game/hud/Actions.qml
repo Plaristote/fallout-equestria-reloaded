@@ -29,12 +29,19 @@ Item {
     target: gamepad
     enabled: root.enabled
     function onBackClicked() { backAction.trigger() }
+    function onStartClicked() { openMenuAction.trigger() }
+  }
+
+  Connections {
+    target: gamepad
+    enabled: root.enabled && !root.parent.hasOverlay
     function onSkilldexClicked() { openSkilldexAction.trigger() }
     function onInventoryClicked() { openInventoryAction.trigger() }
-    function onStartClicked() { openMenuAction.trigger() }
     function onSelectClicked() { helpAction.trigger() }
-    function onLeftClicked() { previousTargetAction.trigger() }
-    function onRightClicked() { nextTargetAction.trigger() }
+    function onAltLeftTriggerClicked() { previousTargetAction.trigger() }
+    function onAltRightTriggerClicked() { nextTargetAction.trigger() }
+    function onLeftClicked() { level.player.inventory.getEquippedItem("use-1")?.swapUseMode() }
+    function onRightClicked() { level.player.inventory.getEquippedItem("use-2")?.swapUseMode() }
     function onBottomClicked() { openPipboyAction.trigger() }
     function onUpClicked() { openCharacterSheetAction.trigger() }
   }

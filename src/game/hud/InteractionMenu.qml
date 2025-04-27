@@ -25,9 +25,15 @@ Item {
     }
   }
 
+  UiStyle.ButtonNavigation {
+    buttonRepeater: repeater
+    currentIndex: -1
+  }
+
   Column {
     id: menuColumn
     Repeater {
+      id: repeater
       model: interactionMenu.interactionTypes
       delegate: Button {
         property string interactionType: interactionMenu.interactionTypes[index]

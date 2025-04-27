@@ -6,17 +6,24 @@ import "../../assets/ui" as UiStyle
 import "../../ui"
 
 SideBar {
-  id: root
   property QtObject character
   property QtObject target
   property var spells: character.statistics.spells
+  id: root
+  title: i18n.t("spells.title")
+  width: 160 + 75 + 35
 
   signal pickedSpell(string spellName)
 
-  title: i18n.t("spells.title")
-  width: 160 + 75 + 35
   content: ColumnLayout {
     spacing: 5
+
+    ButtonNavigation {
+      id: buttonNavigation
+      buttonRepeater: repeater
+      enabled: root.visible
+      onEnabledChanged: currentIndex = -1
+    }
 
     UiStyle.TitleText {
       text: i18n.t("spells.empty-spellbook")

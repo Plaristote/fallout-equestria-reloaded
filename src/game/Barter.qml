@@ -21,6 +21,11 @@ Item {
     closed();
   }
 
+  Connections {
+    target: gamepad
+    function onBackClicked() { abortBarter(); }
+  }
+
   Pane {
     background: UiStyle.Pane {}
     anchors { left: parent.left; right: barterRightPane.left; top: parent.top; bottom: parent.bottom }

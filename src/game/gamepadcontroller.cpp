@@ -208,12 +208,7 @@ void GamepadController::buttonXPressedChange(bool pressed)
 void GamepadController::buttonL1PressedChange(bool pressed)
 {
   if (!pressed)
-  {
-    if (isLevelMode())
-      swapUseMode("use-1");
-    else
-      emit leftTriggerClicked();
-  }
+    emit altLeftTriggerClicked();
 }
 
 void GamepadController::buttonL2PressedChange(bool pressed)
@@ -230,12 +225,7 @@ void GamepadController::buttonL2PressedChange(bool pressed)
 void GamepadController::buttonR1PressedChange(bool pressed)
 {
   if (!pressed)
-  {
-    if (isLevelMode())
-      swapUseMode("use-2");
-    else
-      emit rightTriggerClicked();
-  }
+    emit altRightTriggerClicked();
 }
 
 void GamepadController::buttonR2PressedChange(bool pressed)
