@@ -1,8 +1,10 @@
 #include "targetcomponent.h"
+#include "game.h"
 
 TargetComponent::TargetComponent(QObject *parent) : ParentType(parent)
 {
-  connect(this, &CursorComponent::mouseModeChanged, this, &TargetComponent::updateTargetList);
+  if (!Game::get()->getIsGameEditor())
+    connect(this, &CursorComponent::mouseModeChanged, this, &TargetComponent::updateTargetList);
 }
 
 void TargetComponent::registerDynamicObject(DynamicObject* object)
