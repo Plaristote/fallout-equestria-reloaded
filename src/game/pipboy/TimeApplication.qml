@@ -19,6 +19,7 @@ Column {
       {label: i18n.t("pipboy.clock-wait-hour",   {time:  6}), interval: 360},
       {label: i18n.t("pipboy.clock-wait-hour",   {time: 12}), interval: 720},
       {label: i18n.t("pipboy.clock-wait-day",    {time:  1}), interval: 1440},
+      {label: i18n.t("pipboy.clock-wait-day",    {time:  7}), interval: 10080},
       {label: i18n.t("pipboy.clock-wait-heal"), interval: 0}
     ];
   }
