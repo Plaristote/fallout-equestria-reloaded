@@ -8,13 +8,13 @@ import "./level"
 LevelDisplay {
   id: root
   property bool hasOverlay: interactionMenu.visible ||
-                            inventoryViewContainer.visible ||
-                            itemPickerContainer.visible ||
+                            inventoryViewContainer.activated ||
+                            itemPickerContainer.activated ||
                             skilldex.visible ||
                             spellbook.visible ||
                             countdownDialog.visible ||
                             controlsDialog.visible ||
-                            mainMenu.visible
+                            mainMenu.activated
   property bool isCurrentView: application.currentView === root.parent
   enabled: !gameController.fastPassTime
 
@@ -22,7 +22,7 @@ LevelDisplay {
     levelController.paused = !mainMenu.activated;
     if (interactionMenu.visible)
       interactionMenu.interactionTarget = null;
-    mainMenu.activated = !mainMenu.activated;
+    mainMenu.toggle()
   }
 
   onHasOverlayChanged: if (isCurrentView) { levelController.paused = hasOverlay }
@@ -36,27 +36,27 @@ LevelDisplay {
     onMenuTriggered:           root.openMenu()
     onPreviousTargetTriggered: levelController.centerCursorOn(levelController.targetList.previousTarget())
     onNextTargetTriggered:     levelController.centerCursorOn(levelController.targetList.nextTarget())
-    onInventoryTriggered:      inventoryViewContainer.visible = !inventoryViewContainer.visible
+    onInventoryTriggered:      inventoryViewContainer.toggle()
     onSkilldexTriggered:       skilldex.visible = !skilldex.visible
     onSpellbookTriggered:      spellbook.visible = !spellbook.visible
     onDebugModeTriggered:      debugConsole.visible = !debugConsole.visible
     onHelpTriggered:           controlsDialog.open()
     onBackTriggered: {
       if  (mainMenu.activated)
-        mainMenu.activated = false;
+        mainMenu.toggle();
       else if (controlsDialog.visible)
         controlsDialog.close();
       else if (interactionMenu.visible)
         interactionMenu.interactionTarget = null;
       else if (countdownDialog.visible)
         countdownDialog.visible = false;
-      else if (inventoryViewContainer.visible)
-        inventoryViewContainer.visible = false;
+      else if (inventoryViewContainer.activated)
+        inventoryViewContainer.toggle();
       else if (skilldex.visible)
         skilldex.visible = false;
       else if (spellbook.visible)
         spellbook.visible = false;
-      else if (itemPickerContainer.visible)
+      else if (itemPickerContainer.activated)
         itemPicker.closed();
       else if (levelController.combat && levelController.isPlayerTurn)
         levelController.passTurn(levelController.player);
@@ -160,7 +160,7 @@ LevelDisplay {
   Hud.PlayerInventory {
     id: inventoryViewContainer
     anchors.fill: parent
-    visible: false
+    state: "hidden"
     inventoryHeight: height - levelHud.height - 100
   }
 
@@ -215,15 +215,10 @@ LevelDisplay {
     }
   }
 
-  Rectangle {
+  UiStyle.UnderlayView {
     id: itemPickerContainer
-    color: Qt.rgba(0, 0, 0, 0.5)
+    state: "hidden"
     anchors.fill: parent
-    visible: false
-
-    MouseArea {
-      anchors.fill: parent
-    }
 
     Hud.ItemPicker {
       id: itemPicker
@@ -235,11 +230,11 @@ LevelDisplay {
       height: parent.height - levelHud.height
       inventory: levelController.player.inventory
       onClosed: {
-        itemPickerContainer.visible = false;
+        itemPickerContainer.state = "hidden";
         target = selectedObject = null;
       }
       onAccepted: {
-        itemPickerContainer.visible = false;
+        itemPickerContainer.state = "hidden";
         levelController.useItemOn(itemPicker.selectedObject, itemPicker.target, itemPicker.selectedObject.defaultUseMode);
         target = selectedObject = null;
       }
@@ -285,7 +280,7 @@ LevelDisplay {
   Hud.Menu {
     id: mainMenu
     anchors.fill: parent
-    activated: false
+    state: "hidden"
   }
 
   Component {

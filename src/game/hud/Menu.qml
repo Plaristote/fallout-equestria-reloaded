@@ -4,16 +4,12 @@ import QtQuick.Layouts
 import "qrc:/assets/ui" as UiStyle
 import "../../ui"
 
-Rectangle {
-  property bool activated: false
+UiStyle.UnderlayView {
   property var actions: [saveGameAction, loadGameAction, optionsAction, exitAction, cancelAction]
   id: mainMenu
-  color: Qt.rgba(0, 0, 0, 0.5)
   onActivatedChanged: {
-    visible = activated
     buttonNavigation.currentIndex = -1
   }
-  visible: activated
 
   ButtonNavigation {
     id: buttonNavigation
@@ -52,11 +48,7 @@ Rectangle {
   Action {
     id: cancelAction
     text: i18n.t("Cancel")
-    onTriggered: mainMenu.activated = false
-  }
-
-  MouseArea {
-    anchors.fill: parent
+    onTriggered: mainMenu.state = "hidden"
   }
 
   Pane {

@@ -20,14 +20,16 @@ Item {
   }
 
   onVisibleChanged: {
+    buttonNavigation.currentIndex = 0;
     if (visible && typeof soundManager != "undefined") {
       soundManager.play("ui/int-menu");
     }
   }
 
   UiStyle.ButtonNavigation {
+    id: buttonNavigation
     buttonRepeater: repeater
-    currentIndex: -1
+    currentIndex: 0
   }
 
   Column {
@@ -57,7 +59,7 @@ Item {
             skilldex.target = interactionMenu.interactionTarget;
           }
           else if (interactionType === "use-object") {
-            itemPickerContainer.visible = true;
+            itemPickerContainer.state = "shown";
             itemPicker.target = interactionMenu.interactionTarget;
           }
           else

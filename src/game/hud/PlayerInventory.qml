@@ -1,14 +1,10 @@
 import QtQuick 2.12
+import "qrc:/assets/ui" as UiStyle
 import "../../ui"
 
-Rectangle {
+UiStyle.UnderlayView {
   id: root
-  color: Qt.rgba(0, 0, 0, 0.5)
   property alias inventoryHeight: inventoryView.height
-
-  MouseArea {
-    anchors.fill: parent
-  }
 
   DropArea {
     anchors.fill: parent
@@ -29,6 +25,6 @@ Rectangle {
     anchors.bottomMargin: 50
     anchors.topMargin: 50
     height: parent.height - 200
-    onClosed: root.visible = false
+    onClosed: root.toggle()
   }
 }

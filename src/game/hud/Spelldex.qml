@@ -34,6 +34,7 @@ SideBar {
     }
 
     Repeater {
+      id: repeater
       model: root.spells
       delegate: Button {
         background: UiStyle.Label { style: parent.down ? "dark" : "base" }
