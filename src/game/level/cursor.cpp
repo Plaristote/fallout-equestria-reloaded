@@ -77,7 +77,7 @@ DynamicObject* CursorComponent::getObjectAt(int posX, int posY) const
   list.reserve(objectCount());
   eachObject([this, &list](DynamicObject* object)
   {
-    if (object->getCurrentFloor() == getCurrentFloor() && (object->isCharacter() || object->hasInteractionOverlay()))
+    if (!object->isHidden() && object->getCurrentFloor() == getCurrentFloor() && (object->isCharacter() || object->hasInteractionOverlay()))
       list.push_back(object);
   });
   sortByRenderOrder(list);
