@@ -10,7 +10,7 @@ import Game 1.0 as MyGame
 Item {
   property QtObject controller // WorldMap
   property point movementStart: controller ? controller.currentPosition : Qt.point(0,0)
-  property bool hasOverlay: inventoryViewContainer.visible || mainMenu.visible
+  property bool hasOverlay: inventoryViewContainer.activated || mainMenu.activated
   id: root
   state: "default"
   enabled: !gameManager.currentGame.fastPassTime
@@ -53,17 +53,17 @@ Item {
   LevelHud.Actions {
     id: actions
     enabled: application.currentView === root && root.state == "default"
-    onMenuTriggered:           mainMenu.visible = true
-    onInventoryTriggered:      inventoryViewContainer.visible = true
+    onMenuTriggered:           mainMenu.toggle()
+    onInventoryTriggered:      inventoryViewContainer.toggle()
     onBackTriggered: {
-      if  (mainMenu.visible)
-        mainMenu.visible = false;
-      else if (inventoryViewContainer.visible)
-        inventoryViewContainer.visible = false;
+      if  (mainMenu.activated)
+        mainMenu.toggle();
+      else if (inventoryViewContainer.activated)
+        inventoryViewContainer.visible.toggle();
       else if (splashscreen.selectedCity)
         splashscreen.selectedCity = null;
       else
-        mainMenu.visible = true
+        mainMenu.toggle()
     }
   }
 
@@ -202,7 +202,7 @@ Item {
 
   LevelHud.PlayerInventory {
     id: inventoryViewContainer
-    visible: false
+    state: "hidden"
     anchors.fill: parent
   }
 
@@ -210,8 +210,8 @@ Item {
 
   LevelHud.Menu {
     id: mainMenu
-    anchors.centerIn: parent
-    visible: false
-    onVisibleChanged: controller.paused = visible
+    anchors.fill: parent
+    state: "hidden"
+    onActivatedChanged: controller.paused = activated
   }
 }
