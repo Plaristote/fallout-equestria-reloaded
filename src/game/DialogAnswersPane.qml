@@ -6,27 +6,15 @@ import "qrc:/assets/ui" as UiStyle
 
 Item {
   property QtObject controller
-  property QtObject buttonRepeater
-  property int currentIndex: 0
+  property alias currentIndex: buttonNavigation.currentIndex
   id: root
   y: bottomPartY
   height: bottomPartHeight
   anchors { left: parent.left; right: parent.right }
 
-  function moveUp() {
-    if (currentIndex > 0)
-      currentIndex -= 1;
-    else
-      currentIndex = buttonRepeater.count - 1;
-    moveMouseToButton(currentIndex);
-  }
-
-  function moveDown() {
-    if (currentIndex + 1 < buttonRepeater.count)
-      currentIndex += 1
-    else
-      currentIndex = 0;
-    moveMouseToButton(currentIndex);
+  UiStyle.ButtonNavigation {
+    id: buttonNavigation
+    enabled: root.enabled
   }
 
   function select(index) {
@@ -35,19 +23,9 @@ Item {
       soundManager.play("ui/term-btn-click");
   }
 
-  function moveMouseToButton(index) {
-    const buttonItem = buttonRepeater.itemAt(index)
-    const buttonCenter = buttonItem.mapToItem(null, 
-      buttonItem.width / 2, 
-      buttonItem.height / 2);
-    mouseCursor.setRelativePosition(buttonCenter);
-  }
-
   Connections {
     target: gamepad
     enabled: root.enabled
-    function onUpClicked() { root.moveUp() }
-    function onBottomClicked() { root.moveDown() }
     function onInventoryClicked() { controller.tryToBarter() }
   }
 
@@ -82,7 +60,7 @@ Item {
       id: answersList
       width: parent.width
       Component.onCompleted: {
-        root.buttonRepeater = repeater
+        buttonNavigation.buttonRepeater = repeater
       }
       Repeater {
         id: repeater

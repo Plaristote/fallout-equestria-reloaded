@@ -36,6 +36,7 @@
         <file>assets/ui/tab.png</file>
         <file>assets/ui/Tab.qml</file>
         <file>assets/ui/PlayPanel.qml</file>
+        <file>assets/ui/ButtonNavigation.qml</file>
         <file>assets/ui/key.png</file>
         <file>assets/ui/gamepad.png</file>
         <file>assets/ui/play-panel.png</file>

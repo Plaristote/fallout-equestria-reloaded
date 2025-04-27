@@ -7,7 +7,27 @@ import "./ui"
 SaveGameUi {
   id: root
   title: i18n.t("Save")
+  mainButton: saveButton
   currentSave: selectedIndex > 0 ? savedGameList[selectedIndex - 1] : null
+
+  onBackTriggered: {
+    if (newSaveDialog.visible)
+      newSaveDialog.close();
+    else if (overwriteDialog.visible)
+      overwriteDialog.close();
+    else
+      application.popView();
+  }
+
+  function newSaveGameName() {
+    const names = gameManager.getSavedGames();
+    let i = 1;
+    let name;
+    do {
+      name = i18n.t("save-default-name") + `#${i++}`;
+    } while (names.indexOf(name) >= 0)
+    return name;
+  }
 
   Action {
     id: saveAction
@@ -54,7 +74,10 @@ SaveGameUi {
   ]
 
   controls: [
-    MenuButton { action: saveAction },
+    MenuButton {
+      id: saveButton
+      action: saveAction
+    },
     MenuButton {
       text: i18n.t("Cancel")
       onClicked: application.popView()
@@ -67,7 +90,16 @@ SaveGameUi {
     modal: true
     anchors.centerIn: parent
     standardButtons: Dialog.Ok | Dialog.Cancel
-    onVisibleChanged: if (visible) { newSaveNameInput.forceActiveFocus(); }
+
+    Connections {
+      target: newSaveDialog
+      function onOpened() {
+        newSaveNameInput.text = root.newSaveGameName();
+        newSaveNameInput.selectAll();
+        newSaveNameInput.forceActiveFocus();
+        root.moveMouseToButton(newSaveDialog.okButton);
+      }
+    }
 
     UiStyle.TerminalPane {
       width: parent.width
@@ -97,7 +129,12 @@ SaveGameUi {
     modal: true
     standardButtons: Dialog.Ok | Dialog.Cancel
     onAccepted: saveGame.trigger()
-    onVisibleChanged: if (visible) { virtualInput.forceActiveFocus(); }
+    onVisibleChanged: {
+      if (visible) {
+        virtualInput.forceActiveFocus();
+        root.moveMouseToButton(newSaveDialog.okButton);
+      }
+    }
     TerminalField {
       id: virtualInput
       visible: false

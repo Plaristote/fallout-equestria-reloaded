@@ -13,23 +13,45 @@ Pane {
   property alias slots: slotList.children
   property alias controls: controlsRow.children
   property string currentSave: savedGameList[selectedIndex]
+  property var mainButton
   background: UiStyle.Pane {}
 
+  signal backTriggered()
+
   Shortcut {
+    id: upAction
     sequence: "Up"
     autoRepeat: true
     onActivated: selectedIndex = Math.max(0, selectedIndex - 1)
   }
 
   Shortcut {
+    id: downAction
     sequence: "Down"
     autoRepeat: true
     onActivated: selectedIndex = Math.min(slots.length - 2, selectedIndex + 1)
   }
 
   Shortcut {
+    id: closeAction
     sequence: "Esc"
-    onActivated: application.popView()
+    onActivated: root.backTriggered();
+  }
+
+  Connections {
+    target: gamepad
+    function onUpClicked() { upAction.activated(); moveMouseToButton(mainButton); }
+    function onBottomClicked() { downAction.activated(); moveMouseToButton(mainButton); }
+    function onBackClicked() { closeAction.activated(); }
+  }
+
+  function moveMouseToButton(buttonItem) {
+    if (mouseCursor.virtualPointerEnabled) {
+      const buttonCenter = buttonItem.mapToItem(null,
+        buttonItem.width / 2,
+        buttonItem.height / 2);
+      mouseCursor.setRelativePosition(buttonCenter);
+    }
   }
 
   Text {
