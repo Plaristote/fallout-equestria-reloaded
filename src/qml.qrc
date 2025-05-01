@@ -183,6 +183,7 @@
         <file alias="game/level/PlayerCropCircle.shader.frag.qsb">../build/src/game/level/PlayerCropCircle.shader.frag.qsb</file>
         <file alias="game/level/PlayerCropCircle.shader.vert.qsb">../build/src/game/level/PlayerCropCircle.shader.vert.qsb</file>
         <file>game/level/LayerRenderer.qml</file>
+        <file>game/hud/CombatSpeedWidget.qml</file>
         <file>game/hud/Menu.qml</file>
         <file>game/hud/HudItemSlots.qml</file>
         <file>game/hud/HudActionPoints.qml</file>

@@ -290,4 +290,9 @@ LevelDisplay {
       controller: root.levelController.tutorial
     }
   }
+
+  Loader {
+    anchors { top: parent.top; right: parent.right }
+    source: root.levelController.combat ? "qrc:/game/hud/CombatSpeedWidget.qml" : null
+  }
 }
