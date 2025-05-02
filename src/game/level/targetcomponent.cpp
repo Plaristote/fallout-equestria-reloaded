@@ -29,6 +29,7 @@ void TargetComponent::unregisterDynamicObject(DynamicObject* object)
 
 void TargetComponent::updateTargetList()
 {
+  if (Game::get()->getIsGameEditor()) return ;
   switch (mouseMode)
   {
     default:
