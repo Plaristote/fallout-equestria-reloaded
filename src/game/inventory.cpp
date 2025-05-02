@@ -304,8 +304,8 @@ bool Inventory::equipItem(InventoryItem *item, const QString& slotName)
         removeItem(item);
       itemSlots[slotName] = item;
       item->onEquippedBy(user, true);
-      emit equippedItemsChanged();
     }
+    emit equippedItemsChanged();
   }
   return getEquippedItem(slotName) == item;
 }

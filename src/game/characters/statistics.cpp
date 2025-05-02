@@ -110,6 +110,7 @@ void CharacterStatistics::updateSpriteSheet()
         descriptor.armor = armor->getAnimation();
       if (descriptor.layered)
       {
+        descriptor.customLayers = scriptCall("getSpriteSheetLayers").toString().split('+');
         animationLibrary->registerCharacterSpriteSheet(descriptor);
         setSpriteName(animationLibrary->getCharacterSpriteName(descriptor));
       }

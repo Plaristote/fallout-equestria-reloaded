@@ -389,7 +389,8 @@ QString AnimationLibrary::getCharacterSpriteName(const CharacterSpriteDescriptor
   parts << "static"  << (descriptor.baseStaticColor.isEmpty() ? "blank" : descriptor.baseStaticColor);
   parts << "overlay" << (descriptor.overLayer.isEmpty()       ? "blank" : descriptor.overLayer);
   parts << "armor"   << (descriptor.armor.isEmpty()           ? "blank" : descriptor.armor);
-  parts << "equip"   << (descriptor.weapon.isEmpty()          ? "blank" : descriptor.weapon);
+  if (!descriptor.customLayers.isEmpty())
+    parts << "layers" << descriptor.customLayers.join('+');
   return parts.join('-');
 }
 
@@ -408,10 +409,10 @@ void AnimationLibrary::prerenderCharacterSpriteSheet(const CharacterSpriteDescri
   const QImage       baseImage(ASSETS_PATH + "sprites/characters/" + descriptor.base + ".png");
   const QString      shadowPath(ASSETS_PATH + "sprites/characters/" + descriptor.base + "-shadow.png");
   LayeredSpriteSheet spritesheet(baseImage.size());
-  const QMap<QString, QString> layers({
-    {"sprites/characters/armors",  descriptor.armor},
-    {"sprites/characters/weapons", descriptor.weapon}
-  });
+  const QHash<QString, QStringList> layers{
+    {"sprites/characters/armors",  QStringList{descriptor.armor}},
+    {"sprites/characters", descriptor.customLayers}
+  };
 
   if (QFile::exists(shadowPath))
     spritesheet.addLayer(QImage(shadowPath));
@@ -421,9 +422,11 @@ void AnimationLibrary::prerenderCharacterSpriteSheet(const CharacterSpriteDescri
     spritesheet.addLayer(QImage(ASSETS_PATH + "sprites/characters/" + descriptor.baseStaticColor + ".png"));
   for (auto it = layers.begin() ; it != layers.end() ; ++it)
   {
-    const QImage image(ASSETS_PATH + it.key() + '/' + descriptor.base + '/' + it.value());
-
-    spritesheet.addLayer(image);
+    for (const QString& layer : it.value())
+    {
+      const QImage image(ASSETS_PATH + it.key() + '/' + descriptor.base + '/' + layer);
+      spritesheet.addLayer(image);
+    }
   }
   if (descriptor.hair.length() > 0)
   {

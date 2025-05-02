@@ -75,6 +75,8 @@ void LevelTask::registerDynamicObject(DynamicObject* object)
   object->reloadLightzone();
 
   ParentType::registerDynamicObject(object);
+  if (character)
+    character->updateSpriteSheet();
 }
 
 void LevelTask::unregisterDynamicObject(DynamicObject* object)
