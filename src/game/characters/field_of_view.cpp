@@ -11,6 +11,8 @@ FieldOfView::FieldOfView(Character& character) : QObject(&character), character(
   interval = 1;
   timeLeft = 0;
   hasChanges = false;
+  connect(this, &FieldOfView::characterDetected,   this, std::bind(&FieldOfView::characterDetectionUpdated, this, std::placeholders::_1, true));
+  connect(this, &FieldOfView::characterUndetected, this, std::bind(&FieldOfView::characterDetectionUpdated, this, std::placeholders::_1, false));
 }
 
 FieldOfView::~FieldOfView()
@@ -332,6 +334,7 @@ void FieldOfView::LoseTrackOfCharacters(EntryList& entries)
     {
       character = entries.erase(character);
       hasChanges = true;
+      emit characterUndetected(character->character);
     }
     else
       character++;

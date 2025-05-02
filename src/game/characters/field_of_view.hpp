@@ -70,6 +70,8 @@ signals:
   void                 refreshed();
   void                 changed();
   void                 characterDetected(Character*);
+  void                 characterUndetected(Character*);
+  void                 characterDetectionUpdated(Character*, bool);
 
 protected:
   void                 LoseTrackOfCharacters(EntryList&);

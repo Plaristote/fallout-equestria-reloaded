@@ -11,6 +11,8 @@ Image {
     anchors.centerIn: parent
     text: label
     color: "yellow"
+    font.family: application.consoleFontName
+    font.pointSize: application.consoleFont.tinySize
     font.capitalization: Font.Capitalize
     font.bold: true
   }

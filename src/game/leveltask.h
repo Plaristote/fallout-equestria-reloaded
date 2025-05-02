@@ -26,7 +26,8 @@ class LevelTask : public SaveComponent
   Q_OBJECT
   typedef SaveComponent ParentType;
 
-  Q_PROPERTY(bool       paused  MEMBER paused NOTIFY pausedChanged)
+  Q_PROPERTY(bool paused  MEMBER paused NOTIFY pausedChanged)
+  Q_PROPERTY(short playerDetectedCount MEMBER playerDetectedCount NOTIFY playerDetectedCountChanged)
   Q_PROPERTY(TutorialComponent* tutorial MEMBER tutorial NOTIFY tutorialChanged)
 public:  
   static bool withPlayerCropCircle;
@@ -51,12 +52,15 @@ public:
   void onExit();
   void finalizeRound() override;
 
+  void updatePlayerDetectedCount(short value) { playerDetectedCount += value; emit playerDetectedCountChanged(); }
+
 signals:
   void updated();
   void pausedChanged();
   void displayConsoleMessage(const QString&);
   void cameraFocusRequired(DynamicObject*);
   void daylightColorChanged();
+  void playerDetectedCountChanged();
 
 public slots:
   void deleteLater();
@@ -81,6 +85,7 @@ protected:
   bool           paused = true;
   bool           initialized = false;
   qint64         finalizeTurnRemainingTime = 0;
+  short          playerDetectedCount = 0;
 };
 
 #endif // LEVELTASK_H

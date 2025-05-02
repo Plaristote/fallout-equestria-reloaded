@@ -125,17 +125,8 @@ void ActionsComponent::useSpellAt(Character* user, int posX, int posY, const QSt
 
 bool ActionsComponent::canSneak(Character* user)
 {
-  return findCharacters([user](Character& other)
-  {
-    if (other.isAlive() && !other.isAlly(user))
-    {
-      float radius   = other.getFieldOfView()->GetRadius();
-      float distance = other.getDistance(user);
-
-      return distance <= radius && other.hasLineOfSight(user);
-    }
-    return false;
-  }).size() == 0;
+  auto* level = LevelTask::get();
+  return !(level && level->isCombatEnabled());
 }
 
 bool ActionsComponent::useSneak(Character* user)

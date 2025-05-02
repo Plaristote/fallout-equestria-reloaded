@@ -33,13 +33,37 @@ Pane {
     }
 
     UiStyle.WarningRectangle {
-      visible: levelController.player.unconscious
-      label: i18n.t("cmap.buffs.ko")
-    }
-
-    UiStyle.WarningRectangle {
       visible: levelController.player.sneaking
       label: i18n.t("cmap.sneak")
+      Loader {
+        anchors.rightMargin: 10
+        anchors.right: parent.right
+        anchors.verticalCenter: parent.verticalCenter
+        sourceComponent: levelController.playerDetectedCount > 0 ? detectedCountComponent : null
+      }
+      Component {
+        id: detectedCountComponent
+        RowLayout {
+          UiStyle.Icon {
+            name: "see"
+            Layout.preferredHeight: 20
+            Layout.preferredWidth: 20
+          }
+          Text {
+            text: `x${levelController.playerDetectedCount}`
+            color: "white"
+            font.family: application.consoleFontName
+            font.pointSize: application.consoleFont.tinySize
+          }
+        }
+      }
+    }
+
+    Repeater {
+      model: levelController.player.statistics.buffs
+      delegate: UiStyle.WarningRectangle {
+        label: i18n.t(`cmap.buffs.${levelController.player.statistics.buffs[index]}`)
+      }
     }
   }
 
