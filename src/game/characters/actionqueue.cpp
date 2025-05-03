@@ -188,6 +188,19 @@ void ActionQueue::pushMoveToZone(const TileZone* zone)
   queue << (new ZoneMovementAction(character, zone));
 }
 
+void ActionQueue::pushForceReach(DynamicObject* target, float range, QJSValue caseCompare)
+{
+  MovementAction* action;
+
+  ASSERT_NOT_NULL("ActionQueue::pushReach", target)
+  if (!target->isDoorway())
+    action = (new ReachAction(character, target, range, caseCompare));
+  else
+    action = (new ReachDoorAction(character, reinterpret_cast<Doorway*>(target), range, caseCompare));
+  action->setForced(true);
+  queue << action;
+}
+
 void ActionQueue::pushReach(DynamicObject *target, float range)
 {
   ASSERT_NOT_NULL("ActionQueue::pushReach", target)
@@ -259,6 +272,20 @@ void ActionQueue::pushReachNear(int x, int y, int z, int range)
 void ActionQueue::pushReachNear(int x, int y, int range)
 {
   pushReachNear(x, y, static_cast<int>(character->getCurrentFloor()), range);
+}
+
+int ActionQueue::getForcedReachApCost(DynamicObject* target, float range, QJSValue caseCompare)
+{
+  QScopedPointer<MovementAction> action;
+
+  if (!target)
+    return 0;
+  if (target->isDoorway())
+    action.reset(new ReachAction(character, reinterpret_cast<Doorway*>(target), range, caseCompare));
+  else
+    action.reset(new ReachAction(character, target, range, caseCompare));
+  action->setForced(true);
+  return action->getApCost();
 }
 
 int ActionQueue::getReachApCost(DynamicObject *target, float range) const

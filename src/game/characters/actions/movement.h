@@ -15,6 +15,7 @@ public:
   virtual bool trigger() override;
   void update() override;
   virtual void interrupt() override;
+  void setForced(bool value) { forced = value; }
 
 protected:
   virtual void triggerNextMovement();
@@ -23,6 +24,7 @@ protected:
   bool canMakeNextMovement() const;
 
   Point target;
+  bool forced = false;
 private:
   bool firstRound = true;
 };

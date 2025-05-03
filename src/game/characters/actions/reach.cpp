@@ -71,7 +71,7 @@ int ReachAction::getApCost() const
 {
   QVector<Point> candidates;
 
-  if (alreadyReached())
+  if (!forced && alreadyReached())
     return 0;
   else if (range == 0.f)
     candidates.push_back(getTargetPosition());
@@ -102,7 +102,7 @@ bool ReachAction::trigger()
     target = getTargetPosition();
     return MovementAction::trigger();
   }
-  else if (alreadyReached())
+  else if (!forced && alreadyReached())
     state = Done;
   else
   {
