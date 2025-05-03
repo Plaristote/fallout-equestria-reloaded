@@ -281,6 +281,7 @@ bool Character::setFallAnimation()
     if (hasAnimation("fall"))
     {
       setAnimation("fall");
+      scriptCall("onFell");
       return true;
     }
   }
