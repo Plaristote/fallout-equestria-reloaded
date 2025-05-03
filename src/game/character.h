@@ -47,6 +47,7 @@ public:
   bool             isUnconscious() const override { return unconscious || ParentType::isUnconscious(); }
   bool             hasInteractionOverlay() const override { return !isAlive(); }
 
+  Q_INVOKABLE void  takeMitigableDamage(int damage, const QString& type, Character* dealer);
   Q_INVOKABLE void  takeDamage(int damage, Character* dealer);
   Q_INVOKABLE void  attackedBy(Character* dealer);
   Q_INVOKABLE bool  useActionPoints(int amount = 1, const QString& motive = "");

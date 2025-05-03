@@ -68,12 +68,27 @@ void Character::onIdle()
     ParentType::onIdle();
 }
 
+void Character::takeMitigableDamage(int damage, const QString& type, Character* dealer)
+{
+  if (isAlive())
+  {
+    QJSValue result = scriptCall("mitigateDamage", QJSValueList() << damage << type << dealer->asJSValue());
+
+    qDebug() << "initial damage" << damage;
+    if (result.isNumber())
+      damage = result.toInt();
+    else
+      qDebug() << "mitigate did not return a number";
+    qDebug() << "final damage" << damage;
+    takeDamage(damage, dealer);
+  }
+}
+
 void Character::takeDamage(int damage, Character* dealer)
 {
   if (isAlive())
   {
-    QJSValue modifiedDamage = scriptCall("mitigateDamage", QJSValueList() << damage << (dealer ? dealer->asJSValue() : QJSValue()));
-    auto hp = getStatistics()->getHitPoints() - (modifiedDamage.isUndefined() ? damage : modifiedDamage.toInt());
+    auto hp = getStatistics()->getHitPoints() - damage;
 
     if (hasAnimation("damaged"))
       setAnimation("damaged");
