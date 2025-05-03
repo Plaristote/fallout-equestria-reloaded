@@ -72,14 +72,14 @@ void Character::takeMitigableDamage(int damage, const QString& type, Character* 
 {
   if (isAlive())
   {
-    QJSValue result = scriptCall("mitigateDamage", QJSValueList() << damage << type << dealer->asJSValue());
+    QJSValueList params = QJSValueList() << damage << type;
+    QJSValue result;
 
-    qDebug() << "initial damage" << damage;
+    if (dealer)
+      params << dealer->asJSValue();
+    result = scriptCall("mitigateDamage", QJSValueList() << damage << type << dealer->asJSValue());
     if (result.isNumber())
       damage = result.toInt();
-    else
-      qDebug() << "mitigate did not return a number";
-    qDebug() << "final damage" << damage;
     takeDamage(damage, dealer);
   }
 }
