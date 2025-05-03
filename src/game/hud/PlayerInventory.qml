@@ -1,10 +1,13 @@
+pragma ComponentBehavior: Bound
 import QtQuick 2.12
 import "qrc:/assets/ui" as UiStyle
 import "../../ui"
 
 UiStyle.UnderlayView {
   id: root
-  property alias inventoryHeight: inventoryView.height
+  sourceComponent: inventoryView
+  itemCentered: false
+  property real inventoryHeight: inventoryView.height
 
   DropArea {
     anchors.fill: parent
@@ -16,15 +19,20 @@ UiStyle.UnderlayView {
     }
   }
 
-  CharacterInventory {
+  Component {
     id: inventoryView
-    character: gameManager.currentGame.player
-    anchors { top: parent.top; left: parent.left; right: parent.right }
-    anchors.leftMargin:  parent.width / 8
-    anchors.rightMargin: parent.width / 8
-    anchors.bottomMargin: 50
-    anchors.topMargin: 50
-    height: parent.height - 200
-    onClosed: root.toggle()
+    CharacterInventory {
+      character: gameManager.currentGame.player
+      anchors {
+        top: parent.top
+        topMargin: 50
+        left: parent.left
+        leftMargin: root.width / 8
+      }
+      width: root.width * 3/4
+      height: root.height - 200
+      onClosed: root.toggle()
+      onHeightChanged: root.inventoryHeight = height;
+    }
   }
 }

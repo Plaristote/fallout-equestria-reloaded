@@ -60,7 +60,7 @@ Item {
           }
           else if (interactionType === "use-object") {
             itemPickerContainer.state = "shown";
-            itemPicker.target = interactionMenu.interactionTarget;
+            itemPickerContainer.item.target = interactionMenu.interactionTarget;
           }
           else
             levelController.interactOrderReceived(interactionMenu.interactionTarget, interactionMenu.interactionTypes[index]);

@@ -1,3 +1,4 @@
+pragma ComponentBehavior: Bound
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import "qrc:/assets/ui" as UiStyle
@@ -57,7 +58,7 @@ LevelDisplay {
       else if (spellbook.visible)
         spellbook.visible = false;
       else if (itemPickerContainer.activated)
-        itemPicker.closed();
+        itemPickerContainer.item.closed();
       else if (levelController.combat && levelController.isPlayerTurn)
         levelController.passTurn(levelController.player);
       else
@@ -219,24 +220,31 @@ LevelDisplay {
     id: itemPickerContainer
     state: "hidden"
     anchors.fill: parent
+    sourceComponent: itemPickerComponent
+    itemCentered: false
 
-    Hud.ItemPicker {
-      id: itemPicker
-      anchors { top: parent.top; left: parent.left; right: parent.right }
-      anchors.leftMargin:  parent.width > 1200 ? parent.width / 4 : parent.width / 8
-      anchors.rightMargin: parent.width > 1200 ? parent.width / 4 : parent.width / 8
-      anchors.bottomMargin: 50
-      anchors.topMargin: 50
-      height: parent.height - levelHud.height
-      inventory: levelController.player.inventory
-      onClosed: {
-        itemPickerContainer.state = "hidden";
-        target = selectedObject = null;
-      }
-      onAccepted: {
-        itemPickerContainer.state = "hidden";
-        levelController.useItemOn(itemPicker.selectedObject, itemPicker.target, itemPicker.selectedObject.defaultUseMode);
-        target = selectedObject = null;
+    Component {
+      id: itemPickerComponent
+      Hud.ItemPicker {
+        id: itemPicker
+        anchors {
+          top: parent.top
+          topMargin: 50
+          left: parent.left
+          leftMargin: root.width > 1200 ? root.width / 4 : root.width / 8
+        }
+        width: root.width > 1200 ? root.width * 1/2 : root.width * 3/4
+        height: root.height - levelHud.height
+        inventory: levelController.player.inventory
+        onClosed: {
+          itemPickerContainer.state = "hidden";
+          target = selectedObject = null;
+        }
+        onAccepted: {
+          itemPickerContainer.state = "hidden";
+          levelController.useItemOn(itemPicker.selectedObject, itemPicker.target, itemPicker.selectedObject.defaultUseMode);
+          target = selectedObject = null;
+        }
       }
     }
   }

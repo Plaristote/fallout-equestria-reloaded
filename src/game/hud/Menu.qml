@@ -7,13 +7,13 @@ import "../../ui"
 UiStyle.UnderlayView {
   property var actions: [saveGameAction, loadGameAction, optionsAction, exitAction, cancelAction]
   id: mainMenu
+  sourceComponent: menuComponent
   onActivatedChanged: {
     buttonNavigation.currentIndex = -1
   }
 
   ButtonNavigation {
     id: buttonNavigation
-    buttonRepeater: menuRepeater
     enabled: mainMenu.activated
   }
 
@@ -51,22 +51,27 @@ UiStyle.UnderlayView {
     onTriggered: mainMenu.state = "hidden"
   }
 
-  Pane {
-    anchors.centerIn: parent
-    background: UiStyle.Pane {}
-    implicitHeight: entries.height + 2 * background.borderSize
-    implicitWidth: entries.width + 2 * background.borderSize
+  Component {
+    id: menuComponent
+    Pane {
+      background: UiStyle.Pane {}
+      implicitHeight: entries.height + 2 * background.borderSize
+      implicitWidth: entries.width + 2 * background.borderSize
 
-    ColumnLayout {
-      id: entries
-      anchors.centerIn: parent
+      ColumnLayout {
+        id: entries
+        anchors.centerIn: parent
 
-      Repeater {
-        id: menuRepeater
-        model: actions
-        delegate: MenuButton {
-          Layout.fillWidth: true
-          action: mainMenu.actions[index]
+        Repeater {
+          id: menuRepeater
+          model: actions
+          delegate: MenuButton {
+            Layout.fillWidth: true
+            action: mainMenu.actions[index]
+          }
+          Component.onCompleted: {
+            buttonNavigation.buttonRepeater = menuRepeater;
+          }
         }
       }
     }
