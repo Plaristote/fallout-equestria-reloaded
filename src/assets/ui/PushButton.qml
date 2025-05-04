@@ -18,13 +18,22 @@ Item {
     return source + ".png";
   }
 
-  implicitWidth: image.implicitWidth
-  implicitHeight: image.height + 20
+  implicitWidth: Math.max(image.implicitWidth, textMetrics.width)
+  implicitHeight: buttonColumn.height
+
   onHoveredChanged: {
     mouseCursor.setCurrentPointer(hovered ? MouseCursor.ActivePointer : MouseCursor.NormalPointer)
   }
 
+  TextMetrics {
+    id: textMetrics
+    font.family: application.titleFontName
+    font.pointSize: application.titleFont.pointSize
+    text: root.text
+  }
+
   Column {
+    id: buttonColumn
     anchors.left: parent.left
     anchors.right: parent.right
 
@@ -32,13 +41,14 @@ Item {
       text:  root.text
       color: root.color
       anchors.horizontalCenter: image.horizontalCenter
-      font.family: application.titleFontName
-      font.pixelSize: 20
+      font.family: textMetrics.font.family
+      font.pointSize: textMetrics.font.pointSize
     }
 
     Image {
       id: image
       source: buttonSource(down, hovered)
+      anchors.horizontalCenter: parent.horizontalCenter
     }
   }
 

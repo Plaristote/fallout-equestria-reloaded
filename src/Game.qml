@@ -116,10 +116,11 @@ Item {
     closePolicy: Popup.NoAutoClose
 
     ColumnLayout {
-      anchors.horizontalCenter: parent.horizontalCenter
       Repeater {
         model: promptDialog.options
         delegate: UiStyle.PushButton {
+          Layout.fillWidth: true
+          Layout.preferredHeight: implicitHeight
           text: promptDialog.options[index]
           onClicked: {
             promptDialog.close();
