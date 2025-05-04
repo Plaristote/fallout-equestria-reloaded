@@ -29,6 +29,8 @@ public:
   void             removeAnswerIfUnreferenced(const QString& symbol);
 
 private:
+  QString createStateFromAnswer(QJSValue);
+
   QString defaultEntryPoint;
   QList<QSharedPointer<DialogAnswer>>    answers;
   QList<QSharedPointer<DialogStateData>> states;

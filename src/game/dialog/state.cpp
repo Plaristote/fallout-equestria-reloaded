@@ -9,6 +9,12 @@ DialogStateData::DialogStateData(DialogData& data) : data(data)
 {
 }
 
+void DialogStateData::loadFromJavaScript(const QString& symbol, QJSValue value)
+{
+  this->symbol = symbol;
+  triggerHook = value;
+}
+
 void DialogStateData::load(const QString& symbol, const QJsonObject& object)
 {
   this->symbol = symbol;
@@ -72,6 +78,8 @@ DialogState DialogStateData::setAsCurrentState(const CharacterDialog& dialog)
   }
   else if (triggerHook.isString() && dialog.getScript()->hasMethod(triggerHook.toString()))
     retval = dialog.getScript()->call(triggerHook.toString());
+  else if (triggerHook.isObject())
+    retval = triggerHook;
   if (retval.isString())
     state.text = retval.toString();
   else if (retval.isObject())

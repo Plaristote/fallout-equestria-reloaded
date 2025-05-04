@@ -13,10 +13,10 @@ public:
   void load(const QJSValue&);
   void save(QJsonObject&) const;
 
-  QString getSymbol() const { return symbol; }
-  QString getText(CharacterDialog&);
-  QString trigger(CharacterDialog&);
-  bool    isAvailable(CharacterDialog&);
+  QString  getSymbol() const { return symbol; }
+  QString  getText(CharacterDialog&);
+  QJSValue trigger(CharacterDialog&);
+  bool     isAvailable(CharacterDialog&);
 
   void    setSymbol(const QString& value) { symbol = value; }
   void    setLocalTranslationPath(const QString& value) { localTranslationPath = value; }

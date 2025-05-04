@@ -93,12 +93,28 @@ bool DialogData::isAnswerAvailable(CharacterDialog& dialog, const QString& symbo
   return answer && answer->isAvailable(dialog);
 }
 
+QString DialogData::createStateFromAnswer(QJSValue data)
+{
+  QString uid = QUuid::createUuid().toString();
+  DialogStateData& stateOnTheFly = createNewState(uid);
+
+  stateOnTheFly.loadFromJavaScript(uid, data);
+  return stateOnTheFly.getSymbol();
+}
+
 QString DialogData::triggerAnswer(CharacterDialog& dialog, const QString& symbol)
 {
   auto answer = findAnswer(symbol);
 
   if (answer)
-    return answer->trigger(dialog);
+  {
+    QJSValue retval(answer->trigger(dialog));
+
+    if (retval.isObject())
+      return createStateFromAnswer(retval);
+    else if (retval.isString())
+      return retval.toString();
+  }
   return QString();
 }
 

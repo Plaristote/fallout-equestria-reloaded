@@ -19,6 +19,7 @@ class DialogStateData
 public:
   DialogStateData(DialogData& data);
 
+  void loadFromJavaScript(const QString& symbol, QJSValue);
   void load(const QString& symbol, const QJsonObject&);
   void save(QJsonObject&) const;
 

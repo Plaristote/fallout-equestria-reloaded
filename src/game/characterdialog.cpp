@@ -123,11 +123,7 @@ void CharacterDialog::selectOption(const QString& answerSymbol)
 
 QString CharacterDialog::getNextState(const QString& answerSymbol)
 {
-  const auto& answer = data.findAnswer(answerSymbol);
-
-  if (answer)
-    return answer->trigger(*this);
-  return QString();
+  return data.triggerAnswer(*this, answerSymbol);
 }
 
 QString CharacterDialog::getName() const
