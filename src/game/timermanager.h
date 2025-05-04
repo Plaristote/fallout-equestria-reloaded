@@ -17,6 +17,8 @@ class TimeManager : public QObject
   Q_PROPERTY(int minute  READ getMinute  NOTIFY dateChanged)
   Q_PROPERTY(int second  READ getSecond  NOTIFY dateChanged)
   Q_PROPERTY(int weekDay READ getWeekDay NOTIFY dateChanged)
+  Q_PROPERTY(QString dateString READ dateString NOTIFY dateChanged)
+  Q_PROPERTY(QString timeString READ timeString NOTIFY dateChanged)
 public:
   struct TimePoint
   {
@@ -44,6 +46,10 @@ public:
   Q_INVOKABLE long secondsUntilTime(const QVariantMap& timeData) const;
   // Return timestamp in seconds
   Q_INVOKABLE long getTimestamp() const { return getDateTime().GetTimestamp(); }
+  Q_INVOKABLE QString toStringAfter(int seconds, const QString& format) const;
+  Q_INVOKABLE QString toString(const QString& format = "%w %d/%M/%y %h:%m:%s") const { return toStringAfter(0, format); }
+  QString dateString() const { return toString("%w %d/%M/%y"); }
+  QString timeString() const { return toString("%h:%m:%s"); }
 
   Q_INVOKABLE bool isWithinRange(const QVariantMap&) const;
   bool isWithinRange(const TimePoint& from, const TimePoint& to) const;

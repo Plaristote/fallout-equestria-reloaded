@@ -1,4 +1,5 @@
 #include "datetime.hpp"
+#include "i18n.h"
 #include <sstream>
 
 using namespace std;
@@ -144,6 +145,10 @@ std::string DateTime::ToString(const std::string& format) const
       
       switch (format[i + 1])
       {
+        case 'w':
+          number = -1;
+          result << I18n::get()->t("weekdays." + QString::number(GetDayOfTheWeek())).toStdString();
+          break ;
         case 'd':
           number  = static_cast<short>(day);
           break ;

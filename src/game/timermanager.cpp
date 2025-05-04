@@ -69,6 +69,12 @@ long TimeManager::secondsUntilTime(const QVariantMap &timeData) const
   return static_cast<long>(seconds);
 }
 
+QString TimeManager::toStringAfter(int seconds, const QString& format) const
+{
+  DateTime date = dateTime + DateTime::Seconds(seconds);
+  return QString::fromStdString(date.ToString(format.toStdString()));
+}
+
 TimeManager::TimePoint::TimePoint(const QVariantMap& timeData)
 {
   hour   = timeData.contains("hour") ? timeData["hour"].toUInt() : 0;
