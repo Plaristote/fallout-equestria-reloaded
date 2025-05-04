@@ -36,6 +36,11 @@ find_package(QT NAMES Qt6 COMPONENTS Core Quick Gui REQUIRED)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Quick QuickControls2 Gui OPTIONAL_COMPONENTS Gamepad)
 find_package(Qt${QT_VERSION_MAJOR}Multimedia REQUIRED)
 
+if (WIN32) # Workaround broken QtGamepadLegacy build on Windows
+  find_package(Qt${QT_VERSION_MAJOR} CONFIG REQUIRED COMPONENTS BuildInternals Core Gui)
+  find_package(Qt${QT_VERSION_MAJOR} CONFIG OPTIONAL_COMPONENTS Quick QuickControls2)
+endif()
+
 set(QT_USE_QTMULTIMEDIA TRUE)
 
 add_subdirectory(qtgamepadlegacy)
