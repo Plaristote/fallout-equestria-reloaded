@@ -8,19 +8,51 @@
 #include <QSettings>
 #include <cmath>
 
+SoundWorker::SoundWorker()
+{
+  timer.setInterval(1000);
+  timer.setSingleShot(false);
+  connect(&timer, &QTimer::timeout, this, &SoundWorker::update);
+}
+
+SoundWorker::~SoundWorker()
+{
+  timer.stop();
+}
+
+void SoundWorker::update()
+{
+  for (auto it = sounds.begin() ; it != sounds.end() ;)
+  {
+    QSharedPointer<QSoundEffect> sound = *it;
+
+    if (sound->status() != QSoundEffect::Loading && !sound->isPlaying())
+      it = sounds.erase(it);
+    else
+      it++;
+  }
+  if (!sounds.size())
+    timer.stop();
+}
+
+void SoundWorker::playSound(const QUrl& url, float volume)
+{
+  auto sound = QSharedPointer<QSoundEffect>(new QSoundEffect, &QSoundEffect::deleteLater);
+
+  sound->setSource(url);
+  sound->setLoopCount(1);
+  sound->setVolume(volume);
+  sound->play();
+  sounds.push_back(sound);
+  timer.start();
+}
+
 SoundManager* SoundManager::_global_ptr = nullptr;
 static const QString volumeOption = "audio/soundVolume";
 
 SoundManager::SoundManager(QObject *parent) : QObject(parent)
 {
   _global_ptr = this;
-  timer.setInterval(1000);
-  connect(&timer, &QTimer::timeout, this, &SoundManager::update);
-}
-
-SoundManager::~SoundManager()
-{
-  stop();
 }
 
 void SoundManager::initialize()
@@ -40,18 +72,29 @@ void SoundManager::initialize()
       initialized = true;
     }
   }
+  start();
+}
+
+void SoundManager::start()
+{
+  if (!workerThread)
+  {
+    SoundWorker* worker = new SoundWorker();
+    workerThread = new QThread(this);
+
+    connect(workerThread, &QThread::finished, worker, &QObject::deleteLater);
+    connect(workerThread, &QThread::finished, workerThread, &QObject::deleteLater);
+    connect(this, &SoundManager::playSound, worker, &SoundWorker::playSound, Qt::QueuedConnection);
+    workerThread->start();
+  }
 }
 
 void SoundManager::stop()
 {
-  auto it = sounds.begin();
-
-  while (it != sounds.end())
+  if (workerThread)
   {
-    QSharedPointer<QSoundEffect> sound = *it;
-
-    sound->stop();
-    it = sounds.erase(it);
+    workerThread->quit();
+    workerThread = nullptr;
   }
 }
 
@@ -66,34 +109,13 @@ int SoundManager::getDefaultVolume() const
   return QSettings().value(volumeOption, 100).toInt();
 }
 
-void SoundManager::update()
-{
-  for (auto it = sounds.begin() ; it != sounds.end() ;)
-  {
-    QSharedPointer<QSoundEffect> sound = *it;
-
-    if (sound->status() != QSoundEffect::Loading && !sound->isPlaying())
-      it = sounds.erase(it);
-    else
-      it++;
-  }
-  if (!sounds.size())
-    timer.stop();
-}
-
 void SoundManager::play(const QString& name, qreal volume)
 {
   if (soundLibrary.contains(name))
   {
     auto volumeLevel = QSettings().value(volumeOption, 100).toInt();
-    auto sound = QSharedPointer<QSoundEffect>(new QSoundEffect, &QSoundEffect::deleteLater);
 
-    sound->setSource(soundLibrary[name]);
-    sound->setLoopCount(1);
-    sound->setVolume(volume * volumeLevel / 100);
-    sound->play();
-    sounds.push_back(sound);
-    timer.start();
+    emit playSound(soundLibrary[name], volume * volumeLevel / 100);
   }
 }
 
