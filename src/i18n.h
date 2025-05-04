@@ -26,6 +26,7 @@ public:
   Q_INVOKABLE QStringList getAvailableLocales() const { return locales; }
   Q_INVOKABLE QString t(const QString& key) const;
   Q_INVOKABLE QString t(const QString& key, const QVariantMap& variables) const;
+  Q_INVOKABLE bool hasTranslation(const QString& key) const;
   const QString& getCurrentLocale() const { return currentLocale; }
   QString getSystemLocale() const;
 

@@ -145,6 +145,15 @@ QString CharacterDialog::t(const QString &name, const QVariantMap& options) cons
   return I18n::get()->t(translationPath, parameters);
 }
 
+QString CharacterDialog::tWithFallback(const QString& name, const QVariantMap& options, const QString& fallback) const
+{
+  QString translationPath = translationGroup + '.' + name;
+
+  if (I18n::get()->hasTranslation(translationPath))
+    return t(name, options);
+  return fallback;
+}
+
 QString CharacterDialog::getOptionText(const QString& key)
 {
   const auto& answer = data.findAnswer(key);

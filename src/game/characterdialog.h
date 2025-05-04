@@ -53,6 +53,7 @@ public:
   Q_INVOKABLE bool    tryToBarter();
 
   Q_INVOKABLE QString t(const QString& name, const QVariantMap& = {}) const;
+  Q_INVOKABLE QString tWithFallback(const QString& name, const QVariantMap&, const QString& fallback) const;
 
 signals:
   void stateReferenceChanged();

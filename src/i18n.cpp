@@ -155,6 +155,11 @@ QVariantMap I18n::getTitleFontMetrics() const
   return getFontMetrics("title", {{"point", 18}, {"tiny", 24}, {"big", 32}});
 }
 
+bool I18n::hasTranslation(const QString& key) const
+{
+  return getTranslation(key).isString();
+}
+
 QJsonValue I18n::getTranslation(const QString& key) const
 {
   QJsonObject group = getTranslationGroupForKey(key);
