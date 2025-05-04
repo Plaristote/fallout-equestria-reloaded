@@ -65,6 +65,7 @@ int main(int argc, char *argv[])
 #endif
 
   QGuiApplication app(argc, argv);
+  app.addLibraryPath(QDir(QCoreApplication::applicationDirPath()).filePath("plugins"));
   QQmlApplicationEngine engine;
   GamePackages* gamePackages = new GamePackages(&app);
   GameContext* gameContext = nullptr;
