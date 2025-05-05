@@ -11,11 +11,34 @@ ScriptController::ScriptController(const QString& modulePath) :
     module = game->loadScript(path);
 }
 
+static int findLastPos(const QString& path, char c)
+{
+  QString name;
+  int lastSlash = -1;
+
+  for (int i = 0 ; i < path.size() ; ++i)
+  {
+    if (path[i] == '/')
+      lastSlash = i;
+  }
+  return lastSlash;
+}
+
+static QString lastPart(const QString& path)
+{
+  QString name;
+  int lastSlash = findLastPos(path, '/');
+
+  for (int i = lastSlash + 1 ; i < path.size() ; ++i)
+    name += path[i];
+  return name;
+}
+
 static QString pathToClassName(const QString& path)
 {
   QRegularExpression regex("\\.m?js$");
   QRegularExpression separator("[-_.]+");
-  QString name = path.split("/").last().replace(regex, "");
+  QString name = lastPart(path).replace(regex, "");
   QString result;
 
   for (auto part : name.split(separator))
