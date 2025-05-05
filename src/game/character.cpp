@@ -77,7 +77,7 @@ void Character::takeMitigableDamage(int damage, const QString& type, Character* 
 
     if (dealer)
       params << dealer->asJSValue();
-    result = scriptCall("mitigateDamage", QJSValueList() << damage << type << dealer->asJSValue());
+    result = scriptCall("mitigateDamage", params);
     if (result.isNumber())
       damage = result.toInt();
     takeDamage(damage, dealer);
