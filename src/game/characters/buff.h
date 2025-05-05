@@ -15,6 +15,7 @@ class Buff : public StorableObject
   Q_PROPERTY(QString     name   MEMBER name)
   Q_PROPERTY(Character*  target MEMBER target)
   Q_PROPERTY(TaskRunner* tasks  MEMBER tasks)
+  Q_PROPERTY(QJSValue    script READ getScriptObject CONSTANT)
 public:
   explicit Buff(Character* parent = nullptr);
 
