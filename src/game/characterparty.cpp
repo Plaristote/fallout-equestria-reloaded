@@ -130,6 +130,7 @@ void CharacterParty::addCharacter(Character* character)
   {
     connect(character, &DynamicObject::beforeDestroy, this, [this, character]() { removeCharacter(character); });
     connect(character, &Character::joinedCombat, this, &CharacterParty::joinCombat);
+    connect(character, &Character::died, this, std::bind(&CharacterParty::removeCharacter, this, character));
     character->setParent(this);
     enforceFactionOn(character);
     list.push_back(character);
@@ -139,7 +140,7 @@ void CharacterParty::addCharacter(Character* character)
 
 void CharacterParty::removeCharacter(Character* character)
 {
-  if (character)
+  if (character && list.contains(character))
   {
     disconnect(character, &Character::joinedCombat, this, &CharacterParty::joinCombat);
     list.removeAll(character);
