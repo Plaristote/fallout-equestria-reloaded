@@ -11,16 +11,12 @@ MusicManager* MusicManager::_global_ptr = nullptr;
 
 MusicManager::MusicManager(QObject* parent) : QObject(parent)
 {
-  audioOutput  = new QAudioOutput(this);
-  audioManager = new QMediaPlayer(this);
-  audioManager->setAudioOutput(audioOutput);
   _global_ptr  = this;
   fadingOut    = false;
   loadDataTree();
   fadingTimer.setInterval(50);
   fadingTimer.setSingleShot(false);
   connect(&fadingTimer, &QTimer::timeout, this, &MusicManager::fadeVolume);
-  connect(audioManager, &QMediaPlayer::playbackStateChanged, this, &MusicManager::onStateChanged);
   connect(this, &MusicManager::defaultVolumeChanged, [this]() { setVolumeToDefault(); });
   setVolumeToDefault();
 }
@@ -28,10 +24,12 @@ MusicManager::MusicManager(QObject* parent) : QObject(parent)
 MusicManager::~MusicManager()
 {
   _global_ptr = nullptr;
+  fadingTimer.stop();
   if (audioManager)
   {
     disconnect(audioManager, &QMediaPlayer::playbackStateChanged, this, &MusicManager::onStateChanged);
     audioManager->stop();
+    audioManager->deleteLater();
   }
 }
 
@@ -50,10 +48,13 @@ void MusicManager::loadDataTree()
 
 void MusicManager::pause(bool paused)
 {
-  if (paused)
-    audioManager->pause();
-  else
-    audioManager->play();
+  if (audioManager)
+  {
+    if (paused)
+      audioManager->pause();
+    else
+      audioManager->play();
+  }
 }
 
 void MusicManager::play(const QString& category)
@@ -71,7 +72,7 @@ void MusicManager::play(const QString& scategory, const QString& name)
   if (category.isUndefined()) return ;
   track = category[name];
   if (track.isUndefined())    return ;
-  if (audioManager->playbackState() == QMediaPlayer::PlayingState)
+  if (audioManager && audioManager->playbackState() == QMediaPlayer::PlayingState)
   {
     nextTrack = track.toString();
     fadeOut();
@@ -106,23 +107,30 @@ void MusicManager::playNext(void)
     play(currentCategory, keys.at(rand() % max));
 }
 
+void MusicManager::cleanupAudioManager()
+{
+  QMediaPlayer* self = audioManager;
+
+  disconnect(audioManager, &QMediaPlayer::playbackStateChanged, this, &MusicManager::onStateChanged);
+  connect(audioManager, &QMediaPlayer::playbackStateChanged, self, [self](PlaybackState state)
+  {
+    if (state == QMediaPlayer::StoppedState)
+      self->deleteLater();
+  });
+  audioOutput->setMuted(true);
+}
+
 void MusicManager::startTrack(const QString& filename)
 {
   currentTrack = filename;
   nextTrack    = currentTrack;
   if (audioManager)
-  {
-    disconnect(audioManager, &QMediaPlayer::playbackStateChanged, this, &MusicManager::onStateChanged);
-    audioManager->stop();
-    audioManager->setAudioOutput(nullptr);
-    audioManager->deleteLater();
-  }
-  audioManager = new QMediaPlayer(this);
+    cleanupAudioManager();
+  audioManager = new QMediaPlayer();
+  audioOutput = new QAudioOutput(audioManager);
   audioManager->setAudioOutput(audioOutput);
   audioManager->setSource(QUrl::fromLocalFile(ASSETS_PATH + "audio/" + currentTrack));
-#ifndef _WIN32
   audioManager->play();
-#endif
   setVolumeToDefault();
   connect(audioManager, &QMediaPlayer::playbackStateChanged, this, &MusicManager::onStateChanged);
 }
@@ -183,7 +191,8 @@ void MusicManager::fadeOut()
 void MusicManager::setVolume(double volume)
 {
   volumeGoal = volume;
-  audioOutput->setVolume(volume);
+  if (audioOutput)
+    audioOutput->setVolume(volume);
 }
 
 void MusicManager::setVolumeToDefault()

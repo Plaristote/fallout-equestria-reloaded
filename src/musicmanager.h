@@ -42,6 +42,7 @@ private:
   void                 loadDataTree();
   void                 startTrack(const QString& filename);
   QStringList          potentialSuccessors() const;
+  void                 cleanupAudioManager();
 
   QJsonObject          data;
   QJsonObject          dataTree;
