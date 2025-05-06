@@ -55,6 +55,12 @@ SoundManager::SoundManager(QObject *parent) : QObject(parent)
   _global_ptr = this;
 }
 
+SoundManager::~SoundManager()
+{
+  stop();
+  _global_ptr = nullptr;
+}
+
 void SoundManager::initialize()
 {
   if (!initialized)
