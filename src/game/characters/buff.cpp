@@ -37,11 +37,17 @@ void Buff::load(const QJsonObject& data)
   name = data["name"].toString();
   StorableObject::load(data);
   loadScript();
+  if (data["tasks"].isObject())
+    tasks->load(data["tasks"].toObject());
 }
 
 void Buff::save(QJsonObject& data) const
 {
+  QJsonObject tasksData;
+
+  tasks->save(tasksData);
   data["name"] = name;
+  data["tasks"] = tasksData;
   StorableObject::save(data);
 }
 
