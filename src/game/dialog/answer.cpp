@@ -99,15 +99,21 @@ bool DialogAnswer::isAvailable(CharacterDialog& dialog)
       qDebug() << "DialogAnswer: availableHook: " << jsErrorBacktrace(retval);
     return retval.toBool();
   }
-  else if (availableHook.isString())
+  else if (availableHook.isString() && !availableHook.toString().isEmpty())
   {
-    QString callback = availableHook.toString();
-    QJSValue property = dialog.getScript()->property(callback);
+    QString  callback = availableHook.toString();
+    QJSValue property;
+    bool     inverse = callback.first(1) == '!';
+    bool     result = true;
 
+    if (inverse)
+      callback = callback.slice(1);
+    property = dialog.getScript()->property(callback);
     if (property.isCallable())
-      return dialog.getScript()->callMethod(property).toBool();
+      result = dialog.getScript()->callMethod(property).toBool();
     else if (property.isBool())
-      return property.toBool();
+      result = property.toBool();
+    return inverse ? !result : result;
   }
   else if (availableHook.isBool())
     return availableHook.toBool();
