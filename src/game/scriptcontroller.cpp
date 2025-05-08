@@ -2,13 +2,24 @@
 #include "game.h"
 #include <QDebug>
 
+#ifdef GAME_EDITOR
+static bool shouldLoadScript(const QString& path)
+{
+  return Game::get()->getIsGameEditor()
+      || path.startsWith(SCRIPTS_PATH + "items/");
+}
+#endif
+
 ScriptController::ScriptController(const QString& modulePath) :
   engine(Game::get()->getScriptEngine()), path(modulePath)
 {
-  Game* game = Game::get();
 
-  if (!Game::get()->getIsGameEditor())
-    module = game->loadScript(path);
+#ifdef GAME_EDITOR
+  if (shouldLoadScript(path))
+#endif
+  {
+    module = Game::get()->loadScript(path);
+  }
 }
 
 static int findLastPos(const QString& path, char c)
