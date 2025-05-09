@@ -60,6 +60,29 @@ QJSValue ControlZoneComponent::getControlZoneOccupants() const
   return game->getScriptEngine().newArray();
 }
 
+QJSValue ControlZoneComponent::findControlZoneOccupants(QJSValue filter) const
+{
+  auto* game = Game::get();
+  auto* level = game->getLevel();
+  QSet<DynamicObject*> objects;
+  QJSValue result = game->getScriptEngine().newArray();
+  QJSValue push = result.property("push");
+
+  for (QPoint position : controlZone->getPositions())
+  {
+    position += controlZone->getOffset();
+    for (DynamicObject* object : level->getDynamicObjectsAt({ position.x(), position.y(), floor}))
+      objects << object;
+  }
+  for (DynamicObject* object : objects)
+  {
+    QJSValueList argv{object->asJSValue()};
+    if (filter.call(argv).toBool())
+      push.callWithInstance(result, argv);
+  }
+  return result;
+}
+
 QPoint ControlZoneComponent::getRandomZonePosition() const
 {
   if (controlZone != nullptr && controlZone->getPositionCount() > 0)
