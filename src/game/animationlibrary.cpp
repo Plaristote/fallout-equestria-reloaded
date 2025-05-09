@@ -7,6 +7,7 @@
 #include <QDebug>
 
 QString preRenderRoot();
+const QImage nullImage;
 
 QmlSpriteAnimation::QmlSpriteAnimation(QObject* parent) : QObject(parent)
 {
@@ -162,7 +163,8 @@ const QImage& AnimationLibrary::getImage(const QString& source) const
   if (iterator == images.end())
   {
     qDebug() << "Could not find Image for picture" << source << "in" << images.keys();
-    throw std::out_of_range("no source for animation");
+    qDebug() << "No source for animation" << source;
+    return nullImage;
   }
   return *iterator;
 }
