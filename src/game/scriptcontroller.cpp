@@ -5,7 +5,7 @@
 #ifdef GAME_EDITOR
 static bool shouldLoadScript(const QString& path)
 {
-  return Game::get()->getIsGameEditor()
+  return !Game::get()->getIsGameEditor()
       || path.startsWith(SCRIPTS_PATH + "items/");
 }
 #endif
@@ -13,7 +13,6 @@ static bool shouldLoadScript(const QString& path)
 ScriptController::ScriptController(const QString& modulePath) :
   engine(Game::get()->getScriptEngine()), path(modulePath)
 {
-
 #ifdef GAME_EDITOR
   if (shouldLoadScript(path))
 #endif
