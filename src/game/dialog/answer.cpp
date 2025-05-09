@@ -79,12 +79,10 @@ QJSValue DialogAnswer::trigger(CharacterDialog& dialog)
     retval = triggerHook.call(QJSValueList() << dialog.getScriptObject());
     if (retval.isError())
       qDebug() << "DialogAnswer: hook:" << jsErrorBacktrace(retval);
-    else if (retval.isObject())
-      return retval;
   }
   else if (triggerHook.isString() && script->hasMethod(triggerHook.toString()))
     retval = script->call(triggerHook.toString());
-  if (retval.isString())
+  if (retval.isString() || retval.isObject())
     return retval;
   return defaultNextState;
 }
