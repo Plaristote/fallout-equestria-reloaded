@@ -45,7 +45,7 @@ void InteractionComponent::openCountdownDialog(InventoryItem *item)
 
 int InteractionComponent::getInteractionDistance(DynamicObject* target, const QString& interactionType)
 {
-  int distance;
+  int distance = 0;
 
   if (interactionType == "look")
   {
@@ -55,7 +55,7 @@ int InteractionComponent::getInteractionDistance(DynamicObject* target, const QS
   }
   else if (interactionType == "push" || interactionType == "talk-to")
     distance = 3;
-  else
+  else if (target)
     distance = target->getInteractionDistance();
   return distance;
 }
