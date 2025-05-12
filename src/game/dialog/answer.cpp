@@ -89,9 +89,11 @@ QJSValue DialogAnswer::trigger(CharacterDialog& dialog)
 
 bool DialogAnswer::isAvailable(CharacterDialog& dialog)
 {
+  QJSValueList params{symbol};
+
   if (availableHook.isCallable())
   {
-    QJSValue retval = availableHook.call();
+    QJSValue retval = availableHook.call(params);
 
     if (retval.isError())
       qDebug() << "DialogAnswer: availableHook: " << jsErrorBacktrace(retval);
@@ -108,7 +110,7 @@ bool DialogAnswer::isAvailable(CharacterDialog& dialog)
       callback = callback.slice(1);
     property = dialog.getScript()->property(callback);
     if (property.isCallable())
-      result = dialog.getScript()->callMethod(property).toBool();
+      result = dialog.getScript()->callMethod(property, params).toBool();
     else if (property.isBool())
       result = property.toBool();
     return inverse ? !result : result;
