@@ -58,7 +58,8 @@ Game::Game(QObject *parent) : StorableObject(parent), timePasser(this)
 
 Game::~Game()
 {
-  SoundManager::get()->stop();
+  if (SoundManager::get())
+    SoundManager::get()->stop();
   scriptEngine.collectGarbage();
   if (instance == this)
     instance = nullptr;
