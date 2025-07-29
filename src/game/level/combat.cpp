@@ -74,10 +74,13 @@ void CombatComponent::joinCombat(Character* character)
 
 void CombatComponent::startCombat(Character* character)
 {
-  combat = true;
-  emit combatChanged();
-  emit currentCombattantChanged();
-  initializeCharacterTurn(character);
+  if (!combat)
+  {
+    combat = true;
+    emit combatChanged();
+    emit currentCombattantChanged();
+    initializeCharacterTurn(character);
+  }
 }
 
 void CombatComponent::leaveCombat(Character* character)

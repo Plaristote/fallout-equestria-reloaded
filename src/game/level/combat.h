@@ -28,7 +28,7 @@ public:
   virtual void registerDynamicObject(DynamicObject*) override;
   virtual void unregisterDynamicObject(DynamicObject*) override;
 
-  void startCombat(Character* character);
+  Q_INVOKABLE void startCombat(Character* character);
   void onNextCombatTurn();
   bool isPlayerTurn() const;
 
