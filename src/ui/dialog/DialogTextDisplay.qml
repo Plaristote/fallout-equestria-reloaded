@@ -4,6 +4,7 @@ import "qrc:/assets/ui" as UiStyle
 
 BorderImage {
   property string text: "default text"
+  readonly property bool textConcealed: gameManager.currentGame.fastPassTime
   id: textDisplay
   source: "qrc:/assets/ui/dialog/text.png"
   border { top: 6; left: 287; right: 215; bottom: 11 }
@@ -26,7 +27,7 @@ BorderImage {
     Text {
       id: dialogContent
       color: "white"
-      text: textDisplay.text
+      text: !textDisplay.textConcealed ? textDisplay.text : ""
       textFormat: Text.StyledText
       wrapMode: Text.WordWrap
       horizontalAlignment: Qt.AlignJustify
