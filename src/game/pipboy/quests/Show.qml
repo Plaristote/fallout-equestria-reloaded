@@ -57,6 +57,7 @@ Flickable {
           font.pointSize: application.consoleFont.bigSize / 6 * 7
           horizontalAlignment: Text.AlignJustify
           wrapMode: Text.WordWrap
+          textFormat: Text.RichText
           Layout.preferredWidth: (root.width / 2) - 50
           color: "green"
         }
