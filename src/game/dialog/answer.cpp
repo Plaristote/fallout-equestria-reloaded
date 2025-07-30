@@ -107,7 +107,7 @@ bool DialogAnswer::isAvailable(CharacterDialog& dialog)
     bool     result = true;
 
     if (inverse)
-      callback = callback.slice(1);
+      callback = callback.sliced(1);
     property = dialog.getScript()->property(callback);
     if (property.isCallable())
       result = dialog.getScript()->callMethod(property, params).toBool();
