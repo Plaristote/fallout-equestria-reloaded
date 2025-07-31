@@ -242,7 +242,7 @@ bool CharacterParty::insertIntoZone(GridComponent* level, TileZone* zone) const
 
   if (list.length() > 0)
   {
-    for (auto position : zone->getPositions())
+    for (auto position : zone->getAbsolutePositions())
     {
       if (!grid->isOccupied(position.x(), position.y()))
       {
