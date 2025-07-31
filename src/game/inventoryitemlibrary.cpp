@@ -41,6 +41,11 @@ QString InventoryItemLibrary::getIcon(const QString& name) const
   return library[name]["icon"].toString("any.png");
 }
 
+int InventoryItemLibrary::getValue(const QString& name) const
+{
+  return library[name]["value"].toInt();
+}
+
 void InventoryItemLibrary::setObject(const QString& name, const QJsonObject& data)
 {
   qDebug() << "InventoryItemLibrary::setObject" << name << QJsonDocument(data).toJson();
