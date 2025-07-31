@@ -7,6 +7,7 @@
 #include <QDir>
 #include "editor/leveleditorcontroller.h"
 #include "cmap/perk.h"
+#include "game/inventoryitemlibrary.h"
 
 Game* Game::instance = nullptr;
 const QString nullTargetZone("_load");
@@ -45,6 +46,7 @@ Game::Game(QObject *parent) : StorableObject(parent), timePasser(this)
   scriptEngine.globalObject().setProperty("musicManager", scriptEngine.newQObject(MusicManager::get()));
   scriptEngine.globalObject().setProperty("dices", scriptEngine.newQObject(dices));
   scriptEngine.globalObject().setProperty("i18n", scriptEngine.newQObject(I18n::get()));
+  scriptEngine.globalObject().setProperty("itemLibrary", scriptEngine.newQObject(InventoryItemLibrary::get()));
   Race::initialize();
   Trait::initialize();
   Perk::initialize();

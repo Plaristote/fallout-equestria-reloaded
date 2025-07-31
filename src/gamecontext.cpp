@@ -12,7 +12,7 @@
 QString preRenderRoot();
 
 GameContext::GameContext(QObject *parent)
-  : QObject{parent}
+  : QObject{parent}, itemLibrary(this)
 {}
 
 void GameContext::load(const GamePackage& package)
