@@ -88,6 +88,16 @@ bool TaskRunner::hasTask(const QString &name) const
   return false;
 }
 
+qint64 TaskRunner::timeLeft(const QString &name) const
+{
+  for (auto it = tasks.begin() ; it != tasks.end() ; ++it)
+  {
+    if (it->name == name)
+      return it->timeLeft;
+  }
+  return -1;
+}
+
 void TaskRunner::addTask(const QString &name, qint64 interval, int iterationCount)
 {
   if (interval > 0)
