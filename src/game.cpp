@@ -203,8 +203,10 @@ void Game::onCityEnteredAt(const QString& name, const QString& zone)
 
 LevelTask* Game::newLevelTask()
 {
+#ifdef GAME_EDITOR
   if (isGameEditor)
     return new LevelEditorController(this);
+#endif
   return new LevelTask(this);
 }
 
