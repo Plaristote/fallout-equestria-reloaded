@@ -290,9 +290,9 @@ if (GAME_EDITOR)
 endif()
 
 if (WIN32)
-  qt_add_executable(falloutequestria WIN32 ${PROJECT_SOURCES})
+  qt_add_executable(falloutequestria MANUAL_FINALIZATION WIN32 ${PROJECT_SOURCES})
 else()
-  qt_add_executable(falloutequestria ${PROJECT_SOURCES})
+  qt_add_executable(falloutequestria MANUAL_FINALIZATION ${PROJECT_SOURCES})
 endif()
 
 set(ENGINE_LINK_LIBRARIES 
@@ -322,3 +322,5 @@ target_link_libraries(falloutequestria
 
 qt_import_qml_plugins(falloutequestria)
 qt_finalize_executable(falloutequestria)
+
+install(TARGETS falloutequestria DESTINATION ${CMAKE_INSTALL_BINDIR})
