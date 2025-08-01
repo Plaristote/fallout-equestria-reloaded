@@ -66,6 +66,11 @@ int main(int argc, char *argv[])
 
   QGuiApplication app(argc, argv);
   app.addLibraryPath(QDir(QCoreApplication::applicationDirPath()).filePath("plugins"));
+
+#ifdef FLATPAK_BUILD
+  QDir::setCurrent("/app/share/foe-games");
+#endif
+
   QQmlApplicationEngine engine;
   GamePackages* gamePackages = new GamePackages(&app);
   GameContext* gameContext = nullptr;
