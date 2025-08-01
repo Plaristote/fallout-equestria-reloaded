@@ -14,7 +14,7 @@ class CharacterDialog : public QObject
   Q_OBJECT
 
   Q_PROPERTY(Character*        player         MEMBER player CONSTANT)
-  Q_PROPERTY(DynamicObject*    npc            MEMBER npc CONSTANT)
+  Q_PROPERTY(DynamicObject*    npc            MEMBER npc NOTIFY npcChanged)
   Q_PROPERTY(QString           name           READ getName NOTIFY nameChanged)
   Q_PROPERTY(QString           stateReference MEMBER stateReference NOTIFY stateReferenceChanged)
   Q_PROPERTY(QString           text           MEMBER text NOTIFY textChanged)
@@ -51,6 +51,7 @@ public:
   QString             getPreviousAnswer() const { return answerHistory.size() ? answerHistory.first() : QString(); }
   BarterController*   getBarterController() const { return barter; }
   Q_INVOKABLE bool    tryToBarter();
+  Q_INVOKABLE void    swapNpc(Character*);
 
   Q_INVOKABLE QString t(const QString& name, const QVariantMap& = {}) const;
   Q_INVOKABLE QString tWithFallback(const QString& name, const QVariantMap&, const QString& fallback) const;
@@ -68,6 +69,7 @@ signals:
   void answerListChanged();
   void barterControllerChanged();
   void nameChanged();
+  void npcChanged();
   void ready();
 
 private slots:

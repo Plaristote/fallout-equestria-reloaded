@@ -20,6 +20,17 @@ CharacterDialog::~CharacterDialog()
     delete script;
 }
 
+void CharacterDialog::swapNpc(Character* npc)
+{
+  if (npc)
+  {
+    this->npc = npc;
+    if (npc->isCharacter())
+      prepareDialogWithCharacter();
+    emit npcChanged();
+  }
+}
+
 void CharacterDialog::prepareDialogWithCharacter()
 {
   Character* character = reinterpret_cast<Character*>(npc);
