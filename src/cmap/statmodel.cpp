@@ -550,7 +550,7 @@ void StatModel::fromJson(const QJsonObject& json)
   hasLeveledUp   = json["lvlup"].toBool(false);
   skillPoints    = json["skill-points"].toInt(0);
   availablePerks = json["available-perks"].toInt(0);
-  lastPerk = json["last-perk"].toInt(0);
+  lastPerk       = json["last-perk"].toInt(1);
   strength     = json["str"].toInt(5);
   endurance    = json["end"].toInt(5);
   perception   = json["per"].toInt(5);
