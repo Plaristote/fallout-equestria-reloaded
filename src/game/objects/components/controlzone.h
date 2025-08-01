@@ -25,6 +25,7 @@ public:
   Q_INVOKABLE QJSValue  getControlZoneOccupants() const;
   Q_INVOKABLE QJSValue  findControlZoneOccupants(QJSValue) const;
   Q_INVOKABLE QPoint    getRandomZonePosition() const;
+  Q_INVOKABLE bool      isInside(const GridObjectComponent*) const;
   TileZone*             getControlZone() { return controlZone; }
   void                  toggleZoneBlocked(bool value);
   inline bool           hasControlZone() const { return controlZone != nullptr; }

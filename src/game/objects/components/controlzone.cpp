@@ -50,6 +50,12 @@ void ControlZoneComponent::removeControlZone()
   }
 }
 
+bool ControlZoneComponent::isInside(const GridObjectComponent* object) const
+{
+  QPoint position = object->getPosition();
+  return controlZone != nullptr && controlZone->isInside(position.x(), position.y(), object->getCurrentFloor());
+}
+
 QJSValue ControlZoneComponent::getControlZoneOccupants() const
 {
   auto* game  = Game::get();
