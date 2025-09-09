@@ -43,6 +43,7 @@ Item {
   ConfirmDialog {
     id: encounterConfirmDialog
     anchors.centerIn: parent
+    closePolicy: Popup.NoAutoClose
     onAccepted: gameManager.currentGame.randomEncounters.triggerScheduledEncounter()
     onRejected: {
       root.state = "default";
