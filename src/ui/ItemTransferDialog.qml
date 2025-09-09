@@ -12,6 +12,7 @@ UiStyle.CustomDialog {
   title: i18n.t("How much ?")
   modal: true
   standardButtons: Dialog.Ok | Dialog.Cancel
+  autoFocusOnOkButton: false
   onVisibleChanged: {
     if (visible) {
       quantityInputField.forceActiveFocus();
