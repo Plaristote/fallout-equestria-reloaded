@@ -48,7 +48,7 @@ Row {
           horizontalCenter: parent.horizontalCenter
         }
         CustomLabel {
-          text: character.statistics.name
+          text: character.displayName
         }
         CustomLabel {
           text:  `Sequence: ${character.statistics.sequence}`
