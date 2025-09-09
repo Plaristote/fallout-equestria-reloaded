@@ -12,7 +12,7 @@ bool MovementAction::trigger()
   else
     state = Interrupted;
   firstRound = true;
-  return state == InProgress;
+  return state == Done || state == InProgress;
 }
 
 void MovementAction::update()
