@@ -5,8 +5,9 @@ import "../../ui" as Ui
 QuickControls.Dialog {
   id: root
   background: Pane {}
-  onOpened: okButton.forceActiveFocus()
+  onOpened: autoFocusOnOkButton ? okButton.forceActiveFocus() : null
   property alias okButton: okButton
+  property bool autoFocusOnOkButton: true
 
   function validate() {
     return true;
