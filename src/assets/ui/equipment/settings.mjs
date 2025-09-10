@@ -9,11 +9,13 @@ export const layouts = {
 };
 
 export function layoutFor(character) {
-  switch (character.statistics.race) {
-  case "earth-pony":
-  case "unicorn":
-  case "pegasus":
-    return layouts.pony;
+  if (character) {
+    switch (character.statistics.race) {
+    case "earth-pony":
+    case "unicorn":
+    case "pegasus":
+      return layouts.pony;
+    }
   }
   return null;
 }

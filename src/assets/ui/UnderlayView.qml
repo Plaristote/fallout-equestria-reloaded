@@ -24,11 +24,11 @@ Rectangle {
   states: [
     State {
       name: "shown"
-      PropertyChanges { opacity: 1 }
+      PropertyChanges { target: root; opacity: 1 }
     },
     State {
       name: "hidden"
-      PropertyChanges { opacity: 0 }
+      PropertyChanges { target: root; opacity: 0 }
     }
   ]
 
@@ -89,11 +89,11 @@ Rectangle {
     states: [
       State {
         name: "shown"
-        PropertyChanges { y: 0 }
+        PropertyChanges { target: componentWrapper; y: 0 }
       },
       State {
         name: "hidden"
-        PropertyChanges { y: -root.height }
+        PropertyChanges { target: componentWrapper; y: -root.height }
       }
     ]
 
