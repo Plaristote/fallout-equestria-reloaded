@@ -22,13 +22,17 @@ ItemIcon {
   states: State {
     when: itemMouseArea.drag.active
     ParentChange { target: itemIcon; parent: dragZone }
+    PropertyChanges { target: itemIcon; z: 3 }
   }
 
   MouseArea {
     id: itemMouseArea
     anchors.fill: parent
     drag.target: parent
-    onReleased: parent.Drag.target ? parent.Drag.target.receiveInventoryItem(model) : null;
+    onReleased: {
+      const target = parent.Drag.target;
+      target ? target.receiveInventoryItem(model) : null;
+    }
     onClicked: itemIcon.clicked(mouse)
   }
 }

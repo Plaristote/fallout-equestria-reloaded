@@ -9,13 +9,35 @@ UiStyle.UnderlayView {
   itemCentered: false
   property real inventoryHeight: inventoryView.height
 
-  DropArea {
+  Loader {
+    id: dropArea
     anchors.fill: parent
-    keys: ["InventoryItem"]
-    function receiveInventoryItem(inventoryItem) {
-      gameManager.currentGame.player.inventory.dropItem(inventoryItem)
-      if (typeof soundManager != "undefined")
-        soundManager.play("put-down");
+    z: 1
+  }
+
+  Timer {
+    id: dropAreaReset
+    interval: 5
+    running: true
+    onTriggered: dropArea.sourceComponent = dropAreaImpl
+  }
+
+  Component {
+    id: dropAreaImpl
+    DropArea {
+      keys: ["InventoryItem"]
+      function receiveInventoryItem(inventoryItem) {
+        gameManager.currentGame.player.inventory.dropItem(inventoryItem);
+        if (typeof soundManager != "undefined")
+          soundManager.play("put-down");
+        dropAreaReset.running = true;
+        dropArea.sourceComponent = null;
+      }
+      Rectangle {
+        anchors.fill: parent
+        color: parent.containsDrag ? "red" : "transparent"
+        opacity: 0.3
+      }
     }
   }
 
@@ -33,6 +55,7 @@ UiStyle.UnderlayView {
       height: root.height - 200
       onClosed: root.toggle()
       onHeightChanged: root.inventoryHeight = height;
+      dragZone: root
     }
   }
 }

@@ -6,6 +6,7 @@ import "../../ui"
 CharacterInventory {
   id: characterInventory
   title: `${i18n.t("game-editor.inventory")} - ${character ? character.objectName : 'undefined'}`
+  dragZone: characterInventory
 
   function open(value) {
     characterInventory.visible = true;

@@ -40,6 +40,7 @@ Rectangle {
   states: State {
     when: itemMouseArea.drag.active
     ParentChange { target: itemRectangle; parent: itemRectangle.dragZone }
+    PropertyChanges { target: itemRectangle; z: 3 }
   }
   Text {
     anchors.horizontalCenter: parent.horizontalCenter
@@ -62,8 +63,9 @@ Rectangle {
     onPressed: itemRectangle.clicked()
     onDoubleClicked: itemRectangle.doubleClicked()
     onReleased: {
-      if (parent.Drag.target && parent.Drag.target.receiveInventoryItem)
-        parent.Drag.target.receiveInventoryItem(inventoryItem);
+      const target = itemRectangle.Drag.target;
+      if (target && target.receiveInventoryItem)
+        target.receiveInventoryItem(inventoryItem);
     }
   }
 }

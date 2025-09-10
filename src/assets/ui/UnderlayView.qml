@@ -81,7 +81,7 @@ Rectangle {
 
   Item {
     id: componentWrapper
-    x: 0; y: 0;
+    x: 0; y: 0; z: 2
     width: parent.width
     height: parent.height
     state: root.state

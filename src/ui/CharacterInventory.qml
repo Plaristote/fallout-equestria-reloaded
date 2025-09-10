@@ -16,6 +16,7 @@ Pane {
   property var additionalControls: []
   property alias title: header.text
   property var slotLayout: EquipmentStyle.layoutFor(character)
+  property var dragZone
 
   background: UiStyle.Pane {}
 
@@ -68,7 +69,7 @@ Pane {
       id: itemsView
       Layout.fillHeight: true
       Layout.preferredWidth: parent.width > 800 ? 400 : 200
-      dragZone: root.parent.parent
+      dragZone: root.dragZone
       selectedObject: root.selectedObject
       onItemSelected: root.selectedObject = selectedItem
       onItemDropped: if (inventory.isEquippedItem(inventoryItem)) {
