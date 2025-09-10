@@ -4,6 +4,16 @@
 
 using namespace std;
 
+static void jsonSetAsEnemy(QJsonObject& factions, bool set, const QString& first, const QString& second)
+{
+  QJsonObject data = factions[first].toObject();
+  QJsonObject enemies = data["enemies"].toObject();
+
+  enemies.insert(second, set);
+  data["enemies"] = enemies;
+  factions[first] = data;
+}
+
 WorldDiplomacy::WorldDiplomacy(DataEngine& de) : _data_engine(de)
 {
   _next_flag = 1;
@@ -87,8 +97,6 @@ void WorldDiplomacy::setAsEnemy(bool set, unsigned int flag_1, unsigned int flag
 void WorldDiplomacy::setAsEnemy(bool set, Faction& first, Faction& second)
 {
   QJsonObject factions = _data_engine.getWorldDiplomacy();
-  QJsonObject firstData = factions[first.name].toObject();
-  QJsonObject secondData = factions[second.name].toObject();
 
   if (set)
   {
@@ -102,8 +110,8 @@ void WorldDiplomacy::setAsEnemy(bool set, Faction& first, Faction& second)
     if (second.enemyMask & first.flag)
       second.enemyMask -= first.flag;
   }
-  firstData["enemies"].toObject().insert(second.name, set);
-  secondData["enemies"].toObject().insert(first.name, set);
+  jsonSetAsEnemy(factions, set, first.name, second.name);
+  jsonSetAsEnemy(factions, set, second.name, first.name);
   _data_engine.setWorldDiplomacy(factions);
   emit update({first.name, second.name}, set);
 }
