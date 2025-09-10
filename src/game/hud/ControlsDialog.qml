@@ -17,6 +17,7 @@ UiStyle.CustomDialog {
     {key: "S",   label: i18n.t("controls.openSkilldex")},
     {key: "O",   label: i18n.t("controls.cmap")},
     {key: "P",   label: i18n.t("controls.pipboy")},
+    {key: "T",   label: i18n.t("controls.passTurn")},
     {key: "1",   label: i18n.t("controls.useMode1")},
     {key: "2",   label: i18n.t("controls.useMode2")},
     {key: "Esc", label: i18n.t("controls.passTurn")},

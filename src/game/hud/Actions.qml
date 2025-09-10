@@ -70,7 +70,12 @@ Item {
 
   Action {
     id: passTurnAction
-    enabled: root.enabled && level
+    enabled: root.enabled && level && level.combat && level.isPlayerTurn
+    shortcut: Shortcut {
+      sequence: "T"
+      enabled: passTurnAction.enabled
+      onActivated: passTurnAction.trigger()
+    }
     onTriggered: level.passTurn(level.player)
   }
 

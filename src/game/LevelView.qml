@@ -59,8 +59,6 @@ LevelDisplay {
         spellbook.visible = false;
       else if (itemPickerContainer.activated)
         itemPickerContainer.item.closed();
-      else if (levelController.combat && levelController.isPlayerTurn)
-        levelController.passTurn(levelController.player);
       else
         root.openMenu()
     }
