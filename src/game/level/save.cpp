@@ -1,6 +1,7 @@
 #include "save.h"
 #include "game.h"
 #include "tutorialcomponent.h"
+#include <QJsonArray>
 
 static void injectUniqueCharacters()
 {
@@ -96,6 +97,55 @@ void SaveComponent::save(DataEngine* dataEngine, bool isActive)
     dataEngine->setLevelData(name, {});
   else
     qDebug() << "(!) Level is not persistent and it's current state has been discarded.";
+}
+
+void SaveComponent::saveCombatState(QJsonObject& data) const
+{
+  if (combat)
+  {
+    QJsonObject combatData;
+    QJsonArray combattants;
+    QJsonArray armorClasses;
+
+    for (Character* combattant : this->combattants)
+    {
+      QJsonObject descriptor{{"path", combattant->getPath()}};
+      auto armorClassBonus = armorClassBonuses.find(combattant);
+
+      if (armorClassBonus != armorClassBonuses.end())
+        descriptor["armorClassBonus"] = armorClassBonus.value();
+      combattants << descriptor;
+    }
+    combatData["combattants"] = combattants;
+    combatData["iterator"] = combatIterator;
+    data["combat"] = combatData;
+  }
+}
+
+void SaveComponent::loadCombatState(const QJsonObject& data)
+{
+  if (data["combat"].isObject())
+  {
+    QJsonObject combatData = data["combat"].toObject();
+
+    for (QJsonValue value : combatData["combattants"].toArray())
+    {
+      QJsonObject descriptor      = value.toObject();
+      QString     path            = descriptor["path"].toString();
+      int         armorClassBonus = descriptor["armorClassBonus"].toInteger(0);
+      Character*  character       = qobject_cast<Character*>(findObject(path));
+
+      if (character)
+      {
+        combattants << character;
+        if (armorClassBonus >= 0)
+          armorClassBonuses[character] = armorClassBonus;
+      }
+    }
+    combat = true;
+    emit combattantsChanged();
+    emit combatChanged();
+  }
 }
 
 bool SaveComponent::canSave() const

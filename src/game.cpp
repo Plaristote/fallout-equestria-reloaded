@@ -139,7 +139,14 @@ void Game::loadFromDataEngine(std::function<void()> callback)
   player = playerParty->getCharacters().first();
   initializeEvents();
   if (!currentLevelName.isEmpty())
-    loadLevel(currentLevelName, nullTargetZone, callback);
+  {
+    loadLevel(currentLevelName, nullTargetZone, [this, callback, &variables]()
+    {
+      if (currentLevel)
+        currentLevel->loadCombatState(variables);
+      callback();
+    });
+  }
   else
     emit levelChanged();
   initializeScript();
@@ -424,7 +431,10 @@ void Game::save()
   {
     uniqueCharacterStorage->save(uniqueCharactersData);
     if (currentLevel)
+    {
       currentLevel->save(dataEngine, true);
+      currentLevel->saveCombatState(variables);
+    }
   }
   dataEngine->setTimeData(timeData);
   dataEngine->setQuests(quests->save());

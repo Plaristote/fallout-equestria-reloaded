@@ -19,6 +19,8 @@ public:
   void load(const QString& levelName, DataEngine*);
   void passElapsedTime(int lastUpdate);
   void loadTutorial();
+  void loadCombatState(const QJsonObject&);
+  void saveCombatState(QJsonObject&) const;
   void save(DataEngine*, bool isActive);
   bool canSave() const;
 
