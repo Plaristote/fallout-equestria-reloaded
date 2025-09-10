@@ -55,6 +55,7 @@ public:
   void loadFromDataEngine(std::function<void()> callback);
   UniqueCharacterStorage* getUniqueCharacterStorage() const { return uniqueCharacterStorage; }
   Q_INVOKABLE void save();
+  bool canSave() const;
   void newPlayerParty(StatModel*);
 
   Q_INVOKABLE void appendToConsole(const QString&);

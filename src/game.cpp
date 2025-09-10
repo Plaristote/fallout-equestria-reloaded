@@ -397,6 +397,11 @@ void Game::changeZone(TileZone* tileZone)
     exitLevel();
 }
 
+bool Game::canSave() const
+{
+  return currentLevel ? currentLevel->canSave() : true;
+}
+
 void Game::save()
 {
   QJsonObject partyData, timeData, uniqueCharactersData, variables;

@@ -20,7 +20,8 @@ UiStyle.CustomDialog {
     {key: "1",   label: i18n.t("controls.useMode1")},
     {key: "2",   label: i18n.t("controls.useMode2")},
     {key: "Esc", label: i18n.t("controls.passTurn")},
-    {key: "F2",  label: i18n.t("controls.debugConsole")}
+    {key: "F2",  label: i18n.t("controls.debugConsole")},
+    {key: "F5",  label: i18n.t("quicksave")}
   ]
   property var gamepadControls: ({
     "L1":       i18n.t("controls.nextUseMode1"),

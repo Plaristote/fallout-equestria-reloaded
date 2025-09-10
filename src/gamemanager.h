@@ -30,6 +30,7 @@ signals:
   void newGameStarted();
   void gameLoaded();
   void gameOver();
+  void quickSave();
   void currentGameChanged();
   void movementOptionChanged();
   void combatSpeedOptionChanged();
@@ -45,6 +46,7 @@ private:
   void setWithPlayerCropCircle(bool);
   bool getWithCameraTracking() const;
   void setWithCameraTracking(bool);
+  void tryToQuickSave();
 
   Game* currentGame;
 };

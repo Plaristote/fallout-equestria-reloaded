@@ -15,11 +15,19 @@ Item {
       gameController: gameManager.currentGame,
       levelController: gameManager.currentGame.level
     });
+    gameManager.quickSave();
   }
 
   function openWorldmapView() {
     gameManager.currentGame.worldmap.paused = false;
-    application.pushView("game/worldmap/Worldmap.qml", { controller: gameManager.currentGame.worldmap })
+    application.pushView("game/worldmap/Worldmap.qml", { controller: gameManager.currentGame.worldmap });
+    gameManager.quickSave();
+  }
+
+  Shortcut {
+    autoRepeat: false
+    sequence: "Ctrl+S,F5"
+    onActivated: gameManager.quickSave()
   }
 
   Timer {

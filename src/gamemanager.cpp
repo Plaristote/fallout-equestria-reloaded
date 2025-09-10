@@ -1,4 +1,5 @@
 #include "gamemanager.h"
+#include "i18n.h"
 #include <QDir>
 #include <QStandardPaths>
 #include <QSettings>
@@ -9,6 +10,7 @@ GameManager::GameManager(QObject *parent) : QObject(parent), currentGame(nullptr
   connect(this, &GameManager::newGameStarted, this, &GameManager::currentGameChanged);
   connect(this, &GameManager::gameLoaded,     this, &GameManager::currentGameChanged);
   connect(this, &GameManager::gameOver,       this, &GameManager::currentGameChanged);
+  connect(this, &GameManager::quickSave,      this, &GameManager::tryToQuickSave);
 }
 
 bool GameManager::hasContinueGame() const
@@ -81,6 +83,22 @@ void GameManager::saveGame(const QString& path)
   emit currentGame->requireScreenshot(savePath + ".png");
   currentGame->save();
   currentGame->getDataEngine()->saveToFile(savePath + ".json");
+}
+
+void GameManager::tryToQuickSave()
+{
+  if (currentGame)
+  {
+    I18n* i18n = I18n::get();
+
+    if (currentGame->canSave())
+    {
+      saveGame(i18n->t("quicksave"));
+      currentGame->appendToConsole(i18n->t("messages.quicksave"));
+    }
+    else
+      currentGame->appendToConsole(i18n->t("messages.quicksave-disabled"));
+  }
 }
 
 void GameManager::endGame()
