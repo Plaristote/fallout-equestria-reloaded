@@ -105,9 +105,11 @@ bool DynamicObject::defaultLookInteraction()
 
 QString DynamicObject::getDisplayName() const
 {
-  const I18n* i18n = I18n::get();
+  QJSValue displayName = scriptProperty("displayName");
 
-  return i18n->t("objects." + getBaseName());
+  return displayName.isString()
+    ? displayName.toString()
+    : I18n::get()->t("objects." + getBaseName());
 }
 
 bool DynamicObject::triggerSkillUse(Character *user, const QString &skillName, std::function<bool()> fallback)

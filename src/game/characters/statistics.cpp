@@ -13,7 +13,11 @@ CharacterStatistics::CharacterStatistics(QObject *parent) : ParentType(parent)
 
 QString CharacterStatistics::getDisplayName() const
 {
-  if (statistics)
+  QJSValue name = scriptProperty("displayName");
+
+  if (name.isString())
+    return name.toString();
+  else if (statistics)
   {
     const QString  key = "character-names." + characterSheet;
     const QString& localName = I18n::get()->t(key);
