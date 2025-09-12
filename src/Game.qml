@@ -15,13 +15,13 @@ Item {
       gameController: gameManager.currentGame,
       levelController: gameManager.currentGame.level
     });
-    gameManager.quickSave();
+    Qt.callLater(function() { gameManager.autoSave(); });
   }
 
   function openWorldmapView() {
     gameManager.currentGame.worldmap.paused = false;
     application.pushView("game/worldmap/Worldmap.qml", { controller: gameManager.currentGame.worldmap });
-    gameManager.quickSave();
+    Qt.callLater(function() { gameManager.autoSave(); });
   }
 
   Shortcut {

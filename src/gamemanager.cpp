@@ -10,7 +10,8 @@ GameManager::GameManager(QObject *parent) : QObject(parent), currentGame(nullptr
   connect(this, &GameManager::newGameStarted, this, &GameManager::currentGameChanged);
   connect(this, &GameManager::gameLoaded,     this, &GameManager::currentGameChanged);
   connect(this, &GameManager::gameOver,       this, &GameManager::currentGameChanged);
-  connect(this, &GameManager::quickSave,      this, &GameManager::tryToQuickSave);
+  connect(this, &GameManager::quickSave,      this, [this]() { tryToQuickSave(false); });
+  connect(this, &GameManager::autoSave,       this, [this]() { tryToQuickSave(true); });
 }
 
 bool GameManager::hasContinueGame() const
@@ -85,7 +86,7 @@ void GameManager::saveGame(const QString& path)
   currentGame->getDataEngine()->saveToFile(savePath + ".json");
 }
 
-void GameManager::tryToQuickSave()
+void GameManager::tryToQuickSave(bool autoSave)
 {
   if (currentGame)
   {
@@ -93,7 +94,7 @@ void GameManager::tryToQuickSave()
 
     if (currentGame->canSave())
     {
-      saveGame(i18n->t("quicksave"));
+      saveGame(i18n->t(autoSave ? "autosave" : "quicksave"));
       currentGame->appendToConsole(i18n->t("messages.quicksave"));
     }
     else
