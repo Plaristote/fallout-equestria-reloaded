@@ -92,7 +92,7 @@ bool LootingController::take(InventoryItem* item, int quantity)
       else if (quantity < item->getQuantity())
       {
         item->remove(quantity);
-        character->getInventory()->addItemOfType(item->getObjectName(), quantity);
+        character->getInventory()->addItemOfType(item->getItemType(), quantity);
         return true;
       }
     }
