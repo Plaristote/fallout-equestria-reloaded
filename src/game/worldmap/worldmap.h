@@ -19,6 +19,7 @@ class WorldMap : public QObject
   Q_PROPERTY(QSize  mapSize   MEMBER mapSize NOTIFY mapSizeChanged)
   Q_PROPERTY(QSize  caseSize  MEMBER caseSize NOTIFY mapSizeChanged)
   Q_PROPERTY(QSize  caseCount MEMBER caseCount NOTIFY caseCountChanged)
+  Q_PROPERTY(QPoint currentCase READ currentCase NOTIFY currentPositionChanged)
   Q_PROPERTY(QPointF currentPosition MEMBER currentPosition NOTIFY currentPositionChanged)
   Q_PROPERTY(QPoint targetPosition  MEMBER targetPosition  NOTIFY targetPositionChanged)
   Q_PROPERTY(TimeManager* timeManager MEMBER timeManager NOTIFY timeManagerChanged)
@@ -45,8 +46,10 @@ public:
   Q_INVOKABLE void getIntoCity(WorldMapCity*);
   Q_INVOKABLE void getIntoWasteland(QPoint);
   Q_INVOKABLE bool isVisible(int x, int y) const;
+  Q_INVOKABLE void revealCase(int x, int y) { revealCase(QPoint(x, y)); };
   Q_INVOKABLE void revealCaseAt(int x, int y) { revealCaseAt(QPoint(x, y)); }
   void             revealCaseAt(const QPoint);
+  void             revealCase(const QPoint);
   Q_INVOKABLE void revealCity(const QString& name);
   Q_INVOKABLE void revealCity(WorldMapCity*);
   Q_INVOKABLE void setPosition(int x, int y);
@@ -63,6 +66,9 @@ public:
   Q_INVOKABLE QStringList getCurrentZones() const;
   Q_INVOKABLE WorldMapCity* getCurrentCity() const;
   QVector<WorldMapZone*>  getCurrentZoneList() const;
+
+  QPoint caseAt(const QPoint position) const;
+  QPoint currentCase() const;
 
 signals:
   void currentPositionChanged();

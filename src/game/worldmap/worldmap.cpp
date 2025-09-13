@@ -275,17 +275,33 @@ void WorldMap::getIntoWasteland(QPoint poz)
   qDebug() << "Get into wazteland" << poz;
 }
 
-void WorldMap::revealCaseAt(const QPoint position)
+QPoint WorldMap::caseAt(const QPoint position) const
 {
-  int caseX = position.x() / std::max(caseSize.width(), 1);
-  int caseY = position.y() / std::max(caseSize.height(), 1);
-  unsigned int offset = static_cast<unsigned int>(caseY * caseCount.width() + caseX);
+  return QPoint(
+    position.x() / std::max(caseSize.width(), 1),
+    position.y() / std::max(caseSize.height(), 1)
+  );
+}
+
+QPoint WorldMap::currentCase() const
+{
+  return caseAt(currentPosition.toPoint());
+}
+
+void WorldMap::revealCase(const QPoint position)
+{
+  unsigned int offset = static_cast<unsigned int>(position.y() * caseCount.width() + position.x());
 
   if (offset < discovered.size() && !discovered[offset])
   {
     discovered[offset] = true;
-    emit caseRevealed(caseX, caseY);
+    emit caseRevealed(position.x(), position.y());
   }
+}
+
+void WorldMap::revealCaseAt(const QPoint coordinates)
+{
+  revealCase(caseAt(coordinates));
 }
 
 void WorldMap::revealCity(const QString &name)
