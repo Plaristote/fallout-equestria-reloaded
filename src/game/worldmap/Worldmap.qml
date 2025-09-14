@@ -54,6 +54,7 @@ Item {
   LevelHud.Actions {
     id: actions
     enabled: application.currentView === root && root.state == "default"
+    onDebugModeTriggered:      debugConsole.visible = !debugConsole.visible
     onMenuTriggered:           mainMenu.toggle()
     onInventoryTriggered:      inventoryViewContainer.toggle()
     onBackTriggered: {
@@ -199,6 +200,16 @@ Item {
     id: sidebar
     anchors { right: parent.right; top: parent.top; bottom: parent.bottom }
     controller: root.controller
+  }
+
+  LevelHud.DebugConsole {
+    id: debugConsole
+    visible: false
+    gameController: gameManager.currentGame
+    anchors {
+      left: parent.left; right: parent.right
+      top: parent.top
+    }
   }
 
   LevelHud.PlayerInventory {
