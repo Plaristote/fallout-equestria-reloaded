@@ -69,6 +69,13 @@ void GameManager::launchNewGame()
     qDebug() << "Missing initialize function in scripts/initialize.mjs";
 }
 
+bool GameManager::removeGame(const QString& path) const
+{
+  QString savePath = getSaveDirectoryPath() + '/' + path;
+  return QFile::remove(savePath + ".json")
+      && QFile::remove(savePath + ".png");
+}
+
 void GameManager::loadGame(const QString& path)
 {
   QString savePath = getSaveDirectoryPath() + '/' + path;
@@ -94,8 +101,13 @@ void GameManager::tryToQuickSave(bool autoSave)
 
     if (currentGame->canSave())
     {
-      saveGame(i18n->t(autoSave ? "autosave" : "quicksave"));
-      currentGame->appendToConsole(i18n->t("messages.quicksave"));
+      if (autoSave)
+        saveGame("autosave");
+      else
+      {
+        saveGame(i18n->t("quicksave"));
+        currentGame->appendToConsole(i18n->t("messages.quicksave"));
+      }
     }
     else
       currentGame->appendToConsole(i18n->t("messages.quicksave-disabled"));

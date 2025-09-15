@@ -26,6 +26,7 @@ SaveGameUi {
     Repeater {
       model: savedGameList
       delegate: SavedGameListItem {
+        visible: name != "autosave"
         name: root.savedGameList[index]
         selected: root.selectedIndex == index
         onClicked: root.selectedIndex = index

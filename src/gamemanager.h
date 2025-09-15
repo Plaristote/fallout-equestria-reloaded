@@ -17,6 +17,7 @@ public:
   explicit GameManager(QObject *parent = nullptr);
 
   Q_INVOKABLE bool hasContinueGame() const;
+  Q_INVOKABLE bool removeGame(const QString&) const;
   Q_INVOKABLE void startNewGame();
   Q_INVOKABLE void launchNewGame();
   Q_INVOKABLE void loadGame(const QString&);

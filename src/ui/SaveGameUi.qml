@@ -4,11 +4,12 @@ import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
 import Game 1.0
 import "../assets/ui" as UiStyle
+import "." as Ui
 
 Pane {
   id: root
   property string title
-  property var savedGameList: gameManager.getSavedGames()
+  property var savedGameList: getSavedGames()
   property int selectedIndex: 0
   property alias slots: slotList.children
   property alias controls: controlsRow.children
@@ -17,6 +18,27 @@ Pane {
   background: UiStyle.Pane {}
 
   signal backTriggered()
+
+  function getSavedGames() {
+    return gameManager.getSavedGames().filter(name => name != "autosave");
+  }
+
+  Ui.ConfirmDialog {
+    id: removeGameConfirm
+    onAccepted: {
+      gameManager.removeGame(root.currentSave)
+      savedGameList = getSavedGames();
+    }
+  }
+
+  Action {
+    id: removeGame
+    shortcut: Shortcut {
+      sequence: "Del"
+      onActivated: removeGame.trigger()
+    }
+    onTriggered: removeGameConfirm.open()
+  }
 
   Shortcut {
     id: upAction
