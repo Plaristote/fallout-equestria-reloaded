@@ -75,6 +75,7 @@ private:
   QStringList                   slotNames;
   QMap<QString, QString>        slotTypes;
   Character*                    user = nullptr;
+  bool                          initialized = false;
 };
 
 #endif // INVENTORY_H

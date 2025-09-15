@@ -183,6 +183,12 @@ bool InventoryItem::remove(int amount)
   return false;
 }
 
+void InventoryItem::loadAsEquippedBy(Character* user)
+{
+  if (user)
+    scriptCall("onLoadedAsEquipped", QJSValueList() << user->asJSValue());
+}
+
 void InventoryItem::onEquippedBy(Character* user, bool on)
 {
   resetUseMode();

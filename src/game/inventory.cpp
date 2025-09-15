@@ -428,6 +428,7 @@ void Inventory::load(const QJsonObject& data)
 {
   QJsonObject slotsData = data["slots"].toObject();
 
+  initialized = data["x"].toInt(0) == 1;
   for (auto itemDataValue : data["items"].toArray())
   {
     QJsonObject itemData = itemDataValue.toObject();
@@ -446,12 +447,16 @@ void Inventory::load(const QJsonObject& data)
     {
       item = new InventoryItem(this);
       item->load(itemData);
-      item->onEquippedBy(user, true);
+      if (initialized)
+        item->loadAsEquippedBy(user);
+      else
+        item->onEquippedBy(user, true);
     }
     slotTypes.insert(slotName, itemData["slotType"].toString());
     itemSlots.insert(slotName, item);
   }
   slotNames = slotTypes.keys();
+  initialized = Game::get() && !Game::get()->getIsGameEditor();
 }
 
 void Inventory::save(QJsonObject& data) const
@@ -479,4 +484,5 @@ void Inventory::save(QJsonObject& data) const
   }
   data["items"] = array;
   data["slots"] = slotsData;
+  data["x"] = initialized ? 1 : 0;
 }
