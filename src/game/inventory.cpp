@@ -270,13 +270,17 @@ bool Inventory::equipItem(InventoryItem *item, const QString& slotName)
     auto* oldItem = getEquippedItem(slotName);
 
     // Handling item previously in slot
-    if (oldItem && oldItem->isVirtual())
+    if (oldItem)
     {
-      itemSlots[slotName]->deleteLater();
-      itemSlots[slotName] = nullptr;
+      oldItem->onEquippedBy(user, false);
+      if (oldItem->isVirtual())
+      {
+        itemSlots[slotName]->deleteLater();
+        itemSlots[slotName] = nullptr;
+      }
+      else
+        addItem(itemSlots[slotName]);
     }
-    else if (oldItem)
-      addItem(itemSlots[slotName]);
 
     // Swapping from one slot to another
     if (!currentSlot.isEmpty())
