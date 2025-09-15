@@ -26,7 +26,7 @@ Item {
 
   Shortcut {
     autoRepeat: false
-    sequence: "Ctrl+S,F5"
+    sequences: ["F5", "Ctrl+S"]
     onActivated: gameManager.quickSave()
   }
 
