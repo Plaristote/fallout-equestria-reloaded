@@ -19,7 +19,7 @@ Pane {
       TerminalButton {
         visible: editable
         text: "+"
-        onClicked: characterSheet.addExperience(characterSheet.xpNextLevel)
+        onClicked: characterSheet.addExperience(characterSheet.xpNextLevel - characterSheet.experience + 1)
       }
 
       Text {
@@ -33,7 +33,7 @@ Pane {
       TerminalButton {
         visible: editable
         text: "-"
-        //onClicked: TODO
+        onClicked: characterSheet.levelDown()
       }
     }
 

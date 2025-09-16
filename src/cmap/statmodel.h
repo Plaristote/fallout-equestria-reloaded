@@ -167,6 +167,7 @@ public:
   QStringList getAvailableHairs() const;
   bool withFaceColor() const;
   Q_INVOKABLE void addExperience(int xp);
+  Q_INVOKABLE void levelDown();
   Q_INVOKABLE bool isAcceptable() const;
   Q_INVOKABLE int getMaxTraits() const { return 2; }
   Q_INVOKABLE QStringList getAvailableTraits();
@@ -277,6 +278,7 @@ signals:
   void spellsChanged();
 
 private slots:
+  void updateLevel();
   void updateBaseValues();
 
 private:
@@ -288,7 +290,7 @@ private:
   int hitPoints = 1;
   int skillPoints = 0;
   int availablePerks = 0;
-  int lastPerk = 0;
+  int lastPerk = 1;
   int level = 1;
   int experience = 0;
   int specialPoints = 0;

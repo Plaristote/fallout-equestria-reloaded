@@ -125,6 +125,21 @@ void StatModel::addExperience(int xp)
   emit experienceChanged();
 }
 
+void StatModel::levelDown()
+{
+  if (level > 1)
+  {
+    level      -= 2;
+    experience  = getXpNextLevel();
+    level      += 1;
+    skillPoints = get_skillRate() < skillPoints ? skillPoints - get_skillRate() : 0;
+    lastPerk   -= 1;
+    hitPoints  -= 3;
+    updateLevel();
+    emit experienceChanged();
+  }
+}
+
 void StatModel::levelUp()
 {
   hasLeveledUp = true;
@@ -132,10 +147,15 @@ void StatModel::levelUp()
   skillPoints += get_skillRate();
   lastPerk    += 1;
   hitPoints   += 3;
+  updateLevel();
+}
+
+void StatModel::updateLevel()
+{
   if (lastPerk >= get_perkRate())
   {
     availablePerks++;
-    lastPerk = 0;
+    lastPerk = level == 1 ? 1 : 0;
     emit availablePerksChanged();
   }
   updateBaseValues();
