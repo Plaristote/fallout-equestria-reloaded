@@ -159,14 +159,17 @@ void CombatComponent::onNextCombatTurn()
       swapMouseMode();
   }
   qDebug() << "CombatComponent::onNextCombatTurn" << combatIterator;
-  combatIterator = combatIterator + 1 >= combattants.size() ? 0 : combatIterator  + 1;
+  combatIterator = combatIterator + 1 >= combattants.size() ? 0 : combatIterator + 1;
   current  = combattants.at(combatIterator);
   if (previous && previous->isAlive())
     finalizeCharacterTurn(previous);
   if (combatIterator == 0)
   {
     if (shouldFinalizeTurn)
+    {
       finalizeRound();
+      current = combattants.at(combatIterator);
+    }
     if (!tryToEndCombat())
       initializeCharacterTurn(current);
   }
@@ -217,12 +220,12 @@ void CombatComponent::finalizeAllArmorClassBonus()
 
 void CombatComponent::initializeCharacterTurn(Character* character)
 {
+  finalizeArmorClassBonus(character);
   if (!character->isUnconscious())
   {
     if (character == getPlayer())
       Game::get()->getSoundManager()->play("start-turn");
     character->getFieldOfView()->runTask();
-    finalizeArmorClassBonus(character);
     character->scriptCall("onTurnStart");
   }
   else
