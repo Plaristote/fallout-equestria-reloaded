@@ -35,6 +35,7 @@ public:
   const QString& getItemType() const { return itemType; }
   Q_INVOKABLE void add(int quantity = 1);
   Q_INVOKABLE bool remove(int quantity = 1);
+  Q_INVOKABLE bool isGroupable(InventoryItem* = nullptr);
   int getInteractionDistance() const override { return 0; }
   QStringList getAvailableInteractions() override;
   int         getWeight() const;
@@ -45,7 +46,6 @@ public:
   QString     getDescription() const;
   QString     getDefaultMode() const;
   bool        isDestructible() const override;
-  bool        isGroupable(InventoryItem* = nullptr);
   bool        isBlockingPath() const override { return false; }
   bool        isVirtual() const { return virtualItem; }
   void        setVirtual(bool value) { virtualItem = value; emit virtualChanged(); }
