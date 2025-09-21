@@ -15,6 +15,7 @@ public:
   virtual ~CharacterSight();
 
   Q_INVOKABLE bool  hasLineOfSight(const DynamicObject*) const;
+  Q_INVOKABLE bool  hasLineOfSight(int x, int y) const { return hasLineOfSight({x, y, floor}); }
   bool              hasLineOfSight(Point target) const;
 
   static bool       hasSightFrom(const DynamicObject*, Point position);
