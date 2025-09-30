@@ -152,6 +152,8 @@ QString Race::getDefaultItemForSlot(StatModel* model, const QString& slotName) c
     if (retval.isString())
       return retval.toString();
   }
+  else if (hook.isString())
+    return hook.toString();
   return "melee";
 }
 
