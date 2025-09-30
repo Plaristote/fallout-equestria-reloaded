@@ -36,6 +36,20 @@ QPoint WallGroup::getRenderPosition() const
   return QPoint(renderX, renderY);
 }
 
+WallGroup::Map WallGroup::makeWallGroupMap(const QList<WallGroup>& groups)
+{
+  WallGroup::Map map;
+
+  for (const auto& group : groups)
+  {
+    for (const QPoint& point : group.positions())
+    {
+      map[SortablePoint(point)] = &group;
+    }
+  }
+  return map;
+}
+
 QList<WallGroup> WallGroup::factory(TileMap& tileMap)
 {
   TileLayer* hWalls = tileMap.getLayer("walls-h");

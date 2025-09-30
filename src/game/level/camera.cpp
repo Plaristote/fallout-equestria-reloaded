@@ -20,6 +20,7 @@ CameraComponent::CameraComponent(QObject* parent) : ParentType(parent)
 {
   connect(this, &CameraComponent::cameraMoved,       &updateTimer, [this]() { updateTimer.start(); });
   connect(this, &CameraComponent::cameraSizeChanged, &updateTimer, [this]() { updateTimer.start(); });
+  connect(this, &GridComponent::floorChanged, this, &CameraComponent::updateWallGroups);
   connect(&updateTimer, &QTimer::timeout, this, &CameraComponent::updateRenderedTiles);
   updateTimer.setInterval(50);
 }
@@ -56,4 +57,35 @@ QRect CameraComponent::getRenderedTiles() const
     );
   }
   return QRect();
+}
+
+void CameraComponent::updateWallGroups()
+{
+  wallGroups = WallGroup::makeWallGroupMap(getTileMap()->getWallGroups());
+}
+
+bool CameraComponent::isWallRendered(QPoint position) const
+{
+  WallGroup::Map::const_iterator it;
+
+  if (isCaseRendered(position.x(), position.y()))
+    return true;
+  else if ((it = wallGroups.find(position)) != wallGroups.end())
+  {
+    /*
+     * This is a faster way of doing the thing
+     */
+    const QPoint& lastPosition = it.value()->positions().constLast();
+    return isCaseRendered(lastPosition.x(), lastPosition.y());
+    /*
+     * This is an accurate way of doing the thing
+     *
+    for (QPoint wallPosition : it.value()->positions())
+    {
+      if (isCaseRendered(wallPosition.x(), wallPosition.y()))
+        return true;
+    }
+    */
+  }
+  return false;
 }

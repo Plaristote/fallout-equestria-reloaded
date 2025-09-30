@@ -2,6 +2,7 @@
 # define CAMERACOMPONENT_H
 
 # include "prerender.h"
+# include "tilemap/wallvector.h"
 
 class CameraComponent : public PreRenderComponent
 {
@@ -18,6 +19,8 @@ public:
   const QPoint& cameraOffset() const { return offset; }
 
   Q_INVOKABLE bool isCaseRendered(int x, int y) const { return renderedTiles.contains(x, y); }
+  Q_INVOKABLE bool isWallRendered(int x, int y) const { return isWallRendered(QPoint(x, y)); }
+  bool isWallRendered(QPoint) const;
 
 signals:
   void cameraMoved();
@@ -26,12 +29,14 @@ signals:
 
 private slots:
   void updateRenderedTiles();
+  void updateWallGroups();
 
 private:
   QPoint offset;
   QSize  size;
   QTimer updateTimer;
   QRect renderedTiles;
+  WallGroup::Map wallGroups;
 };
 
 #endif

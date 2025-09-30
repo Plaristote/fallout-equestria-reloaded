@@ -3,14 +3,14 @@ import QtQuick 2.15
 Item {
   id: wallRenderer
   property QtObject levelController
-  property int tx: index % renderTarget.mapSize.width
-  property int ty: Math.round(index / renderTarget.mapSize.width)
+  readonly property int tx: index % renderTarget.mapSize.width
+  readonly property int ty: Math.round(index / renderTarget.mapSize.width)
   readonly property point renderPosition: levelController.getRenderPositionForTile(tx, ty)
   readonly property var block: renderTarget.blocks ? renderTarget.blocks.getTile(tx, ty) : null
   readonly property var vwall: renderTarget.vwalls ? renderTarget.vwalls.getTile(tx, ty) : null
   readonly property var hwall: renderTarget.hwalls ? renderTarget.hwalls.getTile(tx, ty) : null
   property bool rendered: isRendered(levelController.renderedTiles)
-  function isRendered() { return levelController.isCaseRendered(tx, ty); }
+  function isRendered() { return levelController.isWallRendered(tx, ty); }
 
   x: renderPosition.x
   y: renderPosition.y
