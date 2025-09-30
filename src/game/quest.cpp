@@ -86,8 +86,10 @@ void Quest::setHidden(bool value)
   emit completedChanged();
 }
 
-void Quest::addObjective(const QString& name, const QString& label)
+void Quest::addObjective(const QString& name, QString label)
 {
+  if (label.isEmpty())
+    label = translate(name);
   setPropertyOnObjective(objectives, name, "label", label);
 }
 
@@ -98,6 +100,8 @@ bool Quest::hasObjective(const QString& name) const
 
 void Quest::completeObjective(const QString& name)
 {
+  if (!hasObjective(name))
+    addObjective(name);
   if (!isObjectiveCompleted(name))
   {
     setPropertyOnObjective(objectives, name, "success", true);
