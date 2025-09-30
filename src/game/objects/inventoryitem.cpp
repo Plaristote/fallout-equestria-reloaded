@@ -130,7 +130,7 @@ bool InventoryItem::isGroupable(InventoryItem* other)
          << result;
     result = script->call("isGroupable", args).toBool();
   }
-  else
+  else if (other)
     result = result && getItemType() == other->getItemType();
   return result;
 }
