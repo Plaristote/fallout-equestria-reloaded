@@ -45,6 +45,7 @@ signals:
 
 private:
   bool runTask(Task&, int iterations);
+  int countTaskOfType(const QString& name) const;
 
   bool updating = false;
   QList<Task> tasks, pendingAdditions;

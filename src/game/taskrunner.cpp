@@ -4,6 +4,7 @@
 #include <QJsonArray>
 #include <QDebug>
 #include <cmath>
+#define MAX_TASK_OF_TYPE_ALLOWED 25
 
 bool shouldSaveTasks();
 
@@ -100,7 +101,11 @@ qint64 TaskRunner::timeLeft(const QString &name) const
 
 void TaskRunner::addTask(const QString &name, qint64 interval, int iterationCount)
 {
-  if (interval > 0)
+  if (countTaskOfType(name) >= MAX_TASK_OF_TYPE_ALLOWED)
+    qDebug() << "/!\\ Tried to overflow task runner with task" << name;
+  else if (interval <= 0)
+    qDebug() << "/!\\ Tried to add task" << name << "with interval=0";
+  else
   {
     Task task;
 
@@ -119,8 +124,6 @@ void TaskRunner::addTask(const QString &name, qint64 interval, int iterationCoun
     else
       pendingAdditions << task;
   }
-  else
-    qDebug() << "/!\\ Tried to add task" << name << "with interval=0";
 }
 
 void TaskRunner::addUniqueTask(const QString &name, qint64 interval, int iterationCount)
@@ -173,6 +176,17 @@ void TaskRunner::decreaseIterationsFor(const QString &name, int iterationCount)
   }
 }
 
+int TaskRunner::countTaskOfType(const QString& name) const
+{
+  int counter = 0;
+  for (const Task& task : tasks)
+  {
+    if (task.name == name)
+      ++counter;
+  }
+  return counter;
+}
+
 void TaskRunner::load(const QJsonObject& data)
 {
   for (auto jvalue : data["tasks"].toArray())
@@ -185,7 +199,10 @@ void TaskRunner::load(const QJsonObject& data)
     task.interval       = taskData["interval"].toInt();
     task.infinite       = taskData["infinite"].toBool();
     task.timeLeft       = taskData["timeLeft"].toInt();
-    tasks << task;
+    if (countTaskOfType(task.name) < MAX_TASK_OF_TYPE_ALLOWED)
+      tasks << task;
+    else
+      qDebug() << "/!\\ Tried to overflow the task runner with task" << task.name;
   }
 }
 
