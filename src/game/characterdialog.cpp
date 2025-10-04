@@ -42,7 +42,8 @@ void CharacterDialog::prepareDialogWithCharacter()
 
 bool CharacterDialog::load(const QString& name, Character* player, DynamicObject* npc, const QString& state)
 {
-  QFile file(SCRIPTS_PATH + "/dialogs/" + name + ".json");
+  const QString path = SCRIPTS_PATH + "/dialogs/" + name;
+  QFile file(path + ".json");
 
   if (file.open(QIODevice::ReadOnly))
   {
@@ -50,7 +51,7 @@ bool CharacterDialog::load(const QString& name, Character* player, DynamicObject
     this->npc        = npc;
     translationGroup = "dialogs." + name;
     data.load(QJsonDocument::fromJson(file.readAll()).object());
-    script = new ScriptController(SCRIPTS_PATH + "dialogs/" + name + ".mjs");
+    script = new ScriptController(path + ".mjs");
     if (npc->isCharacter())
       prepareDialogWithCharacter();
     connect(npc, &DynamicObject::objectNameChanged, this, &CharacterDialog::nameChanged);
@@ -62,7 +63,7 @@ bool CharacterDialog::load(const QString& name, Character* player, DynamicObject
     }
   }
   else
-    qDebug() << "Could not load dialog file " << (SCRIPTS_PATH + "/dialogs/" + name + ".json");
+    qDebug() << "Could not load dialog file " << (path + ".json");
   return false;
 }
 
