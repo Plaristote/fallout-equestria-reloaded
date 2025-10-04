@@ -87,7 +87,7 @@ static QString scriptTemplate(const QString& scriptName, const QString& scriptCa
       code += "../";
     code += superclass.second + "\";\n\n";
   }
-  code += "class " + className;
+  code += "export default class";
   if (!superclass.first.isEmpty())
     code += " extends " + superclass.first;
   code += " {\n";
@@ -97,9 +97,6 @@ static QString scriptTemplate(const QString& scriptName, const QString& scriptCa
   else
     code += "    this.model = model;\n";
   code += "  }\n";
-  code += "}\n\n";
-  code += "export function create(model) {\n";
-  code += "  return new " + className + "(model);\n";
   code += "}";
   return code;
 }
