@@ -20,9 +20,7 @@ DynamicObject::~DynamicObject()
 
 ObjectGroup* DynamicObject::getGroup() const
 {
-  if (parent() && parent()->metaObject()->className() == QString("ObjectGroup"))
-    return reinterpret_cast<ObjectGroup*>(parent());
-  return nullptr;
+  return qobject_cast<ObjectGroup*>(parent());
 }
 
 QString DynamicObject::getPath() const
@@ -61,9 +59,9 @@ QString DynamicObject::getBaseName() const
 
 QString DynamicObject::getHint() const
 {
-  if (script && script->hasMethod("getHint"))
-    return script->call("getHint").toString();
-  return QString("");
+  QJSValue hint = scriptCall("getHint");
+
+  return hint.isString() ? hint.toString() : QString();
 }
 
 QStringList DynamicObject::getAvailableInteractions()
