@@ -329,7 +329,7 @@ void Inventory::unequipItem(const QString &slotName, bool dropped)
   {
     InventoryItem* oldItem = itemSlots[slotName];
 
-    if (oldItem)
+    if (oldItem && !oldItem->isVirtual())
     {
       itemSlots[slotName] = nullptr;
       oldItem->onEquippedBy(user, false);
