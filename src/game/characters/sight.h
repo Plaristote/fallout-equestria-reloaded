@@ -20,9 +20,6 @@ public:
 
   static bool       hasSightFrom(const DynamicObject*, Point position);
   static bool       hasSightFrom(Point target, Point position);
-  Q_INVOKABLE float getDistance(const DynamicObject*) const;
-  Q_INVOKABLE float getDistance(int x, int y) const { return getDistance(QPoint(x, y)); }
-  float             getDistance(QPoint) const;
   FieldOfView*      getFieldOfView() const { return fieldOfView; }
 
 private slots:

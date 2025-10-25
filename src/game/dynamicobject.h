@@ -62,6 +62,9 @@ public:
   Q_INVOKABLE virtual int getZIndex() const { return 1; }
   Q_INVOKABLE virtual bool hasInteractionOverlay() const { return interactive; }
   Q_INVOKABLE QString getHint() const;
+  Q_INVOKABLE float getDistance(const DynamicObject*) const;
+  Q_INVOKABLE float getDistance(int x, int y) const { return getDistance(QPoint(x, y)); }
+  float             getDistance(QPoint) const;
   virtual int getInteractionDistance() const { return blocksPath ? 1 : 0; }
   virtual QStringList getAvailableInteractions();
   QPoint getSpriteOffset() const;

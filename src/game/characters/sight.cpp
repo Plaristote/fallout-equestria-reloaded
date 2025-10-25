@@ -46,23 +46,6 @@ bool CharacterSight::hasSightFrom(Point target, Point pos)
   return false;
 }
 
-float CharacterSight::getDistance(const DynamicObject* target) const
-{
-  return getDistance(target->getPosition());
-}
-
-float CharacterSight::getDistance(QPoint other) const
-{
-  auto self  = getPosition();
-  auto a = self.x() - other.x();
-  auto b = self.y() - other.y();
-
-  // use pathvinding distance
-  return static_cast<float>(std::max(std::abs(a), std::abs(b)));
-  // or use actual distance
-  //return std::sqrt(static_cast<float>(a * a + b * b));
-}
-
 void CharacterSight::refreshFieldOfView()
 {
   if (fieldOfView && LevelTask::get())

@@ -240,8 +240,10 @@ bool InventoryItem::isInRange(DynamicObject *target)
     if (result.isNull() || result.isUndefined())
     {
       float range = getRange();
-      CharacterSight* owner = reinterpret_cast<CharacterSight*>(getOwner());
+      auto* owner = getOwner();
 
+      if (owner->getCurrentFloor() != target->getCurrentFloor())
+        return false;
       if (range == 1.f)
         return maxDistance(owner->getPosition(), target->getPosition()) <= 1;
       return std::floor(owner->getDistance(target)) <= range;
