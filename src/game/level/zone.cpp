@@ -164,7 +164,7 @@ bool ZoneComponent::isInsideZone(const TileZone* zone, const DynamicObject* obje
 {
   return zone && object
       && zone->getFloor() == object->getCurrentFloor()
-      && zone->getPositions().indexOf(object->getPosition()) >= 0;
+      && zone->getAbsolutePositions().indexOf(object->getPosition()) >= 0;
 }
 
 QJSValue ZoneComponent::getZoneOccupants(const TileZone* zone) const
