@@ -1,5 +1,15 @@
 output_dir="build/"
-qsb="qsb-qt6"
+
+if which qsb-qt6 2> /dev/null ; then
+  export qsb="qsb-qt6"
+elif which qsb 2> /dev/null ; then
+  export qsb="qsb"
+fi
+
+if [[ -z "$qsb" ]] ; then
+  echo "Qt qsb tool not found. Make sure you have the development package installed for Qt GUI."
+  exit -1
+fi
 
 shader="src/game/hud/InteractionColorOverlay.shader"
 echo "+ building $shader"
