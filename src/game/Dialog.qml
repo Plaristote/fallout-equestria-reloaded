@@ -105,6 +105,7 @@ Item {
     id: textDisplay
     anchors { top: faceForeground.bottom; left: faceForeground.left; right: faceForeground.right }
     text: root.controller.text
+    customFont: root.controller.customFont
   }
 
   DialogAnswersPane {

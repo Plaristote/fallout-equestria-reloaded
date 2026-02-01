@@ -3,6 +3,7 @@ import QtQuick.Controls 2.15
 import "qrc:/assets/ui" as UiStyle
 
 BorderImage {
+  property QtObject customFont
   property string text: "default text"
   readonly property bool textConcealed: gameManager.currentGame.fastPassTime
   id: textDisplay
@@ -11,6 +12,11 @@ BorderImage {
   horizontalTileMode: BorderImage.Stretch
   verticalTileMode: BorderImage.Stretch
   height: 150
+
+  FontLoader {
+    id: customFontLoader
+    source: "file://" + customFont.uri
+  }
 
   Flickable {
     id: flickable
@@ -32,8 +38,8 @@ BorderImage {
       wrapMode: Text.WordWrap
       horizontalAlignment: Qt.AlignJustify
       width: parent.width - 30
-      font.family: application.consoleFontName
-      font.pointSize: application.consoleFont.bigSize
+      font.family:    customFont.enabled ? customFontLoader.name : application.consoleFontName
+      font.pointSize: customFont.enabled ? customFont.pixelSize  : application.consoleFont.bigSize
       onTextChanged: flickable.contentY = 0
     }
   }

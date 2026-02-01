@@ -8,9 +8,10 @@
 
 CharacterDialog::CharacterDialog(QObject *parent) : QObject(parent)
 {
-  barter   = new BarterController(this);
-  mood     = "neutral";
-  ambiance = "wasteland";
+  barter     = new BarterController(this);
+  customFont = new CustomFont(this);
+  mood       = "neutral";
+  ambiance   = "wasteland";
   connect(this, &CharacterDialog::barterEnded, this, &CharacterDialog::onBarterEnded);
 }
 

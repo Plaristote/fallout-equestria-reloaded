@@ -8,6 +8,7 @@
 # include "i18n.h"
 # include "bartercontroller.h"
 # include "dialog/data.h"
+# include "dialog/customfont.h"
 
 class CharacterDialog : public QObject
 {
@@ -28,6 +29,7 @@ class CharacterDialog : public QObject
   Q_PROPERTY(QStringList       answerHistory  READ   getAnswerHistory NOTIFY stateReferenceChanged)
   Q_PROPERTY(QString           previousState  READ   getPreviousState NOTIFY stateReferenceChanged)
   Q_PROPERTY(QString           previousAnswer READ   getPreviousAnswer NOTIFY stateReferenceChanged)
+  Q_PROPERTY(CustomFont*       customFont     READ   getCustomFont CONSTANT)
   Q_PROPERTY(QJSValue          script         READ   getScriptObject NOTIFY ready)
 public:
   explicit CharacterDialog(QObject *parent = nullptr);
@@ -50,9 +52,11 @@ public:
   const QStringList&  getAnswerHistory() const { return answerHistory; }
   QString             getPreviousAnswer() const { return answerHistory.size() ? answerHistory.first() : QString(); }
   BarterController*   getBarterController() const { return barter; }
+  CustomFont*         getCustomFont() const { return customFont; }
   Q_INVOKABLE bool    tryToBarter();
   Q_INVOKABLE void    swapNpc(Character*);
 
+  Q_INVOKABLE QString tr(const QString& name, const QVariantMap& vars = {}) const { return t(name, vars); }
   Q_INVOKABLE QString t(const QString& name, const QVariantMap& = {}) const;
   Q_INVOKABLE QString tWithFallback(const QString& name, const QVariantMap&, const QString& fallback) const;
 
@@ -84,6 +88,7 @@ protected:
   DialogData        data;
   ScriptController* script = nullptr;
   BarterController* barter = nullptr;
+  CustomFont*       customFont = nullptr;
   Character*        player;
   DynamicObject*    npc;
   QString           stateReference;

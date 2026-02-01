@@ -81,6 +81,7 @@ set(PROJECT_SOURCES
         game/dialog/data.cpp
         game/dialog/state.cpp
         game/dialog/answer.cpp
+        game/dialog/customfont.cpp
         game/bartercontroller.h
         game/bartercontroller.cpp
         game/characters/buff.h
