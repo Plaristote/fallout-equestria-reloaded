@@ -41,6 +41,9 @@ public:
   Q_INVOKABLE bool areObjectivesCompleted(const QStringList&) const;
   Q_INVOKABLE bool isObjectiveFailed(int index) const;
   Q_INVOKABLE bool isObjectiveFailed(const QString&) const;
+  Q_INVOKABLE bool areObjectivesFailed(const QStringList&) const;
+  Q_INVOKABLE bool isObjectiveCrossedOff(const QString&) const;
+  Q_INVOKABLE bool areObjectivesCrossedOff(const QStringList&) const;
   inline bool inProgress() const { return !completed && !failed; }
   inline bool isHidden() const { return hidden; }
   void setHidden(bool value);
@@ -55,7 +58,7 @@ public:
   int getCompleteCount() const;
 
 public slots:
-  void onCharacterKilled(Character* victim, Character* killed);
+  void onCharacterKilled(Character* victim, Character* killer);
   void onItemPicked(InventoryItem*);
   void onLevelChanged();
 

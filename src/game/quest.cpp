@@ -155,6 +155,31 @@ bool Quest::isObjectiveFailed(const QString& name) const
   return getObjectiveFlag(name, "failed", "isObjectiveFailed");
 }
 
+bool Quest::areObjectivesFailed(const QStringList& names) const
+{
+  for (const QString& name : names)
+  {
+    if (!isObjectiveFailed(name))
+      return false;
+  }
+  return true;
+}
+
+bool Quest::isObjectiveCrossedOff(const QString& name) const
+{
+  return isObjectiveCompleted(name) || isObjectiveFailed(name);
+}
+
+bool Quest::areObjectivesCrossedOff(const QStringList& names) const
+{
+  for (const QString& name : names)
+  {
+    if (!isObjectiveCrossedOff(name))
+      return false;
+  }
+  return true;
+}
+
 QString Quest::objectiveNameAt(int index) const
 {
   auto keys = objectives.keys();
