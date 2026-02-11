@@ -38,6 +38,7 @@ public:
   Q_INVOKABLE void requireJoinCombat();
   void             joinCombat();
   Q_INVOKABLE Character* find(QJSValue callback) const;
+  Q_INVOKABLE QJSValue   findAll(QJSValue callback) const;
 
   Q_INVOKABLE Character* mostSkilledAt(const QByteArray& stat) const;
   Q_INVOKABLE Character* leastSkilledAt(const QByteArray& stat) const;

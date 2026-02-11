@@ -1,10 +1,12 @@
 #include "characterparty.h"
 #include "leveltask.h"
+#include "game.h"
 #include <QJsonArray>
 #include <QDebug>
 #include <algorithm>
 
 const QString originalFactionVarname("_originalFaction");
+QString jsErrorBacktrace(QJSValue retval);
 
 static bool findWithCallback(Character* character, QJSValue callback)
 {
@@ -171,6 +173,25 @@ Character* CharacterParty::find(QJSValue callback) const
     iterator = std::find_if(list.begin(), list.end(), predicate);
   }
   return iterator != list.end() ? *iterator : nullptr;
+}
+
+QJSValue CharacterParty::findAll(QJSValue filter) const
+{
+  QJSValue result = Game::get()->getScriptEngine().newArray();
+  QJSValue push = result.property("push");
+
+  for (int i = 0 ; i < list.size() ; ++i)
+  {
+    Character* character = list.at(i);
+    QJSValueList params{character->asJSValue()};
+    QJSValue retval = filter.call(params);
+
+    if (retval.isError())
+      jsErrorBacktrace(retval);
+    else if (retval.toBool())
+      push.callWithInstance(result, params);
+  }
+  return result;
 }
 
 Character* CharacterParty::mostSkilledAt(const QByteArray& stat) const
