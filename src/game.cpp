@@ -270,7 +270,7 @@ void Game::loadLevel(const QString &name, const QString& targetZone, std::functi
       currentLevel->setPaused(false);
       setupPlayerPartyIntoLevel(targetZone);
       if (!isGameEditor)
-        currentLevel->scriptCall("onLoaded");
+        currentLevel->onLoaded();
     }
     catch (const std::runtime_error& error)
     {

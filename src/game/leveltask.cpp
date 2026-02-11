@@ -312,6 +312,15 @@ void LevelTask::addBloodStainAt(QPoint position_, unsigned char floor_)
   factory()->addBloodStainAt(position_, floor_);
 }
 
+void LevelTask::onLoaded()
+{
+  for (ObjectGroup* group : allObjectGroups())
+    group->scriptCall("onLoaded");
+  for (DynamicObject* object : allDynamicObjects())
+    object->scriptCall("onLoaded");
+  scriptCall("onLoaded");
+}
+
 void LevelTask::onExit()
 {
   scriptCall("onExit");
