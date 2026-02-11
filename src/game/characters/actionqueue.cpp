@@ -9,6 +9,7 @@
 #include "actions/reach.h"
 #include "actions/reachcase.h"
 #include "actions/reachdoor.h"
+#include "actions/reachelevator.h"
 #include "actions/sliding.h"
 #include "actions/waitaction.h"
 #include "actions/speak.h"
@@ -193,10 +194,12 @@ void ActionQueue::pushForceReach(DynamicObject* target, float range, QJSValue ca
   MovementAction* action;
 
   ASSERT_NOT_NULL("ActionQueue::pushReach", target)
-  if (!target->isDoorway())
-    action = (new ReachAction(character, target, range, caseCompare));
-  else
+  if (target->isDoorway())
     action = (new ReachDoorAction(character, reinterpret_cast<Doorway*>(target), range, caseCompare));
+  else if (target->isElevator())
+    action = (new ReachElevatorAction(character, reinterpret_cast<Elevator*>(target), range, caseCompare));
+  else
+    action = (new ReachAction(character, target, range, caseCompare));
   action->setForced(true);
   queue << action;
 }
@@ -204,10 +207,12 @@ void ActionQueue::pushForceReach(DynamicObject* target, float range, QJSValue ca
 void ActionQueue::pushReach(DynamicObject *target, float range)
 {
   ASSERT_NOT_NULL("ActionQueue::pushReach", target)
-  if (!target->isDoorway())
-    queue << (new ReachAction(character, target, range));
-  else
+  if (target->isDoorway())
     queue << (new ReachDoorAction(character, reinterpret_cast<Doorway*>(target), range));
+  else if (target->isElevator())
+    queue << (new ReachElevatorAction(character, reinterpret_cast<Elevator*>(target), range));
+  else
+    queue << (new ReachAction(character, target, range));
 }
 
 void ActionQueue::pushReach(DynamicObject *target, float range, QJSValue caseCompare)
@@ -281,7 +286,9 @@ int ActionQueue::getForcedReachApCost(DynamicObject* target, float range, QJSVal
   if (!target)
     return 0;
   if (target->isDoorway())
-    action.reset(new ReachAction(character, reinterpret_cast<Doorway*>(target), range, caseCompare));
+    action.reset(new ReachDoorAction(character, reinterpret_cast<Doorway*>(target), range, caseCompare));
+  else if (target->isElevator())
+    action.reset(new ReachElevatorAction(character, reinterpret_cast<Elevator*>(target), range, caseCompare));
   else
     action.reset(new ReachAction(character, target, range, caseCompare));
   action->setForced(true);
@@ -293,7 +300,9 @@ int ActionQueue::getReachApCost(DynamicObject *target, float range) const
   if (!target)
     return 0;
   if (target->isDoorway())
-    return ReachAction(character, reinterpret_cast<Doorway*>(target), range).getApCost();
+    return ReachDoorAction(character, reinterpret_cast<Doorway*>(target), range).getApCost();
+  else if (target->isElevator())
+    return ReachElevatorAction(character, reinterpret_cast<Elevator*>(target), range).getApCost();
   return ReachAction(character, target, range).getApCost();
 }
 

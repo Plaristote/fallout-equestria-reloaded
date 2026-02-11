@@ -44,6 +44,7 @@ public:
 
   inline bool isCharacter() const { return getObjectType() == "Character"; }
   inline bool isDoorway() const { return getObjectType() == "Doorway"; }
+  inline bool isElevator() const { return getObjectType() == "Elevator"; }
   virtual bool isBlockingPath() const { return blocksPath; }
   inline bool isVisible() const { return visible && !isHidden(); }
   void setVisible(bool value);

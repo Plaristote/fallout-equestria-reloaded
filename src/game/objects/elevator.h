@@ -20,10 +20,13 @@ public:
   void save(QJsonObject&) const override;
 
   QStringList getAvailableInteractions() override;
+  int getInteractionDistance() const override { return 0; }
   Q_INVOKABLE void setPositionA(int x, int y, unsigned int z) { setPositionA({x,y}, static_cast<unsigned char>(z)); }
   Q_INVOKABLE void setPositionB(int x, int y, unsigned int z) { setPositionB({x,y}, static_cast<unsigned char>(z)); }
   void setPositionA(QPoint, unsigned char);
   void setPositionB(QPoint, unsigned char);
+  Point getPositionA() const { return {positionA.x(), positionA.y(), floorA}; }
+  Point getPositionB() const { return {positionB.x(), positionB.y(), floorB}; }
 
   bool isValid() const { return floorA != NULL_FLOOR && floorB != NULL_FLOOR; }
   void connectCases();

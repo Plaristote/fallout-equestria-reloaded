@@ -117,6 +117,8 @@ set(PROJECT_SOURCES
         game/characters/actions/reachcase.cpp
         game/characters/actions/reachdoor.h
         game/characters/actions/reachdoor.cpp
+        game/characters/actions/reachelevator.h
+        game/characters/actions/reachelevator.cpp
         game/characters/actions/zone_movement.h
         game/characters/actions/zone_movement.cpp
         game/characters/actions/sliding.h
