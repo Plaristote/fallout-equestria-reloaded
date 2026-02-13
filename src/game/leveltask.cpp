@@ -242,12 +242,12 @@ void LevelTask::endTurnTask(qint64 delta)
 
   for (DynamicObject* object : objectList)
   {
+    ObjectPerformanceClock clock(performanceMetrics.object(object));
     Character* asCharacter = reinterpret_cast<Character*>(object);
 
-    if (object->isCharacter() && combattants.indexOf(asCharacter) < 0 && asCharacter->isAlive())
+    if (object->isCharacter() && combattants.indexOf(asCharacter) < 0 && asCharacter->isAlive()
+      && !characterJoiningCombat(asCharacter))
     {
-      ObjectPerformanceClock clock(performanceMetrics.object(object));
-
       asCharacter->getActionQueue()->update();
       if (!asCharacter->getActionQueue()->isEmpty())
         ++affectedCharacters;

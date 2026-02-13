@@ -57,6 +57,16 @@ void CombatComponent::onActiveItemChanged()
     joinCombat(Game::get()->getPlayer());
 }
 
+bool CombatComponent::characterJoiningCombat(Character* character)
+{
+  if (character->scriptCall("shouldJoinOngoingCombat").toBool())
+  {
+    joinCombat(character);
+    return true;
+  }
+  return false;
+}
+
 void CombatComponent::joinCombat(Character* character)
 {
   if (character && !isInCombat(character) && character->isAlive())

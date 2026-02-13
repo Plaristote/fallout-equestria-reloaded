@@ -64,6 +64,7 @@ protected:
   void finalizeCharacterTurn(Character*);
   virtual void finalizeRound();
   void initializeCharacterTurn(Character*);
+  bool characterJoiningCombat(Character*);
 
   void initializeArmorClassBonus(Character*);
   void finalizeArmorClassBonus(Character*);
