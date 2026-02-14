@@ -12,15 +12,15 @@ class Buff : public StorableObject
 {
   Q_OBJECT
 
-  Q_PROPERTY(QString     name       MEMBER name)
+  Q_PROPERTY(QString     name       MEMBER name CONSTANT)
   Q_PROPERTY(bool        hudVisible MEMBER hudVisible NOTIFY visibilityChanged)
-  Q_PROPERTY(Character*  target     MEMBER target)
-  Q_PROPERTY(TaskRunner* tasks      MEMBER tasks)
+  Q_PROPERTY(Character*  target     MEMBER target CONSTANT)
+  Q_PROPERTY(TaskRunner* tasks      MEMBER tasks CONSTANT)
   Q_PROPERTY(QJSValue    script     READ getScriptObject CONSTANT)
 public:
-  explicit Buff(Character* parent = nullptr);
+  explicit Buff(const QString& name, Character* parent = nullptr);
 
-  void initialize(const QString& name);
+  void initialize();
   void addNewCharge();
   void load(const QJsonObject&);
   void save(QJsonObject&) const;
@@ -42,7 +42,7 @@ private:
   void    loadScript();
   QString getScriptPath() const { return SCRIPTS_PATH + "buffs"; }
 
-  QString           name;
+  const QString     name;
   bool              hudVisible = true;
   Character*        target = nullptr;
   ScriptController* script = nullptr;

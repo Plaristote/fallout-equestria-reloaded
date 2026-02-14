@@ -20,9 +20,11 @@ void CharacterBuffs::load(const QJsonObject& data)
   ParentType::load(data);
   for (const QJsonValue& buffData : buffArray)
   {
-    Buff* buff = new Buff(reinterpret_cast<Character*>(this));
+    const QJsonObject data = buffData.toObject();
+    const QString name = data["name"].toString();
+    Buff* buff = new Buff(name, reinterpret_cast<Character*>(this));
 
-    buff->load(buffData.toObject());
+    buff->load(data);
     buffs.push_back(buff);
     onBuffAdded(buff);
   }
@@ -49,11 +51,10 @@ Buff* CharacterBuffs::addBuff(const QString& name)
 
   if (!buff)
   {
-    buff = new Buff(reinterpret_cast<Character*>(this));
-    buff->setProperty("name", name);
+    buff = new Buff(name, reinterpret_cast<Character*>(this));
     buffs.push_back(buff);
     onBuffAdded(buff);
-    buff->initialize(name);
+    buff->initialize();
   }
   else
     buff->addNewCharge();

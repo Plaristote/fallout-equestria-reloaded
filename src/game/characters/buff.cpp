@@ -1,12 +1,12 @@
 #include "buff.h"
 #include "game/character.h"
 
-Buff::Buff(Character* parent) : StorableObject(parent), target(parent)
+Buff::Buff(const QString& name, Character* parent) : StorableObject(parent), name(name), target(parent)
 {
   tasks = new TaskRunner(this);
 }
 
-void Buff::initialize(const QString&)
+void Buff::initialize()
 {
   loadScript();
   if (script->hasMethod("initialize"))
@@ -34,7 +34,6 @@ void Buff::loadScript()
 
 void Buff::load(const QJsonObject& data)
 {
-  name = data["name"].toString();
   StorableObject::load(data);
   loadScript();
   if (data["tasks"].isObject())
