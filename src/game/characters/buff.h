@@ -12,10 +12,11 @@ class Buff : public StorableObject
 {
   Q_OBJECT
 
-  Q_PROPERTY(QString     name   MEMBER name)
-  Q_PROPERTY(Character*  target MEMBER target)
-  Q_PROPERTY(TaskRunner* tasks  MEMBER tasks)
-  Q_PROPERTY(QJSValue    script READ getScriptObject CONSTANT)
+  Q_PROPERTY(QString     name       MEMBER name)
+  Q_PROPERTY(bool        hudVisible MEMBER hudVisible NOTIFY visibilityChanged)
+  Q_PROPERTY(Character*  target     MEMBER target)
+  Q_PROPERTY(TaskRunner* tasks      MEMBER tasks)
+  Q_PROPERTY(QJSValue    script     READ getScriptObject CONSTANT)
 public:
   explicit Buff(Character* parent = nullptr);
 
@@ -32,6 +33,7 @@ public:
 
 signals:
   void finish(Buff*);
+  void visibilityChanged();
 
 private slots:
   void finalize();
@@ -41,6 +43,7 @@ private:
   QString getScriptPath() const { return SCRIPTS_PATH + "buffs"; }
 
   QString           name;
+  bool              hudVisible = true;
   Character*        target = nullptr;
   ScriptController* script = nullptr;
   TaskRunner*       tasks;

@@ -62,7 +62,9 @@ Pane {
     Repeater {
       model: levelController.player.statistics.buffs
       delegate: UiStyle.WarningRectangle {
-        label: i18n.t(`cmap.buffs.${levelController.player.statistics.buffs[index]}`)
+        readonly property QtObject buff: levelController.player.getBuff(levelController.player.statistics.buffs[index])
+        label: i18n.t(`cmap.buffs.${buff.name}`)
+        visible: buff.hudVisible
       }
     }
   }
