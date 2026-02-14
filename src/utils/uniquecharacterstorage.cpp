@@ -111,10 +111,13 @@ int UniqueCharacterStorage::loadUniqueCharactersToLevel(LevelTask* level)
 
 void UniqueCharacterStorage::detachCharacter(Character* character)
 {
-  LevelTask* level = LevelTask::get();
-  QList<StorageSlot*>& storage = requireLevelStorage("__no_level__");
+  if (character)
+  {
+    LevelTask* level = LevelTask::get();
+    QList<StorageSlot*>& storage = requireLevelStorage("__no_level__");
 
-  saveCharacterIntoStorage(level, character, storage) || swapCharacterToStorage(character, storage);
+    saveCharacterIntoStorage(level, character, storage) || swapCharacterToStorage(character, storage);
+  }
 }
 
 bool UniqueCharacterStorage::swapCharacterToStorage(Character* character, QList<StorageSlot*>& storage)
