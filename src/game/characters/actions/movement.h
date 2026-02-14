@@ -26,6 +26,7 @@ protected:
   Point target;
   bool forced = false;
 private:
+  bool findPath() const;
   bool firstRound = true;
 };
 

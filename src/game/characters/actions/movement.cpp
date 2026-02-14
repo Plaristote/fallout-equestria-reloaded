@@ -1,13 +1,19 @@
 #include "movement.h"
 #include "game/leveltask.h"
 
-bool MovementAction::trigger()
+inline bool MovementAction::findPath() const
 {
   ZoneGrid& grid = LevelTask::get()->getPathfinder();
 
+  return grid.findPath(character->getPoint(), target, character->rcurrentPath(), character)
+      && canMakeNextMovement();
+}
+
+bool MovementAction::trigger()
+{
   if (character->getPoint() == target)
     state = Done;
-  else if (grid.findPath(character->getPoint(), target, character->rcurrentPath(), character))
+  else if (findPath())
     state = InProgress;
   else
     state = Interrupted;
