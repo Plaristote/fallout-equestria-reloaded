@@ -120,14 +120,14 @@ ColumnLayout {
         TerminalField {
           Layout.fillWidth: true
           text: controller.optionHook
-          onTextChanged: { controller.optionHook = text }
+          onTextChanged: if (text != controller.optionHook) controller.optionHook = text;
         }
 
         TerminalLabel { text: i18n.t("game-editor.dialogs.answers.available-callback") }
         TerminalField {
           Layout.fillWidth: true
           text: controller.optionAvailableHook
-          onTextChanged: { controller.optionAvailableHook = text }
+          onTextChanged: if (text != controller.optionAvailableHook) controller.optionAvailableHook = text;
         }
 
         TerminalButton {
