@@ -140,6 +140,7 @@ private:
   bool isGameEditor = false;
   bool saveLock = false;
   bool exitingLevel = false;
+  bool isGameOver = false;
   DataEngine* dataEngine = nullptr;
   TimeManager* timeManager;
   WorldDiplomacy* diplomacy;

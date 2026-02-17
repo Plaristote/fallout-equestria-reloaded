@@ -55,6 +55,7 @@ Game::Game(QObject *parent) : StorableObject(parent), timePasser(this)
   connect(&timePasser, &TimePasser::stateChanged, this, &Game::fastPassingChanged);
   connect(this, &Game::gameOver, this, &Game::onGameOver);
   connect(this, &Game::levelChanged, this, &Game::onLevelChanged);
+  connect(this, &Game::gameFinished, this, [this]() { isGameOver = true; });
   connect(this, &Game::gameEditorEnabled, dataEngine, [this]() { dataEngine->enableGameEditorMode(isGameEditor); });
 }
 
@@ -128,6 +129,7 @@ void Game::onLevelChanged()
 
 void Game::onGameOver()
 {
+  isGameOver = true;
   if (player)
     disconnect(player, &Character::died, this, &Game::gameOver);
   disconnect(diplomacy, &WorldDiplomacy::update, this, &Game::onDiplomacyUpdate);
@@ -304,7 +306,11 @@ void Game::loadLevel(const QString &name, const QString& targetZone, std::functi
 
 void Game::switchToLevel(const QString& name, const QString& targetZone, QJSValue callback)
 {
-  auto function = [=]() { loadLevel(name, targetZone, callback); };
+  auto function = [=]()
+  {
+    if (!isGameOver)
+      loadLevel(name, targetZone, callback);
+  };
   static QMetaObject::Connection listener;
 
   if (exitingLevel)
