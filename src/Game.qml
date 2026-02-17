@@ -55,6 +55,20 @@ Item {
     }
   }
 
+  Timer {
+    id: deferredGameFinishedScreen
+    interval: 250
+    onTriggered: {
+      application.pushView("game/slideshows/EndGameScreen.qml", {
+        slides: gameManager.currentGame.getEndGameSlides(),
+        callback: function() {
+          application.popAllViews();
+          application.pushView("Credits.qml");
+        }
+      });
+    }
+  }
+
   Connections {
     target: gameManager
 
@@ -94,6 +108,11 @@ Item {
       console.log("Game.qml onGameOver has been called");
       promptDialog.close();
       deferredGameOverScreen.running = true;
+    }
+
+    function onGameFinished() {
+      promptDialog.close();
+      deferredGameFinishedScreen.running = true;
     }
 
     function onTransitionRequired(video, elapsingTime) {

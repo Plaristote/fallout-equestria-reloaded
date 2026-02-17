@@ -219,6 +219,7 @@
         <file>game/slideshows/LoadingScreen.qml</file>
         <file>game/slideshows/GameOverScreen.qml</file>
         <file>game/slideshows/TransitionScreen.qml</file>
+        <file>game/slideshows/EndGameScreen.qml</file>
         <file>game/pipboy/TimeApplication.qml</file>
         <file>game/pipboy/QuestsApplication.qml</file>
         <file>game/pipboy/quests/Index.qml</file>

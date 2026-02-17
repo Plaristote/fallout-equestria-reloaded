@@ -84,6 +84,7 @@ public:
   Q_INVOKABLE QString consoleEval(const QString& command);
   void loadCmapTraits();
   void loadCmapRaces();
+  Q_INVOKABLE QVariantList getEndGameSlides() const;
 
   Q_INVOKABLE CharacterParty* getPlayerParty() const { return playerParty; }
   Q_INVOKABLE Character* getPlayer() const { return player; }
@@ -105,6 +106,7 @@ signals:
   void levelChanged();
   void consoleUpdated();
   void gameOver();
+  void gameFinished();
   void transitionRequired(const QString& video, int elapsingTime = 0);
   void encounterTriggered(const QString& encounterTitle);
   void encounterNotify(const QString& encounterName, const QVariantMap& parameter);

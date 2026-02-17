@@ -88,6 +88,24 @@ QString Game::consoleEval(const QString &command)
   return eval(command).toString();
 }
 
+QVariantList Game::getEndGameSlides() const
+{
+  QVariantList slides;
+
+  if (script && script->hasMethod("getEndGameSlides"))
+  {
+    QJSValue result = script->call("getEndGameSlides");
+    int length = result.property("length").toInt();
+
+    for (int i = 0 ; i < length ; ++i)
+    {
+      QJSValue element = result.property(i);
+      slides << element.toVariant();
+    }
+  } 
+  return slides;
+}
+
 void Game::newPlayerParty(StatModel* statistics)
 {
   player = new Character;
