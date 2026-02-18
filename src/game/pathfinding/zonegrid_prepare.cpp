@@ -123,19 +123,38 @@ static QVector<LevelGrid::CaseContent*> getCaseSubset(const QVector<LevelGrid::C
   return subset;
 }
 
-static QVector<PathZone> subdivicePathZoneFromLayer(QRect zoneSize, QVector<LevelGrid::CaseContent*>& cases)
+static QPoint findUpperLeftPoint(const QVector<LevelGrid::CaseContent*>& cases)
+{
+  if (cases.size())
+  {
+    QPoint result = cases.first()->position;
+
+    for (const LevelGrid::CaseContent* caseContent : cases)
+    {
+      Point position = caseContent->position;
+      if (result.x() > position.x)
+        result.setX(position.x);
+      if (result.y() > position.y)
+        result.setY(position.y);
+    }
+    return result;
+  }
+  return QPoint();
+}
+
+static QVector<PathZone> subdivicePathZoneFromLayer(QRect zoneSize, QVector<LevelGrid::CaseContent*>& cases, const int granularityInt = ZONE_GRANULARITY)
 {
   QVector<PathZone> zones;
   QVector<QRect>    parts;
-  const int         granularityInt = ZONE_GRANULARITY;
   const double      granularity = static_cast<double>(granularityInt);
   const QPoint      zoneBaseSize(granularityInt, granularityInt);
+  const QPoint      upperLeft = findUpperLeftPoint(cases);
 
   for (int x = 0 ; x < std::ceil(zoneSize.width() / granularity) ; ++x)
   {
     for (int y = 0 ; y < std::ceil(zoneSize.height() / granularity) ; ++y)
     {
-      QPoint   topLeft(x * granularityInt, y * granularityInt);
+      QPoint   topLeft = upperLeft + QPoint(x * granularityInt, y * granularityInt);
 
       parts << QRect(topLeft, topLeft + zoneBaseSize);
     }
@@ -173,7 +192,7 @@ static QVector<PathZone> preparePathZoneFromLayer(LevelGrid* grid, const TileZon
   if (granularity == 0)
     granularity = ZONE_GRANULARITY;
   if (granularity > 0 && (zoneSize.width() > granularity || zoneSize.height() > granularity))
-    return subdivicePathZoneFromLayer(zoneSize, cases);
+    return subdivicePathZoneFromLayer(zoneSize, cases, granularity);
   return makePathZonesFrom(cases);
 }
 
