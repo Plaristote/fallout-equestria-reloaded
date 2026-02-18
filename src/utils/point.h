@@ -2,6 +2,7 @@
 # define POINT_H
 
 # include <QPoint>
+# include <QString>
 
 struct Point
 {
@@ -16,6 +17,7 @@ struct Point
   inline bool operator< (const Point& other) const { return z < other.z || y < other.y || x < other.x; }
 
   bool isInvalid() const { return x == -1 || y == -1; }
+  QString toString() const { return "Point(" + QString::number(x) + ',' + QString::number(y) + ',' + QString::number(static_cast<int>(z)) + ')'; }
 };
 
 #endif
