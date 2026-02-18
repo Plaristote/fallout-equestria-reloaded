@@ -12,9 +12,9 @@ float PathZone::GoalDistanceEstimate(const PathZone& other)
   return std::sqrt(static_cast<float>(distX * distX + distY * distY)) + static_cast<float>(distFloor * 10);
 }
 
-std::list<PathZone*> PathZone::GetSuccessors(const PathZone* parent, Actor* actor) const
+AstarPathfinding<PathZone>::Successors PathZone::GetSuccessors(const PathZone* parent, Actor* actor) const
 {
-  std::list<PathZone*> list;
+  AstarPathfinding<PathZone>::Successors list;
 
   for (auto it = connections.keyBegin() ; it != connections.keyEnd() ; ++it)
   {

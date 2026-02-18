@@ -20,7 +20,7 @@
  * bool  operator==()                                             : comparaison between two references to a UserState
  * float GetCost(UserState, Actor*)                               : the cost to go from a UserState to the one passed as parameter, for a given Actor
  * float GoalDistanceEstimate(UserState)                          : Heuristic between a UserState and another oneç
- * std::list<UserState*> GetSuccessors(UserState* parent, Actor*) : All the possible successor to the UserState, considering the parent and the Actor
+ * AstarPathfinding<UserState>::Successors GetSuccessors(UserState* parent, Actor*) : All the possible successor to the UserState, considering the parent and the Actor
  */
 template <class UserState>
 class AstarPathfinding
@@ -52,8 +52,9 @@ public:
   };
   typedef std::vector<Node*>                    NodeList;
   typedef typename std::vector<Node*>::iterator NodeListIterator;
-  typedef std::list<UserState>                  Solution;
-  typedef std::list<UserState>                  CandidateList;
+  typedef std::vector<UserState>                Solution;
+  typedef std::vector<UserState>                CandidateList;
+  typedef std::vector<UserState*>               Successors;
   typedef std::map<UserState, Solution>         SolutionList;
 
   struct FunctorCompareNode
@@ -149,8 +150,8 @@ public:
   void StoreSecondarySolution(Node* node)
   {
     typename SolutionList::iterator currentSecondarySolution = _secondarySolutions.find(node->userNode);
-    std::list<UserState> solution;
-    Node*                current = node;
+    Solution solution;
+    Node*    current = node;
 
     while (current != _start)
     {
@@ -201,10 +202,10 @@ public:
         SearchSuccedded(node);
       else // not goal
       {
-        std::list<UserState*> userSuccessors = node->userNode.GetSuccessors(node->parent ? &node->parent->userNode : 0, _actor);
+        Successors userSuccessors = node->userNode.GetSuccessors(node->parent ? &node->parent->userNode : 0, _actor);
 
-        typename std::list<UserState*>::iterator successorIt  = userSuccessors.begin();
-        typename std::list<UserState*>::iterator successorEnd = userSuccessors.end();
+        typename Successors::iterator successorIt  = userSuccessors.begin();
+        typename Successors::iterator successorEnd = userSuccessors.end();
 
         if (std::find(_secondaryGoals.begin(), _secondaryGoals.end(), node->userNode) != _secondaryGoals.end())
         {
@@ -328,10 +329,10 @@ public:
     _goal  = 0;
   }
 
-  std::list<UserState> GetSolution(void)
+  Solution GetSolution(void)
   {
-    std::list<UserState> solution;
-    Node*                current = _start;
+    Solution solution;
+    Node*    current = _start;
 
     while (current->child)
     {

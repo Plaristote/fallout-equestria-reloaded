@@ -50,7 +50,7 @@ struct PathZone
   bool  operator< (const PathZone& other) const { return Point(*this) < Point(other); }
   float GetCost(const PathZone&, const Actor*) { return 1; }
   float GoalDistanceEstimate(const PathZone&);
-  std::list<PathZone*> GetSuccessors(const PathZone* parent, Actor*) const;
+  AstarPathfinding<PathZone>::Successors GetSuccessors(const PathZone* parent, Actor*) const;
 };
 
 #endif // PATHZONE_H

@@ -8,6 +8,7 @@
 #include <QVector>
 #include <QPair>
 #include "utils/point.h"
+#include "astar.hpp"
 
 class TileMap;
 class TileZone;
@@ -47,7 +48,7 @@ public:
     bool  operator< (const CaseContent& other) const { return position < other.position; }
     float GetCost(const CaseContent&, const Actor*) const { return 1.f; }
     float GoalDistanceEstimate(const CaseContent&) const;
-    std::list<CaseContent*> GetSuccessors(const CaseContent* parent, Actor*) const;
+    AstarPathfinding<CaseContent>::Successors GetSuccessors(const CaseContent* parent, Actor*) const;
 
     void connectWith(CaseContent*);
     void disconnectFrom(CaseContent*);

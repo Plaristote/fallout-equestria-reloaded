@@ -19,23 +19,25 @@ bool LevelGrid::CaseContent::isBlocked() const
 
 bool LevelGrid::CaseContent::isLinkedTo(QPoint position) const
 {
-  auto iterator = std::find_if(connections.begin(), connections.end(), [this, position](const CaseConnection* connection) -> bool
-  {
-    auto* target = connection->getTargetFor(this);
+  CaseContent* target;
 
-    return target->position == position && !target->isBlocked();
-  });
-  return iterator != connections.end();
+  for (auto it = connections.begin() ; it != connections.end() ; ++it)
+  {
+    target = (*it)->getTargetFor(this);
+    if (target->position == position && !target->isBlocked())
+      return true;
+  }
+  return false;
 }
 
 LevelGrid::CaseConnection* LevelGrid::CaseContent::connectionWith(const CaseContent* other) const
 {
-  auto iterator = std::find_if(connections.begin(), connections.end(), [this, other](const CaseConnection* connection) -> bool
+  for (auto it = connections.begin() ; it != connections.end() ; ++it)
   {
-    return connection->getTargetFor(this) == other;
-  });
-
-  return iterator != connections.end() ? *iterator : nullptr;
+    if ((*it)->getTargetFor(this) == other)
+      return *it;
+  }
+  return nullptr;
 }
 
 int LevelGrid::CaseContent::apCostTo(const CaseContent* other) const
@@ -121,9 +123,9 @@ bool LevelGrid::CaseConnection::goThrough(CharacterMovement* character)
   return true;
 }
 
-std::list<LevelGrid::CaseContent*> LevelGrid::CaseContent::GetSuccessors(const CaseContent* parent, Actor* actor) const
+AstarPathfinding<LevelGrid::CaseContent>::Successors LevelGrid::CaseContent::GetSuccessors(const CaseContent* parent, Actor* actor) const
 {
-  std::list<LevelGrid::CaseContent*> results;
+  AstarPathfinding<LevelGrid::CaseContent>::Successors results;
 
   for (auto* connection : connections)
   {
