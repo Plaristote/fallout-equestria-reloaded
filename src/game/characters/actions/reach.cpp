@@ -2,6 +2,7 @@
 #include "game/leveltask.h"
 #include <cmath>
 #include <functional>
+#define MAX_RANGE 100
 
 static int rateCase(QJSValue callback, const Point position)
 {
@@ -40,6 +41,8 @@ QVector<Point> ReachAction::getCandidates(int caseDistance) const
   QVector<Point> candidates;
   std::function<bool (Point, Point)> compare;
 
+  if (caseDistance > MAX_RANGE)
+    return candidates;
   candidates.reserve(caseDistance * caseDistance);
   for (int x = position.x - caseDistance ; x <= position.x + caseDistance ; ++x)
   {
