@@ -157,6 +157,16 @@ bool CharacterParty::containsCharacter(const Character* character) const
   return list.count(const_cast<Character*>(character)) > 0;
 }
 
+Character* CharacterParty::find(std::function<bool(const Character&)> condition) const
+{
+  for (Character* character : list)
+  {
+    if (condition(*character))
+      return character;
+  }
+  return nullptr;
+}
+
 Character* CharacterParty::find(QJSValue callback) const
 {
   std::function<bool (Character*)> predicate = [](Character*) { return false; };

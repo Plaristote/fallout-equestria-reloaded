@@ -44,19 +44,30 @@ bool UniqueCharacterStorage::saveCharacterIntoStorage(LevelTask* level, Characte
   bool isDetached = level && level->detachObject(character);
 
   if(isDetached)
-  {
-    character->setParent(this);
-    TimeManager* tm = Game::get()->getTimeManager();
-    long time = tm->getTimestamp();
-    character->getFieldOfView()->reset();
-
-    StorageSlot* slot = new StorageSlot(this,character,time);
-    storage.append(slot);
-  }else
-  {
-    qDebug()<<"UniqueCharacterStorage: Could not detach dynamic object"<<character->getObjectName()<<"from level"<<(level ? level->getName() : QString());
-  }
+    appendCharacterToStorage(character, storage);
   return isDetached;
+}
+
+bool UniqueCharacterStorage::saveCharacterIntoStorage(CharacterParty* party, Character* character, QList<StorageSlot*>& storage)
+{
+  if (party->containsCharacter(character))
+  {
+    party->removeCharacter(character);
+    appendCharacterToStorage(character, storage);
+    return true;
+  }
+  return false;
+}
+
+void UniqueCharacterStorage::appendCharacterToStorage(Character* character, QList<StorageSlot*>& storage)
+{
+  character->setParent(this);
+  TimeManager* tm = Game::get()->getTimeManager();
+  long time = tm->getTimestamp();
+  character->getFieldOfView()->reset();
+
+  StorageSlot* slot = new StorageSlot(this,character,time);
+  storage.append(slot);
 }
 
 QList<StorageSlot*>& UniqueCharacterStorage::requireLevelStorage(const QString& levelName)
@@ -115,8 +126,13 @@ void UniqueCharacterStorage::detachCharacter(Character* character)
   {
     LevelTask* level = LevelTask::get();
     QList<StorageSlot*>& storage = requireLevelStorage("__no_level__");
+    bool success;
 
-    saveCharacterIntoStorage(level, character, storage) || swapCharacterToStorage(character, storage);
+    success = saveCharacterIntoStorage(level, character, storage)
+      || saveCharacterIntoStorage(Game::get()->getPlayerParty(), character, storage)
+      || swapCharacterToStorage(character, storage);
+    if (!success)
+      qDebug()<<"UniqueCharacterStorage: Could not detach dynamic object"<<character->getObjectName()<<"from level"<<(level ? level->getName() : QString());
   }
 }
 

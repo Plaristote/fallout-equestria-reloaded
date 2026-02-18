@@ -37,6 +37,7 @@ public:
   Q_INVOKABLE void addExperience(unsigned int value);
   Q_INVOKABLE void requireJoinCombat();
   void             joinCombat();
+  Character*             find(std::function<bool(const Character&)>) const;
   Q_INVOKABLE Character* find(QJSValue callback) const;
   Q_INVOKABLE QJSValue   findAll(QJSValue callback) const;
 

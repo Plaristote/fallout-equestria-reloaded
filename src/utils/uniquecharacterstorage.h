@@ -9,6 +9,7 @@
 class StorageSlot;
 class QJsonObject;
 class TileZone;
+class CharacterParty;
 
 class UniqueCharacterStorage : public QObject
 {
@@ -33,6 +34,8 @@ private:
   bool loadCharacterIntoLevel(LevelTask* level, StorageSlot* characterSlot);
   bool loadCharacterIntoLevel(LevelTask* level, StorageSlot* characterSlot, Point position);
   bool saveCharacterIntoStorage(LevelTask* level, Character* character, QList<StorageSlot*>& storage);
+  bool saveCharacterIntoStorage(CharacterParty*, Character* character, QList<StorageSlot*>& storage);
+  void appendCharacterToStorage(Character* character, QList<StorageSlot*>& storage);
   bool swapCharacterToStorage(Character* character, QList<StorageSlot*>& storage);
 
   QList<StorageSlot*>& requireLevelStorage(const QString& levelName);

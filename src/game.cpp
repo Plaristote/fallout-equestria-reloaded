@@ -541,9 +541,12 @@ void Game::asyncAdvanceToHour(unsigned int hour, unsigned int minutes, QJSValue 
 Character* Game::getCharacter(const QString& characterSheet) const
 {
   Character* match = nullptr;
+  auto condition = [characterSheet](const Character& character) { return character.getCharacterSheet() == characterSheet; };
 
   if (currentLevel)
-    match = currentLevel->findCharacter([characterSheet](Character& character) { return character.getCharacterSheet() == characterSheet; });
+    match = currentLevel->findCharacter(condition);
+  if (!match && playerParty)
+    match = playerParty->find(condition);
   return match ? match : uniqueCharacterStorage->getCharacter(characterSheet);
 }
 
