@@ -19,6 +19,7 @@ public:
   explicit CharacterParty(QObject *parent = nullptr);
 
   static CharacterParty* factory(const QVariantMap& parameters, QObject* parent = nullptr);
+  static CharacterParty* factory(QJSValue parameters, QObject* parent = nullptr);
 
   const QString& getName() const { return name; }
   const QString& getFactionName() const { return factionName; }
@@ -30,6 +31,7 @@ public:
   Q_INVOKABLE void createCharacters(const QVariantMap&);
   Q_INVOKABLE void createCharacter(const QString &name, const QVariantMap& parameters);
   Q_INVOKABLE void addCharacter(Character*);
+  Q_INVOKABLE void addCharacterFromVariant(const QVariant&);
   Q_INVOKABLE void removeCharacter(Character*);
   Q_INVOKABLE bool containsCharacter(const Character*) const;
   Q_INVOKABLE Character* get(const QString& name);

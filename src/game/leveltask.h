@@ -45,7 +45,7 @@ public:
   void registerDynamicObject(DynamicObject*) override;
   void unregisterDynamicObject(DynamicObject*) override;
 
-  Q_INVOKABLE CharacterParty* createNpcGroup(QJSValue description) { return CharacterParty::factory(description.toVariant().toMap(), this); }
+  Q_INVOKABLE CharacterParty* createNpcGroup(QJSValue description) { return CharacterParty::factory(description, this); }
   Q_INVOKABLE void addBloodStainAt(int x, int y, unsigned char z) { addBloodStainAt(QPoint(x, y), z); }
   void             addBloodStainAt(QPoint, unsigned char floor);
 

@@ -30,6 +30,18 @@ static Character* variantToCharacter(const QVariant& value)
     : nullptr;
 }
 
+void CharacterParty::addCharacterFromVariant(const QVariant& entry)
+{
+  Character* character = variantToCharacter(entry);
+
+  if (character)
+    addCharacter(character);
+  else if (entry.typeId() == QMetaType::QVariantMap)
+    createCharacters(entry.toMap());
+  else
+    qDebug() << "CharacterParty::addCharacterFromVariant: invalid member value" << entry;
+}
+
 CharacterParty* CharacterParty::factory(const QVariantMap& parameters, QObject* parent)
 {
   const QVariantList members(parameters["members"].toList());
@@ -38,17 +50,32 @@ CharacterParty* CharacterParty::factory(const QVariantMap& parameters, QObject* 
   qDebug() << "CharacterParty::factory" << parameters;
   party->setProperty("name", parameters["name"]);
   if (!parameters["faction"].isNull())
-    party->setProperty("factionName", parameters["faction"].toString());
+    party->setFactionName(parameters["faction"].toString());
   for (const QVariant& entry : members)
-  {
-    Character* character = variantToCharacter(entry);
+    party->addCharacterFromVariant(entry);
+  return party;
+}
 
-    if (character)
-      party->addCharacter(character);
-    else if (entry.typeId() == QMetaType::QVariantMap)
-      party->createCharacters(entry.toMap());
-    else
-      qDebug() << "CharacterParty::factory: invalid member value" << entry;
+CharacterParty* CharacterParty::factory(QJSValue parameters, QObject* parent)
+{
+  QJSValue members = parameters.property("members");
+  QJSValue faction = parameters.property("faction");
+  CharacterParty* party = new CharacterParty(parent);
+
+  party->setProperty("name", parameters.property("name").toString());
+  if (faction.isString())
+    party->setFactionName(faction.toString());
+  if (members.isArray())
+  {
+    for (int i = 0 ; i < members.property("length").toInt() ; ++i)
+    {
+      QJSValue member = members.property(i);
+
+      if (member.isQObject())
+        party->addCharacter(qobject_cast<Character*>(member.toQObject()));
+      else
+        party->addCharacterFromVariant(member.toVariant());
+    }
   }
   return party;
 }
