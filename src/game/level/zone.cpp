@@ -113,6 +113,29 @@ TileZone * ZoneComponent::getZoneFromName(const QString& name) const
   return nullptr;
 }
 
+QJSValue ZoneComponent::findZones(QJSValue filter) const
+{
+  auto& engine = Game::get()->getScriptEngine();
+  QJSValue result = engine.newArray();
+  QJSValue push = result.property("push");
+
+  for (unsigned char i = 0 ; i < getFloorCount() ; ++i)
+  {
+    LevelGrid* floor = getFloorGrid(i);
+
+    for (TileZone* zone : floor->getZones())
+    {
+      QJSValue jsZone = engine.newQObject(zone);
+      QJSValueList params{jsZone};
+
+      if ((filter.isCallable() && filter.call(params).toBool())
+       || (filter.isString() && zone->getName() == filter.toString()))
+        result.callWithInstance(result, params);
+    }
+  }
+  return result;
+}
+
 void ZoneComponent::onZoneChangedFloor(TileZone* zone)
 {
   qDebug() << "onZoneChangedFloor" << zone;

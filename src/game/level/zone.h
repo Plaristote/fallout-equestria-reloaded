@@ -20,6 +20,7 @@ public:
   Q_INVOKABLE bool isInsideZone(const TileZone*, const DynamicObject*) const;
   Q_INVOKABLE QJSValue getZoneOccupants(const TileZone* zone) const;
   Q_INVOKABLE TileZone* getZoneFromName(const QString&) const;
+  Q_INVOKABLE QJSValue findZones(QJSValue filter) const;
 
 signals:
   void exitZoneEntered(TileZone*);

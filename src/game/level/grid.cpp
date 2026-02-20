@@ -381,6 +381,30 @@ float GridComponent::getDistance(QPoint pa, QPoint pb) const
   return std::sqrt(static_cast<float>(a * a + b * b));
 }
 
+QPoint GridComponent::getClosestPosition(const TileZone* zone, QPoint ref) const
+{
+  QPoint result(ref);
+
+  if (zone)
+  {
+    int size = zone->getPositionCount();
+    float bestMatch = 0.f;
+
+    for (int i = 0 ; i < size ; ++i)
+    {
+      QPoint candidate = zone->getRelativePosition(i);
+      float candidateMatch = getDistance(candidate, ref);
+
+      if (bestMatch == 0.f || candidateMatch < bestMatch)
+      {
+        result = candidate;
+        bestMatch = candidateMatch;
+      }
+    }
+  }
+  return result;
+}
+
 int GridComponent::getVisionQuality(int ax, int ay, int bx, int by) const
 {
   return getGrid()->getVisionQuality(ax, ay, bx, by);

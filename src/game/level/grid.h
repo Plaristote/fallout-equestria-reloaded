@@ -52,6 +52,7 @@ public:
   Q_INVOKABLE QPoint      getRenderPositionForTile(int x, int y, unsigned char z = NULL_FLOOR);
   Q_INVOKABLE float       getDistance(QPoint, QPoint) const;
   Q_INVOKABLE float       getDistance(int ax, int ay, int bx, int by) const { return getDistance(QPoint(ax, ay), QPoint(bx, by)); }
+  Q_INVOKABLE QPoint      getClosestPosition(const TileZone* zone, QPoint) const;
   Q_INVOKABLE int         getVisionQuality(int ax, int ay, int bx, int by) const;
   Q_INVOKABLE TileZone*   getTileZone(const QString& name) const;
   TileZone*               getTileZone(std::function<bool(const TileZone&)>) const;
