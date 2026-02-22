@@ -86,6 +86,8 @@ public:
   void loadCmapRaces();
   Q_INVOKABLE QVariantList getEndGameSlides() const;
 
+  Q_INVOKABLE CharacterParty* createNpcGroup(QJSValue description) { return CharacterParty::factory(description, this); }
+  Q_INVOKABLE void            deleteNpcGroup(CharacterParty* party) const { if (party) party->deleteLater(); }
   Q_INVOKABLE CharacterParty* getPlayerParty() const { return playerParty; }
   Q_INVOKABLE Character* getPlayer() const { return player; }
   Q_INVOKABLE StatModel* getPlayerStatistics() const { return getPlayer()->getStatistics(); }
