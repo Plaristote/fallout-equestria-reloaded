@@ -164,6 +164,7 @@ void Game::loadFromDataEngine(std::function<void()> callback)
     {
       if (currentLevel)
         currentLevel->loadCombatState(variables);
+      script->call("onLoaded");
       callback();
     });
   }
@@ -171,7 +172,10 @@ void Game::loadFromDataEngine(std::function<void()> callback)
     emit levelChanged();
   initializeScript();
   if (currentLevelName.isEmpty())
+  {
+    script->call("onLoaded");
     callback();
+  }
 }
 
 void Game::initializeScript()
