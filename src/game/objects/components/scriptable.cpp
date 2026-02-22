@@ -34,7 +34,7 @@ void ScriptableComponent::setScript(const QString& name)
 
     if (!expression.match(fullPath).hasMatch())
       fullPath += ".mjs";
-    script = new ScriptController(getScriptPath() + '/' + name);
+    script = new ScriptController(fullPath);
     script->initialize(this);
   }
   else
