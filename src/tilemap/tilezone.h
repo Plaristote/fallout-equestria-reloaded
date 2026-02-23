@@ -16,6 +16,7 @@ class TileZone : public TileMask
 
   Q_PROPERTY(QString      name MEMBER name CONSTANT)
   Q_PROPERTY(QString      type MEMBER type CONSTANT)
+  Q_PROPERTY(QString      target MEMBER target CONSTANT)
   Q_PROPERTY(QString      targetZone MEMBER targetZone CONSTANT)
   Q_PROPERTY(QPoint       offset MEMBER offset NOTIFY tilesChanged)
   Q_PROPERTY(unsigned int floor READ getFloor NOTIFY floorChanged)
