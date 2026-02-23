@@ -130,7 +130,7 @@ QJSValue ZoneComponent::findZones(QJSValue filter) const
 
       if ((filter.isCallable() && filter.call(params).toBool())
        || (filter.isString() && zone->getName() == filter.toString()))
-        result.callWithInstance(result, params);
+        push.callWithInstance(result, params);
     }
   }
   return result;
