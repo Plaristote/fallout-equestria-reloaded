@@ -32,7 +32,7 @@ Item {
     color: "white"
     font.family: application.titleFontName
     font.pointSize: application.titleFont.bigSize
-    text: i18n.t("options.combatSpeed") + " " + gameManager.combatSpeedOption
+    text: i18n.t("options.combatSpeed") + " " + (Math.round(gameManager.combatSpeedOption * 100) / 100)
   }
 
   Shortcut {
