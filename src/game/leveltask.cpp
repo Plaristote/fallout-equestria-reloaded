@@ -245,20 +245,17 @@ void LevelTask::endTurnTask(qint64 delta)
     ObjectPerformanceClock clock(performanceMetrics.object(object));
     Character* asCharacter = reinterpret_cast<Character*>(object);
 
-    if (object->isCharacter() && combattants.indexOf(asCharacter) < 0 && asCharacter->isAlive()
-      && !characterJoiningCombat(asCharacter))
+    object->update(delta);
+    object->updateTasks(delta);
+    if (object->isCharacter() && combattants.indexOf(asCharacter) < 0 && asCharacter->isAlive())
     {
+      asCharacter->getFieldOfView()->update(delta);
       asCharacter->getActionQueue()->update();
       if (!asCharacter->getActionQueue()->isEmpty())
         ++affectedCharacters;
     }
-    else
-      object->updateTasks(WORLDTIME_TURN_DURATION);
   }
-  if (affectedCharacters > 0)
-    finalizeTurnRemainingTime -= delta;
-  else
-    finalizeTurnRemainingTime = 0;
+  finalizeTurnRemainingTime -= delta;
   enableWaitingMode(finalizeTurnRemainingTime > 0);
 }
 
