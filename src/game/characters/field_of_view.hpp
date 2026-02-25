@@ -40,6 +40,7 @@ public:
   void                 SetIntervalDurationFromStatistics(void);
 
   Q_INVOKABLE void     detectCharacters();
+  Q_INVOKABLE bool     detectCharacter(Character*);
   Q_INVOKABLE bool     isDetected(const Character*) const;
   Q_INVOKABLE bool     hasLivingEnemiesInSight(void) const;
 
@@ -74,6 +75,7 @@ signals:
   void                 characterDetectionUpdated(Character*, bool);
 
 protected:
+  bool                 UpdateCharacterDetection(Character*);
   void                 LoseTrackOfCharacters(EntryList&);
   bool                 CheckIfEnemyIsDetected(Character& enemy)                  const;
   bool                 CheckIfSneakingEnemyIsDetected(Character& enemy)          const;

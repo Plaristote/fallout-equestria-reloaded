@@ -31,6 +31,10 @@ void CombatComponent::registerDynamicObject(DynamicObject* object)
       character,
       connect(character, &Character::requireJoinCombat, [this, character]() { joinCombat(character); })
     );
+    addCharacterObserver(
+      character,
+      connect(character, &Character::movementFinished, [this, character]() { if (combat && getPlayer()) { getPlayer()->getFieldOfView()->detectCharacter(character); } })
+    );
   }
 }
 

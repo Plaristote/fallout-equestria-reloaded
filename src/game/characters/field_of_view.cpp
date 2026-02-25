@@ -6,6 +6,11 @@
 
 using namespace std;
 
+static bool isCharacterInRange(const Character& self, const Character& other, float radius)
+{
+  return (&other != &self) && other.getDistance(&self) < radius;
+}
+
 FieldOfView::FieldOfView(Character& character) : QObject(&character), character(character)
 {
   interval = 1;
@@ -236,6 +241,37 @@ bool FieldOfView::IsCharacterInList(const Character* character_to_check, const E
   return (find(list.begin(), list.end(), character_to_check) != list.end());
 }
 
+inline bool FieldOfView::UpdateCharacterDetection(Character* checking_character)
+{
+  if (character.isAlly(checking_character) || !checking_character->isAlive())
+  {
+    setCharacterDetected(checking_character);
+    return true;
+  }
+  else if (character.hasLineOfSight(checking_character) && CheckIfEnemyIsDetected(*checking_character))
+  {
+    if (character.isEnemy(checking_character) && checking_character->isAlive())
+    {
+      setEnemyDetected(checking_character);
+      return true;
+    }
+    else
+    {
+      setCharacterDetected(checking_character);
+      return true;
+    }
+  }
+  return false;
+}
+
+bool FieldOfView::detectCharacter(Character* other)
+{
+  return other
+     && other != &character
+     && isCharacterInRange(character, *other, GetRadius())
+     && UpdateCharacterDetection(other);
+}
+
 void FieldOfView::detectCharacters()
 {
   CharacterList characters_in_range = GetCharactersInRange();
@@ -245,18 +281,8 @@ void FieldOfView::detectCharacters()
   {
     Character* checking_character = *iterator;
 
-    if (checking_character != &character)
-    {
-      if (character.isAlly(checking_character) || !checking_character->isAlive())
-        setCharacterDetected(checking_character);
-      else if (character.hasLineOfSight(checking_character) && CheckIfEnemyIsDetected(*checking_character))
-      {
-        if (character.isEnemy(checking_character) && checking_character->isAlive())
-          setEnemyDetected(checking_character);
-        else
-          setCharacterDetected(checking_character);
-      }
-    }
+    if (checking_character != &character) [[likely]]
+      UpdateCharacterDetection(checking_character);
   }
 }
 
@@ -310,16 +336,12 @@ float FieldOfView::GetRadius() const
 
 FieldOfView::CharacterList FieldOfView::GetCharactersInRange() const
 {
-  float field_of_view_radius = GetRadius();
+  float radius = GetRadius();
   auto* level = LevelTask::get();
+  auto filter = bind(isCharacterInRange, ref(character), placeholders::_1, radius);
 
   if (level)
-  {
-    return level->findCharacters([this, field_of_view_radius](Character& other) -> bool
-    {
-      return (&other != &character && other.getDistance(&character) < field_of_view_radius);
-    });
-  }
+    return level->findCharacters(filter);
   return CharacterList();
 }
 
