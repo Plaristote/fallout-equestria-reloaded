@@ -23,6 +23,7 @@ public:
   void saveCombatState(QJsonObject&) const;
   void save(DataEngine*, bool isActive);
   bool canSave() const;
+  bool isPersistent() const { return persistent; }
 
   Q_INVOKABLE void toggleSaveEnabled(bool);
   Q_INVOKABLE void persist();

@@ -3,6 +3,8 @@
 #include <QJsonObject>
 #include <QJsonArray>
 
+static const QString detachedStorageName = "__no_level__";
+
 UniqueCharacterStorage::UniqueCharacterStorage(QObject *parent)
   : QObject{parent}
 {
@@ -18,7 +20,8 @@ int UniqueCharacterStorage::saveUniqueCharactersFromLevel(LevelTask* level)
   }
   qDebug()<<"UniqueCharacterStorage: Saving unique characters from"<<level->getName()<<".";
 
-  QList<StorageSlot*>& storage = requireLevelStorage(level->getName());
+  const QString& storageName = level->isPersistent() ? level->getName() : detachedStorageName;
+  QList<StorageSlot*>& storage = requireLevelStorage(storageName);
   int numberOfCharactersSaved = 0;
 
   QVector<DynamicObject*> dynamicObjects = level->allDynamicObjects();
@@ -125,7 +128,7 @@ void UniqueCharacterStorage::detachCharacter(Character* character)
   if (character)
   {
     LevelTask* level = LevelTask::get();
-    QList<StorageSlot*>& storage = requireLevelStorage("__no_level__");
+    QList<StorageSlot*>& storage = requireLevelStorage(detachedStorageName);
     bool success;
 
     success = saveCharacterIntoStorage(level, character, storage)
