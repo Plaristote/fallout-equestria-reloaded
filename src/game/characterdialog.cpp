@@ -6,7 +6,7 @@
 #include <QJsonArray>
 #include <QDebug>
 
-CharacterDialog::CharacterDialog(QObject *parent) : QObject(parent)
+CharacterDialog::CharacterDialog(QObject *parent) : QObject(parent), player(nullptr)
 {
   barter     = new BarterController(this);
   customFont = new CustomFont(this);
@@ -141,15 +141,15 @@ QString CharacterDialog::getNextState(const QString& answerSymbol)
 
 QString CharacterDialog::getName() const
 {
-  return npc->getDisplayName();
+  return npc ? npc->getDisplayName() : QString();
 }
 
 QString CharacterDialog::t(const QString &name, const QVariantMap& options) const
 {
   QString translationPath = translationGroup + '.' + name;
   QVariantMap parameters{
-    {"name", player->getStatistics()->getName()},
-    {"npc", npc->isCharacter() ? reinterpret_cast<Character*>(npc)->getStatistics()->getName() : getName()}
+    {"name", player ? player->getStatistics()->getName() : QString()},
+    {"npc", npc && npc->isCharacter() ? reinterpret_cast<Character*>(npc)->getStatistics()->getName() : getName()}
   };
 
   parameters = fetchScriptVariablesFromTranslation(translationPath, parameters, script);
