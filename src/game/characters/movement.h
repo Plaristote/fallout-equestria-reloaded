@@ -10,6 +10,7 @@ class CharacterMovement : public StorageObject
   Q_OBJECT
 
   Q_PROPERTY(QString movementMode READ getMovementMode WRITE setMovementMode)
+  Q_PROPERTY(unsigned int currentPathLength READ getCurrentPathLength)
 public:
   explicit CharacterMovement(QObject *parent = nullptr);
 
@@ -23,11 +24,13 @@ public:
   const QString&            getMovementMode() const { return movementMode; }
   void                      setMovementMode(const QString&);
   const QList<Point>&       getCurrentPath() const { return currentPath; }
+  unsigned int              getCurrentPathLength() const { return currentPath.size(); }
   const QVector<TileZone*>& getCurrentZones() const { return currentZones; }
   void                      clearCurrentZones() { currentZones.clear(); }
   void                      setCurrentZones(QVector<TileZone*> value) { currentZones = value; }
   QList<Point>&             rcurrentPath() { return currentPath; }
   Q_INVOKABLE bool          isInZone(TileZone* value) const { return currentZones.indexOf(value) >= 0; }
+  Q_INVOKABLE void          truncatePath(unsigned int maxSize);
 
 public slots:
   virtual void onIdle();
@@ -41,7 +44,6 @@ signals:
 private slots:
   void onMovementStart();
   void onMovementEnded();
-  void onDestinationReached();
 
 protected:
   QList<Point>       currentPath;

@@ -7,8 +7,7 @@ CharacterMovement::CharacterMovement(QObject *parent) : ParentType(parent)
 {
   setOrientation(BottomDir);
   movementMode = "walking";
-  connect(this, &Sprite::movementFinished,              this, &CharacterMovement::onMovementEnded);
-  connect(this, &CharacterMovement::reachedDestination, this, &CharacterMovement::onDestinationReached);
+  connect(this, &Sprite::movementFinished, this, &CharacterMovement::onMovementEnded);
 }
 
 void CharacterMovement::lookTo(int x, int y)
@@ -72,9 +71,9 @@ void CharacterMovement::onMovementEnded()
   scriptCall("onMovementEnded");
 }
 
-void CharacterMovement::onDestinationReached()
+void CharacterMovement::truncatePath(unsigned int maxSize)
 {
-  scriptCall("onDestinationReached");
+  currentPath.resize(std::min<unsigned int>(currentPath.size(), maxSize));
 }
 
 void CharacterMovement::load(const QJsonObject& data)
