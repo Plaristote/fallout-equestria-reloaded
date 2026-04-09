@@ -25,9 +25,10 @@ ObjectGroup* DynamicObject::getGroup() const
 
 QString DynamicObject::getPath() const
 {
-  ObjectGroup* group = getGroup();
+  const ObjectGroup* group = getGroup();
+  const QString parentPath = group ? group->getPath() : QString();
 
-  return group ? group->getPath() + '.' + getObjectName() : getObjectName();
+  return parentPath.length() > 0 ? parentPath + '.' + getObjectName() : getObjectName();
 }
 
 QString DynamicObject::getRelativePath(const ObjectGroup& group) const
