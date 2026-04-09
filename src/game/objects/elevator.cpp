@@ -65,6 +65,7 @@ void Elevator::onLevelFloorChanged()
   {
     setCurrentFloor(activeFloor);
     setAnimation(activeFloor == floorA ? "A" : "B");
+    scriptCall("onFloorChanged", QJSValueList() << activeFloor);
   }
 }
 
