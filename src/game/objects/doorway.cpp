@@ -9,6 +9,7 @@ Doorway::Doorway(QObject* parent) : DynamicObject(parent)
   lockpickLevel = 1;
   connect(this, &Doorway::openedChanged, this, &Doorway::updateAccessPath);
   connect(this, &Doorway::openedChanged, this, &Doorway::updateAnimation);
+  connect(this, &Doorway::openedChanged, this, [this]() { scriptCall("onToggle", QJSValueList() << opened); });
   connect(this, &DynamicObject::positionChanged,     this, &Doorway::updateTileConnections);
   connect(this, &OrientedSprite::orientationChanged, this, &Doorway::updateTileConnections);
   connect(this, &OrientedSprite::orientationChanged, this, &Doorway::updateAnimation);
@@ -223,8 +224,6 @@ void Doorway::toggle()
     playSound(openSound);
   }
   emit openedChanged();
-  if (script && script->hasMethod("onToggle"))
-    script->call("onToggle", QJSValueList() << opened);
 }
 
 void Doorway::save(QJsonObject& data) const
