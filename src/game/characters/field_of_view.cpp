@@ -298,15 +298,19 @@ bool FieldOfView::CheckIfSneakingEnemyIsDetected(Character& enemy) const
 
 void FieldOfView::setEnemyDetected(Character* enemy)
 {
-  InsertOrUpdateCharacterInList(*enemy, detected_enemies);
+  if (enemy)
+    InsertOrUpdateCharacterInList(*enemy, detected_enemies);
 }
 
 void FieldOfView::setCharacterDetected(Character* character)
 {
-  if (this->character.isEnemy(character))
-    setEnemyDetected(character);
-  else
-    InsertOrUpdateCharacterInList(*character, detected_characters);
+  if (character)
+  {
+    if (this->character.isEnemy(character) && character->isAlive())
+      setEnemyDetected(character);
+    else
+      InsertOrUpdateCharacterInList(*character, detected_characters);
+  }
 }
 
 void FieldOfView::InsertOrUpdateCharacterInList(Character& character, EntryList& list)
