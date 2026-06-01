@@ -119,7 +119,8 @@ bool CombatComponent::isCombatEnabled() const
 {
   if (combattants.size() > 1 && combat == true)
   {
-    auto check = [](const Character* character) { return character->shouldJoinFight(); };
+    const auto* player = getPlayer();
+    auto check = [player](const Character* character) { return character != player && character->shouldJoinFight(); };
     auto it    = std::find_if(combattants.begin(), combattants.end(), check);
 
     return it != combattants.end();
