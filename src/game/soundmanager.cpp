@@ -86,20 +86,22 @@ void SoundManager::start()
   if (!workerThread)
   {
     SoundWorker* worker = new SoundWorker();
-    workerThread = new QThread(this);
+    workerThread = new QThread();
 
     connect(workerThread, &QThread::finished, worker, &QObject::deleteLater);
     connect(workerThread, &QThread::finished, workerThread, &QObject::deleteLater);
     connect(this, &SoundManager::playSound, worker, &SoundWorker::playSound, Qt::QueuedConnection);
+    worker->moveToThread(workerThread);
     workerThread->start();
   }
 }
 
+// TODO this does not work as expected... the thread does not necessarily end
 void SoundManager::stop()
 {
   if (workerThread)
   {
-    workerThread->quit();
+    //workerThread->quit();
     workerThread = nullptr;
   }
 }
