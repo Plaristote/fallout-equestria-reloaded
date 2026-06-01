@@ -7,7 +7,7 @@ Item {
   id: root
   property QtObject controller
   property int bottomPartY: textDisplay.y + textDisplay.height
-  property int bottomPartHeight: parent.height - bottomPartY
+  property int bottomPartHeight: (parent ? parent.height : height) - bottomPartY
 
   Connections {
     target: controller
