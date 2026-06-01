@@ -311,7 +311,7 @@ void Character::resetActionPoints()
 void Character::load(const QJsonObject& data)
 {
   actionPoints   = data["ap"].toInt();
-  unconscious    = !(data["ko"].toBool(true));
+  unconscious    = data["ko"].toBool(false);
   morale         = data["morale"].toInt(CHARACTER_MAX_MORALE);
   attacksOnSight = data["attacksOnSight"].toBool(true);
   ParentType::load(data);
