@@ -52,7 +52,9 @@ public:
   Q_INVOKABLE QPoint getPositionAt(int i) const { return offset + positions.at(i); }
   Q_INVOKABLE QPoint getRelativePosition(int i) const { return positions.at(i); }
   Q_INVOKABLE void   addPosition(QPoint);
+  Q_INVOKABLE void   addPosition(int x, int y) { addPosition(QPoint(x, y)); }
   Q_INVOKABLE void   removePosition(QPoint);
+  Q_INVOKABLE void   removePosition(int x, int y) { removePosition(QPoint(x, y)); }
   Q_INVOKABLE void   addRelativePosition(QPoint);
   Q_INVOKABLE void   addRelativePosition(int x, int y) { addRelativePosition(QPoint(x, y)); }
   Q_INVOKABLE void   removeRelativePosition(QPoint);
