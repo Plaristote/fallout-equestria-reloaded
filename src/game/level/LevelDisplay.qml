@@ -41,8 +41,8 @@ Item {
   ScreenEdges {
     enabled: !parent.levelController.paused && !debugConsole.enabled
     onMoveTop:    { camera.translate(0, scrollSpeed); }
-    onMoveLeft:   { camera.translate(scrollSpeed, 0); }
-    onMoveRight:  { camera.translate(-scrollSpeed, 0); }
+    onMoveLeft:   { camera.translate(scrollSpeed * 2, 0); }
+    onMoveRight:  { camera.translate(-scrollSpeed * 2, 0); }
     onMoveBottom: { camera.translate(0, -scrollSpeed); }
   }
 }

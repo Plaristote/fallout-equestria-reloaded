@@ -46,13 +46,13 @@ MouseArea {
 
   function onLeftButtonClick() {
     switch (levelController.mouseMode) {
-      case 0:
+      case 0: // CursorComponent::MovementCursor
         onTileClick();
         break ;
-      case 1:
+      case 1: // CursorComponent::InteractionCursor
         onObjectClick();
         break ;
-      case 2:
+      case 2: // CursorComponent::TargetCursor
         onTargetClick();
         break ;
     }
