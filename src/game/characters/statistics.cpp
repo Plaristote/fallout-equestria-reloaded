@@ -34,7 +34,10 @@ void CharacterStatistics::load(const QJsonObject& data)
   characterSheet = data["charsheet"].toString(objectName);
   isUnique = data["uniq"].toBool();
   if (isUnique || data["stats"]["name"].toString().length() == 0)
+  {
+    setObjectName(objectName);
     onCharacterSheetChanged();
+  }
   else
   {
     StatModel* charSheet = new StatModel(this);

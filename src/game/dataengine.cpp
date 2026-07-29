@@ -308,5 +308,5 @@ void DataEngine::saveStatModel(const QString &characterId, StatModel* model)
   model->toJson(characterData);
   characters.remove(characterId);
   characters.insert(characterId, characterData);
-  data.insert("charaters", characters);
+  data.insert("characters", characters);
 }
