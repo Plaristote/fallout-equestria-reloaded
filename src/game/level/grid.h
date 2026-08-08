@@ -54,6 +54,7 @@ public:
   Q_INVOKABLE float       getDistance(int ax, int ay, int bx, int by) const { return getDistance(QPoint(ax, ay), QPoint(bx, by)); }
   Q_INVOKABLE QPoint      getClosestPosition(const TileZone* zone, QPoint) const;
   Q_INVOKABLE int         getVisionQuality(int ax, int ay, int bx, int by) const;
+  Q_INVOKABLE QJSValue    getCharactersBetween(int ax, int ay, int bx, int by, unsigned int floor = NULL_FLOOR) const;
   Q_INVOKABLE TileZone*   getTileZone(const QString& name) const;
   TileZone*               getTileZone(std::function<bool(const TileZone&)>) const;
 

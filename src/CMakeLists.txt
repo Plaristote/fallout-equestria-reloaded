@@ -193,6 +193,7 @@ set(PROJECT_SOURCES
         game/level/interactiontargetlist.h
         game/level/interactiontargetlist.cpp
         game/level/lineofsight.cpp
+        game/level/lineofshooting.cpp
         game/level/ambientlightcomponent.h
         game/level/ambientlightcomponent.cpp
         game/level/actions.h

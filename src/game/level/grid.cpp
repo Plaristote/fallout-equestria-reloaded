@@ -414,6 +414,18 @@ int GridComponent::getVisionQuality(int ax, int ay, int bx, int by) const
   return getGrid()->getVisionQuality(ax, ay, bx, by);
 }
 
+QJSValue GridComponent::getCharactersBetween(int ax, int ay, int bx, int by, unsigned int floor) const
+{
+  QJSValue   result = Game::get()->getScriptEngine().newArray();
+  QJSValue   push = result.property("push");
+  LevelGrid* grid = floor == NULL_FLOOR ? getGrid() : getFloorGrid(floor);
+  auto       list = grid->getCharactersBetween({ax, ay}, {bx, by});
+
+  for (auto* object : list)
+    push.callWithInstance(result, QJSValueList() << object->asJSValue());
+  return result;
+}
+
 TileZone* GridComponent::getTileZone(std::function<bool (const TileZone&)> compare) const
 {
   for (LevelGrid* grid : floors)

@@ -5,7 +5,7 @@
 #include <QRectF>
 #include <QDebug>
 
-static bool lineIntersectsRect(QLineF line, QRectF rect)
+bool lineIntersectsRect(QLineF line, QRectF rect)
 {
   QLineF leftSide(rect.topLeft(), rect.bottomLeft());
   QLineF topSide(rect.topLeft(), rect.topRight());

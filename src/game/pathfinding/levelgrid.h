@@ -105,6 +105,9 @@ public:
   QVector<TileZone*> getZonesAt(QPoint);
   QList<TileZone*> getZones() const;
 
+  QVector<DynamicObject*> getCharactersBetween(QPoint from, QPoint to) const;
+  void eachCaseBetween(QPoint from, QPoint to, std::function<bool (const CaseContent&)> callback) const;
+
 private:
   static void setCaseOccupant(CaseContent&, DynamicObject*);
   void updateObjectVisibility(DynamicObject* object);
