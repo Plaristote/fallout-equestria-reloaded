@@ -108,7 +108,7 @@ bool CharacterDialog::loadState(const QString& reference)
       mood  = state.mood;
     for (const QString& answer : state.answers)
       loadOption(answer);
-    if (state.answers.length() == 0)
+    if (options.length() == 0)
       options.push_back("exit");
     emit stateReferenceChanged();
     emit textChanged();
