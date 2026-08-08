@@ -103,6 +103,7 @@
         <file>ui/TerminalTextArea.qml</file>
         <file>ui/TerminalButton.qml</file>
         <file>ui/TerminalComboBox.qml</file>
+        <file>ui/TerminalSpinBox.qml</file>
         <file>ui/InventoryItemPreview.qml</file>
         <file>ui/TerminalLabel.qml</file>
         <file>ui/TerminalCheckBox.qml</file>
