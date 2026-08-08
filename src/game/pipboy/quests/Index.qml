@@ -6,51 +6,25 @@ import "../../../ui"
 ColumnLayout {
   property QtObject questManager
   property QtObject hoveredQuest
+  property var questList: sortQuestList(questManager.list);
   id: root
 
   signal selected(QtObject quest)
+
+  function sortQuestList(list) {
+    return list.sort(function(a, b) {
+      if (a.inProgress && !b.inProgress)
+        return -1;
+      else if (b.inProgress && !a.inProgress)
+        return 1;
+      return 0;
+    });
+  }
 
   TerminalLabel {
     text: i18n.t("Quests")
     horizontalAlignment: Qt.AlignHCenter
     Layout.fillWidth: true
-  }
-
-  RowLayout {
-    Layout.fillWidth: true
-
-    TerminalCheckBox {
-      id: onGoingEnabled
-      checked: true
-      text: i18n.t("quests.ongoing")
-      Layout.fillWidth: true
-      onCheckedChanged: {
-        if (checked)
-          completedEnabled.checked = failedEnabled.checked = false;
-      }
-    }
-
-    TerminalCheckBox {
-      id: completedEnabled
-      checked: false
-      text: i18n.t("quests.completed")
-      Layout.fillWidth: true
-      onCheckedChanged: {
-        if (checked)
-          onGoingEnabled.checked = failedEnabled.checked = false;
-      }
-    }
-
-    TerminalCheckBox {
-      id: failedEnabled
-      checked: false
-      text: i18n.t("quests.failed")
-      Layout.fillWidth: true
-      onCheckedChanged: {
-        if (checked)
-          onGoingEnabled.checked = completedEnabled.checked = false;
-      }
-    }
   }
 
   Rectangle { color: "lightgreen"; Layout.fillWidth: true; implicitHeight: 1 }
@@ -70,14 +44,14 @@ ColumnLayout {
       Repeater {
         model: questManager.list.length * contentColumn.columns
         delegate: Rectangle {
-          property QtObject quest: questManager.list[Math.floor(index / contentColumn.columns)]
+          property QtObject quest: root.questList[Math.floor(index / contentColumn.columns)]
           property int column: index % contentColumn.columns
-          property color questColor: quest.completed? "lightgray" : "green"
+          property color questColor: quest.completed ? "lightgray" : "green"
 
           border.width: 1
           border.color: root.hoveredQuest === quest ? "white" : questColor
           color: "transparent"
-          visible: !quest.hidden && ((quest.completed && completedEnabled.checked) || (quest.failed && failedEnabled.checked) || (quest.inProgress && onGoingEnabled.checked))
+          visible: !quest.hidden
           implicitHeight: visible ? 30 : 0
           implicitWidth: cellContent.width + 20
           Layout.fillWidth: column === 0
