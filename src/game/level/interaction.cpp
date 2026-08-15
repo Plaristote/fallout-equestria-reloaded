@@ -138,6 +138,7 @@ void InteractionComponent::initializeDialog(DynamicObject* object, const QString
 
       npc->lookAt(player);
       player->getFieldOfView()->setCharacterDetected(npc);
+      npc->getFieldOfView()->setCharacterDetected(player);
     }
     if (dialog->load(dialogName, player, object, state))
       emit startDialog(dialog);
