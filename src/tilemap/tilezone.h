@@ -23,6 +23,7 @@ class TileZone : public TileMask
   Q_PROPERTY(QRect        clippedRect MEMBER clippedRect CONSTANT)
   Q_PROPERTY(bool         accessBlocked MEMBER accessBlocked)
   Q_PROPERTY(int          positionCount READ getPositionCount NOTIFY tilesChanged)
+  Q_PROPERTY(bool         enabled MEMBER enabled NOTIFY enabledChanged)
 public:
   explicit TileZone(QObject *parent = nullptr);
 
@@ -33,6 +34,7 @@ public:
   const QString& getTargetZone() const { return targetZone; }
   bool getIsDefault() const { return isDefault; }
 
+  inline bool isEnabled() const { return enabled; }
   inline bool getAccessBlocked() const { return accessBlocked; }
   inline void setAccessBlocked(bool value) { accessBlocked = value; }
   Q_INVOKABLE bool isInside(int x, int y, int z) const override;
@@ -65,6 +67,7 @@ signals:
   void exitedZone(DynamicObject*, TileZone*);
   void tilesChanged();
   void floorChanged(TileZone*);
+  void enabledChanged();
 
 private:
   QString        name;
@@ -72,6 +75,7 @@ private:
   QString        target, targetZone;
   bool           isDefault = false;
   bool           accessBlocked = false;
+  bool           enabled = true;
   QRect          clippedRect;
   QList<QPoint>  positions;
   QPoint         offset;

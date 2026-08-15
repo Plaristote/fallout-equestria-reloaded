@@ -158,25 +158,28 @@ void ZoneComponent::onZoneChangedFloor(TileZone* zone)
 
 void ZoneComponent::onZoneEntered(DynamicObject* object, TileZone* zone)
 {
-  QJSValue result;
-
-  if (object->isCharacter())
+  if (zone->isEnabled())
   {
-    Character* character = reinterpret_cast<Character*>(object);
+    QJSValue result;
 
-    if (!character->isInZone(zone))
-      character->onZoneEntered(zone);
+    if (object->isCharacter())
+    {
+      Character* character = reinterpret_cast<Character*>(object);
+
+      if (!character->isInZone(zone))
+        character->onZoneEntered(zone);
+    }
+    result = scriptCall("onZoneEntered", QJSValueList() << zone->getName() << object->asJSValue());
+    if (result.isBool() && result.toBool() == true)
+      return ;
+    if (zone->getType() == "exit" && object == getPlayer())
+      emit exitZoneEntered(zone);
   }
-  result = scriptCall("onZoneEntered", QJSValueList() << zone->getName() << object->asJSValue());
-  if (result.isBool() && result.toBool() == true)
-    return ;
-  if (zone->getType() == "exit" && object == getPlayer())
-    emit exitZoneEntered(zone);
 }
 
 void ZoneComponent::onZoneExited(DynamicObject* object, TileZone* zone)
 {
-  if (object->isCharacter())
+  if (object->isCharacter() && zone->isEnabled())
   {
     reinterpret_cast<Character*>(object)->onZoneExited(zone);
     scriptCall("onZoneExited", QJSValueList() << zone->getName() << object->asJSValue());
@@ -185,7 +188,7 @@ void ZoneComponent::onZoneExited(DynamicObject* object, TileZone* zone)
 
 bool ZoneComponent::isInsideZone(const TileZone* zone, const DynamicObject* object) const
 {
-  return zone && object
+  return zone && object && zone->isEnabled()
       && zone->getFloor() == object->getCurrentFloor()
       && zone->getAbsolutePositions().indexOf(object->getPosition()) >= 0;
 }

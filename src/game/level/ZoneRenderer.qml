@@ -3,7 +3,7 @@ import QtQuick 2.15
 Item {
   property QtObject zone
   property string   tilesetSource
-  visible: zone.type === "exit" || visibleZones.indexOf(zone) >= 0
+  visible: zone.enabled && (zone.type === "exit" || visibleZones.indexOf(zone) >= 0)
 
   Repeater {
     model: zone.positionCount
