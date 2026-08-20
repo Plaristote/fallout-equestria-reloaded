@@ -347,6 +347,7 @@ Column {
       model: [
         {label: i18n.t("pipboy.clock-wait-hour", {time: 1}), seconds: 3600},
         {label: i18n.t("pipboy.clock-wait-hour", {time: 2}), seconds: 7200},
+        {label: i18n.t("pipboy.clock-wait-hour", {time: 12}), seconds: 7200*6},
         {label: i18n.t("pipboy.clock-wait-day",  {time: 1}), seconds: 86400},
         {label: i18n.t("pipboy.clock-wait-day",  {time: 2}), seconds: 86400*2},
         {label: i18n.t("pipboy.clock-wait-day",  {time: 7}), seconds: 86400*7},
