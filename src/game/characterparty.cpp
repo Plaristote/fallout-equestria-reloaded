@@ -164,6 +164,7 @@ void CharacterParty::addCharacter(Character* character)
     enforceFactionOn(character);
     list.push_back(character);
     emit partyChanged();
+    character->scriptCall("onPartyJoined", QJSValueList() << asJSValue());
   }
 }
 
@@ -175,6 +176,7 @@ void CharacterParty::removeCharacter(Character* character)
     list.removeAll(character);
     rollbackFactionOn(character);
     emit partyChanged();
+    character->scriptCall("onPartyLeft", QJSValueList() << asJSValue());
     qDebug() << "removing character vrom party" << character->getDisplayName() << "(remaining characters" << list.length() << ')';
   }
 }
@@ -410,4 +412,11 @@ void CharacterParty::joinCombat()
 
   for (Character* character : list)
     level->joinCombat(character);
+}
+
+QJSValue CharacterParty::asJSValue()
+{
+  if (jsValue.isUndefined())
+    jsValue = Game::get()->getScriptEngine().newQObject(this);
+  return jsValue;
 }

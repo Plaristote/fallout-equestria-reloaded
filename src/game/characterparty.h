@@ -54,6 +54,7 @@ public:
   Q_INVOKABLE void extractFromLevel(GridComponent*);
 
   QQmlListProperty<Character> getQmlCharacters() { return QML_QLIST_CONSTRUCTOR(Character, list); }
+  QJSValue asJSValue();
 
 signals:
   void nameChanged();
@@ -69,6 +70,7 @@ private:
   QString           name;
   QString           factionName;
   QList<Character*> list;
+  QJSValue          jsValue;
 };
 
 #endif // CHARACTERPARTY_H
