@@ -68,6 +68,7 @@ DialogState DialogStateData::setAsCurrentState(const CharacterDialog& dialog)
   QJSValue    retval;
 
   state.answers = defaultAnswers;
+  state.text = dialog.t(localTranslationPath);
   state.mood = mood;
   if (triggerHook.isCallable())
   {
@@ -83,7 +84,5 @@ DialogState DialogStateData::setAsCurrentState(const CharacterDialog& dialog)
     return loadStateFromScriptObject(dialog, state, retval);
   else if (retval.isString())
     state.text = retval.toString();
-  else
-    state.text = dialog.t(localTranslationPath);
   return state;
 }
