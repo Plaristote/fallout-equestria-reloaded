@@ -44,9 +44,9 @@ void SaveComponent::load(const QString& levelName, DataEngine* dataEngine)
     passElapsedTime(lastUpdate.toInt());
   else
     injectUniqueCharacters();
+  loadTutorial();
   if (!initialized)
     scriptCall("initialize");
-  loadTutorial();
 }
 
 void SaveComponent::passElapsedTime(int lastUpdate)
