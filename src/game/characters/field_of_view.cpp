@@ -86,7 +86,7 @@ void FieldOfView::SetIntervalDurationFromStatistics(void)
 
   if (statistics)
   {   
-    unsigned short perception = static_cast<unsigned short>(statistics->property("perception").toInt());
+    unsigned short perception = std::min<unsigned short>(statistics->property("perception").toInt(), 10);
 
     duration = (10 - perception) / 2;
   }
@@ -358,9 +358,11 @@ void FieldOfView::LoseTrackOfCharacters(EntryList& entries)
     character->time_to_live--;
     if (character->time_to_live < 0 || !(character->character->isAlive()))
     {
+      Character* forgottenCharacter = character->character;
+
       character = entries.erase(character);
       hasChanges = true;
-      emit characterUndetected(character->character);
+      emit characterUndetected(forgottenCharacter);
     }
     else
       character++;
