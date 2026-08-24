@@ -308,6 +308,7 @@ bool CharacterParty::insertIntoZone(GridComponent* level, TileZone* zone) const
       {
         Character* character = list.at(characterIt);
 
+        character->getFieldOfView()->reset();
         level->appendObject(character);
         level->setCharacterPosition(character, position.x(), position.y(), zone->getFloor());
         if (++characterIt >= list.length())
@@ -410,8 +411,11 @@ void CharacterParty::joinCombat()
 {
   CombatComponent* level = LevelTask::get();
 
-  for (Character* character : list)
-    level->joinCombat(character);
+  if (level) [[likely]]
+  {
+    for (Character* character : list)
+      level->joinCombat(character);
+  }
 }
 
 QJSValue CharacterParty::asJSValue()

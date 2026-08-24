@@ -49,12 +49,14 @@ void Character::onActionQueueCompleted()
 void Character::afterDeathAnimation()
 {
   QString animationName = getAnimation();
+  auto* level = LevelTask::get();
 
   if ((animationName.startsWith("fall") || animationName.startsWith("death")) && !isAlive())
   {
     unequipUseSlots();
     setAnimation("dead");
-    LevelTask::get()->addBloodStainAt(getPosition(), static_cast<unsigned char>(getCurrentFloor()));
+    if (level)
+      level->addBloodStainAt(getPosition(), static_cast<unsigned char>(getCurrentFloor()));
   }
   else if (getAnimation().startsWith("get-up"))
     setAnimation("idle");
@@ -138,21 +140,25 @@ int Character::getSneakAbility() const
 void Character::moveAway(Character* target)
 {
   auto* level = LevelTask::get();
-  QVector<QPoint> candidates = getAvailableSurroundingCases();
 
-  if (!actionQueue->isEmpty() || (level->isInCombat(this) && getActionPoints() == 0))
-    return ;
-  std::sort(candidates.begin(), candidates.end(), [target](QPoint a, QPoint b)
+  if (level) [[likely]]
   {
-    return target->getDistance(a) > target->getDistance(b);
-  });
-  if (candidates.length() > 0)
-  {
-    QPoint destination = candidates.first();
+    QVector<QPoint> candidates = getAvailableSurroundingCases();
 
-    actionQueue->reset();
-    actionQueue->pushMovement(destination.x(), destination.y());
-    actionQueue->start();
+    if (!actionQueue->isEmpty() || (level->isInCombat(this) && getActionPoints() == 0))
+      return ;
+    std::sort(candidates.begin(), candidates.end(), [target](QPoint a, QPoint b)
+    {
+      return target->getDistance(a) > target->getDistance(b);
+    });
+    if (candidates.length() > 0)
+    {
+      QPoint destination = candidates.first();
+
+      actionQueue->reset();
+      actionQueue->pushMovement(destination.x(), destination.y());
+      actionQueue->start();
+    }
   }
 }
 
@@ -220,12 +226,12 @@ void Character::fall(int distance, const QString &directionName)
 
 void Character::fall(int distance, Direction direction)
 {
+  auto*  level  = LevelTask::get();
   QPoint from   = getPosition();
   QPoint target = from;
 
-  if (direction != NoDir)
+  if (direction != NoDir && level)
   {
-    auto* level = LevelTask::get();
     auto* grid  = level->getGrid();
 
     while (distance > 0)

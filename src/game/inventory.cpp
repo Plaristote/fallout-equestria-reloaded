@@ -56,13 +56,16 @@ void Inventory::destroyItem(InventoryItem *item, int quantity)
     if (isEquippedItem(item))
       unequipItem(item, true);
     else
+    {
       removeItem(item);
-    item->deleteLater();
+      item->deleteLater();
+    }
   }
   else
     item->remove(quantity);
 }
 
+// TODO: doesn't seem to do what it sets out to do in every scenario
 void Inventory::dropItem(InventoryItem *item, int quantity)
 {
   if (item && !item->isVirtual())
@@ -124,9 +127,11 @@ InventoryItem* Inventory::addItemOfType(const QString &name, int quantity)
 
 bool Inventory::removeItemOfType(const QString &name, int quantity)
 {
+  const QList<InventoryItem*> list = items;
+
   if (count(name) >= quantity)
   {
-    for (auto* inventoryItem : items)
+    for (auto* inventoryItem : list)
     {
       if (inventoryItem->getItemType() == name)
       {

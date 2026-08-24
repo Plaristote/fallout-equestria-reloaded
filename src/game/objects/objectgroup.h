@@ -28,7 +28,7 @@ public:
   QString        getPath() const;
   QString        getRelativePath(const ObjectGroup&) const;
   const QString& getName() const { return name; }
-  ObjectGroup*   getParent() const;
+  ObjectGroup*   getParent() const { return qobject_cast<ObjectGroup*>(parent()); }
   QPoint         getPosition() const override;
   void           setPosition(QPoint) override;
   QPoint         getOffset() const { return offset; }

@@ -19,8 +19,7 @@ ControlZoneComponent::ControlZoneComponent(QObject *parent) : ParentType(parent)
 void ControlZoneComponent::initializeZone()
 {
   controlZone = new TileZone(this);
-  if (metaObject()->inherits(DynamicObject().metaObject()))
-    controlZone->setOwner(reinterpret_cast<DynamicObject*>(this));
+  controlZone->setOwner(qobject_cast<DynamicObject*>(this));
   onPositionChanged();
   connect(this, &ControlZoneComponent::positionChanged, this, &ControlZoneComponent::onPositionChanged);
   connect(this, &ControlZoneComponent::floorChanged,    this, &ControlZoneComponent::onPositionChanged);
@@ -69,24 +68,29 @@ QJSValue ControlZoneComponent::getControlZoneOccupants() const
 QJSValue ControlZoneComponent::findControlZoneOccupants(QJSValue filter) const
 {
   auto* game = Game::get();
-  auto* level = game->getLevel();
-  QSet<DynamicObject*> objects;
-  QJSValue result = game->getScriptEngine().newArray();
-  QJSValue push = result.property("push");
+  auto* level = game ? game->getLevel() : nullptr;
 
-  for (QPoint position : controlZone->getPositions())
+  if (level) [[likely]]
   {
-    position += controlZone->getOffset();
-    for (DynamicObject* object : level->getDynamicObjectsAt({ position.x(), position.y(), floor}))
-      objects << object;
+    QSet<DynamicObject*> objects;
+    QJSValue result = game->getScriptEngine().newArray();
+    QJSValue push = result.property("push");
+
+    for (QPoint position : controlZone->getPositions())
+    {
+      position += controlZone->getOffset();
+      for (DynamicObject* object : level->getDynamicObjectsAt({ position.x(), position.y(), floor}))
+        objects << object;
+    }
+    for (DynamicObject* object : objects)
+    {
+      QJSValueList argv{object->asJSValue()};
+      if (filter.call(argv).toBool())
+        push.callWithInstance(result, argv);
+    }
+    return result;
   }
-  for (DynamicObject* object : objects)
-  {
-    QJSValueList argv{object->asJSValue()};
-    if (filter.call(argv).toBool())
-      push.callWithInstance(result, argv);
-  }
-  return result;
+  return QJSValue();
 }
 
 QPoint ControlZoneComponent::getRandomZonePosition() const

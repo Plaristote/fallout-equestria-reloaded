@@ -242,7 +242,7 @@ bool InventoryItem::isInRange(DynamicObject *target)
       float range = getRange();
       auto* owner = getOwner();
 
-      if (owner->getCurrentFloor() != target->getCurrentFloor())
+      if (!owner || owner->getCurrentFloor() != target->getCurrentFloor())
         return false;
       if (range == 1.f)
         return maxDistance(owner->getPosition(), target->getPosition()) <= 1;
@@ -299,14 +299,10 @@ QJSValue InventoryItem::useOn(DynamicObject* target)
 
 void InventoryItem::useReload(bool refill)
 {
-  QStringList modes = getUseModes();
+  const QStringList modes = getUseModes();
 
   if (modes.indexOf("reload") >= 0)
-  {
-    const auto backup = useMode;
-
     useFromInventory(refill ? "reload" : "unload");
-  }
 }
 
 QJSValue InventoryItem::useAt(int x, int y)
@@ -321,11 +317,14 @@ QJSValue InventoryItem::useAt(int x, int y)
 
 void InventoryItem::useFromInventory(QString mode)
 {
-  const auto backup = useMode;
-  QJSValue   result;
+  const auto  backup = useMode;
+  QJSValue    result;
 
   if (mode.isEmpty())
-    mode = getUseModes().first();
+  {
+    const QStringList useModes = getUseModes();
+    mode = useModes.length() > 0 ? useModes.first() : QString();
+  }
   useMode = mode;
   result = useOn(nullptr);
   if (result.isObject())
@@ -371,7 +370,7 @@ void InventoryItem::swapUseMode()
 
 void InventoryItem::resetUseMode()
 {
-  QStringList useModes = getUseModes();
+  const QStringList useModes = getUseModes();
 
   useMode = useModes.length() > 0 ? useModes.first() : "use";
   emit useModeChanged();
@@ -417,17 +416,14 @@ int InventoryItem::getUseAtSuccessRate(int x, int y)
 
 DynamicObject* InventoryItem::getOwner() const
 {
-  const char* parentType = parent()->metaObject()->className();
+  Inventory* inventory = qobject_cast<Inventory*>(parent());
+  Character* character = qobject_cast<Character*>(parent());
 
-  if (parentType == QString("Inventory"))
-  {
-    Inventory* inventory = reinterpret_cast<Inventory*>(parent());
-
+  if (inventory)
     return inventory->getUser();
-  }
-  else if (parentType == QString("Character"))
-    return reinterpret_cast<DynamicObject*>(parent());
-  else
+  else if (character)
+    return character;
+  else if (parent())
     qDebug() << "WARNING InventoryItem has no owner" << parent()->metaObject()->className();
   return nullptr;
 }

@@ -91,7 +91,7 @@ void ObjectGroup::save(QJsonObject& data) const
   {
     QJsonObject jsonObject{{"type", object->metaObject()->className()}};
 
-    if (object->isCharacter() && party->containsCharacter(reinterpret_cast<Character*>(object)))
+    if (party->containsCharacter(qobject_cast<Character*>(object)))
       continue ;
     object->save(jsonObject);
     jsonObjects << jsonObject;
@@ -141,7 +141,7 @@ QJSValue ObjectGroup::find(QJSValue filter) const
 QString jsErrorBacktrace(QJSValue retval);
 
 template<typename OBJECT_TYPE>
-static std::function<void(OBJECT_TYPE*)> makeFilterLambda(QJSValue filter, QJSValue& result, QJSValue& push)
+static std::function<void(OBJECT_TYPE*)> makeFilterLambda(QJSValue& filter, QJSValue& result, QJSValue& push)
 {
   return [&filter, &push, &result](OBJECT_TYPE* object)
   {
@@ -188,12 +188,6 @@ QJSValue ObjectGroup::findFromExpression(QString expression) const
   eachGroup(makeExpressionLambda<ObjectGroup>(this, regex, result, push));
   eachObject(makeExpressionLambda<DynamicObject>(this, regex, result, push));
   return result;
-}
-
-ObjectGroup* ObjectGroup::getParent() const
-{
-  return parent() && parent()->metaObject()->inherits(ObjectGroup().metaObject())
-    ? reinterpret_cast<ObjectGroup*>(parent()) : nullptr;
 }
 
 QString ObjectGroup::getPath() const

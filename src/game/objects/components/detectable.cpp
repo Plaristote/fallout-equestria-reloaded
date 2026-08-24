@@ -45,13 +45,13 @@ int DetectableComponent::getSneakAbility() const
 bool DetectableComponent::tryDetection(const Character* character)
 {
   unsigned int perception = character->getStatistics()->property("perception").toUInt();
-  float        distance   = character->getDistance(reinterpret_cast<DynamicObject*>(this));
+  float        distance   = character->getDistance(dynamic_cast<DynamicObject*>(this));
   int          difficulty = getSneakAbility() + static_cast<int>(distance * 5);
   int          result     = Dices::Throw(perception * 11 + 60 + (perception > 6 ? 15 : 0));
 
   qDebug() << "(i) Detection attempt on" << this->property("objectName").toString() << "by" << character->getObjectName()
            << ": threshold is" << getSneakAbility() << '+' << distance << '*' << 5
-           << ", roll is" << perception << '*' << 12 << '+' << (perception > 6 ? 75 : 60)
+           << ", roll is" << perception << '*' << 11 << '+' << (perception > 6 ? 75 : 60)
            << " -> " << result << ">=" << difficulty;
   if (result >= difficulty)
   {
