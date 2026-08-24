@@ -18,6 +18,7 @@ class CombatComponent : public VisualEffectsComponent
   Q_PROPERTY(QQmlListProperty<Character> combattants READ getQmlCombattants NOTIFY combattantsChanged)
   Q_PROPERTY(int  turn MEMBER combatIterator NOTIFY currentCombattantChanged)
   Q_PROPERTY(bool isPlayerTurn READ isPlayerTurn NOTIFY currentCombattantChanged)
+  Q_PROPERTY(Character* currentCombattant READ currentCombattant NOTIFY currentCombattantChanged)
 public:
   static double combatSpeedOption;
 
@@ -31,6 +32,7 @@ public:
   Q_INVOKABLE void startCombat(Character* character);
   void onNextCombatTurn();
   bool isPlayerTurn() const;
+  Character* currentCombattant() const { return combattants.size() > combatIterator ? combattants.at(combatIterator) : nullptr; }
 
   Q_INVOKABLE bool isCharacterTurn(Character* charcter) const;
   Q_INVOKABLE bool isInCombat(Character* character) const { return combattants.contains(character); }
