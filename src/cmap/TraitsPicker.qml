@@ -7,7 +7,6 @@ Pane {
   property QtObject characterSheet
   property int maxTraits: characterSheet.getMaxTraits()
   property var availableTraits: characterSheet.getAvailableTraits()
-  property var availableTraitsLabels: characterSheet.getAvailableTraitsLabels()
   property string selectedProperty
 
   background: UiStyle.TerminalPane {}
@@ -53,7 +52,7 @@ Pane {
             model: availableTraits.length / 2
             delegate: RowLayout {
               property string traitName: availableTraits[index + offsetIndex]
-              property string traitLabel: availableTraitsLabels[index + offsetIndex]
+              property string traitLabel: i18n.t(`cmap.${traitName}`)
               property color textColor: selectedProperty === traitName ? "green" : "white"
               property bool isPicked: characterSheet.traits.indexOf(traitName) >= 0
               spacing: 10

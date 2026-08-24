@@ -171,7 +171,6 @@ public:
   Q_INVOKABLE bool isAcceptable() const;
   Q_INVOKABLE int getMaxTraits() const { return 2; }
   Q_INVOKABLE QStringList getAvailableTraits();
-  Q_INVOKABLE QStringList getAvailableTraitsLabels();
   Q_INVOKABLE QStringList getAvailablePerks();
   Q_INVOKABLE void toggleTrait(const QString& name, bool);
   Q_INVOKABLE void togglePerk(const QString& name, bool);
