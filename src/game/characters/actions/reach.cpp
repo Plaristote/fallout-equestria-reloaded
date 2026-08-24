@@ -27,12 +27,19 @@ static bool candidateCompare(Character* character, QPoint a, QPoint b)
 
 static bool scriptedCandidateCompare(Character* character, QJSValue callback, Point a, Point b)
 {
-  int   rateA = rateCase(callback, a);
-  int   rateB = rateCase(callback, b);
+  int rateA = rateCase(callback, a);
+  int rateB = rateCase(callback, b);
 
-  if (rateA < rateB)
-    return true;
+  if (rateA != rateB)
+    return rateA < rateB;
   return candidateCompare(character, a, b);
+}
+
+inline static LevelGrid* getGrid(unsigned int z)
+{
+  auto* level = LevelTask::get();
+
+  return level ? level->getFloorGrid(z) : nullptr;
 }
 
 QVector<Point> ReachAction::getCandidates(int caseDistance) const
@@ -40,16 +47,17 @@ QVector<Point> ReachAction::getCandidates(int caseDistance) const
   Point position = getTargetPosition();
   QVector<Point> candidates;
   std::function<bool (Point, Point)> compare;
+  LevelGrid* grid;
 
   if (caseDistance > MAX_RANGE)
     return candidates;
   candidates.reserve(caseDistance * caseDistance);
+  grid = getGrid(position.z);
   for (int x = position.x - caseDistance ; x <= position.x + caseDistance ; ++x)
   {
     for (int y = position.y - caseDistance ; y <= position.y + caseDistance ; ++y)
     {
       Point candidatePosition{x, y, position.z};
-      LevelGrid* grid = LevelTask::get()->getFloorGrid(candidatePosition.z);
 
       if (candidatePosition != position && !grid->isOccupied(candidatePosition.x, candidatePosition.y) && character->hasSightFrom(position, candidatePosition))
         candidates << candidatePosition;
@@ -62,11 +70,7 @@ QVector<Point> ReachAction::getCandidates(int caseDistance) const
   }
   else
     compare = std::bind(&candidateCompare, character, std::placeholders::_1, std::placeholders::_2);
-  // Long story short: using std::sort with scriptedCandidateCompare ends up corrupting memory.
-  // for some weird ass reason, this doesn't happen with std::stable_sort. What the fuck.
-  // It is quite possible that different implementations of sort/stable_sort will exhibit different behaviours
-  // in that regard. The vector returned by this function will probably cause issues on platforms other than Linux.
-  std::stable_sort(candidates.begin(), candidates.end(), compare);
+  std::sort(candidates.begin(), candidates.end(), compare);
   return candidates;
 }
 
