@@ -20,7 +20,7 @@
 #define ASSERT_NOT_NULL(context, target) \
   if (!target) { qDebug() << context << "called with null target" << target; return ; }
 
-ActionQueue::ActionQueue(QObject *parent) : QObject(parent), character(reinterpret_cast<Character*>(parent))
+ActionQueue::ActionQueue(QObject *parent) : QObject(parent), character(dynamic_cast<Character*>(parent))
 {
 
 }
@@ -251,8 +251,8 @@ void ActionQueue::pushReachNear(int x, int y, int z, int range)
   QPoint         position = character->getPosition();
 
   choices.reserve((range + 1) * (range + 1) - 1);
-  for (int xx = x - range ; xx < x + range ; ++xx) {
-    for (int yy = y - range ; yy < y + range ; ++yy) {
+  for (int xx = x - range ; xx <= x + range ; ++xx) {
+    for (int yy = y - range ; yy <= y + range ; ++yy) {
       if (xx == position.x() && yy == position.y())
         continue ;
       if (!grid->isOccupied(xx, yy))
