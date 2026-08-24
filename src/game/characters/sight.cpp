@@ -38,8 +38,8 @@ bool CharacterSight::hasSightFrom(Point target, Point pos)
 
   if (target.z == pos.z && level)
   {
-    auto*  grid   = level->getFloorGrid(target.z);
-    int    score  = grid->getVisionQuality(pos.x, pos.y, target.x, target.y);
+    auto* grid  = level->getFloorGrid(target.z);
+    int   score = grid ? grid->getVisionQuality(pos.x, pos.y, target.x, target.y) : 0;
 
     return score > 0;
   }
