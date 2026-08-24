@@ -71,7 +71,7 @@ bool TaskRunner::runTask(Task& task, int iterations)
     QJSValueList args;
 
     args << iterations;
-    script->call(task.name, args);
+    retval = script->call(task.name, args);
     return retval.isBool() ? retval.toBool() : true;
   }
   else
@@ -199,10 +199,12 @@ void TaskRunner::load(const QJsonObject& data)
     task.interval       = taskData["interval"].toInt();
     task.infinite       = taskData["infinite"].toBool();
     task.timeLeft       = taskData["timeLeft"].toInt();
-    if (countTaskOfType(task.name) < MAX_TASK_OF_TYPE_ALLOWED)
-      tasks << task;
-    else
+    if (task.interval <= 0)
+      qDebug() << "/!\\ Tried to load a task with null interval" << task.name;
+    else if (countTaskOfType(task.name) >= MAX_TASK_OF_TYPE_ALLOWED)
       qDebug() << "/!\\ Tried to overflow the task runner with task" << task.name;
+    else
+      tasks << task;
   }
 }
 
