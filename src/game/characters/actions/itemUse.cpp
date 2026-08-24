@@ -4,6 +4,32 @@
 #include "i18n.h"
 #include <QDebug>
 
+ItemAction::~ItemAction()
+{
+  if (targetWatcher);
+    QObject::disconnect(targetWatcher);
+  if (itemWatcher);
+    QObject::disconnect(itemWatcher);
+}
+
+void ItemAction::setTarget(DynamicObject* newTarget)
+{
+  target = newTarget;
+  if (targetWatcher) [[unlikely]]
+    QObject::disconnect(targetWatcher);
+  if (target) [[likely]]
+    targetWatcher = QObject::connect(target, &QObject::destroyed, [this]() { target = nullptr; });
+}
+
+void ItemAction::setItem(InventoryItem* newItem)
+{
+  item = newItem;
+  if (itemWatcher) [[unlikely]]
+    QObject::disconnect(itemWatcher);
+  if (item) [[likely]]
+    itemWatcher = QObject::connect(item, &QObject::destroyed, [this]() { item = nullptr; });
+}
+
 QJSValue ItemAction::callItemUseOn()
 {
   return item->useOn(target);

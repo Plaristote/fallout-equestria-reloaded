@@ -8,17 +8,24 @@ class ItemAction : public AnimatedAction
 public:
   ItemAction(Character* character, DynamicObject* target, QString itemSlot) : AnimatedAction(character), target(target)
   {
-    item = character->getInventory()->getEquippedItem(itemSlot);
+    setTarget(target);
+    setItem(character->getInventory()->getEquippedItem(itemSlot));
   }
 
-  ItemAction(Character* character, DynamicObject* target, InventoryItem* item, QString useMode) : AnimatedAction(character), target(target), item(item), useMode(useMode)
+  ItemAction(Character* character, DynamicObject* target, InventoryItem* item, QString useMode) : AnimatedAction(character), target(target), useMode(useMode)
   {
+    setTarget(target);
+    setItem(item);
   }
+
+  virtual ~ItemAction();
 
   int  getApCost() const override;
   bool trigger() override;
 
 protected:
+  void setTarget(DynamicObject*);
+  void setItem(InventoryItem*);
   void performAction() override;
   virtual QPoint getTargetPosition() const { return target->getPosition(); }
   virtual void lookAtTarget() override;
@@ -28,6 +35,7 @@ protected:
   DynamicObject*    target;
   InventoryItem*    item;
   QString           useMode;
+  QMetaObject::Connection targetWatcher, itemWatcher;
 };
 
 class ItemZoneAction : public ItemAction
