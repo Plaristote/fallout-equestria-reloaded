@@ -91,10 +91,11 @@ QString jsErrorBacktrace(QJSValue retval)
   static QString head("ScriptController: uncaught exception at ");
   QString path  = retval.property("fileName").toString() + ':' + QString::number(retval.property("lineNumber").toInt());
   QString message = path + ": " + retval.toString();
+  QString stackTrace = retval.property("stack").toString();
 
   if (Game::get())
     Game::get()->javascriptError("uncaught exception at " + message);
-  return head + message;
+  return head + message + "\nJS Stacktrace: " + stackTrace;
 }
 
 QJSValue ScriptController::call(const QString& method, const QJSValueList& args)
@@ -114,7 +115,7 @@ QJSValue ScriptController::callMethod(QJSValue callback, const QJSValueList& arg
 
   if (retval.isError())
   {
-    qDebug() << jsErrorBacktrace(retval);
+    qDebug() << qPrintable(jsErrorBacktrace(retval));
     return false;
   }
   return retval;
