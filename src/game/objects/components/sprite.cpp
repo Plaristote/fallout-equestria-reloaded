@@ -19,8 +19,15 @@ void Sprite::update(qint64 delta)
   if (animation.repeat || isAnimated())
   {
     animationElapsedTime += delta;
-    while (animationElapsedTime > animation.frameInterval)
+    if (animation.frameInterval <= 0)
+    {
+      animation.currentFrame = animation.frameCount;
+      emit animationFinished();
+    }
+    else if (animationElapsedTime > animation.frameInterval)
+    {
       runAnimation();
+    }
   }
   if (spritePosition != spriteMovementTarget)
     runMovement(delta);
@@ -44,31 +51,36 @@ bool Sprite::hasAnimation(const QString& animationName) const
 
 void Sprite::runAnimation()
 {
-  auto width = animation.clippedRect.width();
+  qint64 passedFrames, totalFrame;
+  bool   finished = false;
+  auto   width = animation.clippedRect.width();
+  int    direction = animation.reverse ? -1 : 1;
 
-  animationElapsedTime = -animation.frameInterval;
-  animation.currentFrame++;
-  if (animation.currentFrame >= animation.frameCount)
+  passedFrames         = animationElapsedTime / animation.frameInterval;
+  animationElapsedTime = animationElapsedTime % animation.frameInterval;
+  totalFrame           = animation.currentFrame + passedFrames;
+  if (totalFrame >= animation.frameCount)
   {
     if (animation.repeat)
     {
-      animation.currentFrame = 0;
-      animation.clippedRect.setX(animation.firstFramePosition.x());
-      animation.clippedRect.setWidth(width);
+      animation.currentFrame = totalFrame % animation.frameCount;
     }
     else
     {
+      animation.currentFrame = animation.frameCount - 1;
       animationElapsedTime = 0;
-      emit animationFinished();
+      finished = true;
     }
   }
   else
   {
-    auto movement = width * (animation.reverse ? -1 : 1);
-
-    animation.clippedRect.adjust(movement, 0, movement, 0);
+    animation.currentFrame = totalFrame;
   }
+  animation.clippedRect.setX(animation.firstFramePosition.x() + (width * direction * animation.currentFrame));
+  animation.clippedRect.setWidth(width);
   emit clippedRectChanged();
+  if (finished)
+    emit animationFinished();
 }
 
 const QImage& Sprite::getImage() const
