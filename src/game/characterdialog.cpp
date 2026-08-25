@@ -117,7 +117,10 @@ bool CharacterDialog::loadState(const QString& reference)
     return true;
   }
   else
+  {
+    qDebug() << "CharacterDialog: ended prematurely, state not found:" << reference;
     emit dialogEnded();
+  }
   return false;
 }
 
