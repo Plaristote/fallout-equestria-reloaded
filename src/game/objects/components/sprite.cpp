@@ -11,7 +11,7 @@ Sprite::Sprite(QObject *parent) : ParentType(parent)
 
 bool Sprite::isAnimated() const
 {
-  return animation.currentFrame + 1 <= animation.frameCount && animation.frameInterval > 0;
+  return animation.currentFrame + 1 <= animation.frameCount;
 }
 
 void Sprite::update(qint64 delta)
@@ -46,7 +46,7 @@ void Sprite::runAnimation()
 {
   auto width = animation.clippedRect.width();
 
-  animationElapsedTime -= animation.frameInterval;
+  animationElapsedTime = -animation.frameInterval;
   animation.currentFrame++;
   if (animation.currentFrame >= animation.frameCount)
   {
