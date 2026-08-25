@@ -369,12 +369,17 @@ QPoint makeRenderPosition(QPoint offset, QPoint currentPosition, QSize tileSize)
 QPoint GridComponent::getRenderPositionForTile(int x, int y, unsigned char z)
 {
   auto* grid  = z != NULL_FLOOR ? getFloorGrid(z) : getGrid();
-  auto* layer = grid  ? grid->getTilemap()->getLayer("ground") : nullptr;
-  auto* tile  = layer ? layer->getTile(x, y) : nullptr;
 
-  if (!tile)
-    return makeRenderPosition(QPoint(), QPoint(x, y), grid->getTilemap()->getTileSize());
-  return tile->getRenderPosition();
+  if (grid)
+  {
+    auto* layer = grid  ? grid->getTilemap()->getLayer("ground") : nullptr;
+    auto* tile  = layer ? layer->getTile(x, y) : nullptr;
+
+    if (!tile)
+      return makeRenderPosition(QPoint(), QPoint(x, y), grid->getTilemap()->getTileSize());
+    return tile->getRenderPosition();
+  }
+  return QPoint();
 }
 
 float GridComponent::getDistance(QPoint pa, QPoint pb) const
@@ -419,10 +424,12 @@ QJSValue GridComponent::getCharactersBetween(int ax, int ay, int bx, int by, uns
   QJSValue   result = Game::get()->getScriptEngine().newArray();
   QJSValue   push = result.property("push");
   LevelGrid* grid = floor == NULL_FLOOR ? getGrid() : getFloorGrid(floor);
-  auto       list = grid->getCharactersBetween({ax, ay}, {bx, by});
 
-  for (auto* object : list)
-    push.callWithInstance(result, QJSValueList() << object->asJSValue());
+  if (grid)
+  {
+    for (auto* object : grid->getCharactersBetween({ax, ay}, {bx, by}))
+      push.callWithInstance(result, QJSValueList() << object->asJSValue());
+  }
   return result;
 }
 

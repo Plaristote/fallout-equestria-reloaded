@@ -75,8 +75,6 @@ void CombatComponent::joinCombat(Character* character)
 {
   if (character && !isInCombat(character) && character->isAlive())
   {
-    auto* playerParty = Game::get()->getPlayerParty();
-
     character->resetActionPoints();
     combattants << character;
     if (combat == false)
@@ -227,7 +225,6 @@ void CombatComponent::finalizeArmorClassBonus(Character* character)
     character->getStatistics()->set_armorClass(armorClass - it.value());
     armorClassBonuses.erase(it);
   }
-  armorClassBonuses.remove(character);
 }
 
 void CombatComponent::finalizeAllArmorClassBonus()
