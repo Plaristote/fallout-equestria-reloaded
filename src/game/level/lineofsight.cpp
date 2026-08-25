@@ -31,22 +31,7 @@ static bool losIntersectsWithVWall(QLineF line, QRectF rect)
 
   return rightSide.intersects(line, nullptr) == QLineF::BoundedIntersection;
 }
-/*
-static int sightOrientation(int fromX, int fromY, int toX, int toY)
-{
-  int dir = OrientedSprite::NoDir;
 
-  if (fromX < toX)
-    dir |=  OrientedSprite::RightDir;
-  else if (toX < fromX)
-    dir |= OrientedSprite::LeftDir;
-  if (fromY < toY)
-    dir |= OrientedSprite::BottomDir;
-  else if (toY < fromY)
-    dir |= OrientedSprite::UpperDir;
-  return dir;
-}
-*/
 static QPair<char, char> getCoverThroughCase(const LevelGrid::CaseContent* gridCase, const QLineF sightLine, const QRectF caseRect, const QPoint from, const QPoint target)
 {
   bool isFrom   = gridCase->position == from;
@@ -86,14 +71,22 @@ static bool ignoreCover(int fromX, int fromY, int caseX, int caseY)
 int LevelGrid::getVisionQuality(int fromX, int fromY, int toX, int toY)
 {
   const qreal   caseSize = 10;
+  const qreal   caseCenter = 5;
   const int     minX = std::min(fromX, toX), minY = std::min(fromY, toY);
   const int     maxX = std::max(fromX, toX), maxY = std::max(fromY, toY);
-  const QPointF sightFrom(static_cast<qreal>(fromX - minX) * caseSize, static_cast<qreal>(fromY - minY) * caseSize);
-  const QPointF sightTo  (static_cast<qreal>(toX - minX) * caseSize,   static_cast<qreal>(toY - minY) * caseSize);
+  const QPointF sightFrom(
+    static_cast<qreal>(fromX - minX) * caseSize + caseCenter,
+    static_cast<qreal>(fromY - minY) * caseSize + caseCenter
+  );
+  const QPointF sightTo(
+    static_cast<qreal>(toX - minX) * caseSize + caseCenter,
+    static_cast<qreal>(toY - minY) * caseSize + caseCenter
+  );
   const QLineF  sightLine(sightFrom, sightTo);
-  char  cover = 0;
-  char  obstacleCount = 0;
+  int   cover = 0;
+  int   obstacleCount = 0;
 
+  /* Initial implementation
   for (int x = minX ; x <= maxX ; ++x)
   {
     for (int y = minY ; y <= maxY ; ++y)
@@ -116,11 +109,96 @@ int LevelGrid::getVisionQuality(int fromX, int fromY, int toX, int toY)
           return 0;
         else if (!ignoreCover(fromX, fromY, gridCase->position.x, gridCase->position.y))
         {
-          cover = std::max(cover, result.first);
+          cover = std::max<int>(cover, result.first);
           obstacleCount += result.second;
         }
       }
     }
   }
+  */
+
+  ///* Claude implementation
+  {
+    int x = fromX, y = fromY;
+    int dx = std::abs(toX - fromX), dy = std::abs(toY - fromY);
+    int sx = (fromX < toX) ? 1 : -1;
+    int sy = (fromY < toY) ? 1 : -1;
+    int err = dx - dy;
+
+    while (true)
+    {
+        LevelGrid::CaseContent* gridCase = getGridCase(x, y);
+        if (gridCase)
+        {
+            qreal posX = static_cast<qreal>(x - minX) * caseSize;
+            qreal posY = static_cast<qreal>(y - minY) * caseSize;
+            QRectF caseRect(posX, posY, caseSize, caseSize);
+            auto result = getCoverThroughCase(gridCase, sightLine, caseRect, {fromX, fromY}, {toX, toY});
+
+            if (result.first >= 100)
+                return 0;
+            else if (!ignoreCover(fromX, fromY, x, y))
+            {
+                cover = std::max<int>(cover, result.first);
+                obstacleCount += result.second;
+            }
+        }
+
+        if (x == toX && y == toY)
+            break;
+
+        int e2 = 2 * err;
+        bool stepX = (e2 > -dy);
+        bool stepY = (e2 <  dx);
+
+        // When stepping diagonally, also check the two axis-aligned neighbors
+        // the line passes through — Bresenham skips them but the line clips them
+        if (stepX && stepY)
+        {
+            // Check horizontal neighbor before diagonal step
+            LevelGrid::CaseContent* hCase = getGridCase(x + sx, y);
+            if (hCase)
+            {
+                qreal posX = static_cast<qreal>(x + sx - minX) * caseSize;
+                qreal posY = static_cast<qreal>(y - minY) * caseSize;
+                QRectF caseRect(posX, posY, caseSize, caseSize);
+                if (lineIntersectsRect(sightLine, caseRect))
+                {
+                    auto result = getCoverThroughCase(hCase, sightLine, caseRect, {fromX, fromY}, {toX, toY});
+                    if (result.first >= 100) return 0;
+                    else if (!ignoreCover(fromX, fromY, x + sx, y))
+                    {
+                        cover = std::max<int>(cover, result.first);
+                        obstacleCount += result.second;
+                    }
+                }
+            }
+            // Check vertical neighbor before diagonal step
+            LevelGrid::CaseContent* vCase = getGridCase(x, y + sy);
+            if (vCase)
+            {
+                qreal posX = static_cast<qreal>(x - minX) * caseSize;
+                qreal posY = static_cast<qreal>(y + sy - minY) * caseSize;
+                QRectF caseRect(posX, posY, caseSize, caseSize);
+                if (lineIntersectsRect(sightLine, caseRect))
+                {
+                    auto result = getCoverThroughCase(vCase, sightLine, caseRect, {fromX, fromY}, {toX, toY});
+                    if (result.first >= 100) return 0;
+                    else if (!ignoreCover(fromX, fromY, x, y + sy))
+                    {
+                        cover = std::max<int>(cover, result.first);
+                        obstacleCount += result.second;
+                    }
+                }
+            }
+        }
+
+        if (stepX) { err -= dy; x += sx; }
+        if (stepY) { err += dx; y += sy; }
+    }
+  }
+  //*/
+
+
   return std::max(0, 100 - (cover + obstacleCount));
 }
