@@ -104,3 +104,19 @@ QVector<double> BalancedDiceRoller::calculateSegmentDistribution(const QVector<i
   }
   return distribution;
 }
+
+void BalancedDiceRoller::debug(int max)
+{
+  auto it = m_diceHistory.find(max);
+
+  qDebug() << "BalancedDiceRoller::debug" << this;
+  if (it != m_diceHistory.end())
+  {
+    const QVector<int>& rolls = *it;
+
+    for (int roll : rolls)
+      qDebug() << roll;
+  }
+  else
+    qDebug() << "Nothing for" << max;
+}

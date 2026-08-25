@@ -43,6 +43,7 @@ public:
   Q_INVOKABLE int roll(int max);
   Q_INVOKABLE int random() { return random(100); }
   Q_INVOKABLE int random(int max);
+  Q_INVOKABLE void debug(int max = 100);
 
 private:
   QVector<int>&   requireDiceHistoryFor(int max);
