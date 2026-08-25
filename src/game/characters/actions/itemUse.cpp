@@ -6,9 +6,9 @@
 
 ItemAction::~ItemAction()
 {
-  if (targetWatcher);
+  if (targetWatcher)
     QObject::disconnect(targetWatcher);
-  if (itemWatcher);
+  if (itemWatcher)
     QObject::disconnect(itemWatcher);
 }
 
