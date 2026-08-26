@@ -92,7 +92,7 @@ void Character::takeDamage(int damage, Character* dealer)
   {
     auto hp = getStatistics()->getHitPoints() - damage;
 
-    if (hasAnimation("damaged"))
+    if (hasAnimation("damaged") && !getAnimation().startsWith("fall"))
       setAnimation("damaged");
     getStatistics()->setHitPoints(hp);
     if (hp <= 0)
