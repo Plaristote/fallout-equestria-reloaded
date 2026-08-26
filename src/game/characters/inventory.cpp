@@ -64,9 +64,12 @@ void CharacterInventory::unequipUseSlots()
 
   for (auto it = itemSlots.begin() ; it != itemSlots.end() ; ++it)
   {
-    InventoryItem* item = inventory->getEquippedItem(it.key());
+    if (it.key().startsWith("use"))
+    {
+      InventoryItem* item = inventory->getEquippedItem(it.key());
 
-    if (item && !item->isVirtual())
-      inventory->unequipItem(it.key());
+      if (item && !item->isVirtual())
+        inventory->unequipItem(it.key());
+    }
   }
 }
