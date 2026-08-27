@@ -15,22 +15,36 @@ void ClockComponent::load(const QJsonObject& data)
 
 void ClockComponent::advanceTime(unsigned int minutes)
 {
+  const qint64 minuteDelta = 60 * 1000;
+
   while (minutes-- > 0)
   {
-    const qint64 delta = 60 * 1000;
-
     for (DynamicObject* object : allDynamicObjects())
     {
       ObjectPerformanceClock clock(performanceMetrics.object(object));
+      Character* character = qobject_cast<Character*>(object);
 
-      object->update(delta);
-      object->updateTasks(delta);
-      if (object->isCharacter())
-        reinterpret_cast<Character*>(object)->getActionQueue()->update();
+      if (character && !character->getActionQueue()->isEmpty())
+      {
+        qint64 remaining = minuteDelta;
+        qint64 subStep = 2 * 1000;
+
+        while (remaining > 0)
+        {
+          qint64 delta = std::min(subStep, remaining);
+
+          character->update(delta);
+          character->getActionQueue()->update();
+          remaining -= subStep;
+        }
+      }
+      else
+        object->update(minuteDelta);
+      object->updateTasks(minuteDelta);
     }
     for (ObjectGroup* group : allObjectGroups())
-      group->getTaskManager()->update(delta);
-    taskRunner->update(delta);
-    Game::get()->getTaskManager()->update(delta);
+      group->getTaskManager()->update(minuteDelta);
+    taskRunner->update(minuteDelta);
+    Game::get()->getTaskManager()->update(minuteDelta);
   }
 }
