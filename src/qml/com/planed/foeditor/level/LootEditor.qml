@@ -1,0 +1,92 @@
+import QtQuick 2.15
+import QtQuick.Controls 2.15
+import QtQuick.Layouts 1.15
+import "qrc:/com/planed/foengine/qml/com/planed/foengine/ui/style" as UiStyle
+import "qrc:/com/planed/foengine/qml/com/planed/foengine/ui"
+import "qrc:/com/planed/foengine/qml/com/planed/foengine/game" as GameComponents
+
+Pane {
+  id: root
+  property QtObject inventory
+  property QtObject selectedObject
+
+  background: UiStyle.Pane {}
+
+  function open() {
+    root.visible = true;
+  }
+
+  function addObject() {
+    addItemDialog.open();
+  }
+
+  function removeObject() {
+    if (selectedObject !== null) {
+      if (selectedObject.quantity === 1)
+        root.inventory.removeItem(selectedObject);
+      else
+        removeItemDialog.open();
+    }
+  }
+
+  RowLayout {
+    anchors.fill: parent
+    anchors.margins: 10
+
+    GameComponents.InventoryItemsView {
+      id: itemsView
+      inventory: root.inventory
+      Layout.fillHeight: true
+      Layout.fillWidth: true
+      selectedObject: root.selectedObject
+      onItemSelected: root.selectedObject = selectedItem
+    }
+
+    Column {
+      spacing: 5
+
+      Layout.preferredWidth: 300
+      Loader {
+        anchors { left: parent.left; right: parent.right }
+        sourceComponent: root.selectedObject ? itemPreviewComponent : null
+      }
+
+      MenuButton {
+        text: i18n.t("game-editor.inventories.add-item")
+        onClicked: root.addObject()
+      }
+
+      MenuButton {
+        text: i18n.t("game-editor.inventories.remove-item")
+        enabled: root.selectedObject !== null
+        onClicked: root.removeObject()
+      }
+
+      MenuButton {
+        text: i18n.t("game-editor.exit")
+        onClicked: {
+          root.inventory = null;
+          root.visible = false;
+        }
+      }
+    }
+  }
+
+  AddItemDialog {
+    id: addItemDialog
+    inventory: root.inventory
+  }
+
+  RemoveItemDialog {
+    id: removeItemDialog
+    inventory: root.inventory
+    selectedObject: root.selectedObject
+  }
+
+  Component {
+    id: itemPreviewComponent
+    InventoryItemPreview {
+      model: root.selectedObject
+    }
+  }
+}

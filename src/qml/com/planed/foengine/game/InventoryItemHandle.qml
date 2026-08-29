@@ -1,0 +1,71 @@
+import QtQuick 2.15
+import QtQuick.Controls 2.15
+import QtQuick.Layouts 1.15
+import "../ui"
+import "../ui/style" as UiStyle
+
+Rectangle {
+  id: itemRectangle
+  property QtObject inventoryItem
+  property int itemCount
+  property bool selected: false
+  property var dragZone
+  property string dragType: "InventoryItem"
+  property int itemIconWidth: 72
+  property int itemIconHeight: 72
+
+  signal clicked()
+  signal doubleClicked()
+
+  width: Math.max(itemIconWidth, itemIconHeight)
+  height: width
+  border.width: selected ? 1 : 0
+  border.color: "green"
+  radius: 5
+  color: itemMouseArea.drag.active ? "black" : "transparent"
+  Drag.active: itemMouseArea.drag.active
+  Drag.onActiveChanged: {
+    if (typeof soundManager != "undefined")
+      soundManager.play(Drag.active ? "pick-up" : "put-down");
+  }
+  Drag.hotSpot.x: width / 2
+  Drag.hotSpot.y: height / 2
+  Drag.keys: ["InventoryItem"]
+  ItemIcon {
+    anchors.centerIn: parent
+    model: inventoryItem
+    width: itemIconWidth
+    height: itemIconHeight
+  }
+  states: State {
+    when: itemMouseArea.drag.active
+    ParentChange { target: itemRectangle; parent: itemRectangle.dragZone }
+    PropertyChanges { target: itemRectangle; z: 3 }
+  }
+  Text {
+    anchors.horizontalCenter: parent.horizontalCenter
+    anchors.bottom: parent.bottom
+    anchors.bottomMargin: 5
+    text: itemCount > 1 ? `x${itemCount}` : ""
+    font.family: application.consoleFontName
+    font.pointSize: application.consoleFont.tinySize
+    style: Text.Raised
+    styleColor: "black"
+    color: "white"
+    width: itemIconWidth
+    wrapMode: Text.WrapAnywhere
+  }
+  MouseArea {
+    id: itemMouseArea
+    anchors.fill: parent
+    drag.target: parent
+    hoverEnabled: true
+    onPressed: itemRectangle.clicked()
+    onDoubleClicked: itemRectangle.doubleClicked()
+    onReleased: {
+      const target = itemRectangle.Drag.target;
+      if (target && target.receiveInventoryItem)
+        target.receiveInventoryItem(inventoryItem);
+    }
+  }
+}

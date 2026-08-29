@@ -47,6 +47,8 @@
 
 QJSEngine* qmlJsEngine = nullptr;
 
+const char* qmlModule = "com.planed.foengine";
+
 void registerQmlTilemap()
 {
   qmlRegisterType<TileMap>  ("Tiles", 1,0, "TileMap");
@@ -160,13 +162,13 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("i18n", i18n);
   });
 
-  const QUrl mainUrl(QStringLiteral("qrc:/main.qml"));
-  const QUrl gamePickerUrl(QStringLiteral("qrc:/GamePicker.qml"));
-
-  QObject::connect(&engine, &QQmlApplicationEngine::objectCreated, &app, [mainUrl, gamePickerUrl, cursor, gamepad](QObject *obj, const QUrl &objUrl)
+  QObject::connect(&engine, &QQmlApplicationEngine::objectCreated, &app, [cursor, gamepad](QObject *obj, const QUrl &objUrl)
   {
-    if (!obj && (mainUrl == objUrl || gamePickerUrl == objUrl))
+    if (!obj)
+    {
+      qDebug() << "engine objectCreated null, exiting ->" << obj << objUrl;
       QCoreApplication::exit(-1);
+    }
     else
     {
       gamepad->initialize();
@@ -174,7 +176,7 @@ int main(int argc, char *argv[])
     }
   }, Qt::QueuedConnection);
 
-  auto loadPackage = [&gameContext, &engine, &app, mainUrl](const GamePackage* package)
+  auto loadPackage = [&gameContext, &engine, &app](const GamePackage* package)
   {
     if (package)
     {
@@ -183,7 +185,7 @@ int main(int argc, char *argv[])
       gameContext = new GameContext(&app);
       gameContext->load(*package);
       gameContext->initializeQmlProperties(engine);
-      engine.load(mainUrl);
+      engine.loadFromModule(qmlModule, "Main");
     }
   };
 
@@ -194,7 +196,7 @@ int main(int argc, char *argv[])
   else
   {
     QObject::connect(gamePackages, &GamePackages::pickedPackage, &app, loadPackage, Qt::QueuedConnection);
-    engine.load(gamePickerUrl);
+    engine.loadFromModule(qmlModule, "GamePicker");
   }
   return app.exec();
 }

@@ -1,0 +1,45 @@
+import QtQuick 2.15
+import QtQuick.Controls 2.15
+import QtQuick.Layouts 1.15
+import "qrc:/com/planed/foengine/qml/com/planed/foengine/ui/style" as UiStyle
+import "qrc:/com/planed/foengine/qml/com/planed/foengine/ui"
+import ".."
+
+WorldmapListEditor {
+  id: root
+  property bool showSplashscreen: false
+
+  formComponent: showSplashscreen ? splashscreenComponent : mapComponent
+
+  Component {
+    id: mapComponent
+    CityForm {
+      cityModel: root.currentModel
+      onCityNameChanged: root.refreshNames()
+      onPreviousClicked: root.selectedName = ""
+      onSplashscreenClicked: showSplashscreen = true
+      onDestroyClicked: {
+        worldMap.removeCity(root.currentModel);
+        root.refreshNames();
+      }
+    }
+  }
+
+  Component {
+    id: splashscreenComponent
+    SplashscreenForm {
+      splashscreenModel: root.currentModel.splashscreen
+      onPreviousClicked: showSplashscreen = false
+    }
+  }
+
+  addDialog: TextPromptDialog {
+    title: i18n.t("game-editor.cities.add")
+    parent: Overlay.overlay
+    anchors.centerIn: parent
+    onAccepted: {
+      worldMap.createCity(value);
+      selectedName = value;
+    }
+  }
+}

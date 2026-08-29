@@ -1,14 +1,5 @@
 <RCC>
     <qresource prefix="/">
-        <file>main.qml</file>
-        <file>GamePicker.qml</file>
-        <file>MainMenu.qml</file>
-        <file>Game.qml</file>
-        <file>NewGame.qml</file>
-        <file>SaveGame.qml</file>
-        <file>LoadGame.qml</file>
-        <file>Options.qml</file>
-        <file>Credits.qml</file>
         <file>assets/icon.ico</file>
         <file>assets/locales/options.en.json</file>
         <file>assets/locales/options.fr.json</file>
@@ -18,29 +9,13 @@
         <file>assets/ui/menuButton/active.png</file>
         <file>assets/ui/menuButton/normal.png</file>
         <file>assets/ui/menuButton/pressed.png</file>
-        <file>assets/ui/MenuButton.qml</file>
-        <file>assets/ui/TitleText.qml</file>
-        <file>assets/ui/ColumnLabel.qml</file>
-        <file>assets/ui/hud.png</file>
-        <file>assets/ui/Label.qml</file>
-        <file>assets/ui/Pane.qml</file>
-        <file>assets/ui/pane.png</file>
-        <file>assets/ui/paper.png</file>
-        <file>assets/ui/PaperPane.qml</file>
-        <file>assets/ui/TerminalPane.qml</file>
-        <file>assets/ui/terminal.png</file>
-        <file>assets/ui/TerminalScrollbar.qml</file>
-        <file>assets/ui/TinyButton.qml</file>
-        <file>assets/ui/TerminalButton.qml</file>
-        <file>assets/ui/TerminalToolTip.qml</file>
-        <file>assets/ui/tab.png</file>
-        <file>assets/ui/Tab.qml</file>
-        <file>assets/ui/PlayPanel.qml</file>
-        <file>assets/ui/UnderlayView.qml</file>
-        <file alias="assets/ui/ButtonNavigation.qml">ui/ButtonNavigation.qml</file>
-        <file>ui/ButtonNavigation.qml</file>
         <file>assets/ui/key.png</file>
         <file>assets/ui/gamepad.png</file>
+        <file>assets/ui/terminal.png</file>
+        <file>assets/ui/pane.png</file>
+        <file>assets/ui/paper.png</file>
+        <file>assets/ui/hud.png</file>
+        <file>assets/ui/tab.png</file>
         <file>assets/ui/play-panel.png</file>
         <file>assets/ui/play-panel-left.png</file>
         <file>assets/ui/play-panel-center.png</file>
@@ -73,7 +48,6 @@
         <file>assets/ui/dialog/right.png</file>
         <file>assets/ui/dialog/top.png</file>
         <file>assets/ui/dialog/text.png</file>
-        <file>assets/ui/HudScrollbar.qml</file>
         <file>assets/ui/scrollbars/background.png</file>
         <file>assets/ui/scrollbars/content.png</file>
         <file>assets/ui/clock.png</file>
@@ -87,165 +61,12 @@
         <file>assets/ui/cursors/move-tile.png</file>
         <file>assets/ui/cursors/move-tile-unavailable.png</file>
         <file>assets/ui/cursors/wait.png</file>
-        <file>assets/ui/CustomDialog.qml</file>
-        <file>assets/ui/Icon.qml</file>
         <file>assets/ui/button-pressed.png</file>
         <file>assets/ui/button.png</file>
-        <file>assets/ui/PushButton.qml</file>
-        <file>assets/ui/WarningRectangle.qml</file>
         <file>assets/ui/equipment/pony.png</file>
-        <file>assets/ui/equipment/settings.mjs</file>
-        <file>ui/FaceDisplay.qml</file>
-        <file>ui/FaceEditor.qml</file>
-        <file>ui/SavedGameListItem.qml</file>
-        <file>ui/SaveGameUi.qml</file>
-        <file>ui/TerminalField.qml</file>
-        <file>ui/TerminalTextArea.qml</file>
-        <file>ui/TerminalButton.qml</file>
-        <file>ui/TerminalComboBox.qml</file>
-        <file>ui/TerminalSpinBox.qml</file>
-        <file>ui/InventoryItemPreview.qml</file>
-        <file>ui/TerminalLabel.qml</file>
-        <file>ui/TerminalCheckBox.qml</file>
-        <file>ui/TerminalToolButton.qml</file>
-        <file>ui/TerminalColorButton.qml</file>
-        <file>ui/CharacterInventory.qml</file>
-        <file>ui/CharacterInventorySlots.qml</file>
-        <file>ui/ItemIcon.qml</file>
-        <file>ui/SelectBox.qml</file>
-        <file>ui/TimeDisplay.qml</file>
-        <file>ui/dialog/DialogTextDisplay.qml</file>
-        <file>ui/dialog/DialogAnswersDisplay.qml</file>
-        <file>ui/TextPromptDialog.qml</file>
-        <file>ui/ConfirmDialog.qml</file>
-        <file>ui/CustomTextField.qml</file>
-        <file>ui/CustomLabel.qml</file>
-        <file>ui/ItemTransferDialog.qml</file>
-        <file>ui/dialog/BarterTransferControls.qml</file>
-        <file>ui/dialog/BarterDealPreview.qml</file>
-        <file>ui/CharacterSpritePreview.qml</file>
-        <file>ui/ObjectSpritePreview.qml</file>
-        <file>ui/GridInventorySlots.qml</file>
-        <file>ui/InventorySlot.qml</file>
-        <file>ui/CharacterTemplatePicker.qml</file>
-        <file>ui/CustomFlickable.qml</file>
-        <file>ui/FontStyle.qml</file>
-        <file>ui/ClockWidget.qml</file>
-        <file>ui/BackAction.qml</file>
-        <file>ui/DynamicObjectMetrics.qml</file>
-        <file>ui/FastTimePassView.qml</file>
-        <file>ui/RepeatTimer.qml</file>
-        <file>ui/CharacterSheet.qml</file>
-        <file>ui/FpsWidget.qml</file>
-        <file>ui/MenuButton.qml</file>
-        <file>ui/TabRow.qml</file>
-        <file>ui/KeyHint.qml</file>
-        <file>ui/ShortcutTable.qml</file>
-        <file>ui/GamepadPreview.qml</file>
-        <file>ui/SideBar.qml</file>
-        <file>ui/DraggableItemIcon.qml</file>
-        <file>cmap/Experience.qml</file>
-        <file>cmap/Status.qml</file>
-        <file>cmap/Statistics.qml</file>
-        <file>cmap/Skills.qml</file>
-        <file>cmap/AvailableSkillPoints.qml</file>
-        <file>cmap/CharacterData.qml</file>
-        <file>cmap/PerkPicker.qml</file>
-        <file>cmap/PersonalInfo.qml</file>
-        <file>cmap/SpecialCounter.qml</file>
-        <file>cmap/TraitsPicker.qml</file>
-        <file>cmap/AvailableSkillProficiencies.qml</file>
-        <file>cmap/DescriptionPane.qml</file>
-        <file>cmap/KillsPane.qml</file>
-        <file>cmap/PerksPane.qml</file>
-        <file>cmap/Special.qml</file>
-        <file>cmap/ReputationPane.qml</file>
-        <file>cmap/PersonalInfo.qml</file>
-        <file>cmap/SpecialCounter.qml</file>
-        <file>cmap/DescriptionPane.qml</file>
-        <file>cmap/KillsPane.qml</file>
-        <file>cmap/AvailableSkillPoints.qml</file>
-        <file>cmap/AvailableSkillProficiencies.qml</file>
-        <file>cmap/CharacterData.qml</file>
-        <file>cmap/PerkPicker.qml</file>
-        <file>cmap/TraitsPicker.qml</file>
-        <file>cmap/PerksPane.qml</file>
-        <file>game/level/ZoneRenderer.qml</file>
-        <file>game/level/WallRenderer.qml</file>
-        <file>game/level/DaylightShader.qml</file>
-        <file>game/level/ScreenEdges.qml</file>
-        <file>game/level/LevelRenderTarget.qml</file>
-        <file>game/level/LevelMouseArea.qml</file>
-        <file>game/level/LevelCamera.qml</file>
-        <file>game/level/ObjectListRenderer.qml</file>
-        <file>game/level/CursorRenderer.qml</file>
-        <file>game/level/LevelDisplay.qml</file>
-        <file>game/level/PlayerCropCircle.qml</file>
         <file alias="game/level/PlayerCropCircle.shader.frag.qsb">../build/src/game/level/PlayerCropCircle.shader.frag.qsb</file>
         <file alias="game/level/PlayerCropCircle.shader.vert.qsb">../build/src/game/level/PlayerCropCircle.shader.vert.qsb</file>
-        <file>game/level/LayerRenderer.qml</file>
-        <file>game/hud/CombatSpeedWidget.qml</file>
-        <file>game/hud/Menu.qml</file>
-        <file>game/hud/HudItemSlots.qml</file>
-        <file>game/hud/HudActionPoints.qml</file>
-        <file>game/hud/HudConsole.qml</file>
-        <file>game/hud/HudMenu.qml</file>
-        <file>game/hud/HudCounter.qml</file>
-        <file>game/hud/CountdownDialog.qml</file>
-        <file>game/hud/ItemPicker.qml</file>
-        <file>game/hud/InteractionMenu.qml</file>
-        <file>game/hud/InteractionOverlay.qml</file>
-        <file>game/hud/InteractionColorOverlay.qml</file>
         <file alias="game/hud/InteractionColorOverlay.shader.frag.qsb">../build/src/game/hud/InteractionColorOverlay.shader.frag.qsb</file>
         <file alias="game/hud/InteractionColorOverlay.shader.vert.qsb">../build/src/game/hud/InteractionColorOverlay.shader.vert.qsb</file>
-        <file>game/hud/InteractionOverlay.qml</file>
-        <file>game/hud/InteractionOverlays.qml</file>
-        <file>game/hud/CombatPreview.qml</file>
-        <file>game/hud/HudCombatControls.qml</file>
-        <file>game/hud/TutorialPane.qml</file>
-        <file>game/hud/Actions.qml</file>
-        <file>game/hud/PlayerInventory.qml</file>
-        <file>game/hud/DebugConsole.qml</file>
-        <file>game/hud/ControlsDialog.qml</file>
-        <file>game/hud/Skilldex.qml</file>
-        <file>game/hud/Spelldex.qml</file>
-        <file>game/hud/ItemDropArea.qml</file>
-        <file>game/worldmap/Worldmap.qml</file>
-        <file>game/worldmap/WorldmapView.qml</file>
-        <file>game/worldmap/SplashscreenView.qml</file>
-        <file>game/worldmap/SplashscreenDisplay.qml</file>
-        <file>game/worldmap/WorldmapCase.qml</file>
-        <file>game/worldmap/WorldmapCities.qml</file>
-        <file>game/worldmap/WorldmapSidebar.qml</file>
-        <file>game/slideshows/LoadingScreen.qml</file>
-        <file>game/slideshows/GameOverScreen.qml</file>
-        <file>game/slideshows/TransitionScreen.qml</file>
-        <file>game/slideshows/EndGameScreen.qml</file>
-        <file>game/pipboy/TimeApplication.qml</file>
-        <file>game/pipboy/QuestsApplication.qml</file>
-        <file>game/pipboy/quests/Index.qml</file>
-        <file>game/pipboy/quests/Show.qml</file>
-        <file>game/pipboy/AutomapApplication.qml</file>
-        <file>game/pipboy/Actions.qml</file>
-        <file>game/PipBoy.qml</file>
-        <file>game/CharacterView.qml</file>
-        <file>game/LevelView.qml</file>
-        <file>game/Dialog.qml</file>
-        <file>game/DialogAnswersPane.qml</file>
-        <file>game/Looting.qml</file>
-        <file>game/InventoryItemsView.qml</file>
-        <file>game/LevelHud.qml</file>
-        <file>game/LevelFrameRate.qml</file>
-        <file>game/LevelCursor.qml</file>
-        <file>game/UsageSuccessHint.qml</file>
-        <file>game/Interaction.mjs</file>
-        <file>game/Barter.qml</file>
-        <file>game/LevelTextBubbles.qml</file>
-        <file>game/PauseController.qml</file>
-        <file>game/GameLoadManager.qml</file>
-        <file>game/LevelLoaderView.qml</file>
-        <file>game/InventoryItemHandle.qml</file>
-        <file>game/InventoryItemDropArea.qml</file>
-        <file>ui/VirtualPointerDisplay.qml</file>
     </qresource>
 </RCC>

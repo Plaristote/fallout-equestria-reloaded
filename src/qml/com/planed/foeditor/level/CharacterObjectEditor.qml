@@ -1,0 +1,73 @@
+import QtQuick 2.15
+import QtQuick.Controls 2.15
+import QtQuick.Layouts 1.15
+import "qrc:/com/planed/foengine/qml/com/planed/foengine/ui/style" as UiStyle
+import "qrc:/com/planed/foengine/qml/com/planed/foengine/ui"
+import "qrc:/com/planed/foengine/qml/com/planed/foengine/game" as GameComponents
+import Game 1.0
+
+DynamicObjectEditor {
+  id: characterEditor
+  scriptCategory: "characters"
+  withOrientation: true
+  readOnlyAnimation: true
+  readOnlyPositionType: true
+
+  signal openInventoryClicked()
+  signal requestCharacterView(string characterSheet)
+  signal requestDialogView(string dialogName)
+
+  fields: [
+    TerminalLabel { text: i18n.t("game-editor.levels.characters.sheet") },
+    CharacterSheetInputField {
+      Layout.fillWidth: true
+      model: characterEditor.model
+    },
+
+    TerminalLabel { text: i18n.t("game-editor.levels.characters.dialog") },
+    RowLayout {
+      Layout.fillWidth: true
+      TerminalButton {
+        Layout.fillWidth: true
+        text: {
+          if (characterEditor.model.scriptName.length > 0 && characterEditor.model.getDialogName() != undefined)
+            return characterEditor.model.getDialogName();
+          return "N/A";
+        }
+        enabled: false
+      }
+      TerminalToolButton {
+        iconName: "open"
+        onClicked: characterEditor.requestDialogView(characterEditor.model.getDialogName())
+      }
+    },
+
+    TerminalLabel { text: i18n.t("game-editor.levels.characters.faction") },
+    TerminalField {
+      Layout.fillWidth: true
+      text: model.statistics.faction
+      onTextChanged: {
+        model.statistics.faction = text
+      }
+    },
+
+    TerminalLabel { text: i18n.t("game-editor.levels.characters.is-unique") },
+    TerminalCheckBox {
+      checked: model.isUnique
+      onCheckedChanged: {
+        model.isUnique = checked
+      }
+    },
+
+    TerminalToolButton {
+      Layout.columnSpan: 2
+      Layout.fillWidth: true
+      Layout.preferredHeight: 40
+      text: "Inventory"
+      iconName: "item"
+      onClicked: openInventoryClicked();
+      padding: 20
+      height: 40
+    }
+  ]
+}
