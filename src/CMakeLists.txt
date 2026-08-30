@@ -57,6 +57,22 @@ else()
   qt_add_executable(falloutequestria MANUAL_FINALIZATION ${PROJECT_SOURCES})
 endif()
 
+# I would LOVE to move to the proper way of building shaders for Qt, but it just does
+# not work (produces broken QSB, apparently). Meanwhile, my crappy build-shaders.sh
+# DOES work. So fuck the following:
+
+#qt_add_shaders(falloutequestria "falloutequestria_renderer_shaders"
+#  PREFIX "/game/level/renderer"
+#  BASE "game/level/renderer"
+#  FILES game/level/renderer/tile.shader.vert game/level/renderer/tile.shader.frag
+#)
+
+#qt_add_shaders(falloutequestria "falloutequestria_hud_shaders"
+#  PREFIX "/game/hub"
+#  BASE "game/hub"
+#  FILES game/hud/InteractionColorOverlay.shader.vert game/hud/InteractionColorOverlay.shader.frag
+#)
+
 qt_add_qml_module(falloutequestria_qml
   URI com.planed.foengine
   VERSION 1.0

@@ -37,7 +37,7 @@ void PlayerVisibilityComponent::load(const QJsonObject& data)
   }
 }
 
-QQmlListProperty<Character> PlayerVisibilityComponent::getQmlVisibleCharacters()
+void PlayerVisibilityComponent::updateVisibleCharacters()
 {
   const auto list = getPlayer()->getFieldOfView()->GetDetectedCharacters();
 
@@ -51,10 +51,9 @@ QQmlListProperty<Character> PlayerVisibilityComponent::getQmlVisibleCharacters()
   visibleCharacters << getPlayer();
   sortByRenderOrder(visibleCharacters);
   std::reverse(visibleCharacters.begin(), visibleCharacters.end());
-  return QML_QLIST_CONSTRUCTOR(Character, visibleCharacters);
 }
 
-QQmlListProperty<DynamicObject> PlayerVisibilityComponent::getQmlVisibleObjects()
+void PlayerVisibilityComponent::updateVisibleObjects()
 {
   visibleObjects.clear();
   eachObject([this](DynamicObject* object)
@@ -64,6 +63,29 @@ QQmlListProperty<DynamicObject> PlayerVisibilityComponent::getQmlVisibleObjects(
   });
   sortByRenderOrder(visibleObjects);
   std::reverse(visibleObjects.begin(), visibleObjects.end());
+}
+
+const QList<Character*>& PlayerVisibilityComponent::getVisibleCharacters()
+{
+  updateVisibleCharacters();
+  return visibleCharacters;
+}
+
+const QList<DynamicObject*>& PlayerVisibilityComponent::getVisibleObjects()
+{
+  updateVisibleObjects();
+  return visibleObjects;
+}
+
+QQmlListProperty<Character> PlayerVisibilityComponent::getQmlVisibleCharacters()
+{
+  updateVisibleCharacters();
+  return QML_QLIST_CONSTRUCTOR(Character, visibleCharacters);
+}
+
+QQmlListProperty<DynamicObject> PlayerVisibilityComponent::getQmlVisibleObjects()
+{
+  updateVisibleObjects();
   return QML_QLIST_CONSTRUCTOR(DynamicObject, visibleObjects);
 }
 

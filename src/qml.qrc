@@ -64,8 +64,8 @@
         <file>assets/ui/button-pressed.png</file>
         <file>assets/ui/button.png</file>
         <file>assets/ui/equipment/pony.png</file>
-        <file alias="game/level/PlayerCropCircle.shader.frag.qsb">../build/src/game/level/PlayerCropCircle.shader.frag.qsb</file>
-        <file alias="game/level/PlayerCropCircle.shader.vert.qsb">../build/src/game/level/PlayerCropCircle.shader.vert.qsb</file>
+        <file alias="game/level/renderer/tile.shader.frag.qsb">../build/src/game/level/renderer/tile.shader.frag.qsb</file>
+        <file alias="game/level/renderer/tile.shader.vert.qsb">../build/src/game/level/renderer/tile.shader.vert.qsb</file>
         <file alias="game/hud/InteractionColorOverlay.shader.frag.qsb">../build/src/game/hud/InteractionColorOverlay.shader.frag.qsb</file>
         <file alias="game/hud/InteractionColorOverlay.shader.vert.qsb">../build/src/game/hud/InteractionColorOverlay.shader.vert.qsb</file>
     </qresource>

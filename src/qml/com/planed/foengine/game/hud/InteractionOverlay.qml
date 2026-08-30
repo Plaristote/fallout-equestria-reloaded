@@ -10,20 +10,35 @@ Repeater {
   property color    overlayMaxColor: Qt.rgba(255, 255, 0, 0.5)
   property int      offsetX
   property int      offsetY
+  property var      knownObjects: new Set() // TODO should not be a problem, but is never emptied, so can grow undefinitely
 
   delegate: Image {
     id: dynamicObjectLayer
     property QtObject dynamicObject: root.model[index]
     property point offset: levelController.getAdjustedOffsetFor(dynamicObject)
 
+    opacity: 0
+    Behavior on opacity {
+      id: opacityBehavior
+      NumberAnimation { duration: 300 } // TODO probably should use a common constant with the C++ part
+    }
+
     function updateVisibility() {
       dynamicObjectLayer.visible = root.filter(dynamicObject);
     }
 
     Component.onCompleted: {
-      //console.log("Created InteractionOverlay", name);
-      updateVisibility()
+      updateVisibility();
+      if (root.knownObjects.has(dynamicObject)) {
+        opacityBehavior.enabled = false;
+        opacity = 1;
+        opacityBehavior.enabled = true;
+      } else {
+        root.knownObjects.add(dynamicObject);
+        opacity = 1;
+      }
     }
+
     onSourceClipRectChanged: offset = levelController.getAdjustedOffsetFor(dynamicObject)
 
     Timer {

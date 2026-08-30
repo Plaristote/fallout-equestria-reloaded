@@ -33,7 +33,7 @@ DynamicObject* LevelEditorController::generateFromTemplate(const QString& templa
   return object;
 }
 
-QQmlListProperty<DynamicObject> LevelEditorController::getQmlVisibleObjects()
+void LevelEditorController::updateVisibleObjects()
 {
   visibleObjects.clear();
   for (auto* object : std::as_const(attachedObjects))
@@ -41,10 +41,9 @@ QQmlListProperty<DynamicObject> LevelEditorController::getQmlVisibleObjects()
     if (!object->isCharacter() && object->getCurrentFloor() == getCurrentFloor())
       visibleObjects << reinterpret_cast<Character*>(object);
   }
-  return QML_QLIST_CONSTRUCTOR(DynamicObject, visibleObjects);
 }
 
-QQmlListProperty<Character> LevelEditorController::getQmlVisibleCharacters()
+void LevelEditorController::updateVisibleCharacters()
 {
   visibleCharacters.clear();
   for (auto* object : std::as_const(attachedObjects))
@@ -52,7 +51,6 @@ QQmlListProperty<Character> LevelEditorController::getQmlVisibleCharacters()
     if (object->isCharacter() && object->getCurrentFloor() == getCurrentFloor())
       visibleCharacters << reinterpret_cast<Character*>(object);
   }
-  return QML_QLIST_CONSTRUCTOR(Character, visibleCharacters);
 }
 
 void LevelEditorController::swapMouseMode()

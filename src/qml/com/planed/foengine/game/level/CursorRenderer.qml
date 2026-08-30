@@ -3,12 +3,13 @@ import QtQuick 2.15
 Loader {
   id: cursorRenderer
   property QtObject levelController
+  property real     offsetX: renderTarget.width / 2
   property point    renderPosition: {
     if (renderTarget.hoverTile)
       return levelController.getRenderPositionForTile(...renderTarget.hoverTile);
     return Qt.point(0, 0);
   }
-  x: renderPosition.x
+  x: renderPosition.x + offsetX
   y: renderPosition.y
   z: 99999999
   sourceComponent: {
@@ -41,8 +42,8 @@ Loader {
             renderTarget.hoverTile[1] + zoneY + zoneSize - zoneRadius
           ]
           property point renderPosition: levelController.getRenderPositionForTile(...tile)
-          x: cursorRenderer.x - renderPosition.x
-          y: cursorRenderer.y - renderPosition.y
+          x: renderPosition.x - cursorRenderer.x + cursorRenderer.offsetX
+          y: renderPosition.y - cursorRenderer.y
           source: "qrc:/assets/ui/cursors/target-tile.png"
         }
       }
@@ -79,7 +80,7 @@ Loader {
           ]
           property bool lastTile: index === (combatPathElement.length - 1)
           property point renderPosition: levelController.getRenderPositionForTile(...tile)
-          x: renderPosition.x - cursorRenderer.x
+          x: renderPosition.x - cursorRenderer.x + cursorRenderer.offsetX
           y: renderPosition.y - cursorRenderer.y
           source: "qrc:/assets/ui/cursors/move-tile" + (lastTile ? "" : "-unavailable") + ".png"
 

@@ -17,6 +17,8 @@ public:
   // TODO disable daylight on underground floors
 
   inline bool usesDaylight() const { return useAmbientLight && useDaylight; }
+  inline bool usesAmbientLight() const { return useAmbientLight; }
+  QColor getAmbientColor() const { return ambientColor; }
 
   void load(const QJsonObject&);
   void save(QJsonObject&) const;

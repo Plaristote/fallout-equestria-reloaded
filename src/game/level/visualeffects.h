@@ -22,6 +22,7 @@ public:
   void addAnimationSequence(AnimationSequence*, QJSValue callback = QJSValue());
 
   QQmlListProperty<Sprite> getQmlVisualEffects() { return QML_QLIST_CONSTRUCTOR(Sprite, visualEffects); }
+  const QList<Sprite*>& getVisualEffects() const { return visualEffects; }
 
 signals:
   void visualEffectsChanged();

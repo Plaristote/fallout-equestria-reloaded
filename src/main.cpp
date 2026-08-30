@@ -35,6 +35,7 @@
 #include "game/gamepadcontroller.h"
 #include "game/savepreview.h"
 #include "game/diplomacy.hpp"
+#include "game/level/renderer.h"
 
 #include "cmap/statmodel.h"
 
@@ -117,6 +118,7 @@ int main(int argc, char *argv[])
   qmlRegisterType<Credits>("Game", 1,0, "Credits");
   qmlRegisterType<CreditPerson>("Game", 1,0, "Person");
   qmlRegisterType<MouseCursor>("Game", 1,0, "MouseCursor");
+  qmlRegisterType<LevelRenderer>("Game", 1,0, "LevelRenderer");
 
   qRegisterMetaType<Character*>("Character*");
   qRegisterMetaType<Character*>("const Character*");

@@ -27,8 +27,8 @@ private slots:
   void update() override;
 
 private:
-  QQmlListProperty<DynamicObject> getQmlVisibleObjects() override;
-  QQmlListProperty<Character>     getQmlVisibleCharacters() override;
+  void updateVisibleObjects() override;
+  void updateVisibleCharacters() override;
   static QJsonObject clipper;
 };
 

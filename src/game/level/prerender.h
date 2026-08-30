@@ -1,18 +1,19 @@
 #ifndef  PRERENDERCOMPONENT_H
 # define PRERENDERCOMPONENT_H
 
-# include "zone.h"
+# include "lights.h"
 
-class PreRenderComponent : public ZoneComponent
+class PreRenderComponent : public LightingComponent
 {
   Q_OBJECT
-  typedef ZoneComponent ParentType;
+  typedef LightingComponent ParentType;
 
   Q_PROPERTY(QString preRenderPath READ getPreRenderPath CONSTANT)
 public:
   PreRenderComponent(QObject* parent = nullptr);
 
   void load(const QJsonObject&);
+  QString getPreRenderPath() const;
 
 protected:
   virtual bool usePrerenderCache() const { return true; }
@@ -24,7 +25,6 @@ private:
   void    preRenderGround(TileMap*, const QString& prefix);
   void    preRenderWallVectors(TileMap*, const QString& prefix);
   void    preRenderLayers(const QList<TileLayer*>&, const QString& prefix);
-  QString getPreRenderPath() const;
   void    prepareWallVectors();
   void    prepareWallVectors(TileMap*, const QString& prefix, bool render = false);
 };

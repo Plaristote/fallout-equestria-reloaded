@@ -19,7 +19,7 @@ $qsb --glsl 100es,120,150 --hlsl 50 --msl 12 -b -o $output_dir/$shader.vert.qsb 
 echo "++ frag"
 $qsb --glsl 100es,120,150 --hlsl 50 --msl 12 -b -o $output_dir/$shader.frag.qsb $shader.frag
 
-shader="src/game/level/PlayerCropCircle.shader"
+shader="src/game/level/renderer/tile.shader"
 echo "+ building $shader"
 mkdir -p "$output_dir/$(dirname "$shader")"
 echo "++ vert"

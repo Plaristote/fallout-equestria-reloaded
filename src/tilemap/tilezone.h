@@ -32,6 +32,7 @@ public:
   const QString& getType() const { return type; }
   const QString& getTarget() const { return target; }
   const QString& getTargetZone() const { return targetZone; }
+  QRect getClippedRect() const { return clippedRect; }
   bool getIsDefault() const { return isDefault; }
 
   inline bool isEnabled() const { return enabled; }

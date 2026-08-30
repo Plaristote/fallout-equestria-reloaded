@@ -17,6 +17,9 @@ public:
   virtual void registerDynamicObject(DynamicObject*);
   virtual void unregisterDynamicObject(DynamicObject*);
 
+  const QList<Character*>&     getVisibleCharacters();
+  const QList<DynamicObject*>& getVisibleObjects();
+
 signals:
   void visibleCharactersChanged();
   void visibleObjectsChanged();
@@ -26,8 +29,10 @@ private slots:
   void refreshHiddenObjectsDetection();
 
 private:
-  virtual QQmlListProperty<Character>     getQmlVisibleCharacters();
-  virtual QQmlListProperty<DynamicObject> getQmlVisibleObjects();
+  virtual void updateVisibleCharacters();
+  virtual void updateVisibleObjects();
+  QQmlListProperty<Character>     getQmlVisibleCharacters();
+  QQmlListProperty<DynamicObject> getQmlVisibleObjects();
 
 protected:
   QList<Character*>     visibleCharacters;
