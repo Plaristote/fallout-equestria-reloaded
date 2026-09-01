@@ -31,18 +31,21 @@ void LevelRenderer::setLevelController(LevelTask *controller)
   if (m_levelController)
   {
     m_controllerConnections
+        << connect(m_levelController, &QObject::destroyed, this, [this]{ setLevelController(nullptr); })
         << connect(m_levelController, &LevelTask::updated,                                  this, &LevelRenderer::update)
         << connect(m_levelController, &GridComponent::floorChanged,                         this, &LevelRenderer::initializeTilemap)
         << connect(m_levelController, &PlayerVisibilityComponent::visibleObjectsChanged,    this, [this]{ if (m_objectsRenderer) m_objectsRenderer->updateVisibleObjects(); })
         << connect(m_levelController, &PlayerVisibilityComponent::visibleCharactersChanged, this, [this]{ if (m_objectsRenderer) m_objectsRenderer->updateVisibleObjects(); });
     initializeItemsRenderers();
   }
-else
+  else
   {
     m_itemsRenderers.clear();
     m_daylightMask.reset();
     m_objectsRenderer = nullptr;
     m_zonesRenderer = nullptr;
+    m_wallsRenderer = nullptr;
+    m_roofsRenderer = nullptr;
   }
   emit levelControllerChanged();
 }
@@ -54,16 +57,20 @@ void LevelRenderer::initializeItemsRenderers()
   {
     auto zonesRenderer   = std::make_unique<ZonesRenderer>(m_textureCache.get());
     auto objectsRenderer = std::make_unique<DynamicObjectsRenderer>(m_textureCache.get(), m_levelController);
+    auto wallsRenderer   = std::make_unique<WallsRenderer>(m_textureCache.get(), m_levelController);
+    auto roofsRenderer   = std::make_unique<RoofsRenderer>(m_levelController->getPreRenderPath(), m_textureCache.get());
 
     objectsRenderer->updateVisibleObjects();
     m_zonesRenderer   = zonesRenderer.get();
     m_objectsRenderer = objectsRenderer.get();
+    m_wallsRenderer   = wallsRenderer.get();
+    m_roofsRenderer   = roofsRenderer.get();
     m_itemsRenderers.push_back(std::make_unique<GroundRenderer>(m_levelController->getPreRenderPath(), m_textureCache.get()));
     m_itemsRenderers.push_back(std::move(zonesRenderer));
-    m_itemsRenderers.push_back(std::make_unique<WallsRenderer>(m_textureCache.get(), m_levelController));
+    m_itemsRenderers.push_back(std::move(wallsRenderer));
     m_itemsRenderers.push_back(std::move(objectsRenderer));
     m_itemsRenderers.push_back(std::make_unique<VisualEffectsRenderer>(m_textureCache.get(), m_levelController));
-    m_itemsRenderers.push_back(std::make_unique<RoofsRenderer>(m_levelController->getPreRenderPath(), m_textureCache.get()));
+    m_itemsRenderers.push_back(std::move(roofsRenderer));
     for (auto& itemRenderer : m_itemsRenderers)
       itemRenderer->setWorldShiftX(m_originX);
     m_daylightMask = std::make_unique<DaylightMaskRenderer>(m_textureCache.get(), m_levelController);
@@ -80,22 +87,36 @@ void LevelRenderer::initializeTilemap()
   update();
 }
 
+bool LevelRenderer::renderWalls() const
+{
+  return m_wallsRenderer && m_wallsRenderer->isEnabled();
+}
+
+bool LevelRenderer::renderRoofs() const
+{
+  return m_roofsRenderer && m_roofsRenderer->isEnabled();
+}
+
 void LevelRenderer::setRenderWalls(bool enabled)
 {
-  if (m_renderWalls == enabled)
+  qDebug() << "LevelRenderer::setRenderWalls" << enabled;
+  if (!m_wallsRenderer || renderWalls() == enabled)
     return;
-  m_renderWalls = enabled;
+  m_wallsRenderer->setEnabled(enabled);
   emit renderWallsChanged();
   update();
+  qDebug() << "LevelRenderer::setRenderWalls updated" << m_wallsRenderer->isEnabled();
 }
 
 void LevelRenderer::setRenderRoofs(bool enabled)
 {
-  if (m_renderRoofs == enabled)
+  qDebug() << "LevelRenderer::setRenderRoofs" << enabled;
+  if (!m_roofsRenderer || renderRoofs() == enabled)
     return;
-  m_renderRoofs = enabled;
+  m_roofsRenderer->setEnabled(enabled);
   emit renderRoofsChanged();
   update();
+  qDebug() << "LevelRenderer::setRenderRoofs updated" << m_roofsRenderer->isEnabled();
 }
 
 void LevelRenderer::setOriginX(qreal value)
@@ -243,12 +264,12 @@ QSGNode* LevelRenderer::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *)
     count++;
   }
   items.reserve(count);
-  if (m_textureCache || readyToRumble()) [[likely]]
+  if (m_levelController && (m_textureCache || readyToRumble())) [[likely]]
   {
     if (m_daylightMask)
       m_daylightMask->update(window());
     for (auto& itemsRenderer : m_itemsRenderers)
-      (*itemsRenderer)(items, elapsedMs);
+      itemsRenderer->run(items, elapsedMs);
 
     // stable_sort -> ties must preserve insertion order (maybe ? std::sort is faster, test it sometimes)
     std::stable_sort(items.begin(), items.end(),

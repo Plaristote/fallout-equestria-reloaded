@@ -16,6 +16,12 @@ public:
 
   virtual ~ItemsRendererInterface() = default;
 
+  inline void run(std::vector<RenderItem>& out, qreal elapsedMs)
+  {
+    if (m_enabled) [[likely]]
+      operator()(out, elapsedMs);
+  }
+
   virtual void operator()(std::vector<RenderItem>& out, qreal elapsedMs) = 0;
 
   virtual void setTilemap(TileMap* tilemap, int floor)
@@ -31,10 +37,14 @@ public:
     m_worldShift = QPointF(value, 0);
   }
 
+  inline bool isEnabled() const { return m_enabled; }
+  inline void setEnabled(bool value) { m_enabled = value; }
+
 protected:
   TextureCache& m_textureCache;
   QPointF       m_worldShift;
   TileMap*      m_tilemap;
   QSizeF        m_mapSize;
   int           m_currentFloor;
+  bool          m_enabled = true;
 };

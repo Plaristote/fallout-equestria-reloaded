@@ -17,6 +17,8 @@ class QSGNode;
 class LevelTask;
 class DynamicObjectsRenderer;
 class ZonesRenderer;
+class WallsRenderer;
+class RoofsRenderer;
 
 class LevelRenderer : public QQuickItem
 {
@@ -39,9 +41,9 @@ public:
 
   LevelTask*   levelController() const { return m_levelController; }
   void         setLevelController(LevelTask *controller);
-  bool         renderWalls() const { return m_renderWalls; }
+  bool         renderWalls() const;
   void         setRenderWalls(bool enabled);
-  bool         renderRoofs() const { return m_renderRoofs; }
+  bool         renderRoofs() const;
   void         setRenderRoofs(bool enabled);
   qreal        originX() const { return m_originX; }
   void         setOriginX(qreal value);
@@ -65,14 +67,14 @@ private:
   void         syncNodeTree(QSGNode *root, const std::vector<RenderItem> &sortedItems);
 
   LevelTask*                            m_levelController = nullptr;
-  bool                                  m_renderWalls = true;
-  bool                                  m_renderRoofs = true;
   qreal                                 m_originX = 0;
   QElapsedTimer                         m_elapsedTimer;
   std::unique_ptr<TextureCache>         m_textureCache; // lazily created in updatePaintNode/readyToRumble
   std::unique_ptr<QSGTexture>           m_dummyDarkMaskTexture;
   ItemsRenderers                        m_itemsRenderers;
   DynamicObjectsRenderer*               m_objectsRenderer = nullptr;
+  WallsRenderer*                        m_wallsRenderer = nullptr;
+  RoofsRenderer*                        m_roofsRenderer = nullptr;
   ZonesRenderer*                        m_zonesRenderer = nullptr;
   std::unique_ptr<DaylightMaskRenderer> m_daylightMask;
   QVector<QMetaObject::Connection>      m_controllerConnections;
