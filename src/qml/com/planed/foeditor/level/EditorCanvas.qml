@@ -19,7 +19,7 @@ LevelComponents.LevelDisplay {
   Text {
     anchors.top: parent.top; anchors.right: parent.right
     color: "white"
-    text: hoverTile !== null ? hoverTile[0] + '/' + hoverTile[1] : ''
+    text: hoverTile != null ? hoverTile[0] + '/' + hoverTile[1] : ''
     visible: showHoverCoordinates
   }
 }

@@ -17,6 +17,7 @@ LevelDisplay {
                             controlsDialog.visible ||
                             mainMenu.activated
   property bool isCurrentView: application.currentView === root.parent
+  property alias debugConsole: debugConsole
   enabled: !gameController.fastPassTime
 
   function openMenu() {

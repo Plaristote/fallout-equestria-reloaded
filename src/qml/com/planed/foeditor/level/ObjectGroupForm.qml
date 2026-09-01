@@ -54,7 +54,7 @@ GridLayout {
     }
   }
 
-  TerminalLabel { text: i18n.t("game-editor.script"); visible: !readOnlyScript }
+  TerminalLabel { text: i18n.t("game-editor.script") }
   ScriptInputField {
     Layout.fillWidth: true
     Layout.columnSpan: 2
