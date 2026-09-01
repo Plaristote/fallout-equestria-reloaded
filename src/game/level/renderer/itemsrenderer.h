@@ -2,11 +2,12 @@
 #include "texturecache.h"
 #include "types.h"
 #include "tilemap/tilemap.h"
+#include "../fadeduration.h"
 
 class ItemsRendererInterface
 {
 protected:
-  static constexpr qreal g_fadeDurationMs = 300;
+  static constexpr qreal g_fadeDurationMs = FADE_DURATION_MS;
 public:
   ItemsRendererInterface(TextureCache* textureCache)
     : m_textureCache(*textureCache)

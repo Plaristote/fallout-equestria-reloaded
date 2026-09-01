@@ -15,6 +15,7 @@
 # include "level/save.h"
 # include "level/tutorialcomponent.h"
 # include "level/metrics.h"
+# include "level/fadeduration.h"
 
 class Doorway;
 class CharacterParty;
@@ -29,6 +30,7 @@ class LevelTask : public SaveComponent
   Q_PROPERTY(bool paused  MEMBER paused NOTIFY pausedChanged)
   Q_PROPERTY(short playerDetectedCount MEMBER playerDetectedCount NOTIFY playerDetectedCountChanged)
   Q_PROPERTY(TutorialComponent* tutorial MEMBER tutorial NOTIFY tutorialChanged)
+  Q_PROPERTY(int fadeDurationMs READ fadeDurationMs CONSTANT)
 public:  
   static bool withPlayerCropCircle;
 
@@ -39,6 +41,8 @@ public:
 
   void setPaused(bool value) { paused = value; emit pausedChanged(); }
   bool isPaused() const { return paused; }
+
+  static int fadeDurationMs() { return FADE_DURATION_MS; }
 
   const QString& getName() const { return name; }
 

@@ -10,7 +10,8 @@ Repeater {
   property color    overlayMaxColor: Qt.rgba(255, 255, 0, 0.5)
   property int      offsetX
   property int      offsetY
-  property var      knownObjects: new Set() // TODO should not be a problem, but is never emptied, so can grow undefinitely
+  property var      knownObjects: ({})
+  property int      nextGeneration: 0
 
   delegate: Image {
     id: dynamicObjectLayer
@@ -20,7 +21,7 @@ Repeater {
     opacity: 0
     Behavior on opacity {
       id: opacityBehavior
-      NumberAnimation { duration: 300 } // TODO probably should use a common constant with the C++ part
+      NumberAnimation { duration: root.levelController.fadeDurationMs }
     }
 
     function updateVisibility() {
@@ -28,15 +29,27 @@ Repeater {
     }
 
     Component.onCompleted: {
+      const path = dynamicObject.path;
       updateVisibility();
-      if (root.knownObjects.has(dynamicObject)) {
+      if (root.knownObjects[path]) {
+        root.knownObjects[path] = ++root.nextGeneration;
         opacityBehavior.enabled = false;
         opacity = 1;
         opacityBehavior.enabled = true;
       } else {
-        root.knownObjects.add(dynamicObject);
+        root.knownObjects[path] = ++root.nextGeneration;
         opacity = 1;
       }
+    }
+
+    Component.onDestruction: {
+      const capturedPath = dynamicObject.path;
+      const knownObjects = root.knownObjects;
+      const capturedGeneration = knownObjects[capturedPath];
+      Qt.callLater(function() {
+        if (knownObjects[capturedPath] === capturedGeneration)
+          delete knownObjects[capturedPath];
+      });
     }
 
     onSourceClipRectChanged: offset = levelController.getAdjustedOffsetFor(dynamicObject)
