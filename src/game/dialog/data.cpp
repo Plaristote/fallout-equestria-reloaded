@@ -93,7 +93,7 @@ bool DialogData::isAnswerAvailable(CharacterDialog& dialog, const QString& symbo
   return answer && answer->isAvailable(dialog);
 }
 
-QString DialogData::createStateFromAnswer(QJSValue data)
+QString DialogData::registerAnonymousState(const QJSValue& data)
 {
   QString uid = QUuid::createUuid().toString();
   DialogStateData& stateOnTheFly = createNewState(uid);
@@ -111,7 +111,7 @@ QString DialogData::triggerAnswer(CharacterDialog& dialog, const QString& symbol
     QJSValue retval(answer->trigger(dialog));
 
     if (retval.isObject())
-      return createStateFromAnswer(retval);
+      return registerAnonymousState(retval);
     else if (retval.isString())
       return retval.toString();
   }

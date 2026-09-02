@@ -76,6 +76,8 @@ QString CharacterDialog::getEntryPoint()
 
     if (entryPoint.isString())
       return entryPoint.toString();
+    else if (entryPoint.isObject())
+      return data.registerAnonymousState(entryPoint);
   }
   return data.getDefaultEntryPoint();
 }

@@ -18,6 +18,7 @@ public:
   QString getAnswerText(CharacterDialog& dialog, const QString& symbol);
   QString triggerAnswer(CharacterDialog& dialog, const QString& symbol);
   QString registerAnswer(const QJSValue&);
+  QString registerAnonymousState(const QJSValue&);
   const QString& getDefaultEntryPoint() const { return defaultEntryPoint; }
   void           setDefaultEntryPoint(const QString& value) { defaultEntryPoint = value; }
 
@@ -29,8 +30,6 @@ public:
   void             removeAnswerIfUnreferenced(const QString& symbol);
 
 private:
-  QString createStateFromAnswer(QJSValue);
-
   QString defaultEntryPoint;
   QList<QSharedPointer<DialogAnswer>>    answers;
   QList<QSharedPointer<DialogStateData>> states;
