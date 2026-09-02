@@ -3,6 +3,7 @@
 
 # include <QVector>
 # include <QSharedPointer>
+# include <QElapsedTimer>
 
 class QJSValue;
 class IAnimationPart;
@@ -19,6 +20,7 @@ public:
 private:
   bool nextAnimation();
   QVector<QSharedPointer<IAnimationPart>> parts;
+  QElapsedTimer timer;
 };
 
 #endif

@@ -1,5 +1,6 @@
 #include "animationsequence.h"
 #include "animationloader.h"
+#define TIMEOUT_DURATION_MS 10000
 
 void AnimationSequence::initialize(QJSValue& value)
 {
@@ -26,7 +27,7 @@ bool AnimationSequence::update()
   {
     auto& part = parts.first();
 
-    if (part->isOver())
+    if (part->isOver() || timer.hasExpired(TIMEOUT_DURATION_MS))
       return nextAnimation();
     return true;
   }
@@ -40,6 +41,7 @@ bool AnimationSequence::isRunning() const
 
 bool AnimationSequence::nextAnimation()
 {
+  timer.restart();
   parts.pop_front();
   if (parts.length() > 0)
   {

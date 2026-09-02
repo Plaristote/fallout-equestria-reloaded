@@ -40,7 +40,6 @@ void loadAnimationGroup(ANIMATION_GROUP& group, QJSValue& value)
   for (unsigned int i = 0 ; i < length ; ++i)
   {
     QJSValue animationDescriptor = value.property(i);
-    QString  type = animationDescriptor.property("type").toString();
 
     recursiveAnimationPartLoading<ANIMATION_GROUP,
       SpriteAnimationPart,
