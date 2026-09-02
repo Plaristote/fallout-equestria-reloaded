@@ -48,20 +48,32 @@ Pane {
 
   Button {
     id: faceEditorButton
-    background: UiStyle.Label { style: parent.down ? "dark" : "base" }
     clip: true
-    CharacterSpritePreview {
-      anchors.fill: parent
-      animationName: "walking"
-      animationRepeat: true
-      character: Game.Character {
-        statistics: root.characterSheet
+    background: UiStyle.Label { style: parent.down ? "dark" : "base" }
+    contentItem: RowLayout {
+      Label {
+        text: i18n.t("cmap.skin")
+        color: "white"
+      }
+      Label {
+        text: "Required"
+        color: "red"
+        visible: root.characterSheet.faceTheme.length === 0
+      }
+      CharacterSpritePreview {
+        Layout.fillHeight: true
+        Layout.preferredWidth: height
+        visible: root.characterSheet.faceTheme.length > 0
+        animationName: "walking"
+        animationRepeat: true
+        character: Game.Character {
+          statistics: root.characterSheet
+        }
       }
     }
-    onClicked: if (createMode) { faceEditor.open() }
+    onClicked: if (createMode) { faceEditor.open(); }
     anchors { top: characterNameRow.top; left: characterNameRow.right; leftMargin: 10 }
     height: characterNameRow.height
-    width: 50
   }
 
   Timer {
