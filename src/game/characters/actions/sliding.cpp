@@ -1,5 +1,6 @@
 #include "sliding.h"
 #include "game/leveltask.h"
+#define TIMEOUT_DURATION_MS 10000
 
 SlidingAction::SlidingAction(Character* character, QPoint target) : ActionBase(character), target(target)
 {
@@ -19,12 +20,15 @@ bool SlidingAction::trigger()
     character->lookTo(origin);
   }
   character->setFallAnimation();
+  timer.restart();
   return true;
 }
 
 void SlidingAction::update()
 {
-  if (!character->isSpriteMoving() && !animationRunning())
+  bool finished = !character->isSpriteMoving() && !animationRunning();
+
+  if (finished || timer.hasExpired(TIMEOUT_DURATION_MS))
   {
     state = Done;
     onFinished();

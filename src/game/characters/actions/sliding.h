@@ -2,6 +2,7 @@
 # define SLIDINGACTION_H
 
 # include "base.h"
+# include <QElapsedTimer>
 
 class SlidingAction : public ActionBase
 {
@@ -20,6 +21,7 @@ private:
   void   onFinished();
 
   QPoint target;
+  QElapsedTimer timer;
 };
 
 #endif // SLIDINGACTION_H
