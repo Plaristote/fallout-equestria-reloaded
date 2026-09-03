@@ -13,7 +13,10 @@ void AnimationSequence::initialize(QJSValue& value)
 void AnimationSequence::start()
 {
   if (parts.length() > 0)
+  {
+    timer.restart();
     parts.first()->start();
+  }
 }
 
 void AnimationSequence::addAnimationPart(IAnimationPart* part)
