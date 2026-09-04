@@ -77,7 +77,8 @@ void WallsRenderer::pushWallFace(std::vector<RenderItem>& out, Tile* wall, QPoin
   item.sourceRectPx          = clip;
   item.eligibleForCropCircle = cropEligible;
   item.usesDaylightMask      = true;
-  out.push_back(item);
+  if (item.texture)
+    out.push_back(item);
 }
 
 QPointF WallsRenderer::blockRenderPosition(Tile* block) const

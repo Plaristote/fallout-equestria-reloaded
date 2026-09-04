@@ -72,7 +72,8 @@ void DynamicObjectsRenderer::operator()(std::vector<RenderItem>& out, qreal elap
       RenderItem item     = renderSprite(object, offset, zKey, withDaylight);
 
       item.opacity = state.opacity;
-      out.push_back(item);
+      if (item.texture)
+        out.push_back(item);
     }
     ++it;
   }

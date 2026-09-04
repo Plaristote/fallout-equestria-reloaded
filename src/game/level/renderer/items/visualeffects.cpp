@@ -19,6 +19,7 @@ void VisualEffectsRenderer::operator()(std::vector<RenderItem>& out, qreal)
       item.destRect             = QRectF(pos + m_worldShift, clip.size());
       item.sourceRectPx         = clip;
       item.excludedFromDaylight = true;
-      out.push_back(item);
+      if (item.texture)
+        out.push_back(item);
     }
 }

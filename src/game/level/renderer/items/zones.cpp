@@ -15,6 +15,8 @@ void ZonesRenderer::setTilemap(TileMap* tilemap, int floor)
 
 void ZonesRenderer::operator()(std::vector<RenderItem>& out, qreal)
 {
+  if (!m_tilesetTexture)
+    return ;
   for (TileZone* zone : m_tilemap->getZones())
   {
     if (isZoneVisible(zone))

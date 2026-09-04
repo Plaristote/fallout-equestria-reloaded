@@ -15,14 +15,17 @@ void GroundRenderer::setTilemap(TileMap* tilemap, int floor)
 
 void GroundRenderer::operator()(std::vector<RenderItem>& out, qreal)
 {
-  RenderItem item;
+  if (m_texture)
+  {
+    RenderItem item;
 
-  item.layer           = RenderLayer::Ground;
-  item.texture         = m_texture;
-  item.zKey            = 0;
-  item.destRect        = QRectF(m_groundRect.topLeft() + m_worldShift, m_groundRect.size());
-  item.sourceRectPx    = QRectF(QPointF(0, 0), m_groundRect.size());
-  item.maskLocalOrigin = QPointF(0, 0);
-  item.usesDaylightMask = true;
-  out.push_back(item);
+    item.layer           = RenderLayer::Ground;
+    item.texture         = m_texture;
+    item.zKey            = 0;
+    item.destRect        = QRectF(m_groundRect.topLeft() + m_worldShift, m_groundRect.size());
+    item.sourceRectPx    = QRectF(QPointF(0, 0), m_groundRect.size());
+    item.maskLocalOrigin = QPointF(0, 0);
+    item.usesDaylightMask = true;
+    out.push_back(item);
+  }
 }
