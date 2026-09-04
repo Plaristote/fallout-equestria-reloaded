@@ -16,7 +16,9 @@ public:
   unsigned int getFactionFlag() const { return faction ? faction->flag : 0; }
   Q_INVOKABLE bool isAlly(const CharacterDiplomacy*) const;
   Q_INVOKABLE bool isEnemy(const CharacterDiplomacy*) const;
+  Q_INVOKABLE void setAsEnemy(const QString&);
   Q_INVOKABLE void setAsEnemy(CharacterDiplomacy*);
+  Q_INVOKABLE void setAsFriendly(const QString&);
   Q_INVOKABLE void setAsFriendly(CharacterDiplomacy*);
   Q_INVOKABLE int getReputation() const;
   Q_INVOKABLE void addReputation(int) const;
