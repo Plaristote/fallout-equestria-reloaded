@@ -323,12 +323,15 @@ bool CharacterParty::insertIntoZone(GridComponent* level, TileZone* zone) const
 
 bool CharacterParty::insertIntoZone(GridComponent* level, const QString &zoneName) const
 {
-  auto* tileMap = level->getTileMap();
-
-  for (auto* zone : tileMap->getZones())
+  for (int i = 0 ; i < level->getFloorCount() ; ++i)
   {
-    if (zone->getName() == zoneName)
-      return insertIntoZone(level, zone);
+    auto* tileMap = level->getTileMapAt(i);
+
+    for (auto* zone : tileMap->getZones())
+    {
+      if (zone->getName() == zoneName)
+        return insertIntoZone(level, zone);
+    }
   }
   return false;
 }

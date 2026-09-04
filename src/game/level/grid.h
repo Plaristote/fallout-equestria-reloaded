@@ -23,6 +23,7 @@ public:
 
   LevelGrid*                 getGrid() const { return floors.at(currentFloor); }
   TileMap*                   getTileMap() const { return grid ? getGrid()->getTilemap() : nullptr; }
+  TileMap*                   getTileMapAt(unsigned int floor) const { return getFloorCount() > floor ? floors.at(floor)->getTilemap() : nullptr; }
   unsigned int               getFloorCount() const { return static_cast<unsigned int>(floors.size()); }
   unsigned int               getCurrentFloor() const { return currentFloor; }
   void                       setCurrentFloor(unsigned int value);
